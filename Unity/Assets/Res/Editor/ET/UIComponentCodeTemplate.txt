@@ -1,0 +1,8 @@
+﻿namespace ET.Client
+{
+    [ComponentOf(typeof(UI))]
+    public class UI#NAME#Component: Entity, IAwake<#NAME#Form>, IDestroy
+    {
+        public #NAME#Form Form { get; set; }
+    }
+}

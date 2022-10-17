@@ -1,0 +1,26 @@
+[
+  {
+    "Id": 101,
+    "Desc": "登录",
+    "AssetName": "LoginForm",
+    "UIGroupName": "Default",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": false
+  },
+  {
+    "Id": 102,
+    "Desc": "主界面",
+    "AssetName": "MainForm",
+    "UIGroupName": "Default",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": false
+  },
+  {
+    "Id": 103,
+    "Desc": "房间界面",
+    "AssetName": "MatchRoomForm",
+    "UIGroupName": "Default",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": false
+  }
+]

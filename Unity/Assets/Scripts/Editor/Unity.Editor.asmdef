@@ -1,0 +1,25 @@
+{
+    "name": "Unity.Editor",
+    "rootNamespace": "",
+    "references": [
+        "Unity.ThirdParty",
+        "Unity.Core",
+		"Unity.Loader",
+        "Unity.Codes",
+        "UnityGameFramework.Editor",
+        "UnityGameFramework.Runtime",
+        "GameFramework",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

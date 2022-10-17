@@ -1,0 +1,3841 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neo.Lua</name>
+    </assembly>
+    <members>
+        <member name="T:Neo.IronLua.LuaStackFrameType">
+            <summary>Stackframe notation.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaStackFrameType.Unknown">
+            <summary>Unknown location of the frame.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaStackFrameType.Clr">
+            <summary>Frame is within the .net source.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaStackFrameType.Lua">
+            <summary>Frame is within a lua script.</summary>
+        </member>
+        <member name="T:Neo.IronLua.ILuaExceptionData">
+            <summary>Exception data interface to provide more information about the stack.</summary>
+        </member>
+        <member name="M:Neo.IronLua.ILuaExceptionData.FormatStackTrace(System.Int32,System.Boolean)">
+            <summary>Returns the formatted stacktrace.</summary>
+            <param name="skipFrames">Level to start.</param>
+            <param name="skipSClrFrame">Only Lua frames.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.ILuaExceptionData.Item(System.Int32)">
+            <summary>Returns the debug info from a frame.</summary>
+            <param name="frame"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.ILuaExceptionData.Count">
+            <summary>Stacktrace length.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaException">
+            <summary>Base class for Lua-Exceptions</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaException.#ctor(System.String,System.Exception)">
+            <summary>Base class for Lua-Exceptions</summary>
+            <param name="sMessage">Text</param>
+            <param name="innerException">Inner Exception</param>
+        </member>
+        <member name="P:Neo.IronLua.LuaException.FileName">
+            <summary>Source file name</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaException.Line">
+            <summary>Source line</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaException.Column">
+            <summary>Source column</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaException.GetNotImplementedException(System.String)">
+            <summary>Exception to use for not implementated functions, that might be implemented later.</summary>
+            <param name="caller"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaException.GetNotSupportedException(System.String)">
+            <summary>Exception to use for functions, that can not implemented by design.</summary>
+            <param name="caller"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaParseException">
+            <summary>Lua Exception for parse errors.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaParseException.#ctor(Neo.IronLua.Position,System.String,System.Exception)">
+            <summary>Lua Exception for parse errors.</summary>
+            <param name="position"></param>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="P:Neo.IronLua.LuaParseException.FileName">
+            <summary>Source file name</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaParseException.Line">
+            <summary>Source line</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaParseException.Column">
+            <summary>Source column</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaParseException.Index">
+            <summary>Source index</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaRuntimeException">
+            <summary>Lua Exception for runtime errors.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaRuntimeException.#ctor(System.String,System.Exception)">
+            <summary>Lua Exception for runtime errors.</summary>
+            <param name="message">Error message</param>
+            <param name="innerException">Inner Exception</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaRuntimeException.#ctor(System.String,System.Int32,System.Boolean)">
+            <summary>Lua Exception for runtime errors.</summary>
+            <param name="message">Error message</param>
+            <param name="level">Frame that should skip.</param>
+            <param name="skipClrFrames">Should the stacktrace show clr frames.</param>
+        </member>
+        <member name="P:Neo.IronLua.LuaRuntimeException.StackTrace">
+            <summary>Returns the Lua StackTrace</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaRuntimeException.FileName">
+            <summary>Source file name</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaRuntimeException.Line">
+            <summary>Source line</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaRuntimeException.Column">
+            <summary>Source column</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaRuntimeException.ExceptionDataKey">
+            <summary>Key of the ILuaExceptionData.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaStackFrame">
+            <summary>Stack frame implementation.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaStackFrame.#ctor(System.Diagnostics.StackFrame,Neo.IronLua.ILuaDebugInfo)">
+            <summary></summary>
+            <param name="frame"></param>
+            <param name="info"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaStackFrame.ToString(System.Text.StringBuilder,System.Boolean)">
+            <summary></summary>
+            <param name="sb"></param>
+            <param name="printType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaStackFrame.ToString">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaStackFrame.Type">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaStackFrame.MethodName">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaStackFrame.Method">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaStackFrame.ILOffset">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaStackFrame.NativeOffset">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaStackFrame.FileName">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaStackFrame.ColumnNumber">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaStackFrame.LineNumber">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaExceptionData">
+            <summary>Class to extent the any Exception with Lua debug information.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.#ctor(Neo.IronLua.LuaStackFrame[])">
+            <summary>Creates a exception data with a stack trace.</summary>
+            <param name="stackTrace"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.IndexOf(Neo.IronLua.LuaStackFrame)">
+            <summary></summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.Contains(Neo.IronLua.LuaStackFrame)">
+            <summary></summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.CopyTo(Neo.IronLua.LuaStackFrame[],System.Int32)">
+            <summary></summary>
+            <param name="array"></param>
+            <param name="arrayIndex"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.UpdateStackTrace(Neo.IronLua.LuaStackFrame[])">
+            <summary>Change the StackTrace</summary>
+            <param name="newStackTrace"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.GetEnumerator">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaExceptionData.Count">
+            <summary>Stackframes</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaExceptionData.IsReadOnly">
+            <summary>Always <c>true</c></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.FormatStackTrace(System.Int32,System.Boolean)">
+            <summary>Get StackTrace format as an string.</summary>
+            <param name="luaSkipFrames">Lua frame to skip.</param>
+            <param name="skipClrFrames">Skip all clr-frames.</param>
+            <returns>Formatted stackframe</returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaExceptionData.Item(System.Int32)">
+            <summary></summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaExceptionData.StackTrace">
+            <summary>Formatted StackTrace</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.GetStackFrame(System.Diagnostics.StackFrame)">
+            <summary>Get the LuaStackFrame from a .net StackFrame, if someone exists. In the other case, the return LuaStackFrame is only proxy to the orginal frame.</summary>
+            <param name="frame">.net stackframe</param>
+            <returns>LuaStackFrame</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.GetStackTrace(System.Diagnostics.StackTrace)">
+            <summary>Converts a whole StackTrace.</summary>
+            <param name="trace">.net stacktrace</param>
+            <returns>LuaStackFrames</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.GetStackTrace(System.Collections.Generic.IEnumerable{System.Diagnostics.StackFrame},System.Func{System.Diagnostics.StackFrame,Neo.IronLua.LuaStackFrame})">
+            <summary>Converts a whole StackTrace and it is possible to use a special resolver.</summary>
+            <param name="trace">.net stacktrace</param>
+            <param name="resolveFrames"></param>
+            <returns>LuaStackFrames</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.GetData(System.Exception,System.Boolean)">
+            <summary>Retrieves the debug information for an exception.</summary>
+            <param name="ex">Exception</param>
+            <param name="resolveStackTrace"></param>
+            <returns>Debug Information</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaExceptionData.UnwindException(System.Exception,System.Func{Neo.IronLua.ILuaDebugInfo})">
+            <summary>Unwind exception implementation.</summary>
+            <param name="ex"></param>
+            <param name="createDebugInfo"></param>
+        </member>
+        <member name="T:Neo.IronLua.Lua">
+            <summary>Manages the Lua-Script-Environment. At the time it holds the
+            binder cache between the compiled scripts.</summary>
+            <summary>All static methods for the language implementation</summary>
+        </member>
+        <member name="T:Neo.IronLua.Lua.BindResult">
+            <summary>Result for the binding of methods</summary>
+        </member>
+        <member name="M:Neo.IronLua.Lua.DumpRuleCaches(System.IO.TextWriter)">
+            <summary>Writes the content of the rule cache to a file. For debug-reasons.</summary>
+            <param name="tw"></param>
+        </member>
+        <member name="M:Neo.IronLua.Lua.#ctor">
+            <summary>Create a new lua-script-manager.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Lua.#ctor(Neo.IronLua.LuaIntegerType,Neo.IronLua.LuaFloatType)">
+            <summary>Create a new lua-script-manager.</summary>
+            <param name="integerType"></param>
+            <param name="floatType"></param>
+        </member>
+        <member name="M:Neo.IronLua.Lua.Finalize">
+            <summary>Clear the cache.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Lua.Dispose">
+            <summary>Destroy script manager</summary>
+        </member>
+        <member name="M:Neo.IronLua.Lua.Dispose(System.Boolean)">
+            <summary></summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Neo.IronLua.Lua.Clear">
+            <summary>Removes all chunks, binders and compiled assemblies.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Lua.CreateEnvironment">
+            <summary>Creates a Environment</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.CreateEnvironment``1">
+            <summary>Create an empty environment</summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.CompileChunk(System.String,Neo.IronLua.LuaCompileOptions,System.Collections.Generic.KeyValuePair{System.String,System.Type}[])">
+            <summary>Create a code delegate without executing it.</summary>
+            <param name="fileName">File to parse.</param>
+            <param name="options">Options for the compile process.</param>
+            <param name="args">Arguments for the code block.</param>
+            <returns>Compiled chunk.</returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.CompileChunk(System.IO.TextReader,System.String,Neo.IronLua.LuaCompileOptions,System.Collections.Generic.KeyValuePair{System.String,System.Type}[])">
+            <summary>Create a code delegate without executing it.</summary>
+            <param name="tr">Inhalt</param>
+            <param name="name">Name der Datei</param>
+            <param name="options">Options for the compile process.</param>
+            <param name="args">Arguments for the code block.</param>
+            <returns>Compiled chunk.</returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.CompileChunk(System.String,System.String,Neo.IronLua.LuaCompileOptions,System.Collections.Generic.KeyValuePair{System.String,System.Type}[])">
+            <summary>Create a code delegate without executing it.</summary>
+            <param name="code">Code of the delegate..</param>
+            <param name="name">Name of the delegate</param>
+            <param name="options">Options for the compile process.</param>
+            <param name="args">Arguments for the code block.</param>
+            <returns>Compiled chunk.</returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.CompileChunk(Neo.IronLua.ILuaLexer,Neo.IronLua.LuaCompileOptions,System.Collections.Generic.KeyValuePair{System.String,System.Type}[])">
+            <summary>Create a code delegate without executing it.</summary>
+            <param name="code">Code of the delegate..</param>
+            <param name="options">Options for the compile process.</param>
+            <param name="args">Arguments for the code block.</param>
+            <returns>Compiled chunk.</returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.CompileOrReturnPrint(Neo.IronLua.ILuaLexer,Neo.IronLua.LuaCompileOptions,System.Collections.Generic.KeyValuePair{System.String,System.Type}[])">
+            <summary>Creates a code delegate or returns a single return constant.</summary>
+            <param name="code"></param>
+            <param name="options"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.IsConstantScript(Neo.IronLua.ILuaLexer)">
+            <summary>Test for single print expression.</summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.CreateLambda(System.String,System.String,System.Type,System.Type,System.Collections.Generic.KeyValuePair{System.String,System.Type}[])">
+            <summary>Creates a simple lua-lambda-expression without any environment.</summary>
+            <param name="name">Name of the delegate</param>
+            <param name="code">Code of the delegate.</param>
+            <param name="delegateType">Delegate type. <c>null</c> is allowed.</param>
+            <param name="returnType">Return-Type of the delegate</param>
+            <param name="arguments">Arguments of the delegate.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.CreateLambda``1(System.String,System.String,System.String[])">
+            <summary>Creates a simple lua-delegate without any environment.</summary>
+            <param name="name">Name of the delegate</param>
+            <param name="code">Code of the delegate.</param>
+            <param name="argumentNames">Possible to override the argument names.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.ParseNumber(System.String)">
+            <summary>Parses a string to a lua number.</summary>
+            <param name="number">String representation of the number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.ParseNumber(System.String,System.Int32)">
+            <summary>Parses a string to a lua number.</summary>
+            <param name="number">String representation of the number.</param>
+            <param name="toBase">Base fore the number</param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.Lua.IntegerType">
+            <summary>Default type for the non floating point numbers. Only short, int, long is allowed.</summary>
+        </member>
+        <member name="P:Neo.IronLua.Lua.FloatType">
+            <summary>Default type for the floating point numbers. Only float, double, decimal is allowed.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Lua.GetChunkFromMethodName(System.String)">
+            <summary></summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.GetChunkFromMethodInfo(System.Reflection.MethodBase)">
+            <summary></summary>
+            <param name="mi"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.Lua.Version">
+            <summary>Returns the version of lua.</summary>
+        </member>
+        <member name="P:Neo.IronLua.Lua.StackTraceCompileOptions">
+            <summary>Stack trace compile options.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtParseNumber(System.String,System.Boolean)">
+            <summary>This function convert numbers, that are automatically convert from strings.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtWriteValue(System.IO.TextWriter,System.Object,System.Boolean)">
+            <summary>Write a lua value in a textwriter</summary>
+            <param name="tw"></param>
+            <param name="value"></param>
+            <param name="prettyFormatted"></param>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtFormatValue(System.Object,System.Boolean)">
+            <summary>Write a lua value in a textwriter</summary>
+            <param name="value"></param>
+            <param name="prettyFormatted"></param>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtReadValue(Neo.IronLua.ILuaLexer)">
+            <summary>Read a lua value from a token stream.</summary>
+            <param name="lex">LuaLexer</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtReadValue(System.IO.TextReader)">
+            <summary>Read a lua value from a text reader.</summary>
+            <param name="tr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtReadValue(System.String)">
+            <summary>Read a lua value from a string.</summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtConvertValueDynamic``1(System.Object)">
+            <summary></summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtConvertValue(System.Object,System.Type)">
+            <summary>Converts the value to the type, like NeoLua will do it.</summary>
+            <param name="value">value, that should be converted.</param>
+            <param name="toType">type to which the value should be converted.</param>
+            <returns>converted value</returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtGetResultValues(Neo.IronLua.LuaResult,System.Int32,System.Type)">
+            <summary>Get the part of the result as an array. If there are not enough values in the array, it returns a empty array.</summary>
+            <param name="result"></param>
+            <param name="startAt"></param>
+            <param name="typeElementType">Type of the elements of the result array.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtCombineArrayWithResult(System.Array,Neo.IronLua.LuaResult,System.Type)">
+            <summary>Combines a array with the result.</summary>
+            <param name="args"></param>
+            <param name="result"></param>
+            <param name="typeArray"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtLength(System.Object)">
+            <summary>Get's the length of an value.</summary>
+            <param name="v">Value</param>
+            <returns>Length of the value or 0.</returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtInvokeable(System.Object)">
+            <summary></summary>
+            <param name="ld"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtInvoke(System.Object,System.Object[])">
+            <summary></summary>
+            <param name="target"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtGetUpValue(System.Delegate,System.Int32)">
+            <summary>Returns the up-value of the given index.</summary>
+            <param name="function">Delegate, which upvalue should returned.</param>
+            <param name="index">1-based index of the upvalue.</param>
+            <returns>Name, Value pair for the value.</returns>
+        </member>
+        <member name="T:Neo.IronLua.Lua.UpValueObject">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtUpValueId(System.Delegate,System.Int32)">
+            <summary>Simulates the upvalueid function. Becareful, the returned numbers are the current GC-Handle.</summary>
+            <param name="function">Delegate</param>
+            <param name="index">1-based index of the upvalue.</param>
+            <returns>Returns not a Number. It returns a object, that enforces that all operations are break down to operations on the objects.</returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtSetUpValue(System.Delegate,System.Int32,System.Object)">
+            <summary>Changes the up-value of a delegate</summary>
+            <param name="function">Delegate, which will be changed.</param>
+            <param name="index">1-based index of the upvalue.</param>
+            <param name="value">New value</param>
+            <returns>Name of the value, that is changed or null if the function fails.</returns>
+        </member>
+        <member name="M:Neo.IronLua.Lua.RtUpValueJoin(System.Delegate,System.Int32,System.Delegate,System.Int32)">
+            <summary>Make the index1 upvalue refer to index2 upvalue. This only works for closures.</summary>
+            <param name="function1">Delegate</param>
+            <param name="index1">1-based index of the upvalue.</param>
+            <param name="function2">Delegate</param>
+            <param name="index2">1-based index of the upvalue.</param>
+        </member>
+        <member name="M:Neo.IronLua.Lua.GetEnumIteratorResult(System.Collections.IEnumerator)">
+            <summary>Convert IEnumerator's to lua enumerator-functions.</summary>
+            <param name="e"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaIntegerType">
+            <summary></summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaIntegerType.Int16">
+            <summary></summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaIntegerType.Int32">
+            <summary></summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaIntegerType.Int64">
+            <summary></summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaIntegerType.Mask">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaFloatType">
+            <summary></summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaFloatType.Float">
+            <summary></summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaFloatType.Double">
+            <summary></summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaFloatType.Mask">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaSandboxResult">
+            <summary>Defines the sandbox type</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaSandboxResult.None">
+            <summary>No sandbox</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaSandboxResult.Restrict">
+            <summary>Access is not allowed.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaSandboxResult.Dynamic">
+            <summary>Check the access during runtime.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaCompileOptions">
+            <summary>Defines option for the parse and compile of a script.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaCompileOptions.CreateLexer(System.String,System.IO.TextReader)">
+            <summary>Create the lexer for the parser</summary>
+            <param name="chunkName"></param>
+            <param name="tr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaCompileOptions.RestrictAccess">
+            <summary>Action on access diened.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaCompileOptions.SandboxCore(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression,System.String)">
+            <summary>Most core method, that gets called to sandbox a value.</summary>
+            <param name="expression">Expression, that should be sandboxed.</param>
+            <param name="instance">Optional: Instance, that was called to get the expression.</param>
+            <param name="sMember">Optional: Name of the member that was used to resolve the expression.</param>
+            <returns>Sandboxed expression</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaCompileOptions.Sandbox(System.Type,System.Type,System.String)">
+            <summary>Higher level method to restict access to types.</summary>
+            <param name="expressionType">Type of the sandbox value</param>
+            <param name="instanceType">Optional: Instance, that was called to get the expression.</param>
+            <param name="sMember">Optional: Name of the member that was used to resolve the expression.</param>
+            <returns>Sandbox action</returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaCompileOptions.DynamicSandbox">
+            <summary>Gets called if the sandbox will resolved during runtime.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaCompileOptions.DebugEngine">
+            <summary>Set this member to compile the script with Debug-Infos.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaCompileOptions.ClrEnabled">
+            <summary>Wether or not to recognize the local</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaChunk">
+            <summary>Represents the compiled chunk.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaChunk.#ctor(Neo.IronLua.Lua,System.String,System.Delegate)">
+            <summary>Create the chunk</summary>
+            <param name="lua">Attached runtime</param>
+            <param name="name">Name of the chunk</param>
+            <param name="chunk"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaChunk.RegisterMethod(System.String)">
+            <summary>Assign a methodname with the current chunk.</summary>
+            <param name="name">unique method name</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaChunk.GetDebugInfo(System.Reflection.MethodBase,System.Int32)">
+            <summary>Gets for the StackFrame the position in the source file.</summary>
+            <param name="method"></param>
+            <param name="ilOffset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaChunk.Run(Neo.IronLua.LuaTable,System.Object[])">
+            <summary>Executes the Chunk on the given Environment</summary>
+            <param name="env"></param>
+            <param name="callArgs"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaChunk.Lua">
+            <summary>Returns the associated LuaEngine</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaChunk.Chunk">
+            <summary>Set or get the compiled script.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaChunk.ChunkName">
+            <summary>Name of the compiled chunk.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaChunk.IsCompiled">
+            <summary>Is the chunk compiled and executable.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaChunk.HasDebugInfo">
+            <summary>Is the chunk compiled with debug infos</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaChunk.Method">
+            <summary>Returns the declaration of the compiled chunk.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaChunk.Size">
+            <summary>Get the IL-Size</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaDebugLevel">
+            <summary>Descripes the debug-level.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaDebugLevel.None">
+            <summary>No debug info will be emitted.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaDebugLevel.Line">
+            <summary>Before every new line is a DebugInfo emitted (Line exact).</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaDebugLevel.Expression">
+            <summary>Every expression is wrap by a DebugInfo (Column exact).</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaDebugLevel.RegisterMethods">
+            <summary>Registriert die Methoden</summary>
+        </member>
+        <member name="T:Neo.IronLua.ILuaDebug">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.ILuaDebug.CreateChunk(Neo.IronLua.Lua,System.Linq.Expressions.LambdaExpression)">
+            <summary>Create the chunk</summary>
+            <param name="expr">Content of the chunk.</param>
+            <param name="lua"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.ILuaDebug.Level">
+            <summary>How should the parser emit the DebugInfo's</summary>
+        </member>
+        <member name="T:Neo.IronLua.ILuaDebugInfo">
+            <summary>Information about a position.</summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaDebugInfo.ChunkName">
+            <summary>Name of the chunk.</summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaDebugInfo.FileName">
+            <summary>Source of the position.</summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaDebugInfo.Line">
+            <summary>Line</summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaDebugInfo.Column">
+            <summary>Column</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaExceptionDebugger">
+            <summary>Create lua chunks, that will have stacktrace in case of an exception (only with line numbers).</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaExceptionDebugger.Default">
+            <summary>Instance of the exception debugger.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaEmitTypeCode">
+            <summary>Translates type definitions to codes, that are easier to compare</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaEmit.IsDynamicType(System.Type)">
+            <summary>Should the type thread as dynamic.</summary>
+            <param name="type"></param>
+            <returns><c>true</c>, if the type is object or implements IDynamicMetaObjectProvider</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaEmit.GetTypeCode(System.Type)">
+            <summary>Gets a type code for the type.</summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaEmit.LiftType(System.Type,System.Type,System.Boolean)">
+            <summary>Compares the to types and returns the "higest".</summary>
+            <param name="type1"></param>
+            <param name="type2"></param>
+            <param name="signed"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaEmit.MemberMatchInfo`1">
+            <summary>Holds the result of the member.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaEmit.MemberMatch`2">
+            <summary>Holds the description of the arguments and the compare algorithm.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaFile">
+            <summary>Lua compatible file access.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.#ctor(System.IO.TextReader,System.IO.TextWriter)">
+            <summary></summary>
+            <param name="tr"></param>
+            <param name="tw"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.Finalize">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.Dispose">
+            <summary>Closes the file stream</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.Dispose(System.Boolean)">
+            <summary></summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.close">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.flush">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.lines(System.Object[])">
+            <summary></summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.read(System.Object[])">
+            <summary></summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.write(System.Object[])">
+            <summary></summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.seek(System.String,System.Int64)">
+            <summary></summary>
+            <param name="whence"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFile.setvbuf(System.String,System.Int32)">
+            <summary></summary>
+            <param name="mode"></param>
+            <param name="size"></param>
+        </member>
+        <member name="P:Neo.IronLua.LuaFile.IsEndOfStream">
+            <summary>Is the end of stream reached.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaFile.IsClosed">
+            <summary>Is the file closed.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaFile.TextReader">
+            <summary>Access to the internal TextReader.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaFile.TextWriter">
+            <summary>Access to the internal TextWriter.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaFile.Length">
+            <summary>Length of the file.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaFileStream">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaFileStream.#ctor(System.IO.Stream,System.IO.StreamReader,System.IO.StreamWriter)">
+            <summary></summary>
+            <param name="src"></param>
+            <param name="tr"></param>
+            <param name="tw"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaFileStream.Dispose(System.Boolean)">
+            <summary></summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaFileStream.flush">
+            <summary>Invoke filestream flush.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaFileStream.seek(System.String,System.Int64)">
+            <summary>Seek implementation.</summary>
+            <param name="whence"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaFileStream.Length">
+            <summary>Length of the file</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaFileStream.OpenFile(System.String,System.String,System.Text.Encoding)">
+            <summary>Creates a new lua compatible file access.</summary>
+            <param name="fileName">Name of the file</param>
+            <param name="mode">mode</param>
+            <param name="encoding"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaFileStream.OpenFile(System.String,System.Text.Encoding,System.IO.FileMode,System.IO.FileAccess)">
+            <summary>Creates a new lua compatible file access.</summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="encoding">Encoding for the text access.</param>
+            <param name="fileMode">Open mode</param>
+            <param name="fileAccess">Access mode.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFileStream.OpenFile(System.IO.Stream,System.Text.Encoding)">
+            <summary>Creates a new lua compatible file access.</summary>
+            <param name="src">File stream.</param>
+            <param name="encoding">Encoding for the text access.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaTempFile">
+            <summary>Create a temp file, will be deteted on close.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTempFile.#ctor(System.String,System.IO.FileStream,System.IO.StreamReader,System.IO.StreamWriter)">
+            <summary></summary>
+            <param name="fileName"></param>
+            <param name="src"></param>
+            <param name="tr"></param>
+            <param name="tw"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTempFile.Dispose(System.Boolean)">
+            <summary></summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTempFile.Create(System.String,System.Text.Encoding)">
+            <summary>Create the temp file.</summary>
+            <param name="fileName"></param>
+            <param name="encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaFileProcess">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaGlobal">
+            <summary>Basic implementation of all lua packages and functions, that 
+            are compatible with the portable library.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaGlobal.VersionString">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.#ctor(Neo.IronLua.Lua)">
+            <summary>Create a new environment for the lua script manager/compiler.</summary>
+            <param name="lua">The lua script compiler.</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.GetInvokeBinder(System.Dynamic.CallInfo)">
+            <summary>Redirects the invoke binder to the script manager/compiler.</summary>
+            <param name="callInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.RegisterPackage(System.String,System.Type)">
+            <summary>Registers a type as an library.</summary>
+            <param name="name"></param>
+            <param name="type"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.DoChunk(System.String,System.Collections.Generic.KeyValuePair{System.String,System.Object}[])">
+            <summary>Compiles and execute the filename.</summary>
+            <param name="fileName">Name of the lua file.</param>
+            <param name="args">Parameter definition for the file.</param>
+            <returns>Return values of the file.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.DoChunk(System.String,System.String,System.Collections.Generic.KeyValuePair{System.String,System.Object}[])">
+            <summary>Compiles and executes code.</summary>
+            <param name="code">Lua-Code</param>
+            <param name="name">Name of the lua-code</param>
+            <param name="args">Parameter definition for the lua-code.</param>
+            <returns>Return values of the lua-code.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.DoChunk(System.IO.TextReader,System.String,System.Collections.Generic.KeyValuePair{System.String,System.Object}[])">
+            <summary>Compiles and execute the stream.</summary>
+            <param name="tr">Stream</param>
+            <param name="name">Name of the stream</param>
+            <param name="args">Parameter definition for the stream.</param>
+            <returns>Return values of the stream.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.DoChunk(Neo.IronLua.LuaChunk,System.Object[])">
+            <summary>Executes a precompiled chunk on the lua environment.</summary>
+            <param name="chunk">Compiled chunk.</param>
+            <param name="callArgs">Arguments for the chunk.</param>
+            <returns>Return values of the chunk.</returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaGlobal.DefaultCompileOptions">
+            <summary>Change the default compile options of dochunk or dofile</summary>
+            <example>DefaultCompileOptions = Lua.StackTraceCompileOptions;</example>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaAssert(System.Object,System.String)">
+            <summary></summary>
+            <param name="value"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaCollectgarbage(System.String,System.Object)">
+            <summary></summary>
+            <param name="opt"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaDoFile(System.Object[])">
+            <summary></summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaDoChunk(System.Object[])">
+            <summary></summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaLoad(System.Object,System.String,System.String,Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="ld"></param>
+            <param name="source"></param>
+            <param name="mode"></param>
+            <param name="env"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaLoadFile(System.String,System.String,Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="filename"></param>
+            <param name="mode"></param>
+            <param name="env"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaError(System.Object,System.Int32)">
+            <summary></summary>
+            <param name="message"></param>
+            <param name="level"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaGetMetaTable(System.Object)">
+            <summary></summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaRawMembers(Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaRawArray(Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaIPairs(Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaMPairs(Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaPairs(Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaNext(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="t"></param>
+            <param name="next"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaNextKey(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="t"></param>
+            <param name="next"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaPCall(System.Object,System.Object[])">
+            <summary></summary>
+            <param name="target"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.OnPrint(System.String)">
+            <summary></summary>
+            <param name="text"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaPrint(System.Object[])">
+            <summary></summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaRawEqual(System.Object,System.Object)">
+            <summary></summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaRawGet(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="t"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaRawLen(System.Object)">
+            <summary></summary>
+            <param name="v"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaRawSet(Neo.IronLua.LuaTable,System.Object,System.Object)">
+            <summary></summary>
+            <param name="t"></param>
+            <param name="index"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaSelect(System.String,System.Object[])">
+            <summary></summary>
+            <param name="index"></param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaSetMetaTable(Neo.IronLua.LuaTable,Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="t"></param>
+            <param name="metaTable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaToNumber(System.Object,System.Nullable{System.Int32})">
+            <summary></summary>
+            <param name="v"></param>
+            <param name="iBase"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaToString(System.Object)">
+            <summary></summary>
+            <param name="v"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaTypeTest(System.Object,System.Boolean)">
+            <summary></summary>
+            <param name="v"></param>
+            <param name="clr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaGlobal.LuaXPCall(System.Object,System.Object,System.Object[])">
+            <summary></summary>
+            <param name="target"></param>
+            <param name="msgh"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaGlobal.Version">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaGlobal.LuaLibraryIO">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaGlobal.LuaPackage">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaGlobal.Lua">
+            <summary>Access to the assigned Lua script manager</summary>
+        </member>
+        <member name="T:Neo.IronLua.TokenNameAttribute">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaToken">
+            <summary>Tokens</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.None">
+            <summary>Not defined token</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Eof">
+            <summary>End of file</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.InvalidChar">
+            <summary>Invalid char</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.InvalidString">
+            <summary>Invalid string</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.InvalidStringOpening">
+            <summary>Invalid string opening</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.InvalidComment">
+            <summary>Invalid comment</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.NewLine">
+            <summary>NewLine</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Whitespace">
+            <summary>Space</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Comment">
+            <summary>Comment</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.String">
+            <summary>string</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Number">
+            <summary>Integer or floating point number</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Identifier">
+            <summary>Identifier</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwAnd">
+            <summary>Keyword and</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwBreak">
+            <summary>Keyword break</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwCast">
+            <summary>Keyword cast</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwConst">
+            <summary>Keyword const</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwDo">
+            <summary>Keyword do</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwElse">
+            <summary>Keyword else</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwElseif">
+            <summary>Keyword elseif</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwEnd">
+            <summary>Keyword end</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwFalse">
+            <summary>Keyword false</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwFor">
+            <summary>Keyword for</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwForEach">
+            <summary>Keyword foreach</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwFunction">
+            <summary>Keyword function</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwGoto">
+            <summary>Keyword goto</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwIf">
+            <summary>Keyword if</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwIn">
+            <summary>Keyword in</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwLocal">
+            <summary>Keyword local</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwNil">
+            <summary>Keyword nil</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwNot">
+            <summary>Keyword not</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwOr">
+            <summary>Keyword or</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwRepeat">
+            <summary>Keyword repeat</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwReturn">
+            <summary>Keyword return</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwThen">
+            <summary>Keyword then</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwTrue">
+            <summary>Keyword true</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwUntil">
+            <summary>Keyword until</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.KwWhile">
+            <summary>Keyword while</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Plus">
+            <summary>+</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Minus">
+            <summary>-</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Star">
+            <summary>*</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Slash">
+            <summary>/</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.SlashShlash">
+            <summary>//</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Percent">
+            <summary>%</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Caret">
+            <summary>^</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.BitAnd">
+            <summary>&amp;</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.BitOr">
+            <summary>|</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Dilde">
+            <summary>~</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Cross">
+            <summary>#</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Equal">
+            <summary>==</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.NotEqual">
+            <summary>~=</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.LowerEqual">
+            <summary>&lt;=</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.GreaterEqual">
+            <summary>&gt;=</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Lower">
+            <summary>&lt;</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Greater">
+            <summary>&gt;</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.ShiftLeft">
+            <summary>&lt;&lt;</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.ShiftRight">
+            <summary>&gt;&gt;</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Assign">
+            <summary>=</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.BracketOpen">
+            <summary>(</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.BracketClose">
+            <summary>)</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.BracketCurlyOpen">
+            <summary>{</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.BracketCurlyClose">
+            <summary>}</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.BracketSquareOpen">
+            <summary>[</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.BracketSquareClose">
+            <summary>]</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Semicolon">
+            <summary>;</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Colon">
+            <summary>:</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.ColonColon">
+            <summary>::</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Comma">
+            <summary>,</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.Dot">
+            <summary>.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.DotDot">
+            <summary>..</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaToken.DotDotDot">
+            <summary>...</summary>
+        </member>
+        <member name="T:Neo.IronLua.Position">
+            <summary>Position in the source file</summary>
+        </member>
+        <member name="M:Neo.IronLua.Position.ToString">
+            <summary>Umwandlung in ein übersichtliche Darstellung.</summary>
+            <returns>Zeichenfolge mit Inhalt</returns>
+        </member>
+        <member name="P:Neo.IronLua.Position.FileName">
+            <summary>Dateiname in der dieser Position sich befindet.</summary>
+        </member>
+        <member name="P:Neo.IronLua.Position.Document">
+            <summary>Document where the token was found.</summary>
+        </member>
+        <member name="P:Neo.IronLua.Position.Line">
+            <summary>Zeile, bei 1 beginnent.</summary>
+        </member>
+        <member name="P:Neo.IronLua.Position.Col">
+            <summary>Spalte, bei 1 beginnent.</summary>
+        </member>
+        <member name="P:Neo.IronLua.Position.Index">
+            <summary>Index bei 0 beginnend.</summary>
+        </member>
+        <member name="T:Neo.IronLua.Token">
+            <summary>Represents a token of the lua source file.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Token.#ctor(Neo.IronLua.LuaToken,System.String,Neo.IronLua.Position,Neo.IronLua.Position)">
+            <summary>Erzeugt einen Token.</summary>
+            <param name="kind">Type des Wertes.</param>
+            <param name="value">Der Wert.</param>
+            <param name="start">Beginn des Tokens</param>
+            <param name="end">Ende des Tokens</param>
+        </member>
+        <member name="M:Neo.IronLua.Token.ToString">
+            <summary>Umwandlung in ein übersichtliche Darstellung.</summary>
+            <returns>Zeichenfolge mit Inhalt</returns>
+        </member>
+        <member name="P:Neo.IronLua.Token.Typ">
+            <summary>Art des Wertes</summary>
+        </member>
+        <member name="P:Neo.IronLua.Token.Value">
+            <summary>Wert selbst</summary>
+        </member>
+        <member name="P:Neo.IronLua.Token.Start">
+            <summary>Start des Tokens</summary>
+        </member>
+        <member name="P:Neo.IronLua.Token.End">
+            <summary>Ende des Tokens</summary>
+        </member>
+        <member name="P:Neo.IronLua.Token.Length">
+            <summary>Länge des Tokens</summary>
+        </member>
+        <member name="T:Neo.IronLua.ILuaLexer">
+            <summary>Lexer interface for parser.</summary>
+        </member>
+        <member name="M:Neo.IronLua.ILuaLexer.Next">
+            <summary>Read next token.</summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaLexer.LookAhead">
+            <summary>Look a head token, aka next token.</summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaLexer.LookAhead2">
+            <summary>Look a head token, aka next, next token.</summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaLexer.Current">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaCharLexer">
+            <summary>Base class for the lua lexer.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.#ctor(System.String,System.IO.TextReader,System.Int32,System.Boolean,System.Int32,System.Int32,System.Int32)">
+            <summary>Creates the lexer for the lua parser</summary>
+            <param name="fileName">Filename</param>
+            <param name="tr">Input for the scanner, will be disposed on the lexer dispose.</param>
+            <param name="lookAheadLength">defines the look a head length for parsers</param>
+            <param name="leaveOpen"></param>
+            <param name="currentLine">Start line for the text reader.</param>
+            <param name="currentColumn"></param>
+            <param name="firstColumnIndex"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.Dispose">
+            <summary>Destroy the lexer and the TextReader</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.AppendValue(System.Char)">
+            <summary>Append a char to the current buffer.</summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.AppendValue(System.String)">
+            <summary>Append a char to the current buffer.</summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.Next">
+            <summary>Move the char stream and discard the buffer.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.Next(System.Int32)">
+            <summary>Move the char stream and discard the buffer.</summary>
+            <param name="skip"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.Eat">
+            <summary>Append the current char to the buffer and move the char stream.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.ReadLine">
+            <summary>Read a whole line</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.SkipWhiteSpaces">
+            <summary>Skip white spaces</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.CreateToken(Neo.IronLua.LuaToken)">
+            <summary>Create a new token with the current buffer.</summary>
+            <param name="kind">Token type</param>
+            <returns>Token</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.CreateTokenAtStart(Neo.IronLua.LuaToken,System.String)">
+            <summary>Create a new token.</summary>
+            <param name="kind">Token type</param>
+            <param name="value"></param>
+            <returns>Token</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.CreateTokenAtEnd(Neo.IronLua.LuaToken,System.String)">
+            <summary>Create a new token.</summary>
+            <param name="kind">Token type</param>
+            <param name="value"></param>
+            <returns>Token</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.IsLookAHead(System.Char,System.Int32)">
+            <summary></summary>
+            <param name="c"></param>
+            <param name="idx"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.IsLookAHead(System.String,System.Int32)">
+            <summary>Check the next following chars.</summary>
+            <param name="value"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.GetLookAHead(System.Int32)">
+            <summary>Get look a head.</summary>
+            <param name="idx"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaCharLexer.ResetCurValue">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaCharLexer.StartPosition">
+            <summary>Current start position.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaCharLexer.CurrentPosition">
+            <summary>Current char position.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaCharLexer.Cur">
+            <summary>Current active char</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaCharLexer.IsEof">
+            <summary>End of file</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaCharLexer.CurValue">
+            <summary>Currently collected chars.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaCharLexer.HasCurValue">
+            <summary>Currently collected chars.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaLexer">
+            <summary>Lexer for the lua syntax.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.#ctor(System.String,System.IO.TextReader,System.Boolean,System.Int32,System.Int32)">
+            <summary>Creates the lexer for the lua parser</summary>
+            <param name="fileName">Filename</param>
+            <param name="tr">Input for the scanner, will be disposed on the lexer dispose.</param>
+            <param name="leaveOpen"></param>
+            <param name="currentLine">Start line for the text reader.</param>
+            <param name="currentColumn"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.#ctor(System.Collections.Generic.IEnumerator{Neo.IronLua.Token})">
+            <summary>Create a lexer from a token stream.</summary>
+            <param name="tokenStream"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.Dispose">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.Next">
+            <summary>Reads the next token from the stream</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaLexer.LookAhead">
+            <summary>Next token</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaLexer.LookAhead2">
+            <summary>Next token</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaLexer.Current">
+            <summary>Current token</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaLexer.SkipComments">
+            <summary>Should the scanner skip comments</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.NextToken(Neo.IronLua.LuaCharLexer)">
+            <summary>Read a token from the char stream.</summary>
+            <param name="chars"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.Create(System.String,System.IO.TextReader,System.Boolean,System.Int32,System.Int32,System.Int32)">
+            <summary>Creates the lexer for the lua parser</summary>
+            <param name="fileName">Filename</param>
+            <param name="tr">Input for the scanner, will be disposed on the lexer dispose.</param>
+            <param name="leaveOpen"></param>
+            <param name="currentLine">Start line for the text reader.</param>
+            <param name="currentColumn"></param>
+            <param name="firstColumnIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.Create(Neo.IronLua.LuaCharLexer)">
+            <summary>Creates the lexer for the lua parser</summary>
+            <param name="charLexer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.CreateHtml(Neo.IronLua.LuaCharLexer,Neo.IronLua.Token[])">
+            <summary></summary>
+            <param name="charStream"></param>
+            <param name="scriptPreamble"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.CreateHtml(Neo.IronLua.LuaCharLexer,System.Boolean)">
+            <summary></summary>
+            <param name="charStream"></param>
+            <param name="enforceCode"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Neo.IronLua.LuaLexer.HtmlCharStreamLookAHead">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.IsIdentifierChar(System.Char)">
+            <summary>Check for A-Z,0-9 and _</summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.IsKeyWord(Neo.IronLua.LuaToken)">
+            <summary>Is the given identifier a keyword.</summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.IsKeyWord(System.String)">
+            <summary>Is the given identifier a keyword.</summary>
+            <param name="member"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.GetDefaultTokenValue(Neo.IronLua.LuaToken)">
+            <summary></summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.GetTokenName(Neo.IronLua.LuaToken)">
+            <summary>Resolves the name of the token.</summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLexer.CreateToken(Neo.IronLua.LuaToken,System.String,Neo.IronLua.Position,Neo.IronLua.Position)">
+            <summary>Create a new token.</summary>
+            <param name="kind"></param>
+            <param name="value"></param>
+            <param name="startAt"></param>
+            <param name="endAt"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaLibraryString">
+            <summary>Reimplements methods of the string package.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.byte(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>Implamentation of http://www.lua.org/manual/5.3/manual.html#pdf-string.byte </summary>
+            <param name="s"></param>
+            <param name="i"></param>
+            <param name="j"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.char(System.Int32[])">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.char </summary>
+            <param name="chars"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.dump(System.Delegate)">
+            <summary>Not implemented</summary>
+            <param name="dlg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.find(System.String,System.String,System.Int32,System.Boolean)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.find </summary>
+            <param name="s"></param>
+            <param name="pattern"></param>
+            <param name="init"></param>
+            <param name="plain"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.format(System.String,System.Object[])">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.format </summary>
+            <param name="formatstring"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.gmatch(System.String,System.String)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.gmatch </summary>
+            <param name="s"></param>
+            <param name="pattern"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.gsub(System.String,System.String,System.Object,System.Int32)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.gsub </summary>
+            <param name="s"></param>
+            <param name="pattern"></param>
+            <param name="repl"></param>
+            <param name="n"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.len(System.String)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.len </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.lower(System.String)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.lower </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.match(System.String,System.String,System.Int32)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.match </summary>
+            <param name="s"></param>
+            <param name="pattern"></param>
+            <param name="init"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.rep(System.String,System.Int32,System.String)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.rep </summary>
+            <param name="s"></param>
+            <param name="n"></param>
+            <param name="sep"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.reverse(System.String)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.reverse </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.sub(System.String,System.Int32,System.Int32)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.sub </summary>
+            <param name="s"></param>
+            <param name="i"></param>
+            <param name="j"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryString.upper(System.String)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-string.upper </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaLibraryString.__TranslateRegEx">
+            <summary>Set this member to <c>false</c> to use native (.net) regex syntax.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaLibraryMath">
+            <summary>Reimplements methods of the math package.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.abs(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.abs </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.acos(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.acos </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.asin(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.asin </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.atan(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.atan </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.atan2(System.Double,System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-math.atan2 </summary>
+            <param name="y"></param>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.ceil(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.ceil </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.cos(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.cos </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.cosh(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-math.cosh </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.deg(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.deg </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.exp(System.Double)">
+            <summary>Implementation of  </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.floor(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.floor </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.fmod(System.Double,System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.fmod </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.frexp(System.Double)">
+            <summary>Returns m and e such that x = m2e, e is an integer and the absolute value of m is in the range [0.5, 1) (or zero when x is zero, http://www.lua.org/manual/5.2/manual.html#pdf-math.frexp).</summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaLibraryMath.huge">
+            <summary>The value HUGE_VAL, a value larger than or equal to any other numerical value (http://www.lua.org/manual/5.3/manual.html#pdf-math.huge).</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.ldexp(System.Double,System.Int32)">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-math.ldexp </summary>
+            <param name="m"></param>
+            <param name="e"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.log(System.Double,System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.log </summary>
+            <param name="x"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.max(System.Double[])">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.max </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.min(System.Double[])">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.min </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.modf(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.modf </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.pow(System.Double,System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-math.pow </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.rad(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.rad </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.random(System.Object,System.Object)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.random </summary>
+            <param name="m"></param>
+            <param name="n"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.randomseed(System.Object)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.randomseed </summary>
+            <param name="x"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.sin(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.sin </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.sinh(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-math.sinh </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.sqrt(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.sqrt </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.tan(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.tan </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.tanh(System.Double)">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-math.tanh </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.type(System.Object)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.type </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.tointeger(System.Object)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.tointeger </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryMath.ult(System.Int64,System.Int64)">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.ult </summary>
+            <param name="m"></param>
+            <param name="n"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaLibraryMath.pi">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.pi </summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaLibraryMath.e">
+            <summary>Maps Math.E</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaLibraryMath.mininteger">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.mininteger </summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaLibraryMath.maxinteger">
+            <summary>Implementation of http://www.lua.org/manual/5.3/manual.html#pdf-math.maxinteger </summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaLibraryBit32">
+            <summary>Reimplements methods of the bit32 package.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.arshift(System.Int32,System.Nullable{System.Int32})">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.arshift </summary>
+            <param name="x"></param>
+            <param name="disp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.band(System.UInt32[])">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.band </summary>
+            <param name="ands"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.bnot(System.UInt32)">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.bnot </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.bor(System.UInt32[])">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.bor </summary>
+            <param name="ors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.btest(System.UInt32[])">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.btest </summary>
+            <param name="tests"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.bxor(System.UInt32[])">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.bxor </summary>
+            <param name="xors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.extract(System.UInt32,System.Int32,System.Int32)">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.extract </summary>
+            <param name="n"></param>
+            <param name="field"></param>
+            <param name="width"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.replace(System.UInt32,System.UInt32,System.Int32,System.Int32)">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.replace </summary>
+            <param name="n"></param>
+            <param name="v"></param>
+            <param name="field"></param>
+            <param name="width"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.lrotate(System.UInt32,System.Nullable{System.Int32})">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.lrotate </summary>
+            <param name="x"></param>
+            <param name="disp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.lshift(System.UInt32,System.Nullable{System.Int32})">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.lshift </summary>
+            <param name="x"></param>
+            <param name="disp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.rrotate(System.UInt32,System.Nullable{System.Int32})">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.rrotate </summary>
+            <param name="x"></param>
+            <param name="disp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryBit32.rshift(System.UInt32,System.Nullable{System.Int32})">
+            <summary>Implementation of http://www.lua.org/manual/5.2/manual.html#pdf-bit32.rshift </summary>
+            <param name="x"></param>
+            <param name="disp"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaFilePackage">
+            <summary>default files are not supported.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.open(System.String,System.String)">
+            <summary></summary>
+            <param name="filename"></param>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.lines(System.Object[])">
+            <summary></summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.close(Neo.IronLua.LuaFile)">
+            <summary></summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.input(System.Object)">
+            <summary></summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.output(System.Object)">
+            <summary></summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.flush">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.read(System.Object[])">
+            <summary></summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.write(System.Object[])">
+            <summary></summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.tmpfile">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.tmpfilenew">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.type(System.Object)">
+            <summary></summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaFilePackage.popen(System.String,System.String)">
+            <summary></summary>
+            <param name="program"></param>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaFilePackage.DefaultEncoding">
+            <summary>Defines the encoding for stdout</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaLibraryPackage">
+            <summary></summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaLibraryPackage.CurrentDirectoryPathVariable">
+            <summary></summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaLibraryPackage.ExecutingDirectoryPathVariable">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryPackage.#ctor(Neo.IronLua.LuaGlobal)">
+            <summary></summary>
+            <param name="global"></param>
+        </member>
+        <member name="P:Neo.IronLua.LuaLibraryPackage.loaded">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaLibraryPackage.path">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaLibraryPackage.Path">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaLibraryPackage.CompileOptions">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryOS.date(System.String,System.Object)">
+            <summary>Converts a number representing the date and time back to some higher-level representation.</summary>
+            <param name="format">Format string. Same format as the C <see href="http://www.cplusplus.com/reference/ctime/strftime/">strftime()</see> function.</param>
+            <param name="time">Numeric date-time. It defaults to the current date and time.</param>
+            <returns>Formatted date string, or table of time information.</returns>
+            <remarks>by PapyRef</remarks>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryOS.time(Neo.IronLua.LuaTable)">
+            <summary>Calculate the current date and time, coded as a number. That number is the number of seconds since 
+            Epoch date, that is 00:00:00 UTC, January 1, 1970. When called with a table, it returns the number representing 
+            the date and time described by the table.</summary>
+            <param name="table">Table representing the date and time</param>
+            <returns>The time in system seconds. </returns>
+            <remarks>by PapyRef</remarks>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryOS.datetime(System.Object)">
+            <summary>Converts a time to a .net DateTime</summary>
+            <param name="time"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaLibraryOS.difftime(System.Object,System.Object)">
+            <summary>Calculate the number of seconds between time t1 to time t2.</summary>
+            <param name="t2">Higher bound of the time interval whose length is calculated.</param>
+            <param name="t1">Lower bound of the time interval whose length is calculated. If this describes a time point later than end, the result is negative.</param>
+            <returns>The number of seconds from time t1 to time t2. In other words, the result is t2 - t1.</returns>
+            <remarks>by PapyRef</remarks>
+        </member>
+        <member name="T:Neo.IronLua.LuaResult">
+            <summary>Dynamic result object for lua functions.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaResult.LuaResultMetaObject">
+            <summary>Redirect mainly all calls to a dynamic expression, because 
+            e.g. CSharp binder doesn't look for the DynamicMetaObjectProvider interface and 
+            LuaResult only stores Object's.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.#ctor">
+            <summary>Creates a empty result-object.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.#ctor(System.Object)">
+            <summary>Creates a empty result-object.</summary>
+            <param name="v">One result value</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.#ctor(System.Object[])">
+            <summary>Creates a empty result-object.</summary>
+            <param name="values">Result values</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToString">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.GetValueOrDefault``1(System.Int32,``0)">
+            <summary></summary>
+            <typeparam name="T"></typeparam>
+            <param name="iIndex"></param>
+            <param name="default"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToBoolean(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToByte(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToChar(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToDateTime(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToDecimal(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToDouble(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToInt16(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToInt32(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToInt64(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToSByte(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToSingle(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToString(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToType(System.Type,System.IFormatProvider)">
+            <summary></summary>
+            <param name="conversionType"></param>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToUInt16(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToUInt32(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.ToUInt64(System.IFormatProvider)">
+            <summary></summary>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaResult.Item(System.Int32)">
+            <summary>Return values.</summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaResult.Values">
+            <summary>Access to the raw-result values.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaResult.Count">
+            <summary>Get's the number of results.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.op_Implicit(Neo.IronLua.LuaResult)~System.Object[]">
+            <summary></summary>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaResult.op_Implicit(System.Object[])~Neo.IronLua.LuaResult">
+            <summary></summary>
+            <param name="v"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaResult.Empty">
+            <summary>Represents a empty result</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaStackTraceDebugger">
+            <summary>Debugger that creates the methods as dynamic assembly, with them
+            it is possible to retrieve exact stacktraces. This debugger is good if
+            you are running long scripts, they stay in memory.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaStackTraceDebugger.#ctor">
+            <summary>Creates a new StackTrace-Debugger</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaStackTraceDebugger.Default">
+            <summary>Default debugger for the stack trace debugger.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaMemberAttribute">
+            <summary>Marks a function or a GET property for the global namespace.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaMemberAttribute.#ctor(System.Boolean)">
+            <summary></summary>
+            <param name="isMethod"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaMemberAttribute.#ctor(System.String,System.Boolean)">
+            <summary>Marks global Members, they act normally as library</summary>
+            <param name="name"></param>
+            <param name="isMethod"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaMemberAttribute.ToString">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaMemberAttribute.UseDefault">
+            <summary>Use the name of the  method.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaMemberAttribute.IsMethod">
+            <summary>Register this member as method.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaMemberAttribute.LuaName">
+            <summary>Global name of the function.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable">
+            <summary>Implementation of a the lua table. A lua table is a combination 
+            of a hash dictionary, a string dictionary and a array list.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaTable.csMetaTable">
+            <summary>Member name of the metatable</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.LuaTableMetaObject.GetDynamicMemberNames">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.ArrayImplementation">
+            <summary>Proxy for a interface to the array part of a table.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.MemberImplementation">
+            <summary>Proxy for a interface to the members of a table.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringKeyCollection">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringKeyCollection.Contains(System.String)">
+            <summary></summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringKeyCollection.CopyTo(System.String[],System.Int32)">
+            <summary></summary>
+            <param name="array"></param>
+            <param name="arrayIndex"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringKeyCollection.GetEnumerator">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringKeyCollection.Count">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringKeyCollection.IsReadOnly">
+            <summary>Always true</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringValueCollection">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringValueCollection.Contains(System.Object)">
+            <summary></summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringValueCollection.CopyTo(System.Object[],System.Int32)">
+            <summary></summary>
+            <param name="array"></param>
+            <param name="arrayIndex"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringValueCollection.GetEnumerator">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringValueCollection.Count">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.MemberImplementation.LuaTableStringValueCollection.IsReadOnly">
+            <summary>Always true</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaTable.LuaTableEntry.nextHash">
+            <summary>points to the next entry with the same hashcode</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.LuaTableDefineMode">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.LuaTableDefine">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.LuaTableDefine.GetInitialValue(Neo.IronLua.LuaTable)">
+            <summary>Initial value for the table creation.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.LuaTablePropertyDefine">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.LuaTableMethodDefine">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.LuaCollectedMember">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.LuaTableClass">
+            <summary></summary>
+        </member>
+        <member name="E:Neo.IronLua.LuaTable.PropertyChanged">
+            <summary>Value has changed.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.#ctor">
+            <summary>Creates a new lua table</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.Equals(System.Object)">
+            <summary></summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.GetHashCode">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.GetMetaObject(System.Linq.Expressions.Expression)">
+            <summary>Returns the Meta-Object</summary>
+            <param name="parameter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.GetInvokeBinder(System.Dynamic.CallInfo)">
+            <summary>Get the invoke binder.</summary>
+            <param name="callInfo">CallInfo</param>
+            <returns>Binder</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ToString">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.InsertValue(System.Object,System.Int32,System.Object,System.Boolean)">
+            <summary>Insert a value in the hash list</summary>
+            <param name="key">Key of the item</param>
+            <param name="hashCode">Hashcode of the key</param>
+            <param name="value">Value that will be setted</param>
+            <param name="isMethod">Is the value a method</param>
+            <returns>Index of the setted entry</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.FindKey(System.Object,System.Int32,System.Collections.IEqualityComparer)">
+            <summary>Search the key in the list</summary>
+            <param name="key">Key of the item</param>
+            <param name="hashCode">hash code of the key</param>
+            <param name="comparer">Comparer for equality</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.Clear">
+            <summary>Empty the table</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnPropertyChanged(System.String)">
+            <summary>Notify property changed</summary>
+            <param name="propertyName">Name of property</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.SetMemberValue(System.String,System.Object,System.Boolean,System.Boolean)">
+            <summary>Set a value string key value</summary>
+            <param name="memberName">Key</param>
+            <param name="value">Value, <c>null</c> deletes the value.</param>
+            <param name="ignoreCase">Ignore case of the member name</param>
+            <param name="rawSet">If the value not exists, should we call OnNewIndex.</param>
+            <returns>value</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.GetMemberValue(System.String,System.Boolean,System.Boolean)">
+            <summary>Returns the value of a key.</summary>
+            <param name="memberName">Key</param>
+            <param name="ignoreCase">Ignore case of the member name</param>
+            <param name="rawGet">Is OnIndex called, if no member exists.</param>
+            <returns>The value or <c>null</c></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ContainsMember(System.String,System.Boolean)">
+            <summary>Checks if the Member exists.</summary>
+            <param name="memberName">Membername</param>
+            <param name="ignoreCase">Ignore case of the member name</param>
+            <returns><c>true</c>, if the member is in the table.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.SetArrayValue(System.Int32,System.Object,System.Boolean)">
+            <summary>Set the value in the array part of the table (if the index is greater Length + 1 it is set to the hash part)</summary>
+            <param name="index">Index of the element</param>
+            <param name="value">Value, <c>null</c> deletes the value.</param>
+            <param name="rawSet">If the value not exists, should we call OnNewIndex.</param>
+            <returns>value</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.GetArrayValue(System.Int32,System.Boolean)">
+            <summary>Get the value from the array part or from the hash part.</summary>
+            <param name="index">Index of the element</param>
+            <param name="rawGet">Is OnIndex called, if no index exists.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ContainsIndex(System.Int32)">
+            <summary>Checks if the index is set.</summary>
+            <param name="index">Index</param>
+            <returns><c>true</c>, if the index is in the table.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ArrayOnlyIndexOf(System.Object)">
+            <summary>zero based</summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ArrayOnlyInsert(System.Int32,System.Object)">
+            <summary>zero based</summary>
+            <param name="iIndex"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ArrayOnlyRemoveAt(System.Int32)">
+            <summary>zero based</summary>
+            <param name="index"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.IsIndexKey(System.Type)">
+            <summary>Is the type a index type.</summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.SetValue(System.Object,System.Object,System.Boolean)">
+            <summary>Set a value in of the table</summary>
+            <param name="key">Key</param>
+            <param name="value">Value, <c>null</c> deletes the value.</param>
+            <param name="rawSet">If the value not exists, should we call OnNewIndex.</param>
+            <returns>value</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.SetValue(System.Object[],System.Object,System.Boolean)">
+            <summary>Set multi indexed values.</summary>
+            <param name="keyList">Keys</param>
+            <param name="rawSet">If the value not exists, should we call OnNewIndex.</param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.GetValue(System.Object,System.Boolean)">
+            <summary>Gets the value of a key</summary>
+            <param name="key">Key</param>
+            <param name="rawGet">Is OnIndex called, if no key exists.</param>
+            <returns>The value or <c>null</c>.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.GetValue(System.Object[],System.Boolean)">
+            <summary>Get multi indexed values</summary>
+            <param name="keyList">Keys</param>
+            <param name="rawGet">Is OnIndex called, if no key exists.</param>
+            <returns>Value</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.GetOptionalValue``1(System.String,``0,System.Boolean,System.Boolean)">
+            <summary>Returns the value of the table.</summary>
+            <typeparam name="T">Excpected type for the value</typeparam>
+            <param name="name">Name of the member.</param>
+            <param name="default">Replace value, if the member not exists or can not converted.</param>
+            <param name="ignoreCase"></param>
+            <param name="rawGet"></param>
+            <returns>Value or default.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ContainsKey(System.Object)">
+            <summary>Checks if the key exists.</summary>
+            <param name="key">key</param>
+            <returns><c>true</c>, if the key is in the listtable</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.DefineFunction(System.String,System.Delegate,System.Boolean)">
+            <summary>Defines a normal function attached to a table.</summary>
+            <param name="functionName">Name of the member for the function.</param>
+            <param name="function">function definition</param>
+            <param name="ignoreCase">Ignore case of the member name</param>
+            <returns>function</returns>
+            <remarks>If you want to delete the define, call SetMemberValue with the function name and set the value to <c>null</c>.</remarks>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.DefineMethod(System.String,System.Delegate,System.Boolean)">
+            <summary>Defines a new method on the table.</summary>
+            <param name="methodName">Name of the member/name.</param>
+            <param name="method">Method that has as a first parameter a LuaTable.</param>
+            <param name="ignoreCase">Ignore case of the member name</param>
+            <returns>method</returns>
+            <remarks>If you want to delete the define, call SetMemberValue with the function name and set the value to <c>null</c>.</remarks>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.CallMember(System.String)">
+            <summary>Call a member</summary>
+            <param name="memberName">Name of the member</param>
+            <returns>Result of the function call.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.CallMember(System.String,System.Object)">
+            <summary>Call a member</summary>
+            <param name="memberName">Name of the member</param>
+            <param name="arg0">first argument</param>
+            <returns>Result of the function call.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.CallMember(System.String,System.Object,System.Object)">
+            <summary>Call a member</summary>
+            <param name="memberName">Name of the member</param>
+            <param name="arg0">first argument</param>
+            <param name="arg1">second argument</param>
+            <returns>Result of the function call.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.CallMember(System.String,System.Object,System.Object,System.Object)">
+            <summary>Call a member</summary>
+            <param name="memberName">Name of the member</param>
+            <param name="arg0">first argument</param>
+            <param name="arg1">second argument</param>
+            <param name="arg2">third argument</param>
+            <returns>Result of the function call.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.CallMember(System.String,System.Object[])">
+            <summary>Call a member</summary>
+            <param name="memberName">Name of the member</param>
+            <param name="args">Arguments</param>
+            <returns>Result of the function call.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.CallMemberDirect(System.String,System.Object[],System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Call a member (function or method) of the lua-table</summary>
+            <param name="memberName">Name of the member</param>
+            <param name="args">Arguments</param>
+            <param name="ignoreCase">Ignore case of the member name</param>
+            <param name="rawGet"></param>
+            <param name="throwExceptions"><c>true</c>, throws a exception if something is going wrong. <c>false</c>, on a exception a empty LuaResult will be returned.</param>
+            <param name="ignoreNilFunction"><c>true</c>, throws no exception n nil value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.SetObjectMember(System.Object)">
+            <summary>Sets the given object with the members of the table.</summary>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnAdd(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnSub(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnMul(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnDiv(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnMod(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnPow(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnUnMinus">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnIDiv(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnBAnd(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnBOr(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnBXor(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnBNot">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnShl(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnShr(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnConcat(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnLen">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnEqual(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnLessThan(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnLessEqual(System.Object)">
+            <summary></summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnIndex(System.Object)">
+            <summary></summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnNewIndex(System.Object,System.Object)">
+            <summary></summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns><c>true</c>, if __newindex is defined.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.OnCall(System.Object[])">
+            <summary></summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.LuaTableHashKeyCollection">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.LuaTableHashKeyCollection.Contains(System.Object)">
+            <summary></summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.LuaTableHashKeyCollection.CopyTo(System.Object[],System.Int32)">
+            <summary></summary>
+            <param name="array"></param>
+            <param name="arrayIndex"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.LuaTableHashKeyCollection.GetEnumerator">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.LuaTableHashKeyCollection.Count">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.LuaTableHashKeyCollection.IsReadOnly">
+            <summary>Always true</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.LuaTableHashValueCollection">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.LuaTableHashValueCollection.Contains(System.Object)">
+            <summary></summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.LuaTableHashValueCollection.CopyTo(System.Object[],System.Int32)">
+            <summary></summary>
+            <param name="array"></param>
+            <param name="arrayIndex"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.LuaTableHashValueCollection.GetEnumerator">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.LuaTableHashValueCollection.Count">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.LuaTableHashValueCollection.IsReadOnly">
+            <summary>Always true</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.Add(System.Object)">
+            <summary>Support for the array initalizer.</summary>
+            <param name="value">Value that is added to the array part.</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.Add(System.Object,System.Object)">
+            <summary>Support for a key value initializer.</summary>
+            <param name="key">key of the value.</param>
+            <param name="value">value</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.NextKey(System.Object)">
+            <summary>Implementation of the lua next.</summary>
+            <param name="next"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.GetKeys">
+            <summary>Return visible keys.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.GetEnumerator">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.Item(System.Int32)">
+            <summary>Returns or sets an value in the lua-table.</summary>
+            <param name="index">Index.</param>
+            <returns>Value or <c>null</c></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.Item(System.String)">
+            <summary>Returns or sets an value in the lua-table.</summary>
+            <param name="key">Index.</param>
+            <returns>Value or <c>null</c></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.Item(System.Object)">
+            <summary>Returns or sets an value in the lua-table.</summary>
+            <param name="key">Index.</param>
+            <returns>Value or <c>null</c></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.Item(System.Object[])">
+            <summary>Returns or sets an value in the lua-table.</summary>
+            <param name="keyList">Index list.</param>
+            <returns>Value or <c>null</c></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.ArrayList">
+            <summary>Access to the array part</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.Members">
+            <summary>Access to all members</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.Values">
+            <summary>Access to all values.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.Length">
+            <summary>Length if it is an array.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaTable.MetaTable">
+            <summary>Access to the __metatable</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.concat(Neo.IronLua.LuaTable,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary></summary>
+            <param name="t"></param>
+            <param name="sep"></param>
+            <param name="i"></param>
+            <param name="j"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.insert(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="t"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.insert(Neo.IronLua.LuaTable,System.Object,System.Object)">
+            <summary></summary>
+            <param name="t"></param>
+            <param name="pos"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.move(Neo.IronLua.LuaTable,System.Int32,System.Int32,System.Int32)">
+            <summary></summary>
+            <param name="t1"></param>
+            <param name="f"></param>
+            <param name="e"></param>
+            <param name="t"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.move(Neo.IronLua.LuaTable,System.Int32,System.Int32,System.Int32,Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="t1"></param>
+            <param name="f"></param>
+            <param name="e"></param>
+            <param name="t"></param>
+            <param name="t2"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.merge(Neo.IronLua.LuaTable,Neo.IronLua.LuaTable,System.Boolean)">
+            <summary>merge the second table into the first one.</summary>
+            <param name="targetTable"></param>
+            <param name="mergeTable"></param>
+            <param name="overwrite"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.pack(System.Object[])">
+            <summary>Returns a new table with all parameters stored into keys 1, 2, etc. and with a field &quot;n&quot; 
+            with the total number of parameters. Note that the resulting table may not be a sequence.</summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.pack``1(``0[])">
+            <summary>Returns a new table with all parameters stored into keys 1, 2, etc. and with a field &quot;n&quot; 
+            with the total number of parameters. Note that the resulting table may not be a sequence.</summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.remove(Neo.IronLua.LuaTable)">
+            <summary>Removes from list the last element.</summary>
+            <param name="t"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.remove(Neo.IronLua.LuaTable,System.Int32)">
+            <summary>Removes from list the element at position pos, returning the value of the removed element.</summary>
+            <param name="t"></param>
+            <param name="pos"></param>
+        </member>
+        <member name="T:Neo.IronLua.LuaTable.SortComparer">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.sort(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="t"></param>
+            <param name="sort"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.unpack(Neo.IronLua.LuaTable)">
+            <summary>Returns the elements from the given table.</summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.unpack(Neo.IronLua.LuaTable,System.Int32)">
+            <summary>Returns the elements from the given table.</summary>
+            <param name="t"></param>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.unpack(Neo.IronLua.LuaTable,System.Int32,System.Int32)">
+            <summary>Returns the elements from the given table.</summary>
+            <param name="t"></param>
+            <param name="i"></param>
+            <param name="j"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.unpack``1(Neo.IronLua.LuaTable,System.Int32,System.Int32,``0[])">
+            <summary>Returns the elements from the given table as a sequence.</summary>
+            <param name="t"></param>
+            <param name="i"></param>
+            <param name="j"></param>
+            <param name="empty">Return value for empty lists</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.collect(Neo.IronLua.LuaTable)">
+            <summary>Returns the elements from the given table as a sequence.</summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.collect(Neo.IronLua.LuaTable,System.Int32)">
+            <summary>Returns the elements from the given table as a sequence.</summary>
+            <param name="t"></param>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.collect(Neo.IronLua.LuaTable,System.Int32,System.Int32)">
+            <summary>Returns the elements from the given table as a sequence.</summary>
+            <param name="t"></param>
+            <param name="i"></param>
+            <param name="j"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.collect``1(Neo.IronLua.LuaTable,System.Int32,System.Int32,``0[])">
+            <summary>Returns the elements from the given table as a sequence.</summary>
+            <param name="t"></param>
+            <param name="i"></param>
+            <param name="j"></param>
+            <param name="empty">Return value for empty lists</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ToLsonCore(Neo.IronLua.LuaTable,System.IO.TextWriter,System.Boolean,System.String,System.Int32)">
+            <summary>Convert the table to a string</summary>
+            <param name="table"></param>
+            <param name="tw"></param>
+            <param name="prettyFormatting"></param>
+            <param name="currentLevel"></param>
+            <param name="indent"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ToLson(Neo.IronLua.LuaTable,System.Boolean,System.String)">
+            <summary>Convert the table to a string</summary>
+            <param name="table"></param>
+            <param name="prettyFormatting"></param>
+            <param name="indent"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ToLson(System.Boolean,System.String)">
+            <summary>Convert the table to a string</summary>
+            <param name="prettyFormatting"></param>
+            <param name="indent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.FromLson(Neo.IronLua.ILuaLexer)">
+            <summary></summary>
+            <param name="lex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.FromLson(System.IO.TextReader)">
+            <summary></summary>
+            <param name="tr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.FromLson(System.String)">
+            <summary>Parse a lua table</summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ToJson(Neo.IronLua.LuaTable,System.Boolean,System.String)">
+            <summary>Convert the table to a json-string</summary>
+            <param name="table"></param>
+            <param name="prettyFormatting"></param>
+            <param name="indent"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ToJson(Neo.IronLua.LuaTable,System.IO.TextWriter,System.Boolean,System.String)">
+            <summary>Convert the table to a json-string</summary>
+            <param name="table"></param>
+            <param name="tw"></param>
+            <param name="prettyFormatting"></param>
+            <param name="indent"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.ToJson(System.Boolean,System.String)">
+            <summary>Convert the table to a json-string</summary>
+            <param name="prettyFormatting"></param>
+            <param name="indent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.FromJson(System.IO.TextReader)">
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.FromJson(System.String)">
+            <summary>Parse json to a lua table</summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_Addition(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_Subtraction(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_Multiply(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_Division(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_Modulus(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_UnaryNegation(Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="table"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_Equality(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_Inequality(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_LessThan(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_GreaterThan(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_LessThanOrEqual(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_GreaterThanOrEqual(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_RightShift(Neo.IronLua.LuaTable,System.Int32)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_LeftShift(Neo.IronLua.LuaTable,System.Int32)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_BitwiseAnd(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_BitwiseOr(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_ExclusiveOr(Neo.IronLua.LuaTable,System.Object)">
+            <summary></summary>
+            <param name="table"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaTable.op_OnesComplement(Neo.IronLua.LuaTable)">
+            <summary></summary>
+            <param name="table"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaThreadStatus">
+            <summary>Descripes the status of an LuaThread.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaThreadStatus.Normal">
+            <summary>Coroutine is active but not running.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaThreadStatus.Running">
+            <summary>Coroutine is running.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaThreadStatus.Suspended">
+            <summary>Coroutine currently calls yield.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaThreadStatus.Dead">
+            <summary>Coroutine has stopped.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaThread">
+            <summary>Implemention of the coroutine module.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.#ctor(System.Object)">
+            <summary>Creates a new lua thread.</summary>
+            <param name="target">Delegate that should run as a thread.</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.Dispose">
+            <summary>Gibt die Daten frei</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.create(System.Object)">
+            <summary>Creates a coroutine from an delegate.</summary>
+            <param name="target"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.BeginResume(System.Object[])">
+            <summary>Starts the execution of the next part of the thread.</summary>
+            <param name="args">Arguments, that will pass to the function-part</param>
+            <returns>Returns the <c>LuaThread</c> as an IAsyncResult.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.EndResume(System.IAsyncResult)">
+            <summary></summary>
+            <param name="ar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.resume(System.Object[])">
+            <summary>Executes a part of the thread.</summary>
+            <param name="args">Arguments, that will pass to the function-part</param>
+            <returns>Result of the function.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.resume(Neo.IronLua.LuaThread,System.Object[])">
+            <summary>Executes a part of the thread.</summary>
+            <param name="co">Thread, that should resume.</param>
+            <param name="args">Arguments, that will pass to the function-part</param>
+            <returns>Result of the function.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.yield(System.Object[])">
+            <summary>Sends a result to the main-thread.</summary>
+            <param name="args">Result</param>
+            <returns>New parameter.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.running">
+            <summary>Returns the running coroutine and a boolean if it is the main.</summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaThread.Status">
+            <summary>Returns the status of the thread.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.status(System.Object)">
+            <summary>Returns the status of the thread.</summary>
+            <param name="co">Thread</param>
+            <returns>Returns the status.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaThread.wrap(System.Delegate)">
+            <summary>Creates a function, that wraps resume.</summary>
+            <param name="dlg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.LuaMethodEnumerate">
+            <summary>Enumeration type.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaMethodEnumerate.Static">
+            <summary>Enumerate only public static methods.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaMethodEnumerate.Typed">
+            <summary>Enumerate only public non-static methods.</summary>
+        </member>
+        <member name="F:Neo.IronLua.LuaMethodEnumerate.Dynamic">
+            <summary>Enumerate public non-static and interface methods.</summary>
+        </member>
+        <member name="T:Neo.IronLua.ILuaTypeResolver">
+            <summary>Interface to the logic, that resolves the types.</summary>
+        </member>
+        <member name="M:Neo.IronLua.ILuaTypeResolver.Refresh">
+            <summary>Gets called before the resolve of a assembly.</summary>
+        </member>
+        <member name="M:Neo.IronLua.ILuaTypeResolver.GetType(System.String)">
+            <summary>Resolves the type.</summary>
+            <param name="sTypeName">Name of the type.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.ILuaTypeResolver.Version">
+            <summary>Versioninformation for the re-resolve of types.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaSimpleTypeResolver">
+            <summary>Simple resolver, that iterates over a list of static assemblies.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaSimpleTypeResolver.#ctor">
+            <summary>Creates a simple type resolver.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaSimpleTypeResolver.Add(System.Reflection.Assembly)">
+            <summary>Appends a new assembly for the search.</summary>
+            <param name="assembly">Assembly</param>
+        </member>
+        <member name="T:Neo.IronLua.LuaType">
+            <summary>Base class for the Type-Wrapper.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.GetHashCode">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.Equals(System.Object)">
+            <summary></summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.Equals(System.Type)">
+            <summary></summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.ToString">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.System#Dynamic#IDynamicMetaObjectProvider#GetMetaObject(System.Linq.Expressions.Expression)">
+            <summary>Gets the dynamic interface of a type</summary>
+            <param name="parameter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.MakeGenericLuaType(Neo.IronLua.LuaType[],System.Boolean)">
+            <summary>Get the generic type</summary>
+            <param name="arguments">Arguments for the generic type</param>
+            <param name="throwException"></param>
+            <returns>Created type.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.MakeArrayLuaType(System.Int32,System.Boolean)">
+            <summary></summary>
+            <param name="rank"></param>
+            <param name="throwException"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.EnumerateMembers``1(Neo.IronLua.LuaMethodEnumerate,System.Func{System.Collections.Generic.IEnumerable{System.Reflection.MemberInfo},System.Collections.Generic.IEnumerable{System.Reflection.MemberInfo}})">
+            <summary></summary>
+            <typeparam name="T"></typeparam>
+            <param name="searchType"></param>
+            <param name="getDeclaredMembers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.EnumerateMembers``1(Neo.IronLua.LuaMethodEnumerate,System.String,System.Boolean)">
+            <summary></summary>
+            <typeparam name="T"></typeparam>
+            <param name="memberName"></param>
+            <param name="ignoreCase"></param>
+            <param name="searchType"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.Name">
+            <summary>Name of the LuaType</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.FullName">
+            <summary>FullName of the Clr-Type</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.AliasName">
+            <summary>Alias name</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.AliasOrFullName">
+            <summary>Returns the alias or if it is <c>null</c> the full name</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.Type">
+            <summary>Type that is represented by the LuaType</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.IsNamespace">
+            <summary>Is the LuaType only a namespace at the time.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.Parent">
+            <summary>Parent type</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.AssemblyCacheList.AssemblyCount">
+            <summary>Number of loaded assemblies</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.op_Implicit(Neo.IronLua.LuaType)~System.Type">
+            <summary>implicit convert to type</summary>
+            <param name="type">lua-type that should convert.</param>
+            <returns>clr-type</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.GetType(System.Type)">
+            <summary>Creates or looks up the LuaType for a clr-type.</summary>
+            <param name="type">clr-type, that should wrapped.</param>
+            <returns>Wrapped Type</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.GetType(System.String,System.Boolean,System.Boolean)">
+            <summary>Creates or looks up the LuaType for a clr-type.</summary>
+            <param name="typeName">Full path to the type (clr-name).</param>
+            <param name="ignoreCase"></param>
+            <param name="lateAllowed">Must the type exist or it is possible to bound the type later.</param>
+            <returns>Wrapped Type, is lLate is <c>false</c> also <c>null</c> is possible.</returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.GetCachedType(System.String)">
+            <summary>Lookup for a well known type.</summary>
+            <param name="typeName">Name of the type (in neolua style)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.RegisterTypeAlias(System.String,System.Type)">
+            <summary>Register a new type alias.</summary>
+            <param name="aliasName">Name of the type alias. It should be a identifier.</param>
+            <param name="type">Type of the alias</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.RegisterTypeExtension(System.Type)">
+            <summary>Registers a type extension.</summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.RegisterMethodExtension(System.Reflection.MethodInfo)">
+            <summary>Registers a single extension method.</summary>
+            <param name="mi">Method</param>
+        </member>
+        <member name="M:Neo.IronLua.LuaType.RegisterMethodExtension(System.Type,System.Type,System.String)">
+            <summary></summary>
+            <param name="typeToExtent"></param>
+            <param name="type"></param>
+            <param name="methodName"></param>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.Clr">
+            <summary>Root for all clr-types.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.Resolver">
+            <summary>Resolver for types.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.DefaultResolver">
+            <summary>Default resolver.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaType.LookupReferencedAssemblies">
+            <summary>Should the type resolve also scan references assemblies (default is true).</summary>
+        </member>
+        <member name="T:Neo.IronLua.ILuaMethod">
+            <summary></summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaMethod.Name">
+            <summary>Name of the member.</summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaMethod.Type">
+            <summary>Type that is the owner of the member list</summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaMethod.Instance">
+            <summary>Instance, that belongs to the member.</summary>
+        </member>
+        <member name="P:Neo.IronLua.ILuaMethod.IsMemberCall">
+            <summary>Is the first parameter a self parameter.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaMethod">
+            <summary>Represents overloaded members.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaMethod.#ctor(System.Object,System.Reflection.MethodInfo,System.Boolean)">
+            <summary></summary>
+            <param name="instance"></param>
+            <param name="method"></param>
+            <param name="isMemberCall"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaMethod.ToString">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaMethod.CreateDelegate(System.Type)">
+            <summary>Creates a delegate from the method</summary>
+            <param name="typeDelegate"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaMethod.Name">
+            <summary>Name of the member.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaMethod.Type">
+            <summary>Type that is the owner of the member list</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaMethod.Instance">
+            <summary>Instance, that belongs to the member.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaMethod.IsMemberCall">
+            <summary>Use self parameter</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaMethod.Method">
+            <summary>Access to the method.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaMethod.Delegate">
+            <summary>Delegate of the Method</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaOverloadedMethod">
+            <summary>Represents overloaded members.</summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaOverloadedMethod.#ctor(System.Object,System.Reflection.MethodInfo[],System.Boolean)">
+            <summary></summary>
+            <param name="instance"></param>
+            <param name="methods"></param>
+            <param name="isMemberCall"></param>
+        </member>
+        <member name="M:Neo.IronLua.LuaOverloadedMethod.System#Dynamic#IDynamicMetaObjectProvider#GetMetaObject(System.Linq.Expressions.Expression)">
+            <summary></summary>
+            <param name="parameter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaOverloadedMethod.GetDelegate(System.Boolean,System.Type[])">
+            <summary>Finds the delegate from the signature.</summary>
+            <param name="exactMatchesOnly"><c>true </c>type must match exact. <c>false</c>, the types only should assignable.</param>
+            <param name="types">Types</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaOverloadedMethod.GetDelegate(System.Dynamic.CallInfo,System.Type[])">
+            <summary>Finds the delegate from the signature.</summary>
+            <param name="callInfo"></param>
+            <param name="types"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaOverloadedMethod.GetDelegate(System.Int32)">
+            <summary>Gets the delegate from the index</summary>
+            <param name="index">Index</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaOverloadedMethod.GetMethod(System.Boolean,System.Type[])">
+            <summary>Finds the method from the signature</summary>
+            <param name="exactMatchesOnly"><c>true </c>type must match exact. <c>false</c>, the types only should assignable.</param>
+            <param name="types"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaOverloadedMethod.GetMethod(System.Dynamic.CallInfo,System.Type[])">
+            <summary>Finds the method from the signature.</summary>
+            <param name="callInfo"></param>
+            <param name="types"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaOverloadedMethod.GetMethod(System.Int32)">
+            <summary>Gets the method from the index</summary>
+            <param name="index">Index</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaOverloadedMethod.GetEnumerator">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.LuaOverloadedMethod.ToString">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaOverloadedMethod.Item(System.Int32)">
+            <summary></summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaOverloadedMethod.Item(System.Type[])">
+            <summary></summary>
+            <param name="types"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaOverloadedMethod.Name">
+            <summary>Name of the member.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaOverloadedMethod.Type">
+            <summary>Type that is the owner of the member list</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaOverloadedMethod.Instance">
+            <summary>Instance, that belongs to the member.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaOverloadedMethod.IsMemberCall">
+            <summary>Self parameter</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaOverloadedMethod.Count">
+            <summary>Count of overloade members.</summary>
+        </member>
+        <member name="T:Neo.IronLua.LuaEvent">
+            <summary></summary>
+        </member>
+        <member name="M:Neo.IronLua.LuaEvent.ToString">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="P:Neo.IronLua.LuaEvent.Name">
+            <summary>Name of the event.</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaEvent.Type">
+            <summary>Type that is the owner of the member list</summary>
+        </member>
+        <member name="P:Neo.IronLua.LuaEvent.Instance">
+            <summary>Instance, that belongs to the member.</summary>
+        </member>
+        <member name="T:Neo.IronLua.Parser">
+            <summary>Internal parser code to generate te expression tree.</summary>
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.Parser.Scope">
+            <summary>Scope, that builds a block.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Parser.Scope.#ctor(Neo.IronLua.Parser.Scope)">
+            <summary>Creates the scope</summary>
+            <param name="parent">parent-scope</param>
+        </member>
+        <member name="M:Neo.IronLua.Parser.Scope.RegisterVariable(System.Type,System.String)">
+            <summary>Creates a new variable in the current scope.</summary>
+            <param name="type">Type of the variable</param>
+            <param name="sName">Name of the variable</param>
+            <returns>The expression that represents the access to the variable.</returns>
+        </member>
+        <member name="M:Neo.IronLua.Parser.Scope.RegisterVariable(System.Linq.Expressions.ParameterExpression)">
+            <summary></summary>
+            <param name="expr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neo.IronLua.Parser.Scope.LookupExpression(System.String,System.Boolean)">
+            <summary>Looks up the variable/parameter/const through the scopes.</summary>
+            <param name="name">Name of the variable</param>
+            <param name="isLocalOnly"></param>
+            <returns>The access-expression for the variable, parameter or <c>null</c>, if it is not registered.</returns>
+        </member>
+        <member name="M:Neo.IronLua.Parser.Scope.LookupLabel(System.Type,System.String)">
+            <summary>Create a named label or look for an existing</summary>
+            <param name="type">Returntype for the label</param>
+            <param name="sName">Name for the label</param>
+            <returns>Labeltarget</returns>
+        </member>
+        <member name="P:Neo.IronLua.Parser.Scope.ExpressionBlock">
+            <summary>Close the expression block and return it.</summary>
+        </member>
+        <member name="P:Neo.IronLua.Parser.Scope.Runtime">
+            <summary>Access to the Lua-Binders</summary>
+        </member>
+        <member name="P:Neo.IronLua.Parser.Scope.EmitDebug">
+            <summary>Emit-Debug-Information</summary>
+        </member>
+        <member name="P:Neo.IronLua.Parser.Scope.Options">
+            <summary>Options</summary>
+        </member>
+        <member name="P:Neo.IronLua.Parser.Scope.EmitExpressionDebug">
+            <summary>DebugInfo on expression level</summary>
+        </member>
+        <member name="P:Neo.IronLua.Parser.Scope.ReturnType">
+            <summary>Return type of the current Lambda-Scope</summary>
+        </member>
+        <member name="P:Neo.IronLua.Parser.Scope.Variables">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.Parser.LoopScope">
+            <summary>Scope that represents the loop content.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Parser.LoopScope.#ctor(Neo.IronLua.Parser.Scope)">
+            <summary>Scope that represents the loop content.</summary>
+            <param name="parent"></param>
+        </member>
+        <member name="M:Neo.IronLua.Parser.LoopScope.LookupLabel(System.Type,System.String)">
+            <summary>Creates or lookup the label</summary>
+            <param name="type">Type of the label. Is ignored on std. labels.</param>
+            <param name="name">Name of the label.</param>
+            <returns>LabelTarget</returns>
+        </member>
+        <member name="P:Neo.IronLua.Parser.LoopScope.BreakLabel">
+            <summary>Default break position.</summary>
+        </member>
+        <member name="P:Neo.IronLua.Parser.LoopScope.ContinueLabel">
+            <summary>Default continue position.</summary>
+        </member>
+        <member name="T:Neo.IronLua.Parser.LambdaScope">
+            <summary>Lambda-Scope with labels and parameters.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Parser.LambdaScope.#ctor(Neo.IronLua.Parser.Scope,System.Type,System.Linq.Expressions.Expression)">
+            <summary>Creates the lambda-scope, that manages labels and arguments.</summary>
+            <param name="parent"></param>
+            <param name="returnType"></param>
+            <param name="returnDefaultValue"></param>
+        </member>
+        <member name="M:Neo.IronLua.Parser.LambdaScope.RegisterParameter(System.Type,System.String)">
+            <summary>Registers arguments for the function.</summary>
+            <param name="type">Type of the argument</param>
+            <param name="name">Name of the argument</param>
+            <returns>Access to the argument</returns>
+        </member>
+        <member name="M:Neo.IronLua.Parser.LambdaScope.LookupExpression(System.String,System.Boolean)">
+            <summary>Lookup the variables and arguments.</summary>
+            <param name="name">Name of the parameter/variable.</param>
+            <param name="isLocalOnly"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neo.IronLua.Parser.GlobalScope">
+            <summary>Global parse-scope.</summary>
+        </member>
+        <member name="M:Neo.IronLua.Parser.GlobalScope.#ctor(Neo.IronLua.Lua,Neo.IronLua.LuaCompileOptions,System.Type,System.Linq.Expressions.Expression)">
+            <summary>Global parse-scope</summary>
+            <param name="runtime">Runtime and binder of the global scope.</param>
+            <param name="options"></param>
+            <param name="returnType"></param>
+            <param name="returnDefaultValue"></param>
+        </member>
+        <member name="P:Neo.IronLua.Parser.GlobalScope.Runtime">
+            <summary>Access to the binders</summary>
+        </member>
+        <member name="P:Neo.IronLua.Parser.GlobalScope.EmitDebug">
+            <summary>Emit-Debug-Information</summary>
+        </member>
+        <member name="P:Neo.IronLua.Parser.GlobalScope.Options">
+            <summary>Options</summary>
+        </member>
+        <member name="T:Neo.IronLua.Parser.CatchScope">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.Parser.ArgumentsList">
+            <summary>Class to hold arguments.</summary>
+        </member>
+        <member name="T:Neo.IronLua.Parser.PrefixMemberInfo">
+            <summary>Mini-Parse-Tree for resolve of prefix expressions</summary>
+        </member>
+        <member name="M:Neo.IronLua.Parser.ParseChunk(Neo.IronLua.Lua,Neo.IronLua.LuaCompileOptions,System.Boolean,Neo.IronLua.ILuaLexer,System.Type,System.Type,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Type}})">
+            <summary>Parses the chunk to an function.</summary>
+            <param name="runtime">Binder</param>
+            <param name="options">Compile options for the script.</param>
+            <param name="hasEnvironment">Creates the _G parameter.</param>
+            <param name="code">Lexer for the code.</param>
+            <param name="typeDelegate">Type for the delegate. <c>null</c>, for an automatic type</param>
+            <param name="returnType">Defines the return type of the chunk.</param>
+            <param name="args">Arguments of the function.</param>
+            <returns>Expression-Tree for the code.</returns>
+        </member>
+        <member name="T:Neo.IronLua.ReflectionFlag">
+            <summary></summary>
+        </member>
+        <member name="T:Neo.IronLua.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsBindConversionNotDefined">
+            <summary>
+              Looks up a localized string similar to No conversion defined from {0} to {1}..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsBindOperatorNotDefined">
+            <summary>
+              Looks up a localized string similar to No operator is defined for {1} {0} {2}..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsChunkNotCompiled">
+            <summary>
+              Looks up a localized string similar to Chunk is not compiled..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsClrGenericNoType">
+            <summary>
+              Looks up a localized string similar to No type for the generic argument {0}..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsClrGenericTypeExpected">
+            <summary>
+              Looks up a localized string similar to Clr type expected..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsConstExpressionEvalError">
+            <summary>
+              Looks up a localized string similar to Constant expression could not evaluate ({0})..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsConstExpressionNeeded">
+            <summary>
+              Looks up a localized string similar to Constant expression expected..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsCoroutineInvalidAR">
+            <summary>
+              Looks up a localized string similar to Argument ar must from the same LuaThread..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsCoroutineInvalidCO">
+            <summary>
+              Looks up a localized string similar to Argument co must be a LuaThread or a Thread..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsCoroutineNoBeginResume">
+            <summary>
+              Looks up a localized string similar to BeginResume is not called..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsCoroutineWrongThread">
+            <summary>
+              Looks up a localized string similar to Yield from wrong thread..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsDelegateCouldNotHaveOut">
+            <summary>
+              Looks up a localized string similar to Delegate must not have out parameters..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsExpressionNotEnumerable">
+            <summary>
+              Looks up a localized string similar to Expression is not enumerable..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsFileInvalidModeFormat">
+            <summary>
+              Looks up a localized string similar to Invalid mode format..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsFileNotReadable">
+            <summary>
+              Looks up a localized string similar to Can not read from file..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsFileNotSeekable">
+            <summary>
+              Looks up a localized string similar to File pointer can not set to a new position..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsFileNotWriteable">
+            <summary>
+              Looks up a localized string similar to Can not write into file..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsFormatError">
+            <summary>
+              Looks up a localized string similar to Can not format &apos;{0}&apos; to {1}..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsGlobalFunctionNotUnique">
+            <summary>
+              Looks up a localized string similar to Function &apos;{0}&apos; on type &apos;{1}&apos; already exists..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsIndexNotFound">
+            <summary>
+              Looks up a localized string similar to No index found for type &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsInvokeNoDelegate">
+            <summary>
+              Looks up a localized string similar to Type &apos;{0}&apos; is not callable..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsMemberNotReadable">
+            <summary>
+              Looks up a localized string similar to &apos;{0}:{1}&apos; is not readable..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsMemberNotResolved">
+            <summary>
+              Looks up a localized string similar to &apos;{0}:{1}&apos; not found..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsMemberNotUnique">
+            <summary>
+              Looks up a localized string similar to &apos;{0}:{1}&apos; must be unique..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsMemberNotWritable">
+            <summary>
+              Looks up a localized string similar to &apos;{0}:{1}&apos; is not writable..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsMethodStaticMix">
+            <summary>
+              Looks up a localized string similar to Can not mix static and non-static methods ({0})..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsNilNotCallable">
+            <summary>
+              Looks up a localized string similar to Can not call nil value..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsNilOperatorError">
+            <summary>
+              Looks up a localized string similar to Operator is not defined for nil-values..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsNoLengthOperator">
+            <summary>
+              Looks up a localized string similar to No length for {0}..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsNullReference">
+            <summary>
+              Looks up a localized string similar to Object is nil..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsNumberExpected">
+            <summary>
+              Looks up a localized string similar to Number expected..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseAssignmentExpected">
+            <summary>
+              Looks up a localized string similar to Assignment expected..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseCatchVarTypeMustAssignableToException">
+            <summary>
+              Looks up a localized string similar to The argument type must be assignable to Exception (unexpected type: {0}).
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseConvertNumberError">
+            <summary>
+              Looks up a localized string similar to Number expected (&apos;{0}&apos; not converted)..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseEof">
+            <summary>
+              Looks up a localized string similar to Current block is closed before end of file..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseExpressionNoResult">
+            <summary>
+              Looks up a localized string similar to Expression has no result..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseExpressionNotAssignable">
+            <summary>
+              Looks up a localized string similar to Expression is not assignable..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseInvalidArgList">
+            <summary>
+              Looks up a localized string similar to Named arguments specifications must appear after all fixed arguments have been specified..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseInvalidChar">
+            <summary>
+              Looks up a localized string similar to Unexpected char..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseInvalidComment">
+            <summary>
+              Looks up a localized string similar to Comment not closed..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseInvalidString">
+            <summary>
+              Looks up a localized string similar to NewLine in string constant..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseInvalidStringOpening">
+            <summary>
+              Looks up a localized string similar to Invalid long string delimiter..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseNoArgList">
+            <summary>
+              Looks up a localized string similar to No arglist defined..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseTypeRedef">
+            <summary>
+              Looks up a localized string similar to It is not allowed to redefine the type..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseUnexpectedToken">
+            <summary>
+              Looks up a localized string similar to Unexpected token &apos;{0}&apos;. &apos;{1}&apos; expected..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseUnexpectedTokenElse">
+            <summary>
+              Looks up a localized string similar to Unexpected token in Else-Statement.
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseUnexpectedTokenPrefix">
+            <summary>
+              Looks up a localized string similar to Literal, function or table-ctor expected..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsParseUnknownType">
+            <summary>
+              Looks up a localized string similar to Type &apos;{0}&apos; not found..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsStackTraceAt">
+            <summary>
+              Looks up a localized string similar to  at .
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsStackTraceInternal">
+            <summary>
+              Looks up a localized string similar to  -- internal --.
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsStackTraceLine">
+            <summary>
+              Looks up a localized string similar to  line .
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsStackTraceUnknownMethod">
+            <summary>
+              Looks up a localized string similar to &lt;unknown method&gt;.
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTableAddDuplicate">
+            <summary>
+              Looks up a localized string similar to There is already a value with the key &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTableCallMemberFailed">
+            <summary>
+              Looks up a localized string similar to Failed to call &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTableKeyNotNullable">
+            <summary>
+              Looks up a localized string similar to Nil is not a valid key..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTableMethodExpected">
+            <summary>
+              Looks up a localized string similar to Methods must have a LuaTable as first parameter (&apos;{0}&apos;)..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTableOperatorIncompatible">
+            <summary>
+              Looks up a localized string similar to Operator &apos;{0}&apos; is not compatible (expected {1})..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTableOperatorNotFound">
+            <summary>
+              Looks up a localized string similar to Operator &apos;{0}&apos; is not defined for the table..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTableRecursionLevelError">
+            <summary>
+              Looks up a localized string similar to Recursion level is to deep..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTypeAliasInvalidName">
+            <summary>
+              Looks up a localized string similar to Name for type alias is invalid &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTypeExtentionInvalidMethod">
+            <summary>
+              Looks up a localized string similar to Method {0}.{1} must be static, public and needs at least one parameter..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTypeExtentionInvalidType">
+            <summary>
+              Looks up a localized string similar to {0} is not static..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTypeInvalidType">
+            <summary>
+              Looks up a localized string similar to &apos;{0}&apos; is a pointer or byref type. These types can not converted to a LuaType..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTypeIsNotSupported">
+            <summary>
+              Looks up a localized string similar to The type &quot;{0}&quot; is not supported..
+            </summary>
+        </member>
+        <member name="P:Neo.IronLua.Properties.Resources.rsTypeParseError">
+            <summary>
+              Looks up a localized string similar to Invalid type format for &apos;{0}&apos; (unexpected: {1} at {2}; expected: {3}).
+            </summary>
+        </member>
+        <member name="M:AT.MIN.Tools.IsNumericType(System.Object)">
+            <summary>
+            Determines whether the specified value is of numeric type.
+            </summary>
+            <param name="o">The object to check.</param>
+            <returns>
+            	<c>true</c> if o is a numeric type; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:AT.MIN.Tools.IsPositive(System.Object,System.Boolean)">
+            <summary>
+            Determines whether the specified value is positive.
+            </summary>
+            <param name="Value">The value.</param>
+            <param name="ZeroIsPositive">if set to <c>true</c> treats 0 as positive.</param>
+            <returns>
+            	<c>true</c> if the specified value is positive; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:AT.MIN.Tools.ToUnsigned(System.Object)">
+            <summary>
+            Converts the specified values boxed type to its correpsonding unsigned
+            type.
+            </summary>
+            <param name="Value">The value.</param>
+            <returns>A boxed numeric object whos type is unsigned.</returns>
+        </member>
+        <member name="M:AT.MIN.Tools.ToInteger(System.Object,System.Boolean)">
+            <summary>
+            Converts the specified values boxed type to its correpsonding integer
+            type.
+            </summary>
+            <param name="Value">The value.</param>
+            <param name="Round"></param>
+            <returns>A boxed numeric object whos type is an integer type.</returns>
+        </member>
+        <member name="M:AT.MIN.Tools.ReplaceMetaChars(System.String)">
+            <summary>
+            Replaces the string representations of meta chars with their corresponding
+            character values.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>A string with all string meta chars are replaced</returns>
+        </member>
+        <member name="M:AT.MIN.Tools.ToStrFTime(System.DateTime,System.String)">
+            <summary>
+            Format time as string
+            </summary>
+            <param name="dateTime">Instant in time, typically expressed as a date and time of day.</param>
+            <param name="pattern">String containing any combination of regular characters and special format specifiers.They all begin with a percentage (%).</param>
+            <returns>String with expanding its format specifiers into the corresponding values that represent the time described in dateTime</returns>
+        </member>
+    </members>
+</doc>

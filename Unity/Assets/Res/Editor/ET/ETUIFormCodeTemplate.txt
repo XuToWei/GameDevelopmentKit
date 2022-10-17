@@ -1,0 +1,9 @@
+﻿using UGF;
+
+namespace ET.Client
+{
+    public partial class #NAME#Form: ETUIForm
+    {
+        
+    }
+}

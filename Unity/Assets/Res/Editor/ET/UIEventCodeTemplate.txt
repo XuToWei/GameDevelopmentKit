@@ -1,0 +1,22 @@
+﻿using UGF;
+
+namespace ET.Client
+{
+    [UIEvent(UIFormId.#NAME#)]
+    [FriendOf(typeof(UI#NAME#Component))]
+    public class UI#NAME#Event: AUIEvent
+    {
+        public override void OnInit(UI ui, object userData)
+        {
+            base.OnInit(ui, userData);
+            #NAME#Form uiForm = ui.UIForm.Logic as #NAME#Form;
+            UI#NAME#Component ui#NAME#Component = ui.AddComponent<UI#NAME#Component, #NAME#Form>(uiForm);
+        }
+        
+        public override void OnOpen(UI ui, object userData)
+        {
+            base.OnOpen(ui, userData);
+            
+        }
+    }
+}

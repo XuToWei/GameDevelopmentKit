@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="Scriban.props" />
+  <PropertyGroup>
+    <PackageId>Scriban</PackageId>
+  </PropertyGroup>
+</Project>

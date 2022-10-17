@@ -1,0 +1,1 @@
+docker run -d --rm --name luban-server -p 8899:8899 focuscreativegames/luban-server:latest
