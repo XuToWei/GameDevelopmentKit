@@ -7,6 +7,8 @@
 
 [自定义代码绑定工具](./Unity/Assets/Scripts/Editor/UGF/Common/BaseBindInspector)
 
+[GF与ET结合的UI](./Unity/Assets/Scripts/Codes/ModelView/Client/UGF/UI)
+
 # 使用方式
 配置表目录在Develop中
 
