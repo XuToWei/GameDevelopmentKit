@@ -12,10 +12,9 @@
 
 打开Unity/Assets/Luncher.unity场景运行
 
-#自定义代码绑定工具介绍
-Unity的MonoBehaviour的Inspector继承自BaseBindInspector即可，使用Hybridclr来实现对MonoBehaviour的热更即可（对ModelView即可）
+自定义绑定代码MonoBehaviour继承使用BaseBindInspector即可，使用Hybridclr来实现对MonoBehaviour的热更即可
 
-[Hybridclr热更MonoBehaviour](https://focus-creative-games.github.io/hybridclr/monobehaviour/)
+[Hybridclr热更ModelView中的MonoBehaviour](https://focus-creative-games.github.io/hybridclr/monobehaviour/)
 
 # 引用库，致谢
 [ET](https://github.com/egametang/ET)
