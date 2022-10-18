@@ -1,7 +1,7 @@
 #!/bin/bash
-WORKSPACE=../..
+WORKSPACE=$(cd $(dirname $0);cd ../.. ; pwd)
 
-GEN_CLIENT=${WORKSPACE}/Tools/luban/Tools/Luban.ClientServer/Luban.ClientServer.exe
+GEN_CLIENT=${WORKSPACE}/Tools/luban/Tools/Luban.ClientServer/Luban.ClientServer.dll
 CONF_ROOT=${WORKSPACE}/Develop/Excel
 
 CUSTOM_TEMPLATE_DIR=${WORKSPACE}/Tools/luban/Custom/Templates

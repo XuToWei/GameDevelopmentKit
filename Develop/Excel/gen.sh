@@ -1,5 +1,5 @@
 #!/bin/bash
-WORKSPACE=../..
+WORKSPACE=$(cd $(dirname $0);cd ../.. ; pwd)
 
 GEN_CLIENT=${WORKSPACE}/Tools/luban/Tools/Luban.ClientServer/Luban.ClientServer.dll
 CONF_ROOT=${WORKSPACE}/Develop/Excel
@@ -14,8 +14,8 @@ GEN_TYPE_DATA=data_bin
 dotnet ${GEN_CLIENT} --template_search_path ${CUSTOM_TEMPLATE_DIR}/LoadAsync -j cfg --\
  -d ${CONF_ROOT}/Defines/__root__.xml \
  --input_data_dir ${CONF_ROOT}/Datas \
- --output_code_dir %OUTPUT_CODE_DIR%/Client/Config \
- --output_data_dir %OUTPUT_DATA_DIR%/Client \
+ --output_code_dir ${OUTPUT_CODE_DIR}/Client/Config \
+ --output_data_dir ${OUTPUT_DATA_DIR}/Client \
  --gen_types ${GEN_TYPE_CODE_DATA} \
  -s client
 
@@ -29,8 +29,8 @@ dotnet ${GEN_CLIENT} --template_search_path ${CUSTOM_TEMPLATE_DIR}/LoadAsync -j 
 dotnet ${GEN_CLIENT} --template_search_path ${CUSTOM_TEMPLATE_DIR}/Load -j cfg --\
  -d ${CONF_ROOT}/Defines/__root__.xml \
  --input_data_dir ${CONF_ROOT}/Datas \
- --output_code_dir %OUTPUT_CODE_DIR%/Server/Config \
- --output_data_dir %OUTPUT_DATA_DIR%/Server \
+ --output_code_dir ${OUTPUT_CODE_DIR}/Server/Config \
+ --output_data_dir ${OUTPUT_DATA_DIR}/Server \
  --gen_types ${GEN_TYPE_CODE_DATA} \
  -s server
 
@@ -44,8 +44,8 @@ dotnet ${GEN_CLIENT} --template_search_path ${CUSTOM_TEMPLATE_DIR}/Load -j cfg -
 dotnet ${GEN_CLIENT} --template_search_path ${CUSTOM_TEMPLATE_DIR}/LoadAsync -j cfg --\
  -d ${CONF_ROOT}/Defines/__root__.xml \
  --input_data_dir ${CONF_ROOT}/Datas \
- --output_code_dir %OUTPUT_CODE_DIR%/ClientServer/Config \
- --output_data_dir %OUTPUT_DATA_DIR%/ClientServer \
+ --output_code_dir ${OUTPUT_CODE_DIR}/ClientServer/Config \
+ --output_data_dir ${OUTPUT_DATA_DIR}/ClientServer \
  --gen_types ${GEN_TYPE_CODE_DATA} \
  -s clientserver
 
