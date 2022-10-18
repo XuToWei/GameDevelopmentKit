@@ -108,4 +108,5 @@ public sealed partial class DRUISound :  Bright.Config.EditorBeanBase
     public float Volume { get; set; }
 
 }
+
 }

@@ -96,4 +96,5 @@ public sealed partial class TestExcelBean2 :  Bright.Config.EditorBeanBase
     public float Y3 { get; set; }
 
 }
+
 }

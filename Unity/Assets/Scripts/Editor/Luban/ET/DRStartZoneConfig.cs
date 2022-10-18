@@ -133,4 +133,5 @@ public sealed partial class DRStartZoneConfig :  Bright.Config.EditorBeanBase
     public string Desc { get; set; }
 
 }
+
 }

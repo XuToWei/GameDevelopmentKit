@@ -162,4 +162,5 @@ public sealed partial class DRStartSceneConfig :  Bright.Config.EditorBeanBase
     public int OuterPort { get; set; }
 
 }
+
 }

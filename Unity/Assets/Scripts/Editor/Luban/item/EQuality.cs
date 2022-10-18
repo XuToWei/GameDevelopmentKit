@@ -8,7 +8,6 @@
 
 namespace editor.cfg.item
 {
-
     public enum EQuality
     {
         /// <summary>
@@ -61,4 +60,5 @@ namespace editor.cfg.item
             return __items.Find(c => c.Value == value);
         }
     }
+
 }

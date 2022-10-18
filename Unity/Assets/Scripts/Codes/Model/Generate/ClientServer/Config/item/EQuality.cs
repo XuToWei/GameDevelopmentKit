@@ -6,8 +6,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+
 namespace cfg.item
-{
+{ 
     public enum EQuality
     {
         /// <summary>
@@ -27,4 +28,5 @@ namespace cfg.item
         /// </summary>
         RED = 4,
     }
-}
+
+} 

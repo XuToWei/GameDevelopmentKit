@@ -146,4 +146,5 @@ public sealed partial class DRAIConfig :  Bright.Config.EditorBeanBase
     public System.Collections.Generic.List<int> NodeParams { get; set; }
 
 }
+
 }

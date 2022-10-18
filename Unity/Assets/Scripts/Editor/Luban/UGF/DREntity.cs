@@ -111,4 +111,5 @@ public sealed partial class DREntity :  Bright.Config.EditorBeanBase
     public int Priority { get; set; }
 
 }
+
 }

@@ -92,4 +92,5 @@ public sealed partial class DRScene :  Bright.Config.EditorBeanBase
     public int BackgroundMusicId { get; set; }
 
 }
+
 }

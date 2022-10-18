@@ -9,10 +9,8 @@ using Bright.Serialization;
 using System.Collections.Generic;
 
 
-
 namespace cfg.ET
 {
-
 public sealed partial class DRUnitConfig :  Bright.Config.BeanBase 
 {
     public DRUnitConfig(ByteBuf _buf) 

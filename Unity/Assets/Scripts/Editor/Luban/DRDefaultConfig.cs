@@ -73,4 +73,5 @@ public sealed partial class DRDefaultConfig :  Bright.Config.EditorBeanBase
     public int Test { get; set; }
 
 }
+
 }

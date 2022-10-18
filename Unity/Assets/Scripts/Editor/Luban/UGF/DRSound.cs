@@ -156,4 +156,5 @@ public sealed partial class DRSound :  Bright.Config.EditorBeanBase
     public float MaxDistance { get; set; }
 
 }
+
 }

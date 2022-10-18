@@ -108,4 +108,5 @@ public sealed partial class DRStartProcessConfig :  Bright.Config.EditorBeanBase
     public int InnerPort { get; set; }
 
 }
+
 }

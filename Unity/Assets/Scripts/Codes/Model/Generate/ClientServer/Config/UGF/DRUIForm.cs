@@ -9,10 +9,8 @@ using Bright.Serialization;
 using System.Collections.Generic;
 
 
-
 namespace cfg.UGF
 {
-
 public sealed partial class DRUIForm :  Bright.Config.BeanBase 
 {
     public DRUIForm(ByteBuf _buf) 

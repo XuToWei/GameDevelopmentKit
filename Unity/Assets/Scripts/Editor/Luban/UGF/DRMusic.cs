@@ -92,4 +92,5 @@ public sealed partial class DRMusic :  Bright.Config.EditorBeanBase
     public float Volume { get; set; }
 
 }
+
 }

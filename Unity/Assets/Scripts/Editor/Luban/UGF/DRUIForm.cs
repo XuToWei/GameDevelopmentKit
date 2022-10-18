@@ -146,4 +146,5 @@ public sealed partial class DRUIForm :  Bright.Config.EditorBeanBase
     public bool PauseCoveredUIForm { get; set; }
 
 }
+
 }

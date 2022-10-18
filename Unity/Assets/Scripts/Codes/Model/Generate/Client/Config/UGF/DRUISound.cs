@@ -9,10 +9,8 @@ using Bright.Serialization;
 using System.Collections.Generic;
 
 
-
 namespace cfg.UGF
 {
-
 public sealed partial class DRUISound :  Bright.Config.BeanBase 
 {
     public DRUISound(ByteBuf _buf) 

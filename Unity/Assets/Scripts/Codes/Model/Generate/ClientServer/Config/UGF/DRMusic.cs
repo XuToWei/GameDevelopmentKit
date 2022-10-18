@@ -9,10 +9,8 @@ using Bright.Serialization;
 using System.Collections.Generic;
 
 
-
 namespace cfg.UGF
 {
-
 public sealed partial class DRMusic :  Bright.Config.BeanBase 
 {
     public DRMusic(ByteBuf _buf) 

@@ -159,4 +159,5 @@ public sealed partial class DRUnitConfig :  Bright.Config.EditorBeanBase
     public int Weight { get; set; }
 
 }
+
 }

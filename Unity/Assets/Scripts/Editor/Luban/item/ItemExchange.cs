@@ -74,4 +74,5 @@ public sealed partial class ItemExchange :  Bright.Config.EditorBeanBase
     public int Num { get; set; }
 
 }
+
 }

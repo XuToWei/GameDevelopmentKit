@@ -9,10 +9,8 @@ using Bright.Serialization;
 using System.Collections.Generic;
 
 
-
 namespace cfg.UGF
 {
-
 public sealed partial class DREntity :  Bright.Config.BeanBase 
 {
     public DREntity(ByteBuf _buf) 

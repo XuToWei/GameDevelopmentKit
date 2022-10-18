@@ -44,4 +44,5 @@ public abstract partial class Shape :  Bright.Config.EditorBeanBase
     }
 
 }
+
 }

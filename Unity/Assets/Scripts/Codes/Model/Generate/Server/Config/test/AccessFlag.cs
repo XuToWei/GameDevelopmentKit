@@ -6,8 +6,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+
 namespace cfg.test
-{
+{ 
     [System.Flags]
     public enum AccessFlag
     {
@@ -20,4 +21,5 @@ namespace cfg.test
         /// </summary>
         READ_WRITE = WRITE|READ,
     }
-}
+
+} 

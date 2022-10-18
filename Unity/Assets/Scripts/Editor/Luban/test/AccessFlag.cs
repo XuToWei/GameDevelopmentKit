@@ -8,7 +8,6 @@
 
 namespace editor.cfg.test
 {
-
     [System.Flags]
     public enum AccessFlag
     {
@@ -56,4 +55,5 @@ namespace editor.cfg.test
             return __items.Find(c => c.Value == value);
         }
     }
+
 }

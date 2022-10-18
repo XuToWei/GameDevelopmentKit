@@ -133,4 +133,5 @@ public sealed partial class DRStartMachineConfig :  Bright.Config.EditorBeanBase
     public string WatcherPort { get; set; }
 
 }
+
 }

@@ -9,10 +9,8 @@ using Bright.Serialization;
 using System.Collections.Generic;
 
 
-
 namespace cfg.UGF
 {
-
 public sealed partial class DRScene :  Bright.Config.BeanBase 
 {
     public DRScene(ByteBuf _buf) 
