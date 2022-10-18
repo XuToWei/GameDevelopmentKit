@@ -21,8 +21,7 @@ namespace ET.Client
 
         private async ETTask LoadAsync(ETTask<ISingleton> task)
         {
-            GlobalConfig globalConfig = Resources.Load<GlobalConfig>("GlobalConfig");
-            CodeMode codeMode = globalConfig.CodeMode;
+            CodeMode codeMode = GameEntry.Builtin.GlobalConfig.CodeMode;
             
             Type tablesType = typeof (DataTables);
 
