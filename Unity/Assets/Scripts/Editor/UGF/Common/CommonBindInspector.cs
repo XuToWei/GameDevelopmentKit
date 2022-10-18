@@ -14,11 +14,11 @@ namespace UGF.Editor
 
         private readonly List<(string, Type)> m_DefaultBindTypeList = new()
         {
-            ("Trans", typeof (Transform)),
-            ("OldAnim", typeof (Animation)),
-            ("NewAnim", typeof (Animator)),
-            ("SpRender", typeof (SpriteRenderer)),
-            ("TMPTxt", typeof (TextMeshPro)),
+            ("Transform", typeof (Transform)),
+            ("Animation", typeof (Animation)),
+            ("Animator", typeof (Animator)),
+            ("SpriteRenderer", typeof (SpriteRenderer)),
+            ("TextMeshPro", typeof (TextMeshPro)),
         };
 
         private readonly List<(string, Type)> m_CustomBindTypeList = new()

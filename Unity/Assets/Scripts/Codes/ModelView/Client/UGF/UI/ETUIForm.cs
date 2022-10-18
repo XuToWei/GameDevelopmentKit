@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using ET;
 using ET.Client;
 using GameFramework;
 using UnityGameFramework.Runtime;
-using UIComponent = ET.Client.UIComponent;
 
 namespace UGF
 {
