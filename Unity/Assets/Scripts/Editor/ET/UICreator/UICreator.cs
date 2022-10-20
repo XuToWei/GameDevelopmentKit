@@ -12,7 +12,7 @@ namespace ET
     {
         private const string UIViewCodeTemplateFile = "Assets/Res/Editor/ET/UIViewCodeTemplate.txt";
         private const string UIComponentCodeTemplateFile = "Assets/Res/Editor/ET/UIComponentCodeTemplate.txt";
-        private const string UIComponentSystemCodeTemplateFile = "Assets/Res/Editor/ET/UISystemCodeTemplate.txt";
+        private const string UISystemCodeTemplateFile = "Assets/Res/Editor/ET/UISystemCodeTemplate.txt";
         private const string UIEventCodeTemplateFile = "Assets/Res/Editor/ET/UIEventCodeTemplate.txt";
 
         private const string UIModelViewCodePath = "Assets/Scripts/Codes/ModelView/Client/Game/UI";
@@ -85,7 +85,7 @@ namespace ET
 
             GenerateCode(UIViewCodeTemplateFile, $"{UIModelViewCodePath}/{uiName}/UI{uiName}View.cs");
             GenerateCode(UIComponentCodeTemplateFile, $"{UIModelViewCodePath}/{uiName}/UI{uiName}Component.cs");
-            GenerateCode(UIComponentSystemCodeTemplateFile, $"{UIHotfixViewCodePath}/{uiName}/UI{uiName}ComponentSystem.cs");
+            GenerateCode(UISystemCodeTemplateFile, $"{UIHotfixViewCodePath}/{uiName}/UI{uiName}ComponentSystem.cs");
             GenerateCode(UIEventCodeTemplateFile, $"{UIHotfixViewCodePath}/{uiName}/UI{uiName}Event.cs");
         }
     }
