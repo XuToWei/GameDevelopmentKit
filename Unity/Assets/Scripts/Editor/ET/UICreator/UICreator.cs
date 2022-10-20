@@ -85,7 +85,7 @@ namespace ET
 
             GenerateCode(UIViewCodeTemplateFile, $"{UIModelViewCodePath}/{uiName}/UI{uiName}View.cs");
             GenerateCode(UIComponentCodeTemplateFile, $"{UIModelViewCodePath}/{uiName}/UI{uiName}Component.cs");
-            GenerateCode(UISystemCodeTemplateFile, $"{UIHotfixViewCodePath}/{uiName}/UI{uiName}ComponentSystem.cs");
+            GenerateCode(UISystemCodeTemplateFile, $"{UIHotfixViewCodePath}/{uiName}/UI{uiName}System.cs");
             GenerateCode(UIEventCodeTemplateFile, $"{UIHotfixViewCodePath}/{uiName}/UI{uiName}Event.cs");
         }
     }
