@@ -1,0 +1,22 @@
+﻿namespace ET.Client
+{
+    [FriendOf(typeof (UI#NAME#Component))]
+    public static class UI#NAME#System
+    {
+        public class UI#NAME#AwakeSystem : AwakeSystem<UI#NAME#Component, UI#NAME#View>
+        {
+             protected override void Awake(UI#NAME#Component self, UI#NAME#View uiView)
+             {
+                self.View = uiView;
+             }
+        }
+        
+        public class UI#NAME#DestroySystem : DestroySystem<UI#NAME#Component>
+        {
+            protected override void Destroy(UI#NAME#Component self)
+            {
+                self.View = null;
+            }
+        }
+    }
+}

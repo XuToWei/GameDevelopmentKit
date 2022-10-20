@@ -10,9 +10,9 @@ namespace ET.Client
         public override void OnInit(UI ui, object userData)
         {
             base.OnInit(ui, userData);
-            LoginForm uiForm = ui.UIForm.Logic as LoginForm;
-            UILoginComponent uiLoginComponent = ui.AddComponent<UILoginComponent, LoginForm>(uiForm);
-            uiForm.LoginButton.Set(uiLoginComponent.OnLogin);
+            UILoginView uiView = ui.UIForm.GetComponent<UILoginView>();
+            UILoginComponent uiLoginComponent = ui.AddComponent<UILoginComponent, UILoginView>(uiView);
+            uiView.LoginButton.Set(uiLoginComponent.OnLogin);
         }
         
         public override void OnOpen(UI ui, object userData)

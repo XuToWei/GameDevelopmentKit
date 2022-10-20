@@ -9,8 +9,8 @@ namespace ET.Client
         public override void OnInit(UI ui, object userData)
         {
             base.OnInit(ui, userData);
-            MatchRoomForm MatchRoomForm = ui.UIForm.Logic as MatchRoomForm;
-            UIMatchRoomComponent uiMatchRoomComponent = ui.AddComponent<UIMatchRoomComponent, MatchRoomForm>(MatchRoomForm);
+            UIMatchRoomView uiView = ui.UIForm.GetComponent<UIMatchRoomView>();
+            UIMatchRoomComponent uiMatchRoomComponent = ui.AddComponent<UIMatchRoomComponent, UIMatchRoomView>(uiView);
         }
         
         public override void OnOpen(UI ui, object userData)

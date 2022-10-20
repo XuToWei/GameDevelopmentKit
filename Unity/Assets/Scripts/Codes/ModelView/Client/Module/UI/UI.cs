@@ -8,9 +8,9 @@ namespace ET.Client
     public static class UISystem
     {
         [ObjectSystem]
-        public class UIAwakeSystem: AwakeSystem<UI, UIFormId, UIForm>
+        public class UIAwakeSystem: AwakeSystem<UI, UIFormId, ETUIForm>
         {
-            protected override void Awake(UI self, UIFormId uiFormId, UIForm uiForm)
+            protected override void Awake(UI self, UIFormId uiFormId, ETUIForm uiForm)
             {
                 self.UIFormId = uiFormId;
                 self.UIForm = uiForm;
@@ -29,9 +29,9 @@ namespace ET.Client
     }
 
     [ChildOf]
-    public sealed class UI: Entity, IAwake<UIFormId, UIForm>, IDestroy
+    public sealed class UI: Entity, IAwake<UIFormId, ETUIForm>, IDestroy
     {
         public UIFormId UIFormId { get; set; }
-        public UIForm UIForm { get; set; }
+        public ETUIForm UIForm { get; set; }
     }
 }

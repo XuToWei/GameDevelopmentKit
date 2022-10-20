@@ -1,6 +1,6 @@
 namespace ET.Client
 {
-    public partial class MatchRoomForm
+    public partial class UIMatchRoomView
     {
         [UnityEngine.SerializeField] private TMPro.TextMeshProUGUI m_RoomCodeTMPProText;
         [UnityEngine.SerializeField] private UnityEngine.UI.Image m_MyPlayerImage;

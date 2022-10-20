@@ -61,6 +61,8 @@ namespace ET
 #if UNITY
             await process.WaitForExitAsync();
             Log.Info($"process exit, exitcode: {process.ExitCode} {process.StandardOutput.ReadToEnd()} {process.StandardError.ReadToEnd()}");
+#else
+            await ETTask.CompletedTask;
 #endif
         }
         

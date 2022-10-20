@@ -1,21 +1,21 @@
 namespace ET.Client
 {
     [FriendOf(typeof (UIMainComponent))]
-    public static class UIMainComponentSystem
+    public static class UIMainSystem
     {
-        public class UIMainComponentAwakeSystem : AwakeSystem<UIMainComponent, MainForm>
+        public class UIMainAwakeSystem : AwakeSystem<UIMainComponent, UIMainView>
         {
-             protected override void Awake(UIMainComponent self, MainForm uiForm)
+             protected override void Awake(UIMainComponent self, UIMainView uiView)
              {
-                self.Form = uiForm as MainForm;
+                self.View = uiView;
              }
         }
         
-        public class UIMainComponentDestroySystem : DestroySystem<UIMainComponent>
+        public class UIMainDestroySystem : DestroySystem<UIMainComponent>
         {
             protected override void Destroy(UIMainComponent self)
             {
-                self.Form = null;
+                self.View = null;
             }
         }
     }

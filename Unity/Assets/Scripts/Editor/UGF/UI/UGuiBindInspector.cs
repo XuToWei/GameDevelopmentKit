@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using ET;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -46,7 +45,6 @@ namespace UGF.Editor
         private readonly List<(string, Type)> m_CustomBindTypeList = new()
         {
             ( "Bind", typeof (UGuiBind) ),
-            ( "Form", typeof (UGuiForm) ),
         };
     }
 }

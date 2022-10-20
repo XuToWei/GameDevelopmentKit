@@ -1,21 +1,21 @@
 namespace ET.Client
 {
     [FriendOf(typeof (UIMatchRoomComponent))]
-    public static class UIMatchRoomComponentSystem
+    public static class UIMatchRoomSystem
     {
-        public class UIMatchRoomComponentAwakeSystem : AwakeSystem<UIMatchRoomComponent, MatchRoomForm>
+        public class UIMatchRoomAwakeSystem : AwakeSystem<UIMatchRoomComponent, UIMatchRoomView>
         {
-             protected override void Awake(UIMatchRoomComponent self, MatchRoomForm uiForm)
+             protected override void Awake(UIMatchRoomComponent self, UIMatchRoomView uiView)
              {
-                self.Form = uiForm as MatchRoomForm;
+                self.View = uiView;
              }
         }
         
-        public class UIMatchRoomComponentDestroySystem : DestroySystem<UIMatchRoomComponent>
+        public class UIMatchRoomDestroySystem : DestroySystem<UIMatchRoomComponent>
         {
             protected override void Destroy(UIMatchRoomComponent self)
             {
-                self.Form = null;
+                self.View = null;
             }
         }
     }

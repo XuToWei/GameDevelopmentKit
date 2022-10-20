@@ -2,7 +2,7 @@ using UGF;
 
 namespace ET.Client
 {
-    public partial class MatchRoomForm: ETUIForm
+    public partial class UILoginView: UGuiBind
     {
         
     }

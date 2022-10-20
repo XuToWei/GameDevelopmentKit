@@ -19,6 +19,8 @@ namespace ET
     {
 #if ENABLE_VIEW && UNITY_EDITOR
         private UnityEngine.GameObject viewGO;
+
+        [StaticField]
         private static UnityEngine.Transform viewParent = new UnityEngine.GameObject("ETView").transform;
 #endif
         

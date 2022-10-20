@@ -1,8 +1,8 @@
 namespace ET.Client
 {
     [ComponentOf(typeof(UI))]
-    public class UIMainComponent: Entity, IAwake<MainForm>, IDestroy
+    public class UIMainComponent: Entity, IAwake<UIMainView>, IDestroy
     {
-        public MainForm Form { get; set; }
+        public UIMainView View { get; set; }
     }
 }

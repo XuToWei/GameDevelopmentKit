@@ -2,7 +2,7 @@
 
 namespace ET.Client
 {
-    public partial class #NAME#Form: ETUIForm
+    public partial class UI#NAME#View: UGuiBind
     {
         
     }

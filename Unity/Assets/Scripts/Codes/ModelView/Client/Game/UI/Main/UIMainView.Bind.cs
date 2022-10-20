@@ -1,6 +1,6 @@
-namespace ET
+namespace ET.Client
 {
-    public partial class MainForm
+    public partial class UIMainView
     {
         [UnityEngine.SerializeField] private TMPro.TextMeshProUGUI m_NameTMPProText;
         [UnityEngine.SerializeField] private UnityEngine.UI.Button m_SkinButton;

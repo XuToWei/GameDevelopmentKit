@@ -66,7 +66,7 @@
       <Link>LubanLib\StringUtil.cs</Link>
     </Compile>
 
-    <Compile Include="..\..\Unity\Assets\Scripts\ThirdParty\ShareLib\Kcp\Kcp.cs">
+    <Compile Include="..\..\Unity\Assets\Scripts\ThirdParty\Kcp\Kcp.cs">
       <Link>Kcp\Kcp.cs</Link>
     </Compile>
 

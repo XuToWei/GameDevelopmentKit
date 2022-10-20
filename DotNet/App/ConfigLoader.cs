@@ -14,8 +14,8 @@ namespace ET.Server
             return $"../Config/Excel/Server/{assetName}.{(fromJson? "json" : "bytes")}";
         }
         
-        [Callback]
-        public class LoadLuban: ACallbackHandler<ConfigComponent.LoadLuban, ISingleton>
+        [Invoke]
+        public class LoadLuban: AInvokeHandler<ConfigComponent.LoadLuban, ISingleton>
         {
             public override ISingleton Handle(ConfigComponent.LoadLuban args)
             {
@@ -59,8 +59,8 @@ namespace ET.Server
             }
         }
 
-        [Callback]
-        public class LoadLubanAsync: ACallbackHandler<ConfigComponent.LoadLubanAsync, ETTask<ISingleton>>
+        [Invoke]
+        public class LoadLubanAsync: AInvokeHandler<ConfigComponent.LoadLubanAsync, ETTask<ISingleton>>
         {
             public override ETTask<ISingleton> Handle(ConfigComponent.LoadLubanAsync args)
             {

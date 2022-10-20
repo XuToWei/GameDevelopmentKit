@@ -685,6 +685,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4889710043935998039}
+  - component: {fileID: -5623381463242644963}
   - component: {fileID: 4889710043935998042}
   - component: {fileID: 4889710043935998043}
   - component: {fileID: 4889710043935998040}
@@ -722,6 +723,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &-5623381463242644963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4889710043935998036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9a9852d06f149c4598c1c68f1b21918, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4889710043935998042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -731,7 +744,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4889710043935998036}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f227964440938054f9257b3c43eac84a, type: 3}
+  m_Script: {fileID: 11500000, guid: efb5682395efaf84787c560888039d7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_AccountTMPInputField: {fileID: 4889710044509886666}

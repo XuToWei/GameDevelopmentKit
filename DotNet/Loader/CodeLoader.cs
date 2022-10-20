@@ -12,7 +12,7 @@ namespace ET
 
         private Assembly model;
 
-        public void Start()
+        public async ETTask StartAsync()
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly assembly in assemblies)
@@ -23,23 +23,24 @@ namespace ET
                     break;
                 }
             }
-            this.LoadHotfix();
-            
+
+            await this.LoadHotfixAsync();
+
             IStaticMethod start = new StaticMethod(this.model, "ET.Entry", "Start");
             start.Run();
         }
 
-        public void LoadHotfix()
+        public async ETTask LoadHotfixAsync()
         {
             assemblyLoadContext?.Unload();
             GC.Collect();
             assemblyLoadContext = new AssemblyLoadContext("Hotfix", true);
-            byte[] dllBytes = File.ReadAllBytes("./Hotfix.dll");
-            byte[] pdbBytes = File.ReadAllBytes("./Hotfix.pdb");
+            byte[] dllBytes = await File.ReadAllBytesAsync("./Hotfix.dll");
+            byte[] pdbBytes = await File.ReadAllBytesAsync("./Hotfix.pdb");
             Assembly hotfixAssembly = assemblyLoadContext.LoadFromStream(new MemoryStream(dllBytes), new MemoryStream(pdbBytes));
 
-            Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(Assembly.GetEntryAssembly(), typeof(Init).Assembly, typeof (Game).Assembly, this.model, hotfixAssembly);
-			
+            Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(Assembly.GetEntryAssembly(), typeof (Init).Assembly, typeof (Game).Assembly, this.model, hotfixAssembly);
+
             EventSystem.Instance.Add(types);
         }
     }

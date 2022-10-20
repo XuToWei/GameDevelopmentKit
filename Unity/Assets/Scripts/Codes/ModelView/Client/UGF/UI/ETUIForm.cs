@@ -1,10 +1,11 @@
 using ET.Client;
 using GameFramework;
-using UnityGameFramework.Runtime;
+using UnityEngine;
 
 namespace UGF
 {
-    public abstract class ETUIForm: UGuiForm
+    [DisallowMultipleComponent]
+    public sealed class ETUIForm: UGuiForm
     {
         public UIFormId UIFormId { get; private set; }
 
@@ -15,7 +16,7 @@ namespace UGF
             base.OnInit(userData);
             ETUIFormData formData = userData as ETUIFormData;
             this.UIFormId = formData.UIFormId;
-            this.UI = formData.UIComponent.AddChild<UI, UIFormId, UIForm>(this.UIFormId, this.UIForm);
+            this.UI = formData.UIComponent.AddChild<UI, UIFormId, ETUIForm>(this.UIFormId, this);
             UIEventComponent.Instance.UIEvents[this.UIFormId].OnInit(this.UI, formData.UserData);
         }
 

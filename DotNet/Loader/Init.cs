@@ -6,7 +6,7 @@ namespace ET
 {
 	public static class Init
 	{
-		public static void Start()
+		public static async void Start()
 		{
 			try
 			{	
@@ -35,7 +35,7 @@ namespace ET
 				
 				Log.Console($"{Parser.Default.FormatCommandLine(Options.Instance)}");
 
-				Game.AddSingleton<CodeLoader>().Start();
+				await Game.AddSingleton<CodeLoader>().StartAsync();
 
 				while (true)
 				{

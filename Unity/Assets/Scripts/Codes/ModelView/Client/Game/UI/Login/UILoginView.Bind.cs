@@ -1,6 +1,6 @@
 namespace ET.Client
 {
-    public partial class LoginForm
+    public partial class UILoginView
     {
         [UnityEngine.SerializeField] private TMPro.TMP_InputField m_AccountTMPInputField;
         [UnityEngine.SerializeField] private TMPro.TMP_InputField m_PasswordTMPInputField;

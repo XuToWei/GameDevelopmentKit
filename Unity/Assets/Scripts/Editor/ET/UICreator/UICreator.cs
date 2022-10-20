@@ -10,9 +10,9 @@ namespace ET
 {
     public static class UICreator
     {
-        private const string ETUIFormCodeTemplateFile = "Assets/Res/Editor/ET/ETUIFormCodeTemplate.txt";
+        private const string UIViewCodeTemplateFile = "Assets/Res/Editor/ET/UIViewCodeTemplate.txt";
         private const string UIComponentCodeTemplateFile = "Assets/Res/Editor/ET/UIComponentCodeTemplate.txt";
-        private const string UIComponentSystemCodeTemplateFile = "Assets/Res/Editor/ET/UIComponentSystemCodeTemplate.txt";
+        private const string UIComponentSystemCodeTemplateFile = "Assets/Res/Editor/ET/UISystemCodeTemplate.txt";
         private const string UIEventCodeTemplateFile = "Assets/Res/Editor/ET/UIEventCodeTemplate.txt";
 
         private const string UIModelViewCodePath = "Assets/Scripts/Codes/ModelView/Client/Game/UI";
@@ -83,7 +83,7 @@ namespace ET
                 File.WriteAllText(codeFile, codeStr);
             }
 
-            GenerateCode(ETUIFormCodeTemplateFile, $"{UIModelViewCodePath}/{uiName}/{uiName}Form.cs");
+            GenerateCode(UIViewCodeTemplateFile, $"{UIModelViewCodePath}/{uiName}/UI{uiName}View.cs");
             GenerateCode(UIComponentCodeTemplateFile, $"{UIModelViewCodePath}/{uiName}/UI{uiName}Component.cs");
             GenerateCode(UIComponentSystemCodeTemplateFile, $"{UIHotfixViewCodePath}/{uiName}/UI{uiName}ComponentSystem.cs");
             GenerateCode(UIEventCodeTemplateFile, $"{UIHotfixViewCodePath}/{uiName}/UI{uiName}Event.cs");

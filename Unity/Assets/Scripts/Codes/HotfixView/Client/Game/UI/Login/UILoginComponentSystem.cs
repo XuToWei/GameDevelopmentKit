@@ -1,30 +1,28 @@
-using UnityEngine.UI;
-
 namespace ET.Client
 {
     [FriendOf(typeof (UILoginComponent))]
-    public static class UILoginComponentSystem
+    public static class UILoginSystem
     {
-        public class UILoginComponentAwakeSystem : AwakeSystem<UILoginComponent, LoginForm>
+        public class UILoginAwakeSystem : AwakeSystem<UILoginComponent, UILoginView>
         {
-             protected override void Awake(UILoginComponent self, LoginForm uiForm)
+             protected override void Awake(UILoginComponent self, UILoginView uiView)
              {
-                self.Form = uiForm;
+                self.View = uiView;
              }
         }
         
-        public class UILoginComponentDestroySystem : DestroySystem<UILoginComponent>
+        public class UILoginDestroySystem : DestroySystem<UILoginComponent>
         {
             protected override void Destroy(UILoginComponent self)
             {
-                self.Form = null;
+                self.View = null;
             }
         }
-
+        
         public static async ETTask OnLogin(this UILoginComponent self)
         {
-            string account = self.Form.AccountTMPInputField.text;
-            string password = self.Form.PasswordTMPInputField.text;
+            string account = self.View.AccountTMPInputField.text;
+            string password = self.View.PasswordTMPInputField.text;
             int? r = AccountHelper.CheckAccountPassword(account, password);
             if (r.HasValue)
             {

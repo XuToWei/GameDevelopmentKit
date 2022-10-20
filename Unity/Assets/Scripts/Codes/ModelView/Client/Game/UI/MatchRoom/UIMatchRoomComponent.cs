@@ -1,8 +1,8 @@
 namespace ET.Client
 {
     [ComponentOf(typeof(UI))]
-    public class UIMatchRoomComponent: Entity, IAwake<MatchRoomForm>, IDestroy
+    public class UIMatchRoomComponent: Entity, IAwake<UIMatchRoomView>, IDestroy
     {
-        public MatchRoomForm Form { get; set; }
+        public UIMatchRoomView View { get; set; }
     }
 }
