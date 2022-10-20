@@ -845,11 +845,22 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    Android: NETSTANDARD2_0;UNITY
+    Android: NETSTANDARD2_0;UNITY;TextMeshPro
+    CloudRendering: TextMeshPro
+    EmbeddedLinux: TextMeshPro
+    GameCoreXboxOne: TextMeshPro
+    Lumin: TextMeshPro
+    Nintendo Switch: TextMeshPro
+    PS4: TextMeshPro
+    PS5: TextMeshPro
     Server: NETSTANDARD2_0;UNITY
-    Standalone: NETSTANDARD2_0;UNITY;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ENABLE_CODES;ENABLE_VIEW
-    WebGL: NETSTANDARD2_0;UNITY
-    iPhone: NETSTANDARD2_0;UNITY
+    Stadia: TextMeshPro
+    Standalone: NETSTANDARD2_0;UNITY;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ENABLE_CODES;ENABLE_VIEW;TextMeshPro
+    WebGL: NETSTANDARD2_0;UNITY;TextMeshPro
+    Windows Store Apps: TextMeshPro
+    XboxOne: TextMeshPro
+    iPhone: NETSTANDARD2_0;UNITY;TextMeshPro
+    tvOS: TextMeshPro
   additionalCompilerArguments: {}
   platformArchitecture:
     iPhone: 1

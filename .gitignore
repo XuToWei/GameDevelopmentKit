@@ -85,3 +85,4 @@ Publish/
 /Unity/Unity.GenerateClient.csproj
 /Unity/Unity.GenerateServer.csproj
 /Develop/Excel/.cache.meta
+/Unity/*.csproj
