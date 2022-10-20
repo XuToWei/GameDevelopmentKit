@@ -752,6 +752,7 @@ MonoBehaviour:
   m_LoginButton: {fileID: 4889710043619969538}
   m_RegisterButton: {fileID: 4889710044429463802}
   m_TestImage: {fileID: 3264003924373333376}
+  m_TestButton: {fileID: 945524846519820661}
 --- !u!222 &4889710043935998043
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1725,7 +1726,7 @@ GameObject:
   - component: {fileID: 3264003924373333376}
   - component: {fileID: 945524846519820661}
   m_Layer: 5
-  m_Name: Test_Image
+  m_Name: Test_Image_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

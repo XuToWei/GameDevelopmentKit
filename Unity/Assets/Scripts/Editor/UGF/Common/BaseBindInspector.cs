@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
@@ -53,6 +54,8 @@ namespace UGF.Editor
                 this.BindPrefix = bindPrefix;
                 this.BindTransform = bindTransform;
             }
+            
+            
         }
 
         public override void OnInspectorGUI()
@@ -119,13 +122,13 @@ namespace UGF.Editor
             }
         }
 
-        private readonly Dictionary<string, BindData> m_BindDataDict = new();
+        private readonly List<BindData> m_BindDatas = new();
 
         private bool TryGenerateNameMapTypeData()
         {
-            bool TryGetBindComponent(Transform child, out BindData bindData)
+            bool TryGetBindComponents(Transform child, out List<BindData> bindDatas)
             {
-                bindData = null;
+                bindDatas = new List<BindData>();
                 if (!child.name.Contains('_'))
                 {
                     return false;
@@ -157,40 +160,51 @@ namespace UGF.Editor
                     }
                     parent = parent.parent;
                 }
-                
-                int lastIndex = child.name.LastIndexOf('_');
-                string typeStr = child.name.Substring(lastIndex + 1, child.name.Length - lastIndex - 1);
-                (string, Type) value = this.DefaultBindTypeList.Find(p => p.Item1.Equals(typeStr, StringComparison.OrdinalIgnoreCase));
-                if (value.Item2 != null)
+
+                string[] strArray = child.name.Split('_');
+                string bindName = strArray[0];
+                for (int i = 1; i < strArray.Length; i++)
                 {
-                    bindData = new BindData(child.name.Substring(0, lastIndex), value.Item2, value.Item1, child);
-                    return true;
+                    string typeStr = strArray[i];
+                    (string, Type) value = this.DefaultBindTypeList.Find(p => p.Item1.Equals(typeStr, StringComparison.OrdinalIgnoreCase));
+                    if (value.Item2 != null)
+                    {
+                        BindData bindData = new BindData(bindName, value.Item2, value.Item1, child);
+                        bindDatas.Add(bindData);
+                        continue;
+                    }
+                    value = this.CustomBindTypeList.Find(p => p.Item1.Equals(typeStr, StringComparison.OrdinalIgnoreCase));
+                    if (value.Item2 != null)
+                    {
+                        BindData bindData = new BindData(bindName, value.Item2, value.Item1, child);
+                        bindDatas.Add(bindData);
+                        continue;
+                    }
+                    throw new Exception($"{child.name}的命名中{typeStr}不存在对应的组件类型，绑定失败");
                 }
-                value = this.CustomBindTypeList.Find(p => p.Item1.Equals(typeStr, StringComparison.OrdinalIgnoreCase));
-                if (value.Item2 != null)
-                {
-                    bindData = new BindData(child.name.Substring(0, lastIndex), value.Item2, value.Item1, child);
-                    return true;
-                }
-                throw new Exception($"{child.name}的命名中{typeStr}不存在对应的组件类型，绑定失败");
+
+                return bindDatas.Count > 0;
             }
             
-            this.m_BindDataDict.Clear();
+            this.m_BindDatas.Clear();
             foreach (Transform child in rootTransform.GetComponentsInChildren<Transform>(true))
             {
                 if(child == this.rootTransform)
                     continue;
-                if (TryGetBindComponent(child, out BindData bindData))
+                if (TryGetBindComponents(child, out List<BindData> bindDatas))
                 {
-                    if (this.m_BindDataDict.ContainsKey(bindData.BindName))
+                    foreach (BindData bindData in bindDatas)
                     {
-                        this.m_BindDataDict.Clear();
-                        throw new Exception($"绑定对象中存在同名{bindData.BindName},请修改后重新生成。");
+                        if (this.m_BindDatas.Find(data => data.BindName == bindData.BindName && data.BindPrefix == bindData.BindPrefix) != null)
+                        {
+                            this.m_BindDatas.Clear();
+                            throw new Exception($"绑定对象中存在同名{bindData.BindName}-{bindData.BindPrefix},请修改后重新生成。");
+                        }
+                        this.m_BindDatas.Add(bindData);
                     }
-                    this.m_BindDataDict.Add(bindData.BindName, bindData);
                 }
             }
-            if (m_BindDataDict.Count < 1)
+            if (this.m_BindDatas.Count < 1)
             {
                 throw new Exception($"绑定数量为0，生成失败。");
             }
@@ -203,44 +217,70 @@ namespace UGF.Editor
             {
                 if (child.name.Contains('_'))
                 {
-                    int lastIndex = child.name.LastIndexOf('_');
-                    if (lastIndex >= child.name.Length - 1)
+                    List<string> strList = child.name.Split('_').ToList();
+                    if (strList.Count >= 3)
                     {
-                        bool TryFixChildName(List<(string, Type)> bindTypeList)
+                        for (int i = 1; i < strList.Count - 1; i++)
+                        {
+                            if (string.IsNullOrEmpty(strList[i]))
+                            {
+                                throw new Exception($"不支持自动补齐超过数量为1的脚本：{child.name}");
+                            }
+                        }
+                    }
+                    
+                    if (string.IsNullOrEmpty(strList[^1]))
+                    {
+                        bool TryFixEmptyBindName(List<(string, Type)> bindTypeList)
                         {
                             for (int i = bindTypeList.Count - 1; i >= 0; i--)
                             {
                                 (string, Type) value = bindTypeList[i];
-                                if (child.GetComponent(value.Item2) != null)
+                                bool isExist = false;
+                                for (int j = 0; j < strList.Count - 1; j++)
                                 {
-                                    child.name = $"{child.name}{value.Item1}";
-                                    return true;
+                                    string typeSrt = strList[j];
+                                    if (typeSrt == value.Item1)
+                                    {
+                                        isExist = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!isExist)
+                                {
+                                    if (child.GetComponent(value.Item2) != null)
+                                    {
+                                        strList[^1] = value.Item1;
+                                        return true;
+                                    }
                                 }
                             }
                             return false;
                         }
                         
-                        if (!TryFixChildName(this.CustomBindTypeList))
+                        if (!TryFixEmptyBindName(this.CustomBindTypeList))
                         {
-                            TryFixChildName(this.DefaultBindTypeList);
+                            TryFixEmptyBindName(this.DefaultBindTypeList);
                         }
                     }
-                    else
+                    
+                    for (int i = 1; i < strList.Count - 1; i++)
                     {
-                        string typeStr = child.name.Substring(lastIndex + 1, child.name.Length - lastIndex - 1);
-
-                        bool TryFixChildName(List<(string, Type)> bindTypeList)
+                        string typeStr = strList[i];
+                        
+                        bool TryFixErrorBindName(List<(string, Type)> bindTypeList)
                         {
                             (string, Type) value = bindTypeList.Find(p => p.Item1.Equals(typeStr, StringComparison.OrdinalIgnoreCase));
                             if (value.Item2 == null || child.GetComponent(value.Item2) == null)
                             {
-                                for (int i = bindTypeList.Count - 1; i >= 0; i--)
+                                for (int j = bindTypeList.Count - 1; j >= 0; j--)
                                 {
-                                    value = bindTypeList[i];
+                                    value = bindTypeList[j];
                                     if ((value.Item1.Contains(typeStr, StringComparison.OrdinalIgnoreCase) || typeStr.Contains(value.Item1, StringComparison.OrdinalIgnoreCase))
                                         && child.GetComponent(value.Item2) != null)
                                     {
-                                        child.name = $"{child.name.Substring(0, lastIndex + 1)}{value.Item1}";
+                                        strList[i] = value.Item1;
                                         return true;
                                     }
                                 }
@@ -251,12 +291,14 @@ namespace UGF.Editor
                                 return true;
                             }
                         }
-
-                        if (!TryFixChildName(this.CustomBindTypeList))
+                        
+                        if (!TryFixErrorBindName(this.CustomBindTypeList))
                         {
-                            TryFixChildName(this.DefaultBindTypeList);
+                            TryFixErrorBindName(this.DefaultBindTypeList);
                         }
                     }
+
+                    child.name = string.Join('_', strList);
                 }
             }
         }
@@ -297,13 +339,13 @@ namespace UGF.Editor
             stringBuilder.AppendLine($"{indentation}public partial class {this.ScriptClassName}");
             stringBuilder.AppendLine($"{indentation}{{");
             //组件字段
-            foreach (var pair in this.m_BindDataDict)
+            foreach (BindData bindData in this.m_BindDatas)
             {
-                stringBuilder.AppendLine($"{indentation}\t[UnityEngine.SerializeField] private {pair.Value.BindType.FullName} m_{pair.Key}{pair.Value.BindPrefix};");
+                stringBuilder.AppendLine($"{indentation}\t[UnityEngine.SerializeField] private {bindData.BindType.FullName} m_{bindData.BindName}{bindData.BindPrefix};");
             }
-            foreach (var pair in this.m_BindDataDict)
+            foreach (BindData bindData in this.m_BindDatas)
             {
-                stringBuilder.AppendLine($"{indentation}\tpublic {pair.Value.BindType.FullName} {pair.Key}{pair.Value.BindPrefix} => m_{pair.Key}{pair.Value.BindPrefix};");
+                stringBuilder.AppendLine($"{indentation}\tpublic {bindData.BindType.FullName} {bindData.BindName}{bindData.BindPrefix} => m_{bindData.BindName}{bindData.BindPrefix};");
             }
             stringBuilder.AppendLine($"{indentation}}}");
             if (!string.IsNullOrEmpty(nameSpace))
@@ -319,10 +361,9 @@ namespace UGF.Editor
             {
                 return;
             }
-            foreach (var pair in m_BindDataDict)
+            foreach (BindData bindData in m_BindDatas)
             {
-                SerializedProperty serializedProperty = this.serializedObject.FindProperty($"m_{pair.Key}{pair.Value.BindPrefix}");
-                BindData bindData = pair.Value;
+                SerializedProperty serializedProperty = this.serializedObject.FindProperty($"m_{bindData.BindName}{bindData.BindPrefix}");
                 serializedProperty.objectReferenceValue = bindData.BindTransform.GetComponent(bindData.BindType);
             }
             serializedObject.ApplyModifiedProperties();
