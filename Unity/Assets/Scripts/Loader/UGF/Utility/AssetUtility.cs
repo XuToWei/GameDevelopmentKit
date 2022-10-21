@@ -94,7 +94,7 @@ namespace UGF
 
         public static string GetLocalizationAsset()
         {
-            return "Assets/Res/Localization/LocalizationSource.prefab";
+            return "Assets/Res/Localization/LocalizationSource.asset";
         }
     }
 }

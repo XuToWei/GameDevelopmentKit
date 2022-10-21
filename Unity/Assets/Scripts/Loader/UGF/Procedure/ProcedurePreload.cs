@@ -21,8 +21,8 @@ namespace UGF
 
         private async ETTask LoadLocalization()
         {
-            GameObject languageSourceObj = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetLocalizationAsset());
-            GameObject.Instantiate(languageSourceObj).name = "LocalizationSource";
+            LanguageSourceAsset languageSourceAsset = await GameEntry.Resource.LoadAssetAsync<LanguageSourceAsset>(AssetUtility.GetLocalizationAsset());
+            LocalizationManager.UpdateByOneSource(languageSourceAsset);
         }
     }
 }
