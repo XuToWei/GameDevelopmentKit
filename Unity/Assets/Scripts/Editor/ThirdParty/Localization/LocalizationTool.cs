@@ -38,17 +38,19 @@ namespace I2.Loc
                 FileInfo excelFileInfo = new FileInfo(LocalizationFilePath);
                 if (PlayerPrefs.GetString(LoadTimeSaveKey) != excelFileInfo.LastWriteTime.ToString())
                 {
-                    LoadFromCSV();
+                    Loom.Post(ImportFromCSV);
                 }
             }
             else
             {
-                Loom.Post(LoadFromCSV);
+                Loom.Post(ImportFromCSV);
             }
+            
+            Loom.Post(LoadLanguageSource);
         }
 
         [MenuItem("Tools/更新本地化")]
-        public static void LoadFromCSV()
+        public static void ImportFromCSV()
         {
             LanguageSource languageSource = AssetDatabase.LoadAssetAtPath<LanguageSource>(AssetUtility.GetLocalizationAsset());
             languageSource.mSource.Import_CSV(string.Empty, ExcelToCSV(LocalizationFilePath), eSpreadsheetUpdateMode.Replace);
@@ -59,9 +61,17 @@ namespace I2.Loc
             Debug.Log("本地化xlsx已加载！");
         }
 
+        private static void LoadLanguageSource()
+        {
+            LanguageSource languageSource = AssetDatabase.LoadAssetAtPath<LanguageSource>(AssetUtility.GetLocalizationAsset());
+            languageSource = GameObject.Instantiate(languageSource);
+            languageSource.NeverDestroy = true;
+            GameObject.DestroyImmediate(languageSource);
+        }
+
         private static void OnCSVFileChanged(object sender, FileSystemEventArgs e)
         {
-            Loom.Post(LoadFromCSV);
+            Loom.Post(ImportFromCSV);
         }
 
         private static List<string[]> ExcelToCSV(string excelFilePath)
