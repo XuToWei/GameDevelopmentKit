@@ -52,21 +52,20 @@ namespace I2.Loc
         [MenuItem("Tools/更新本地化")]
         public static void ImportFromCSV()
         {
-            LanguageSource languageSource = AssetDatabase.LoadAssetAtPath<LanguageSource>(AssetUtility.GetLocalizationAsset());
-            languageSource.mSource.Import_CSV(string.Empty, ExcelToCSV(LocalizationFilePath), eSpreadsheetUpdateMode.Replace);
-            EditorUtility.SetDirty(languageSource);
+            LanguageSourceAsset languageSourceAsset = AssetDatabase.LoadAssetAtPath<LanguageSourceAsset>(AssetUtility.GetLocalizationAsset());
+            languageSourceAsset.SourceData.Import_CSV(string.Empty, ExcelToCSV(LocalizationFilePath), eSpreadsheetUpdateMode.Replace);
+            EditorUtility.SetDirty(languageSourceAsset);
             AssetDatabase.Refresh();
             FileInfo excelFileInfo = new FileInfo(LocalizationFilePath);
             PlayerPrefs.SetString(LoadTimeSaveKey, excelFileInfo.LastWriteTime.ToString());
             Debug.Log("本地化xlsx已加载！");
         }
 
-        private static void LoadLanguageSource()
+        [MenuItem("Tools/重载本地化")]
+        public static void LoadLanguageSource()
         {
-            LanguageSource languageSource = AssetDatabase.LoadAssetAtPath<LanguageSource>(AssetUtility.GetLocalizationAsset());
-            languageSource = GameObject.Instantiate(languageSource);
-            languageSource.NeverDestroy = true;
-            GameObject.DestroyImmediate(languageSource);
+            LanguageSourceAsset languageSourceAsset = AssetDatabase.LoadAssetAtPath<LanguageSourceAsset>(AssetUtility.GetLocalizationAsset());
+            LocalizationManager.UpdateByOneSource(languageSourceAsset);
         }
 
         private static void OnCSVFileChanged(object sender, FileSystemEventArgs e)

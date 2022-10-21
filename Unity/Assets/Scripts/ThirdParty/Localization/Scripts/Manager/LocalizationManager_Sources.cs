@@ -17,6 +17,21 @@ namespace I2.Loc
 
         #endregion
 
+        #region Custom
+
+        public static void UpdateByOneSource(LanguageSourceAsset languageSourceAsset)
+        {
+            for (int i = Sources.Count - 1; i >= 0; --i)
+            {
+                RemoveSource(Sources[i]);
+            }
+
+            languageSourceAsset.SourceData.owner = languageSourceAsset;
+            AddSource(languageSourceAsset.SourceData);
+        }
+
+        #endregion
+        
         #region Sources
 
         public static bool UpdateSources()
