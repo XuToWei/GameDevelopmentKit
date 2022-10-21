@@ -8,7 +8,7 @@ set OUTPUT_CODE_DIR=%WORKSPACE%\Unity\Assets\Scripts\Codes\Model\Generate
 set OUTPUT_DATA_DIR=%WORKSPACE%\Config\Excel
 set UNITY_OUTPUT_DATA_DIR=%WORKSPACE%\Unity\Assets\Res\Config
 set GEN_TYPE_CODE_DATA=code_cs_unity_json,data_json
-set GEN_TYPE_DATA=data_bin
+set GEN_TYPE_DATA=data_json
 
 %GEN_CLIENT% --template_search_path %CUSTOM_TEMPLATE_DIR%\LoadAsync -j cfg --^
  -d %CONF_ROOT%\Defines\__root__.xml ^
