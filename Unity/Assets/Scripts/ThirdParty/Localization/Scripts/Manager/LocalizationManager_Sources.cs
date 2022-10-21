@@ -13,7 +13,7 @@ namespace I2.Loc
         #region Variables: Misc
 
         public static List<LanguageSourceData> Sources = new List<LanguageSourceData>();
-        public static string[] GlobalSources = { "I2Languages" };
+        public static string[] GlobalSources = { };
 
         #endregion
 
