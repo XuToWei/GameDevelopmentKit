@@ -1,4 +1,7 @@
 # GameDevelopmentKit
+
+目前在新项目中开发使用进行优化，后续补上详细的使用说明
+
 大体框架基于ET7二次开发
 
 [客户端部分使用的GF](./Unity/Assets/Scripts/Library/UnityGameFramework)
