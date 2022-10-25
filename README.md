@@ -1,11 +1,16 @@
 # ToDo
 Unity能双击定位异常的Log
+
 UI，Entity命名和结构优化
+
 绑定代码优化（去掉自定义生命编辑器，改为同一个方便使用)
+
 接入稳定的HybridCLR
+
 删掉清理ET中没用的客户端模块
 
 # Future
+
 整理修改GF，删除GF中没有模块（或者不暴露）
 
 # GameDevelopmentKit
