@@ -1,0 +1,17 @@
+{
+    "name": "ET.Runtime",
+    "rootNamespace": "ET",
+    "references": [
+        "Unity.Mathematics",
+        "ProtoBuf"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

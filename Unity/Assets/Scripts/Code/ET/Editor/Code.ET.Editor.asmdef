@@ -1,0 +1,20 @@
+{
+    "name": "Code.ET.Editor",
+    "rootNamespace": "ET",
+    "references": [
+        "GUID:5ea3d62eabfae09448c38636cef75a26",
+        "GUID:c1b96bd6e19963e44928d1319570a86b",
+        "GUID:a47aa16b0734283429ea36999cbcb669",
+        "GUID:ab178125f37805a4d9574cef4ed13330",
+        "GUID:3fcf00d7a3c894e46a955a792eefb4da"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

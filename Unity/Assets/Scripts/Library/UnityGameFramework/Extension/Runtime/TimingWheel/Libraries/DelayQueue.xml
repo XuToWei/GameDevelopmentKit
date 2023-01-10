@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DelayQueue</name>
+    </assembly>
+    <members>
+        <member name="T:DelayQueue.DelayItem`1">
+            <summary>
+            默认延时对象
+            </summary>
+        </member>
+        <member name="F:DelayQueue.DelayItem`1.TimeoutMs">
+            <summary>
+            过期时间戳，绝对时间
+            </summary>
+        </member>
+        <member name="F:DelayQueue.DelayItem`1.Item">
+            <summary>
+            延时对象
+            </summary>
+        </member>
+        <member name="M:DelayQueue.DelayItem`1.#ctor(System.TimeSpan,`0)">
+            <summary>
+            
+            </summary>
+            <param name="timeoutSpan">过期时间，相对时间</param>
+            <param name="item">延时对象</param>
+        </member>
+        <member name="M:DelayQueue.DelayItem`1.#ctor(System.Int64,`0)">
+            <summary>
+            
+            </summary>
+            <param name="timeoutMs">过期时间戳，绝对时间</param>
+            <param name="item">延时对象</param>
+        </member>
+        <member name="M:DelayQueue.DelayItem`1.GetTimestamp">
+            <summary>
+            获取当前时间戳
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DelayQueue.DelayQueue`1">
+            <summary>
+            延时队列，线程安全，参考java DelayQueue实现
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="F:DelayQueue.DelayQueue`1._sortedList">
+            <summary>
+            有序列表
+            </summary>
+        </member>
+        <member name="F:DelayQueue.DelayQueue`1._waitThread">
+            <summary>
+            当前排队等待取元素的线程
+            </summary>
+        </member>
+        <member name="P:DelayQueue.DelayQueue`1.Count">
+            <summary>
+            队列当前元素数量
+            </summary>
+        </member>
+        <member name="P:DelayQueue.DelayQueue`1.IsEmpty">
+            <summary>
+            队列是否为空
+            </summary>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.TryAdd(`0)">
+            <summary>
+            添加项
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.TryAdd(`0,System.Threading.CancellationToken)">
+            <summary>
+            添加项
+            </summary>
+            <param name="item"></param>
+            <param name="cancelToken"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.TryAdd(`0,System.TimeSpan)">
+            <summary>
+            添加项
+            </summary>
+            <param name="item"></param>
+            <param name="timeout">该方法执行超时时间</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.TryAdd(`0,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            添加项
+            </summary>
+            <param name="item"></param>
+            <param name="timeout">该方法执行超时时间</param>
+            <param name="cancelToken"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.Peek">
+            <summary>
+            取出首项，但不移除
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.TryPeek(`0@)">
+            <summary>
+            取出首项，但不移除
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.TryTakeNoBlocking(`0@)">
+            <summary>
+            非阻塞获取项
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.TryTake(`0@)">
+            <summary>
+            取出项，如果未到期，则阻塞
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.TryTake(`0@,System.Threading.CancellationToken)">
+            <summary>
+            取出项，如果未到期，则阻塞
+            </summary>
+            <param name="item"></param>
+            <param name="cancelToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.TryTake(`0@,System.TimeSpan)">
+            <summary>
+            取出项，如果未到期，则阻塞
+            </summary>
+            <param name="item"></param>
+            <param name="timeout">该方法执行超时时间，注意，实际超时时间可能大于指定值</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.TryTake(`0@,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            取出项，如果未到期，则阻塞
+            </summary>
+            <param name="item"></param>
+            <param name="timeout">该方法执行超时时间，注意，实际超时时间可能大于指定值</param>
+            <param name="cancelToken"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.Clear">
+            <summary>
+            清理
+            </summary>
+        </member>
+        <member name="M:DelayQueue.DelayQueue`1.IsTimeout(System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            是否超时
+            </summary>
+            <param name="timeout"></param>
+            <param name="cancelToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DelayQueue.Extensions.MonitorExt">
+            <summary>
+            Monitor扩展
+            </summary>
+        </member>
+        <member name="M:DelayQueue.Extensions.MonitorExt.Wait(System.Object,System.TimeSpan)">
+            <summary>
+            锁等待，返回剩余时间
+            </summary>
+            <param name="obj"></param>
+            <param name="timeout">超时时间，如果是Infinite则无限期等待</param>
+            <returns></returns>
+        </member>
+        <member name="T:DelayQueue.Extensions.SortedQueue`1">
+            <summary>
+            有序队列，非线程安全
+            </summary>
+        </member>
+        <member name="M:DelayQueue.Extensions.SortedQueue`1.TryAdd(`0)">
+            <summary>
+            添加
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DelayQueue.Extensions.SortedQueue`1.Remove(`0)">
+            <summary>
+            移除
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DelayQueue.Extensions.SortedQueue`1.Clear">
+            <summary>
+            清理
+            </summary>
+        </member>
+        <member name="T:DelayQueue.Interfaces.IDelayItem">
+            <summary>
+            延时队列任务项
+            </summary>
+        </member>
+        <member name="M:DelayQueue.Interfaces.IDelayItem.GetDelaySpan">
+            <summary>
+            获取剩余延时
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

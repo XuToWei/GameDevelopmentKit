@@ -1,0 +1,16 @@
+{
+    "name": "ET.Editor",
+    "rootNamespace": "ET",
+    "references": [
+        "GUID:5ea3d62eabfae09448c38636cef75a26"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

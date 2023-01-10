@@ -1,0 +1,30 @@
+[
+  {
+    "StartConfig": "Benchmark",
+    "Id": 1,
+    "InnerIP": "127.0.0.1",
+    "OuterIP": "127.0.0.1",
+    "WatcherPort": "10000"
+  },
+  {
+    "StartConfig": "Localhost",
+    "Id": 1,
+    "InnerIP": "127.0.0.1",
+    "OuterIP": "127.0.0.1",
+    "WatcherPort": "10000"
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 1,
+    "InnerIP": "192.168.1.111",
+    "OuterIP": "192.168.1.111",
+    "WatcherPort": "10000"
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 1,
+    "InnerIP": "127.0.0.1",
+    "OuterIP": "127.0.0.1",
+    "WatcherPort": "10000"
+  }
+]

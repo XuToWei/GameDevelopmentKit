@@ -1,0 +1,21 @@
+﻿<Config>
+  <Input_Data_Dir Value="../Design/Excel/Code.ET" />
+  <Gen>
+    <Output_Code_Dirs Value="../Unity/Assets/Scripts/Code/ET/Code/Model/Generate/Client/Luban" />
+    <Output_Data_Dirs Value="../Unity/Assets/Res/Runtime/ET/Client/Luban" />
+    <Gen_Type_Code_Data Value="code_cs_unity_bin,data_bin" />
+    <Gen_Group Value="client" />
+  </Gen>
+  <Gen>
+    <Output_Code_Dirs Value="../Unity/Assets/Scripts/Code/ET/Code/Model/Generate/ClientServer/Luban" />
+    <Output_Data_Dirs Value="../Config/Luban,../Unity/Assets/Res/Runtime/ET/ClientServer/Luban" />
+    <Gen_Type_Code_Data Value="code_cs_unity_bin,data_bin" />
+    <Gen_Group Value="clientserver" />
+  </Gen>
+  <Gen>
+    <Output_Code_Dirs Value="../Unity/Assets/Scripts/Code/ET/Editor/Generate/Luban" />
+    <Output_Data_Dirs Value="../Unity/Assets/Res/Editor/ET/Luban" />
+    <Gen_Type_Code_Data Value="code_cs_unity_editor_json" />
+    <Gen_Group Value="all" />
+  </Gen>
+</Config>

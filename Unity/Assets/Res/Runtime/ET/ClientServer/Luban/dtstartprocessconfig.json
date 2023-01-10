@@ -1,0 +1,80 @@
+[
+  {
+    "StartConfig": "Benchmark",
+    "Id": 1,
+    "MachineId": 1,
+    "InnerPort": 20101
+  },
+  {
+    "StartConfig": "Benchmark",
+    "Id": 2,
+    "MachineId": 1,
+    "InnerPort": 20102
+  },
+  {
+    "StartConfig": "Benchmark",
+    "Id": 3,
+    "MachineId": 1,
+    "InnerPort": 20103
+  },
+  {
+    "StartConfig": "Localhost",
+    "Id": 1,
+    "MachineId": 1,
+    "InnerPort": 20101
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 1,
+    "MachineId": 1,
+    "InnerPort": 20001
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 2,
+    "MachineId": 1,
+    "InnerPort": 20002
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 1,
+    "MachineId": 1,
+    "InnerPort": 20101
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 2,
+    "MachineId": 1,
+    "InnerPort": 20102
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 3,
+    "MachineId": 1,
+    "InnerPort": 20103
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 4,
+    "MachineId": 1,
+    "InnerPort": 20104
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 5,
+    "MachineId": 1,
+    "InnerPort": 20105
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 6,
+    "MachineId": 1,
+    "InnerPort": 20106
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 7,
+    "MachineId": 1,
+    "InnerPort": 20107
+  }
+]

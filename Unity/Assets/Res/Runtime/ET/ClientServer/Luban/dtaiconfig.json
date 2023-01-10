@@ -1,0 +1,10 @@
+[
+  {
+    "Id": 201,
+    "AIConfigId": 2,
+    "Order": 1,
+    "Name": "AI_XunLuo",
+    "Desc": "巡逻",
+    "NodeParams": []
+  }
+]
