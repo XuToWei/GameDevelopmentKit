@@ -1,8 +1,0 @@
-﻿namespace ET.Client
-{
-    [ComponentOf(typeof(UI))]
-    public class UI#NAME#Component: Entity, IAwake<UI#NAME#View>, IDestroy
-    {
-        public UI#NAME#View View { get; set; }
-    }
-}

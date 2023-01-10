@@ -25,27 +25,26 @@
     </PropertyGroup>
     <ItemGroup>
 
-        <Compile Include="..\..\Unity\Assets\Scripts\Codes\Model\Server\**\*.cs"> 
+        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Server\**\*.cs"> 
             <Link>Server\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
 
-        <Compile Include="..\..\Unity\Assets\Scripts\Codes\Model\Client\**\*.cs"> 
+        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Client\**\*.cs"> 
             <Link>Client\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         
-        <Compile Include="..\..\Unity\Assets\Scripts\Codes\Model\Share\**\*.cs">
+        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Share\**\*.cs">
             <Link>Share\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
 
-        <Compile Include="..\..\Unity\Assets\Scripts\Codes\Model\Generate\Server\**\*.cs"> 
+        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Generate\Server\**\*.cs"> 
             <Link>Generate\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         
     </ItemGroup> 
     <ItemGroup> 
         <ProjectReference Include="..\..\Share\Analyzer\Share.Analyzer.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="..\Core\DotNet.Core.csproj" />
         <ProjectReference Include="..\Loader\DotNet.Loader.csproj" />
-        <ProjectReference Include="..\ThirdParty\DotNet.ThirdParty.csproj" />
+        <ProjectReference Include="..\ET\DotNet.ET.csproj" />
     </ItemGroup>
 </Project>

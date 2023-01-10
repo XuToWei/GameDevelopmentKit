@@ -9,28 +9,26 @@ namespace ET.Server
     {
         private static int Main(string[] args)
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
-            {
-                Log.Error(e.ExceptionObject.ToString());
-            };
-            
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
+
             try
             {
                 // 异步方法全部会回掉到主线程
                 Game.AddSingleton<MainThreadSynchronizationContext>();
-				
+
                 // 命令行参数
                 Parser.Default.ParseArguments<Options>(args)
-                    .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
-                    .WithParsed(Game.AddSingleton);
-				
+                        .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
+                        .WithParsed(Game.AddSingleton);
+
                 Game.AddSingleton<TimeInfo>();
-                Game.AddSingleton<Logger>().ILog = new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, "../Config/NLog/NLog.config");
+                Game.AddSingleton<Logger>().ILog =
+                        new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, "../Config/NLog/NLog.config");
                 Game.AddSingleton<ObjectPool>();
                 Game.AddSingleton<IdGenerater>();
                 Game.AddSingleton<EventSystem>();
                 Game.AddSingleton<Root>();
-                
+
                 ETTask.ExceptionHandler += Log.Error;
 
                 Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Game).Assembly);
@@ -38,15 +36,15 @@ namespace ET.Server
 
                 MongoHelper.Init();
                 ProtobufHelper.Init();
-				
+
                 Log.Info($"server start........................ {Root.Instance.Scene.Id}");
-				
+                
                 switch (Options.Instance.AppType)
                 {
                     case AppType.ExcelExporter:
                     {
                         Options.Instance.Console = 1;
-                        LubanGenerator.Generate();
+                        ExcelExporter.Export();
                         return 0;
                     }
                     case AppType.Proto2CS:
@@ -56,11 +54,13 @@ namespace ET.Server
                         return 0;
                     }
                 }
+                Proto2CS.Export();
             }
             catch (Exception e)
             {
                 Log.Console(e.ToString());
             }
+
             return 1;
         }
     }

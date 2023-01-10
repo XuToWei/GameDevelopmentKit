@@ -31,32 +31,17 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <Compile Include="..\..\Unity\Assets\Mono\Core\**\*.cs">
-            <Link>Core\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        
-        <Compile Include="..\..\Unity\Assets\Scripts\Codes\Model\Share\Module\Config\**\*.cs">
+        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Share\Module\Config\**\*.cs">
             <Link>Module\Config\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
 
-        <Compile Include="..\..\Unity\Assets\Scripts\Codes\Model\Share\Module\Log\**\*.cs">
+        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Share\Module\Log\**\*.cs">
             <Link>Module\Log\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
-
-        <Compile Include="..\..\Unity\Assets\Scripts\Core\Module\Network\OpcodeRangeDefine.cs">
-            <Link>Module\Message\OpcodeRangeDefine.cs</Link>
-        </Compile>
     </ItemGroup>
     
     <ItemGroup>
-      <None Update="Template.txt">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-    
-    <ItemGroup>
-      <ProjectReference Include="..\..\DotNet\Core\DotNet.Core.csproj" />
-      <ProjectReference Include="..\..\DotNet\ThirdParty\DotNet.ThirdParty.csproj" />
+      <ProjectReference Include="..\..\DotNet\ET\DotNet.ET.csproj" />
     </ItemGroup>
 
 </Project>

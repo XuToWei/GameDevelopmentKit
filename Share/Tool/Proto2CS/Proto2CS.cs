@@ -23,10 +23,9 @@ namespace ET
 
     public static class InnerProto2CS
     {
-        private const string protoDir = "../Develop/Proto";
-        private const string clientMessagePath = "../Unity/Assets/Scripts/Codes/Model/Generate/Client/Message/";
-        private const string serverMessagePath = "../Unity/Assets/Scripts/Codes/Model/Generate/Server/Message/";
-        private const string clientServerMessagePath = "../Unity/Assets/Scripts/Codes/Model/Generate/ClientServer/Message/";
+        private const string protoDir = "../Design/Proto";
+        private const string clientMessagePath = "../Unity/Assets/Scripts/Code/ET/Code/Model/Generate/Client/Message/";
+        private const string clientServerMessagePath = "../Unity/Assets/Scripts/Code/ET/Code/Model/Generate/ClientServer/Message/";
         private static readonly char[] splitChars = { ' ', '\t' };
         private static readonly List<OpcodeInfo> msgOpcode = new List<OpcodeInfo>();
 
@@ -39,11 +38,6 @@ namespace ET
                 Directory.Delete(clientMessagePath, true);
             }
 
-            if (Directory.Exists(serverMessagePath))
-            {
-                Directory.Delete(serverMessagePath, true);
-            }
-            
             if (Directory.Exists(clientServerMessagePath))
             {
                 Directory.Delete(clientServerMessagePath, true);
@@ -65,7 +59,7 @@ namespace ET
             }
         }
 
-        public static void ProtoFile2CS(string fileName, string protoName, string cs, int startOpcode)
+        private static void ProtoFile2CS(string fileName, string protoName, string cs, int startOpcode)
         {
             string ns = "ET";
             msgOpcode.Clear();
@@ -190,13 +184,11 @@ namespace ET
             if (cs.Contains("C"))
             {
                 GenerateCS(sb, clientMessagePath, proto);
-                GenerateCS(sb, serverMessagePath, proto);
                 GenerateCS(sb, clientServerMessagePath, proto);
             }
             
             if (cs.Contains("S"))
             {
-                GenerateCS(sb, serverMessagePath, proto);
                 GenerateCS(sb, clientServerMessagePath, proto);
             }
         }

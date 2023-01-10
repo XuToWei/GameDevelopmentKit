@@ -1,4 +1,7 @@
-﻿namespace ET
+﻿using System;
+using System.Threading;
+
+namespace ET
 {
     public static class Program
     {
@@ -12,7 +15,7 @@
             //客户端服务端不热更不共享的组件可以写到Loader中，比如表现层需要一个组件不需要热更，可以写在Loader中，这样性能更高。如果客户端跟服务端共享的并且不需要热更的
             //的组件可以写在Core中
             Entry.Init();
-            Init.Start();
+            Init.StartAsync();
         }
     }
 }

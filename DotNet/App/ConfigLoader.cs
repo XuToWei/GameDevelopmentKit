@@ -1,110 +1,48 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using Bright.Serialization;
-using cfg;
-using SimpleJSON;
 
 namespace ET.Server
 {
-    public static class ConfigLoader
+    [Invoke]
+    public class GetAllConfigBytes: AInvokeHandler<ConfigComponent.GetAllConfigBytes, Dictionary<Type, byte[]>>
     {
-        public static string GetLubanAsset(string assetName, bool fromJson)
+        public override Dictionary<Type, byte[]> Handle(ConfigComponent.GetAllConfigBytes args)
         {
-            return $"../Config/Excel/Server/{assetName}.{(fromJson? "json" : "bytes")}";
-        }
-        
-        [Invoke]
-        public class LoadLuban: AInvokeHandler<ConfigComponent.LoadLuban, ISingleton>
-        {
-            public override ISingleton Handle(ConfigComponent.LoadLuban args)
+            Dictionary<Type, byte[]> output = new Dictionary<Type, byte[]>();
+            List<string> startConfigs = new List<string>()
             {
-                return this.Load();
-            }
-
-            private ISingleton Load()
+                "StartMachineConfigCategory", 
+                "StartProcessConfigCategory", 
+                "StartSceneConfigCategory", 
+                "StartZoneConfigCategory",
+            };
+            HashSet<Type> configTypes = EventSystem.Instance.GetTypes(typeof (ConfigAttribute));
+            foreach (Type configType in configTypes)
             {
-                Type tablesType = typeof (DataTables);
-
-                MethodInfo loadMethodInfo = tablesType.GetMethod("Load");
-
-                Type loaderReturnType = loadMethodInfo.GetParameters()[0].ParameterType.GetGenericArguments()[1];
-
-                DataTables dataTables = new();
-                // 根据cfg.Tables的构造函数的Loader的返回值类型决定使用json还是ByteBuf Loader
-                if (loaderReturnType == typeof (ByteBuf))
+                string configFilePath;
+                if (startConfigs.Contains(configType.Name))
                 {
-                    ByteBuf LoadByteBuf(string file)
-                    {
-                        byte[] bytes = File.ReadAllBytes(GetLubanAsset(file, false));
-                        return new ByteBuf(bytes);
-                    }
-
-                    Func<string, ByteBuf> func = LoadByteBuf;
-                    loadMethodInfo.Invoke(dataTables, new object[] { func });
+                    configFilePath = $"../Config/Excel/s/{Options.Instance.StartConfig}/{configType.Name}.bytes";    
                 }
                 else
                 {
-                    JSONNode LoadJson(string file)
-                    {
-                        string text = File.ReadAllText(GetLubanAsset(file, true));
-                        return JSON.Parse(text);
-                    }
-
-                    Func<string, JSONNode> func = LoadJson;
-                    loadMethodInfo.Invoke(dataTables, new object[] { func });
+                    configFilePath = $"../Config/Excel/s/{configType.Name}.bytes";
                 }
-
-                return dataTables;
+                output[configType] = File.ReadAllBytes(configFilePath);
             }
+
+            return output;
         }
-
-        [Invoke]
-        public class LoadLubanAsync: AInvokeHandler<ConfigComponent.LoadLubanAsync, ETTask<ISingleton>>
+    }
+    
+    [Invoke]
+    public class GetOneConfigBytes: AInvokeHandler<ConfigComponent.GetOneConfigBytes, byte[]>
+    {
+        public override byte[] Handle(ConfigComponent.GetOneConfigBytes args)
         {
-            public override ETTask<ISingleton> Handle(ConfigComponent.LoadLubanAsync args)
-            {
-                ISingleton singleton = this.Load();
-                var task = ETTask<ISingleton>.Create();
-                task.SetResult(singleton);
-                return task;
-            }
-
-            private ISingleton Load()
-            {
-                Type tablesType = typeof (DataTables);
-
-                MethodInfo loadMethodInfo = tablesType.GetMethod("Load");
-
-                Type loaderReturnType = loadMethodInfo.GetParameters()[0].ParameterType.GetGenericArguments()[1];
-
-                DataTables dataTables = new();
-                // 根据cfg.Tables的构造函数的Loader的返回值类型决定使用json还是ByteBuf Loader
-                if (loaderReturnType == typeof (ByteBuf))
-                {
-                    ByteBuf LoadByteBuf(string file)
-                    {
-                        byte[] bytes = File.ReadAllBytes(GetLubanAsset(file, false));
-                        return new ByteBuf(bytes);
-                    }
-
-                    Func<string, ByteBuf> func = LoadByteBuf;
-                    loadMethodInfo.Invoke(dataTables, new object[] { func });
-                }
-                else
-                {
-                    JSONNode LoadJson(string file)
-                    {
-                        string text = File.ReadAllText(GetLubanAsset(file, true));
-                        return JSON.Parse(text);
-                    }
-
-                    Func<string, JSONNode> func = LoadJson;
-                    loadMethodInfo.Invoke(dataTables, new object[] { func });
-                }
-
-                return dataTables;
-            }
+            byte[] configBytes = File.ReadAllBytes($"../Config/{args.ConfigName}.bytes");
+            return configBytes;
         }
     }
 }

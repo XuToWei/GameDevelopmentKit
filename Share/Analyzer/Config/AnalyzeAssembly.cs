@@ -2,45 +2,38 @@
 {
     public static class AnalyzeAssembly
     {
-        private const string DotNetCore = "Core";
-        private const string DotNetModel = "Model";
-        private const string DotNetHotfix = "Hotfix";
+        private const string DotNet_ET = "DotNet.ET";
+        private const string DotNet_Model = "DotNet.Model";
+        private const string DotNet_Hotfix = "DotNet.Hotfix";
 
-        private const string UnityCore = "Unity.Core";
-        private const string UnityModel = "Unity.Model";
-        private const string UnityHotfix = "Unity.Hotfix";
-        private const string UnityModelView = "Unity.ModelView";
-        private const string UnityHotfixView = "Unity.HotfixView";
-
-        private const string UnityModelCodes = "Unity.Model.Codes";
-        private const string UnityHotfixCodes = "Unity.Hotfix.Codes";
-        private const string UnityModelViewCodes = "Unity.ModelView.Codes";
-        private const string UnityHotfixViewCodes = "Unity.HotfixView.Codes";
+        private const string Unity_ET_Runtime = "ET.Runtime";
+        
+        private const string Unity_ET_Code_Model = "Code.ET.Code.Model";
+        private const string Unity_ET_Code_Hotfix = "Code.ET.Code.Hotfix";
+        private const string Unity_ET_Code_ModelView = "Code.ET.Code.ModelView";
+        private const string Unity_ET_Code_HotfixView = "Code.ET.Code.HotfixView";
 
         public static readonly string[] AllHotfix =
         {
-            DotNetHotfix, UnityHotfix, UnityHotfixView, 
-            UnityHotfixCodes, UnityHotfixViewCodes
+            DotNet_Hotfix, Unity_ET_Code_Hotfix, Unity_ET_Code_HotfixView
         };
 
         public static readonly string[] AllModel =
         {
-            DotNetModel, UnityModel, 
-            UnityModelView, UnityModel, UnityModelCodes
+            DotNet_Model, Unity_ET_Code_Model, Unity_ET_Code_ModelView
         };
 
         public static readonly string[] AllModelHotfix =
         {
-            DotNetModel, DotNetHotfix, 
-            UnityModel, UnityHotfix, UnityModelView, UnityHotfixView, 
-            UnityModelCodes, UnityModelViewCodes, UnityHotfixCodes, UnityHotfixViewCodes
+            DotNet_Model, DotNet_Hotfix,
+            Unity_ET_Code_Model, Unity_ET_Code_ModelView, Unity_ET_Code_Hotfix, Unity_ET_Code_HotfixView
         };
         
         public static readonly string[] All =
         {
-            DotNetCore, DotNetModel, DotNetHotfix, 
-            UnityCore, UnityModel, UnityHotfix, UnityModelView, UnityHotfixView, 
-            UnityModelCodes, UnityModelViewCodes, UnityHotfixCodes, UnityHotfixViewCodes
+            DotNet_ET, DotNet_Model, DotNet_Hotfix,
+            Unity_ET_Runtime,
+            Unity_ET_Code_Model, Unity_ET_Code_ModelView, Unity_ET_Code_Hotfix, Unity_ET_Code_HotfixView
         };
         
         
