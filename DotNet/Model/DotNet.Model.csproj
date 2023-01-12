@@ -37,7 +37,7 @@
             <Link>Share\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
 
-        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Generate\Server\**\*.cs"> 
+        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Generate\ClientServer\**\*.cs"> 
             <Link>Generate\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         

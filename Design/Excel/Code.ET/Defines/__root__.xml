@@ -8,7 +8,6 @@
 
 	<group name="c" default="1"/> client
 	<group name="s" default="1"/> server
-	<group name="e" default="1"/> editor
 	
 	<import name="."/>
 	
@@ -18,5 +17,4 @@
 
 	<service name="client" manager="Tables" group="c"/>
 	<service name="clientserver" manager="Tables" group="c,s"/>
-	<service name="all" manager="Tables" group="c,s,e"/>
 </root>

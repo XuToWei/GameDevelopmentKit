@@ -1,5 +1,4 @@
 #if UNITY_ET_VIEW
-using System;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;

@@ -9,7 +9,7 @@ using UnityEngine;
 namespace ET
 {
     [CustomEditor(typeof (ComponentView))]
-    public class ComponentViewEditor: Editor
+    public class ComponentViewEditor: UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

@@ -70,6 +70,8 @@ namespace ET
                     info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value;
                     input_data_dirs.Add(info);
                 }
+                
+                Log.Console("Export Excel Sucess!");
             }
             
             foreach (Input_Output_Gen_Info info in input_data_dirs)

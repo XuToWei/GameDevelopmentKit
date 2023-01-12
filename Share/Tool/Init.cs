@@ -54,7 +54,6 @@ namespace ET.Server
                         return 0;
                     }
                 }
-                Proto2CS.Export();
             }
             catch (Exception e)
             {

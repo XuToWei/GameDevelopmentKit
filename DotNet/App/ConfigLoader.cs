@@ -1,48 +1,63 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
+using Bright.Serialization;
+using SimpleJSON;
 
 namespace ET.Server
 {
     [Invoke]
-    public class GetAllConfigBytes: AInvokeHandler<ConfigComponent.GetAllConfigBytes, Dictionary<Type, byte[]>>
+    public class LubanLoadAllAsyncHandler : AInvokeHandler<ConfigComponent.LoadAll, ETTask>
     {
-        public override Dictionary<Type, byte[]> Handle(ConfigComponent.GetAllConfigBytes args)
+        public override async ETTask Handle(ConfigComponent.LoadAll arg)
         {
-            Dictionary<Type, byte[]> output = new Dictionary<Type, byte[]>();
-            List<string> startConfigs = new List<string>()
+            Type tablesType = typeof (Tables);
+
+            MethodInfo loadMethodInfo = tablesType.GetMethod("LoadAsync");
+
+            Type loaderReturnType = loadMethodInfo.GetParameters()[0].ParameterType.GetGenericArguments()[1];
+            
+            // 根据cfg.Tables的构造函数的Loader的返回值类型决定使用json还是ByteBuf Loader
+            if (loaderReturnType == typeof (Task<ByteBuf>))
             {
-                "StartMachineConfigCategory", 
-                "StartProcessConfigCategory", 
-                "StartSceneConfigCategory", 
-                "StartZoneConfigCategory",
-            };
-            HashSet<Type> configTypes = EventSystem.Instance.GetTypes(typeof (ConfigAttribute));
-            foreach (Type configType in configTypes)
+                async Task<ByteBuf> LoadByteBuf(string file)
+                {
+                    return new ByteBuf(await File.ReadAllBytesAsync(GetLubanAssetPath(file, false)));
+                }
+
+                Func<string, Task<ByteBuf>> func = LoadByteBuf;
+                await (Task)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
+            }
+            else
             {
-                string configFilePath;
-                if (startConfigs.Contains(configType.Name))
+                async Task<JSONNode> LoadJson(string file)
                 {
-                    configFilePath = $"../Config/Excel/s/{Options.Instance.StartConfig}/{configType.Name}.bytes";    
+                    return JSON.Parse(await File.ReadAllTextAsync(GetLubanAssetPath(file, true)));
                 }
-                else
-                {
-                    configFilePath = $"../Config/Excel/s/{configType.Name}.bytes";
-                }
-                output[configType] = File.ReadAllBytes(configFilePath);
+
+                Func<string, Task<JSONNode>> func = LoadJson;
+                await (ETTask)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
+            }
+        }
+        
+        private string GetLubanAssetPath(string fileName, bool isJson)
+        {
+            if (isJson)
+            {
+                return $"../Config/Luban/{fileName}.json";
             }
 
-            return output;
+            return $"../Config/Luban/{fileName}.byte";
         }
     }
     
     [Invoke]
-    public class GetOneConfigBytes: AInvokeHandler<ConfigComponent.GetOneConfigBytes, byte[]>
+    public class LubanLoadOneAsyncHandler: AInvokeHandler<ConfigComponent.LoadOne, ETTask>
     {
-        public override byte[] Handle(ConfigComponent.GetOneConfigBytes args)
+        public override async ETTask Handle(ConfigComponent.LoadOne arg)
         {
-            byte[] configBytes = File.ReadAllBytes($"../Config/{args.ConfigName}.bytes");
-            return configBytes;
+            await Tables.Instance.GetDataTable(arg.ConfigName).LoadAsync();
         }
     }
 }
