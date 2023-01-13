@@ -18,7 +18,7 @@ namespace ET
                 object[] attrs = type.GetCustomAttributes(typeof(UGFUIFormEventAttribute), false);
                 UGFUIFormEventAttribute ugfUIFormEventAttribute = attrs[0] as UGFUIFormEventAttribute;
                 IUGFUIFormEvent ugfUIFormEvent = Activator.CreateInstance(type) as IUGFUIFormEvent;
-                this.UIFormEvents.Add(ugfUIFormEventAttribute.UIFormId, ugfUIFormEvent);
+                this.UIFormEvents.Add(ugfUIFormEventAttribute.uiFormId, ugfUIFormEvent);
             }
             
             this.EntityEvents.Clear();

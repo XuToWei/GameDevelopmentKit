@@ -1,7 +1,7 @@
 <root>
-	<topmodule name="Stable"/>
+	<topmodule name="Game"/>
 	
-	<option name="editor.topmodule" value="Stable.Editor"/>
+	<option name="editor.topmodule" value="Game.Editor"/>
 
 	<patch name="cn"/>
 	<patch name="en"/>
@@ -16,5 +16,5 @@
 	<importexcel name="__beans__.xlsx" type="bean"/>相对data目录
 
 	<service name="client" manager="Tables" group="c"/>
-	<service name="editor" manager="Tables" group="e"/>
+	<service name="all" manager="Tables" group="c,e"/>
 </root>

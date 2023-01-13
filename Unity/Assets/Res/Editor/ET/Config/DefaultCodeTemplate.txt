@@ -1,0 +1,7 @@
+﻿namespace ET#NAMESPACE#
+{
+    public class #NAME#: Entity, IAwake
+    {
+        
+    }
+}

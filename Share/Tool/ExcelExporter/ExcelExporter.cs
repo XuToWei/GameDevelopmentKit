@@ -52,13 +52,12 @@ namespace ET
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(File.ReadAllText(genConfigFile));
                 XmlNode xmlRoot = xmlDocument.SelectSingleNode("Config");
-                string input_Data_Dir = xmlRoot.SelectSingleNode("Input_Data_Dir").Attributes.GetNamedItem("Value").Value;
                 XmlNodeList xmlGens = xmlRoot.SelectNodes("Gen");
                 for (int j = 0; j < xmlGens.Count; j++)
                 {
                     XmlNode xmlGen = xmlGens.Item(j);
                     Input_Output_Gen_Info info = new Input_Output_Gen_Info();
-                    info.Input_Data_Dir = input_Data_Dir;
+                    info.Input_Data_Dir = dir;
                     info.Output_Code_Dirs = xmlGen.SelectSingleNode("Output_Code_Dirs").Attributes.GetNamedItem("Value").Value.Split(',').ToList();
                     info.Output_Data_Dirs = xmlGen.SelectSingleNode("Output_Data_Dirs").Attributes.GetNamedItem("Value").Value.Split(',').ToList();
                     info.Gen_Type_Code_Data = xmlGen.SelectSingleNode("Gen_Type_Code_Data").Attributes.GetNamedItem("Value").Value;
@@ -70,13 +69,16 @@ namespace ET
                     info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value;
                     input_data_dirs.Add(info);
                 }
-                
-                Log.Console("Export Excel Sucess!");
             }
             
             foreach (Input_Output_Gen_Info info in input_data_dirs)
             {
-                RunCommand(GetCommand(info), "../Bin/");
+                string cmd = GetCommand(info);
+                if (!RunCommand(cmd, "../Bin/"))
+                {
+                    Log.Console($"Run error! Cmd:{cmd}");
+                    continue;
+                }
                 if (info.Output_Code_Dirs.Count > 1)
                 {
                     for (int i = 1; i < info.Output_Code_Dirs.Count; i++)
@@ -93,6 +95,26 @@ namespace ET
                     }
                 }
             }
+
+            try
+            {
+                GenerateUGFEntityId.GenerateCode();
+            }
+            catch (Exception e)
+            {
+                Log.Console($"GenerateUGFEntityId Code Fail! Msg:{e}");
+            }
+            
+            try
+            {
+                GenerateUGFUIFormId.GenerateCode();
+            }
+            catch (Exception e)
+            {
+                Log.Console($"GenerateUGFUIFormId Code Fail! Msg:{e}");
+            }
+            
+            Log.Console("Export Excel Finished!");
         }
 
         private static string GetCommand(Input_Output_Gen_Info info)
@@ -113,9 +135,9 @@ namespace ET
             return cmd;
         }
 
-        private static void RunCommand(string cmd, string workDirectory)
+        private static bool RunCommand(string cmd, string workDirectory)
         {
-            Log.Debug(cmd);
+            bool isSuccess = false;
             Process process = new();
             try
             {
@@ -179,15 +201,18 @@ namespace ET
 
                 process.CancelOutputRead();
                 process.CancelErrorRead();
+                isSuccess = true;
             }
             catch (Exception e)
             {
                 Log.Error(e);
+                isSuccess = false;
             }
             finally
             {
                 process.Close();
             }
+            return isSuccess;
         }
     }
 }

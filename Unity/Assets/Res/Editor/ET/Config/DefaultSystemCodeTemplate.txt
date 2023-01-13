@@ -1,0 +1,14 @@
+﻿namespace ET#NAMESPACE#
+{
+    [FriendOf(typeof (#NAME#))]
+    public static class #NAME#System
+    {
+        public class #NAME#AwakeSystem : AwakeSystem<#NAME#>
+        {
+             protected override void Awake(#NAME# self)
+             {
+                
+             }
+        }
+    }
+}

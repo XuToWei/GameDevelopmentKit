@@ -1,0 +1,11 @@
+[
+  {
+    "Id": 3000,
+    "AssetName": "Jelly_destroy_02",
+    "Priority": 0,
+    "Loop": false,
+    "Volume": 1,
+    "SpatialBlend": 0,
+    "MaxDistance": 100
+  }
+]

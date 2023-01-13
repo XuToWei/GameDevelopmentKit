@@ -21,7 +21,7 @@ namespace ET
         [MenuItem("ET/ServerTools")]
         public static void ShowWindow()
         {
-            GetWindow<ServerCommandLineEditor>();
+            GetWindow<ServerCommandLineEditor>("Server CommandLine");
         }
         
         private int selectStartConfigIndex = 1;
@@ -29,7 +29,7 @@ namespace ET
         private string startConfig;
         private DevelopMode developMode;
 
-        public void OnEnable()
+        private void OnEnable()
         {
             JSONNode jsonNode = JSONNode.Parse(AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Res/Editor/ET/Luban/dtstartmachineconfig.json").text);
             List<string> configs = new List<string>();
@@ -44,7 +44,7 @@ namespace ET
             this.startConfigs = configs.ToArray();
         }
 
-        public void OnGUI()
+        private void OnGUI()
         {
             selectStartConfigIndex = EditorGUILayout.Popup(selectStartConfigIndex, this.startConfigs);
             this.startConfig = this.startConfigs[this.selectStartConfigIndex];

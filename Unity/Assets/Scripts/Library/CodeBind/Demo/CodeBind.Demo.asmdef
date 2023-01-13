@@ -1,0 +1,16 @@
+{
+    "name": "CodeBind.Demo",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b782c2eb658bcb14cad945faf67de879"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

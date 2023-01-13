@@ -39,12 +39,12 @@ namespace ET.Client
             }
 
             formData.Release();
-            return etMonoUIForm.UGFUIForm;
+            return etMonoUIForm.ugfUIForm;
         }
 
         public static void CloseUIForm(this UIComponent self, UGFUIForm uiForm)
         {
-            GameEntry.UI.CloseUIForm(uiForm.EtMonoUIForm.UIForm);
+            GameEntry.UI.CloseUIForm(uiForm.etMonoUIForm.UIForm);
         }
 
         public static void CloseUIForm(this UIComponent self, int uiFormId)
@@ -52,7 +52,7 @@ namespace ET.Client
             HashSet<UGFUIForm> needRemoves = new HashSet<UGFUIForm>();
             foreach (UGFUIForm uiForm in self.UIForms)
             {
-                if (uiForm.UIFormId == uiFormId)
+                if (uiForm.uiFormId == uiFormId)
                 {
                     needRemoves.Add(uiForm);
                 }
@@ -66,7 +66,7 @@ namespace ET.Client
 
         public static void RefocusUIForm(this UIComponent self, UGFUIForm uiForm, object userData = null)
         {
-            GameEntry.UI.RefocusUIForm(uiForm.EtMonoUIForm.UIForm, userData);
+            GameEntry.UI.RefocusUIForm(uiForm.etMonoUIForm.UIForm, userData);
         }
     }
 }

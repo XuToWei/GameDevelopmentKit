@@ -38,7 +38,7 @@ namespace ET.Client
 
         public static void HideEntity(this EntityComponent self, UGFEntity entity)
         {
-            GameEntry.Entity.HideEntity(entity.ETMonoEntity);
+            GameEntry.Entity.HideEntity(entity.etMonoEntity);
         }
 
         public static void HideEntity(this UIComponent self, int entityId)
@@ -64,17 +64,17 @@ namespace ET.Client
 
         public static void AttachEntity(this EntityComponent self, UGFEntity childEntity, UGFEntity parentEntity, string parentTransformPath, object userData = null)
         {
-            GameEntry.Entity.AttachEntity(childEntity.ETMonoEntity.Entity, parentEntity.ETMonoEntity.Entity, parentTransformPath, userData);
+            GameEntry.Entity.AttachEntity(childEntity.etMonoEntity.Entity, parentEntity.etMonoEntity.Entity, parentTransformPath, userData);
         }
 
         public static void DetachEntity(this EntityComponent self, UGFEntity childEntity, object userData = null)
         {
-            GameEntry.Entity.DetachEntity(childEntity.ETMonoEntity.Entity, userData);
+            GameEntry.Entity.DetachEntity(childEntity.etMonoEntity.Entity, userData);
         }
         
         public static void DetachChildEntities(this EntityComponent self, UGFEntity parentEntity, object userData = null)
         {
-            GameEntry.Entity.DetachChildEntities(parentEntity.ETMonoEntity.Entity, userData);
+            GameEntry.Entity.DetachChildEntities(parentEntity.etMonoEntity.Entity, userData);
         }
     }
 }

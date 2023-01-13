@@ -38,10 +38,17 @@
         <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Share\Module\Log\**\*.cs">
             <Link>Module\Log\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
+
+        <Compile Include="..\..\Unity\Assets\Scripts\Library\LubanLib\Editor\**\*.cs">
+            <Link>ExcelExporter\LubanLib\Editor\%(RecursiveDir)%(FileName)%(Extension)</Link>
+        </Compile>
+
+        <Compile Include="..\..\Unity\Assets\Scripts\Code\Editor\Generate\Luban\**\*.cs">
+            <Link>ExcelExporter\Luban\Editor\%(RecursiveDir)%(FileName)%(Extension)</Link>
+        </Compile>
     </ItemGroup>
     
     <ItemGroup>
       <ProjectReference Include="..\..\DotNet\ET\DotNet.ET.csproj" />
     </ItemGroup>
-
 </Project>

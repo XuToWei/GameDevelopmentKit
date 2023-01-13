@@ -1,0 +1,9 @@
+[
+  {
+    "Id": 1000,
+    "Desc": "飞船",
+    "AssetName": "PlayerShip",
+    "EntityGroupName": "Aircraft",
+    "Priority": 0
+  }
+]

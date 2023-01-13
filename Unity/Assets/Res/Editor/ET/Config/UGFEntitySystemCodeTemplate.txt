@@ -1,0 +1,24 @@
+﻿using UnityEngine;
+
+namespace ET.Client
+{
+    [FriendOf(typeof (UGFEntity#NAME#))]
+    public static partial class UGFEntity#NAME#System
+    {
+        public class UGFEntity#NAME#AwakeSystem : AwakeSystem<UGFEntity#NAME#, Transform>
+        {
+             protected override void Awake(UGFEntity#NAME# self, Transform transform)
+             {
+                self.transform = transform;
+             }
+        }
+        
+        public class UGFEntity#NAME#DestroySystem : DestroySystem<UGFEntity#NAME#>
+        {
+            protected override void Destroy(UGFEntity#NAME# self)
+            {
+                self.transform = null;
+            }
+        }
+    }
+}

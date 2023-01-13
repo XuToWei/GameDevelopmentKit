@@ -1,37 +1,46 @@
+using UnityEngine;
+
 namespace ET
 {
     public sealed class UGFUIForm : Entity, IAwake<int, ETMonoUIForm>, ILoad
     {
-        public ETMonoUIForm EtMonoUIForm
+        public ETMonoUIForm etMonoUIForm
         {
             get;
             private set;
         }
 
-        public int UIFormId
+        public int uiFormId
         {
             get;
             private set;
         }
 
-        public bool IsOpen;
+        public Transform transform
+        {
+            get;
+            private set;
+        }
+
+        public bool isOpen;
 
         [ObjectSystem]
         public sealed class UGFUIFormAwakeSystem: AwakeSystem<UGFUIForm, int, ETMonoUIForm>
         {
             protected override void Awake(UGFUIForm self, int uiFormId, ETMonoUIForm ugfETUIForm)
             {
-                self.UIFormId = uiFormId;
-                self.EtMonoUIForm = ugfETUIForm;
+                self.uiFormId = uiFormId;
+                self.etMonoUIForm = ugfETUIForm;
+                self.transform = self.etMonoUIForm.CachedTransform;
             }
         }
         
         [ObjectSystem]
-        public class UGFUIFormLoadSystem: LoadSystem<UGFUIForm>
+        public sealed class UGFUIFormLoadSystem: LoadSystem<UGFUIForm>
         {
             protected override void Load(UGFUIForm self)
             {
-                self.EtMonoUIForm.Load();
+                self.etMonoUIForm.Load();
             }
         }
     }

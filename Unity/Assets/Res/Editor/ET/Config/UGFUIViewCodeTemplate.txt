@@ -1,0 +1,7 @@
+﻿namespace ET.Client
+{
+    public partial class UGFUI#NAME#View
+    {
+        
+    }
+}
