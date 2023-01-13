@@ -1,11 +1,10 @@
 {
-    "name": "Code",
+    "name": "Code.Runtime",
     "rootNamespace": "",
     "references": [
         "GUID:185999e4d3aadab45bf0f7ee77382397",
         "GUID:363c5eb08ff8e6a439b85e37b8c20d96",
         "GUID:6ce6ba9c57c5f6a4095678c0317f9b18",
-        "GUID:6e17cd4649ea94c0cb18f30a60b9b4b4",
         "GUID:9da5641325774b1468e1cb8e27edbc1f",
         "GUID:e16a851ff45a46b42918f227b09bf21e",
         "GUID:3fcf00d7a3c894e46a955a792eefb4da",

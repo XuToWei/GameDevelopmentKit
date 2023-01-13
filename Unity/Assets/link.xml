@@ -1,7 +1,4 @@
 <linker>
-    <assembly fullname="Unity.Core" preserve="all"/>
-    <assembly fullname="Unity.Mono" preserve="all"/>
-    <assembly fullname="Unity.ThirdParty" preserve="all"/>
     <assembly fullname="UnityEngine" preserve="all"/>
     <assembly fullname="System" preserve="all"/>
     <assembly fullname="CommandLine" preserve="all"/>
@@ -15,4 +12,13 @@
     <assembly fullname="NLog" preserve="all" />
     <assembly fullname="UnityEngine.CoreModule" preserve="all" />
     <assembly fullname="UnityEngine.InputLegacyModule" preserve="all" />
+    
+    <assembly fullname="CatJson.Runtime" preserve="all"/>
+    <assembly fullname="CodeBind.Runtime" preserve="all"/>
+    <assembly fullname="ET.Runtime" preserve="all"/>
+    <assembly fullname="LubanLib.Runtime" preserve="all"/>
+    <assembly fullname="ProtoBuf" preserve="all"/>
+
+    <assembly fullname="Code.Runtime" preserve="all"/>
+    <assembly fullname="Code.ET.Loader" preserve="all"/>
 </linker>
