@@ -10,10 +10,8 @@ namespace Game
         {
             base.OnEnter(procedureOwner);
 
-            UnityEngine.GameObject.Find("ET").SetActive(true);
-            
-            Log.Debug("ET load successfully!");
-            //ChangeState<ProcedureXXX>(procedureOwner);
+            GameEntry.ETRunner.StartRun();
+            Log.Debug("Start run ET!");
         }
     }
 }

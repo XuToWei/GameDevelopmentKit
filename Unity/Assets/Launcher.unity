@@ -804,7 +804,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_JsonHelperTypeName
-      value: Game.CatJsonHelper
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
@@ -963,7 +963,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1114015494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b908d45b2e5e35845af8f3e569b10618, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a94f08e8c5b12545a06241e91b3ddd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1576232202
