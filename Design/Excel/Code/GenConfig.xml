@@ -1,5 +1,4 @@
 ﻿<Config>
-  <Input_Data_Dir Value="../Design/Excel/Code" />
   <Gen>
     <Output_Code_Dirs Value="../Unity/Assets/Scripts/Code/Generate/Luban" />
     <Output_Data_Dirs Value="../Unity/Assets/Res/Runtime/Luban" />
