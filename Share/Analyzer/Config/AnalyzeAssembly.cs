@@ -7,7 +7,7 @@
         private const string DotNet_Hotfix = "DotNet.Hotfix";
 
         private const string Unity_ET_Runtime = "ET.Runtime";
-        
+        private const string Unity_ET_Loader = "Code.ET.Loader";
         private const string Unity_ET_Code_Model = "Code.ET.Code.Model";
         private const string Unity_ET_Code_Hotfix = "Code.ET.Code.Hotfix";
         private const string Unity_ET_Code_ModelView = "Code.ET.Code.ModelView";
@@ -32,7 +32,7 @@
         public static readonly string[] All =
         {
             DotNet_ET, DotNet_Model, DotNet_Hotfix,
-            Unity_ET_Runtime,
+            Unity_ET_Runtime, Unity_ET_Loader,
             Unity_ET_Code_Model, Unity_ET_Code_ModelView, Unity_ET_Code_Hotfix, Unity_ET_Code_HotfixView
         };
         

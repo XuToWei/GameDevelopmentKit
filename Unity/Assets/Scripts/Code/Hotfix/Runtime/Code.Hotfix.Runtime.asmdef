@@ -1,0 +1,23 @@
+{
+    "name": "Code.Hotfix.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:185999e4d3aadab45bf0f7ee77382397",
+        "GUID:363c5eb08ff8e6a439b85e37b8c20d96",
+        "GUID:6ce6ba9c57c5f6a4095678c0317f9b18",
+        "GUID:8230fa752d2b77040afe8bfff568c89e",
+        "GUID:3fcf00d7a3c894e46a955a792eefb4da",
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "HotfixAble"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
