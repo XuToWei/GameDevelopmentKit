@@ -15,7 +15,7 @@ namespace Game
             private set;
         }
 
-        public static ETRunner ETRunner
+        public static ETRunnerComponent ETRunner
         {
             get;
             private set;
@@ -42,7 +42,7 @@ namespace Game
         private static void InitCustomComponents()
         {
             Builtin = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinComponent>();
-            ETRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<ETRunner>();
+            ETRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<ETRunnerComponent>();
             SpriteCollection = UnityGameFramework.Runtime.GameEntry.GetComponent<SpriteCollectionComponent>();
             Tables = UnityGameFramework.Runtime.GameEntry.GetComponent<Tables>();
             TextureSet = UnityGameFramework.Runtime.GameEntry.GetComponent<TextureSetComponent>();

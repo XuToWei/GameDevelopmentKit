@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityGameFramework.Editor.ResourceTools;
 
 namespace UnityGameFramework.Extension.Editor

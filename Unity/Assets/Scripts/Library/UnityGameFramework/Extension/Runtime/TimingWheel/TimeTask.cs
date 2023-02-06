@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using GameFramework;
-using TimingWheel.Extensions;
-using TimingWheel.Interfaces;
 
-namespace TimingWheel
+namespace UnityGameFramework.Extension
 {
     enum TimerType
     {

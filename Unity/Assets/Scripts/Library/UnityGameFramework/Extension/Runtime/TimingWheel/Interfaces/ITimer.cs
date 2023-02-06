@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace TimingWheel.Interfaces
+namespace UnityGameFramework.Extension
 {
     /// <summary>
     /// 时间轮计时器

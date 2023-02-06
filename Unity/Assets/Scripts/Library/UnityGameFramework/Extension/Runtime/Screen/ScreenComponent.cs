@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
 
-namespace UGF
+namespace UnityGameFramework.Extension
 {
     [InfoBox("目前只针对于UGui")]
     public class ScreenComponent : GameFrameworkComponent

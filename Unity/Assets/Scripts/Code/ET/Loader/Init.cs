@@ -28,6 +28,7 @@ namespace ET
 
         private void Start()
         {
+            this.gameObject.name = "ET";//提供给编辑器ETView使用
             GameEntry.ETRunner.SetRunAction(StartAsync);
         }
 

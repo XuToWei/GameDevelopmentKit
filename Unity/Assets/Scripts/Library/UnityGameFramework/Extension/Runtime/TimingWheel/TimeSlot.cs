@@ -1,9 +1,8 @@
 ﻿using DelayQueue.Interfaces;
 using System;
 using System.Collections.Generic;
-using TimingWheel.Extensions;
 
-namespace TimingWheel
+namespace UnityGameFramework.Extension
 {
     /// <summary>
     /// 时间槽

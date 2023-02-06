@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace TimingWheel.Extensions
+namespace UnityGameFramework.Extension
 {
     /// <summary>
     /// 原子int

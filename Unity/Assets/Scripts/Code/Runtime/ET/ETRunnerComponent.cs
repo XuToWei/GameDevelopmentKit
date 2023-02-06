@@ -4,16 +4,20 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    public class ETRunner : GameFrameworkComponent
+    public class ETRunnerComponent : GameFrameworkComponent
     {
-        public GameObject RunnerObj => this.gameObject;
+        public GameObject RunnerObj
+        {
+            get;
+            private set;
+        }
 
         private Action m_StartRunAction;
 
         protected override void Awake()
         {
             base.Awake();
-            this.gameObject.name = "ET";//提供给编辑器ETView使用
+            this.RunnerObj = this.gameObject;
         }
 
         public void SetRunAction(Action action)

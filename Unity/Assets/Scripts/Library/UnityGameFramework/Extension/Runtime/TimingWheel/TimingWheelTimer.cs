@@ -2,11 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DelayQueue;
-using TimingWheel.Extensions;
-using TimingWheel.Interfaces;
-using UnityGameFramework.Extension;
 
-namespace TimingWheel
+namespace UnityGameFramework.Extension
 {
     /// <summary>
     /// 时间轮计时器，参考kafka时间轮算法实现

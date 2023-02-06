@@ -1,7 +1,6 @@
 ﻿using DelayQueue;
-using TimingWheel.Extensions;
 
-namespace TimingWheel
+namespace UnityGameFramework.Extension
 {
     /// <summary>
     /// 时间轮，采用分层算法

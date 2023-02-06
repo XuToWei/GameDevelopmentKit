@@ -73,11 +73,11 @@ namespace Game
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             url = GameEntry.Builtin.BuildInfo.WindowsAppUrl;
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-            url = GameEntry.BuiltinData.BuildInfo.MacOSAppUrl;
+            url = GameEntry.Builtin.BuildInfo.MacOSAppUrl;
 #elif UNITY_IOS
-            url = GameEntry.BuiltinData.BuildInfo.IOSAppUrl;
+            url = GameEntry.Builtin.BuildInfo.IOSAppUrl;
 #elif UNITY_ANDROID
-            url = GameEntry.BuiltinData.BuildInfo.AndroidAppUrl;
+            url = GameEntry.Builtin.BuildInfo.AndroidAppUrl;
 #endif
             if (!string.IsNullOrEmpty(url))
             {

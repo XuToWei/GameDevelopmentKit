@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
-using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ namespace CodeBind.Editor
         {
             MonoCodeBindAttribute attribute = this.Property.GetAttribute<MonoCodeBindAttribute>();
 
-            ProcessedMemberPropertyResolverExtensions.AddDelegate(propertyInfos, "Code Binder", (Action) (() => { }), -100000f, new Attribute[2]
+            propertyInfos.AddDelegate("Code Binder", (Action) (() => { }), -100000f, new Attribute[2]
             {
                 (Attribute) new InfoBoxAttribute($"Separator Char:{attribute.separatorChar}"),
                 (Attribute) new OnInspectorGUIAttribute("@")

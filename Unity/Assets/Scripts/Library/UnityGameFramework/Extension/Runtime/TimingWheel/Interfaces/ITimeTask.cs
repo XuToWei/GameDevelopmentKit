@@ -1,4 +1,4 @@
-﻿namespace TimingWheel.Interfaces
+﻿namespace UnityGameFramework.Extension
 {
     /// <summary>
     /// 定时任务

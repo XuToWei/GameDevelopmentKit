@@ -15,17 +15,17 @@ namespace UnityGameFramework.Extension.Editor
     /// </summary>
     public class ResourceRuleEditor : EditorWindow
     {
-        private readonly string m_NormalConfigurationPath = "Assets/Res/Configs/ResourceRuleEditor.asset";
+        private readonly string m_NormalConfigurationPath = "Assets/Res/Editor/Config/ResourceRuleEditor.asset";
         private ResourceRuleEditorData m_Configuration;
         private ResourceCollection m_ResourceCollection;
 
         private ReorderableList m_RuleList;
         private Vector2 m_ScrollPosition = Vector2.zero;
 
-        private string m_SourceAssetExceptTypeFilter = "t:Script";
+        private readonly string m_SourceAssetExceptTypeFilter = "t:Script";
         private string[] m_SourceAssetExceptTypeFilterGUIDArray;
 
-        private string m_SourceAssetExceptLabelFilter = "l:ResourceExclusive";
+        private readonly string m_SourceAssetExceptLabelFilter = "l:ResourceExclusive";
         private string[] m_SourceAssetExceptLabelFilterGUIDArray;
 
         [MenuItem("Game Framework/Resource Tools/Resource Rule Editor", false, 50)]

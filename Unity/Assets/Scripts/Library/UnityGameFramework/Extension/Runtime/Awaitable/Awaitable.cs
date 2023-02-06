@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
 using GameFramework.Resource;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -12,19 +14,19 @@ namespace UnityGameFramework.Extension
     public static partial class Awaitable
     {
         private static readonly Dictionary<int, TaskCompletionSource<UIForm>> s_UIFormTcs =
-            new Dictionary<int, TaskCompletionSource<UIForm>>();
+                new Dictionary<int, TaskCompletionSource<UIForm>>();
 
         private static readonly Dictionary<int, TaskCompletionSource<Entity>> s_EntityTcs =
-            new Dictionary<int, TaskCompletionSource<Entity>>();
+                new Dictionary<int, TaskCompletionSource<Entity>>();
 
         private static readonly Dictionary<string, TaskCompletionSource<bool>> s_DataTableTcs =
-            new Dictionary<string, TaskCompletionSource<bool>>();
+                new Dictionary<string, TaskCompletionSource<bool>>();
 
         private static readonly Dictionary<string, TaskCompletionSource<bool>> s_LoadSceneTcs =
-            new Dictionary<string, TaskCompletionSource<bool>>();
+                new Dictionary<string, TaskCompletionSource<bool>>();
 
         private static readonly Dictionary<string, TaskCompletionSource<bool>> s_UnLoadSceneTcs =
-            new Dictionary<string, TaskCompletionSource<bool>>();
+                new Dictionary<string, TaskCompletionSource<bool>>();
 
         private static readonly HashSet<int> s_WebSerialIDs = new HashSet<int>();
         private static readonly List<WebResult> s_DelayReleaseWebResult = new List<WebResult>();
@@ -77,7 +79,7 @@ namespace UnityGameFramework.Extension
         /// 打开界面（可等待）
         /// </summary>
         public static Task<UIForm> OpenUIFormAsync(this UIComponent uiComponent, string uiFormAssetName,
-            string uiGroupName, int priority, bool pauseCoveredUIForm, object userData)
+        string uiGroupName, int priority, bool pauseCoveredUIForm, object userData, Action cancelAction = null)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
@@ -85,14 +87,28 @@ namespace UnityGameFramework.Extension
             int serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData);
             var tcs = new TaskCompletionSource<UIForm>();
             s_UIFormTcs.Add(serialId, tcs);
+            if (cancelAction != null)
+            {
+                cancelAction += () =>
+                {
+                    if (uiComponent.IsLoadingUIForm(serialId))
+                    {
+                        uiComponent.CloseUIForm(serialId);
+                        if (s_UIFormTcs.TryGetValue(serialId, out tcs))
+                        {
+                            s_UIFormTcs.Remove(serialId);
+                            tcs.SetCanceled();
+                        }
+                    }
+                };
+            }
             return tcs.Task;
         }
 
         private static void OnOpenUIFormSuccess(object sender, GameEventArgs e)
         {
             OpenUIFormSuccessEventArgs ne = (OpenUIFormSuccessEventArgs)e;
-            s_UIFormTcs.TryGetValue(ne.UIForm.SerialId, out TaskCompletionSource<UIForm> tcs);
-            if (tcs != null)
+            if (s_UIFormTcs.TryGetValue(ne.UIForm.SerialId, out TaskCompletionSource<UIForm> tcs))
             {
                 tcs.SetResult(ne.UIForm);
                 s_UIFormTcs.Remove(ne.UIForm.SerialId);
@@ -102,8 +118,7 @@ namespace UnityGameFramework.Extension
         private static void OnOpenUIFormFailure(object sender, GameEventArgs e)
         {
             OpenUIFormFailureEventArgs ne = (OpenUIFormFailureEventArgs)e;
-            s_UIFormTcs.TryGetValue(ne.SerialId, out TaskCompletionSource<UIForm> tcs);
-            if (tcs != null)
+            if (s_UIFormTcs.TryGetValue(ne.SerialId, out TaskCompletionSource<UIForm> tcs))
             {
                 Debug.LogError(ne.ErrorMessage);
                 tcs.SetException(new GameFrameworkException(ne.ErrorMessage));
@@ -115,7 +130,7 @@ namespace UnityGameFramework.Extension
         /// 显示实体（可等待）
         /// </summary>
         public static Task<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityId,
-            Type entityLogicType, string entityAssetName, string entityGroupName, int priority, object userData)
+        Type entityLogicType, string entityAssetName, string entityGroupName, int priority, object userData, Action cancelAction = null)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
@@ -123,9 +138,23 @@ namespace UnityGameFramework.Extension
             var tcs = new TaskCompletionSource<Entity>();
             s_EntityTcs.Add(entityId, tcs);
             entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, userData);
+            if (cancelAction != null)
+            {
+                cancelAction += () =>
+                {
+                    if (entityComponent.IsLoadingEntity(entityId))
+                    {
+                        entityComponent.HideEntity(entityId);
+                        if (s_EntityTcs.TryGetValue(entityId, out tcs))
+                        {
+                            s_EntityTcs.Remove(entityId);
+                            tcs.SetCanceled();
+                        }
+                    }
+                };
+            }
             return tcs.Task;
         }
-
 
         private static void OnShowEntitySuccess(object sender, GameEventArgs e)
         {
@@ -149,7 +178,6 @@ namespace UnityGameFramework.Extension
                 s_EntityTcs.Remove(ne.EntityId);
             }
         }
-
 
         /// <summary>
         /// 加载场景（可等待）
@@ -263,14 +291,13 @@ namespace UnityGameFramework.Extension
         /// 加载资源（可等待）
         /// </summary>
         public static Task<T> LoadAssetAsync<T>(this ResourceComponent resourceComponent, string assetName)
-            where T : UnityEngine.Object
+                where T : UnityEngine.Object
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
             TaskCompletionSource<T> loadAssetTcs = new TaskCompletionSource<T>();
-            resourceComponent.LoadAsset(assetName, typeof(T), new LoadAssetCallbacks(
-                (tempAssetName, asset, duration, userdata) =>
+            resourceComponent.LoadAsset(assetName, typeof (T), new LoadAssetCallbacks((tempAssetName, asset, duration, userdata) =>
                 {
                     var source = loadAssetTcs;
                     loadAssetTcs = null;
@@ -281,18 +308,16 @@ namespace UnityGameFramework.Extension
                     }
                     else
                     {
-                        Debug.LogError(
-                            $"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}.");
+                        Debug.LogError($"Load asset failure load type is {asset.GetType()} but asset type is {typeof (T)}.");
                         source.SetException(new GameFrameworkException(
-                            $"Load asset failure load type is {asset.GetType()} but asset type is {typeof(T)}."));
+                            $"Load asset failure load type is {asset.GetType()} but asset type is {typeof (T)}."));
                     }
                 },
                 (tempAssetName, status, errorMessage, userdata) =>
                 {
                     Debug.LogError(errorMessage);
                     loadAssetTcs.SetException(new GameFrameworkException(errorMessage));
-                }
-            ));
+                }));
 
             return loadAssetTcs.Task;
         }
@@ -301,7 +326,7 @@ namespace UnityGameFramework.Extension
         /// 加载多个资源（可等待）
         /// </summary>
         public static async Task<T[]> LoadAssetsAsync<T>(this ResourceComponent resourceComponent, string[] assetNames)
-            where T : UnityEngine.Object
+                where T : UnityEngine.Object
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
@@ -327,12 +352,11 @@ namespace UnityGameFramework.Extension
             return assets;
         }
 
-
         /// <summary>
         /// 增加Web请求任务（可等待）
         /// </summary>
         public static Task<WebResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent,
-            string webRequestUri, WWWForm wwwForm = null, object userdata = null)
+        string webRequestUri, WWWForm wwwForm = null, object userdata = null)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
@@ -348,7 +372,7 @@ namespace UnityGameFramework.Extension
         /// 增加Web请求任务（可等待）
         /// </summary>
         public static Task<WebResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent,
-            string webRequestUri, byte[] postData, object userdata = null)
+        string webRequestUri, byte[] postData, object userdata = null)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
@@ -417,9 +441,9 @@ namespace UnityGameFramework.Extension
         /// 增加下载任务（可等待)
         /// </summary>
         public static Task<DownLoadResult> AddDownloadAsync(this DownloadComponent downloadComponent,
-            string downloadPath,
-            string downloadUri,
-            object userdata = null)
+        string downloadPath,
+        string downloadUri,
+        object userdata = null)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();

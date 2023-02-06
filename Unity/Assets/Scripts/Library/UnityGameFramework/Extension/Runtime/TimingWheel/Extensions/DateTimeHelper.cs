@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TimingWheel.Extensions
+namespace UnityGameFramework.Extension
 {
     /// <summary>
     /// DateTime帮助类
