@@ -25,7 +25,7 @@ namespace UnityGameFramework.Runtime
         private float m_VolumeWhenPause = 0f;
         private bool m_ApplicationPauseFlag = false;
         private EventHandler<ResetSoundAgentEventArgs> m_ResetSoundAgentEventHandler = null;
-
+        private bool m_IsPaused;
         /// <summary>
         /// 获取当前是否正在播放。
         /// </summary>
@@ -33,7 +33,7 @@ namespace UnityGameFramework.Runtime
         {
             get
             {
-                return m_AudioSource.isPlaying;
+                return m_AudioSource.isPlaying || m_IsPaused;
             }
         }
 
@@ -279,6 +279,7 @@ namespace UnityGameFramework.Runtime
             }
             else
             {
+                m_IsPaused = true;
                 m_AudioSource.Pause();
             }
         }
@@ -290,7 +291,7 @@ namespace UnityGameFramework.Runtime
         public override void Resume(float fadeInSeconds)
         {
             StopAllCoroutines();
-
+            m_IsPaused = false;
             m_AudioSource.UnPause();
             if (fadeInSeconds > 0f)
             {
@@ -311,6 +312,7 @@ namespace UnityGameFramework.Runtime
             m_AudioSource.clip = null;
             m_BindingEntityLogic = null;
             m_VolumeWhenPause = 0f;
+            m_IsPaused = false;
         }
 
         /// <summary>
