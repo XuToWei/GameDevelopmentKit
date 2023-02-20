@@ -29,7 +29,7 @@ namespace Game.Hotfix.Editor
         static CompileDllToolBar_UGFHotfix()
         {
             s_ButtonGUIContent = new GUIContent($"Compile {s_DllName}", $"Compile {s_DllName} Dll.");
-            ToolbarExtender.LeftToolbarGUI.Add(OnToolbarGUI);
+            ToolbarExtender.AddLeftToolbarGUI(50, OnToolbarGUI);
         }
 
         static void OnToolbarGUI()

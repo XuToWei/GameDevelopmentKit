@@ -26,7 +26,7 @@ namespace UnityToolbarExtender.Examples
 	{
 		static SceneSwitchLeftButton()
 		{
-			ToolbarExtender.LeftToolbarGUI.Add(OnToolbarGUI);
+			//ToolbarExtender.LeftToolbarGUI.Add(OnToolbarGUI);
 		}
 
 		static void OnToolbarGUI()

@@ -12,8 +12,20 @@ namespace UnityToolbarExtender
 		static int m_toolCount;
 		static GUIStyle m_commandStyle = null;
 
-		public static readonly List<Action> LeftToolbarGUI = new List<Action>();
-		public static readonly List<Action> RightToolbarGUI = new List<Action>();
+		private static readonly List<(int, Action)> s_LeftToolbarGUI = new List<(int, Action)>();
+		private static readonly List<(int, Action)> s_RightToolbarGUI = new List<(int, Action)>();
+
+		public static void AddLeftToolbarGUI(int priority, Action onGUIAction)
+		{
+			s_LeftToolbarGUI.Add((priority, onGUIAction));
+			s_LeftToolbarGUI.Sort((tuple1, tuple2) => tuple1.Item1 - tuple2.Item1);
+		}
+		
+		public static void AddRightToolbarGUI(int priority, Action onGUIAction)
+		{
+			s_RightToolbarGUI.Add((priority, onGUIAction));
+			s_RightToolbarGUI.Sort((tuple1, tuple2) => tuple1.Item1 - tuple2.Item1);
+		}
 
 		static ToolbarExtender()
 		{
@@ -127,9 +139,9 @@ Debug.Log(rightRect);
 				GUILayout.BeginArea(leftRect);
 				GUILayout.BeginHorizontal();
 				GUILayout.FlexibleSpace();
-				foreach (var handler in LeftToolbarGUI)
+				foreach (var handler in s_LeftToolbarGUI)
 				{
-					handler();
+					handler.Item2();
 				}
 
 				GUILayout.EndHorizontal();
@@ -140,9 +152,9 @@ Debug.Log(rightRect);
 			{
 				GUILayout.BeginArea(rightRect);
 				GUILayout.BeginHorizontal();
-				foreach (var handler in RightToolbarGUI)
+				foreach (var handler in s_RightToolbarGUI)
 				{
-					handler();
+					handler.Item2();
 				}
 
 				GUILayout.EndHorizontal();
@@ -153,18 +165,18 @@ Debug.Log(rightRect);
 		public static void GUILeft() {
 			GUILayout.BeginHorizontal();
 			GUILayout.FlexibleSpace();
-			foreach (var handler in LeftToolbarGUI)
+			foreach (var handler in s_LeftToolbarGUI)
 			{
-				handler();
+				handler.Item2();
 			}
 			GUILayout.EndHorizontal();
 		}
 		
 		public static void GUIRight() {
 			GUILayout.BeginHorizontal();
-			foreach (var handler in RightToolbarGUI)
+			foreach (var handler in s_RightToolbarGUI)
 			{
-				handler();
+				handler.Item2();
 			}
 			GUILayout.EndHorizontal();
 		}

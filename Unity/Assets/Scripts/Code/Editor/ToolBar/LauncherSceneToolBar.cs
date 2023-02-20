@@ -13,7 +13,7 @@ namespace Game.Editor
         static LauncherSceneToolBar()
         {
             m_ButtonGUIContent = new GUIContent("Launcher", "Start Run Launcher Scene.");
-            ToolbarExtender.LeftToolbarGUI.Add(OnToolbarGUI);
+            ToolbarExtender.AddLeftToolbarGUI(100, OnToolbarGUI);
         }
 
         static void OnToolbarGUI()
