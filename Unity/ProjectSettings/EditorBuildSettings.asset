@@ -6,12 +6,33 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Launcher.unity
+    guid: 10fddf155a8273a4a831e246e5d9d9e7
+  - enabled: 0
+    path: Assets/Res/Scene/Main.unity
+    guid: 4473d81b14ddb0143addf0e6050d8491
+  - enabled: 0
+    path: Assets/Res/Scene/Menu.unity
+    guid: b031b4f2980561542a7f7ba41391edc3
+  - enabled: 0
+    path: Assets/Res/Scene/SampleScene.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 0
     path: Assets/Scenes/Init.unity
     guid: e0d691ac8c1d0454ba07089ea820e18a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Map1.unity
     guid: a5294483f20f40d449699101bb428cda
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Map2.unity
     guid: 064123f1e5067b249a9fd8967ddbde09
+  - enabled: 0
+    path: Assets/Scripts/Library/CodeBind/Demo/CodeBindDemo.unity
+    guid: 4adb3417bafb7a84681bc5f72097ec8d
+  - enabled: 0
+    path: Assets/Scripts/Library/ToolbarExtender/Example/SceneSwitcher/Scenes/ToolbarExtenderExampleScene1.unity
+    guid: 382c814799c8741e2953d4a50ef9f425
+  - enabled: 0
+    path: Assets/Scripts/Library/ToolbarExtender/Example/SceneSwitcher/Scenes/ToolbarExtenderExampleScene2.unity
+    guid: fab7a2155986e414188d345f96238ce2
   m_configObjects: {}

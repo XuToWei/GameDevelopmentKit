@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityGameFramework.Extension;
 using GameEntry = Game.GameEntry;
 using Entity = UnityGameFramework.Runtime.Entity;
@@ -15,12 +16,6 @@ namespace ET
             return asset;
         }
 
-        public static async ETTask<T[]> LoadAssetsAsync<T>(string[] assetNames) where T : UnityEngine.Object
-        {
-            T[] assets = await GameEntry.Resource.LoadAssetsAsync<T>(assetNames);
-            return assets;
-        }
-
         public static void UnloadAsset(object asset)
         {
             GameEntry.Resource.UnloadAsset(asset);
@@ -28,14 +23,14 @@ namespace ET
         #endregion
 
         #region Scene
-        public static async ETTask<bool> LoadSceneAsync(string sceneAssetName)
+        public static async UniTaskVoid LoadSceneAsync(string sceneAssetName)
         {
-            return await GameEntry.Scene.LoadSceneAsync(sceneAssetName);
+            await GameEntry.Scene.LoadSceneAsync(sceneAssetName);
         }
 
-        public static async Task<bool> UnLoadSceneAsync(string sceneAssetName)
+        public static async UniTaskVoid UnLoadSceneAsync(string sceneAssetName)
         {
-            return await GameEntry.Scene.UnLoadSceneAsync(sceneAssetName);
+            await GameEntry.Scene.UnLoadSceneAsync(sceneAssetName);
         }
         #endregion
 

@@ -18,7 +18,8 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [
-        "UNITY_ET_CODE"
+        "UNITY_ET",
+        "!UNITY_HOTFIX"
     ],
     "versionDefines": [],
     "noEngineReferences": true

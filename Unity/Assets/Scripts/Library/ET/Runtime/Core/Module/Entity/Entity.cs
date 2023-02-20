@@ -18,7 +18,11 @@ namespace ET
     public partial class Entity: DisposeObject
     {
 #if UNITY_ET_VIEW && UNITY_EDITOR
+        [BsonIgnore]
         private UnityEngine.GameObject viewGO;
+        
+        [StaticField]
+        private static UnityEngine.Transform rootViewTransform;
 #endif
         
         [BsonIgnore]
@@ -88,8 +92,11 @@ namespace ET
                 {
                     this.viewGO = new UnityEngine.GameObject(this.ViewName);
                     this.viewGO.AddComponent<ComponentView>().Component = this;
-                    this.viewGO.transform.SetParent(this.Parent == null? 
-                            UnityEngine.GameObject.Find("ET").transform : this.Parent.viewGO.transform);
+                    if (rootViewTransform == null)
+                    {
+                        rootViewTransform = UnityEngine.GameObject.Find("ET").transform;
+                    }
+                    this.viewGO.transform.SetParent(this.Parent == null? rootViewTransform : this.Parent.viewGO.transform);
                 }
                 else
                 {

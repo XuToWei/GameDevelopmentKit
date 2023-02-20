@@ -1,39 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
 using GameFramework.Resource;
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityGameFramework.Runtime;
+using TaskStatus = GameFramework.TaskStatus;
 
 namespace UnityGameFramework.Extension
 {
     public static partial class Awaitable
     {
-        private static readonly Dictionary<int, TaskCompletionSource<UIForm>> s_UIFormTcs =
-                new Dictionary<int, TaskCompletionSource<UIForm>>();
-
-        private static readonly Dictionary<int, TaskCompletionSource<Entity>> s_EntityTcs =
-                new Dictionary<int, TaskCompletionSource<Entity>>();
-
-        private static readonly Dictionary<string, TaskCompletionSource<bool>> s_DataTableTcs =
-                new Dictionary<string, TaskCompletionSource<bool>>();
-
-        private static readonly Dictionary<string, TaskCompletionSource<bool>> s_LoadSceneTcs =
-                new Dictionary<string, TaskCompletionSource<bool>>();
-
-        private static readonly Dictionary<string, TaskCompletionSource<bool>> s_UnLoadSceneTcs =
-                new Dictionary<string, TaskCompletionSource<bool>>();
-
-        private static readonly HashSet<int> s_WebSerialIDs = new HashSet<int>();
-        private static readonly List<WebResult> s_DelayReleaseWebResult = new List<WebResult>();
-
-        private static readonly HashSet<int> s_DownloadSerialIds = new HashSet<int>();
-        private static readonly List<DownLoadResult> s_DelayReleaseDownloadResult = new List<DownLoadResult>();
-
 #if UNITY_EDITOR
         private static bool s_IsSubscribeEvent = false;
 #endif
@@ -78,29 +56,24 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 打开界面（可等待）
         /// </summary>
-        public static Task<UIForm> OpenUIFormAsync(this UIComponent uiComponent, string uiFormAssetName,
-        string uiGroupName, int priority, bool pauseCoveredUIForm, object userData, Action cancelAction = null)
+        public static UniTask<UIForm> OpenUIFormAsync(this UIComponent uiComponent, string uiFormAssetName, string uiGroupName,
+        int priority, bool pauseCoveredUIForm, object userData = default, CancellationTokenSource cancellationTokenSource = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
-            int serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData);
-            var tcs = new TaskCompletionSource<UIForm>();
-            s_UIFormTcs.Add(serialId, tcs);
-            if (cancelAction != null)
+            var tcs = AutoResetUniTaskCompletionSource<UIForm>.Create();
+            int serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, AwaitDataWrap<UIForm>.Create(userData, tcs));
+            if (cancellationTokenSource != default)
             {
-                cancelAction += () =>
+                cancellationTokenSource.Token.Register(() =>
                 {
                     if (uiComponent.IsLoadingUIForm(serialId))
                     {
                         uiComponent.CloseUIForm(serialId);
-                        if (s_UIFormTcs.TryGetValue(serialId, out tcs))
-                        {
-                            s_UIFormTcs.Remove(serialId);
-                            tcs.SetCanceled();
-                        }
+                        tcs.TrySetCanceled(cancellationTokenSource.Token);
                     }
-                };
+                });
             }
             return tcs.Task;
         }
@@ -108,50 +81,47 @@ namespace UnityGameFramework.Extension
         private static void OnOpenUIFormSuccess(object sender, GameEventArgs e)
         {
             OpenUIFormSuccessEventArgs ne = (OpenUIFormSuccessEventArgs)e;
-            if (s_UIFormTcs.TryGetValue(ne.UIForm.SerialId, out TaskCompletionSource<UIForm> tcs))
+            if(ne.UserData is AwaitDataWrap<UIForm> awaitDataWrap)
             {
-                tcs.SetResult(ne.UIForm);
-                s_UIFormTcs.Remove(ne.UIForm.SerialId);
+                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitDataWrap);
+                taskCompletionSource.TrySetResult(ne.UIForm);
             }
         }
 
         private static void OnOpenUIFormFailure(object sender, GameEventArgs e)
         {
             OpenUIFormFailureEventArgs ne = (OpenUIFormFailureEventArgs)e;
-            if (s_UIFormTcs.TryGetValue(ne.SerialId, out TaskCompletionSource<UIForm> tcs))
+            if (ne.UserData is AwaitDataWrap<UIForm> awaitDataWrap)
             {
-                Debug.LogError(ne.ErrorMessage);
-                tcs.SetException(new GameFrameworkException(ne.ErrorMessage));
-                s_UIFormTcs.Remove(ne.SerialId);
+                Log.Error(ne.ErrorMessage);
+                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitDataWrap);
+                taskCompletionSource.TrySetException(new GameFrameworkException(ne.ErrorMessage));
             }
         }
 
         /// <summary>
         /// 显示实体（可等待）
         /// </summary>
-        public static Task<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityId,
-        Type entityLogicType, string entityAssetName, string entityGroupName, int priority, object userData, Action cancelAction = null)
+        public static UniTask<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityId, Type entityLogicType, string entityAssetName,
+        string entityGroupName, int priority = 0, object userData = default, CancellationTokenSource cancellationTokenSource = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
-            var tcs = new TaskCompletionSource<Entity>();
-            s_EntityTcs.Add(entityId, tcs);
-            entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, userData);
-            if (cancelAction != null)
+            var tcs = AutoResetUniTaskCompletionSource<Entity>.Create();
+            entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, AwaitDataWrap<Entity>.Create(userData, tcs));
+            if (cancellationTokenSource != default)
             {
-                cancelAction += () =>
+                cancellationTokenSource.Token.Register(() =>
                 {
                     if (entityComponent.IsLoadingEntity(entityId))
                     {
                         entityComponent.HideEntity(entityId);
-                        if (s_EntityTcs.TryGetValue(entityId, out tcs))
-                        {
-                            s_EntityTcs.Remove(entityId);
-                            tcs.SetCanceled();
-                        }
+                        tcs.TrySetCanceled(cancellationTokenSource.Token);
                     }
-                };
+                });
             }
             return tcs.Task;
         }
@@ -159,351 +129,268 @@ namespace UnityGameFramework.Extension
         private static void OnShowEntitySuccess(object sender, GameEventArgs e)
         {
             ShowEntitySuccessEventArgs ne = (ShowEntitySuccessEventArgs)e;
-            s_EntityTcs.TryGetValue(ne.Entity.Id, out var tcs);
-            if (tcs != null)
+            if (ne.UserData is AwaitDataWrap<Entity> awaitDataWrap)
             {
-                tcs.SetResult(ne.Entity);
-                s_EntityTcs.Remove(ne.Entity.Id);
+                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitDataWrap);
+                taskCompletionSource.TrySetResult(ne.Entity);
             }
         }
 
         private static void OnShowEntityFailure(object sender, GameEventArgs e)
         {
             ShowEntityFailureEventArgs ne = (ShowEntityFailureEventArgs)e;
-            s_EntityTcs.TryGetValue(ne.EntityId, out var tcs);
-            if (tcs != null)
+            if (ne.UserData is AwaitDataWrap<Entity> awaitDataWrap)
             {
-                Debug.LogError(ne.ErrorMessage);
-                tcs.SetException(new GameFrameworkException(ne.ErrorMessage));
-                s_EntityTcs.Remove(ne.EntityId);
+                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitDataWrap);
+                taskCompletionSource.TrySetException(new GameFrameworkException(ne.ErrorMessage));
             }
         }
 
         /// <summary>
         /// 加载场景（可等待）
         /// </summary>
-        public static async Task<bool> LoadSceneAsync(this SceneComponent sceneComponent, string sceneAssetName)
+        public static UniTask LoadSceneAsync(this SceneComponent sceneComponent, string sceneAssetName, int priority = 0 , object userData = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
-            var tcs = new TaskCompletionSource<bool>();
-            var isUnLoadScene = s_UnLoadSceneTcs.TryGetValue(sceneAssetName, out var unloadSceneTcs);
-            if (isUnLoadScene)
-            {
-                await unloadSceneTcs.Task;
-            }
-
-            s_LoadSceneTcs.Add(sceneAssetName, tcs);
-
+            var tcs = AutoResetUniTaskCompletionSource.Create();
             try
             {
-                sceneComponent.LoadScene(sceneAssetName);
+                sceneComponent.LoadScene(sceneAssetName, priority, AwaitDataWrap.Create(userData, tcs));
             }
             catch (Exception e)
             {
-                Debug.LogError(e.ToString());
-                tcs.SetException(e);
-                s_LoadSceneTcs.Remove(sceneAssetName);
+                Log.Error(e.ToString());
+                tcs.TrySetException(e);
             }
-
-            return await tcs.Task;
+            return tcs.Task;
         }
 
         private static void OnLoadSceneSuccess(object sender, GameEventArgs e)
         {
             LoadSceneSuccessEventArgs ne = (LoadSceneSuccessEventArgs)e;
-            s_LoadSceneTcs.TryGetValue(ne.SceneAssetName, out var tcs);
-            if (tcs != null)
+            if (ne.UserData is AwaitDataWrap awaitDataWrap)
             {
-                tcs.SetResult(true);
-                s_LoadSceneTcs.Remove(ne.SceneAssetName);
+                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitDataWrap);
+                taskCompletionSource.TrySetResult();
             }
         }
 
         private static void OnLoadSceneFailure(object sender, GameEventArgs e)
         {
             LoadSceneFailureEventArgs ne = (LoadSceneFailureEventArgs)e;
-            s_LoadSceneTcs.TryGetValue(ne.SceneAssetName, out var tcs);
-            if (tcs != null)
+            if (ne.UserData is AwaitDataWrap awaitDataWrap)
             {
-                Debug.LogError(ne.ErrorMessage);
-                tcs.SetException(new GameFrameworkException(ne.ErrorMessage));
-                s_LoadSceneTcs.Remove(ne.SceneAssetName);
+                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitDataWrap);
+                Log.Error(ne.ErrorMessage);
+                taskCompletionSource.TrySetException(new GameFrameworkException(ne.ErrorMessage));
             }
         }
 
         /// <summary>
         /// 卸载场景（可等待）
         /// </summary>
-        public static async Task<bool> UnLoadSceneAsync(this SceneComponent sceneComponent, string sceneAssetName)
+        public static UniTask UnLoadSceneAsync(this SceneComponent sceneComponent, string sceneAssetName, object userData = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
-            var tcs = new TaskCompletionSource<bool>();
-            var isLoadSceneTcs = s_LoadSceneTcs.TryGetValue(sceneAssetName, out var loadSceneTcs);
-            if (isLoadSceneTcs)
-            {
-                Debug.Log("Unload  loading scene");
-                await loadSceneTcs.Task;
-            }
-
-            s_UnLoadSceneTcs.Add(sceneAssetName, tcs);
+            var tcs = AutoResetUniTaskCompletionSource.Create();
             try
             {
-                sceneComponent.UnloadScene(sceneAssetName);
+                sceneComponent.UnloadScene(sceneAssetName, AwaitDataWrap.Create(userData, tcs));
             }
             catch (Exception e)
             {
-                Debug.LogError(e.ToString());
-                tcs.SetException(e);
-                s_UnLoadSceneTcs.Remove(sceneAssetName);
+                Log.Error(e.ToString());
+                tcs.TrySetException(e);
             }
-
-            return await tcs.Task;
+            return tcs.Task;
         }
 
         private static void OnUnloadSceneSuccess(object sender, GameEventArgs e)
         {
             UnloadSceneSuccessEventArgs ne = (UnloadSceneSuccessEventArgs)e;
-            s_UnLoadSceneTcs.TryGetValue(ne.SceneAssetName, out var tcs);
-            if (tcs != null)
+            if (ne.UserData is AwaitDataWrap awaitDataWrap)
             {
-                tcs.SetResult(true);
-                s_UnLoadSceneTcs.Remove(ne.SceneAssetName);
+                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitDataWrap);
+                taskCompletionSource.TrySetResult();
             }
         }
 
         private static void OnUnloadSceneFailure(object sender, GameEventArgs e)
         {
             UnloadSceneFailureEventArgs ne = (UnloadSceneFailureEventArgs)e;
-            s_UnLoadSceneTcs.TryGetValue(ne.SceneAssetName, out var tcs);
-            if (tcs != null)
+            if (ne.UserData is AwaitDataWrap awaitDataWrap)
             {
-                Debug.LogError($"Unload scene {ne.SceneAssetName} failure.");
-                tcs.SetException(new GameFrameworkException($"Unload scene {ne.SceneAssetName} failure."));
-                s_UnLoadSceneTcs.Remove(ne.SceneAssetName);
+                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitDataWrap);
+                Log.Error($"Unload scene {ne.SceneAssetName} failure.");
+                taskCompletionSource.TrySetException(new GameFrameworkException($"Unload scene {ne.SceneAssetName} failure."));
             }
         }
 
         /// <summary>
         /// 加载资源（可等待）
         /// </summary>
-        public static Task<T> LoadAssetAsync<T>(this ResourceComponent resourceComponent, string assetName)
-                where T : UnityEngine.Object
+        public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent resourceComponent, string assetName, int priority = 0,
+        object userData = default, CancellationTokenSource cancellationTokenSource = default) where T : UnityEngine.Object
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
-            TaskCompletionSource<T> loadAssetTcs = new TaskCompletionSource<T>();
-            resourceComponent.LoadAsset(assetName, typeof (T), new LoadAssetCallbacks((tempAssetName, asset, duration, userdata) =>
-                {
-                    var source = loadAssetTcs;
-                    loadAssetTcs = null;
-                    T tAsset = asset as T;
-                    if (tAsset != null)
+            var loadAssetTcs = AutoResetUniTaskCompletionSource<T>.Create();
+            resourceComponent.LoadAsset(assetName, typeof (T), priority,
+                new LoadAssetCallbacks((tempAssetName, asset, duration, userdata) =>
                     {
-                        source.SetResult(tAsset);
-                    }
-                    else
+                        var source = loadAssetTcs;
+                        loadAssetTcs = null;
+                        T tAsset = asset as T;
+                        if (tAsset != null)
+                        {
+                            if (cancellationTokenSource is { IsCancellationRequested: true })
+                            {
+                                resourceComponent.UnloadAsset(tAsset);
+                                source.TrySetCanceled(cancellationTokenSource.Token);
+                            }
+                            else
+                            {
+                                source.TrySetResult(tAsset);
+                            }
+                        }
+                        else
+                        {
+                            Log.Error($"Load asset failure load type is {asset.GetType()} but asset type is {typeof (T)}.");
+                            source.TrySetException(
+                                new GameFrameworkException($"Load asset failure load type is {asset.GetType()} but asset type is {typeof (T)}."));
+                        }
+                    },
+                    (tempAssetName, status, errorMessage, userdata) =>
                     {
-                        Debug.LogError($"Load asset failure load type is {asset.GetType()} but asset type is {typeof (T)}.");
-                        source.SetException(new GameFrameworkException(
-                            $"Load asset failure load type is {asset.GetType()} but asset type is {typeof (T)}."));
-                    }
-                },
-                (tempAssetName, status, errorMessage, userdata) =>
-                {
-                    Debug.LogError(errorMessage);
-                    loadAssetTcs.SetException(new GameFrameworkException(errorMessage));
-                }));
-
+                        Log.Error(errorMessage);
+                        loadAssetTcs.TrySetException(new GameFrameworkException(errorMessage));
+                    }),
+                userData);
             return loadAssetTcs.Task;
         }
 
         /// <summary>
-        /// 加载多个资源（可等待）
+        /// 增加Web请求任务（可等待）
         /// </summary>
-        public static async Task<T[]> LoadAssetsAsync<T>(this ResourceComponent resourceComponent, string[] assetNames)
-                where T : UnityEngine.Object
+        public static UniTask<WebResult> WebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri,
+        WWWForm wwwForm = null, string tag = null, int priority = 0, object userData = default, CancellationTokenSource cancellationTokenSource = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
-            if (assetNames == null)
+            var tcs = AutoResetUniTaskCompletionSource<WebResult>.Create();
+            int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm, tag, priority, AwaitDataWrap<WebResult>.Create(userData, tcs));
+            if (cancellationTokenSource != default)
             {
-                return null;
+                cancellationTokenSource.Token.Register(() =>
+                {
+                    var taskInfo = webRequestComponent.GetWebRequestInfo(serialId);
+                    if (taskInfo.Status != TaskStatus.Done)
+                    {
+                        webRequestComponent.RemoveWebRequest(serialId);
+                        tcs.TrySetCanceled(cancellationTokenSource.Token);
+                    }
+                });
             }
-
-            T[] assets = new T[assetNames.Length];
-            Task<T>[] tasks = new Task<T>[assets.Length];
-            for (int i = 0; i < tasks.Length; i++)
-            {
-                tasks[i] = resourceComponent.LoadAssetAsync<T>(assetNames[i]);
-            }
-
-            await Task.WhenAll(tasks);
-            for (int i = 0; i < assets.Length; i++)
-            {
-                assets[i] = tasks[i].Result;
-            }
-
-            return assets;
+            return tcs.Task;
         }
 
         /// <summary>
         /// 增加Web请求任务（可等待）
         /// </summary>
-        public static Task<WebResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent,
-        string webRequestUri, WWWForm wwwForm = null, object userdata = null)
+        public static UniTask<WebResult> WebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri, byte[] postData,
+        string tag = null, int priority = 0, object userData = default, CancellationTokenSource cancellationTokenSource = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
-            var tsc = new TaskCompletionSource<WebResult>();
-            int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm,
-                AwaitDataWrap<WebResult>.Create(userdata, tsc));
-            s_WebSerialIDs.Add(serialId);
-            return tsc.Task;
-        }
-
-        /// <summary>
-        /// 增加Web请求任务（可等待）
-        /// </summary>
-        public static Task<WebResult> AddWebRequestAsync(this WebRequestComponent webRequestComponent,
-        string webRequestUri, byte[] postData, object userdata = null)
-        {
-#if UNITY_EDITOR
-            TipsSubscribeEvent();
-#endif
-            var tsc = new TaskCompletionSource<WebResult>();
-            int serialId = webRequestComponent.AddWebRequest(webRequestUri, postData,
-                AwaitDataWrap<WebResult>.Create(userdata, tsc));
-            s_WebSerialIDs.Add(serialId);
-            return tsc.Task;
+            var tcs = AutoResetUniTaskCompletionSource<WebResult>.Create();
+            int serialId = webRequestComponent.AddWebRequest(webRequestUri, postData, tag, priority, AwaitDataWrap<WebResult>.Create(userData, tcs));
+            if (cancellationTokenSource != default)
+            {
+                cancellationTokenSource.Token.Register(() =>
+                {
+                    var taskInfo = webRequestComponent.GetWebRequestInfo(serialId);
+                    if (taskInfo.Status != TaskStatus.Done)
+                    {
+                        webRequestComponent.RemoveWebRequest(serialId);
+                        tcs.TrySetCanceled(cancellationTokenSource.Token);
+                    }
+                });
+            }
+            return tcs.Task;
         }
 
         private static void OnWebRequestSuccess(object sender, GameEventArgs e)
         {
             WebRequestSuccessEventArgs ne = (WebRequestSuccessEventArgs)e;
-            if (s_WebSerialIDs.Contains(ne.SerialId))
+            if (ne.UserData is AwaitDataWrap<WebResult> awaitDataWrap)
             {
-                if (ne.UserData is AwaitDataWrap<WebResult> webRequestUserdata)
-                {
-                    WebResult result = WebResult.Create(ne.GetWebResponseBytes(), false, string.Empty,
-                        webRequestUserdata.UserData);
-                    s_DelayReleaseWebResult.Add(result);
-                    webRequestUserdata.Source.TrySetResult(result);
-                    ReferencePool.Release(webRequestUserdata);
-                }
-
-                s_WebSerialIDs.Remove(ne.SerialId);
-                if (s_WebSerialIDs.Count == 0)
-                {
-                    for (int i = 0; i < s_DelayReleaseWebResult.Count; i++)
-                    {
-                        ReferencePool.Release(s_DelayReleaseWebResult[i]);
-                    }
-
-                    s_DelayReleaseWebResult.Clear();
-                }
+                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
+                WebResult result = WebResult.Create(ne.GetWebResponseBytes(), false, string.Empty, awaitDataWrap.UserData);
+                ReferencePool.Release(awaitDataWrap);
+                taskCompletionSource.TrySetResult(result);
             }
         }
 
         private static void OnWebRequestFailure(object sender, GameEventArgs e)
         {
             WebRequestFailureEventArgs ne = (WebRequestFailureEventArgs)e;
-            if (s_WebSerialIDs.Contains(ne.SerialId))
+            if (ne.UserData is AwaitDataWrap<WebResult> awaitDataWrap)
             {
-                if (ne.UserData is AwaitDataWrap<WebResult> webRequestUserdata)
-                {
-                    WebResult result = WebResult.Create(null, true, ne.ErrorMessage, webRequestUserdata.UserData);
-                    webRequestUserdata.Source.TrySetResult(result);
-                    s_DelayReleaseWebResult.Add(result);
-                    ReferencePool.Release(webRequestUserdata);
-                }
-
-                s_WebSerialIDs.Remove(ne.SerialId);
-                if (s_WebSerialIDs.Count == 0)
-                {
-                    for (int i = 0; i < s_DelayReleaseWebResult.Count; i++)
-                    {
-                        ReferencePool.Release(s_DelayReleaseWebResult[i]);
-                    }
-
-                    s_DelayReleaseWebResult.Clear();
-                }
+                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
+                WebResult result = WebResult.Create(null, true, ne.ErrorMessage, awaitDataWrap.UserData);
+                ReferencePool.Release(awaitDataWrap);
+                taskCompletionSource.TrySetResult(result);
             }
         }
 
         /// <summary>
         /// 增加下载任务（可等待)
         /// </summary>
-        public static Task<DownLoadResult> AddDownloadAsync(this DownloadComponent downloadComponent,
-        string downloadPath,
-        string downloadUri,
-        object userdata = null)
+        public static UniTask<DownloadResult> AddDownloadAsync(this DownloadComponent downloadComponent,
+        string downloadPath,string downloadUri, string tag = null, int priority = 0, object userdata = null)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
-            var tcs = new TaskCompletionSource<DownLoadResult>();
-            int serialId = downloadComponent.AddDownload(downloadPath, downloadUri,
-                AwaitDataWrap<DownLoadResult>.Create(userdata, tcs));
-            s_DownloadSerialIds.Add(serialId);
+            var tcs = AutoResetUniTaskCompletionSource<DownloadResult>.Create();
+            downloadComponent.AddDownload(downloadPath, downloadUri, tag, priority, AwaitDataWrap<DownloadResult>.Create(userdata, tcs));
             return tcs.Task;
         }
 
         private static void OnDownloadSuccess(object sender, GameEventArgs e)
         {
             DownloadSuccessEventArgs ne = (DownloadSuccessEventArgs)e;
-            if (s_DownloadSerialIds.Contains(ne.SerialId))
+            if (ne.UserData is AwaitDataWrap<DownloadResult> awaitDataWrap)
             {
-                if (ne.UserData is AwaitDataWrap<DownLoadResult> awaitDataWrap)
-                {
-                    DownLoadResult result = DownLoadResult.Create(false, string.Empty, awaitDataWrap.UserData);
-                    s_DelayReleaseDownloadResult.Add(result);
-                    awaitDataWrap.Source.TrySetResult(result);
-                    ReferencePool.Release(awaitDataWrap);
-                }
-
-                s_DownloadSerialIds.Remove(ne.SerialId);
-                if (s_DownloadSerialIds.Count == 0)
-                {
-                    for (int i = 0; i < s_DelayReleaseDownloadResult.Count; i++)
-                    {
-                        ReferencePool.Release(s_DelayReleaseDownloadResult[i]);
-                    }
-
-                    s_DelayReleaseDownloadResult.Clear();
-                }
+                DownloadResult result = DownloadResult.Create(false, string.Empty, awaitDataWrap.UserData);
+                var tcs = awaitDataWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitDataWrap);
+                tcs.TrySetResult(result);
             }
         }
 
         private static void OnDownloadFailure(object sender, GameEventArgs e)
         {
             DownloadFailureEventArgs ne = (DownloadFailureEventArgs)e;
-            if (s_DownloadSerialIds.Contains(ne.SerialId))
+            if (ne.UserData is AwaitDataWrap<DownloadResult> awaitDataWrap)
             {
-                if (ne.UserData is AwaitDataWrap<DownLoadResult> awaitDataWrap)
-                {
-                    DownLoadResult result = DownLoadResult.Create(true, ne.ErrorMessage, awaitDataWrap.UserData);
-                    s_DelayReleaseDownloadResult.Add(result);
-                    awaitDataWrap.Source.TrySetResult(result);
-                    ReferencePool.Release(awaitDataWrap);
-                }
-
-                s_DownloadSerialIds.Remove(ne.SerialId);
-                if (s_DownloadSerialIds.Count == 0)
-                {
-                    for (int i = 0; i < s_DelayReleaseDownloadResult.Count; i++)
-                    {
-                        ReferencePool.Release(s_DelayReleaseDownloadResult[i]);
-                    }
-
-                    s_DelayReleaseDownloadResult.Clear();
-                }
+                DownloadResult result = DownloadResult.Create(true, ne.ErrorMessage, awaitDataWrap.UserData);
+                var tcs = awaitDataWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitDataWrap);
+                tcs.TrySetResult(result);
             }
         }
     }

@@ -36,7 +36,7 @@ namespace UnityGameFramework.Extension
                         cancelAction += Cancel;
                     }
 
-                    var data = await m_WebRequestComponent.AddWebRequestAsync(setTexture2dObject.Texture2dFilePath);
+                    var data = await m_WebRequestComponent.WebRequestAsync(setTexture2dObject.Texture2dFilePath);
                     if (!data.IsError)
                     {
                         texture = new Texture2D(0, 0, TextureFormat.RGBA32, false);

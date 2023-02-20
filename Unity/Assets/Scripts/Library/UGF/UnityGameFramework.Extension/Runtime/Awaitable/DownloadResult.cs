@@ -1,4 +1,3 @@
-using System;
 using GameFramework;
 
 namespace UnityGameFramework.Extension
@@ -6,7 +5,7 @@ namespace UnityGameFramework.Extension
     /// <summary>
     /// DownLoad 结果
     /// </summary>
-    public class DownLoadResult : IReference
+    public class DownloadResult : IReference
     {
         /// <summary>
         /// 是否有错误
@@ -21,13 +20,13 @@ namespace UnityGameFramework.Extension
         /// </summary>
         public object UserData { get; private set; }
 
-        public static DownLoadResult Create(bool isError, string errorMessage, object userData)
+        public static DownloadResult Create(bool isError, string errorMessage, object userData)
         {
-            DownLoadResult downLoadResult = ReferencePool.Acquire<DownLoadResult>();
-            downLoadResult.IsError = isError;
-            downLoadResult.ErrorMessage = errorMessage;
-            downLoadResult.UserData = userData;
-            return downLoadResult;
+            DownloadResult downloadResult = ReferencePool.Acquire<DownloadResult>();
+            downloadResult.IsError = isError;
+            downloadResult.ErrorMessage = errorMessage;
+            downloadResult.UserData = userData;
+            return downloadResult;
         }
 
         public void Clear()

@@ -1,8 +1,39 @@
-using System.Threading.Tasks;
+
+using Cysharp.Threading.Tasks;
 using GameFramework;
 
 namespace UnityGameFramework.Extension
 {
+    /// <summary>
+    /// Await包装类
+    /// </summary>
+    public class AwaitDataWrap : IReference
+    {
+        /// <summary>
+        /// 自定义数据
+        /// </summary>
+        public object UserData { get; private set; }
+        /// <summary>
+        /// TaskCompletionSource
+        /// </summary>
+        public AutoResetUniTaskCompletionSource TaskCompletionSource { get; private set; }
+
+        public static AwaitDataWrap Create(object userData, AutoResetUniTaskCompletionSource taskCompletionSource)
+        {
+            AwaitDataWrap awaitDataWrap = ReferencePool.Acquire<AwaitDataWrap>();
+            awaitDataWrap.UserData = userData;
+            awaitDataWrap.TaskCompletionSource = taskCompletionSource;
+            return awaitDataWrap;
+        }
+
+        public void Clear()
+        {
+            UserData = default;
+            TaskCompletionSource = default;
+        }
+    }
+    
+    
     /// <summary>
     /// Await包装类
     /// </summary>
@@ -15,20 +46,20 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// TaskCompletionSource
         /// </summary>
-        public TaskCompletionSource<T> Source { get; private set; }
+        public AutoResetUniTaskCompletionSource<T> TaskCompletionSource { get; private set; }
 
-        public static AwaitDataWrap<T> Create(object userData, TaskCompletionSource<T> source)
+        public static AwaitDataWrap<T> Create(object userData, AutoResetUniTaskCompletionSource<T> taskCompletionSource)
         {
             AwaitDataWrap<T> awaitDataWrap = ReferencePool.Acquire<AwaitDataWrap<T>>();
             awaitDataWrap.UserData = userData;
-            awaitDataWrap.Source = source;
+            awaitDataWrap.TaskCompletionSource = taskCompletionSource;
             return awaitDataWrap;
         }
 
         public void Clear()
         {
-            UserData = null;
-            Source = null;
+            UserData = default;
+            TaskCompletionSource = default;
         }
     }
 }

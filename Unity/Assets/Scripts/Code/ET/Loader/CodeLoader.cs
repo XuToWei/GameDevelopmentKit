@@ -13,7 +13,7 @@ namespace ET
 
         public async ETTask StartAsync()
         {
-            if (Define.EnableCode)
+            if (Define.EnableHotfix)
             {
                 Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
                 Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(assemblies);

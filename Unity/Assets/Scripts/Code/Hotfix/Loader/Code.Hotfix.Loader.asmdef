@@ -1,0 +1,16 @@
+{
+    "name": "Code.Hotfix.Loader",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_UGFHOTFIX"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

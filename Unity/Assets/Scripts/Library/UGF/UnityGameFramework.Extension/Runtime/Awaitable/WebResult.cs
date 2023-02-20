@@ -5,7 +5,7 @@ namespace UnityGameFramework.Extension
     /// <summary>
     /// web 访问结果
     /// </summary>
-    public class WebResult : IReference
+    public sealed class WebResult : IReference
     {
         /// <summary>
         /// web请求 返回数据

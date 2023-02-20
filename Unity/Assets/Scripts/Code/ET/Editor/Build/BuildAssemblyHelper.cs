@@ -60,11 +60,7 @@ namespace ET
             }
 
             BuildMuteAssembly("Model", codes, Array.Empty<string>(), codeOptimization, codeMode);
-
-            if (Define.EnableCode)
-            {
-                
-            }
+            
             File.Copy(Path.Combine(Define.BuildOutputDir, $"Model.dll"), Path.Combine(CodeDir, $"Model.dll.bytes"), true);
             File.Copy(Path.Combine(Define.BuildOutputDir, $"Model.pdb"), Path.Combine(CodeDir, $"Model.pdb.bytes"), true);
             Debug.Log("copy Model.dll to Bundles/Code success!");
@@ -87,24 +83,26 @@ namespace ET
                 case CodeMode.Client:
                     codes = new List<string>()
                     {
-                        "Assets/Scripts/Codes/Hotfix/Share/",
-                        "Assets/Scripts/Codes/Hotfix/Client/",
-                        "Assets/Scripts/Codes/HotfixView/Client/",
+                        $"{ETSourceCodeDir}/Hotfix/Share/",
+                        $"{ETSourceCodeDir}/Hotfix/Client/",
+                        $"{ETSourceCodeDir}/HotfixView/Client/",
                     };
                     break;
                 case CodeMode.Server:
                     codes = new List<string>()
                     {
-                        "Assets/Scripts/Codes/Hotfix/Share/", "Assets/Scripts/Codes/Hotfix/Server/", "Assets/Scripts/Codes/Hotfix/Client/",
+                        $"{ETSourceCodeDir}/Hotfix/Share/",
+                        $"{ETSourceCodeDir}/Hotfix/Server/",
+                        $"{ETSourceCodeDir}/Hotfix/Client/",
                     };
                     break;
                 case CodeMode.ClientServer:
                     codes = new List<string>()
                     {
-                        "Assets/Scripts/Codes/Hotfix/Share/",
-                        "Assets/Scripts/Codes/Hotfix/Client/",
-                        "Assets/Scripts/Codes/HotfixView/Client/",
-                        "Assets/Scripts/Codes/Hotfix/Server/",
+                        $"{ETSourceCodeDir}/Hotfix/Share/",
+                        $"{ETSourceCodeDir}/Hotfix/Client/",
+                        $"{ETSourceCodeDir}/HotfixView/Client/",
+                        $"{ETSourceCodeDir}/Hotfix/Server/",
                     };
                     break;
                 default:
@@ -120,8 +118,7 @@ namespace ET
             Debug.Log("copy Hotfix.dll to Bundles/Code success!");
         }
 
-        private static void BuildMuteAssembly(
-            string assemblyName, List<string> CodeDirectorys,
+        private static void BuildMuteAssembly(string assemblyName, List<string> CodeDirectorys,
             string[] additionalReferences, CodeOptimization codeOptimization, CodeMode codeMode = CodeMode.Client)
         {
             if (!Directory.Exists(Define.BuildOutputDir))
@@ -153,13 +150,13 @@ namespace ET
             {
                 assemblyBuilder.excludeReferences = new string[]
                 {
-                    "DnsClient.dll", 
-                    "MongoDB.Driver.Core.dll", 
-                    "MongoDB.Driver.dll", 
+                    "DnsClient.dll",
+                    "MongoDB.Driver.Core.dll",
+                    "MongoDB.Driver.dll",
                     "MongoDB.Driver.Legacy.dll",
-                    "MongoDB.Libmongocrypt.dll", 
-                    "SharpCompress.dll", 
-                    "System.Buffers.dll", 
+                    "MongoDB.Libmongocrypt.dll",
+                    "SharpCompress.dll",
+                    "System.Buffers.dll",
                     "System.Runtime.CompilerServices.Unsafe.dll",
                     "System.Text.Encoding.CodePages.dll"
                 };
@@ -207,8 +204,7 @@ namespace ET
                         if (compilerMessages[i].type == CompilerMessageType.Error)
                         {
                             string filename = Path.GetFullPath(compilerMessages[i].file);
-                            Debug.LogError(
-                                $"{compilerMessages[i].message} (at <a href=\"file:///{filename}/\" line=\"{compilerMessages[i].line}\">{Path.GetFileName(filename)}</a>)");
+                            Debug.LogError($"{compilerMessages[i].message} (at <a href=\"file:///{filename}/\" line=\"{compilerMessages[i].line}\">{Path.GetFileName(filename)}</a>)");
                         }
                     }
                 }

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
-using UnityEngine;
 
 namespace ET
 {
@@ -27,7 +26,7 @@ namespace ET
                 Unity.CodeEditor.CodeEditor.CurrentEditor.SyncAll();
             }
             
-            Debug.Log("ReGenerateProjectFiles finished.");
+            UnityEngine.Debug.Log("ReGenerateProjectFiles finished.");
         }
 
 
@@ -93,7 +92,7 @@ namespace ET
                 {
                     string targetPath = Path.Combine(relativeDirPrefix, $"{programName}_Data/StreamingAssets/");
                     FileHelper.CleanDirectory(targetPath);
-                    Debug.Log($"src dir: {fold}    target: {targetPath}");
+                    UnityEngine.Debug.Log($"src dir: {fold}    target: {targetPath}");
                     FileHelper.CopyDirectory(fold, targetPath);
                 }
             }

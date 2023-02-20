@@ -11,9 +11,9 @@
 #endif
 
 #if UNITY_ET_CODE
-        public static bool EnableCode => true;
+        public static bool EnableHotfix => true;
 #else
-        public static bool EnableCode => false;
+        public static bool EnableHotfix => false;
 #endif
 
 #if UNITY_ET_VIEW && UNITY_EDITOR

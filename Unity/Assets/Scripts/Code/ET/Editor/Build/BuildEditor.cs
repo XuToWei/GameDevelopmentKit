@@ -47,17 +47,17 @@ namespace ET
             globalConfig = Resources.Load<GlobalConfig>("ET/GlobalConfig");
 
 #if UNITY_ANDROID
-			activePlatform = PlatformType.Android;
+            activePlatform = PlatformType.Android;
 #elif UNITY_IOS
-			activePlatform = PlatformType.IOS;
+            activePlatform = PlatformType.IOS;
 #elif UNITY_STANDALONE_WIN
             activePlatform = PlatformType.Windows;
 #elif UNITY_STANDALONE_OSX
-			activePlatform = PlatformType.MacOS;
+            activePlatform = PlatformType.MacOS;
 #elif UNITY_STANDALONE_LINUX
-			activePlatform = PlatformType.Linux;
+            activePlatform = PlatformType.Linux;
 #else
-			activePlatform = PlatformType.None;
+            activePlatform = PlatformType.None;
 #endif
             platformType = activePlatform;
         }
@@ -121,7 +121,7 @@ namespace ET
 
             if (GUILayout.Button("BuildModelAndHotfix"))
             {
-                if (Define.EnableCode)
+                if (Define.EnableHotfix)
                 {
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
@@ -136,7 +136,7 @@ namespace ET
 
             if (GUILayout.Button("BuildModel"))
             {
-                if (Define.EnableCode)
+                if (Define.EnableHotfix)
                 {
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
@@ -150,7 +150,7 @@ namespace ET
 
             if (GUILayout.Button("BuildHotfix"))
             {
-                if (Define.EnableCode)
+                if (Define.EnableHotfix)
                 {
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }

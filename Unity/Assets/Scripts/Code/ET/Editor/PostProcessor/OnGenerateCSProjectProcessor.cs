@@ -16,7 +16,7 @@ namespace ET
                 return GenerateCustomProject(path, content);
             }
 
-            if (Define.EnableCode || true)
+            if (Define.EnableHotfix || true)
             {
                 if (path.EndsWith("Code.ET.Code.Hotfix.csproj"))
                 {
