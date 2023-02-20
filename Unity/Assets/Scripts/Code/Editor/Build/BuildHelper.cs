@@ -5,29 +5,21 @@ using UnityEditor;
 
 namespace ET
 {
+    public enum PlatformType
+    {
+        None,
+        Android,
+        IOS,
+        Windows,
+        MacOS,
+        Linux
+    }
+    
     public static class BuildHelper
     {
         private const string relativeDirPrefix = "../Release";
 
         public static string BuildFolder = "../Release/{0}/StreamingAssets/";
-        
-        
-        [InitializeOnLoadMethod]
-        public static void ReGenerateProjectFiles()
-        {
-            if (Unity.CodeEditor.CodeEditor.CurrentEditor.GetType().Name== "RiderScriptEditor")
-            {
-                FieldInfo generator = Unity.CodeEditor.CodeEditor.CurrentEditor.GetType().GetField("m_ProjectGeneration", BindingFlags.Static | BindingFlags.NonPublic);
-                var syncMethod = generator.FieldType.GetMethod("Sync");
-                syncMethod.Invoke(generator.GetValue(Unity.CodeEditor.CodeEditor.CurrentEditor), null);
-            }
-            else
-            {
-                Unity.CodeEditor.CodeEditor.CurrentEditor.SyncAll();
-            }
-            
-            UnityEngine.Debug.Log("ReGenerateProjectFiles finished.");
-        }
 
 
         public static void Build(PlatformType type, BuildAssetBundleOptions buildAssetBundleOptions, BuildOptions buildOptions, bool isBuildExe, bool isContainAB, bool clearFolder)
@@ -72,8 +64,8 @@ namespace ET
 
             if (isContainAB)
             {
-                FileHelper.CleanDirectory("Assets/StreamingAssets/");
-                FileHelper.CopyDirectory(fold, "Assets/StreamingAssets/");
+                //FileHelper.CleanDirectory("Assets/StreamingAssets/");
+                //FileHelper.CopyDirectory(fold, "Assets/StreamingAssets/");
             }
 
             if (isBuildExe)
@@ -91,9 +83,9 @@ namespace ET
                 if (isContainAB && type == PlatformType.Windows)
                 {
                     string targetPath = Path.Combine(relativeDirPrefix, $"{programName}_Data/StreamingAssets/");
-                    FileHelper.CleanDirectory(targetPath);
+                    //FileHelper.CleanDirectory(targetPath);
                     UnityEngine.Debug.Log($"src dir: {fold}    target: {targetPath}");
-                    FileHelper.CopyDirectory(fold, targetPath);
+                    //FileHelper.CopyDirectory(fold, targetPath);
                 }
             }
         }
