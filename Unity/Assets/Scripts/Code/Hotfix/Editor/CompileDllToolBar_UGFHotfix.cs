@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_HOTFIX
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Game.Editor;
@@ -44,3 +45,4 @@ namespace Game.Hotfix.Editor
         }
     }
 }
+#endif

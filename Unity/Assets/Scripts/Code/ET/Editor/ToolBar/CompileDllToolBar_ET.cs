@@ -1,4 +1,4 @@
-using System;
+#if UNITY_HOTFIX
 using ET;
 using UnityEditor;
 using UnityEditor.Compilation;
@@ -69,3 +69,4 @@ namespace Game.Editor
         }
     }
 }
+#endif
