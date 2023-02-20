@@ -1,6 +1,6 @@
 {
     "name": "Code.Hotfix.Code.Runtime",
-    "rootNamespace": "",
+    "rootNamespace": "Game.Hotfix",
     "references": [
         "GUID:185999e4d3aadab45bf0f7ee77382397",
         "GUID:363c5eb08ff8e6a439b85e37b8c20d96",

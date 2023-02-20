@@ -1,13 +1,13 @@
-﻿#if UNITY_UGFHOTFIX
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Game.Editor;
 using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEngine;
 using UnityToolbarExtender;
 
-namespace Game.Editor
+namespace Game.Hotfix.Editor
 {
     [InitializeOnLoad]
     internal sealed class CompileDllToolBar_UGFHotfix
@@ -44,4 +44,3 @@ namespace Game.Editor
         }
     }
 }
-#endif

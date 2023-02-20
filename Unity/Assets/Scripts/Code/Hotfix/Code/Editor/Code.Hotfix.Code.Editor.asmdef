@@ -1,7 +1,9 @@
 {
     "name": "Code.Hotfix.Code.Editor",
-    "rootNamespace": "",
-    "references": [],
+    "rootNamespace": "Game.Hotfix.Editor",
+    "references": [
+        "GUID:7b8a1c6c24879a64985dc67ad67b0241"
+    ],
     "includePlatforms": [
         "Editor"
     ],

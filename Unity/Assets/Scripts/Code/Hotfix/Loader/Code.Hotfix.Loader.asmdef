@@ -1,6 +1,6 @@
 {
     "name": "Code.Hotfix.Loader",
-    "rootNamespace": "",
+    "rootNamespace": "Game.Hotfix",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
