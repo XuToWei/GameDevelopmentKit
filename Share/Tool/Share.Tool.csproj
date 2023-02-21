@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
@@ -49,6 +48,6 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\DotNet\ET\DotNet.Library.csproj" />
+      <ProjectReference Include="..\..\DotNet\Library\DotNet.Library.csproj" />
     </ItemGroup>
 </Project>
