@@ -11,9 +11,9 @@ namespace Game
         // 负值用于本地生成的临时实体（如特效、FakeObject等）
         private static int s_SerialId = 0;
 
-        public static void HideEntity(this EntityComponent entityComponent, Entity entity)
+        public static void HideEntity(this EntityComponent entityComponent, BaseEntity baseEntity)
         {
-            entityComponent.HideEntity(entity.Entity);
+            entityComponent.HideEntity(baseEntity.Entity);
         }
 
         public static int? ShowEntity<T>(this EntityComponent entityComponent, int entityTypeId, object userData = null) where T : EntityLogic

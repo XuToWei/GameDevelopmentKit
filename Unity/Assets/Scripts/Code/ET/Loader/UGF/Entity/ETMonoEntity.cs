@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 using UnityGameFramework.Runtime;
-using GEntity = Game.Entity;
+using Game;
 
 namespace ET
 {
-    public class ETMonoEntity : GEntity
+    public class ETMonoEntity : BaseEntity
     {
         public UGFEntity UGFEntity { get; private set; }
         public Type EntityEventType { get; private set; }

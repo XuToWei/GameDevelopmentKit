@@ -4,7 +4,7 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    public abstract class Entity: EntityLogic
+    public abstract class BaseEntity: EntityLogic
     {
         public int Id
         {

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using GameFramework;
 using GameFramework.ObjectPool;
@@ -32,24 +31,23 @@ namespace UnityGameFramework.Extension
 #if ODIN_INSPECTOR
         [ReadOnly] [ShowInInspector]
 #endif
-        private LinkedList<LoadSpriteObject> m_LoadSpriteObjectsLinkedList;
+        private LinkedList<LoadSpriteObject> m_LoadedSpriteObjectsLinkedList;
         
         private HashSet<string> m_SpriteCollectionBeingLoaded;
         private Dictionary<string, LinkedList<ISetSpriteObject>> m_WaitSetObjects;
+        private HashSet<ISetSpriteObject> m_SpriteObjectsToReleaseOnLoad;
 #if UNITY_EDITOR
-        public LinkedList<LoadSpriteObject> LoadSpriteObjectsLinkedList
+        public LinkedList<LoadSpriteObject> LoadedSpriteObjectsLinkedList
         {
-            get => m_LoadSpriteObjectsLinkedList;
-            set => m_LoadSpriteObjectsLinkedList = value;
+            get => m_LoadedSpriteObjectsLinkedList;
+            set => m_LoadedSpriteObjectsLinkedList = value;
         }
 #endif
         private void Start()
         {
-            ObjectPoolComponent objectPoolComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<ObjectPoolComponent>();
-            m_SpriteCollectionPool = objectPoolComponent.CreateMultiSpawnObjectPool<SpriteCollectionItemObject>(
-                "SpriteCollection",
-                m_AutoReleaseInterval, 16, 60, 0);
-            m_LoadSpriteObjectsLinkedList = new LinkedList<LoadSpriteObject>();
+            ObjectPoolComponent objectPoolComponent = GameEntry.GetComponent<ObjectPoolComponent>();
+            m_SpriteCollectionPool = objectPoolComponent.CreateMultiSpawnObjectPool<SpriteCollectionItemObject>("SpriteCollection", m_AutoReleaseInterval, 16, 60, 0);
+            m_LoadedSpriteObjectsLinkedList = new LinkedList<LoadSpriteObject>();
             m_SpriteCollectionBeingLoaded = new HashSet<string>();
             m_WaitSetObjects = new Dictionary<string, LinkedList<ISetSpriteObject>>();
 
@@ -71,7 +69,7 @@ namespace UnityGameFramework.Extension
 #endif
         public void ReleaseUnused()
         {
-            LinkedListNode<LoadSpriteObject> current = m_LoadSpriteObjectsLinkedList.First;
+            LinkedListNode<LoadSpriteObject> current = m_LoadedSpriteObjectsLinkedList.First;
             while (current != null)
             {
                 var next = current.Next;
@@ -79,9 +77,9 @@ namespace UnityGameFramework.Extension
                 {
                     m_SpriteCollectionPool.Unspawn(current.Value.Collection);
                     ReferencePool.Release(current.Value.SpriteObject);
-                    m_LoadSpriteObjectsLinkedList.Remove(current);
+                    m_LoadedSpriteObjectsLinkedList.Remove(current);
+                    ReferencePool.Release(current.Value);
                 }
-
                 current = next;
             }
 

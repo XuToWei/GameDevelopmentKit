@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
 using GameFramework.Resource;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -33,9 +34,9 @@ namespace UnityGameFramework.Extension
         /// </summary>
         private static void RestCancellationTokenRegistration()
         {
-            foreach (CancellationTokenRegistration cancellationTokenRegistration in s_CancellationTokenRegistrationDict.Values)
+            foreach (CancellationTokenRegistration? cancellationTokenRegistration in s_CancellationTokenRegistrationDict.Values)
             {
-                cancellationTokenRegistration.Dispose();
+                cancellationTokenRegistration?.Dispose();
             }
             s_CancellationTokenRegistrationDict.Clear();
             s_CancellationTokenRegistrationId = 1;
