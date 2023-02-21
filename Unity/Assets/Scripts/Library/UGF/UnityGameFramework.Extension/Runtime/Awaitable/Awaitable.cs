@@ -106,7 +106,7 @@ namespace UnityGameFramework.Extension
                         if (uiComponent.IsLoadingUIForm(serialId))
                         {
                             uiComponent.CloseUIForm(serialId);
-                            tcs.TrySetCanceled(cts.Token);
+                            tcs.TrySetResult(null);
                         }
                     });
                 }
@@ -181,7 +181,7 @@ namespace UnityGameFramework.Extension
                         if (entityComponent.IsLoadingEntity(entityId))
                         {
                             entityComponent.HideEntity(entityId);
-                            tcs.TrySetCanceled(cts.Token);
+                            tcs.TrySetResult(null);
                         }
                     });
                 }
@@ -318,45 +318,61 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 加载资源（可等待）
         /// </summary>
-        public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent resourceComponent, string assetName, int priority = 0,
-        object userData = default, CancellationTokenSource cancellationTokenSource = default) where T : UnityEngine.Object
+        public static UniTask<T> LoadAssetAsync<T>(this ResourceComponent resourceComponent, string assetName,
+        int priority = 0, object userData = default, CancellationTokenSource cts = default) where T : UnityEngine.Object
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
-            var loadAssetTcs = AutoResetUniTaskCompletionSource<T>.Create();
+            var tcs = AutoResetUniTaskCompletionSource<T>.Create();
+            long ctrId = ++s_CancellationTokenRegistrationId;
+            s_CancellationTokenRegistrationDict.Add(ctrId, null);
             resourceComponent.LoadAsset(assetName, typeof (T), priority,
                 new LoadAssetCallbacks((tempAssetName, asset, duration, userdata) =>
                     {
-                        var source = loadAssetTcs;
-                        loadAssetTcs = null;
                         T tAsset = asset as T;
                         if (tAsset != null)
                         {
-                            if (cancellationTokenSource is { IsCancellationRequested: true })
+                            if (cts is { IsCancellationRequested: true })
                             {
+                                if (ctrId > 0 && s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                                {
+                                    s_CancellationTokenRegistrationDict.Remove(ctrId);
+                                    ctr?.Dispose();
+                                }
                                 resourceComponent.UnloadAsset(tAsset);
-                                source.TrySetCanceled(cancellationTokenSource.Token);
+                                tcs.TrySetResult(null);
                             }
                             else
                             {
-                                source.TrySetResult(tAsset);
+                                tcs.TrySetResult(tAsset);
                             }
                         }
                         else
                         {
                             Log.Error($"Load asset failure load type is {asset.GetType()} but asset type is {typeof (T)}.");
-                            source.TrySetException(
-                                new GameFrameworkException($"Load asset failure load type is {asset.GetType()} but asset type is {typeof (T)}."));
+                            tcs.TrySetException(new GameFrameworkException($"Load asset failure load type is {asset.GetType()} but asset type is {typeof (T)}."));
                         }
                     },
                     (tempAssetName, status, errorMessage, userdata) =>
                     {
                         Log.Error(errorMessage);
-                        loadAssetTcs.TrySetException(new GameFrameworkException(errorMessage));
+                        tcs.TrySetException(new GameFrameworkException(errorMessage));
                     }),
                 userData);
-            return loadAssetTcs.Task;
+            if (s_CancellationTokenRegistrationDict.ContainsKey(ctrId))
+            {
+                s_CancellationTokenRegistrationDict[ctrId] = cts.Token.Register(() =>
+                {
+                    if (s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                    {
+                        s_CancellationTokenRegistrationDict.Remove(ctrId);
+                        ctr?.Dispose();
+                    }
+                    tcs.TrySetResult(null);
+                });
+            }
+            return tcs.Task;
         }
 
         /// <summary>
@@ -388,7 +404,7 @@ namespace UnityGameFramework.Extension
                         if (taskInfo.Status != TaskStatus.Done)
                         {
                             webRequestComponent.RemoveWebRequest(serialId);
-                            tcs.TrySetCanceled(cts.Token);
+                            tcs.TrySetResult(null);
                         }
                     });
                 }
@@ -429,7 +445,7 @@ namespace UnityGameFramework.Extension
                         if (taskInfo.Status != TaskStatus.Done)
                         {
                             webRequestComponent.RemoveWebRequest(serialId);
-                            tcs.TrySetCanceled(cts.Token);
+                            tcs.TrySetResult(null);
                         }
                     });
                 }
@@ -506,7 +522,7 @@ namespace UnityGameFramework.Extension
                         if (taskInfo.Status != TaskStatus.Done)
                         {
                             downloadComponent.RemoveDownload(serialId);
-                            tcs.TrySetCanceled(cts.Token);
+                            tcs.TrySetResult(null);
                         }
                     });
                 }
