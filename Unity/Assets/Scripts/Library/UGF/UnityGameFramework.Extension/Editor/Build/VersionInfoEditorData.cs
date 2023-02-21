@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace UnityGameFramework.Extension.Editor
 {
-    [CreateAssetMenu(fileName = "VersionInfoEditorData", menuName = "UGFExtensions/VersionInfoEditorData", order = 0)]
+    [CreateAssetMenu(fileName = "VersionInfoEditorData", menuName = "UGFExtension/VersionInfoEditorData", order = 0)]
     public class VersionInfoEditorData : ScriptableObject
     {
         private const string M_DataPath = "Assets/Res/Configs/VersionInfoEditorData.asset";

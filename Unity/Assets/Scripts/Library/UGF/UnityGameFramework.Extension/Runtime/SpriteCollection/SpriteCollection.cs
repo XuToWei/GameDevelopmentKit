@@ -20,7 +20,7 @@ using Object = UnityEngine.Object;
 
 namespace UnityGameFramework.Extension
 {
-    [CreateAssetMenu(fileName = "SpriteCollection", menuName = "UGFExtensions/SpriteCollection", order = 0)]
+    [CreateAssetMenu(fileName = "SpriteCollection", menuName = "UGFExtension/SpriteCollection", order = 0)]
 #if ODIN_INSPECTOR
     public class SpriteCollection : SerializedScriptableObject
     {
