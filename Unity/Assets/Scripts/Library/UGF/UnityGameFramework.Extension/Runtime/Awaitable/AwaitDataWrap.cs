@@ -47,12 +47,15 @@ namespace UnityGameFramework.Extension
         /// TaskCompletionSource
         /// </summary>
         public AutoResetUniTaskCompletionSource<T> TaskCompletionSource { get; private set; }
+        
+        public long CancellationTokenRegistrationId { get; private set; }
 
-        public static AwaitDataWrap<T> Create(object userData, AutoResetUniTaskCompletionSource<T> taskCompletionSource)
+        public static AwaitDataWrap<T> Create(object userData, AutoResetUniTaskCompletionSource<T> taskCompletionSource, long cancellationTokenRegistrationId = 0)
         {
             AwaitDataWrap<T> awaitDataWrap = ReferencePool.Acquire<AwaitDataWrap<T>>();
             awaitDataWrap.UserData = userData;
             awaitDataWrap.TaskCompletionSource = taskCompletionSource;
+            awaitDataWrap.CancellationTokenRegistrationId = cancellationTokenRegistrationId;
             return awaitDataWrap;
         }
 
@@ -60,6 +63,7 @@ namespace UnityGameFramework.Extension
         {
             UserData = default;
             TaskCompletionSource = default;
+            CancellationTokenRegistrationId = default;
         }
     }
 }

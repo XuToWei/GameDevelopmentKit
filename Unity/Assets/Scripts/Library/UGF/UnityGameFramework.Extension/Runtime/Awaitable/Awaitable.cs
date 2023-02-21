@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using GameFramework;
@@ -6,20 +7,44 @@ using GameFramework.Event;
 using GameFramework.Resource;
 using UnityEngine;
 using UnityGameFramework.Runtime;
-using TaskStatus = GameFramework.TaskStatus;
 
 namespace UnityGameFramework.Extension
 {
-    public static partial class Awaitable
+    public static class Awaitable
     {
+        private static long s_CancellationTokenRegistrationId;
+        private static readonly Dictionary<long, CancellationTokenRegistration?> s_CancellationTokenRegistrationDict = new Dictionary<long, CancellationTokenRegistration?>();
+
 #if UNITY_EDITOR
         private static bool s_IsSubscribeEvent = false;
 #endif
 
         /// <summary>
+        /// 初始化
+        /// </summary>
+        public static void Init()
+        {
+            RestCancellationTokenRegistration();
+            SubscribeEvent();
+        }
+
+        /// <summary>
+        /// 需再流程入口处调用 (清除资源)
+        /// </summary>
+        private static void RestCancellationTokenRegistration()
+        {
+            foreach (CancellationTokenRegistration cancellationTokenRegistration in s_CancellationTokenRegistrationDict.Values)
+            {
+                cancellationTokenRegistration.Dispose();
+            }
+            s_CancellationTokenRegistrationDict.Clear();
+            s_CancellationTokenRegistrationId = 1;
+        }
+
+        /// <summary>
         /// 注册需要的事件 (需再流程入口处调用 防止框架重启导致事件被取消问题)
         /// </summary>
-        public static void SubscribeEvent()
+        private static void SubscribeEvent()
         {
             EventComponent eventComponent = GameEntry.GetComponent<EventComponent>();
             eventComponent.Subscribe(OpenUIFormSuccessEventArgs.EventId, OnOpenUIFormSuccess);
@@ -52,28 +77,43 @@ namespace UnityGameFramework.Extension
             }
         }
 #endif
-
+        
         /// <summary>
         /// 打开界面（可等待）
         /// </summary>
         public static UniTask<UIForm> OpenUIFormAsync(this UIComponent uiComponent, string uiFormAssetName, string uiGroupName,
-        int priority, bool pauseCoveredUIForm, object userData = default, CancellationTokenSource cancellationTokenSource = default)
+        int priority, bool pauseCoveredUIForm, object userData = default, CancellationTokenSource cts = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
             var tcs = AutoResetUniTaskCompletionSource<UIForm>.Create();
-            int serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, AwaitDataWrap<UIForm>.Create(userData, tcs));
-            if (cancellationTokenSource != default)
+            if (cts != default)
             {
-                cancellationTokenSource.Token.Register(() =>
+                long ctrId = ++s_CancellationTokenRegistrationId;
+                s_CancellationTokenRegistrationDict.Add(ctrId, null);
+                int serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, AwaitDataWrap<UIForm>.Create(userData, tcs, ctrId));
+                if (s_CancellationTokenRegistrationDict.ContainsKey(ctrId))
                 {
-                    if (uiComponent.IsLoadingUIForm(serialId))
+                    s_CancellationTokenRegistrationDict[ctrId] = cts.Token.Register(() =>
                     {
-                        uiComponent.CloseUIForm(serialId);
-                        tcs.TrySetCanceled(cancellationTokenSource.Token);
-                    }
-                });
+                        if (s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                        {
+                            s_CancellationTokenRegistrationDict.Remove(ctrId);
+                            ctr?.Dispose();
+                        }
+                        
+                        if (uiComponent.IsLoadingUIForm(serialId))
+                        {
+                            uiComponent.CloseUIForm(serialId);
+                            tcs.TrySetCanceled(cts.Token);
+                        }
+                    });
+                }
+            }
+            else
+            {
+                uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, AwaitDataWrap<UIForm>.Create(userData, tcs));
             }
             return tcs.Task;
         }
@@ -83,6 +123,12 @@ namespace UnityGameFramework.Extension
             OpenUIFormSuccessEventArgs ne = (OpenUIFormSuccessEventArgs)e;
             if(ne.UserData is AwaitDataWrap<UIForm> awaitDataWrap)
             {
+                long ctrId = awaitDataWrap.CancellationTokenRegistrationId;
+                if (ctrId > 0 && s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                {
+                    s_CancellationTokenRegistrationDict.Remove(ctrId);
+                    ctr?.Dispose();
+                }
                 var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
                 ReferencePool.Release(awaitDataWrap);
                 taskCompletionSource.TrySetResult(ne.UIForm);
@@ -95,6 +141,12 @@ namespace UnityGameFramework.Extension
             if (ne.UserData is AwaitDataWrap<UIForm> awaitDataWrap)
             {
                 Log.Error(ne.ErrorMessage);
+                long ctrId = awaitDataWrap.CancellationTokenRegistrationId;
+                if (ctrId > 0 && s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                {
+                    s_CancellationTokenRegistrationDict.Remove(ctrId);
+                    ctr?.Dispose();
+                }
                 var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
                 ReferencePool.Release(awaitDataWrap);
                 taskCompletionSource.TrySetException(new GameFrameworkException(ne.ErrorMessage));
@@ -105,23 +157,38 @@ namespace UnityGameFramework.Extension
         /// 显示实体（可等待）
         /// </summary>
         public static UniTask<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityId, Type entityLogicType, string entityAssetName,
-        string entityGroupName, int priority = 0, object userData = default, CancellationTokenSource cancellationTokenSource = default)
+        string entityGroupName, int priority = 0, object userData = default, CancellationTokenSource cts = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
             var tcs = AutoResetUniTaskCompletionSource<Entity>.Create();
-            entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, AwaitDataWrap<Entity>.Create(userData, tcs));
-            if (cancellationTokenSource != default)
+            if (cts != default)
             {
-                cancellationTokenSource.Token.Register(() =>
+                long ctrId = ++s_CancellationTokenRegistrationId;
+                s_CancellationTokenRegistrationDict.Add(ctrId, null);
+                entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, AwaitDataWrap<Entity>.Create(userData, tcs, ctrId));
+                if (s_CancellationTokenRegistrationDict.ContainsKey(ctrId))
                 {
-                    if (entityComponent.IsLoadingEntity(entityId))
+                    s_CancellationTokenRegistrationDict[ctrId] = cts.Token.Register(() =>
                     {
-                        entityComponent.HideEntity(entityId);
-                        tcs.TrySetCanceled(cancellationTokenSource.Token);
-                    }
-                });
+                        if (s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                        {
+                            s_CancellationTokenRegistrationDict.Remove(ctrId);
+                            ctr?.Dispose();
+                        }
+                        
+                        if (entityComponent.IsLoadingEntity(entityId))
+                        {
+                            entityComponent.HideEntity(entityId);
+                            tcs.TrySetCanceled(cts.Token);
+                        }
+                    });
+                }
+            }
+            else
+            {
+                entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, AwaitDataWrap<Entity>.Create(userData, tcs));
             }
             return tcs.Task;
         }
@@ -131,6 +198,12 @@ namespace UnityGameFramework.Extension
             ShowEntitySuccessEventArgs ne = (ShowEntitySuccessEventArgs)e;
             if (ne.UserData is AwaitDataWrap<Entity> awaitDataWrap)
             {
+                long ctrId = awaitDataWrap.CancellationTokenRegistrationId;
+                if (ctrId > 0 && s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                {
+                    s_CancellationTokenRegistrationDict.Remove(ctrId);
+                    ctr?.Dispose();
+                }
                 var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
                 ReferencePool.Release(awaitDataWrap);
                 taskCompletionSource.TrySetResult(ne.Entity);
@@ -142,6 +215,12 @@ namespace UnityGameFramework.Extension
             ShowEntityFailureEventArgs ne = (ShowEntityFailureEventArgs)e;
             if (ne.UserData is AwaitDataWrap<Entity> awaitDataWrap)
             {
+                long ctrId = awaitDataWrap.CancellationTokenRegistrationId;
+                if (ctrId > 0 && s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                {
+                    s_CancellationTokenRegistrationDict.Remove(ctrId);
+                    ctr?.Dispose();
+                }
                 var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
                 ReferencePool.Release(awaitDataWrap);
                 taskCompletionSource.TrySetException(new GameFrameworkException(ne.ErrorMessage));
@@ -284,24 +363,39 @@ namespace UnityGameFramework.Extension
         /// 增加Web请求任务（可等待）
         /// </summary>
         public static UniTask<WebResult> WebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri,
-        WWWForm wwwForm = null, string tag = null, int priority = 0, object userData = default, CancellationTokenSource cancellationTokenSource = default)
+        WWWForm wwwForm = null, string tag = null, int priority = 0, object userData = default, CancellationTokenSource cts = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
             var tcs = AutoResetUniTaskCompletionSource<WebResult>.Create();
-            int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm, tag, priority, AwaitDataWrap<WebResult>.Create(userData, tcs));
-            if (cancellationTokenSource != default)
+            if (cts != default)
             {
-                cancellationTokenSource.Token.Register(() =>
+                long ctrId = ++s_CancellationTokenRegistrationId;
+                s_CancellationTokenRegistrationDict.Add(ctrId, null);
+                int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm, tag, priority, AwaitDataWrap<WebResult>.Create(userData, tcs, ctrId));
+                if (s_CancellationTokenRegistrationDict.ContainsKey(ctrId))
                 {
-                    var taskInfo = webRequestComponent.GetWebRequestInfo(serialId);
-                    if (taskInfo.Status != TaskStatus.Done)
+                    s_CancellationTokenRegistrationDict[ctrId] = cts.Token.Register(() =>
                     {
-                        webRequestComponent.RemoveWebRequest(serialId);
-                        tcs.TrySetCanceled(cancellationTokenSource.Token);
-                    }
-                });
+                        if (s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                        {
+                            s_CancellationTokenRegistrationDict.Remove(ctrId);
+                            ctr?.Dispose();
+                        }
+                        
+                        var taskInfo = webRequestComponent.GetWebRequestInfo(serialId);
+                        if (taskInfo.Status != TaskStatus.Done)
+                        {
+                            webRequestComponent.RemoveWebRequest(serialId);
+                            tcs.TrySetCanceled(cts.Token);
+                        }
+                    });
+                }
+            }
+            else
+            {
+                webRequestComponent.AddWebRequest(webRequestUri, wwwForm, tag, priority, AwaitDataWrap<WebResult>.Create(userData, tcs));
             }
             return tcs.Task;
         }
@@ -309,25 +403,40 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 增加Web请求任务（可等待）
         /// </summary>
-        public static UniTask<WebResult> WebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri, byte[] postData,
-        string tag = null, int priority = 0, object userData = default, CancellationTokenSource cancellationTokenSource = default)
+        public static UniTask<WebResult> WebRequestAsync(this WebRequestComponent webRequestComponent, string webRequestUri,
+        byte[] postData, string tag = null, int priority = 0, object userData = default, CancellationTokenSource cts = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
             var tcs = AutoResetUniTaskCompletionSource<WebResult>.Create();
-            int serialId = webRequestComponent.AddWebRequest(webRequestUri, postData, tag, priority, AwaitDataWrap<WebResult>.Create(userData, tcs));
-            if (cancellationTokenSource != default)
+            if (cts != default)
             {
-                cancellationTokenSource.Token.Register(() =>
+                long ctrId = ++s_CancellationTokenRegistrationId;
+                s_CancellationTokenRegistrationDict.Add(ctrId, null);
+                int serialId = webRequestComponent.AddWebRequest(webRequestUri, postData, tag, priority, AwaitDataWrap<WebResult>.Create(userData, tcs, ctrId));
+                if (s_CancellationTokenRegistrationDict.ContainsKey(ctrId))
                 {
-                    var taskInfo = webRequestComponent.GetWebRequestInfo(serialId);
-                    if (taskInfo.Status != TaskStatus.Done)
+                    s_CancellationTokenRegistrationDict[ctrId] = cts.Token.Register(() =>
                     {
-                        webRequestComponent.RemoveWebRequest(serialId);
-                        tcs.TrySetCanceled(cancellationTokenSource.Token);
-                    }
-                });
+                        if (s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                        {
+                            s_CancellationTokenRegistrationDict.Remove(ctrId);
+                            ctr?.Dispose();
+                        }
+                        
+                        var taskInfo = webRequestComponent.GetWebRequestInfo(serialId);
+                        if (taskInfo.Status != TaskStatus.Done)
+                        {
+                            webRequestComponent.RemoveWebRequest(serialId);
+                            tcs.TrySetCanceled(cts.Token);
+                        }
+                    });
+                }
+            }
+            else
+            {
+                webRequestComponent.AddWebRequest(webRequestUri, postData, tag, priority, AwaitDataWrap<WebResult>.Create(userData, tcs));
             }
             return tcs.Task;
         }
@@ -337,6 +446,12 @@ namespace UnityGameFramework.Extension
             WebRequestSuccessEventArgs ne = (WebRequestSuccessEventArgs)e;
             if (ne.UserData is AwaitDataWrap<WebResult> awaitDataWrap)
             {
+                long ctrId = awaitDataWrap.CancellationTokenRegistrationId;
+                if (ctrId > 0 && s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                {
+                    s_CancellationTokenRegistrationDict.Remove(ctrId);
+                    ctr?.Dispose();
+                }
                 var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
                 WebResult result = WebResult.Create(ne.GetWebResponseBytes(), false, string.Empty, awaitDataWrap.UserData);
                 ReferencePool.Release(awaitDataWrap);
@@ -349,6 +464,12 @@ namespace UnityGameFramework.Extension
             WebRequestFailureEventArgs ne = (WebRequestFailureEventArgs)e;
             if (ne.UserData is AwaitDataWrap<WebResult> awaitDataWrap)
             {
+                long ctrId = awaitDataWrap.CancellationTokenRegistrationId;
+                if (ctrId > 0 && s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                {
+                    s_CancellationTokenRegistrationDict.Remove(ctrId);
+                    ctr?.Dispose();
+                }
                 var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
                 WebResult result = WebResult.Create(null, true, ne.ErrorMessage, awaitDataWrap.UserData);
                 ReferencePool.Release(awaitDataWrap);
@@ -359,14 +480,41 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 增加下载任务（可等待)
         /// </summary>
-        public static UniTask<DownloadResult> AddDownloadAsync(this DownloadComponent downloadComponent,
-        string downloadPath,string downloadUri, string tag = null, int priority = 0, object userdata = null)
+        public static UniTask<DownloadResult> DownloadAsync(this DownloadComponent downloadComponent, string downloadPath,
+        string downloadUri, string tag = null, int priority = 0, object userdata = null, CancellationTokenSource cts = default)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
             var tcs = AutoResetUniTaskCompletionSource<DownloadResult>.Create();
-            downloadComponent.AddDownload(downloadPath, downloadUri, tag, priority, AwaitDataWrap<DownloadResult>.Create(userdata, tcs));
+            if (cts != default)
+            {
+                long ctrId = ++s_CancellationTokenRegistrationId;
+                s_CancellationTokenRegistrationDict.Add(ctrId, null);
+                int serialId = downloadComponent.AddDownload(downloadPath, downloadUri, tag, priority, AwaitDataWrap<DownloadResult>.Create(userdata, tcs, ctrId));
+                if (s_CancellationTokenRegistrationDict.ContainsKey(ctrId))
+                {
+                    s_CancellationTokenRegistrationDict[ctrId] = cts.Token.Register(() =>
+                    {
+                        if (s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                        {
+                            s_CancellationTokenRegistrationDict.Remove(ctrId);
+                            ctr?.Dispose();
+                        }
+                        
+                        var taskInfo = downloadComponent.GetDownloadInfo(serialId);
+                        if (taskInfo.Status != TaskStatus.Done)
+                        {
+                            downloadComponent.RemoveDownload(serialId);
+                            tcs.TrySetCanceled(cts.Token);
+                        }
+                    });
+                }
+            }
+            else
+            {
+                downloadComponent.AddDownload(downloadPath, downloadUri, tag, priority, AwaitDataWrap<DownloadResult>.Create(userdata, tcs));
+            }
             return tcs.Task;
         }
 
@@ -375,6 +523,12 @@ namespace UnityGameFramework.Extension
             DownloadSuccessEventArgs ne = (DownloadSuccessEventArgs)e;
             if (ne.UserData is AwaitDataWrap<DownloadResult> awaitDataWrap)
             {
+                long ctrId = awaitDataWrap.CancellationTokenRegistrationId;
+                if (ctrId > 0 && s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                {
+                    s_CancellationTokenRegistrationDict.Remove(ctrId);
+                    ctr?.Dispose();
+                }
                 DownloadResult result = DownloadResult.Create(false, string.Empty, awaitDataWrap.UserData);
                 var tcs = awaitDataWrap.TaskCompletionSource;
                 ReferencePool.Release(awaitDataWrap);
@@ -387,6 +541,12 @@ namespace UnityGameFramework.Extension
             DownloadFailureEventArgs ne = (DownloadFailureEventArgs)e;
             if (ne.UserData is AwaitDataWrap<DownloadResult> awaitDataWrap)
             {
+                long ctrId = awaitDataWrap.CancellationTokenRegistrationId;
+                if (ctrId > 0 && s_CancellationTokenRegistrationDict.TryGetValue(ctrId, out CancellationTokenRegistration? ctr))
+                {
+                    s_CancellationTokenRegistrationDict.Remove(ctrId);
+                    ctr?.Dispose();
+                }
                 DownloadResult result = DownloadResult.Create(true, ne.ErrorMessage, awaitDataWrap.UserData);
                 var tcs = awaitDataWrap.TaskCompletionSource;
                 ReferencePool.Release(awaitDataWrap);

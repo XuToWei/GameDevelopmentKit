@@ -14,8 +14,8 @@ namespace ET
         {
             
             UniTaskCompletionSource<int> tcs = new UniTaskCompletionSource<int>();
-
-            StartCoroutine(SetDley(tcs));
+            tcs.TrySetException(null);
+            //StartCoroutine(SetDley(tcs));
 
             Debug.Log(await tcs.Task);
             
@@ -30,14 +30,22 @@ namespace ET
         IEnumerator SetDley(UniTaskCompletionSource<int> tcs)
         {
             CancellationTokenSource ct = new CancellationTokenSource();
+            CancellationTokenRegistration pp = default;
             var kkk = ct.Token.Register(() =>
             {
                 Debug.Log("1111111111111111111111111");
+                pp.Dispose();
             });
+            pp = kkk;
             yield return new WaitForSeconds(2);
-            //ct.Cancel();
-            //kkk.Dispose();
-            tcs.TrySetException(new Exception());
+            ct.Cancel();
+            ct.Token.Register(() =>
+            {
+                Debug.Log("MMMMMMMMM");
+            });
+            ct.Cancel();
+            //
+            //tcs.TrySetException(new Exception());
             Debug.Log(ct.IsCancellationRequested);
         }
     }

@@ -20,7 +20,7 @@ namespace Game
             base.OnEnter(procedureOwner);
             
             // 注册异步需要的事件
-            Awaitable.SubscribeEvent();
+            Awaitable.Init();
             
             // 构建信息：发布版本时，把一些数据以 Json 的格式写入 Assets/GameMain/Configs/BuildInfo.txt，供游戏逻辑读取
             //GameEntry.Builtin.InitBuildInfo();
