@@ -881,7 +881,7 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform:
     Android: 3
     Server: 3
-    Standalone: 3
+    Standalone: 6
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: Unity
