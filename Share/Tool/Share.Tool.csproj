@@ -49,6 +49,6 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\DotNet\ET\DotNet.ET.csproj" />
+      <ProjectReference Include="..\..\DotNet\ET\DotNet.Library.csproj" />
     </ItemGroup>
 </Project>

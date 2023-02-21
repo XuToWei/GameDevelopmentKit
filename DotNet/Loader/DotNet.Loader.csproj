@@ -28,6 +28,6 @@
     </ItemGroup> 
     <ItemGroup> 
         <ProjectReference Include="..\..\Share\Analyzer\Share.Analyzer.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="..\ET\DotNet.ET.csproj" />
+        <ProjectReference Include="..\Library\DotNet.Library.csproj" />
     </ItemGroup>
 </Project>

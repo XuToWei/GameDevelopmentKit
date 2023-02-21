@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNet.Hotfix", "DotNet\Hot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNet.Model", "DotNet\Model\DotNet.Model.csproj", "{6AFC109E-85DE-4A14-9C81-95D93C3F90AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNet.ET", "DotNet\ET\DotNet.ET.csproj", "{4B15C845-B5BD-4105-AE91-9B057F8AC134}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNet.Library", "DotNet\Library\DotNet.Library.csproj", "{4B15C845-B5BD-4105-AE91-9B057F8AC134}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Share", "Share", "{1272AF7B-A962-4BA4-8A9C-FFA7E131A0AC}"
 EndProject
