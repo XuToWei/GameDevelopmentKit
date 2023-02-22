@@ -4,7 +4,7 @@
 
 ~~ET代码生成工具（UI，Entity，Default）~~
 
-~~将ETTask更换为UniTask（已完成，还未测试）~~
+将ETTask更换为UniTask（已完成，还未测试）
 
 UniTask代码分析功能（Forget等）
 
