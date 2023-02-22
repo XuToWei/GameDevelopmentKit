@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
@@ -587,7 +588,7 @@ namespace ET
             }
         }
 
-        public async ETTask PublishAsync<T>(Scene scene, T a) where T : struct
+        public async UniTask PublishAsync<T>(Scene scene, T a) where T : struct
         {
             List<EventInfo> iEvents;
             if (!this.allEvents.TryGetValue(typeof(T), out iEvents))
@@ -595,7 +596,7 @@ namespace ET
                 return;
             }
 
-            using ListComponent<ETTask> list = ListComponent<ETTask>.Create();
+            using ListComponent<UniTask> list = ListComponent<UniTask>.Create();
             
             foreach (EventInfo eventInfo in iEvents)
             {
@@ -615,7 +616,7 @@ namespace ET
 
             try
             {
-                await ETTaskHelper.WaitAll(list);
+                await UniTask.WhenAll(list);
             }
             catch (Exception e)
             {
@@ -646,7 +647,7 @@ namespace ET
                     continue;
                 }
                 
-                aEvent.Handle(scene, a).Coroutine();
+                aEvent.Handle(scene, a).Forget();
             }
         }
         

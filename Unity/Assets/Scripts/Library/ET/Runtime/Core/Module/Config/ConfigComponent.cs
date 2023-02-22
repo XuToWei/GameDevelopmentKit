@@ -1,4 +1,6 @@
-﻿namespace ET
+﻿using Cysharp.Threading.Tasks;
+
+namespace ET
 {
     public class ConfigComponent : Singleton<ConfigComponent>
     {
@@ -20,14 +22,14 @@
             }
         }
         
-        public async ETTask LoadAllAsync()
+        public async UniTask LoadAllAsync()
         {
-            await EventSystem.Instance.Invoke<LoadAll, ETTask>(0, new LoadAll());
+            await EventSystem.Instance.Invoke<LoadAll, UniTask>(0, new LoadAll());
         }
 
-        public async ETTask LoadOneAsync(string configName)
+        public async UniTask LoadOneAsync(string configName)
         {
-            await EventSystem.Instance.Invoke<LoadOne, ETTask>(0, new LoadOne(configName));
+            await EventSystem.Instance.Invoke<LoadOne, UniTask>(0, new LoadOne(configName));
         }
     }
 }

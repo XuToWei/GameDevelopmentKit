@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
@@ -44,7 +44,7 @@ namespace ET
             this.nextFrameRun.Enqueue((coroutineLockType, key, level));
         }
 
-        public async ETTask<CoroutineLock> Wait(int coroutineLockType, long key, int time = 60000)
+        public async UniTask<CoroutineLock> Wait(int coroutineLockType, long key, int time = 60000)
         {
             CoroutineLockQueueType coroutineLockQueueType = this.list[coroutineLockType];
             return await coroutineLockQueueType.Wait(key, time);

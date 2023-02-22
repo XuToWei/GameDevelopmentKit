@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.WebSockets;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
@@ -22,7 +23,7 @@ namespace ET
             
             this.httpListener = new HttpListener();
 
-            StartAccept(prefixs).Coroutine();
+            StartAccept(prefixs).Forget();
         }
         
         public WService()
@@ -82,7 +83,7 @@ namespace ET
             this.httpListener = null;
         }
 
-        private async ETTask StartAccept(IEnumerable<string> prefixs)
+        private async UniTaskVoid StartAccept(IEnumerable<string> prefixs)
         {
             try
             {

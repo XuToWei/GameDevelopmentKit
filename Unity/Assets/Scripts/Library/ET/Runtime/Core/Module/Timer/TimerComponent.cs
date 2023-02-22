@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
@@ -145,8 +147,8 @@ namespace ET
                 }
                 case TimerClass.OnceWaitTimer:
                 {
-                    ETTask tcs = timerAction.Object as ETTask;
-                    tcs.SetResult();
+                    AutoResetUniTaskCompletionSource tcs = timerAction.Object as AutoResetUniTaskCompletionSource;
+                    tcs.TrySetResult();
                     timerAction.Recycle();
                     break;
                 }
@@ -194,7 +196,7 @@ namespace ET
             return true;
         }
 
-        public async ETTask WaitTillAsync(long tillTime, ETCancellationToken cancellationToken = null)
+        public async UniTask WaitTillAsync(long tillTime, CancellationTokenSource cancellationToken = null)
         {
             long timeNow = GetNow();
             if (timeNow >= tillTime)
@@ -202,36 +204,40 @@ namespace ET
                 return;
             }
 
-            ETTask tcs = ETTask.Create(true);
+            AutoResetUniTaskCompletionSource tcs = AutoResetUniTaskCompletionSource.Create();
             TimerAction timer = TimerAction.Create(this.GetId(), TimerClass.OnceWaitTimer, timeNow, tillTime - timeNow, 0, tcs);
             this.AddTimer(timer);
             long timerId = timer.Id;
-
+            
             void CancelAction()
             {
                 if (this.Remove(timerId))
                 {
-                    tcs.SetResult();
+                    tcs.TrySetResult();
                 }
             }
 
+            CancellationTokenRegistration? ctr = null;
             try
             {
-                cancellationToken?.Add(CancelAction);
-                await tcs;
+                ctr = cancellationToken?.Token.Register(CancelAction);
+                await tcs.Task;
             }
             finally
             {
-                cancellationToken?.Remove(CancelAction);
+                if (cancellationToken is {IsCancellationRequested : false })
+                {
+                    ctr?.Dispose();
+                }
             }
         }
 
-        public async ETTask WaitFrameAsync(ETCancellationToken cancellationToken = null)
+        public async UniTask WaitFrameAsync(CancellationTokenSource cancellationToken = null)
         {
             await this.WaitAsync(1, cancellationToken);
         }
 
-        public async ETTask WaitAsync(long time, ETCancellationToken cancellationToken = null)
+        public async UniTask WaitAsync(long time, CancellationTokenSource cancellationToken = null)
         {
             if (time == 0)
             {
@@ -240,7 +246,7 @@ namespace ET
 
             long timeNow = GetNow();
 
-            ETTask tcs = ETTask.Create(true);
+            var tcs = AutoResetUniTaskCompletionSource.Create();
             TimerAction timer = TimerAction.Create(this.GetId(), TimerClass.OnceWaitTimer, timeNow, time, 0, tcs);
             this.AddTimer(timer);
             long timerId = timer.Id;
@@ -249,18 +255,19 @@ namespace ET
             {
                 if (this.Remove(timerId))
                 {
-                    tcs.SetResult();
+                    tcs.TrySetResult();
                 }
             }
 
+            CancellationTokenRegistration? ctr = null;
             try
             {
-                cancellationToken?.Add(CancelAction);
-                await tcs;
+                ctr = cancellationToken?.Token.Register(CancelAction);
+                await tcs.Task;
             }
             finally
             {
-                cancellationToken?.Remove(CancelAction);
+                ctr?.Dispose();
             }
         }
 

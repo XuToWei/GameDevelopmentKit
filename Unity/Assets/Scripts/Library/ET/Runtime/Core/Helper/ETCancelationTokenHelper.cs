@@ -1,17 +1,20 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
+
 namespace ET
 {
     public static class ETCancelationTokenHelper
     {
-        public static async ETTask CancelAfter(this ETCancellationToken self, long afterTimeCancel)
+        public static async UniTask CancelAfter(this CancellationTokenSource self, long afterTimeCancel)
         {
-            if (self.IsCancel())
+            if (self.IsCancellationRequested)
             {
                 return;
             }
 
             await TimerComponent.Instance.WaitAsync(afterTimeCancel);
             
-            if (self.IsCancel())
+            if (self.IsCancellationRequested)
             {
                 return;
             }

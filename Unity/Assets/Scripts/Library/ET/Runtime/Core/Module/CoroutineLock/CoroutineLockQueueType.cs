@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
@@ -34,7 +35,7 @@ namespace ET
             }
         }
 
-        public async ETTask<CoroutineLock> Wait(long key, int time)
+        public async UniTask<CoroutineLock> Wait(long key, int time)
         {
             CoroutineLockQueue queue = this.Get(key) ?? this.New(key);
             return await queue.Wait(time);

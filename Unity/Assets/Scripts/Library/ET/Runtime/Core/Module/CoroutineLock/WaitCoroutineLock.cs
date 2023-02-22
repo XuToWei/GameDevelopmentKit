@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
     [Invoke(TimerCoreInvokeType.CoroutineTimeout)]
-    public class WaitCoroutineLockTimer: ATimer<WaitCoroutineLock>
+    public class WaitCoroutineLockTimer : ATimer<WaitCoroutineLock>
     {
         protected override void Run(WaitCoroutineLock waitCoroutineLock)
         {
@@ -12,20 +12,21 @@ namespace ET
             {
                 return;
             }
+
             waitCoroutineLock.SetException(new Exception("coroutine is timeout!"));
         }
     }
-    
+
     public class WaitCoroutineLock
     {
         public static WaitCoroutineLock Create()
         {
             WaitCoroutineLock waitCoroutineLock = new WaitCoroutineLock();
-            waitCoroutineLock.tcs = ETTask<CoroutineLock>.Create(true);
+            waitCoroutineLock.tcs = AutoResetUniTaskCompletionSource<CoroutineLock>.Create();
             return waitCoroutineLock;
         }
-        
-        private ETTask<CoroutineLock> tcs;
+
+        private AutoResetUniTaskCompletionSource<CoroutineLock> tcs;
 
         public void SetResult(CoroutineLock coroutineLock)
         {
@@ -33,9 +34,10 @@ namespace ET
             {
                 throw new NullReferenceException("SetResult tcs is null");
             }
+
             var t = this.tcs;
             this.tcs = null;
-            t.SetResult(coroutineLock);
+            t.TrySetResult(coroutineLock);
         }
 
         public void SetException(Exception exception)
@@ -44,9 +46,10 @@ namespace ET
             {
                 throw new NullReferenceException("SetException tcs is null");
             }
+
             var t = this.tcs;
             this.tcs = null;
-            t.SetException(exception);
+            t.TrySetException(exception);
         }
 
         public bool IsDisposed()
@@ -54,9 +57,9 @@ namespace ET
             return this.tcs == null;
         }
 
-        public async ETTask<CoroutineLock> Wait()
+        public async UniTask<CoroutineLock> Wait()
         {
-            return await this.tcs;
+            return await this.tcs.Task;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.WebSockets;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
@@ -37,8 +38,8 @@ namespace ET
             
             this.Service.ThreadSynchronizationContext.Post(()=>
             {
-                this.StartRecv().Coroutine();
-                this.StartSend().Coroutine();
+                this.StartRecv().Forget();
+                this.StartSend().Forget();
             });
         }
 
@@ -52,7 +53,7 @@ namespace ET
 
             isConnected = false;
             
-            this.Service.ThreadSynchronizationContext.Post(()=>this.ConnectAsync(connectUrl).Coroutine());
+            this.Service.ThreadSynchronizationContext.Post(()=>this.ConnectAsync(connectUrl).Forget());
         }
 
         public override void Dispose()
@@ -69,15 +70,15 @@ namespace ET
             this.webSocket.Dispose();
         }
 
-        public async ETTask ConnectAsync(string url)
+        public async UniTaskVoid ConnectAsync(string url)
         {
             try
             {
                 await ((ClientWebSocket) this.webSocket).ConnectAsync(new Uri(url), cancellationTokenSource.Token);
                 isConnected = true;
                 
-                this.StartRecv().Coroutine();
-                this.StartSend().Coroutine();
+                this.StartRecv().Forget();
+                this.StartSend().Forget();
             }
             catch (Exception e)
             {
@@ -101,11 +102,11 @@ namespace ET
 
             if (this.isConnected)
             {
-                this.StartSend().Coroutine();
+                this.StartSend().Forget();
             }
         }
 
-        public async ETTask StartSend()
+        public async UniTaskVoid StartSend()
         {
             if (this.IsDisposed)
             {
@@ -154,7 +155,7 @@ namespace ET
 
         private byte[] cache = new byte[ushort.MaxValue];
 
-        public async ETTask StartRecv()
+        public async UniTaskVoid StartRecv()
         {
             if (this.IsDisposed)
             {

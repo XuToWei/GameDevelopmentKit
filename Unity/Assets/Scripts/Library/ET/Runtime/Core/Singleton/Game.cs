@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
@@ -14,7 +15,7 @@ namespace ET
         [StaticField]
         private static readonly Queue<ISingleton> lateUpdates = new Queue<ISingleton>();
         [StaticField]
-        private static readonly Queue<ETTask> frameFinishTask = new Queue<ETTask>();
+        private static readonly Queue<AutoResetUniTaskCompletionSource> frameFinishTask = new Queue<AutoResetUniTaskCompletionSource>();
 
         public static T AddSingleton<T>() where T: Singleton<T>, new()
         {
@@ -52,11 +53,11 @@ namespace ET
             }
         }
 
-        public static async ETTask WaitFrameFinish()
+        public static async UniTask WaitFrameFinish()
         {
-            ETTask task = ETTask.Create(true);
-            frameFinishTask.Enqueue(task);
-            await task;
+            var tcs = AutoResetUniTaskCompletionSource.Create();
+            frameFinishTask.Enqueue(tcs);
+            await tcs.Task;
         }
 
         public static void Update()
@@ -121,8 +122,8 @@ namespace ET
         {
             while (frameFinishTask.Count > 0)
             {
-                ETTask task = frameFinishTask.Dequeue();
-                task.SetResult();
+                AutoResetUniTaskCompletionSource task = frameFinishTask.Dequeue();
+                task.TrySetResult();
             }
         }
 

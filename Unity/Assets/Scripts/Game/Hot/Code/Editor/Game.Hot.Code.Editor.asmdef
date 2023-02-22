@@ -1,0 +1,21 @@
+{
+    "name": "Game.Hot.Code.Editor",
+    "rootNamespace": "Game.Hotfix.Editor",
+    "references": [
+        "GUID:7b8a1c6c24879a64985dc67ad67b0241"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_GAMEHOT",
+        "!UNITY_HOTFIX"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
