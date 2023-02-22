@@ -6,6 +6,8 @@
 
 ~~ET代码生成工具（UI，Entity，Default）~~
 
+~~接入自定义工具栏，添加启动，ET模块的编译和重载~~
+
 将ETTask更换为UniTask（已完成，还未测试）
 
 UniTask代码分析功能（Forget等）
