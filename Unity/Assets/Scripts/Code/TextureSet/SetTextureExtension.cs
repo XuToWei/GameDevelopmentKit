@@ -1,3 +1,5 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using UnityEngine.UI;
 using UnityGameFramework.Extension;
@@ -6,15 +8,14 @@ namespace Game
 {
     public static partial class SetTextureExtension
     {
-        public static void SetTextureByNetworkAsync(this RawImage rawImage, string file, string saveFilePath = null, GameFrameworkAction cancelAction = null)
+        public static async UniTask<bool> SetTextureByNetworkAsync(this RawImage rawImage, string file, string saveFilePath = null, CancellationTokenSource cts = null)
         {
-            GameEntry.TextureSet.SetTextureByNetworkAsync(SetRawImage.Create(rawImage, file), saveFilePath,
-                cancelAction);
+            return await GameEntry.TextureSet.SetTextureByNetworkAsync(SetRawImage.Create(rawImage, file), saveFilePath, cts);
         }
 
-        public static void SetTextureByResourcesAsync(this RawImage rawImage, string file, GameFrameworkAction cancelAction = null)
+        public static async UniTask SetTextureByResourcesAsync(this RawImage rawImage, string file, CancellationTokenSource cts = null)
         {
-            GameEntry.TextureSet.SetTextureByResourcesAsync(SetRawImage.Create(rawImage, file), cancelAction);
+            await GameEntry.TextureSet.SetTextureByResourcesAsync(SetRawImage.Create(rawImage, file), cts);
         }
 
         public static void SetTextureByFileSystem(this RawImage rawImage, string file)

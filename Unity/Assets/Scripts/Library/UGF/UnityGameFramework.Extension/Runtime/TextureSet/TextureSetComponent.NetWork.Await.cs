@@ -1,3 +1,5 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using UnityEngine;
 
@@ -11,56 +13,50 @@ namespace UnityGameFramework.Extension
         /// <param name="setTexture2dObject">需要设置图片的对象</param>
         /// <param name="saveFilePath">保存网络图片到本地的路径</param>
         /// <param name="cancelAction">取消图片设置函数</param>
-        public async void SetTextureByNetworkAsync(ISetTexture2dObject setTexture2dObject, string saveFilePath = null, GameFrameworkAction cancelAction = null)
+        public async UniTask<bool> SetTextureByNetworkAsync(ISetTexture2dObject setTexture2dObject, string saveFilePath = null, CancellationTokenSource cts = null)
         {
-            int serialId = -1;
-
-            Texture2D texture = null;
+            Texture2D texture;
             if (m_TexturePool.CanSpawn(setTexture2dObject.Texture2dFilePath))
             {
                 texture = (Texture2D)m_TexturePool.Spawn(setTexture2dObject.Texture2dFilePath).Target;
+                SetTexture(setTexture2dObject, texture);
+                return true;
             }
             else
             {
-                serialId = m_SerialId++;
-
-                void Cancel()
+                int serialId = m_SerialId++;
+                
+                CancellationTokenRegistration? ctr = cts?.Token.Register(delegate
                 {
                     CancelSetTexture(serialId);
+                });
+                
+                var data = await m_WebRequestComponent.WebRequestAsync(setTexture2dObject.Texture2dFilePath, cts: cts);
+
+                if (cts is { IsCancellationRequested: true })
+                {
+                    return false;
                 }
 
-                try
+                ctr?.Dispose();
+                
+                if (!data.IsError)
                 {
-                    if (cancelAction != null)
+                    texture = new Texture2D(0, 0, TextureFormat.RGBA32, false);
+                    texture.LoadImage(data.Bytes);
+                    if (!string.IsNullOrEmpty(saveFilePath))
                     {
-                        cancelAction += Cancel;
+                        SaveTexture(saveFilePath, data.Bytes);
                     }
-
-                    var data = await m_WebRequestComponent.WebRequestAsync(setTexture2dObject.Texture2dFilePath);
-                    if (!data.IsError)
-                    {
-                        texture = new Texture2D(0, 0, TextureFormat.RGBA32, false);
-                        texture.LoadImage(data.Bytes);
-                        if (!string.IsNullOrEmpty(saveFilePath))
-                        {
-                            SaveTexture(saveFilePath, data.Bytes);
-                        }
-
-                        m_TexturePool.Register(
-                            TextureItemObject.Create(setTexture2dObject.Texture2dFilePath, texture,
-                                TextureLoad.FromNet), true);
-                    }
+                    m_TexturePool.Register(TextureItemObject.Create(setTexture2dObject.Texture2dFilePath, texture, TextureLoad.FromNet), true);
+                    SetTexture(setTexture2dObject, texture, serialId);
+                    return true;
                 }
-                finally
+                else
                 {
-                    if (cancelAction != null)
-                    {
-                        cancelAction -= Cancel;
-                    }
+                    return false;
                 }
             }
-
-            SetTexture(setTexture2dObject, texture, serialId);
         }
     }
 }

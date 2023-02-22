@@ -10,7 +10,7 @@ namespace UnityGameFramework.Extension
         /// 设置精灵
         /// </summary>
         /// <param name="setSpriteObject">需要设置精灵的对象</param>
-        public async UniTaskVoid SetSpriteAsync(ISetSpriteObject setSpriteObject, CancellationTokenSource cts = default)
+        public async UniTask SetSpriteAsync(ISetSpriteObject setSpriteObject, CancellationTokenSource cts = null)
         {
             if (cts is { IsCancellationRequested: true })
                 return;
@@ -47,9 +47,13 @@ namespace UnityGameFramework.Extension
 
             m_SpriteCollectionBeingLoaded.Add(setSpriteObject.CollectionPath);
             SpriteCollection collection = await m_ResourceComponent.LoadAssetAsync<SpriteCollection>(setSpriteObject.CollectionPath, cts: cts);
-            ctr?.Dispose();
-            if (collection == null)
+            
+            if (cts is { IsCancellationRequested: true })
+            {
                 return;
+            }
+            ctr?.Dispose();
+            
             m_SpriteCollectionPool.Register(SpriteCollectionItemObject.Create(setSpriteObject.CollectionPath, collection,m_ResourceComponent), false);
             m_SpriteCollectionBeingLoaded.Remove(setSpriteObject.CollectionPath);
             m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out LinkedList<ISetSpriteObject> awaitSetImages);

@@ -1,4 +1,5 @@
 
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 
@@ -48,22 +49,22 @@ namespace UnityGameFramework.Extension
         /// </summary>
         public AutoResetUniTaskCompletionSource<T> TaskCompletionSource { get; private set; }
         
-        public long CancellationTokenRegistrationId { get; private set; }
+        public CancellationTokenRegistration? CancellationTokenRegistration { get; private set; }
 
-        public static AwaitDataWrap<T> Create(object userData, AutoResetUniTaskCompletionSource<T> taskCompletionSource, long cancellationTokenRegistrationId = 0)
+        public static AwaitDataWrap<T> Create(object userData, AutoResetUniTaskCompletionSource<T> taskCompletionSource, CancellationTokenRegistration? cancellationTokenRegistration)
         {
             AwaitDataWrap<T> awaitDataWrap = ReferencePool.Acquire<AwaitDataWrap<T>>();
             awaitDataWrap.UserData = userData;
             awaitDataWrap.TaskCompletionSource = taskCompletionSource;
-            awaitDataWrap.CancellationTokenRegistrationId = cancellationTokenRegistrationId;
+            awaitDataWrap.CancellationTokenRegistration = cancellationTokenRegistration;
             return awaitDataWrap;
         }
 
         public void Clear()
         {
-            UserData = default;
-            TaskCompletionSource = default;
-            CancellationTokenRegistrationId = default;
+            UserData = null;
+            TaskCompletionSource = null;
+            CancellationTokenRegistration = null;
         }
     }
 }

@@ -108,7 +108,7 @@ namespace UnityGameFramework.Extension
             m_CheckCanReleaseTime = 0f;
         }
 
-        private void SetTexture(ISetTexture2dObject setTexture2dObject, Texture2D texture, int serialId = -1)
+        private void SetTexture(ISetTexture2dObject setTexture2dObject, Texture2D texture, int serialId)
         {
             m_LoadTextureObjectsLinkedList.AddLast(LoadTextureObject.Create(setTexture2dObject, texture));
             if (!m_CancelId.Contains(serialId))
@@ -119,6 +119,12 @@ namespace UnityGameFramework.Extension
             {
                 m_CancelId.Remove(serialId);
             }
+        }
+        
+        private void SetTexture(ISetTexture2dObject setTexture2dObject, Texture2D texture)
+        {
+            m_LoadTextureObjectsLinkedList.AddLast(LoadTextureObject.Create(setTexture2dObject, texture));
+            setTexture2dObject.SetTexture(texture);
         }
 
         /// <summary>

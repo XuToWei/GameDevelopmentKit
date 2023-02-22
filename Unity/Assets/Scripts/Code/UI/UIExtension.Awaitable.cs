@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityGameFramework.Runtime;
 using UnityGameFramework.Extension;
 
@@ -7,8 +7,7 @@ namespace Game
 {
     public static partial class UIExtension
     {
-        [ItemCanBeNull]
-        public static async Task<UIForm> OpenUIFormAsync(this UIComponent uiComponent, int uiFormId, object userData = null)
+        public static async UniTask<UIForm> OpenUIFormAsync(this UIComponent uiComponent, int uiFormId, object userData = null, CancellationTokenSource cts = null)
         {
             DRUIForm drUIForm = GameEntry.Tables.DTUIForm.GetOrDefault(uiFormId);
             if (drUIForm == null)
@@ -31,7 +30,7 @@ namespace Game
                 }
             }
 
-            return await uiComponent.OpenUIFormAsync(assetName, drUIForm.UIGroupName, Constant.AssetPriority.UIFormAsset, drUIForm.PauseCoveredUIForm, userData);
+            return await uiComponent.OpenUIFormAsync(assetName, drUIForm.UIGroupName, Constant.AssetPriority.UIFormAsset, drUIForm.PauseCoveredUIForm, userData, cts);
         }
     }
 }
