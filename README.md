@@ -28,6 +28,8 @@ UI扩展：滑动列表（包括ET），UI特效等等
 
 使用文档（可能会比较晚）
 
+MonoHook接入方便开发时Dll Reload
+
 #
 # Future
 
