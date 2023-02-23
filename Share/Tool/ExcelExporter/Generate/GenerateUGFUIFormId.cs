@@ -9,7 +9,7 @@ namespace ET
 {
     public class GenerateUGFUIFormId
     {
-        private const string UIFormIdCodeFile = "../Unity/Assets/Scripts/Code/ET/Code/ModelView/Client/Game/UI/UGFUIFormId.cs";
+        private const string UIFormIdCodeFile = "../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Game/UI/UGFUIFormId.cs";
         private const string LubanUIFormAsset = "../Unity/Assets/Res/Editor/Luban/dtuiform.json";
 
         public static void GenerateCode()

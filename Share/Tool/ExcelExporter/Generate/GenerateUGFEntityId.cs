@@ -10,7 +10,7 @@ namespace ET
     public static class GenerateUGFEntityId
     {
         private const string LubanEntityAsset = "../Unity/Assets/Res/Editor/Luban/dtentity.json";
-        private const string EntityIdCodeFile = "../Unity/Assets/Scripts/Code/ET/Code/ModelView/Client/Game/Entity/UGFEntityId.cs";
+        private const string EntityIdCodeFile = "../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Game/Entity/UGFEntityId.cs";
 
         public static void GenerateCode()
         {

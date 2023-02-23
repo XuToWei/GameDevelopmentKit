@@ -39,11 +39,11 @@
         </Compile>
 
         <Compile Include="..\..\Unity\Assets\Scripts\Library\LubanLib\Editor\**\*.cs">
-            <Link>ExcelExporter\LubanLib\Editor\%(RecursiveDir)%(FileName)%(Extension)</Link>
+            <Link>ExcelExporter\LubanLib\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
 
         <Compile Include="..\..\Unity\Assets\Scripts\Game\Editor\Generate\Luban\**\*.cs">
-            <Link>ExcelExporter\Luban\Editor\%(RecursiveDir)%(FileName)%(Extension)</Link>
+            <Link>ExcelExporter\Luban\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
     </ItemGroup>
     
