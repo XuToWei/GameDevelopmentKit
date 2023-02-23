@@ -489,6 +489,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: a4c1cc1e6676f0e48a527bad48941f98,
         type: 2}
+    - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_ShowFullWindow
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11402440, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_ConsoleWindow.m_LockScroll
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EntranceProcedureTypeName
       value: Game.ProcedureLaunch
