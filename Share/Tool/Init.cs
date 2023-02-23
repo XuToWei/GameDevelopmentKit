@@ -29,7 +29,7 @@ namespace ET.Server
                 Game.AddSingleton<EventSystem>();
                 Game.AddSingleton<Root>();
 
-                ETTask.ExceptionHandler += Log.Error;
+                //ETTask.ExceptionHandler += Log.Error;
 
                 Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Game).Assembly);
                 EventSystem.Instance.Add(types);

@@ -13,13 +13,11 @@ namespace UnityGameFramework.Extension
         private ResourceComponent m_ResourceComponent;
 
         private LoadAssetCallbacks m_LoadAssetCallbacks;
-        private int m_SerialId;
 
         private void InitializedResources()
         {
             m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
             m_LoadAssetCallbacks = new LoadAssetCallbacks(OnLoadAssetSuccess, OnLoadAssetFailure);
-            m_SerialId = 0;
         }
 
         private void OnLoadAssetFailure(string assetName, LoadResourceStatus status, string errormessage, object userdata)

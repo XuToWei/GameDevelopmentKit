@@ -22,15 +22,15 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Hotfix\Client\**\*.cs"> 
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Client\**\*.cs"> 
             <Link>Client\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile> 
 
-        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Hotfix\Server\**\*.cs">
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Server\**\*.cs">
             <Link>Server\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
 
-        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Hotfix\Share\**\*.cs">
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Share\**\*.cs">
             <Link>Share\%(RecursiveDir)%(FileName)%(Extension)</Link> 
         </Compile> 
     </ItemGroup>

@@ -25,19 +25,19 @@
     </PropertyGroup>
     <ItemGroup>
 
-        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Server\**\*.cs"> 
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Server\**\*.cs"> 
             <Link>Server\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
 
-        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Client\**\*.cs"> 
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Client\**\*.cs"> 
             <Link>Client\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         
-        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Share\**\*.cs">
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\**\*.cs">
             <Link>Share\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
 
-        <Compile Include="..\..\Unity\Assets\Scripts\Code\ET\Code\Model\Generate\ClientServer\**\*.cs"> 
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Generate\ClientServer\**\*.cs"> 
             <Link>Generate\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         

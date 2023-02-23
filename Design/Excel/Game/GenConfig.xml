@@ -1,12 +1,12 @@
 ﻿<Config>
   <Gen>
-    <Output_Code_Dirs Value="../Unity/Assets/Scripts/Code/Generate/Luban" />
+    <Output_Code_Dirs Value="../Unity/Assets/Scripts/Game/Generate/Luban" />
     <Output_Data_Dirs Value="../Unity/Assets/Res/Luban" />
     <Gen_Type_Code_Data Value="code_cs_unity_bin,data_bin" />
     <Gen_Group Value="client" />
   </Gen>
   <Gen>
-    <Output_Code_Dirs Value="../Unity/Assets/Scripts/Code/Editor/Generate/Luban" />
+    <Output_Code_Dirs Value="../Unity/Assets/Scripts/Game/Editor/Generate/Luban" />
     <Output_Data_Dirs Value="../Unity/Assets/Res/Editor/Luban" />
     <Gen_Type_Code_Data Value="code_cs_unity_editor_json,data_json" />
     <Gen_Group Value="all" />

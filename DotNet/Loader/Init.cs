@@ -29,7 +29,7 @@ namespace ET
                 Game.AddSingleton<TimerComponent>();
                 Game.AddSingleton<CoroutineLockComponent>();
 
-                ETTask.ExceptionHandler += Log.Error;
+                //ETTask.ExceptionHandler += Log.Error;
 
                 Log.Console($"{Parser.Default.FormatCommandLine(Options.Instance)}");
 

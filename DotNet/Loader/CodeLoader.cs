@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
@@ -12,7 +13,7 @@ namespace ET
 
         private Assembly model;
 
-        public async ETTask StartAsync()
+        public async UniTask StartAsync()
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly assembly in assemblies)
@@ -30,7 +31,7 @@ namespace ET
             start.Run();
         }
 
-        public async ETTask LoadHotfixAsync()
+        public async UniTask LoadHotfixAsync()
         {
             assemblyLoadContext?.Unload();
             GC.Collect();

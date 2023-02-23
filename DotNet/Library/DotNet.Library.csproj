@@ -77,8 +77,4 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
         <PackageReference Include="UniTask" Version="2.3.3" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Update="..\..\Unity\Assets\Scripts\Library\ET\Runtime" />
-    </ItemGroup>
 </Project>

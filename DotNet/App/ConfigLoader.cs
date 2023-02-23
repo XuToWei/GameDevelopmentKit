@@ -3,14 +3,15 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Bright.Serialization;
+using Cysharp.Threading.Tasks;
 using SimpleJSON;
 
 namespace ET.Server
 {
     [Invoke]
-    public class LubanLoadAllAsyncHandler : AInvokeHandler<ConfigComponent.LoadAll, ETTask>
+    public class LubanLoadAllAsyncHandler : AInvokeHandler<ConfigComponent.LoadAll, UniTask>
     {
-        public override async ETTask Handle(ConfigComponent.LoadAll arg)
+        public override async UniTask Handle(ConfigComponent.LoadAll arg)
         {
             Type tablesType = typeof (Tables);
 
@@ -37,8 +38,9 @@ namespace ET.Server
                 }
 
                 Func<string, Task<JSONNode>> func = LoadJson;
-                await (ETTask)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
+                await (Task)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
             }
+            
         }
         
         private string GetLubanAssetPath(string fileName, bool isJson)
@@ -53,9 +55,9 @@ namespace ET.Server
     }
     
     [Invoke]
-    public class LubanLoadOneAsyncHandler: AInvokeHandler<ConfigComponent.LoadOne, ETTask>
+    public class LubanLoadOneAsyncHandler: AInvokeHandler<ConfigComponent.LoadOne, UniTask>
     {
-        public override async ETTask Handle(ConfigComponent.LoadOne arg)
+        public override async UniTask Handle(ConfigComponent.LoadOne arg)
         {
             await Tables.Instance.GetDataTable(arg.ConfigName).LoadAsync();
         }
