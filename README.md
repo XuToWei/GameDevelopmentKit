@@ -26,11 +26,15 @@ UniTask代码分析功能（Forget等）
 
 本地化功能：文本，图片，资源等
 
-UI扩展：滑动列表（包括ET），UI特效等等
+UI扩展：滑动列表（包括ET），UI特效 , 编辑器点击选取UI优化 等等
 
 使用文档（可能会比较晚）
 
 MonoHook接入方便开发时Dll Reload
+
+接入SDebugger，替换掉GF的Debugger
+
+支持图片的多语言功能
 
 #
 # Future
