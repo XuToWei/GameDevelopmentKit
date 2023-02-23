@@ -16,6 +16,14 @@ namespace ET
         {
             if (Define.EnableHotfix)
             {
+                byte[] assBytes = await this.LoadCodeBytesAsync("Model.dll");
+                byte[] pdbBytes = await this.LoadCodeBytesAsync("Model.pdb");
+
+                this.model = Assembly.Load(assBytes, pdbBytes);
+                await this.LoadHotfixAsync();
+            }
+            else
+            {
                 Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
                 Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(assemblies);
                 EventSystem.Instance.Add(types);
@@ -27,14 +35,6 @@ namespace ET
                         this.model = ass;
                     }
                 }
-            }
-            else
-            {
-                byte[] assBytes = await this.LoadCodeBytesAsync("Model.dll");
-                byte[] pdbBytes = await this.LoadCodeBytesAsync("Model.pdb");
-
-                this.model = Assembly.Load(assBytes, pdbBytes);
-                await this.LoadHotfixAsync();
             }
             
             IStaticMethod start = new StaticMethod(this.model, "ET.Entry", "Start");

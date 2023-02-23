@@ -36,6 +36,8 @@ MonoHook接入方便开发时Dll Reload
 
 支持图片的多语言功能
 
+带代码定位的Log
+
 #
 # Future
 

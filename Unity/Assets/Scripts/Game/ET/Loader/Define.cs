@@ -10,7 +10,7 @@
         public static bool IsEditor => false;
 #endif
 
-#if UNITY_ET_CODE
+#if UNITY_HOTFIX
         public static bool EnableHotfix => true;
 #else
         public static bool EnableHotfix => false;
