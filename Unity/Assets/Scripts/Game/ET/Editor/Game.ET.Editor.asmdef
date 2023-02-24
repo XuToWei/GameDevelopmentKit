@@ -1,6 +1,6 @@
 {
     "name": "Game.ET.Editor",
-    "rootNamespace": "ET",
+    "rootNamespace": "ET.Editor",
     "references": [
         "GUID:5ea3d62eabfae09448c38636cef75a26",
         "GUID:c1b96bd6e19963e44928d1319570a86b",
@@ -10,7 +10,8 @@
         "GUID:8230fa752d2b77040afe8bfff568c89e",
         "GUID:2269b912bcd135d468b628a1ec462dff",
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
-        "GUID:0a0471484b079be408cb3a0d7fe94736"
+        "GUID:0a0471484b079be408cb3a0d7fe94736",
+        "GUID:a2d8a19598eca814496b089021d08d60"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

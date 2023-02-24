@@ -4,7 +4,7 @@ using UnityEditor.Compilation;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace ET
+namespace ET.Editor
 {
     public class BuildEditor: EditorWindow
     {

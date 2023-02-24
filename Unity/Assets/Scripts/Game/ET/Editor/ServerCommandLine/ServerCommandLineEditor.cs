@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using ET.Editor;
+﻿using System.Collections.Generic;
 using SimpleJSON;
 using UnityEditor;
 using UnityEngine;
 
-namespace ET
+namespace ET.Editor
 {
     public enum DevelopMode
     {

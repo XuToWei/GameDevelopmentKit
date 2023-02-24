@@ -1,4 +1,4 @@
-namespace ET
+namespace ET.Editor
 {
     [EntityMenu(typeof (Unit), "打开属性菜单")]
     public class UnitNumericWindowMenu: AEntityMenuHandler

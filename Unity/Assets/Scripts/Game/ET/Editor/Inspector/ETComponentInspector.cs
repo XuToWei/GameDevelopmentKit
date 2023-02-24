@@ -1,10 +1,14 @@
+using System.Collections;
+using System.Collections.Generic;
+using Game;
 using UnityEditor;
 using UnityEngine;
+using UnityGameFramework.Editor;
 
 namespace ET.Editor
 {
-    [CustomEditor(typeof(Init))]
-    public class InitInspector : UnityEditor.Editor
+    [CustomEditor(typeof(ETComponent))]
+    internal sealed class ETComponentInspector :GameFrameworkInspector
     {
         private GlobalConfig globalConfig;
         

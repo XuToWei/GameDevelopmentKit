@@ -1,5 +1,3 @@
-using System;
-using System.Reflection;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
 using UnityGameFramework.Runtime;
@@ -11,12 +9,12 @@ namespace Game
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
-
-            GameEntry.ETRunner.StartRun();
-
+#if UNITY_ET
+            GameEntry.ET.StartRun();
             Log.Debug("Start run ET!");
-            
-            GameEntry.UI.CloseUIForm(1, null);
+#else
+            Log.Error("ET is not open!");
+#endif
         }
     }
 }

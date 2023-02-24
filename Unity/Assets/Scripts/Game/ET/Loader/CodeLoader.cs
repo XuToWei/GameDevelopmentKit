@@ -30,7 +30,7 @@ namespace ET
                 foreach (Assembly ass in assemblies)
                 {
                     string name = ass.GetName().Name;
-                    if (name == "Code.ET.Code.Model")
+                    if (name == "Game.ET.Code.Model")
                     {
                         this.model = ass;
                     }

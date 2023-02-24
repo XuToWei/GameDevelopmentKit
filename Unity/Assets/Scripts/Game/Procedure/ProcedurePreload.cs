@@ -23,7 +23,11 @@ namespace Game
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
             
+#if UNITY_ET
             ChangeState<ProcedureStartET>(procedureOwner);
+#else
+            
+#endif
         }
     }
 }

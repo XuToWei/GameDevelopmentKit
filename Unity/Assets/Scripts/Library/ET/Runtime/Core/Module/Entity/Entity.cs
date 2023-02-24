@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
+using UnityEngine;
 
 namespace ET
 {
@@ -23,6 +24,11 @@ namespace ET
         
         [StaticField]
         private static UnityEngine.Transform rootViewTransform;
+
+        public static void SetRootView(Transform root)
+        {
+            rootViewTransform = root;
+        }
 #endif
         
         [BsonIgnore]
@@ -95,6 +101,11 @@ namespace ET
                     if (rootViewTransform == null)
                     {
                         rootViewTransform = UnityEngine.GameObject.Find("ET").transform;
+                        if (rootViewTransform == null)
+                        {
+                            rootViewTransform = new UnityEngine.GameObject("ET").transform;
+                            UnityEngine.Object.DontDestroyOnLoad(rootViewTransform);
+                        }
                     }
                     this.viewGO.transform.SetParent(this.Parent == null? rootViewTransform : this.Parent.viewGO.transform);
                 }

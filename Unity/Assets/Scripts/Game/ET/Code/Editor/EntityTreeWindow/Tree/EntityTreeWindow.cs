@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
-namespace ET
+namespace ET.Editor
 {
     public class EntityTreeWindow: EditorWindow
     {

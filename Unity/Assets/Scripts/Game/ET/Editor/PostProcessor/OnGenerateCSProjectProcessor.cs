@@ -1,15 +1,12 @@
-﻿using System;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEditor;
 using System.Xml;
 using System.IO;
-using System.Text;
 
-namespace ET
+namespace ET.Editor
 {
     public class OnGenerateCSProjectProcessor: AssetPostprocessor
     {
-        public static string OnGeneratedCSProject(string path, string content)
+        private static string OnGeneratedCSProject(string path, string content)
         {
             if (path.EndsWith("ET.Runtime.csproj"))
             {
@@ -18,22 +15,22 @@ namespace ET
 
             if (Define.EnableHotfix || true)
             {
-                if (path.EndsWith("Code.ET.Code.Hotfix.csproj"))
+                if (path.EndsWith("Game.ET.Code.Hotfix.csproj"))
                 {
                     content = GenerateCustomProject(path, content);
                 }
 
-                if (path.EndsWith("Code.ET.Code.Model.csproj"))
+                if (path.EndsWith("Game.ET.Code.Model.csproj"))
                 {
                     content = GenerateCustomProject(path, content);
                 }
 
-                if (path.EndsWith("Code.ET.Code.HotfixView.csproj"))
+                if (path.EndsWith("Game.ET.Code.HotfixView.csproj"))
                 {
                     content = GenerateCustomProject(path, content);
                 }
 
-                if (path.EndsWith("Code.ET.Code.ModelView.csproj"))
+                if (path.EndsWith("Game.ET.Code.ModelView.csproj"))
                 {
                     content = GenerateCustomProject(path, content);
                 }

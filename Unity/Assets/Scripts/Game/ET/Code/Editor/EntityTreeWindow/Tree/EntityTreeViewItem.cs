@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.CSharp.RuntimeBinder;
 using UnityEditor.IMGUI.Controls;
 
-namespace ET
+namespace ET.Editor
 {
     public class EntityTreeViewItem: TreeViewItem
     {

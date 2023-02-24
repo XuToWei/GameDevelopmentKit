@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace ET
+namespace ET.Editor
 {
     [TypeDrawer]
     public class BoundsTypeDrawer: ITypeDrawer

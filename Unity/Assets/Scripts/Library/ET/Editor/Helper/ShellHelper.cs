@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace ET
+namespace ET.Editor
 {
     public static class ShellHelper
     {

@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace ET
+namespace ET.Editor
 {
     [CustomEditor(typeof (ComponentView))]
     public class ComponentViewEditor: UnityEditor.Editor

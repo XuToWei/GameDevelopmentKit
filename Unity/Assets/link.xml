@@ -1,4 +1,5 @@
 <linker>
+    <!--UNITY_HOTFIX_FIRST-->
     <assembly fullname="UnityEngine" preserve="all"/>
     <assembly fullname="System" preserve="all"/>
     <assembly fullname="CommandLine" preserve="all"/>
@@ -15,10 +16,18 @@
     
     <assembly fullname="CatJson.Runtime" preserve="all"/>
     <assembly fullname="CodeBind.Runtime" preserve="all"/>
-    <assembly fullname="ET.Runtime" preserve="all"/>
     <assembly fullname="LubanLib.Runtime" preserve="all"/>
     <assembly fullname="ProtoBuf" preserve="all"/>
+    <assembly fullname="GameFramework" preserve="all" />
+    <assembly fullname="UnityGameFramework.Runtime" preserve="all" />
+    <assembly fullname="UnityGameFramework.Extension" preserve="all" />
+    <assembly fullname="UniTask" preserve="all" />
+    
+    <assembly fullname="Game" preserve="all"/>
+    <!--UNITY_HOTFIX_END-->
 
-    <assembly fullname="Code.Runtime" preserve="all"/>
-    <assembly fullname="Code.ET.Loader" preserve="all"/>
+    <!--UNITY_ET_FIRST-->
+    <assembly fullname="Game.ET.Loader" preserve="all"/>
+    <assembly fullname="ET.Runtime" preserve="all"/>
+    <!--UNITY_ET_END-->
 </linker>

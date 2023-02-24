@@ -5,10 +5,10 @@ using UnityEditor.Compilation;
 using UnityEngine;
 using UnityToolbarExtender;
 
-namespace Game.Editor
+namespace ET.Editor
 {
     [InitializeOnLoad]
-    internal sealed class CompileDllToolBar_ET
+    sealed class CompileDllToolBar_ET
     {
         private const CodeOptimization s_CodeOptimization = CodeOptimization.Debug;
         

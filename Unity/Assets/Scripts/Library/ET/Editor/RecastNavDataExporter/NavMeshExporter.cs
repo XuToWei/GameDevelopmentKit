@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
-namespace ET
+namespace ET.Editor
 {
     /// <summary>
     /// 从Unity的NavMesh组件里导出地图数据，供服务器来使用

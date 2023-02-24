@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.Compilation;
 
-namespace ET
+namespace ET.Editor
 {
     public static class BuildAssemblyHelper
     {
@@ -19,7 +19,7 @@ namespace ET
         /// <summary>
         /// ET Code的目录
         /// </summary>
-        public const string ETSourceCodeDir = "Assets/Scripts/Code/ET/Code";
+        public const string ETSourceCodeDir = "Assets/Scripts/Game/ET/Code";
 
         public static void BuildModel(CodeOptimization codeOptimization, CodeMode codeMode)
         {

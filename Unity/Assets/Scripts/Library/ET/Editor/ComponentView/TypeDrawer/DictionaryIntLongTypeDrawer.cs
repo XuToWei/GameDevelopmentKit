@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace ET
+namespace ET.Editor
 {
     [TypeDrawer]
     public class DictionaryIntLongTypeDrawer: ITypeDrawer

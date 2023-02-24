@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace ET
+namespace ET.Editor
 {
     public static class EntityContextMenu
     {

@@ -1,12 +1,19 @@
 ﻿using System;
 using CommandLine;
-using Game;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace ET
 {
+    [DisallowMultipleComponent]
     public class Init : MonoBehaviour
     {
+        public static Init Instance
+        {
+            get;
+            private set;
+        }
+
         private class Runner : MonoBehaviour
         {
             private void Update()
@@ -26,13 +33,20 @@ namespace ET
             }
         }
 
-        private void Start()
+        private void Awake()
         {
-            this.gameObject.name = "ET";//提供给编辑器ETView使用
-            GameEntry.ETRunner.SetRunAction(StartAsync);
+            Instance = this;
+#if UNITY_ET_VIEW && UNITY_EDITOR
+            Entity.SetRootView(this.transform);
+#endif
         }
 
-        private async void StartAsync()
+        private void Start()
+        {
+            StartAsync().Forget();
+        }
+
+        private async UniTaskVoid StartAsync()
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
 

@@ -1,4 +1,4 @@
-﻿namespace ET
+﻿namespace ET.Editor
 {
     public static class ToolsEditor
     {
