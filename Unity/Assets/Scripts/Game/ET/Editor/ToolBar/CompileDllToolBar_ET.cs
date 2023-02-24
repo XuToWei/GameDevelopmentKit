@@ -18,7 +18,7 @@ namespace ET.Editor
         
         static CompileDllToolBar_ET()
         {
-            s_BuildHotfixButtonGUIContent = new GUIContent("Reload ET.Hotfix", "Compile And Reload ET.Hotfix Dll.");
+            s_BuildHotfixButtonGUIContent = new GUIContent("Reload ET.Hotfix", "Compile And Reload ET.Hotfix Dll When Playing.");
             s_BuildHotfixModelButtonGUIContent = new GUIContent("Compile All ET", "Compile All ET Dll.");
             s_IsReloading = false;
             ToolbarExtender.AddLeftToolbarGUI(0, OnToolbarGUI);
