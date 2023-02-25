@@ -1,56 +1,10 @@
 using System;
 using System.IO;
 using UnityEngine;
+using UnityGameFramework.Editor.ResourceTools;
 
 namespace UnityGameFramework.Extension.Editor
 {
-    [Serializable]
-    public enum Platform
-    {
-        Undefined = 0,
-
-        /// <summary>
-        /// Windows 32 位。
-        /// </summary>
-        Windows = 1 << 0,
-
-        /// <summary>
-        /// Windows 64 位。
-        /// </summary>
-        Windows64 = 1 << 1,
-
-        /// <summary>
-        /// macOS。
-        /// </summary>
-        MacOS = 1 << 2,
-
-        /// <summary>
-        /// Linux。
-        /// </summary>
-        Linux = 1 << 3,
-
-        /// <summary>
-        /// iOS。
-        /// </summary>
-        IOS = 1 << 4,
-
-        /// <summary>
-        /// Android。
-        /// </summary>
-        Android = 1 << 5,
-
-        /// <summary>
-        /// Windows Store。
-        /// </summary>
-        WindowsStore = 1 << 6,
-
-        /// <summary>
-        /// WebGL。
-        /// </summary>
-        WebGL = 1 << 7,
-    }
-    
-
     [Serializable]
     public class VersionInfoData
     {

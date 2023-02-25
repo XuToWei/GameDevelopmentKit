@@ -40,9 +40,7 @@ _ReSharper.CSharp/
 /Release
 .idea/
 /Unity/Logs
-/Unity/Assets/StreamingAssets/
 /netcoreapp2.0
-/Unity/Assets/StreamingAssets.meta
 .DS_Store
 Server/.DS_Store
 /Server/.vscode/
@@ -53,10 +51,6 @@ Server/.DS_Store
 /.git*
 /ToolsApp/
 /Unity/Unity.Editor.csproj
-/Unity/Assets/Bundles/Code/Code.dll.bytes
-/Unity/Assets/Bundles/Code/Code.dll.bytes.meta
-/Unity/Assets/Bundles/Code/Code.pdb.bytes
-/Unity/Assets/Bundles/Code/Code.pdb.bytes.meta
 /Unity/Assembly-CSharp.csproj
 ~$*.xlsx
 ~$*.xlsx.meta
@@ -74,11 +68,6 @@ Server/.DS_Store
 /Unity/Unity.Loader.csproj
 /Unity/Unity.Ignore.csproj
 Publish/
-/Unity/Assets/Bundles/Code/*
-/Unity/Assets/Bundles/AssetBundleOutput.meta
-/Unity/Assets/Bundles/AssetBundleOutput
-/Unity/Assets/Bundles/AssetBundleSourceData
-/Unity/Assets/Bundles/AssetBundleSourceData.meta
 /Unity/Unity.Editor.Codes.csproj
 /Unity/Unity.Hotfix.Codes.csproj
 /Unity/Unity.HotfixView.Codes.csproj
