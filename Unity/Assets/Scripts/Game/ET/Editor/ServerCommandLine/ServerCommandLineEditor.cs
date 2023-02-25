@@ -14,7 +14,7 @@ namespace ET.Editor
     
     public class ServerCommandLineEditor: EditorWindow
     {
-        [MenuItem("ET/ServerTools")]
+        [MenuItem("ET/ServerTool")]
         public static void ShowWindow()
         {
             GetWindow<ServerCommandLineEditor>("Server CommandLine");

@@ -15,7 +15,6 @@ namespace UnityGameFramework.Extension.Editor
             get { return false; }
         }
 
-
         public void OnPreprocessAllPlatforms(string productName, string companyName, string gameIdentifier,
             string gameFrameworkVersion, string unityVersion, string applicableGameVersion, int internalResourceVersion,
             UnityGameFramework.Editor.ResourceTools.Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName,
@@ -104,7 +103,5 @@ namespace UnityGameFramework.Extension.Editor
             bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
         }
-        
-        
     }
 }

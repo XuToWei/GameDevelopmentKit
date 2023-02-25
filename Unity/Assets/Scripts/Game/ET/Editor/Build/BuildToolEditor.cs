@@ -6,34 +6,32 @@ using Debug = UnityEngine.Debug;
 
 namespace ET.Editor
 {
-    public class BuildEditor: EditorWindow
+    public class BuildToolEditor: EditorWindow
     {
-        private GUIStyle titleGUIStyle;
-        
         private CodeOptimization codeOptimization = CodeOptimization.Debug;
         private GlobalConfig globalConfig;
 
         [MenuItem("ET/Build Tool")]
         public static void ShowWindow()
         {
-            GetWindow<BuildEditor>(DockDefine.Types);
+            GetWindow<BuildToolEditor>(DockDefine.Types);
         }
 
         private void OnEnable()
         {
             globalConfig = Resources.Load<GlobalConfig>("ET/GlobalConfig");
+            
         }
 
         private void OnGUI()
         {
-            if (this.titleGUIStyle != null)
+            GUIStyle titleGUIStyle = new GUIStyle(GUI.skin.label)
             {
-                this.titleGUIStyle = GUI.skin.GetStyle("Label");
-                this.titleGUIStyle.alignment = TextAnchor.MiddleCenter;
-                this.titleGUIStyle.fontStyle = FontStyle.Bold;
-            }
+                alignment = TextAnchor.MiddleCenter,
+                fontStyle = FontStyle.Bold
+            };
             
-            GUILayout.Label("Code Compile", this.titleGUIStyle);
+            GUILayout.Label("Code Compile", titleGUIStyle);
             
             this.codeOptimization = (CodeOptimization)EditorGUILayout.EnumPopup("CodeOptimization:", this.codeOptimization);
 
@@ -82,7 +80,7 @@ namespace ET.Editor
                 ShowNotification("Build Hotfix Success!");
             }
 
-            GUILayout.Label("Tool", this.titleGUIStyle);
+            GUILayout.Label("Tool", titleGUIStyle);
             if (GUILayout.Button("ExcelExporter"))
             {
                 ToolsEditor.ExcelExporter();

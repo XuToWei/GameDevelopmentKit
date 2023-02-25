@@ -20,7 +20,8 @@ namespace UnityGameFramework.Editor
         {
 #if UNITY_2017_3_OR_NEWER
             "UnityGameFramework.Runtime",
-            "Code",
+            "UnityGameFramework.Extension",
+            "Game",
 #endif
             "Assembly-CSharp",
         };
@@ -29,11 +30,14 @@ namespace UnityGameFramework.Editor
         {
 #if UNITY_2017_3_OR_NEWER
             "UnityGameFramework.Runtime",
-            "Code",
+            "UnityGameFramework.Extension",
+            "Game",
 #endif
             "Assembly-CSharp",
 #if UNITY_2017_3_OR_NEWER
             "UnityGameFramework.Editor",
+            "UnityGameFramework.Extension.Editor",
+            "Game.Editor",
 #endif
             "Assembly-CSharp-Editor",
         };
