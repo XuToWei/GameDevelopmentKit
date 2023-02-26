@@ -20,6 +20,7 @@ namespace Game.Editor
         {
             if (GUILayout.Button(m_ButtonGUIContent))
             {
+                BuildSceneSetting.AllScenes();
                 SceneHelper.StartScene("Assets/Launcher.unity");
             }
         }

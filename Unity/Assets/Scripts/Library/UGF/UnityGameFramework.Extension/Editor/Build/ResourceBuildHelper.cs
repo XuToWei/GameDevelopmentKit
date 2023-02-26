@@ -16,12 +16,13 @@ namespace UnityGameFramework.Extension.Editor
     /// <summary>
     /// 资源生成器。
     /// </summary>
-    public static class ResourceBuilderHelper
+    public static class ResourceBuildHelper
     {
         private static ResourceBuilderController m_Controller = null;
+        private static Platform m_OriginalPlatform;
         
         [MenuItem("Game Framework/Resource Tools/Resource Start Build", false, 39)]
-        public static void StartBuild()
+        public static void StartBuild(Platform specificPlatform = Platform.Undefined)
         {
             m_Controller = new ResourceBuilderController();
             m_Controller.OnLoadingResource += OnLoadingResource;
@@ -36,6 +37,12 @@ namespace UnityGameFramework.Extension.Editor
 
             if (m_Controller.Load())
             {
+                m_OriginalPlatform = m_Controller.Platforms;
+                if (specificPlatform != Platform.Undefined)
+                {
+                    m_Controller.Platforms = specificPlatform;
+                }
+                
                 Debug.Log("Load configuration success.");
 
                 m_Controller.RefreshCompressionHelper();
@@ -159,6 +166,7 @@ namespace UnityGameFramework.Extension.Editor
 
         private static void SaveConfiguration()
         {
+            m_Controller.Platforms = m_OriginalPlatform;
             if (m_Controller.Save())
             {
                 Debug.Log("Save configuration success.");
@@ -231,7 +239,8 @@ namespace UnityGameFramework.Extension.Editor
         private static void OnProcessResourceComplete(Platform platform)
         {
             EditorUtility.ClearProgressBar();
-            Debug.Log(GameFramework.Utility.Text.Format("Build resources for '{0}' complete.", platform));
+            Debug.Log(GameFramework.Utility.Text.Format("Build resources {0}({1}) for '{2}' complete.",
+                m_Controller.ApplicableGameVersion, m_Controller.InternalResourceVersion, platform));
         }
 
         private static void OnBuildResourceError(string errorMessage)

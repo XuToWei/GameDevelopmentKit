@@ -8,11 +8,11 @@ using UnityEditor.Compilation;
 
 namespace Game.Editor
 {
-    public static class BuildAssemblyTool
+    public static class BuildAssemblyHelper
     {
         public static string BuildOutputDir => "./Temp/Bin/Debug";
         
-        public static void Build(string assemblyName, List<string> CodeDirectorys, string[] additionalReferences, string[] excludeReferences, CodeOptimization codeOptimization)
+        public static void Build(string assemblyName, List<string> codeDirectories, string[] additionalReferences, string[] excludeReferences, CodeOptimization codeOptimization)
         {
             if (!Directory.Exists(BuildOutputDir))
             {
@@ -20,9 +20,9 @@ namespace Game.Editor
             }
 
             List<string> scripts = new List<string>();
-            for (int i = 0; i < CodeDirectorys.Count; i++)
+            for (int i = 0; i < codeDirectories.Count; i++)
             {
-                DirectoryInfo dti = new DirectoryInfo(CodeDirectorys[i]);
+                DirectoryInfo dti = new DirectoryInfo(codeDirectories[i]);
                 FileInfo[] fileInfos = dti.GetFiles("*.cs", System.IO.SearchOption.AllDirectories);
                 for (int j = 0; j < fileInfos.Length; j++)
                 {

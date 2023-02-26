@@ -2,7 +2,6 @@
 using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace ET.Editor
 {
@@ -14,7 +13,7 @@ namespace ET.Editor
         [MenuItem("ET/Build Tool")]
         public static void ShowWindow()
         {
-            GetWindow<BuildToolEditor>(DockDefine.Types);
+            GetWindow<BuildToolEditor>("Build Tool", DockDefine.Types);
         }
 
         private void OnEnable()

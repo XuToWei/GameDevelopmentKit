@@ -16,7 +16,7 @@ namespace ET.Editor
         [MenuItem("ET/Code Creator")]
         public static void ShowWindow()
         {
-            GetWindow<CodeCreatorEditor>("ET Code Creator");
+            GetWindow<CodeCreatorEditor>("ET Code Creator", DockDefine.Types);
         }
 
         private void OnEnable()

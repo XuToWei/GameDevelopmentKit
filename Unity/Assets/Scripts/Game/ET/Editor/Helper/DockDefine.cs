@@ -5,6 +5,11 @@ namespace ET.Editor
 {
     public static class DockDefine
     {
-        public static Type[] Types = { typeof (BuildToolEditor), typeof (ServerCommandLineEditor) };
+        public static readonly Type[] Types =
+        {
+            typeof (CodeCreatorEditor),
+            typeof (BuildToolEditor),
+            typeof (ServerCommandLineEditor),
+        };
     }
 }
