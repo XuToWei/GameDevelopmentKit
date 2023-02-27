@@ -28,7 +28,7 @@ namespace UnityGameFramework.Extension.Editor
             string updatePrefixUri = GameFramework.Utility.Path.GetRegularPath(Path.Combine(server, resourceVersion, platformStr));
             EditorGUI.LabelField(rect,"UpdatePrefixUri",updatePrefixUri);
          
-            bool isValidUri = Utility.Uri.CheckUri(updatePrefixUri);
+            bool isValidUri = UriUtility.CheckUri(updatePrefixUri);
             if (!isValidUri)
             {
                 rect = new Rect(rect.x+30, rect.y + 20, rect.width, 35);
@@ -68,7 +68,7 @@ namespace UnityGameFramework.Extension.Editor
             var platform = property.FindPropertyRelative("m_Platform");
             string platformStr = platform.enumNames[platform.enumValueIndex];
             string updatePrefixUri =  GameFramework.Utility.Path.GetRegularPath(Path.Combine(server, resourceVersion, platformStr));
-            bool isValidUri = Utility.Uri.CheckUri(updatePrefixUri);
+            bool isValidUri = UriUtility.CheckUri(updatePrefixUri);
             if (isValidUri)
             {
                 height -= 40;

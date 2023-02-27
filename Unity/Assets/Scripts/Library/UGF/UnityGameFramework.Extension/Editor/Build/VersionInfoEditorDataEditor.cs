@@ -57,7 +57,7 @@ namespace UnityGameFramework.Extension.Editor
             EditorGUILayout.Space();
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(m_IsGenerateToFullPath);
-            bool isValidUri = Utility.Uri.CheckUri(m_VersionInfoEditorData.VersionInfos[m_ActiveIndex.intValue].Value.UpdatePrefixUri);
+            bool isValidUri = UriUtility.CheckUri(m_VersionInfoEditorData.VersionInfos[m_ActiveIndex.intValue].Value.UpdatePrefixUri);
             if (!m_IsGenerateToFullPath.boolValue)
             {
                 EditorGUILayout.BeginHorizontal();

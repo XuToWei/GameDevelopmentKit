@@ -39,7 +39,7 @@ namespace UnityGameFramework.Extension.Editor
             EditorGUILayout.PropertyField(m_InternalGameVersion);
 
             EditorGUILayout.PropertyField(m_UpdatePrefixUri);
-            bool isValidUri = Utility.Uri.CheckUri(m_UpdatePrefixUri.stringValue);
+            bool isValidUri = UriUtility.CheckUri(m_UpdatePrefixUri.stringValue);
             if (!isValidUri)
             {
                 EditorGUILayout.HelpBox("UpdatePrefixUri is Not Valid!", MessageType.Error);

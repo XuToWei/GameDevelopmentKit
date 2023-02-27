@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using GameFramework;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
@@ -17,7 +18,7 @@ namespace UnityGameFramework.Extension.Editor
 
         public void OnPreprocessAllPlatforms(string productName, string companyName, string gameIdentifier,
             string gameFrameworkVersion, string unityVersion, string applicableGameVersion, int internalResourceVersion,
-            UnityGameFramework.Editor.ResourceTools.Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName,
+            Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName,
             bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName,
             string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions, string workingPath,
             bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath,
@@ -26,21 +27,32 @@ namespace UnityGameFramework.Extension.Editor
             ResourceRuleEditor ruleEditor = ScriptableObject.CreateInstance<ResourceRuleEditor>();
             ruleEditor.RefreshResourceCollection();
             SpriteCollectionUtility.RefreshSpriteCollection();
+            
+            string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+            string[] fileNames = Directory.GetFiles(streamingAssetsPath, "*", SearchOption.AllDirectories);
+            foreach (string fileName in fileNames)
+            {
+                if (fileName.Contains(".dat"))
+                {
+                    File.Delete(fileName);
+                }
+            }
+            Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
         }
 
-        public void OnPreprocessPlatform(UnityGameFramework.Editor.ResourceTools.Platform platform, string workingPath, bool outputPackageSelected,
+        public void OnPreprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected,
             string outputPackagePath,
             bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath)
         {
         }
 
-        public void OnBuildAssetBundlesComplete(UnityGameFramework.Editor.ResourceTools.Platform platform, string workingPath, bool outputPackageSelected,
+        public void OnBuildAssetBundlesComplete(Platform platform, string workingPath, bool outputPackageSelected,
             string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected,
             string outputPackedPath, AssetBundleManifest assetBundleManifest)
         {
         }
 
-        public void OnOutputUpdatableVersionListData(UnityGameFramework.Editor.ResourceTools.Platform platform, string versionListPath, int versionListLength,
+        public void OnOutputUpdatableVersionListData(Platform platform, string versionListPath, int versionListLength,
             int versionListHashCode, int versionListZipLength, int versionListZipHashCode)
         {
             Type resourceBuilderType =
@@ -87,16 +99,44 @@ namespace UnityGameFramework.Extension.Editor
             }
         }
 
-        public void OnPostprocessPlatform(UnityGameFramework.Editor.ResourceTools.Platform platform, string workingPath, bool outputPackageSelected,
-            string outputPackagePath,
-            bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath,
+        public void OnPostprocessPlatform(Platform platform, string workingPath,
+            bool outputPackageSelected, string outputPackagePath,
+            bool outputFullSelected, string outputFullPath,
+            bool outputPackedSelected, string outputPackedPath,
             bool isSuccess)
         {
+            //如果有一下多个平台，自行处理
+            
+            void CopyResource(string outputPath)
+            {
+                string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+                string[] fileNames = Directory.GetFiles(outputPath, "*", SearchOption.AllDirectories);
+                foreach (string fileName in fileNames)
+                {
+                    string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName.Substring(outputPath.Length)));
+                    FileInfo destFileInfo = new FileInfo(destFileName);
+                    if (destFileInfo.Directory is { Exists: false })
+                    {
+                        destFileInfo.Directory.Create();
+                    }
+
+                    File.Copy(fileName, destFileName);
+                }
+            }
+            
+            if (outputPackedSelected)
+            {
+                CopyResource(outputPackedPath);
+            }
+            else if (outputPackageSelected)
+            {
+                CopyResource(outputPackagePath);
+            }
         }
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier,
             string gameFrameworkVersion, string unityVersion, string applicableGameVersion, int internalResourceVersion,
-            UnityGameFramework.Editor.ResourceTools.Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName,
+            Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName,
             bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName,
             string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions, string workingPath,
             bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath,

@@ -68,7 +68,7 @@ namespace UnityGameFramework.Extension.Editor
         {
             var versionInfoData = VersionInfos[m_ActiveIndex].Value;
 
-            if (!Utility.Uri.CheckUri(versionInfoData.UpdatePrefixUri))
+            if (!UriUtility.CheckUri(versionInfoData.UpdatePrefixUri))
             {
                 EditorUtility.DisplayDialog("提示", $"VersionInfo:{VersionInfos[m_ActiveIndex].Key}.UpdatePrefixUri:{versionInfoData.UpdatePrefixUri} is not valid.无法自动生成", "确定");
                 Selection.activeObject = AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(M_DataPath);
