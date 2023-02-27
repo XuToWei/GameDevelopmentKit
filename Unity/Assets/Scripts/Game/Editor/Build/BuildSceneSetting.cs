@@ -20,7 +20,7 @@ namespace Game.Editor
             foreach (string sceneGuid in sceneGuids)
             {
                 string sceneName = AssetDatabase.GUIDToAssetPath(sceneGuid);
-                scenes.Add(new EditorBuildSettingsScene(sceneName, false));
+                scenes.Add(new EditorBuildSettingsScene(sceneName, true));
             }
             
             EditorBuildSettings.scenes = scenes.ToArray();

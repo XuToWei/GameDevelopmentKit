@@ -28,7 +28,7 @@ namespace Game.Editor
 
     internal static class SceneHelper
     {
-        static string sceneToOpen;
+        static string s_SceneToOpen;
 
         public static void StartScene(string sceneAssetName)
         {
@@ -37,13 +37,13 @@ namespace Game.Editor
                 EditorApplication.isPlaying = false;
             }
 
-            sceneToOpen = sceneAssetName;
+            s_SceneToOpen = sceneAssetName;
             EditorApplication.update += OnUpdate;
         }
 
         static void OnUpdate()
         {
-            if (sceneToOpen == null ||
+            if (s_SceneToOpen == null ||
                 EditorApplication.isPlaying || EditorApplication.isPaused ||
                 EditorApplication.isCompiling || EditorApplication.isPlayingOrWillChangePlaymode)
             {
@@ -54,11 +54,11 @@ namespace Game.Editor
 
             if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
             {
-                EditorSceneManager.OpenScene(sceneToOpen);
+                EditorSceneManager.OpenScene(s_SceneToOpen);
                 EditorApplication.isPlaying = true;
             }
 
-            sceneToOpen = null;
+            s_SceneToOpen = null;
         }
     }
 }
