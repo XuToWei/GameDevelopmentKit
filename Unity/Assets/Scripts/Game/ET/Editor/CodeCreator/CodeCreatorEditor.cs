@@ -27,12 +27,10 @@ namespace ET.Editor
             var types = this.GetType().Assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract && typeof (ICodeCreator).IsAssignableFrom(x));
             
             List<string> typeNames = new List<string>();
-            typeNames.Add("<None>");
-            this.m_CodeCreatorInstances.Add(null);
             foreach (Type cType in types)
             {
                 typeNames.Add(cType.Name);
-                ICodeCreator codeCreator = Activator.CreateInstance(cType) as ICodeCreator;
+                ICodeCreator codeCreator = (ICodeCreator)Activator.CreateInstance(cType);
                 this.m_CodeCreatorInstances.Add(codeCreator);
                 codeCreator.OnEnable();
             }
@@ -53,9 +51,6 @@ namespace ET.Editor
             }
             
             this.m_CurCodeCreatorIndex = EditorGUILayout.Popup("Code Creator Type", this.m_CurCodeCreatorIndex, this.m_CodeCreatorTypeNames);
-
-            if (this.m_CurCodeCreatorIndex == 0)
-                return;
 
             this.m_CodeCreatorInstances[this.m_CurCodeCreatorIndex].OnGUI();
             
