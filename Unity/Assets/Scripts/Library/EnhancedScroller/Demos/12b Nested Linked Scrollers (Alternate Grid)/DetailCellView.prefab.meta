@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: 5e285c89496c047eb911f22d641f4641
+labels:
+- Cell
+- Cells
+- Data
+- Inventory
+- List
+- Recycle
+- Reuse
+- Scroll
+- ScrollRect
+- ScrollView
+- Scroller
+- UI
+- Virtualize
+- data
+- infinite
+- loop
+- scroll
+- scroller
+- virtualize
+timeCreated: 1436468097
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,188 @@
+3.5.4
+- You can now enable Assembly Definition Files for Easy Save by going to Tools > Easy Save 3 > Enable Assembly Definition Files.
+- Accounted for edge case where ES3File would be merged rather than overwritten, preventing keys from being deleted from the stored file.
+- Resolved issue where reference collection can cause an InvalidOperationException (Collection was modified).
+- Worked around bug with Unity Runner Template which prevented Easy Save types from loading.
+- overrideSprite is no longer saved when saving UI.Image as Unity now returns the Sprite rather than null when this is unassigned.
+- Resolved issue where Auto Save's events sometimes did not update when changing the active scene in the Editor.
+
+3.5.3
+- Attempting to save a Material with a RenderTexture will now throw a warning indicating that the RenderTexture won't be saved.
+- Added filtering by tag in the Auto Save window by prefixing 'tag:' to the search query.
+
+3.5.2
+- Resolved issue where RectTransform was loaded incorrectly as parent is deserialized before anchoredPosition.
+- Removed warning regarding Transform parents being set using the accessor rather than the SetParent method.
+- ES3.CopyFile now automatically creates the target directory if it doesn't exist.
+- Added an option to encrypt/compress raw cached data if the setting is defined for the cached file (postprocessRawCachedData).
+- 'Add References to Manager' now permanently adds prefabs to the manager if 'Auto Add Prefabs to Manager' is enabled.
+- Assembly names are now in alphabetical order so changes in order aren't registered as a change in version control.
+- Using 'Add References to Manager' on a folder now adds all supported assets in that folder to the reference manager.
+
+3.5.1
+- Reverted changes to LoadRaw methods when using Cache as it caused regression issues.
+
+3.5.0
+- Added support for NativeArray.
+- Managed case where ES3.EncryptBytes/DecryptBytes encountered an encoding issue.
+- Worked around Unity bug where invalid assembly list would cause issues when exceptions are disabled.
+- Worked around bug at Unity's end where unloaded scenes are returned by their methods.
+- Resolved issue where scripting define symbols were overwritten on older versions of Unity.
+- Worked around bug where inertia tensor value is rejected even when set as it's default upon loading.
+- Most Material properties can now be saved, including custom properties.
+- When saving a parent GameObject, children automatically have their parent set to the parent GameObject rather than loading this value by reference.
+- Support added for Tuples.
+- Added overload for AppendRaw which accepts a string and a filename.
+- Worked around Unity bug where EventType.Layout isn't called when moving tabs for first time, causing Types pane recent types to be uninitialised.
+- Worked around Unity bug which infrequently prevented Auto Save changes from persisting.
+- Added ES3.Compress and ES3.Decompress methods.
+- Performing 'Add Reference(s) to Manager' for a Texture2D will also add it's Sprite if one is present.
+- Classes without parameterless constructors can now be serialised (note that their constructor will not be called).
+- Resolved issue where an unloaded scene warning was thrown when scene is open but manually marked as unloaded in the Editor.
+
+3.4.2
+- Resolved issue where Unity Visual Scripting defines were not present on some versions of Unity.
+
+3.4.1
+- Added support for Particle System Bursts
+- Resolved issue where Auto Save would sometimes save all Components regardless of settings.
+- Resolved issue where Auto Save icon would not highlight when fields are selected.
+- Structs with private properties or fields can now be serialized.
+- Loading a blank string from a spreadsheet now returns a blank string rather than null.
+- The reference manager will only collect references up to 3 levels deep to improve performance.
+- System.Random support has been dropped due to Unity's implementation changing, making it non-serializable.
+- ES3Ref is no longer stored twice for ScriptableObjects.
+- Added support for Numerics.BigInteger.
+- Internal fields of the ES3AutoSave Component are no longer displayed in the Editor.
+- If a reference ID for a Component exists, it now ignores the GameObject ID so that a new GO instance is not created.
+- Added a Get Streaming Assets Path action for Playmaker.
+- Added non-generic versions of the ES3Spreadsheet methods to work around issue with Bolt.
+- Worked around issue with Bolt where it would crash if you have two methods with the same parameters but one is generic.
+- Resolved issue where Components marked as destroyed but not yet destroyed would cause unexpected behaviour.
+- Auto Save will now work for additive scenes.
+- Resolved issue where reference manager wasn't automatically updated when scene was open additively prior to runtime.
+- Support added for Unity Visual Scripting.
+
+3.4.0
+- Caching now works seamlessly between Cloud and Auto Save.
+- Added Save Multiple and Load Multiple actions to enable saving multiple specific variables at once.
+- Added extra overloads to the ES3.LoadString method.
+- Guids are now natively supported.
+- Transform now stores the sibling index.
+- Getting a timestamp for a file in cache which doesn't exist now returns a zero timestamp.
+- Resolved issues where enums would sometiimes not serialize correctly when creating an ES3Type script for a class.
+- Resolved issue where DownloadTimestamp PlayMaker action would download the wrong data.
+- Resolved issue where reflection does not recognise a collection of a nested type as a nested type.
+- Resolved issue where ES3Cloud was merged with the debug branch.
+- Resolved issue where Sprites with atlased Textures would save an incorrect Rect.
+- Resolved issue where ES3Spreadsheet was serializing primitives as objects when using PlayMaker actions.
+
+3.3.2f7
+- Type data is now stored when using ES3.Serialize<object>.
+- Worked around issue where Unity would return an incorrect number of assemblies.
+
+3.3.2f6
+- ES3Spreadsheet now correctly serializes object types into a CSV file.
+- Resolved issue where an object[] containing primitive types could not be loaded in some situations.
+- Worked around issue where PlayMaker wouldn't initialize variable before it's value was reset.
+- Created a workaround for some situations where Unity creates new instances of ScriptableObjects in Assets at runtime.
+- Resolved issue where Base-64 encoding option would not work with newline option in PlayMaker SaveRaw action.
+
+3.3.2f5
+- Resolved issue where scripts were not overwritten by Asset Store importer, causing Easy Save to be unstable.
+
+3.3.2f4
+- Resolved issue where Save action for PlayMaker could return NullReferenceException due to using the wrong ES3.Save override.
+- Worked around IL2CPP bug where reflection would not find particular ES3Types on iOS
+- Resolved issue where trying to store an empty/unassigned PlayMaker object would throw a NulReferenceException.
+- Keys of a type which no longer exists in the project are now automatically removed
+- Abstract types used in an ES3Type will now work as intended
+
+3.3.2f3
+- Added GameObject variables to Auto Save
+- Resolved issue where Sprites would be loaded with the incorrect pivot.
+- Resolved issue where Stacks were loaded in reverse.
+- Added a 'quality' field to the ES3.SaveImage method to allow the quality to be specified when saving JPEGs.
+
+3.3.2f2
+- Added method which allows raw bytes to be uploaded via ES3Cloud.
+- Worked around issue where File IO was called on platforms which don't support it
+- Accounted for situations where Component should evaluate to null but doesn't
+- Updated PlayMaker actions to work around issue where global variables sometimes go missing
+- Objects with the NotEditable hideFlags can now be stored by reference
+- Worked around Unity bug where it fails to deserialize data when Prefab mode is open
+- Resolved issue where global 'Save GameObject Children' settings can take precedence over Auto Save settings
+- 'Enable Easy Save for Prefab' context menu item now works when multiple objects are selected.
+
+3.3.2f1
+- Resolved issue where Components on prefabs would sometimes not be added to the reference manager.
+- Resolved issue where reference ID was read unnecesserily, causing format exception.
+- Resolved issue where child prefabs would not be recognised by manager.
+
+3.3.1p12
+- Resolved case where certain references would not be added to manager.
+
+3.3.1f11
+- Fixed issue where using ES3.CacheFile with an encrypted file could fail.
+- Fixed issue where Directory.GetFiles cannot process a full path on certain configurations.
+- Accounted for case where HideFlags are changed during build process.
+- Added a timeout parameter to the ES3Cloud constructor.
+- ES3.Serialize and ES3.Deserialize now work with encryption and compression
+
+3.3.1f10
+- Full support for projects which use multiple scenes at once.
+- Added ES3.Encrypt and ES3.Decrypt methods.
+- Supported saving the active state and FsmVariables of PlayMaker FSMs.
+- Added edge case for SkinnedMeshRenderers which use LODs to ensure that all meshes and Materials are added to the reference manager.
+- Ensured that Auto Update References setting is ackowledged when first adding manager to scene.
+- Moved menu items into Tools/Easy Save 3 menu.
+- Using LoadInto will now assign the loaded reference ID to the object you're loading into.
+
+3.3.1f9
+- It's not possible to add an ES3ReferenceMgr to your scene directly, ensuring that initialisation code is performed.
+- Compressed files can now be cached.
+- Ability to only add prefabs directly referenced by your scene to the manager.
+
+3.3.1f8
+- Caching is now enabled by default for Auto Save, significantly improving performance.
+- Added ES3.LoadString method so you do not need to provide all parameters to use the defaultValue overload.
+- Resolved case where SaveAll would not correctly save some types of array.
+- Resolved case where global references would not be acknowledged.
+
+3.3.1f7
+- Serialization depth limit has been raised to account for projects with deep hierearchies
+- Fixed issue where Easy Save 3 Manager could not be found for scenes which had not been saved.
+- Resolved issue where Add Reference(s) to Manager would not dirty scene when Auto Update References was disabled.
+- Improved Editor performance by accounting for situations where post-processing events would be called multiple times.
+
+3.3.1f6
+- Internal fields of the UnityEngine.Object class are hidden in the Types pane as they are not serialisable.
+- Accounted for edge case where unassigned script is returned by GameObject.GetComponents().
+- ES3Settings constructor now accepts any settings enum (e.g. ES3.Location).
+- No longer throws warning when multiple scenes are open.
+
+3.3.1f5
+- Updated PlayMaker actions.
+- Provided workaround for issue where IL2CPP stripper removes methods which are marked to not be stripped.
+- Performance updates.
+
+3.3.1f4 
+- Improved performance when gathering references for reference manager.
+
+3.3.1f3
+- Added Cache as a storage location, providing a much simpler way of caching data.
+- References can now be added by right-clicking the object and going to Easy Save 3 > Add Reference to Manager.
+- Floats and doubles are now stored with full precision.
+- Assorted bug fixes.
+
+3.3.1f2
+- Added compression, reducing file size by 85% on average when enabled
+- JSON is now pretty printed (formatted) by default
+- Added attributes to control serialisation
+- Private fields in inherited classes are now stored
+- Added search capabilities to the Auto Save window
+- The way in which GameObjects is saved is now more flexible
+- The reference manager is now updated whenever playmode is entered
+- Null values in the global manager are now automatically removed
+- Fixed issue where default settings were not applied properly
+- Fixed issue where ES3Types would be stored in Easy Save root rather than in Assets/Easy Save 3/

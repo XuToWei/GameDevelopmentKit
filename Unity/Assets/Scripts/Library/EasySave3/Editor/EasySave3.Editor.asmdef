@@ -1,0 +1,18 @@
+{
+    "name": "EasySave3.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:cfcd2ce455f8d1944942cdd919ecaa60"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

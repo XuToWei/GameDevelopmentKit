@@ -77,8 +77,8 @@
       }
     },
     "com.unity.searcher": {
-      "version": "4.9.1",
-      "depth": 2,
+      "version": "4.9.2",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.cn"
@@ -93,8 +93,8 @@
       }
     },
     "com.unity.test-framework": {
-      "version": "1.1.31",
-      "depth": 1,
+      "version": "1.1.33",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.6",

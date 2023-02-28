@@ -261,8 +261,8 @@ namespace UnityGameFramework.Runtime
         /// <returns>读取的对象。</returns>
         public override T GetObject<T>(string settingName, T defaultObj)
         {
-            string json = GetString(settingName, null);
-            if (json == null)
+            string json = GetString(settingName, string.Empty);
+            if (string.IsNullOrEmpty(json))
             {
                 return defaultObj;
             }
@@ -279,8 +279,8 @@ namespace UnityGameFramework.Runtime
         /// <returns>读取的对象。</returns>
         public override object GetObject(Type objectType, string settingName, object defaultObj)
         {
-            string json = GetString(settingName, null);
-            if (json == null)
+            string json = GetString(settingName, string.Empty);
+            if (string.IsNullOrEmpty(json))
             {
                 return defaultObj;
             }

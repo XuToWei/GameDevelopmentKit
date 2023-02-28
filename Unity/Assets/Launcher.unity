@@ -649,6 +649,10 @@ PrefabInstance:
       propertyPath: m_UIGroups.Array.data[1].m_Depth
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11459312, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_SettingHelperTypeName
+      value: Game.EasySaveSettingHelper
+      objectReference: {fileID: 0}
     - target: {fileID: 11461162, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EnableStrictCheck
       value: 2
