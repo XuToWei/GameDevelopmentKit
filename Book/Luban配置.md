@@ -1,6 +1,6 @@
-# Luban工具
+# [Luban工具](https://focus-creative-games.github.io/luban/about/)
 
-## 方便的处理多Luban工程，只用关心配置，不用去处理繁琐的生成命令
+## 方便的处理多Luban目录（多Luban目录可以用来区分热更非热更等），只用关心配置，不用去处理繁琐的生成命令
 #
 1.  Luban的Excel工程目录目录必须是Design/Excel下，对目录命名不做要求
 
