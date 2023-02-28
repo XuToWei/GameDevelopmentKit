@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
-using UnityEngine;
 
 namespace ET
 {
@@ -25,7 +24,7 @@ namespace ET
         [StaticField]
         private static UnityEngine.Transform rootViewTransform;
 
-        public static void SetRootView(Transform root)
+        public static void SetRootView(UnityEngine.Transform root)
         {
             rootViewTransform = root;
         }
