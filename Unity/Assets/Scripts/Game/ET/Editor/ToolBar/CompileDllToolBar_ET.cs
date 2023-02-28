@@ -12,13 +12,13 @@ namespace ET.Editor
     {
         private const CodeOptimization s_CodeOptimization = CodeOptimization.Debug;
         
-        private static readonly GUIContent s_BuildHotfixButtonGUIContent;
+        private static readonly GUIContent s_BuildReloadHotfixButtonGUIContent;
         private static readonly GUIContent s_BuildHotfixModelButtonGUIContent;
         private static bool s_IsReloading;
         
         static CompileDllToolBar_ET()
         {
-            s_BuildHotfixButtonGUIContent = new GUIContent("Reload ET.Hotfix", "Compile And Reload ET.Hotfix Dll When Playing.");
+            s_BuildReloadHotfixButtonGUIContent = new GUIContent("Reload ET.Hotfix", "Compile And Reload ET.Hotfix Dll When Playing.");
             s_BuildHotfixModelButtonGUIContent = new GUIContent("Compile All ET", "Compile All ET Dll.");
             s_IsReloading = false;
             ToolbarExtender.AddLeftToolbarGUI(0, OnToolbarGUI);
@@ -28,15 +28,12 @@ namespace ET.Editor
         {
             EditorGUI.BeginDisabledGroup(!Application.isPlaying || s_IsReloading);
             {
-                if (GUILayout.Button(s_BuildHotfixButtonGUIContent))
+                if (GUILayout.Button(s_BuildReloadHotfixButtonGUIContent))
                 {
                     GlobalConfig globalConfig = Resources.Load<GlobalConfig>("ET/GlobalConfig");
-
-                    BuildAssemblyHelper.BuildModel(s_CodeOptimization, globalConfig.CodeMode);
                     BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, globalConfig.CodeMode);
 
-                    EditorWindow game = EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));
-                    if (game != null) game.ShowNotification(new GUIContent("Build Model And Hotfix Success!"));
+                    ShowNotification("Build Hotfix Success!");
 
                     if (s_IsReloading)
                         return;
@@ -67,9 +64,14 @@ namespace ET.Editor
                 BuildAssemblyHelper.BuildModel(s_CodeOptimization, globalConfig.CodeMode);
                 BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, globalConfig.CodeMode);
 
-                EditorWindow game = EditorWindow.GetWindow(typeof (EditorWindow).Assembly.GetType("UnityEditor.GameView"));
-                if (game != null) game.ShowNotification(new GUIContent("Build Model And Hotfix Success!"));
+                ShowNotification("Build Model And Hotfix Success!");
             }
+        }
+
+        private static void ShowNotification(string msg)
+        {
+            EditorWindow game = EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));
+            if (game != null) game.ShowNotification(new GUIContent(msg));
         }
     }
 }

@@ -4,7 +4,7 @@ namespace UnityGameFramework.Extension.Editor
 {
     public static class UriUtility
     {
-        static readonly Regex regex = new Regex(@"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$");
+        private static readonly Regex s_Regex = new Regex(@"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$");
             
         public static bool CheckUri(string uri)
         {
@@ -12,7 +12,7 @@ namespace UnityGameFramework.Extension.Editor
             {
                 return false;
             }
-            return regex.IsMatch(uri);
+            return s_Regex.IsMatch(uri);
         }
     }
 }

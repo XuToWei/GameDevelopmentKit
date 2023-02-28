@@ -1,19 +1,35 @@
 using UnityEditor;
 using UnityEngine;
+using UnityGameFramework.Editor.ResourceTools;
 
 namespace Game.Editor
 {
     public class BuildToolEditor: EditorWindow
     {
+        private Platform m_Platform;
+        
         [MenuItem("Tools/Build Tool")]
         public static void ShowWindow()
         {
             GetWindow<BuildToolEditor>("Build Tool");
         }
 
+        public Platform GetCurPlatform()
+        {
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+            return Platform.Windows;
+#elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
+            return Platform.MacOS;
+#elif UNITY_IOS
+             return Platform.IOS;
+#elif UNITY_ANDROID
+            return Platform.Android;
+#endif
+        }
+
         private void OnEnable()
         {
-            
+            m_Platform = GetCurPlatform();
         }
 
         private void OnGUI()
@@ -23,39 +39,57 @@ namespace Game.Editor
                 alignment = TextAnchor.MiddleCenter,
                 fontStyle = FontStyle.Bold
             };
-            
-            GUILayout.Label("Code Compile", titleGUIStyle);
-            
-            if (GUILayout.Button("BuildModelAndHotfix"))
+
+            EditorGUI.BeginDisabledGroup(Application.isPlaying);
             {
-                AfterCompiling();
+                m_Platform = (Platform)EditorGUILayout.EnumPopup("Platform: ", m_Platform);
 
-                ShowNotification("Build Model And Hotfix Success!");
+                if (GUILayout.Button("Build Pkg"))
+                {
+                    if (m_Platform != GetCurPlatform())
+                    {
+                        switch (EditorUtility.DisplayDialogComplex("Warning!",
+                                    $"current platform is {GetCurPlatform()}, if change to {m_Platform}, may be take a long time",
+                                    "change", "cancel", "no change"))
+                        {
+                            case 0:
+                                break;
+                            case 1:
+                                return;
+                            case 2:
+                                m_Platform = GetCurPlatform();
+                                break;
+                        }
+                    }
+
+                    BuildHelper.BuildPkg(m_Platform);
+                    ShowNotification($"Build {m_Platform} Pkg Success!");
+                }
+                GUILayout.Space(20);
+                if (GUILayout.Button("Refresh Windows Pkg Resource"))
+                {
+                    if (Platform.Windows != GetCurPlatform())
+                    {
+                        switch (EditorUtility.DisplayDialogComplex("Warning!",
+                                    $"current platform is {GetCurPlatform()}, if change to {Platform.Windows}, may be take a long time",
+                                    "change", "cancel", null))
+                        {
+                            case 0:
+                                break;
+                            case 1:
+                                return;
+                            case 2:
+                                return;
+                        }
+                    }
+
+                    BuildHelper.RefreshWindowsPkgResource();
+                    ShowNotification("Build Model Success!");
+                }
             }
-
-            if (GUILayout.Button("BuildModel"))
-            {
-                AfterCompiling();
-
-                ShowNotification("Build Model Success!");
-            }
-
-            if (GUILayout.Button("BuildHotfix"))
-            {
-                ShowNotification("Build Hotfix Success!");
-            }
-
-            GUILayout.Label("Tool", titleGUIStyle);
-            GUILayout.Space(5);
+            EditorGUI.EndDisabledGroup();
         }
-
-        private static void AfterCompiling()
-        {
-            AssetDatabase.Refresh();
-
-            Debug.Log("build success!");
-        }
-
+        
         private static void ShowNotification(string tips)
         {
             Debug.Log(tips);

@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using GameFramework;
 
-namespace ET
+namespace Game
 {
-    public static class FileHelper
+    public static class FileUtility
     {
         public static List<string> GetAllFiles(string dir, string searchPattern = "*")
         {
@@ -35,9 +36,9 @@ namespace ET
                 return;
             }
 
-            foreach (string subdir in Directory.GetDirectories(dir))
+            foreach (string subDir in Directory.GetDirectories(dir))
             {
-                Directory.Delete(subdir, true);
+                Directory.Delete(subDir, true);
             }
 
             foreach (string subFile in Directory.GetFiles(dir))
@@ -53,7 +54,7 @@ namespace ET
 
             if (target.FullName.StartsWith(source.FullName, StringComparison.CurrentCultureIgnoreCase))
             {
-                throw new Exception("父目录不能拷贝到子目录！");
+                throw new GameFrameworkException("父目录不能拷贝到子目录！");
             }
 
             if (!source.Exists)
@@ -91,7 +92,7 @@ namespace ET
                 {
                     if (fl.EndsWith(extensionName))
                     {
-                        File.Move(fl, fl.Substring(0, fl.IndexOf(extensionName)) + newExtensionName);
+                        File.Move(fl, fl.Substring(0, fl.IndexOf(extensionName, StringComparison.Ordinal)) + newExtensionName);
                         File.Delete(fl);
                     }
                 }

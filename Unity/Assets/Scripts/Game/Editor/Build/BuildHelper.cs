@@ -1,95 +1,113 @@
 ﻿using System.IO;
+using GameFramework;
 using UnityEditor;
 using UnityEngine;
+using UnityGameFramework.Editor.ResourceTools;
 using UnityGameFramework.Extension.Editor;
 
 namespace Game.Editor
 {
-    public enum PlatformType
-    {
-        None,
-        Android,
-        IOS,
-        Windows,
-        MacOS,
-        Linux
-    }
-
     public static class BuildHelper
     {
-        private const string relativeDirPrefix = "../../Temp";
-
-        public static string BuildFolder = "../../Temp";
-
-        public static void BuildResource()
-        {
-        }
-
-        public static void BuildPkg(PlatformType type, bool isBuildExe, bool buildResource, bool clearFolder)
+        private static readonly string BuildFolder = "../../Temp/Pkg";
+        
+        public static void BuildPkg(Platform platform)
         {
             BuildTarget buildTarget = BuildTarget.StandaloneWindows;
-            string exeName = string.Empty;
-            switch (type)
+            string appName = Application.productName;
+            switch (platform)
             {
-                case PlatformType.Windows:
+                case Platform.Windows:
+                    buildTarget = BuildTarget.StandaloneWindows;
+                    appName += ".exe";
+                    break;
+                case Platform.Windows64:
                     buildTarget = BuildTarget.StandaloneWindows64;
-                    exeName = Application.productName + ".exe";
+                    appName += ".exe";
                     break;
-                case PlatformType.Android:
+                case Platform.Android:
                     buildTarget = BuildTarget.Android;
-                    exeName += Application.productName + ".apk";
+                    appName += ".apk";
                     break;
-                case PlatformType.IOS:
+                case Platform.IOS:
                     buildTarget = BuildTarget.iOS;
                     break;
-                case PlatformType.MacOS:
+                case Platform.MacOS:
                     buildTarget = BuildTarget.StandaloneOSX;
                     break;
-
-                case PlatformType.Linux:
+                case Platform.Linux:
                     buildTarget = BuildTarget.StandaloneLinux64;
                     break;
+                case Platform.WebGL:
+                    buildTarget = BuildTarget.WebGL;
+                    break;
+                default:
+                    throw new GameFrameworkException($"No Support {platform}!");
             }
 
-            string fold = string.Format(BuildFolder, type);
+            Debug.Log($"start build {platform}");
+            
+            string fold = $"BuildFolder/{platform}";
 
-            if (clearFolder && Directory.Exists(fold))
+            if (Directory.Exists(fold))
             {
-                Directory.Delete(fold, true);
+                FileUtility.CleanDirectory(fold);
             }
-
-            Directory.CreateDirectory(fold);
-
-            if (buildResource)
+            else
             {
-                Debug.Log("start build resource");
-                ResourceBuildHelper.StartBuild();
-                Debug.Log("finish build resource");
+                Directory.CreateDirectory(fold);
             }
+
+            Debug.Log("start build resource");
+            ResourceBuildHelper.StartBuild(platform);
+            Debug.Log("finish build resource");
 
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            
             string[] levels =
             {
                 "Assets/Launcher.unity",
             };
             Debug.Log("start build pkg");
-            BuildPipeline.BuildPlayer(levels, $"{relativeDirPrefix}/{exeName}", buildTarget, BuildOptions.None);
-            Debug.Log("finish build pkg");
+            string locationPathName = $"{fold}/{appName}";
+            BuildPipeline.BuildPlayer(levels, locationPathName, buildTarget, BuildOptions.None);
+            Debug.Log($"finish build pkg at {locationPathName}");
+        }
+
+        public static void RefreshWindowsPkgResource()
+        {
+            string fold = $"BuildFolder/{Platform.Windows}";
+            string targetPath = Path.Combine(fold, $"{Application.productName}_Data/StreamingAssets/");
+            if (!Directory.Exists(targetPath))
+            {
+                throw new GameFrameworkException($"RefreshExePkgResource fail! {targetPath} not exist!");
+            }
             
-            if (isBuildExe)
+            Debug.Log("start build resource");
+            ResourceBuildHelper.StartBuild(Platform.Windows);
+            Debug.Log("finish build resource");
+            
+            FileUtility.CleanDirectory(targetPath);
+            FileUtility.CopyDirectory(fold, targetPath);
+            Debug.Log($"src dir: {fold}    target: {targetPath}");
+        }
+        
+        public static void RefreshWindows64PkgResource()
+        {
+            string fold = $"BuildFolder/{Platform.Windows64}";
+            string targetPath = Path.Combine(fold, $"{Application.productName}_Data/StreamingAssets/");
+            if (!Directory.Exists(targetPath))
             {
-                
+                throw new GameFrameworkException($"RefreshExePkgResource fail! {targetPath} not exist!");
             }
-            else
-            {
-                if (buildResource && type == PlatformType.Windows)
-                {
-                    string targetPath = Path.Combine(relativeDirPrefix, $"{Application.productName}_Data/StreamingAssets/");
-                    Directory.Delete(targetPath, true);
-                    Debug.Log($"src dir: {fold}    target: {targetPath}");
-                    FileHelper.CopyDirectory(fold, targetPath);
-                }
-            }
+            
+            Debug.Log("start build resource");
+            ResourceBuildHelper.StartBuild(Platform.Windows64);
+            Debug.Log("finish build resource");
+            
+            FileUtility.CleanDirectory(targetPath);
+            FileUtility.CopyDirectory(fold, targetPath);
+            Debug.Log($"src dir: {fold}    target: {targetPath}");
         }
     }
 }
