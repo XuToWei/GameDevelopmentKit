@@ -52,7 +52,7 @@ public sealed partial class DRStartZoneConfig :  Bright.Config.BeanBase
     public const int __ID__ = -1835667038;
     public override int GetTypeId() => __ID__;
 
-    public  void Resolve(Dictionary<string, object> _tables)
+    public  void Resolve(Dictionary<string, IDataTable> _tables)
     {
         PostResolve();
     }

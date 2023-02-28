@@ -42,7 +42,7 @@ public sealed partial class DRScene :  Bright.Config.BeanBase
     public const int __ID__ = -1646966626;
     public override int GetTypeId() => __ID__;
 
-    public  void Resolve(Dictionary<string, object> _tables)
+    public  void Resolve(Dictionary<string, IDataTable> _tables)
     {
         PostResolve();
     }

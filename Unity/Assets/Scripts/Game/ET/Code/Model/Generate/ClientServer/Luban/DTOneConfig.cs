@@ -44,7 +44,7 @@ public partial class DTOneConfig : IDataTable
     /// </summary>
      public int Test => _data.Test;
 
-    public void Resolve(Dictionary<string, object> _tables)
+    public void Resolve(Dictionary<string, IDataTable> _tables)
     {
         _data.Resolve(_tables);
         PostResolve();

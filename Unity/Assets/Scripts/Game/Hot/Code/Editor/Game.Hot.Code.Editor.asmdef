@@ -2,7 +2,9 @@
     "name": "Game.Hot.Code.Editor",
     "rootNamespace": "Game.Hotfix.Editor",
     "references": [
-        "GUID:7b8a1c6c24879a64985dc67ad67b0241"
+        "GUID:7b8a1c6c24879a64985dc67ad67b0241",
+        "GUID:3fcf00d7a3c894e46a955a792eefb4da",
+        "GUID:ab178125f37805a4d9574cef4ed13330"
     ],
     "includePlatforms": [
         "Editor"

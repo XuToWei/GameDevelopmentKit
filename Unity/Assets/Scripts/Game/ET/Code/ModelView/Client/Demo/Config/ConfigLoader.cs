@@ -55,4 +55,16 @@ namespace ET.Client
             await Tables.Instance.GetDataTable(arg.ConfigName).LoadAsync();
         }
     }
+    
+    [Invoke]
+    public class LubanReloadAllAsyncHandler: AInvokeHandler<ConfigComponent.ReloadAll, UniTask>
+    {
+        public override async UniTask Handle(ConfigComponent.ReloadAll arg)
+        {
+            foreach (var dataTable in Tables.Instance.DataTables)
+            {
+                await dataTable.LoadAsync();
+            }
+        }
+    }
 }

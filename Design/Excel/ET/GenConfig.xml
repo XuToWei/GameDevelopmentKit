@@ -1,4 +1,5 @@
 ﻿<Config>
+  <Open Value="TRUE" />
   <Gen>
     <Output_Code_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/Client/Luban" />
     <Output_Data_Dirs Value="../Unity/Assets/Res/ET/Client/Luban" />

@@ -50,7 +50,7 @@ public partial class DTEntity : IDataTable
     public DREntity Get(int key) => _dataMap[key];
     public DREntity this[int key] => _dataMap[key];
 
-    public void Resolve(Dictionary<string, object> _tables)
+    public void Resolve(Dictionary<string, IDataTable> _tables)
     {
         foreach(var v in _dataList)
         {

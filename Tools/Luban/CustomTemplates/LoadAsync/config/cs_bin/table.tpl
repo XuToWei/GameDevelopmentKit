@@ -58,7 +58,7 @@ public partial class {{name}} : IDataTable
     public {{cs_define_type value_type}} Get({{cs_define_type key_type}} key) => _dataMap[key];
     public {{cs_define_type value_type}} this[{{cs_define_type key_type}} key] => _dataMap[key];
 
-    public void Resolve(Dictionary<string, object> _tables)
+    public void Resolve(Dictionary<string, IDataTable> _tables)
     {
         foreach(var v in _dataList)
         {
@@ -137,7 +137,7 @@ public partial class {{name}} : IDataTable
         {{~end~}}
     {{~end~}}
 
-    public void Resolve(Dictionary<string, object> _tables)
+    public void Resolve(Dictionary<string, IDataTable> _tables)
     {
         foreach(var v in _dataList)
         {
@@ -184,7 +184,7 @@ public partial class {{name}} : IDataTable
      public {{cs_define_type field.ctype}} {{field.convention_name}} => _data.{{field.convention_name}};
     {{~end~}}
 
-    public void Resolve(Dictionary<string, object> _tables)
+    public void Resolve(Dictionary<string, IDataTable> _tables)
     {
         _data.Resolve(_tables);
         PostResolve();

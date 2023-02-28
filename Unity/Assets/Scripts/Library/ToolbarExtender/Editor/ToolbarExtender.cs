@@ -24,7 +24,7 @@ namespace UnityToolbarExtender
 		public static void AddRightToolbarGUI(int priority, Action onGUIAction)
 		{
 			s_RightToolbarGUI.Add((priority, onGUIAction));
-			s_RightToolbarGUI.Sort((tuple1, tuple2) => tuple1.Item1 - tuple2.Item1);
+			s_RightToolbarGUI.Sort((tuple1, tuple2) => tuple2.Item1 - tuple1.Item1);
 		}
 
 		static ToolbarExtender()
@@ -143,7 +143,6 @@ Debug.Log(rightRect);
 				{
 					handler.Item2();
 				}
-
 				GUILayout.EndHorizontal();
 				GUILayout.EndArea();
 			}
@@ -156,7 +155,7 @@ Debug.Log(rightRect);
 				{
 					handler.Item2();
 				}
-
+				GUILayout.FlexibleSpace();
 				GUILayout.EndHorizontal();
 				GUILayout.EndArea();
 			}
@@ -178,6 +177,7 @@ Debug.Log(rightRect);
 			{
 				handler.Item2();
 			}
+			GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
 		}
 	}

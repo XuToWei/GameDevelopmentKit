@@ -22,6 +22,10 @@ namespace ET
             }
         }
         
+        public struct ReloadAll
+        {
+        }
+        
         public async UniTask LoadAllAsync()
         {
             await EventSystem.Instance.Invoke<LoadAll, UniTask>(0, new LoadAll());
@@ -30,6 +34,11 @@ namespace ET
         public async UniTask LoadOneAsync(string configName)
         {
             await EventSystem.Instance.Invoke<LoadOne, UniTask>(0, new LoadOne(configName));
+        }
+        
+        public async UniTask ReloadAllAsync()
+        {
+            await EventSystem.Instance.Invoke<ReloadAll, UniTask>(0, new ReloadAll());
         }
     }
 }

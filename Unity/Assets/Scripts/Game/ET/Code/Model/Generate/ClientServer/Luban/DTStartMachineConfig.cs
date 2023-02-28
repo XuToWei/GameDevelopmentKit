@@ -52,7 +52,7 @@ public partial class DTStartMachineConfig : IDataTable
 
     public DRStartMachineConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartMachineConfig __v) ? __v : null;
 
-    public void Resolve(Dictionary<string, object> _tables)
+    public void Resolve(Dictionary<string, IDataTable> _tables)
     {
         foreach(var v in _dataList)
         {

@@ -52,6 +52,12 @@ namespace ET
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(File.ReadAllText(genConfigFile));
                 XmlNode xmlRoot = xmlDocument.SelectSingleNode("Config");
+                XmlNode openNode = xmlRoot.SelectSingleNode("Open");
+                if (!openNode.Attributes.GetNamedItem("Value").Value.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+                //string saveCmd = "";
                 XmlNodeList xmlGens = xmlRoot.SelectNodes("Gen");
                 for (int j = 0; j < xmlGens.Count; j++)
                 {
@@ -68,7 +74,9 @@ namespace ET
                     }
                     info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value;
                     input_data_dirs.Add(info);
+                    //saveCmd += GetCommand(info);
                 }
+                //Log.Info(saveCmd);
             }
             
             foreach (Input_Output_Gen_Info info in input_data_dirs)

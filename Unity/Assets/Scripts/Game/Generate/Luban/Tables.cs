@@ -22,13 +22,15 @@ public partial class Tables
     public DTMusic DTMusic {private set; get; }
     public DTOneConfig DTOneConfig {private set; get; }
 
-    private System.Collections.Generic.Dictionary<string, object> _tables;
+    private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
 
-    public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v as IDataTable : null;
+    public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
+
+    public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
-        _tables = new System.Collections.Generic.Dictionary<string, object>();
+        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
         DTUIForm = new DTUIForm(loader("dtuiform")); 
         await DTUIForm.LoadAsync();
         _tables.Add("DTUIForm", DTUIForm);

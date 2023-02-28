@@ -47,7 +47,7 @@ public sealed partial class DREntity :  Bright.Config.BeanBase
     public const int __ID__ = 93435409;
     public override int GetTypeId() => __ID__;
 
-    public  void Resolve(Dictionary<string, object> _tables)
+    public  void Resolve(Dictionary<string, IDataTable> _tables)
     {
         PostResolve();
     }
