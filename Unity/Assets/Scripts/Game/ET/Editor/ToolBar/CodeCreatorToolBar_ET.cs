@@ -11,7 +11,7 @@ namespace ET.Editor
         
         static CodeCreatorToolBar_ET()
         {
-            s_OpenETCodeCreatorTool = new GUIContent("CodeCreator ET", "Open ET Code Creator Tool.");
+            s_OpenETCodeCreatorTool = new GUIContent("ETCodeCreator", "Open ET Code Creator Tool.");
             ToolbarExtender.AddLeftToolbarGUI(0, OnToolbarGUI);
         }
 
