@@ -1,4 +1,4 @@
-namespace MonoTest
+namespace CodeBind.Demo
 {
     public partial class TestMono
     {

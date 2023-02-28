@@ -1,7 +1,7 @@
 using CodeBind;
 using UnityEngine;
 
-namespace MonoTest
+namespace CodeBind.Demo
 {
     [MonoCodeBind('_')]
     public partial class TestMono : MonoBehaviour
