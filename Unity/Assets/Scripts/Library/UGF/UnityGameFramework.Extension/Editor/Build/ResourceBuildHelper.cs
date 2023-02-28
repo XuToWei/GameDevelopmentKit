@@ -20,9 +20,18 @@ namespace UnityGameFramework.Extension.Editor
     {
         private static ResourceBuilderController m_Controller = null;
         private static Platform m_OriginalPlatform;
-        
+
         [MenuItem("Game Framework/Resource Tools/Resource Start Build", false, 39)]
-        public static void StartBuild(Platform specificPlatform = Platform.Undefined)
+        public static void StartBuild()
+        {
+            StartBuild(null);
+        }
+        
+        /// <summary>
+        /// build resource
+        /// </summary>
+        /// <param name="specificPlatform">为null或Undefined使用设置的平台</param>
+        public static void StartBuild(Platform? specificPlatform)
         {
             m_Controller = new ResourceBuilderController();
             m_Controller.OnLoadingResource += OnLoadingResource;
@@ -38,9 +47,9 @@ namespace UnityGameFramework.Extension.Editor
             if (m_Controller.Load())
             {
                 m_OriginalPlatform = m_Controller.Platforms;
-                if (specificPlatform != Platform.Undefined)
+                if (specificPlatform.HasValue && specificPlatform != Platform.Undefined)
                 {
-                    m_Controller.Platforms = specificPlatform;
+                    m_Controller.Platforms = specificPlatform.Value;
                 }
                 
                 Debug.Log("Load configuration success.");

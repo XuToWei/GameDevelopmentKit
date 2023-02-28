@@ -7,5 +7,6 @@ namespace CodeBind
         CSCodeBindMono mono { get; }
         Transform transform { get; }
         void InitBind(CSCodeBindMono csCodeBindMono);
+        void Clear();
     }
 }

@@ -30,6 +30,16 @@ namespace Game
             {
                 ES3.Init();
                 this.m_ES3Settings = ES3Settings.defaultSettings;
+#if UNITY_EDITOR
+                //在编辑器状态下，不用加密，方便修改数据测试
+                if (this.m_ES3Settings.encryptionType != ES3.EncryptionType.None)
+                {
+                    ES3.EncryptionType originalEncryptionType = this.m_ES3Settings.encryptionType;
+                    this.m_ES3Settings.encryptionType = ES3.EncryptionType.None;
+                    Log.Info(Utility.Text.Format("ES3 encryptionType from {0} to {1} on UNITY_EDITOR", originalEncryptionType,
+                        this.m_ES3Settings.encryptionType));
+                }
+#endif
                 return true;
             }
             catch (Exception exception)

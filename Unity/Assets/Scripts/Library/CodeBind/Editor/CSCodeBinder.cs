@@ -34,13 +34,13 @@ namespace CodeBind.Editor
             stringBuilder.AppendLine($"{indentation}public partial class {this.m_ScriptClassName} : CodeBind.ICSCodeBind");
             stringBuilder.AppendLine($"{indentation}{{");
             //组件字段
-            stringBuilder.AppendLine($"{indentation}{indentation}public CodeBind.CSCodeBindMono mono {{get; private set;}}");
+            stringBuilder.AppendLine($"{indentation}{indentation}public CodeBind.CSCodeBindMono mono {{ get; private set; }}");
             stringBuilder.AppendLine("");
-            stringBuilder.AppendLine($"{indentation}{indentation}public UnityEngine.Transform transform {{get; private set;}}");
+            stringBuilder.AppendLine($"{indentation}{indentation}public UnityEngine.Transform transform {{ get; private set; }}");
             stringBuilder.AppendLine("");
             foreach (CodeBindData bindData in this.m_BindDatas)
             {
-                stringBuilder.AppendLine($"{indentation}{indentation}public {bindData.BindType.FullName} {bindData.BindName}{bindData.BindPrefix} {{get; private set;}}");
+                stringBuilder.AppendLine($"{indentation}{indentation}public {bindData.BindType.FullName} {bindData.BindName}{bindData.BindPrefix} {{ get; private set; }}");
                 stringBuilder.AppendLine("");
             }
             //InitBind方法
@@ -51,7 +51,19 @@ namespace CodeBind.Editor
             for (int i = 0; i < this.m_BindDatas.Count; i++)
             {
                 CodeBindData bindData = this.m_BindDatas[i];
-                stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{bindData.BindName}{bindData.BindPrefix} = this.mono.BindComponents[{i}] as {bindData.BindType.FullName};");
+                stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{bindData.BindName}{bindData.BindPrefix} = this.mono.bindComponents[{i}] as {bindData.BindType.FullName};");
+            }
+            stringBuilder.AppendLine($"{indentation}{indentation}}}");
+            //Clear方法
+            stringBuilder.AppendLine("");
+            stringBuilder.AppendLine($"{indentation}{indentation}public void Clear()");
+            stringBuilder.AppendLine($"{indentation}{indentation}{{");
+            stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.mono = null;");
+            stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.transform = null;");
+            for (int i = 0; i < this.m_BindDatas.Count; i++)
+            {
+                CodeBindData bindData = this.m_BindDatas[i];
+                stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{bindData.BindName}{bindData.BindPrefix} = null;");
             }
             stringBuilder.AppendLine($"{indentation}{indentation}}}");
             
@@ -66,11 +78,11 @@ namespace CodeBind.Editor
         protected override void SetSerialization()
         {
             this.mCsCodeBindMono.bindComponents.Clear();
-            this.mCsCodeBindMono.BindComponentNames.Clear();
+            this.mCsCodeBindMono.bindComponentNames.Clear();
             foreach (CodeBindData bindData in m_BindDatas)
             {
                 this.mCsCodeBindMono.bindComponents.Add(bindData.BindTransform.GetComponent(bindData.BindType));
-                this.mCsCodeBindMono.BindComponentNames.Add(bindData.BindName);
+                this.mCsCodeBindMono.bindComponentNames.Add(bindData.BindName);
             }
         }
     }

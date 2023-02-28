@@ -15,9 +15,9 @@ MonoBehaviour:
   settings:
     _location: 0
     path: SaveFile.es3
-    encryptionType: 0
+    encryptionType: 1
     compressionType: 0
-    encryptionPassword: password
+    encryptionPassword: GameDevelopmentKit
     directory: 0
     format: 0
     prettyPrint: 1
@@ -36,6 +36,7 @@ MonoBehaviour:
     - CodeBind.Editor
     - CodeBind.Runtime
     - EasySave3
+    - EnhancedScroller.Demo
     - EnhancedScroller_asmdef
     - ET.Editor
     - ET.Runtime

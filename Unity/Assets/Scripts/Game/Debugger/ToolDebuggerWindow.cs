@@ -1,4 +1,5 @@
 using GameFramework.Debugger;
+using UnityEngine;
 
 namespace Game
 {
@@ -6,7 +7,9 @@ namespace Game
     {
         public void Initialize(params object[] args)
         {
-            //SRDebug.Init();
+#if !DISABLE_SRDEBUGGER
+            SRDebug.Init();
+#endif
         }
 
         public void Shutdown()
@@ -31,14 +34,11 @@ namespace Game
 
         public void OnDraw()
         {
-            // GUILayout.BeginHorizontal("box");
-            // {
-            //     if (GUILayout.Button("Open SRDebugger", GUILayout.Height(30)))
-            //     {
-            //         
-            //     }
-            // }
-            // GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal("box");
+            {
+                
+            }
+            GUILayout.EndHorizontal();
         }
     }
 }
