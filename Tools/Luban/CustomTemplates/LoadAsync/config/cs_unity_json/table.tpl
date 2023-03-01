@@ -23,7 +23,7 @@ public sealed partial class {{name}} : IDataTable
     {{~if x.is_map_table ~}}
     private readonly Dictionary<{{cs_define_type key_type}}, {{cs_define_type value_type}}> _dataMap;
     private readonly List<{{cs_define_type value_type}}> _dataList;
-    
+
     private readonly Task<JSONNode> _loadFunc;
 
     public {{name}}(Task<JSONNode> loadFunc)
@@ -36,10 +36,9 @@ public sealed partial class {{name}} : IDataTable
     public async Task LoadAsync()
     {
         JSONNode _json = await _loadFunc;
-
         _dataMap.Clear();
         _dataList.Clear();
-        
+
         foreach(JSONNode _row in _json.Children)
         {
             var _v = {{cs_define_type value_type}}.Deserialize{{value_type.bean.name}}(_row);
@@ -60,7 +59,7 @@ public sealed partial class {{name}} : IDataTable
     public {{cs_define_type value_type}} Get({{cs_define_type key_type}} key) => _dataMap[key];
     public {{cs_define_type value_type}} this[{{cs_define_type key_type}} key] => _dataMap[key];
 
-    public void Resolve(Dictionary<string, object> _tables)
+    public void Resolve(Dictionary<string, IDataTable> _tables)
     {
         foreach(var v in _dataList)
         {
@@ -100,7 +99,6 @@ public sealed partial class {{name}} : IDataTable
     public async Task LoadAsync()
     {
         JSONNode _json = await _loadFunc;
-
         _dataList.Clear();
         
         foreach(JSONNode _row in _json.Children)
@@ -138,7 +136,7 @@ public sealed partial class {{name}} : IDataTable
         {{~end~}}
     {{~end~}}
 
-    public void Resolve(Dictionary<string, object> _tables)
+    public void Resolve(Dictionary<string, IDataTable> _tables)
     {
         foreach(var v in _dataList)
         {
@@ -188,7 +186,7 @@ public sealed partial class {{name}} : IDataTable
      public {{cs_define_type field.ctype}} {{field.convention_name}} => _data.{{field.convention_name}};
     {{~end~}}
 
-    public void Resolve(Dictionary<string, object> _tables)
+    public void Resolve(Dictionary<string, IDataTable> _tables)
     {
         _data.Resolve(_tables);
         PostResolve();

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 /// {{x.escape_comment}}
 /// </summary>
 {{~end~}}
-public partial class {{name}} : IDataTable
+public sealed partial class {{name}} : IDataTable
 {
     {{~if x.is_map_table ~}}
     private readonly Dictionary<{{cs_define_type key_type}}, {{cs_define_type value_type}}> _dataMap;
@@ -33,10 +33,8 @@ public partial class {{name}} : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         _dataMap.Clear();
         _dataList.Clear();
-        
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             {{cs_define_type value_type}} _v;
@@ -97,9 +95,7 @@ public partial class {{name}} : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         _dataList.Clear();
-        
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             {{cs_define_type value_type}} _v;
@@ -155,7 +151,7 @@ public partial class {{name}} : IDataTable
     }
     {{~else~}}
 
-    private {{cs_define_type value_type}} _data;
+    private readonly {{cs_define_type value_type}} _data;
 
     private readonly Task<ByteBuf> _loadFunc;
 
@@ -167,7 +163,6 @@ public partial class {{name}} : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         int n = _buf.ReadSize();
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
         {{cs_deserialize '_buf' '_data' value_type}}

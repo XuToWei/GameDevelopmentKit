@@ -17,7 +17,7 @@ public partial class {{name}}
     /// {{table.escape_comment}}
     /// </summary>
 {{~end~}}
-    public {{table.full_name}} {{table.name}} {private set; get; }
+    public {{table.full_name}} {{table.name}} { private set; get; }
     {{~end~}}
 
     private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
