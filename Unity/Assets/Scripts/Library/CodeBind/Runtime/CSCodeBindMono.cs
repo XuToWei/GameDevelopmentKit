@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -9,6 +7,7 @@ using UnityEditor;
 namespace CodeBind
 {
     [CSCodeBind]
+    [DisallowMultipleComponent]
     public sealed class CSCodeBindMono : MonoBehaviour
     {
         private static readonly CSCodeBindPool s_Pool = new CSCodeBindPool();
