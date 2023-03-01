@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Game
 {
    
-public partial class DTScene : IDataTable
+public sealed partial class DTScene : IDataTable
 {
     private readonly Dictionary<int, DRScene> _dataMap;
     private readonly List<DRScene> _dataList;
@@ -29,10 +29,8 @@ public partial class DTScene : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         _dataMap.Clear();
         _dataList.Clear();
-        
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRScene _v;

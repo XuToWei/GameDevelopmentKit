@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace ET
 {
    
-public partial class DTStartMachineConfig : IDataTable
+public sealed partial class DTStartMachineConfig : IDataTable
 {
     private readonly List<DRStartMachineConfig> _dataList;
 
@@ -30,9 +30,7 @@ public partial class DTStartMachineConfig : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         _dataList.Clear();
-        
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRStartMachineConfig _v;

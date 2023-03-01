@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Game
 {
    
-public partial class DTUISound : IDataTable
+public sealed partial class DTUISound : IDataTable
 {
     private readonly Dictionary<int, DRUISound> _dataMap;
     private readonly List<DRUISound> _dataList;
@@ -29,10 +29,8 @@ public partial class DTUISound : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         _dataMap.Clear();
         _dataList.Clear();
-        
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRUISound _v;

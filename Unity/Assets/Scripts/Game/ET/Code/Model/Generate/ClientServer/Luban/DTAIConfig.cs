@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace ET
 {
    
-public partial class DTAIConfig : IDataTable
+public sealed partial class DTAIConfig : IDataTable
 {
     private readonly Dictionary<int, DRAIConfig> _dataMap;
     private readonly List<DRAIConfig> _dataList;
@@ -29,10 +29,8 @@ public partial class DTAIConfig : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         _dataMap.Clear();
         _dataList.Clear();
-        
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRAIConfig _v;

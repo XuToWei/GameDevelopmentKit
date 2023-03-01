@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace ET
@@ -78,31 +79,40 @@ namespace ET
                 }
                 //Log.Info(saveCmd);
             }
-            
+
+            List<Task> tasks = new List<Task>();
             foreach (Input_Output_Gen_Info info in input_data_dirs)
             {
-                string cmd = GetCommand(info);
-                if (!RunCommand(cmd, "../Bin/"))
+                Task task = Task.Run(() =>
                 {
-                    Log.Console($"Run error! Cmd:{cmd}");
-                    continue;
-                }
-                if (info.Output_Code_Dirs.Count > 1)
-                {
-                    for (int i = 1; i < info.Output_Code_Dirs.Count; i++)
+                    string cmd = GetCommand(info);
+                    if (!RunCommand(cmd, "../Bin/"))
                     {
-                        FileHelper.CopyDirectory(info.Output_Code_Dirs[0], info.Output_Code_Dirs[i]);
+                        Log.Error($"Run error! Cmd:{cmd}");
+                        return;
                     }
-                }
 
-                if (info.Output_Data_Dirs.Count > 1)
-                {
-                    for (int i = 1; i < info.Output_Data_Dirs.Count; i++)
+                    if (info.Output_Code_Dirs.Count > 1)
                     {
-                        FileHelper.CopyDirectory(info.Output_Data_Dirs[0], info.Output_Data_Dirs[i]);
+                        for (int i = 1; i < info.Output_Code_Dirs.Count; i++)
+                        {
+                            FileHelper.CopyDirectory(info.Output_Code_Dirs[0], info.Output_Code_Dirs[i]);
+                        }
                     }
-                }
+
+                    if (info.Output_Data_Dirs.Count > 1)
+                    {
+                        for (int i = 1; i < info.Output_Data_Dirs.Count; i++)
+                        {
+                            FileHelper.CopyDirectory(info.Output_Data_Dirs[0], info.Output_Data_Dirs[i]);
+                        }
+                    }
+                });
+                tasks.Add(task);
             }
+
+            Task whenAllTask = Task.WhenAll(tasks);
+            whenAllTask.Wait();
 
             try
             {

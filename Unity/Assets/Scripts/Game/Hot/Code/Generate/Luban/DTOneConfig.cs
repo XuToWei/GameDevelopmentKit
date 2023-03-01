@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Hotfix
 {
    
-public partial class DTOneConfig : IDataTable
+public sealed partial class DTOneConfig : IDataTable
 {
 
     private DROneConfig _data;
@@ -27,7 +27,6 @@ public partial class DTOneConfig : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         int n = _buf.ReadSize();
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
         _data = DROneConfig.DeserializeDROneConfig(_buf);

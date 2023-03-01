@@ -151,7 +151,7 @@ public sealed partial class {{name}} : IDataTable
     }
     {{~else~}}
 
-    private readonly {{cs_define_type value_type}} _data;
+    private {{cs_define_type value_type}} _data;
 
     private readonly Task<ByteBuf> _loadFunc;
 

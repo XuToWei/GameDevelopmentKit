@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Game
 {
    
-public partial class DTMusic : IDataTable
+public sealed partial class DTMusic : IDataTable
 {
     private readonly Dictionary<int, DRMusic> _dataMap;
     private readonly List<DRMusic> _dataList;
@@ -29,10 +29,8 @@ public partial class DTMusic : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         _dataMap.Clear();
         _dataList.Clear();
-        
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRMusic _v;

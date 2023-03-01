@@ -14,13 +14,13 @@ namespace Game
 { 
 public partial class Tables
 {
-    public DTUIForm DTUIForm {private set; get; }
-    public DTEntity DTEntity {private set; get; }
-    public DTScene DTScene {private set; get; }
-    public DTSound DTSound {private set; get; }
-    public DTUISound DTUISound {private set; get; }
-    public DTMusic DTMusic {private set; get; }
-    public DTOneConfig DTOneConfig {private set; get; }
+    public DTUIForm DTUIForm { private set; get; }
+    public DTEntity DTEntity { private set; get; }
+    public DTScene DTScene { private set; get; }
+    public DTSound DTSound { private set; get; }
+    public DTUISound DTUISound { private set; get; }
+    public DTMusic DTMusic { private set; get; }
+    public DTOneConfig DTOneConfig { private set; get; }
 
     private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
 

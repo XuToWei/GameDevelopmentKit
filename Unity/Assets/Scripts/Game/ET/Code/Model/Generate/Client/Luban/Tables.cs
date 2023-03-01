@@ -14,9 +14,9 @@ namespace ET
 { 
 public partial class Tables
 {
-    public DTOneConfig DTOneConfig {private set; get; }
-    public DTAIConfig DTAIConfig {private set; get; }
-    public DTUnitConfig DTUnitConfig {private set; get; }
+    public DTOneConfig DTOneConfig { private set; get; }
+    public DTAIConfig DTAIConfig { private set; get; }
+    public DTUnitConfig DTUnitConfig { private set; get; }
 
     private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
 

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace ET
 {
    
-public partial class DTUnitConfig : IDataTable
+public sealed partial class DTUnitConfig : IDataTable
 {
     private readonly Dictionary<int, DRUnitConfig> _dataMap;
     private readonly List<DRUnitConfig> _dataList;
@@ -29,10 +29,8 @@ public partial class DTUnitConfig : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         _dataMap.Clear();
         _dataList.Clear();
-        
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRUnitConfig _v;

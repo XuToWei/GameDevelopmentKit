@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace ET
 {
    
-public partial class DTStartSceneConfig : IDataTable
+public sealed partial class DTStartSceneConfig : IDataTable
 {
     private readonly List<DRStartSceneConfig> _dataList;
 
@@ -30,9 +30,7 @@ public partial class DTStartSceneConfig : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         _dataList.Clear();
-        
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRStartSceneConfig _v;

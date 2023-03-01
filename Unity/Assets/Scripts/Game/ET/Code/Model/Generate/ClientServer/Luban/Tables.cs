@@ -14,13 +14,13 @@ namespace ET
 { 
 public partial class Tables
 {
-    public DTStartMachineConfig DTStartMachineConfig {private set; get; }
-    public DTStartProcessConfig DTStartProcessConfig {private set; get; }
-    public DTStartSceneConfig DTStartSceneConfig {private set; get; }
-    public DTStartZoneConfig DTStartZoneConfig {private set; get; }
-    public DTOneConfig DTOneConfig {private set; get; }
-    public DTAIConfig DTAIConfig {private set; get; }
-    public DTUnitConfig DTUnitConfig {private set; get; }
+    public DTStartMachineConfig DTStartMachineConfig { private set; get; }
+    public DTStartProcessConfig DTStartProcessConfig { private set; get; }
+    public DTStartSceneConfig DTStartSceneConfig { private set; get; }
+    public DTStartZoneConfig DTStartZoneConfig { private set; get; }
+    public DTOneConfig DTOneConfig { private set; get; }
+    public DTAIConfig DTAIConfig { private set; get; }
+    public DTUnitConfig DTUnitConfig { private set; get; }
 
     private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
 

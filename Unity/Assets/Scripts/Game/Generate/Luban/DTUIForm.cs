@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Game
 {
    
-public partial class DTUIForm : IDataTable
+public sealed partial class DTUIForm : IDataTable
 {
     private readonly Dictionary<int, DRUIForm> _dataMap;
     private readonly List<DRUIForm> _dataList;
@@ -29,10 +29,8 @@ public partial class DTUIForm : IDataTable
     public async Task LoadAsync()
     {
         ByteBuf _buf = await _loadFunc;
-
         _dataMap.Clear();
         _dataList.Clear();
-        
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRUIForm _v;
