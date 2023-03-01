@@ -7,31 +7,50 @@ using Cysharp.Threading.Tasks;
 
 namespace ET
 {
-    public class CodeLoader : Singleton<CodeLoader>
+    [Invoke]
+    public class CodeStartAsyncHandler : AInvokeHandler<CodeLoaderComponent.CodeStartAsync, UniTask>
     {
-        private AssemblyLoadContext assemblyLoadContext;
+        public override async UniTask Handle(CodeLoaderComponent.CodeStartAsync a)
+        {
+            await CodeLoader.StartAsync();
+        }
+    }
 
-        private Assembly model;
+    // 热重载调用该方法
+    [Invoke]
+    public class CodeLoadHotfixAsyncHandler : AInvokeHandler<CodeLoaderComponent.CodeLoadHotfixAsync, UniTask>
+    {
+        public override async UniTask Handle(CodeLoaderComponent.CodeLoadHotfixAsync a)
+        {
+            await CodeLoader.LoadHotfixAsync();
+        }
+    }
+    
+    public static class CodeLoader
+    {
+        private static AssemblyLoadContext assemblyLoadContext;
 
-        public async UniTask StartAsync()
+        private static Assembly model;
+
+        public static async UniTask StartAsync()
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly assembly in assemblies)
             {
                 if (assembly.GetName().Name == "Model")
                 {
-                    this.model = assembly;
+                    model = assembly;
                     break;
                 }
             }
 
-            await this.LoadHotfixAsync();
+            await LoadHotfixAsync();
 
-            IStaticMethod start = new StaticMethod(this.model, "ET.Entry", "Start");
+            IStaticMethod start = new StaticMethod(model, "ET.Entry", "Start");
             start.Run();
         }
 
-        public async UniTask LoadHotfixAsync()
+        public static async UniTask LoadHotfixAsync()
         {
             assemblyLoadContext?.Unload();
             GC.Collect();
@@ -40,7 +59,7 @@ namespace ET
             byte[] pdbBytes = await File.ReadAllBytesAsync("./Hotfix.pdb");
             Assembly hotfixAssembly = assemblyLoadContext.LoadFromStream(new MemoryStream(dllBytes), new MemoryStream(pdbBytes));
 
-            Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(Assembly.GetEntryAssembly(), typeof (Init).Assembly, typeof (Game).Assembly, this.model, hotfixAssembly);
+            Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(Assembly.GetEntryAssembly(), typeof (Init).Assembly, typeof (Game).Assembly, model, hotfixAssembly);
 
             EventSystem.Instance.Add(types);
         }

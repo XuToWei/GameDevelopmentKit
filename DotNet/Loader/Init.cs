@@ -33,7 +33,7 @@ namespace ET
 
                 Log.Console($"{Parser.Default.FormatCommandLine(Options.Instance)}");
 
-                await Game.AddSingleton<CodeLoader>().StartAsync();
+                await Game.AddSingleton<CodeLoaderComponent>().StartAsync();
             }
             catch (Exception e)
             {
@@ -54,7 +54,6 @@ namespace ET
                     Log.Error(e);
                 }
             }
-            // ReSharper disable once FunctionNeverReturns
         }
     }
 }

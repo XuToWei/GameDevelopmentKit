@@ -8,19 +8,39 @@ using UnityGameFramework.Extension;
 
 namespace ET
 {
-    public class CodeLoader: Singleton<CodeLoader>
+    [Invoke]
+    public class CodeStartAsyncHandler : AInvokeHandler<CodeLoaderComponent.CodeStartAsync, UniTask>
     {
-        private Assembly model;
-
-        public async UniTask StartAsync()
+        public override async UniTask Handle(CodeLoaderComponent.CodeStartAsync a)
         {
+            await CodeLoader.StartAsync();
+        }
+    }
+
+    // 热重载调用该方法
+    [Invoke]
+    public class CodeLoadHotfixAsyncHandler : AInvokeHandler<CodeLoaderComponent.CodeLoadHotfixAsync, UniTask>
+    {
+        public override async UniTask Handle(CodeLoaderComponent.CodeLoadHotfixAsync a)
+        {
+            await CodeLoader.LoadHotfixAsync();
+        }
+    }
+
+    internal static class CodeLoader
+    {
+        private static Assembly model;
+
+        public static async UniTask StartAsync()
+        {
+            model = null;
             if (Define.EnableHotfix)
             {
-                byte[] assBytes = await this.LoadCodeBytesAsync("Model.dll");
-                byte[] pdbBytes = await this.LoadCodeBytesAsync("Model.pdb");
+                byte[] assBytes = await LoadCodeBytesAsync("Model.dll");
+                byte[] pdbBytes = await LoadCodeBytesAsync("Model.pdb");
 
-                this.model = Assembly.Load(assBytes, pdbBytes);
-                await this.LoadHotfixAsync();
+                model = Assembly.Load(assBytes, pdbBytes);
+                await LoadHotfixAsync();
             }
             else
             {
@@ -32,29 +52,28 @@ namespace ET
                     string name = ass.GetName().Name;
                     if (name == "Game.ET.Code.Model")
                     {
-                        this.model = ass;
+                        model = ass;
                     }
                 }
             }
             
-            IStaticMethod start = new StaticMethod(this.model, "ET.Entry", "Start");
+            IStaticMethod start = new StaticMethod(model, "ET.Entry", "Start");
             start.Run();
         }
 
-        // 热重载调用该方法
-        public async UniTask LoadHotfixAsync()
+        public static async UniTask LoadHotfixAsync()
         {
-            byte[] assBytes = await this.LoadCodeBytesAsync("Hotfix.dll");
-            byte[] pdbBytes = await this.LoadCodeBytesAsync("Hotfix.pdb");
+            byte[] assBytes = await LoadCodeBytesAsync("Hotfix.dll");
+            byte[] pdbBytes = await LoadCodeBytesAsync("Hotfix.pdb");
             
             Assembly hotfixAssembly = Assembly.Load(assBytes, pdbBytes);
 
-            Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Game).Assembly, typeof (Init).Assembly, this.model, hotfixAssembly);
+            Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Game).Assembly, typeof (Init).Assembly, model, hotfixAssembly);
 
             EventSystem.Instance.Add(types);
         }
-
-        private async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
+        
+        private static async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
         {
             TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetCodeAsset(fileName));
             byte[] bytes = textAsset.bytes;

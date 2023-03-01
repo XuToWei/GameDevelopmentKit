@@ -34,7 +34,7 @@ namespace ET.Client
 
                 if (Input.GetKeyDown(KeyCode.R))
                 {
-                    await CodeLoader.Instance.LoadHotfixAsync();
+                    await CodeLoaderComponent.Instance.LoadHotfixAsync();
                     EventSystem.Instance.Load();
                     Log.Debug("hot reload success!");
                 }

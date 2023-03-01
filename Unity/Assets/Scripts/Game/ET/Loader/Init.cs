@@ -68,7 +68,7 @@ namespace ET
 
             //ETTask.ExceptionHandler += Log.Error;
             
-            await Game.AddSingleton<CodeLoader>().StartAsync();
+            await Game.AddSingleton<CodeLoaderComponent>().StartAsync();
 
             this.gameObject.AddComponent<Runner>();
         }

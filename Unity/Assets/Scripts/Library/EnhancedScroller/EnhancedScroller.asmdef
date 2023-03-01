@@ -1,5 +1,6 @@
 {
-    "name": "EnhancedScroller_asmdef",
+    "name": "EnhancedScroller",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

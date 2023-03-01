@@ -11,7 +11,6 @@ namespace ET
         [SerializeField] private ETEnhancedScrollerCellView m_EnhancedScrollerCellView;
         
         private EnhancedScroller m_EnhancedScroller;
-        public EnhancedScroller EnhancedScroller => this.m_EnhancedScroller;
         private float m_Size;
         
         private int m_NumberOfCells;
