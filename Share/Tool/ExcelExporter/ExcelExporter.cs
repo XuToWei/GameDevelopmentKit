@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -80,10 +82,10 @@ namespace ET
                 //Log.Info(saveCmd);
             }
 
-            List<Task> tasks = new List<Task>();
+            List<Action> genActions = new List<Action>();
             foreach (Input_Output_Gen_Info info in input_data_dirs)
             {
-                Task task = Task.Run(() =>
+                genActions.Add(() =>
                 {
                     string cmd = GetCommand(info);
                     if (!RunCommand(cmd, "../Bin/"))
@@ -108,11 +110,10 @@ namespace ET
                         }
                     }
                 });
-                tasks.Add(task);
             }
 
-            Task whenAllTask = Task.WhenAll(tasks);
-            whenAllTask.Wait();
+            int maxParallelCount = Math.Max(1, Environment.ProcessorCount / 2 - 1);
+            Parallel.ForEach(genActions, new ParallelOptions {MaxDegreeOfParallelism = maxParallelCount}, genAction => { genAction(); });
 
             try
             {
