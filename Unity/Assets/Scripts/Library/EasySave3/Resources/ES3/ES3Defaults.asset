@@ -36,8 +36,8 @@ MonoBehaviour:
     - CodeBind.Editor
     - CodeBind.Runtime
     - EasySave3
+    - EnhancedScroller
     - EnhancedScroller.Demo
-    - EnhancedScroller_asmdef
     - ET.Editor
     - ET.Runtime
     - Game
