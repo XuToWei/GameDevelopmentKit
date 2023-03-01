@@ -28,13 +28,19 @@ namespace ET.Server
             NetClientComponent netClientComponent = scene.AddComponent<NetClientComponent, AddressFamily>(AddressFamily.InterNetwork);
 
             using Session session = netClientComponent.Create(Tables.Instance.DTStartSceneConfig.BenchmarkServer.OuterIPPort);
-            List<UniTask<IResponse>> list = new List<UniTask<IResponse>>(100000);
+            List<UniTask> list = new List<UniTask>(100000);
+
+            async UniTask Call(Session s)
+            {
+                await s.Call(new C2G_Benchmark());
+            }
+
             for (int j = 0; j < 100000000; ++j)
             {
                 list.Clear();
                 for (int i = 0; i < list.Capacity; ++i)
                 {
-                    list.Add(session.Call(new C2G_Benchmark()));
+                    list.Add(Call(session));
                 }
                 await UniTask.WhenAll(list);
             }

@@ -80,7 +80,6 @@ namespace ET
                 {
                     this.status &= ~EntityStatus.IsRegister;
                 }
-
                 
                 if (!value)
                 {
@@ -219,6 +218,20 @@ namespace ET
                 this.IsComponent = false;
                 this.parent.AddToChildren(this);
                 this.Domain = this.parent.domain;
+                
+#if ENABLE_VIEW && UNITY_EDITOR
+                this.viewGO.GetComponent<ComponentView>().Component = this;
+                this.viewGO.transform.SetParent(this.Parent == null ?
+                        rootViewTransform : this.Parent.viewGO.transform);
+                foreach (var child in this.Children.Values)
+                {
+                    child.viewGO.transform.SetParent(this.viewGO.transform);
+                }
+                foreach (var comp in this.Components.Values)
+                {
+                    comp.viewGO.transform.SetParent(this.viewGO.transform);
+                }
+#endif
             }
         }
 

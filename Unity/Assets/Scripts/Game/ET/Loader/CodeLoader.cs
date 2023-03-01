@@ -36,6 +36,11 @@ namespace ET
             model = null;
             if (Define.EnableHotfix)
             {
+                if (!Define.IsEditor && Define.EnableHotfix)
+                {
+                    HybridCLRHelper.Load();
+                }
+                
                 byte[] assBytes = await LoadCodeBytesAsync("Model.dll");
                 byte[] pdbBytes = await LoadCodeBytesAsync("Model.pdb");
 
@@ -65,7 +70,7 @@ namespace ET
         {
             byte[] assBytes = await LoadCodeBytesAsync("Hotfix.dll");
             byte[] pdbBytes = await LoadCodeBytesAsync("Hotfix.pdb");
-            
+
             Assembly hotfixAssembly = Assembly.Load(assBytes, pdbBytes);
 
             Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Game).Assembly, typeof (Init).Assembly, model, hotfixAssembly);

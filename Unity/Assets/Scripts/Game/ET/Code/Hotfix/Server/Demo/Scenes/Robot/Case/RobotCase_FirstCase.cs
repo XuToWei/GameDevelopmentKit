@@ -13,6 +13,14 @@ namespace ET.Server
             // 创建了两个机器人，生命周期是RobotCase，RobotCase_FirstCase.Run执行结束，机器人就会删除
             await robotCase.NewRobot(2, robots);
 
+            using ListComponent<UniTask> robotsTasks = ListComponent<UniTask>.Create();
+            for (int i = 0; i < 50; ++i)
+            {
+                robotsTasks.Add(robotCase.NewRobot(i, robots));
+            }
+
+            await UniTask.WhenAll(robotsTasks);
+
             foreach (Scene robotScene in robots)
             {
                 M2C_TestRobotCase response =

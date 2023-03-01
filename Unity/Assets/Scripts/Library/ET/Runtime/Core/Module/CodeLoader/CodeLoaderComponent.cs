@@ -14,13 +14,13 @@ namespace ET
         
         public async UniTask StartAsync()
         {
-            await EventSystem.Instance.Invoke<CodeStartAsync, UniTask>(0, new CodeStartAsync());
+            await EventSystem.Instance.Invoke<CodeStartAsync, UniTask>(new CodeStartAsync());
         }
         
         // 热重载调用该方法
         public async UniTask LoadHotfixAsync()
         {
-            await EventSystem.Instance.Invoke<CodeLoadHotfixAsync, UniTask>(0, new CodeLoadHotfixAsync());
+            await EventSystem.Instance.Invoke<CodeLoadHotfixAsync, UniTask>(new CodeLoadHotfixAsync());
         }
     }
 }
