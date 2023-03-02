@@ -26,6 +26,8 @@ namespace ET
         private const string excel_dir = "../Design/Excel";
         private const string gen_config_name = "GenConfig.xml";
 
+        private static Encoding s_Encoding;
+
         private struct Input_Output_Gen_Info
         {
             public string Input_Data_Dir;
@@ -38,12 +40,22 @@ namespace ET
         public static void Export()
         {
             Console.WriteLine("Start Export Excel ...");
+            if (Options.Instance.Customs.Contains("GB2312", StringComparison.OrdinalIgnoreCase))
+            {
+                //luban在windows上编码为GB2312
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                s_Encoding = Encoding.GetEncoding("GB2312");
+            }
+            else
+            {
+                s_Encoding = Encoding.UTF8;
+            }
             string[] dirs = Directory.GetDirectories(excel_dir);
             if (dirs.Length < 1)
             {
                 throw new Exception($"Directory {excel_dir} is empty");
             }
-            bool useJson = Options.Instance.Custom.Split(" ").Contains("Json");
+            bool useJson = Options.Instance.Customs.Contains("Json", StringComparison.OrdinalIgnoreCase);
             List<Input_Output_Gen_Info> genInfos = new List<Input_Output_Gen_Info>();
             for (int i = 0; i < dirs.Length; i++)
             {
@@ -84,9 +96,9 @@ namespace ET
             }
             Console.WriteLine("Export Excel Parallel ForEachAsync!");
             bool isSuccess = true;
-            int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
+            //int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
             Parallel.ForEachAsync(genInfos,
-                new ParallelOptions() { MaxDegreeOfParallelism = maxParallelism },
+                new ParallelOptions() { MaxDegreeOfParallelism = 1 },//luban并发IO会报错，这里设置为1
                 async (info, _) =>
                 {
                     string cmd = GetCommand(info);
@@ -156,14 +168,10 @@ namespace ET
             {
                 string app = "bash";
                 string arguments = "-c";
-                Encoding encoding = Encoding.UTF8;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     app = "cmd.exe";
                     arguments = "/c";
-                    //luban在windows上编码为GB2312
-                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                    encoding = Encoding.GetEncoding("GB2312");
                 }
 
                 ProcessStartInfo start = new ProcessStartInfo(app);
@@ -178,8 +186,8 @@ namespace ET
                 start.RedirectStandardOutput = true;
                 start.RedirectStandardError = true;
                 start.RedirectStandardInput = true;
-                start.StandardOutputEncoding = encoding;
-                start.StandardErrorEncoding = encoding;
+                start.StandardOutputEncoding = s_Encoding;
+                start.StandardErrorEncoding = s_Encoding;
 
                 bool inError = false;
                 process.OutputDataReceived += (sender, args) =>

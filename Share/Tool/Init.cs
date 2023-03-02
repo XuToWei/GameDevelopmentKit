@@ -44,6 +44,9 @@ namespace ET.Server
                     case AppType.ExcelExporter:
                     {
                         Options.Instance.Console = 1;
+                        //Options: Customs
+                        //Json-luban导出json
+                        //GB2312:使用GB2312编码解决中文乱码
                         ExcelExporter.Export();
                         return 0;
                     }

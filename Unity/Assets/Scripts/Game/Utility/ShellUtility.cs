@@ -9,7 +9,7 @@ namespace Game.Editor
 {
     public static class ShellUtility
     {
-        public static void Run(string cmd, string workDirectory, List<string> environmentVars = null)
+        public static void Run(string cmd, string workDirectory, string encodingName = "UTF-8", List<string> environmentVars = null)
         {
             Process process = new();
             try
@@ -43,8 +43,10 @@ namespace Game.Editor
                 start.RedirectStandardOutput = true;
                 start.RedirectStandardError = true;
                 start.RedirectStandardInput = false;
-                start.StandardOutputEncoding = Encoding.UTF8;
-                start.StandardErrorEncoding = Encoding.UTF8;
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                var encoding = Encoding.GetEncoding(encodingName);
+                start.StandardOutputEncoding = encoding;
+                start.StandardErrorEncoding = encoding;
                 
                 process.OutputDataReceived += (sender, args) =>
                 {
@@ -77,7 +79,7 @@ namespace Game.Editor
             }
         }
         
-        public static async UniTask RunAsync(string cmd, string workDirectory, List<string> environmentVars = null)
+        public static async UniTask RunAsync(string cmd, string workDirectory, string encodingName = "UTF-8", List<string> environmentVars = null)
         {
             Process process = new();
             try
@@ -111,9 +113,11 @@ namespace Game.Editor
                 start.RedirectStandardOutput = true;
                 start.RedirectStandardError = true;
                 start.RedirectStandardInput = true;
-                start.StandardOutputEncoding = Encoding.UTF8;
-                start.StandardErrorEncoding = Encoding.UTF8;
-                
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                var encoding = Encoding.GetEncoding(encodingName);
+                start.StandardOutputEncoding = encoding;
+                start.StandardErrorEncoding = encoding;
+
                 process.OutputDataReceived += (sender, args) =>
                 {
                     if (!string.IsNullOrEmpty(args.Data))

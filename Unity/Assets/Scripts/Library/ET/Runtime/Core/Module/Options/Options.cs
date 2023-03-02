@@ -1,6 +1,7 @@
 using CommandLine;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace ET
 {
@@ -40,7 +41,7 @@ namespace ET
         public int CreateScenes { get; set; }
         
         // 自定义（可以用来自定义参数）
-        [Option("Custom", Required = false, Default = "")]
-        public string Custom { get; set; }
+        [Option("Customs", Required = false, Default = "")]
+        public string Customs { get; set; }
     }
 }
