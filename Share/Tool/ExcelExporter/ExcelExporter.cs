@@ -75,19 +75,17 @@ namespace ET
                                 Replace("code_cs_unity_bin", "code_cs_unity_json")
                                 .Replace("data_bin", "data_json");
                     }
-
                     info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value;
                     genInfos.Add(info);
                 }
             }
 
             bool isSuccess = true;
-            int maxParallelism = Convert.ToInt32(Math.Ceiling(Environment.ProcessorCount * 0.75 * 2.0));
-            Parallel.ForEachAsync(genInfos,
+            int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
+            ParallelLoopResult result = Parallel.ForEach(genInfos,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxParallelism },
-                async (info, _) =>
+                info =>
                 {
-                    await Task.CompletedTask;
                     string cmd = GetCommand(info);
                     if (!RunCommand(cmd))
                     {
@@ -112,18 +110,23 @@ namespace ET
                             FileHelper.CopyDirectory(info.Output_Data_Dirs[0], info.Output_Data_Dirs[k]);
                         }
                     }
-                }).Wait();
-
+                });
+            
             if (!isSuccess)
             {
                 return;
+            }
+
+            if (result.IsCompleted)
+            {
+                throw new Exception("Parallel is not completed!");
             }
 
             GenerateUGFEntityId.GenerateCode();
 
             GenerateUGFUIFormId.GenerateCode();
 
-            Log.Console("Export Excel Success!");
+            Console.WriteLine("Export Excel Success!");
         }
 
         private static string GetCommand(Input_Output_Gen_Info info)
@@ -195,11 +198,12 @@ namespace ET
                         if (string.Equals(luban_error_line, args.Data))
                         {
                             inError = !inError;
+                            Console.Error.WriteLine(args.Data);
                         }
                         else if (inError)
                         {
                             isSuccess = false;
-                            Log.ConsoleError(args.Data);
+                            Console.Error.WriteLine(args.Data);
                         }
                     }
                     else
@@ -207,13 +211,12 @@ namespace ET
                         endOutput = true;
                     }
                 };
-                
                 process.ErrorDataReceived += (sender, args) =>
                 {
                     if (args.Data != null)
                     {
                         isSuccess = false;
-                        Log.ConsoleError(args.Data);
+                        Console.Error.WriteLine(args.Data);
                     }
                     else
                     {
@@ -235,7 +238,7 @@ namespace ET
             catch (Exception e)
             {
                 isSuccess = false;
-                Log.ConsoleError(e.ToString());
+                Console.Error.WriteLine(e.ToString());
             }
             finally
             {

@@ -17,7 +17,7 @@ namespace ET
         {
             // InnerMessage.proto生成cs代码
             InnerProto2CS.Proto2CS();
-            Log.Console("proto2cs succeed!");
+            Console.WriteLine("proto2cs succeed!");
         }
     }
 
@@ -241,7 +241,7 @@ namespace ET
             }
             catch (Exception e)
             {
-                Console.WriteLine($"{newline}\n {e}");
+                Console.Error.WriteLine($"{newline}\n {e}");
             }
         }
 
@@ -299,7 +299,7 @@ namespace ET
             }
             catch (Exception e)
             {
-                Console.WriteLine($"{newline}\n {e}");
+                Console.Error.WriteLine($"{newline}\n {e}");
             }
         }
     }
