@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 
 namespace Game.Editor
 {
@@ -54,24 +55,24 @@ namespace Game.Editor
 
                 bool endOutput = false;
                 bool endError = false;
-
+                
                 process.OutputDataReceived += (sender, args) =>
                 {
                     if (args.Data != null)
                     {
-                        UnityEngine.Debug.Log(args.Data);
+                        UnityEngine.Debug.Log(args.Data.Replace("@rn", "\r\n"));
                     }
                     else
                     {
                         endOutput = true;
                     }
                 };
-
+                
                 process.ErrorDataReceived += (sender, args) =>
                 {
                     if (args.Data != null)
                     {
-                        UnityEngine.Debug.LogError(args.Data);
+                        UnityEngine.Debug.LogError(args.Data.Replace("@rn", "\r\n"));
                     }
                     else
                     {
@@ -94,6 +95,7 @@ namespace Game.Editor
             {
                 UnityEngine.Debug.LogException(e);
             }
+            
             finally
             {
                 process.Close();

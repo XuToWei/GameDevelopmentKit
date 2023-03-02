@@ -38,5 +38,9 @@ namespace ET
         // 进程启动是否创建该进程的scenes
         [Option("CreateScenes", Required = false, Default = 1)]
         public int CreateScenes { get; set; }
+        
+        // 自定义（可以用来自定义参数）
+        [Option("Custom", Required = false, Default = "")]
+        public string Custom { get; set; }
     }
 }

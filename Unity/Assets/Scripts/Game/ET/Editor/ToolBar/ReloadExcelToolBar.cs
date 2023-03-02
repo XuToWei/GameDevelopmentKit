@@ -1,3 +1,4 @@
+using Game.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityToolbarExtender;
@@ -12,7 +13,7 @@ namespace ET.Editor
         
         static ReloadExcelToolBar()
         {
-            s_ExportReloadButtonGUIConent = new GUIContent("ReloadExcel", "Export And Reload All Excel!");
+            s_ExportReloadButtonGUIConent = new GUIContent("ReloadExcel", "Reload (No Export) All Excel!");
             s_IsReloading = false;
             ToolbarExtender.AddRightToolbarGUI(0, OnToolbarGUI);
         }
@@ -26,9 +27,7 @@ namespace ET.Editor
                     if (s_IsReloading)
                         return;
                     s_IsReloading = true;
-                    
-                    ToolsEditor.ExcelExporter();
-                    
+
                     async void ReloadAsync()
                     {
                         try

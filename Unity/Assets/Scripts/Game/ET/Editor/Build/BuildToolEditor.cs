@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Editor;
 using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEngine;
@@ -82,12 +83,12 @@ namespace ET.Editor
             GUILayout.Label("Tool", titleGUIStyle);
             if (GUILayout.Button("ExcelExporter"))
             {
-                ToolsEditor.ExcelExporter();
+                ToolEditor.ExcelExporter();
             }
 
             if (GUILayout.Button("Proto2CS"))
             {
-                ToolsEditor.Proto2CS();
+                ToolEditor.Proto2CS();
             }
 
             GUILayout.Space(5);

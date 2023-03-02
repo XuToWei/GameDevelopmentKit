@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Unicode;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -13,20 +12,20 @@ namespace ET
 {
     public static class ExcelExporter
     {
-        /// <summary>
-        /// 是否使用json，需要测试使用json的时候更改此字段
-        /// </summary>
-        private static readonly bool UseJson = false;
-        
+        private const string working_dir = "../Bin/";
+        private const string luban_error_line = "=======================================================================";
+
         /// <summary>
         /// luban命令模板，不能带换行符
         /// </summary>
-        private const string lubanCommandTemplate = "dotnet %GEN_CLIENT% --template_search_path %CUSTOM_TEMPLATE_DIR% -j cfg -- -d %INPUT_DATA_DIR%/Defines/__root__.xml --input_data_dir %INPUT_DATA_DIR%/Datas --output_code_dir %OUTPUT_CODE_DIR% --output_data_dir %OUTPUT_DATA_DIR% --gen_types %GEN_TYPE_CODE_DATA% -s %GEN_GROUP%";
+        private const string lubanCommandTemplate =
+                "dotnet %GEN_CLIENT% --template_search_path %CUSTOM_TEMPLATE_DIR% -j cfg -- -d %INPUT_DATA_DIR%/Defines/__root__.xml --input_data_dir %INPUT_DATA_DIR%/Datas --output_code_dir %OUTPUT_CODE_DIR% --output_data_dir %OUTPUT_DATA_DIR% --gen_types %GEN_TYPE_CODE_DATA% -s %GEN_GROUP%";
+
         private const string gen_client = "../Tools/Luban/Tools/Luban.ClientServer/Luban.ClientServer.dll";
         private const string custom_template_dir = "../Tools/Luban/CustomTemplates/LoadAsync";
         private const string excel_dir = "../Design/Excel";
         private const string gen_config_name = "GenConfig.xml";
-        
+
         private struct Input_Output_Gen_Info
         {
             public string Input_Data_Dir;
@@ -35,23 +34,23 @@ namespace ET
             public string Gen_Type_Code_Data;
             public string Gen_Group;
         }
-        
-        private static List<Input_Output_Gen_Info> input_data_dirs;
+
         public static void Export()
         {
             string[] dirs = Directory.GetDirectories(excel_dir);
             if (dirs.Length < 1)
                 return;
-            
-            input_data_dirs = new List<Input_Output_Gen_Info>();
+            bool useJson = Options.Instance.Custom.Split(" ").Contains("Json");
+            List<Input_Output_Gen_Info> genInfos = new List<Input_Output_Gen_Info>();
             for (int i = 0; i < dirs.Length; i++)
             {
                 string dir = dirs[i];
-                string genConfigFile = Path.Combine(dir, gen_config_name).Replace('\\', '/');;
+                string genConfigFile = Path.Combine(dir, gen_config_name).Replace('\\', '/');
                 if (!File.Exists(genConfigFile))
                 {
                     continue;
                 }
+
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(File.ReadAllText(genConfigFile));
                 XmlNode xmlRoot = xmlDocument.SelectSingleNode("Config");
@@ -60,7 +59,7 @@ namespace ET
                 {
                     continue;
                 }
-                //string saveCmd = "";
+
                 XmlNodeList xmlGens = xmlRoot.SelectNodes("Gen");
                 for (int j = 0; j < xmlGens.Count; j++)
                 {
@@ -70,80 +69,72 @@ namespace ET
                     info.Output_Code_Dirs = xmlGen.SelectSingleNode("Output_Code_Dirs").Attributes.GetNamedItem("Value").Value.Split(',').ToList();
                     info.Output_Data_Dirs = xmlGen.SelectSingleNode("Output_Data_Dirs").Attributes.GetNamedItem("Value").Value.Split(',').ToList();
                     info.Gen_Type_Code_Data = xmlGen.SelectSingleNode("Gen_Type_Code_Data").Attributes.GetNamedItem("Value").Value;
-                    if (UseJson)
+                    if (useJson)
                     {
-                        info.Gen_Type_Code_Data = info.Gen_Type_Code_Data.Replace("code_cs_unity_bin", "code_cs_unity_json")
+                        info.Gen_Type_Code_Data = info.Gen_Type_Code_Data.
+                                Replace("code_cs_unity_bin", "code_cs_unity_json")
                                 .Replace("data_bin", "data_json");
                     }
+
                     info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value;
-                    input_data_dirs.Add(info);
-                    //saveCmd += GetCommand(info);
+                    genInfos.Add(info);
                 }
-                //Log.Info(saveCmd);
             }
 
-            List<Action> genActions = new List<Action>();
-            foreach (Input_Output_Gen_Info info in input_data_dirs)
-            {
-                genActions.Add(() =>
+            bool isSuccess = true;
+            int maxParallelism = Convert.ToInt32(Math.Ceiling(Environment.ProcessorCount * 0.75 * 2.0));
+            Parallel.ForEachAsync(genInfos,
+                new ParallelOptions() { MaxDegreeOfParallelism = maxParallelism },
+                async (info, _) =>
                 {
+                    await Task.CompletedTask;
                     string cmd = GetCommand(info);
-                    if (!RunCommand(cmd, "../Bin/"))
+                    if (!RunCommand(cmd))
                     {
-                        Log.Error($"Run error! Cmd:{cmd}");
+                        isSuccess = false;
                         return;
                     }
 
                     if (info.Output_Code_Dirs.Count > 1)
                     {
-                        for (int i = 1; i < info.Output_Code_Dirs.Count; i++)
+                        for (int k = 1; k < info.Output_Code_Dirs.Count; k++)
                         {
-                            FileHelper.CopyDirectory(info.Output_Code_Dirs[0], info.Output_Code_Dirs[i]);
+                            FileHelper.CleanDirectory(info.Output_Code_Dirs[k]);
+                            FileHelper.CopyDirectory(info.Output_Code_Dirs[0], info.Output_Code_Dirs[k]);
                         }
                     }
 
                     if (info.Output_Data_Dirs.Count > 1)
                     {
-                        for (int i = 1; i < info.Output_Data_Dirs.Count; i++)
+                        for (int k = 1; k < info.Output_Data_Dirs.Count; k++)
                         {
-                            FileHelper.CopyDirectory(info.Output_Data_Dirs[0], info.Output_Data_Dirs[i]);
+                            FileHelper.CleanDirectory(info.Output_Data_Dirs[k]);
+                            FileHelper.CopyDirectory(info.Output_Data_Dirs[0], info.Output_Data_Dirs[k]);
                         }
                     }
-                });
+                }).Wait();
+
+            if (!isSuccess)
+            {
+                return;
             }
 
-            int maxParallelCount = Math.Max(1, Environment.ProcessorCount / 2 - 1);
-            Parallel.ForEach(genActions, new ParallelOptions {MaxDegreeOfParallelism = maxParallelCount}, genAction => { genAction(); });
+            GenerateUGFEntityId.GenerateCode();
 
-            try
-            {
-                GenerateUGFEntityId.GenerateCode();
-            }
-            catch (Exception e)
-            {
-                Log.Console($"GenerateUGFEntityId Code Fail! Msg:{e}");
-            }
-            
-            try
-            {
-                GenerateUGFUIFormId.GenerateCode();
-            }
-            catch (Exception e)
-            {
-                Log.Console($"GenerateUGFUIFormId Code Fail! Msg:{e}");
-            }
-            
-            Log.Console("Export Excel Finished!");
+            GenerateUGFUIFormId.GenerateCode();
+
+            Log.Console("Export Excel Success!");
         }
 
         private static string GetCommand(Input_Output_Gen_Info info)
         {
             string cmd = lubanCommandTemplate;
-            if (string.Equals(info.Gen_Type_Code_Data, "code_cs_unity_editor_json"))//editor,不用自定义模板,不用导出数据
+            if (string.Equals(info.Gen_Type_Code_Data, "code_cs_unity_editor_json")) //editor,不用自定义模板,不用导出数据
             {
                 cmd = cmd.Replace(" --template_search_path %CUSTOM_TEMPLATE_DIR%", "");
                 cmd = cmd.Replace(" --output_data_dir %OUTPUT_DATA_DIR%", "");
             }
+
             cmd = cmd.Replace("%GEN_CLIENT%", gen_client)
                     .Replace("%CUSTOM_TEMPLATE_DIR%", custom_template_dir)
                     .Replace("%INPUT_DATA_DIR%", info.Input_Data_Dir)
@@ -154,18 +145,27 @@ namespace ET
             return cmd;
         }
 
-        private static bool RunCommand(string cmd, string workDirectory)
+        /// <summary>
+        /// 执行命令
+        /// </summary>
+        /// <param name="cmd">命令</param>
+        /// <returns>错误信息</returns>
+        private static bool RunCommand(string cmd)
         {
-            bool isSuccess = false;
+            bool isSuccess = true;
             Process process = new();
             try
             {
                 string app = "bash";
                 string arguments = "-c";
+                Encoding encoding = Encoding.UTF8;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     app = "cmd.exe";
                     arguments = "/c";
+                    //luban在windows上编码为GB2312
+                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                    encoding = Encoding.GetEncoding("GB2312");
                 }
 
                 ProcessStartInfo start = new ProcessStartInfo(app);
@@ -175,34 +175,45 @@ namespace ET
                 start.CreateNoWindow = true;
                 start.ErrorDialog = true;
                 start.UseShellExecute = false;
-                start.WorkingDirectory = workDirectory;
+                start.WorkingDirectory = working_dir;
 
                 start.RedirectStandardOutput = true;
                 start.RedirectStandardError = true;
                 start.RedirectStandardInput = true;
-                start.StandardOutputEncoding = System.Text.Encoding.UTF8;
-                start.StandardErrorEncoding = System.Text.Encoding.UTF8;
+                start.StandardOutputEncoding = encoding;
+                start.StandardErrorEncoding = encoding;
 
                 bool endOutput = false;
                 bool endError = false;
-
+                bool inError = false;
+                
                 process.OutputDataReceived += (sender, args) =>
                 {
                     if (args.Data != null)
                     {
-                        Log.Debug(args.Data);
+                        //luban运行时候，配置错误不会抛出异常，所以需要从OutputData筛选错误信息
+                        if (string.Equals(luban_error_line, args.Data))
+                        {
+                            inError = !inError;
+                        }
+                        else if (inError)
+                        {
+                            isSuccess = false;
+                            Log.ConsoleError(args.Data);
+                        }
                     }
                     else
                     {
                         endOutput = true;
                     }
                 };
-
+                
                 process.ErrorDataReceived += (sender, args) =>
                 {
                     if (args.Data != null)
                     {
-                        Log.Error(args.Data);
+                        isSuccess = false;
+                        Log.ConsoleError(args.Data);
                     }
                     else
                     {
@@ -220,17 +231,17 @@ namespace ET
 
                 process.CancelOutputRead();
                 process.CancelErrorRead();
-                isSuccess = true;
             }
             catch (Exception e)
             {
-                Log.Error(e);
                 isSuccess = false;
+                Log.ConsoleError(e.ToString());
             }
             finally
             {
                 process.Close();
             }
+
             return isSuccess;
         }
     }

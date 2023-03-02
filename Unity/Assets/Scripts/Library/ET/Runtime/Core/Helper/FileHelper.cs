@@ -46,10 +46,10 @@ namespace ET
             }
         }
 
-        public static void CopyDirectory(string srcDir, string tgtDir)
+        public static void CopyDirectory(string srcDir, string targetDir)
         {
             DirectoryInfo source = new DirectoryInfo(srcDir);
-            DirectoryInfo target = new DirectoryInfo(tgtDir);
+            DirectoryInfo target = new DirectoryInfo(targetDir);
 
             if (target.FullName.StartsWith(source.FullName, StringComparison.CurrentCultureIgnoreCase))
             {

@@ -129,13 +129,11 @@ namespace ET
                 return;
             }
             this.iLog.Debug(string.Format(message, args));
-
         }
 
         public void Error(string message, params object[] args)
         {
-            StackTrace st = new StackTrace(2, true);
-            string s = string.Format(message, args) + '\n' + st;
+            string s = $"{string.Format(message, args)} \n {new StackTrace(2, true)}";
             this.iLog.Error(s);
         }
         
@@ -155,7 +153,27 @@ namespace ET
             {
                 System.Console.WriteLine(s);
             }
-            this.iLog.Debug(s);
+            Log.Debug(s);
+        }
+        
+        public void ConsoleError(string message)
+        {
+            string s = $"{message} \n {new StackTrace(2, true)}";
+            if (Options.Instance.Console == 1)
+            {
+                System.Console.Error.WriteLine(s);
+            }
+            Log.Error(s);
+        }
+        
+        public void ConsoleError(string message, params object[] args)
+        {
+            string s = $"{string.Format(message, args)} \n {new StackTrace(2, true)}";
+            if (Options.Instance.Console == 1)
+            {
+                System.Console.Error.WriteLine(s);
+            }
+            Log.Error(s);
         }
     }
 }
