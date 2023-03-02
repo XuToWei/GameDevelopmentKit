@@ -20,14 +20,7 @@ namespace Game.Editor
             if (GUILayout.Button(s_ExportButtonGUIConent))
             {
                 ToolEditor.ExcelExporter();
-                ShowNotification("Export All Excel!");
             }
-        }
-
-        private static void ShowNotification(string msg)
-        {
-            EditorWindow game = EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));
-            if (game != null) game.ShowNotification(new GUIContent(msg));
         }
     }
 }

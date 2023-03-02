@@ -37,9 +37,12 @@ namespace ET
 
         public static void Export()
         {
+            Console.WriteLine("Start Export Excel ...");
             string[] dirs = Directory.GetDirectories(excel_dir);
             if (dirs.Length < 1)
-                return;
+            {
+                throw new Exception($"Directory {excel_dir} is empty");
+            }
             bool useJson = Options.Instance.Custom.Split(" ").Contains("Json");
             List<Input_Output_Gen_Info> genInfos = new List<Input_Output_Gen_Info>();
             for (int i = 0; i < dirs.Length; i++)
@@ -79,20 +82,19 @@ namespace ET
                     genInfos.Add(info);
                 }
             }
-
+            Console.WriteLine("Export Excel Parallel ForEachAsync!");
             bool isSuccess = true;
             int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
-            ParallelLoopResult result = Parallel.ForEach(genInfos,
+            Parallel.ForEachAsync(genInfos,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxParallelism },
-                info =>
+                async (info, _) =>
                 {
                     string cmd = GetCommand(info);
-                    if (!RunCommand(cmd))
+                    if (!await RunCommand(cmd))
                     {
                         isSuccess = false;
                         return;
                     }
-
                     if (info.Output_Code_Dirs.Count > 1)
                     {
                         for (int k = 1; k < info.Output_Code_Dirs.Count; k++)
@@ -101,7 +103,6 @@ namespace ET
                             FileHelper.CopyDirectory(info.Output_Code_Dirs[0], info.Output_Code_Dirs[k]);
                         }
                     }
-
                     if (info.Output_Data_Dirs.Count > 1)
                     {
                         for (int k = 1; k < info.Output_Data_Dirs.Count; k++)
@@ -110,22 +111,16 @@ namespace ET
                             FileHelper.CopyDirectory(info.Output_Data_Dirs[0], info.Output_Data_Dirs[k]);
                         }
                     }
-                });
+                }).Wait();
             
             if (!isSuccess)
             {
+                Console.WriteLine("Export Excel Fail!");
                 return;
             }
-
-            if (result.IsCompleted)
-            {
-                throw new Exception("Parallel is not completed!");
-            }
-
+            
             GenerateUGFEntityId.GenerateCode();
-
             GenerateUGFUIFormId.GenerateCode();
-
             Console.WriteLine("Export Excel Success!");
         }
 
@@ -153,7 +148,7 @@ namespace ET
         /// </summary>
         /// <param name="cmd">命令</param>
         /// <returns>错误信息</returns>
-        private static bool RunCommand(string cmd)
+        private static async Task<bool> RunCommand(string cmd)
         {
             bool isSuccess = true;
             Process process = new();
@@ -186,65 +181,51 @@ namespace ET
                 start.StandardOutputEncoding = encoding;
                 start.StandardErrorEncoding = encoding;
 
-                bool endOutput = false;
-                bool endError = false;
                 bool inError = false;
-                
                 process.OutputDataReceived += (sender, args) =>
                 {
-                    if (args.Data != null)
+                    if (!string.IsNullOrEmpty(args.Data))
                     {
                         //luban运行时候，配置错误不会抛出异常，所以需要从OutputData筛选错误信息
                         if (string.Equals(luban_error_line, args.Data))
                         {
+                            isSuccess = false;
                             inError = !inError;
                             Console.Error.WriteLine(args.Data);
                         }
                         else if (inError)
                         {
                             isSuccess = false;
-                            Console.Error.WriteLine(args.Data);
+                            if (!string.IsNullOrEmpty(args.Data))
+                            {
+                                Console.Error.WriteLine(args.Data);
+                            }
                         }
-                    }
-                    else
-                    {
-                        endOutput = true;
                     }
                 };
                 process.ErrorDataReceived += (sender, args) =>
                 {
-                    if (args.Data != null)
+                    if (!string.IsNullOrEmpty(args.Data))
                     {
                         isSuccess = false;
                         Console.Error.WriteLine(args.Data);
-                    }
-                    else
-                    {
-                        endError = true;
                     }
                 };
 
                 process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
-
-                while (!endOutput || !endError)
-                {
-                }
-
-                process.CancelOutputRead();
-                process.CancelErrorRead();
+                await process.WaitForExitAsync();
             }
             catch (Exception e)
             {
                 isSuccess = false;
-                Console.Error.WriteLine(e.ToString());
+                await Console.Error.WriteLineAsync(e.ToString());
             }
             finally
             {
                 process.Close();
             }
-
             return isSuccess;
         }
     }

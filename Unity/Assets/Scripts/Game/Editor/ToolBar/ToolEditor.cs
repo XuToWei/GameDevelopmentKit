@@ -1,12 +1,13 @@
 using System.Diagnostics;
 using UnityEditor;
+using UnityEngine;
 
 namespace Game.Editor
 {
     public static class ToolEditor
     {
         [MenuItem("Tools/Tool/ExcelExporter")]
-        public static void ExcelExporter()
+        public static async void ExcelExporter()
         {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
             const string tools = "./Tool";
@@ -14,14 +15,14 @@ namespace Game.Editor
             const string tools = ".\\Tool.exe";
 #endif
             Stopwatch stopwatch = Stopwatch.StartNew();
-            ShellUtility.Run($"{tools} --AppType=ExcelExporter --Console=1", "../Bin/");
+            await ShellUtility.RunAsync($"{tools} --AppType=ExcelExporter --Console=1", "../Bin/");
             stopwatch.Stop();
             UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
         
         [MenuItem("Tools/Tool/ExcelExporterForJson")]
-        public static void ExcelExporterForJson()
+        public static async void ExcelExporterForJson()
         {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
             const string tools = "./Tool";
@@ -29,7 +30,7 @@ namespace Game.Editor
             const string tools = ".\\Tool.exe";
 #endif
             Stopwatch stopwatch = Stopwatch.StartNew();
-            ShellUtility.Run($"{tools} --AppType=ExcelExporter --Console=1 --Custom=Json", "../Bin/");
+            await ShellUtility.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Custom=Json", "../Bin/");
             stopwatch.Stop();
             UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
