@@ -47,7 +47,7 @@ namespace Game.Editor
 
             Debug.Log($"start build {platform}");
             
-            string fold = $"BuildFolder/{platform}";
+            string fold = $"{BuildFolder}/{platform}";
 
             if (Directory.Exists(fold))
             {
@@ -76,7 +76,7 @@ namespace Game.Editor
 
         public static void RefreshWindowsPkgResource()
         {
-            string fold = $"BuildFolder/{Platform.Windows}";
+            string fold = $"{BuildFolder}/{Platform.Windows}";
             string targetPath = Path.Combine(fold, $"{Application.productName}_Data/StreamingAssets/");
             if (!Directory.Exists(targetPath))
             {
@@ -94,7 +94,7 @@ namespace Game.Editor
         
         public static void RefreshWindows64PkgResource()
         {
-            string fold = $"BuildFolder/{Platform.Windows64}";
+            string fold = $"{BuildFolder}/{Platform.Windows64}";
             string targetPath = Path.Combine(fold, $"{Application.productName}_Data/StreamingAssets/");
             if (!Directory.Exists(targetPath))
             {
