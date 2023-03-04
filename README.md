@@ -37,3 +37,5 @@
 
 [UGFExtensions](https://github.com/FingerCaster/UGFExtensions)
 
+[CatJson](https://github.com/CatImmortal/CatJson)
+
