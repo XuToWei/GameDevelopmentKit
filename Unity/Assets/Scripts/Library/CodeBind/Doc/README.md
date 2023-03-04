@@ -4,7 +4,7 @@
 
 ## 1.MonoBehaviour类型：
 
-继承MonoBehaviour的绑定：添加特性[MonoCodeBind](../Runtime/CSCodeBindAttribute.cs)即可，指定分隔符参数（可选）
+添加特性[MonoCodeBind](../Runtime/CSCodeBindAttribute.cs)即可，指定分隔符参数（可选）
 
 ### $\,\,$使用方式：
 ```csharp
