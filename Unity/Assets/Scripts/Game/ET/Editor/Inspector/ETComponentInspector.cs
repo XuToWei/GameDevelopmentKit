@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Game;
 using UnityEditor;
 using UnityEngine;
@@ -23,9 +21,12 @@ namespace ET.Editor
             
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
-                this.globalConfig.CodeMode = (CodeMode)EditorGUILayout.EnumPopup("CodeMode: ", this.globalConfig.CodeMode);
-                EditorUtility.SetDirty(this.globalConfig);
-                AssetDatabase.SaveAssets();
+                var codeMode = (CodeMode)EditorGUILayout.EnumPopup("CodeMode: ", this.globalConfig.CodeMode);
+                if (codeMode != this.globalConfig.CodeMode)
+                {
+                    EditorUtility.SetDirty(this.globalConfig);
+                    AssetDatabase.SaveAssets();
+                }
             }
             EditorGUI.EndDisabledGroup();
         }
