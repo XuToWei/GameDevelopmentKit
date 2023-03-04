@@ -6,7 +6,7 @@
 
 2.以[GFEntity](Unity/Assets/Scripts/Game/ET/Loader/UGF/UIForm)为基础的[ETEntity](Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Module/Entity)
 
-3.[代码绑定工具](Unity/Assets/Scripts/Library/CodeBind/Doc/README.md)，使用简单人性化
+3.[代码绑定工具](Unity/Assets/Scripts/Library/CodeBind/Doc/README.md)，使用简单人性化！
 
 4.ET模块化，ET逻辑与GF逻辑，热更和非热更[切换](Book/Project%E7%BB%93%E6%9E%84.md)简单
 
