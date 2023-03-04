@@ -59,6 +59,11 @@ namespace ET
                     RedirectStandardError = true,
                 };
                 Process process = Process.Start(info);
+                if (process == null)
+                {
+                    return null;
+                }
+
                 if (!process.HasExited)
                 {
                     return process;
