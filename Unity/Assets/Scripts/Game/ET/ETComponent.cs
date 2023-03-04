@@ -11,6 +11,8 @@ namespace Game
     public class ETComponent : GameFrameworkComponent
     {
 #if UNITY_ET
+        public bool IsOpen = true;
+        
         public void StartRun()
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -25,6 +27,8 @@ namespace Game
             }
             throw new GameFrameworkException("Not Found Game.ET.Loader or ET.Init!");
         }
+#else
+        public bool IsOpen = false;
 #endif
     }
 }

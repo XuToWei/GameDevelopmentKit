@@ -8,30 +8,11 @@ using UnityGameFramework.Extension;
 
 namespace ET
 {
-    [Invoke]
-    public class CodeStartAsyncHandler : AInvokeHandler<CodeLoaderComponent.CodeStartAsync, UniTask>
+    public class CodeLoader : ICodeLoader
     {
-        public override async UniTask Handle(CodeLoaderComponent.CodeStartAsync a)
-        {
-            await CodeLoader.StartAsync();
-        }
-    }
+        private Assembly model;
 
-    // 热重载调用该方法
-    [Invoke]
-    public class CodeLoadHotfixAsyncHandler : AInvokeHandler<CodeLoaderComponent.CodeLoadHotfixAsync, UniTask>
-    {
-        public override async UniTask Handle(CodeLoaderComponent.CodeLoadHotfixAsync a)
-        {
-            await CodeLoader.LoadHotfixAsync();
-        }
-    }
-
-    internal static class CodeLoader
-    {
-        private static Assembly model;
-
-        public static async UniTask StartAsync()
+        public async UniTask StartAsync()
         {
             model = null;
             if (Define.EnableHotfix)
@@ -66,7 +47,7 @@ namespace ET
             start.Run();
         }
 
-        public static async UniTask LoadHotfixAsync()
+        public async UniTask LoadHotfixAsync()
         {
             byte[] assBytes = await LoadCodeBytesAsync("Hotfix.dll");
             byte[] pdbBytes = await LoadCodeBytesAsync("Hotfix.pdb");
@@ -78,7 +59,7 @@ namespace ET
             EventSystem.Instance.Add(types);
         }
         
-        private static async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
+        private async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
         {
             TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetCodeAsset(fileName));
             byte[] bytes = textAsset.bytes;

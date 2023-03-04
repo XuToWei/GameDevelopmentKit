@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
@@ -10,23 +10,21 @@ namespace Game
         {
             base.OnEnter(procedureOwner);
             
-            
+            PreloadAsync(procedureOwner).Forget();
         }
 
-        protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
+        private async UniTaskVoid PreloadAsync(ProcedureOwner procedureOwner)
         {
-
-            base.OnLeave(procedureOwner, isShutdown);
-        }
-
-        protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
-        {
-            base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
+            Log.Info("Start load Game Tables!");
+            await TablesLoader.LoadAsync();
+            Log.Info("Finish load Game Tables!");
             
 #if UNITY_ET
             ChangeState<ProcedureStartET>(procedureOwner);
+#elif UNITY_GAMEHOT
+            ChangeState<ProcedureStartHot>(procedureOwner);
 #else
-            
+            ChangeState<ProcedureStartGame>(procedureOwner);
 #endif
         }
     }

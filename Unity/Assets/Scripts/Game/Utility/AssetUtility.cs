@@ -38,7 +38,7 @@ namespace Game
         {
             return Utility.Text.Format("Assets/Res/UI/UISound/{0}.wav", assetName);
         }
-        
+
         public static string GetUISpriteAsset(string assetName)
         {
             return Utility.Text.Format("Assets/Res/UI/UISprite/{0}.png", assetName);
@@ -46,7 +46,12 @@ namespace Game
 
         public static string GetCodeAsset(string assetName)
         {
-            return Utility.Text.Format("Assets/Res/Code/{0}.byte", assetName);
+            return Utility.Text.Format("Assets/Res/Code/{0}.bytes", assetName);
+        }
+
+        public static string GetLubanAsset(string assetName, bool fromJson)
+        {
+            return Utility.Text.Format("Assets/Res/Luban/{0}.{1}", assetName, fromJson ? "json" : "bytes");
         }
     }
 }

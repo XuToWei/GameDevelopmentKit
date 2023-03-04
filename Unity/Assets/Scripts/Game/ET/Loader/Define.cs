@@ -45,18 +45,18 @@
             {
                 if (isJson)
                 {
-                    return $"Assets/Res/Runtime/ET/Client/Luban/{fileName}.json";
+                    return $"Assets/Res/ET/Client/Luban/{fileName}.json";
                 }
 
-                return $"Assets/Res/Runtime/ET/Client/Luban/{fileName}.byte";
+                return $"Assets/Res/ET/Client/Luban/{fileName}.bytes";
             }
             
             if (isJson)
             {
-                return $"Assets/Res/Runtime/ET/ClientServer/Luban/{fileName}.json";
+                return $"Assets/Res/ET/ClientServer/Luban/{fileName}.json";
             }
 
-            return $"Assets/Res/Runtime/ET/ClientServer/Luban/{fileName}.byte";
+            return $"Assets/Res/ET/ClientServer/Luban/{fileName}.bytes";
         }
     }
 }

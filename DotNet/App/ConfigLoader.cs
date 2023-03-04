@@ -40,7 +40,6 @@ namespace ET.Server
                 Func<string, Task<JSONNode>> func = LoadJson;
                 await (Task)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
             }
-            
         }
         
         private string GetLubanAssetPath(string fileName, bool isJson)
@@ -50,7 +49,7 @@ namespace ET.Server
                 return $"../Config/Luban/{fileName}.json";
             }
 
-            return $"../Config/Luban/{fileName}.byte";
+            return $"../Config/Luban/{fileName}.bytes";
         }
     }
     

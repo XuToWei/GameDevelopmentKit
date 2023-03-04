@@ -31,7 +31,7 @@ namespace ET
         {
             InstanceIdStruct instanceIdStruct = new InstanceIdStruct((int)this.Id, 0);
             this.SceneId = instanceIdStruct.ToLong();
-            Log.Info($"StartProcess info: {this.MachineId} {this.Id} {this.SceneId}");
+            //Log.Info($"StartProcess info: {this.MachineId} {this.Id} {this.SceneId}");
         }
     }
 }

@@ -28,12 +28,11 @@ namespace ET
                 Game.AddSingleton<EventSystem>();
                 Game.AddSingleton<TimerComponent>();
                 Game.AddSingleton<CoroutineLockComponent>();
-
-                //ETTask.ExceptionHandler += Log.Error;
-
+                Game.AddSingleton<CodeLoaderComponent>().SetCodeLoader(new CodeLoader());
+                
                 Log.Console($"{Parser.Default.FormatCommandLine(Options.Instance)}");
-
-                await Game.AddSingleton<CodeLoaderComponent>().StartAsync();
+                
+                await CodeLoaderComponent.Instance.StartAsync();
             }
             catch (Exception e)
             {

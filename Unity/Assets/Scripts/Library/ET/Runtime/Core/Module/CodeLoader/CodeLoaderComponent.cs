@@ -2,25 +2,24 @@ using Cysharp.Threading.Tasks;
 
 namespace ET
 {
-    public class CodeLoaderComponent : Singleton<CodeLoaderComponent>
+    public class CodeLoaderComponent : Singleton<CodeLoaderComponent>, ICodeLoader
     {
-        public struct CodeStartAsync
-        {
-        }
+        private ICodeLoader codeLoader;
 
-        public struct CodeLoadHotfixAsync
+        public void SetCodeLoader(ICodeLoader loader)
         {
+            this.codeLoader = loader;
         }
         
         public async UniTask StartAsync()
         {
-            await EventSystem.Instance.Invoke<CodeStartAsync, UniTask>(new CodeStartAsync());
+            await this.codeLoader.StartAsync();
         }
         
         // 热重载调用该方法
         public async UniTask LoadHotfixAsync()
         {
-            await EventSystem.Instance.Invoke<CodeLoadHotfixAsync, UniTask>(new CodeLoadHotfixAsync());
+            await this.codeLoader.LoadHotfixAsync();
         }
     }
 }
