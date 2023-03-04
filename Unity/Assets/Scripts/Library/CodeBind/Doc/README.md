@@ -29,5 +29,13 @@ $\,\,$按钮Generate Serialization：生成绑定数据
 
 拖入创建的C#脚本到BindScript(-_-!再也不用填写烦人的脚本路径)
 
+```csharp
+public partial class TestCS : ICSCodeBind
+{
+    //something
+}
+gameObject.GetCSCodeBindObject<TestCS>();//自带对象缓存
+```
+
 
 
