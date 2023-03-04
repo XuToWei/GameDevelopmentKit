@@ -30,11 +30,11 @@ namespace ET.Editor
 
         public void OnGUI()
         {
-            this.m_CodePathType = (CodePathType)EditorGUILayout.EnumPopup("Create Type", this.m_CodePathType);
-            this.m_CodeSubPath = EditorGUILayout.TextField("Code Sub Path", this.m_CodeSubPath);
-            
             EditorGUILayout.LabelField("Code Model Path", GetModelPath());
             EditorGUILayout.LabelField("Code Hotfix Path", GetHotfixPath());
+            
+            this.m_CodePathType = (CodePathType)EditorGUILayout.EnumPopup("Create Type", this.m_CodePathType);
+            this.m_CodeSubPath = EditorGUILayout.TextField("Code Sub Path", this.m_CodeSubPath);
         }
 
         public void GenerateCode(string codeName)

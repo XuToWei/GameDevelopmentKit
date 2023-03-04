@@ -14,7 +14,9 @@
 
 6.[基于Luban优化过后的导表工具](Book/Luban%E9%85%8D%E7%BD%AE.md)，方便生成多项目多程序集的配置
 
-7.[自定义Toolbar工具](Unity/Assets/Scripts/Library/ToolbarExtender/)
+7.[ET代码生成工具](Book/ET%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7.md)
+
+8.[自定义Toolbar工具](Unity/Assets/Scripts/Library/ToolbarExtender/)
 
 ![](Book/png/toolbar.png)
 
