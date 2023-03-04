@@ -12,7 +12,7 @@ namespace CodeBind.Editor
         public override void ProcessMemberProperties(List<InspectorPropertyInfo> propertyInfos)
         {
             MonoCodeBindAttribute attribute = this.Property.GetAttribute<MonoCodeBindAttribute>();
-
+            
             propertyInfos.AddDelegate("Code Binder", (Action) (() => { }), -100000f, new Attribute[2]
             {
                 (Attribute) new InfoBoxAttribute($"Separator Char:{attribute.separatorChar}"),
@@ -28,6 +28,10 @@ namespace CodeBind.Editor
         {
             MonoCodeBindAttribute attribute = this.Property.GetAttribute<MonoCodeBindAttribute>();
             MonoBehaviour mono = this.ValueEntry.SmartValue as MonoBehaviour;
+            if (mono == null)
+            {
+                throw new Exception($"{this.ValueEntry.SmartValue.GetType()} is not inherit from MonoBehaviour!");
+            }
             MonoScript script = MonoScript.FromMonoBehaviour(mono);
             MonoCodeBinder codeBinder = new MonoCodeBinder(script, mono.transform, attribute.separatorChar);
             codeBinder.TryGenerateBindCode();
@@ -37,6 +41,10 @@ namespace CodeBind.Editor
         {
             MonoCodeBindAttribute attribute = this.Property.GetAttribute<MonoCodeBindAttribute>();
             MonoBehaviour mono = this.ValueEntry.SmartValue as MonoBehaviour;
+            if (mono == null)
+            {
+                throw new Exception($"{this.ValueEntry.SmartValue.GetType()} is not inherit from MonoBehaviour!");
+            }
             MonoScript script = MonoScript.FromMonoBehaviour(mono);
             MonoCodeBinder codeBinder = new MonoCodeBinder(script, mono.transform, attribute.separatorChar);
             codeBinder.TrySetSerialization();

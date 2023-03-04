@@ -1,25 +1,38 @@
 # GameDevelopmentKit的介绍：
-一个以[UnityGameFramework框架（GF）](https://github.com/EllanJiang/UnityGameFramework)为基础，将[ET框架](https://github.com/egametang/ET)子模块化入前者，[Luban](https://github.com/focus-creative-games/luban)双端配置工具的一站式开发工具
+一个以[UnityGameFramework框架（GF）](https://github.com/EllanJiang/UnityGameFramework)为基础，将[ET框架](https://github.com/egametang/ET)子模块化入前者并完善ET的客户端模块，[Luban](https://github.com/focus-creative-games/luban)双端配置工具的一站式开发工具
 
-# 特色
-以[GFUI](https://github.com/XuToWei/GameDevelopmentKit/tree/master/Unity/Assets/Scripts/Game/ET/Loader/UGF/UIForm)为基础的[ETUI](https://github.com/XuToWei/GameDevelopmentKit/tree/master/Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Module/UI)
+## 特色
+1.以[GFUI](Unity/Assets/Scripts/Game/ET/Loader/UGF/UIForm)为基础的[ETUI](Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Module/UI)
 
-以[GFEntity](https://github.com/XuToWei/GameDevelopmentKit/tree/master/Unity/Assets/Scripts/Game/ET/Loader/UGF/UIForm)为基础的[ETEntity](https://github.com/XuToWei/GameDevelopmentKit/tree/master/Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Module/Entity)
+2.以[GFEntity](Unity/Assets/Scripts/Game/ET/Loader/UGF/UIForm)为基础的[ETEntity](Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Module/Entity)
 
-[代码绑定工具](https://github.com/XuToWei/GameDevelopmentKit/tree/master/Unity/Assets/Scripts/Library/CodeBind)
+3.[代码绑定工具](Unity/Assets/Scripts/Library/CodeBind/Doc/README.md)，使用简单人性化
 
-分为两种：
-继承MonoBehaviour的绑定：
+4.ET模块化，ET逻辑与GF逻辑，热更和非热更[切换](Book/Project%E7%BB%93%E6%9E%84.md)简单
 
-添加特性MonoCodeBind即可，指定分隔符参数
+5.项目全面使用[UniTask](Unity/Assets/Scripts/Library/UniTask)，已替换ETTask，对非ET的部分支持更全面，推荐使用
 
-CSCodeBindMono和ICSCodeBind组合：
+6.[基于Luban优化过后的导表工具](Book/Luban%E9%85%8D%E7%BD%AE.md)，方便生成多项目多程序集的配置
 
-CSCodeBindMono保存绑定的数据，ICSCodeBind是非MonoBehaviour代码，因此一般有热更需求时候可以用
+7.[自定义Toolbar工具](Unity/Assets/Scripts/Library/ToolbarExtender/)
+![](Book/png/toolbar.png)
 
-命名规则：
+等等
 
-变量名_脚本类型名
+## 运行步骤
 
-脚本类型名继承[ICodeBindNameTypeConfig](https://github.com/XuToWei/GameDevelopmentKit/blob/master/Unity/Assets/Scripts/Library/CodeBind/Editor/ICodeBindNameTypeConfig.cs)实现即可，可以定义多个，适用多个程序集，会自动收集
+1.安装 [.net6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)，服务器功能需要安装[MonogoDB](https://www.mongodb.com/)
+
+2.打开 ET/ET.sln 编译
+
+# 引用库 致谢
+[UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
+
+[ET](https://github.com/egametang/ET)
+
+[Luban](https://github.com/focus-creative-games/luban)
+
+[UniTask](https://github.com/Cysharp/UniTask)
+
+[UGFExtensions](https://github.com/FingerCaster/UGFExtensions)
 

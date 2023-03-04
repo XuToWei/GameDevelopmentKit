@@ -15,7 +15,7 @@ namespace Game.Editor
             const string tools = ".\\Tool.exe";
 #endif
             Stopwatch stopwatch = Stopwatch.StartNew();
-            await ShellUtility.RunAsync($"{tools} --AppType=ExcelExporter --Console=1", "../Bin/");
+            await ShellUtility.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=GB2312", "../Bin/");
             stopwatch.Stop();
             UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
@@ -30,7 +30,7 @@ namespace Game.Editor
             const string tools = ".\\Tool.exe";
 #endif
             Stopwatch stopwatch = Stopwatch.StartNew();
-            await ShellUtility.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Custom=Json", "../Bin/");
+            await ShellUtility.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=Json,GB2312", "../Bin/");
             stopwatch.Stop();
             UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);

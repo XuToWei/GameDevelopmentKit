@@ -11,5 +11,10 @@ namespace CodeBind
         {
             this.separatorChar = separatorChar;
         }
+        
+        public MonoCodeBindAttribute()
+        {
+            this.separatorChar = '_';
+        }
     }
 }

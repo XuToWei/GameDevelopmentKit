@@ -1,4 +1,3 @@
-using CodeBind;
 using UnityEngine;
 
 namespace CodeBind.Demo

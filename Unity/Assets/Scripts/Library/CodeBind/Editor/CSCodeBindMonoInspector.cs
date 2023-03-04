@@ -38,7 +38,7 @@ namespace CodeBind.Editor
 
                 EditorGUILayout.PropertyField(this.m_SeparatorChar);
                 EditorGUILayout.PropertyField(this.m_BindScript);
-                this.m_ShowBindComponets = EditorGUILayout.BeginFoldoutHeaderGroup(this.m_ShowBindComponets, $"Bind Data ({this.m_BindComponents.arraySize})");
+                this.m_ShowBindComponets = EditorGUILayout.BeginFoldoutHeaderGroup(this.m_ShowBindComponets, $"Bind Data (count:{this.m_BindComponents.arraySize})");
                 {
                     if (this.m_ShowBindComponets)
                     {
