@@ -1,5 +1,5 @@
 # GameDevelopmentKit的介绍：
-一个以[UnityGameFramework框架（GF）](https://github.com/EllanJiang/UnityGameFramework)为基础，将[ET框架](https://github.com/egametang/ET)子模块化入前者并完善ET的客户端模块，[Luban](https://github.com/focus-creative-games/luban)双端配置工具的一站式开发工具
+客户端以[UnityGameFramework框架（GF）](https://github.com/EllanJiang/UnityGameFramework)为基础，将[ET框架](https://github.com/egametang/ET)子模块化入GF并完善ET的客户端功能，配置工具使用[Luban](https://github.com/focus-creative-games/luban)，努力提供方便开发的常用工具
 
 ## 特色
 1.以[GFUI](Unity/Assets/Scripts/Game/ET/Loader/UGF/UIForm)为基础的[ETUI](Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Module/UI)
