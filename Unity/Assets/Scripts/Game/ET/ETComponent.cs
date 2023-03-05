@@ -4,6 +4,7 @@ using System.Reflection;
 using GameFramework;
 #endif
 
+using Sirenix.OdinInspector;
 using UnityGameFramework.Runtime;
 
 namespace Game
@@ -11,6 +12,7 @@ namespace Game
     public class ETComponent : GameFrameworkComponent
     {
 #if UNITY_ET
+        [ShowInInspector]
         public bool IsOpen = true;
         
         public void StartRun()
