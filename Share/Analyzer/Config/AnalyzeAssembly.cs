@@ -2,9 +2,9 @@
 {
     public static class AnalyzeAssembly
     {
-        private const string DotNet_Library = "DotNet.Library";
-        private const string DotNet_Model = "DotNet.Model";
-        private const string DotNet_Hotfix = "DotNet.Hotfix";
+        private const string DotNet_Library = "Library";
+        private const string DotNet_Model = "Model";
+        private const string DotNet_Hotfix = "Hotfix";
 
         private const string Unity_ET_Runtime = "ET.Runtime";
         private const string Unity_ET_Loader = "Code.ET.Loader";
