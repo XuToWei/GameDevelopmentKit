@@ -8,37 +8,44 @@ namespace ET.Editor
     {
         private static string OnGeneratedCSProject(string path, string content)
         {
+            if (path.EndsWith("Game.csproj"))
+            {
+                return GenerateCustomProject(content);
+            }
+            
+            if (path.EndsWith("Game.Hot.csproj"))
+            {
+                return GenerateCustomProject(content);
+            }
+            
             if (path.EndsWith("ET.Runtime.csproj"))
             {
-                return GenerateCustomProject(path, content);
+                return GenerateCustomProject(content);
             }
 
-            if (Define.EnableHotfix || true)
+            if (path.EndsWith("Game.ET.Code.Hotfix.csproj"))
             {
-                if (path.EndsWith("Game.ET.Code.Hotfix.csproj"))
-                {
-                    content = GenerateCustomProject(path, content);
-                }
+                return GenerateCustomProject(content);
+            }
 
-                if (path.EndsWith("Game.ET.Code.Model.csproj"))
-                {
-                    content = GenerateCustomProject(path, content);
-                }
+            if (path.EndsWith("Game.ET.Code.Model.csproj"))
+            {
+                return GenerateCustomProject(content);
+            }
 
-                if (path.EndsWith("Game.ET.Code.HotfixView.csproj"))
-                {
-                    content = GenerateCustomProject(path, content);
-                }
+            if (path.EndsWith("Game.ET.Code.HotfixView.csproj"))
+            {
+                return GenerateCustomProject(content);
+            }
 
-                if (path.EndsWith("Game.ET.Code.ModelView.csproj"))
-                {
-                    content = GenerateCustomProject(path, content);
-                }
+            if (path.EndsWith("Game.ET.Code.ModelView.csproj"))
+            {
+                return GenerateCustomProject(content);
             }
             return content;
         }
 
-        private static string GenerateCustomProject(string path, string content, params string[] links)
+        private static string GenerateCustomProject(string content, params string[] links)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(content);

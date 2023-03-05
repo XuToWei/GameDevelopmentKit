@@ -4,11 +4,11 @@ namespace ET.Analyzer
 {
     public static class ETTaskInSyncMethodAnalyzerRule
     {
-        private const string Title = "ETTask方法调用在非异步方法体内使用错误";
+        private const string Title = "UniTask方法调用在非异步方法体内使用错误";
 
-        private const string MessageFormat = "方法: {0} 在非异步方法体内使用时需要添加.Coroutine()后缀";
+        private const string MessageFormat = "方法: {0} 在非异步方法体内使用时需要添加.Forget()后缀";
 
-        private const string Description = "ETTask方法调用在非异步方法体内使用错误.";
+        private const string Description = "UniTask方法调用在非异步方法体内使用错误.";
 
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.ETTaskInSyncMethodAnalyzerRuleId,
@@ -22,11 +22,11 @@ namespace ET.Analyzer
 
     public static class ETTaskInAsyncMethodAnalyzerRule
     {
-        private const string Title = "ETTask方法调用在异步方法体内使用错误";
+        private const string Title = "UniTask方法调用在异步方法体内使用错误";
 
-        private const string MessageFormat = "方法: {0} 在异步方法体内使用时需要添加await前缀 或 .Coroutine()后缀";
+        private const string MessageFormat = "方法: {0} 在异步方法体内使用时需要添加await前缀 或 .Forget()后缀";
 
-        private const string Description = "ETTask方法调用在异步方法体内使用错误.";
+        private const string Description = "UniTask方法调用在异步方法体内使用错误.";
 
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.ETTaskInAsyncMethodAnalyzerRuleId,
@@ -166,11 +166,11 @@ namespace ET.Analyzer
     
     public static class AwaitExpressionCancelTokenParamAnalyzerRule
     {
-        private const string Title = "含有ETCancelToken参数的异步函数内调用await表达式必须传入同一个CancelToken";
+        private const string Title = "含有CancellationTokenSource参数的异步函数内调用await表达式必须传入同一个CancellationToken";
     
-        private const string MessageFormat = "含有ETCancelToken参数的异步函数内调用await表达式必须传入同一个CancelToken";
+        private const string MessageFormat = "含有CancellationTokenSource参数的异步函数内调用await表达式必须传入同一个CancellationToken";
     
-        private const string Description = "含有ETCancelToken参数的异步函数内调用await表达式必须传入同一个CancelToken.";
+        private const string Description = "含有CancellationTokenSource参数的异步函数内调用await表达式必须传入同一个CancellationToken.";
     
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.AwaitExpressionCancelTokenParamAnalyzerRuleId,
@@ -184,11 +184,11 @@ namespace ET.Analyzer
     
     public static class AsyncMethodWithCancelTokenParamAnalyzerRule
     {
-        private const string Title = "异步函数声明处的ETCancelToken参数禁止声明默认值";
+        private const string Title = "异步函数声明处的CancellationTokenSource参数禁止声明默认值";
     
-        private const string MessageFormat = "异步函数声明处的ETCancelToken参数禁止声明默认值";
+        private const string MessageFormat = "异步函数声明处的CancellationTokenSource参数禁止声明默认值";
     
-        private const string Description = "异步函数声明处的ETCancelToken参数禁止声明默认值.";
+        private const string Description = "异步函数声明处的CancellationTokenSource参数禁止声明默认值.";
     
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.AsyncMethodWithCancelTokenParamAnalyzerRuleId,
@@ -203,11 +203,11 @@ namespace ET.Analyzer
     
     public static class ExpressionWithCancelTokenParamAnalyzerRule
     {
-        private const string Title = "函数调用处的ETCancelToken参数禁止传入null";
+        private const string Title = "函数调用处的CancellationTokenSource参数禁止传入null";
     
-        private const string MessageFormat = "函数调用处的ETCancelToken参数禁止传入null";
+        private const string MessageFormat = "函数调用处的CancellationTokenSource参数禁止传入null";
     
-        private const string Description = "函数调用处的ETCancelToken参数禁止传入null.";
+        private const string Description = "函数调用处的CancellationTokenSource参数禁止传入null.";
     
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.ExpressionWithCancelTokenParamAnalyzerRuleId,
@@ -221,11 +221,11 @@ namespace ET.Analyzer
 
     public static class ETTaslAsyncMethodHasCancelTokenAnalyzerRule
     {
-        private const string Title = "返回ETTask的异步函数必须含有ETCancelToken参数";
+        private const string Title = "返回UniTask的异步函数必须含有CancellationTokenSource参数";
     
-        private const string MessageFormat = "返回ETTask的异步函数必须含有ETCancelToken参数";
+        private const string MessageFormat = "返回UniTask的异步函数必须含有CancellationTokenSource参数";
     
-        private const string Description = "返回ETTask的异步函数必须含有ETCancelToken参数.";
+        private const string Description = "返回UniTask的异步函数必须含有CancellationTokenSource参数.";
     
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.ETTaslAsyncMethodHasCancelTokenAnalyzerRuleId,

@@ -4,9 +4,9 @@
     {
         public const string EntityType = "ET.Entity";
         
-        public const string ETTask = "ETTask";
+        public const string ETTask = "UniTask";
 
-        public const string ETTaskFullName = "ET.ETTask";
+        public const string ETTaskFullName = "Cysharp.Threading.Tasks.UniTask";
 
         public static readonly string[] AddChildMethods = { "AddChild", "AddChildWithId" };
 
@@ -32,9 +32,9 @@
 
         public const string StaticFieldAttribute = "ET.StaticFieldAttribute";
 
-        public const string ETCancellationToken = "ET.ETCancellationToken";
+        public const string ETCancellationToken = "System.Threading.CancellationTokenSource";
 
-        public const string ETTaskCompleteTask = "ETTask.CompletedTask";
+        public const string ETTaskCompleteTask = "UniTask.CompletedTask";
     }
 }
 

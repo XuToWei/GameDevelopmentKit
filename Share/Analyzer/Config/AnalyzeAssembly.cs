@@ -7,11 +7,11 @@
         private const string DotNet_Hotfix = "Hotfix";
 
         private const string Unity_ET_Runtime = "ET.Runtime";
-        private const string Unity_ET_Loader = "Code.ET.Loader";
-        private const string Unity_ET_Code_Model = "Code.ET.Code.Model";
-        private const string Unity_ET_Code_Hotfix = "Code.ET.Code.Hotfix";
-        private const string Unity_ET_Code_ModelView = "Code.ET.Code.ModelView";
-        private const string Unity_ET_Code_HotfixView = "Code.ET.Code.HotfixView";
+        private const string Unity_ET_Loader = "Game.ET.Loader";
+        private const string Unity_ET_Code_Model = "Game.ET.Code.Model";
+        private const string Unity_ET_Code_Hotfix = "Game.ET.Code.Hotfix";
+        private const string Unity_ET_Code_ModelView = "Game.ET.Code.ModelView";
+        private const string Unity_ET_Code_HotfixView = "Game.ET.Code.HotfixView";
 
         public static readonly string[] AllHotfix =
         {
