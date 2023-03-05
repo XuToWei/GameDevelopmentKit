@@ -1,9 +1,10 @@
 using System;
 using Game;
-using GameFramework;
+using UnityEngine;
 
 namespace ET
 {
+    [DisallowMultipleComponent]
     public sealed class ETMonoUIForm : UGuiForm
     {
         public UGFUIForm ugfUIForm { get; private set; }
@@ -62,6 +63,7 @@ namespace ET
                 this.m_IsInitOpen = false;
                 ETMonoUIFormData formData = userData as ETMonoUIFormData;
                 this.m_UIFormEvent?.OnOpen(this.ugfUIForm, formData.UserData);
+                formData.Release();
             }
             else
             {

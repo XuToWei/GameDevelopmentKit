@@ -33,7 +33,7 @@ namespace CodeBind
 
         public void Recycle(ICSCodeBind obj)
         {
-            obj.Clear();
+            obj.ClearBind();
             Type type = obj.GetType();
             if (!m_Pool.TryGetValue(type, out var queue))
             {

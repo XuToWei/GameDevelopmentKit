@@ -32,7 +32,6 @@ namespace ET.Editor
                 {
                     GlobalConfig globalConfig = Resources.Load<GlobalConfig>("ET/GlobalConfig");
                     BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, globalConfig.CodeMode);
-
                     ShowNotification("Build Hotfix Success!");
 
                     if (s_IsReloading)
@@ -60,16 +59,15 @@ namespace ET.Editor
             if (GUILayout.Button(s_BuildHotfixModelButtonGUIContent))
             {
                 GlobalConfig globalConfig = Resources.Load<GlobalConfig>("ET/GlobalConfig");
-                
                 BuildAssemblyHelper.BuildModel(s_CodeOptimization, globalConfig.CodeMode);
                 BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, globalConfig.CodeMode);
-
                 ShowNotification("Build Model And Hotfix Success!");
             }
         }
 
         private static void ShowNotification(string msg)
         {
+            Debug.Log(msg);
             EditorWindow game = EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));
             if (game != null) game.ShowNotification(new GUIContent(msg));
         }

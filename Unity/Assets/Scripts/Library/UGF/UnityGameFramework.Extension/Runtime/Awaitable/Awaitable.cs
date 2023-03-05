@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using GameFramework;
@@ -14,7 +15,8 @@ namespace UnityGameFramework.Extension
 #if UNITY_EDITOR
         private static bool s_IsSubscribeEvent = false;
 #endif
-        
+        private static readonly Dictionary<int, AwaitTaskWrap<UIForm>> s_UFormTcsDict = new Dictionary<int, AwaitTaskWrap<UIForm>>();
+
         /// <summary>
         /// 注册需要的事件 (需再流程入口处调用 防止框架重启导致事件被取消问题)
         /// </summary>
@@ -71,18 +73,25 @@ namespace UnityGameFramework.Extension
                     tcs.TrySetResult(null);
                 }
             });
-            serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, AwaitDataWrap<UIForm>.Create(userData, tcs, ctr));
+            serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData);
+            AwaitTaskWrap<UIForm> awaitTaskWrap = AwaitTaskWrap<UIForm>.Create(tcs, ctr);
+            s_UFormTcsDict.Add(serialId, awaitTaskWrap);
+            // if (tcs.Task.Status == UniTaskStatus.Pending)
+            // {
+            //     AwaitTaskWrap<UIForm> awaitTaskWrap = AwaitTaskWrap<UIForm>.Create(tcs, ctr);
+            //     s_UFormTcsDict.Add(serialId, awaitTaskWrap);
+            // }
             return tcs.Task;
         }
 
         private static void OnOpenUIFormSuccess(object sender, GameEventArgs e)
         {
             OpenUIFormSuccessEventArgs ne = (OpenUIFormSuccessEventArgs)e;
-            if(ne.UserData is AwaitDataWrap<UIForm> awaitDataWrap)
+            if (s_UFormTcsDict.TryGetValue(ne.UIForm.SerialId, out AwaitTaskWrap<UIForm> awaitTaskWrap))
             {
-                awaitDataWrap.CancellationTokenRegistration?.Dispose();
-                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
-                ReferencePool.Release(awaitDataWrap);
+                awaitTaskWrap.CancellationTokenRegistration?.Dispose();
+                var taskCompletionSource = awaitTaskWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitTaskWrap);
                 taskCompletionSource.TrySetResult(ne.UIForm);
             }
         }

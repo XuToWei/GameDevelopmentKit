@@ -6,7 +6,7 @@
     "Zone": 1,
     "SceneType": "BenchmarkServer",
     "Name": "BenchmarkServer",
-    "OuterPort": 10002
+    "OuterPort": 30001
   },
   {
     "StartConfig": "Benchmark",
@@ -15,7 +15,7 @@
     "Zone": 1,
     "SceneType": "BenchmarkClient",
     "Name": "BenchmarkClient1",
-    "OuterPort": 10003
+    "OuterPort": 30002
   },
   {
     "StartConfig": "Benchmark",
@@ -24,7 +24,7 @@
     "Zone": 1,
     "SceneType": "BenchmarkClient",
     "Name": "BenchmarkClient2",
-    "OuterPort": 10004
+    "OuterPort": 30003
   },
   {
     "StartConfig": "Localhost",
@@ -33,7 +33,7 @@
     "Zone": 1,
     "SceneType": "Realm",
     "Name": "Realm",
-    "OuterPort": 10002
+    "OuterPort": 30002
   },
   {
     "StartConfig": "Localhost",
@@ -42,7 +42,7 @@
     "Zone": 1,
     "SceneType": "Gate",
     "Name": "Gate1",
-    "OuterPort": 10003
+    "OuterPort": 30003
   },
   {
     "StartConfig": "Localhost",
@@ -51,7 +51,7 @@
     "Zone": 1,
     "SceneType": "Gate",
     "Name": "Gate2",
-    "OuterPort": 10004
+    "OuterPort": 30004
   },
   {
     "StartConfig": "Localhost",
@@ -96,7 +96,7 @@
     "Zone": 3,
     "SceneType": "RouterManager",
     "Name": "RouterManager",
-    "OuterPort": 10300
+    "OuterPort": 30300
   },
   {
     "StartConfig": "Localhost",
@@ -105,7 +105,7 @@
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router01",
-    "OuterPort": 10301
+    "OuterPort": 30301
   },
   {
     "StartConfig": "Localhost",
@@ -114,7 +114,7 @@
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router02",
-    "OuterPort": 10302
+    "OuterPort": 30302
   },
   {
     "StartConfig": "Localhost",
@@ -123,7 +123,7 @@
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router03",
-    "OuterPort": 10303
+    "OuterPort": 30303
   },
   {
     "StartConfig": "Localhost",
@@ -132,7 +132,7 @@
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router04",
-    "OuterPort": 10304
+    "OuterPort": 30304
   },
   {
     "StartConfig": "Release",
@@ -141,7 +141,7 @@
     "Zone": 1,
     "SceneType": "Realm",
     "Name": "Realm",
-    "OuterPort": 10002
+    "OuterPort": 30001
   },
   {
     "StartConfig": "Release",
@@ -150,7 +150,7 @@
     "Zone": 1,
     "SceneType": "Gate",
     "Name": "Gate1",
-    "OuterPort": 10003
+    "OuterPort": 30002
   },
   {
     "StartConfig": "Release",
@@ -159,7 +159,7 @@
     "Zone": 1,
     "SceneType": "Gate",
     "Name": "Gate2",
-    "OuterPort": 10004
+    "OuterPort": 30003
   },
   {
     "StartConfig": "Release",
@@ -204,7 +204,7 @@
     "Zone": 1,
     "SceneType": "Realm",
     "Name": "Realm",
-    "OuterPort": 10002
+    "OuterPort": 30001
   },
   {
     "StartConfig": "RouterTest",
@@ -213,7 +213,7 @@
     "Zone": 1,
     "SceneType": "Gate",
     "Name": "Gate1",
-    "OuterPort": 10003
+    "OuterPort": 30002
   },
   {
     "StartConfig": "RouterTest",
@@ -222,7 +222,7 @@
     "Zone": 1,
     "SceneType": "Gate",
     "Name": "Gate2",
-    "OuterPort": 10004
+    "OuterPort": 30003
   },
   {
     "StartConfig": "RouterTest",
@@ -267,7 +267,7 @@
     "Zone": 3,
     "SceneType": "RouterManager",
     "Name": "RouterManager",
-    "OuterPort": 10300
+    "OuterPort": 30300
   },
   {
     "StartConfig": "RouterTest",
@@ -276,7 +276,7 @@
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router01",
-    "OuterPort": 10301
+    "OuterPort": 30301
   },
   {
     "StartConfig": "RouterTest",
@@ -285,7 +285,7 @@
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router02",
-    "OuterPort": 10302
+    "OuterPort": 30302
   },
   {
     "StartConfig": "RouterTest",
@@ -294,7 +294,7 @@
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router03",
-    "OuterPort": 10303
+    "OuterPort": 30303
   },
   {
     "StartConfig": "RouterTest",
@@ -303,6 +303,6 @@
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router04",
-    "OuterPort": 10304
+    "OuterPort": 30304
   }
 ]

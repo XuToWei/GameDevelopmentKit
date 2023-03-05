@@ -31,8 +31,10 @@ namespace ET.Client
             ETMonoEntityData formData = ETMonoEntityData.Acquire(typeof (T), self, userData);
             UnityGameFramework.Runtime.Entity entity = await GameEntry.Entity.ShowEntityAsync<ETMonoEntity>(entityTypeId, formData);
             if (entity == null)
+            {
+                formData.Release();
                 return null;
-            formData.Release();
+            }
             return (entity.Logic as ETMonoEntity).UGFEntity;
         }
 

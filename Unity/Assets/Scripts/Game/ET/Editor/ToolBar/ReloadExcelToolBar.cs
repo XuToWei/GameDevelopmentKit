@@ -1,4 +1,3 @@
-using Game.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityToolbarExtender;
@@ -49,6 +48,7 @@ namespace ET.Editor
 
         private static void ShowNotification(string msg)
         {
+            Debug.Log(msg);
             EditorWindow game = EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));
             if (game != null) game.ShowNotification(new GUIContent(msg));
         }

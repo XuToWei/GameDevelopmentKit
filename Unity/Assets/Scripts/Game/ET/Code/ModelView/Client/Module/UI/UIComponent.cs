@@ -3,6 +3,7 @@ using UGFUICompoent = UnityGameFramework.Runtime.UIComponent;
 
 namespace ET.Client
 {
+    [ComponentOf(typeof(Scene))]
     public sealed class UIComponent : Entity, IAwake, IDestroy
     {
         [StaticField]

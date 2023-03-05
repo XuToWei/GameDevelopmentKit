@@ -1,17 +1,17 @@
 using System;
 using System.IO;
+using UnityEngine;
 
 namespace ET.Editor
 {
     internal sealed class UGFUIFormCodeCreator : ICodeCreator
     {
-        private const string UGFUIViewCodeTemplateFile           = "Assets/Res/Editor/ET/Config/UGFUIViewCodeTemplate.txt";
         private const string UGFUIComponentCodeTemplateFile      = "Assets/Res/Editor/ET/Config/UGFUICodeTemplate.txt";
         private const string UGFUISystemCodeTemplateFile         = "Assets/Res/Editor/ET/Config/UGFUISystemCodeTemplate.txt";
         private const string UGFUIEventCodeTemplateFile          = "Assets/Res/Editor/ET/Config/UGFUIEventCodeTemplate.txt";
 
-        private const string UGFUIModelViewCodePath              = "Assets/Scripts/Code/ET/Code/ModelView/Client/Game/UI";
-        private const string UGFUIHotfixViewCodePath             = "Assets/Scripts/Code/ET/Code/HotfixView/Client/Game/UI";
+        private const string UGFUIModelViewCodePath              = "Assets/Scripts/Game/ET/Code/ModelView/Client/Game/UI";
+        private const string UGFUIHotfixViewCodePath             = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Game/UI";
 
         public void OnEnable()
         {
@@ -50,12 +50,13 @@ namespace ET.Editor
                 string template = File.ReadAllText(templateFile);
                 string codeStr = template.Replace("#NAME#", uiName);
                 File.WriteAllText(codeFile, codeStr);
+                Debug.Log($"Generate cs:{codeFile}!");
             }
-
-            GenerateCS(UGFUIViewCodeTemplateFile,          $"{UGFUIModelViewCodePath}/{uiName}/UGFUI{uiName}View.cs");
-            GenerateCS(UGFUIComponentCodeTemplateFile,     $"{UGFUIModelViewCodePath}/{uiName}/UGFUI{uiName}.cs");
-            GenerateCS(UGFUISystemCodeTemplateFile,        $"{UGFUIHotfixViewCodePath}/{uiName}/UGFUI{uiName}System.cs");
-            GenerateCS(UGFUIEventCodeTemplateFile,         $"{UGFUIHotfixViewCodePath}/{uiName}/UGFUI{uiName}Event.cs");
+            
+            GenerateCS(UGFUIComponentCodeTemplateFile,     $"{UGFUIModelViewCodePath}/UI{uiName}/UGFUI{uiName}.cs");
+            GenerateCS(UGFUISystemCodeTemplateFile,        $"{UGFUIHotfixViewCodePath}/UI{uiName}/UGFUI{uiName}System.cs");
+            GenerateCS(UGFUIEventCodeTemplateFile,         $"{UGFUIHotfixViewCodePath}/UI{uiName}/UGFUI{uiName}Event.cs");
+            CodeCreatorEditor.ShowNotification("生成完毕！");
         }
     }
 }

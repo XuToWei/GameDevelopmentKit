@@ -24,7 +24,7 @@ namespace ET.Client
         {
             protected override void Destroy(UIComponent self)
             {
-                UIComponent.Instance = null;
+                
             }
         }
 
@@ -33,13 +33,14 @@ namespace ET.Client
             ETMonoUIFormData formData = ETMonoUIFormData.Acquire(uiFormId, self, userData);
             UIForm uiForm = await GameEntry.UI.OpenUIFormAsync(uiFormId, formData);
             if (uiForm == null)
+            {
+                formData.Release();
                 return null;
+            }
             if (uiForm.Logic is not ETMonoUIForm etMonoUIForm)
             {
                 throw new Exception($"Open UI fail! UiFomId:{uiFormId}) is not ETMonoUIForm!");
             }
-
-            formData.Release();
             return etMonoUIForm.ugfUIForm;
         }
 

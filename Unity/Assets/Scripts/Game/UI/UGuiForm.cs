@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,11 +10,12 @@ namespace Game
     {
         public const int DepthFactor = 100;
         private const float FadeTime = 0.3f;
-
-        private static Font s_MainFont = null;
+        
         private Canvas m_CachedCanvas = null;
-        private CanvasGroup m_CanvasGroup = null;
+        private readonly List<ParticleSystemRenderer> m_CachedParticleSystemRenderersContainer = new List<ParticleSystemRenderer>();
         private List<Canvas> m_CachedCanvasContainer = new List<Canvas>();
+        
+        private CanvasGroup m_CanvasGroup = null;
 
         public int OriginalDepth
         {
@@ -61,17 +55,6 @@ namespace Game
             GameEntry.Sound.PlayUISound(uiSoundId);
         }
 
-        public static void SetMainFont(Font mainFont)
-        {
-            if (mainFont == null)
-            {
-                Log.Error("Main font is invalid.");
-                return;
-            }
-
-            s_MainFont = mainFont;
-        }
-
 #if UNITY_2017_3_OR_NEWER
         protected override void OnInit(object userData)
 #else
@@ -86,23 +69,13 @@ namespace Game
 
             m_CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
 
-            RectTransform transform = GetComponent<RectTransform>();
-            transform.anchorMin = Vector2.zero;
-            transform.anchorMax = Vector2.one;
-            transform.anchoredPosition = Vector2.zero;
-            transform.sizeDelta = Vector2.zero;
+            RectTransform rectTransform = GetComponent<RectTransform>();
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.anchoredPosition = Vector2.zero;
+            rectTransform.sizeDelta = Vector2.zero;
 
             gameObject.GetOrAddComponent<GraphicRaycaster>();
-
-            Text[] texts = GetComponentsInChildren<Text>(true);
-            for (int i = 0; i < texts.Length; i++)
-            {
-                texts[i].font = s_MainFont;
-                if (!string.IsNullOrEmpty(texts[i].text))
-                {
-                    texts[i].text = GameEntry.Localization.GetString(texts[i].text);
-                }
-            }
         }
 
 #if UNITY_2017_3_OR_NEWER
@@ -208,8 +181,14 @@ namespace Game
             {
                 m_CachedCanvasContainer[i].sortingOrder += deltaDepth;
             }
-
             m_CachedCanvasContainer.Clear();
+            
+            GetComponentsInChildren(true, m_CachedParticleSystemRenderersContainer);
+            foreach (var t in m_CachedParticleSystemRenderersContainer)
+            {
+                t.sortingOrder += deltaDepth;
+            }
+            m_CachedParticleSystemRenderersContainer.Clear();
         }
 
         private IEnumerator CloseCo(float duration)

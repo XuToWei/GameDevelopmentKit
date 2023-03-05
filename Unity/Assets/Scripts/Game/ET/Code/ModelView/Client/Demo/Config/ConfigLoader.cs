@@ -11,6 +11,15 @@ using UnityGameFramework.Extension;
 namespace ET.Client
 {
     [Invoke]
+    public class LubanInitHandler : AInvokeHandler<ConfigComponent.Init>
+    {
+        public override void Handle(ConfigComponent.Init arg)
+        {
+            Game.AddSingleton<Tables>();
+        }
+    }
+    
+    [Invoke]
     public class LubanLoadAllAsyncHandler : AInvokeHandler<ConfigComponent.LoadAll, UniTask>
     {
         public override async UniTask Handle(ConfigComponent.LoadAll arg)

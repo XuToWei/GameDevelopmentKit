@@ -8,18 +8,18 @@ namespace ET.Client
         public const int Undefined = 0;
 
         /// <summary>
-        /// 登录。
+        /// 帮助界面。
         /// </summary>
-        public const int Login = 101;
+        public const int UIHelp = 101;
 
         /// <summary>
-        /// 主界面。
+        /// 大厅面。
         /// </summary>
-        public const int Main = 102;
+        public const int UILobby = 102;
 
         /// <summary>
-        /// 房间界面。
+        /// 登录界面。
         /// </summary>
-        public const int MatchRoom = 103;
+        public const int UILogin = 103;
     }
 }

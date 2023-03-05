@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEditor;
+using UnityEngine;
 
 namespace ET.Editor
 {
@@ -17,7 +18,7 @@ namespace ET.Editor
         private const string ComponentCodeTemplateFile           = "Assets/Res/Editor/ET/Config/DefaultCodeTemplate.txt";
         private const string ComponentSystemCodeTemplateFile     = "Assets/Res/Editor/ET/Config/DefaultSystemCodeTemplate.txt";
 
-        private const string CodePath = "Assets/Scripts/Code/ET/Code";
+        private const string CodePath = "Assets/Scripts/Game/ET/Code";
 
         private CodePathType m_CodePathType;
         private string m_CodeSubPath;
@@ -65,10 +66,12 @@ namespace ET.Editor
                 string codeStr = template.Replace("#NAME#", componentName);
                 codeStr = codeStr.Replace("#NAMESPACE#", $".{this.GetNameSpace()}");
                 File.WriteAllText(codeFile, codeStr);
+                Debug.Log($"Generate cs:{codeFile}!");
             }
             
             GenerateCS(ComponentCodeTemplateFile,          $"{GetModelPath()}/{componentName}.cs");
             GenerateCS(ComponentSystemCodeTemplateFile,    $"{GetHotfixPath()}/{componentName}System.cs");
+            CodeCreatorEditor.ShowNotification("生成完毕！");
         }
 
         private string GetModelPath()

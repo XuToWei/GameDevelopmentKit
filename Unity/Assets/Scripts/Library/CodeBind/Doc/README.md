@@ -2,6 +2,12 @@
 
 基于节点命名规则自动生成代码和绑定数据，支持子节点嵌套，自定义命名规则（继承[ICodeBindNameTypeConfig](../Editor/ICodeBindNameTypeConfig.cs)即可）
 
+说明：
+
+节点名字识别支持模糊匹配，比如需要绑定一个变量名为Self的Transform组件，节点名字Self_Tr就可以试别Tr为Transform
+
+节点名字支持绑定多个不同组件，用分隔符连接起来即可，例如：Self_Transform_Button，Self_Tr_But等
+
 ## 1.MonoBehaviour类型：
 
 添加特性[MonoCodeBind](../Runtime/CSCodeBindAttribute.cs)即可，指定分隔符参数（可选）

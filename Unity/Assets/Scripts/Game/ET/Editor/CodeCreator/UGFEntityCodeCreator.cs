@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using UnityEngine;
 
 namespace ET.Editor
 {
@@ -9,8 +10,8 @@ namespace ET.Editor
         private const string UGFEntitySystemCodeTemplateFile         = "Assets/Res/Editor/ET/Config/UGFEntitySystemCodeTemplate.txt";
         private const string UGFEntityEventCodeTemplateFile          = "Assets/Res/Editor/ET/Config/UGFEntityEventCodeTemplate.txt";
 
-        private const string UGFEntityModelViewCodePath              = "Assets/Scripts/Code/ET/Code/ModelView/Client/Game/Entity";
-        private const string UGFEntityHotfixViewCodePath             = "Assets/Scripts/Code/ET/Code/HotfixView/Client/Game/Entity";
+        private const string UGFEntityModelViewCodePath              = "Assets/Scripts/Game/ET/Code/ModelView/Client/Game/Entity";
+        private const string UGFEntityHotfixViewCodePath             = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Game/Entity";
 
         public void OnEnable()
         {
@@ -49,11 +50,13 @@ namespace ET.Editor
                 string template = File.ReadAllText(templateFile);
                 string codeStr = template.Replace("#NAME#", entityName);
                 File.WriteAllText(codeFile, codeStr);
+                Debug.Log($"Generate cs:{codeFile}!");
             }
             
             GenerateCS(UGFEntityComponentCodeTemplateFile,     $"{UGFEntityModelViewCodePath}/{entityName}/UGFEntity{entityName}.cs");
             GenerateCS(UGFEntitySystemCodeTemplateFile,        $"{UGFEntityHotfixViewCodePath}/{entityName}/UGFEntity{entityName}System.cs");
             GenerateCS(UGFEntityEventCodeTemplateFile,         $"{UGFEntityHotfixViewCodePath}/{entityName}/UGFEntity{entityName}Event.cs");
+            CodeCreatorEditor.ShowNotification("生成完毕！");
         }
     }
 }

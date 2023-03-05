@@ -23,6 +23,11 @@ namespace Game
         {
             return Utility.Text.Format("Assets/Res/Sound/{0}.wav", assetName);
         }
+        
+        public static string GetPrefabAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/Res/Prefab/{0}.prefab", assetName);
+        }
 
         public static string GetEntityAsset(string assetName)
         {

@@ -2,6 +2,7 @@ using System;
 
 namespace ET
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public sealed class UGFUIFormEventAttribute : BaseAttribute
     {
         public int uiFormId { get; }

@@ -121,7 +121,7 @@ public sealed partial class DRUIForm :  Bright.Config.EditorBeanBase
     public int Id { get; set; }
 
     /// <summary>
-    /// 策划备注
+    /// 备注
     /// </summary>
     public string Desc { get; set; }
 

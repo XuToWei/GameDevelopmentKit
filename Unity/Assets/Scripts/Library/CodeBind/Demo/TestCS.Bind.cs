@@ -15,7 +15,7 @@ namespace CodeBind.Demo
             this.selfTransform = this.mono.bindComponents[0] as UnityEngine.Transform;
         }
 
-        public void Clear()
+        public void ClearBind()
         {
             this.mono = null;
             this.transform = null;

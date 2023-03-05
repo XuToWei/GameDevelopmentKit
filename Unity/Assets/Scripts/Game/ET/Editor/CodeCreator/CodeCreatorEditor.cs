@@ -18,6 +18,12 @@ namespace ET.Editor
         {
             GetWindow<CodeCreatorEditor>("ET Code Creator", DockDefine.Types);
         }
+        
+        public static void ShowNotification(string tips)
+        {
+            EditorWindow game = GetWindow(typeof(CodeCreatorEditor));
+            if (game != null) game.ShowNotification(new GUIContent($"{tips}"));
+        }
 
         private void OnEnable()
         {
@@ -25,7 +31,6 @@ namespace ET.Editor
             this.m_CodeCreatorTypeNames = null;
             
             var types = this.GetType().Assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract && typeof (ICodeCreator).IsAssignableFrom(x));
-            
             List<string> typeNames = new List<string>();
             foreach (Type cType in types)
             {

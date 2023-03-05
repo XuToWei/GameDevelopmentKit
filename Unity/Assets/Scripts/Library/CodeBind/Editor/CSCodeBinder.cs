@@ -56,7 +56,7 @@ namespace CodeBind.Editor
             stringBuilder.AppendLine($"{indentation}{indentation}}}");
             //Clear方法
             stringBuilder.AppendLine("");
-            stringBuilder.AppendLine($"{indentation}{indentation}public void Clear()");
+            stringBuilder.AppendLine($"{indentation}{indentation}public void ClearBind()");
             stringBuilder.AppendLine($"{indentation}{indentation}{{");
             stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.mono = null;");
             stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.transform = null;");

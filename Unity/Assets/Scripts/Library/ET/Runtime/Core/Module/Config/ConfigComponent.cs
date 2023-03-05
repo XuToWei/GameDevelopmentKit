@@ -2,8 +2,11 @@
 
 namespace ET
 {
-    public class ConfigComponent : Singleton<ConfigComponent>
+    public class ConfigComponent : Singleton<ConfigComponent>, ISingletonAwake
     {
+        public struct Init
+        {
+        }
         public struct LoadAll
         {
         }
@@ -24,6 +27,11 @@ namespace ET
         
         public struct ReloadAll
         {
+        }
+        
+        public void Awake()
+        {
+            EventSystem.Instance.Invoke<Init>(new Init());
         }
         
         public async UniTask LoadAllAsync()

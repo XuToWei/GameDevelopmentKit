@@ -9,7 +9,9 @@ namespace ET.Client
         {
             // 加载配置
             Scene clientScene = await SceneFactory.CreateClientScene(1, "Game");
-            
+            clientScene.AddComponent<UGFEventComponent>();
+            clientScene.AddComponent<UIComponent>();
+
             await EventSystem.Instance.PublishAsync(clientScene, new EventType.AppStartInitFinish());
         }
     }

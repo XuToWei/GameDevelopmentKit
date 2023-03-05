@@ -67,4 +67,31 @@ namespace UnityGameFramework.Extension
             CancellationTokenRegistration = null;
         }
     }
+    
+    /// <summary>
+    /// Await包装类
+    /// </summary>
+    public class AwaitTaskWrap<T> : IReference
+    {
+        /// <summary>
+        /// TaskCompletionSource
+        /// </summary>
+        public AutoResetUniTaskCompletionSource<T> TaskCompletionSource { get; private set; }
+        
+        public CancellationTokenRegistration? CancellationTokenRegistration { get; private set; }
+
+        public static AwaitTaskWrap<T> Create(AutoResetUniTaskCompletionSource<T> taskCompletionSource, CancellationTokenRegistration? cancellationTokenRegistration)
+        {
+            AwaitTaskWrap<T> awaitDataWrap = ReferencePool.Acquire<AwaitTaskWrap<T>>();
+            awaitDataWrap.TaskCompletionSource = taskCompletionSource;
+            awaitDataWrap.CancellationTokenRegistration = cancellationTokenRegistration;
+            return awaitDataWrap;
+        }
+
+        public void Clear()
+        {
+            TaskCompletionSource = null;
+            CancellationTokenRegistration = null;
+        }
+    }
 }

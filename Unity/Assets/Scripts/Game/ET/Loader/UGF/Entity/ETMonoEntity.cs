@@ -5,7 +5,8 @@ using Game;
 
 namespace ET
 {
-    public class ETMonoEntity : BaseEntity
+    [DisallowMultipleComponent]
+    public sealed class ETMonoEntity : BaseEntity
     {
         public UGFEntity UGFEntity { get; private set; }
         public Type EntityEventType { get; private set; }
@@ -62,6 +63,7 @@ namespace ET
                 this.m_IsInitShow = false;
                 ETMonoEntityData entityData = userData as ETMonoEntityData;
                 this.m_EntityEvent?.OnShow(this.UGFEntity, entityData.UserData);
+                entityData.Release();
             }
             else
             {
