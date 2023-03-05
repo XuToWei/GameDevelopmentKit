@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using GameFramework;
@@ -15,13 +16,22 @@ namespace UnityGameFramework.Extension
 #if UNITY_EDITOR
         private static bool s_IsSubscribeEvent = false;
 #endif
-        private static readonly Dictionary<int, AwaitTaskWrap<UIForm>> s_UFormTcsDict = new Dictionary<int, AwaitTaskWrap<UIForm>>();
+        private static readonly Dictionary<int, AwaitTaskWrap<UIForm>> s_OpenUFormTcsDict = new Dictionary<int, AwaitTaskWrap<UIForm>>();
+        private static readonly Dictionary<int, AwaitTaskWrap<Entity>> s_ShowEntityTcsDict = new Dictionary<int, AwaitTaskWrap<Entity>>();
+        private static readonly Dictionary<string, AutoResetUniTaskCompletionSource> s_LoadSceneTcsDict = new Dictionary<string, AutoResetUniTaskCompletionSource>();
+        private static readonly Dictionary<string, AutoResetUniTaskCompletionSource> s_UnLoadSceneTcsDict = new Dictionary<string, AutoResetUniTaskCompletionSource>();
 
         /// <summary>
         /// 注册需要的事件 (需再流程入口处调用 防止框架重启导致事件被取消问题)
         /// </summary>
         public static void SubscribeEvent()
         {
+            if (s_OpenUFormTcsDict.Count > 0 || s_ShowEntityTcsDict.Count > 0 ||
+                s_LoadSceneTcsDict.Count > 0 || s_UnLoadSceneTcsDict.Count > 0)
+            {
+                throw new GameFrameworkException("Awaitable Task is not clean!");
+            }
+            
             EventComponent eventComponent = GameEntry.GetComponent<EventComponent>();
             eventComponent.Subscribe(OpenUIFormSuccessEventArgs.EventId, OnOpenUIFormSuccess);
             eventComponent.Subscribe(OpenUIFormFailureEventArgs.EventId, OnOpenUIFormFailure);
@@ -69,26 +79,27 @@ namespace UnityGameFramework.Extension
             {
                 if (uiComponent.IsLoadingUIForm(serialId))
                 {
+                    if (s_OpenUFormTcsDict.ContainsKey(serialId))
+                    {
+                        s_OpenUFormTcsDict.Remove(serialId);
+                    }
                     uiComponent.CloseUIForm(serialId);
                     tcs.TrySetResult(null);
                 }
             });
             serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData);
             AwaitTaskWrap<UIForm> awaitTaskWrap = AwaitTaskWrap<UIForm>.Create(tcs, ctr);
-            s_UFormTcsDict.Add(serialId, awaitTaskWrap);
-            // if (tcs.Task.Status == UniTaskStatus.Pending)
-            // {
-            //     AwaitTaskWrap<UIForm> awaitTaskWrap = AwaitTaskWrap<UIForm>.Create(tcs, ctr);
-            //     s_UFormTcsDict.Add(serialId, awaitTaskWrap);
-            // }
+            s_OpenUFormTcsDict.Add(serialId, awaitTaskWrap);
             return tcs.Task;
         }
 
         private static void OnOpenUIFormSuccess(object sender, GameEventArgs e)
         {
             OpenUIFormSuccessEventArgs ne = (OpenUIFormSuccessEventArgs)e;
-            if (s_UFormTcsDict.TryGetValue(ne.UIForm.SerialId, out AwaitTaskWrap<UIForm> awaitTaskWrap))
+            int serialId = ne.UIForm.SerialId;
+            if (s_OpenUFormTcsDict.TryGetValue(serialId, out AwaitTaskWrap<UIForm> awaitTaskWrap))
             {
+                s_OpenUFormTcsDict.Remove(serialId);
                 awaitTaskWrap.CancellationTokenRegistration?.Dispose();
                 var taskCompletionSource = awaitTaskWrap.TaskCompletionSource;
                 ReferencePool.Release(awaitTaskWrap);
@@ -99,12 +110,14 @@ namespace UnityGameFramework.Extension
         private static void OnOpenUIFormFailure(object sender, GameEventArgs e)
         {
             OpenUIFormFailureEventArgs ne = (OpenUIFormFailureEventArgs)e;
-            if (ne.UserData is AwaitDataWrap<UIForm> awaitDataWrap)
+            int serialId = ne.SerialId;
+            if (s_OpenUFormTcsDict.TryGetValue(serialId, out AwaitTaskWrap<UIForm> awaitTaskWrap))
             {
+                s_OpenUFormTcsDict.Remove(serialId);
                 Log.Error(ne.ErrorMessage);
-                awaitDataWrap.CancellationTokenRegistration?.Dispose();
-                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
-                ReferencePool.Release(awaitDataWrap);
+                awaitTaskWrap.CancellationTokenRegistration?.Dispose();
+                var taskCompletionSource = awaitTaskWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitTaskWrap);
                 taskCompletionSource.TrySetException(new GameFrameworkException(ne.ErrorMessage));
             }
         }
@@ -123,22 +136,30 @@ namespace UnityGameFramework.Extension
             {
                 if (entityComponent.IsLoadingEntity(entityId))
                 {
+                    if (s_ShowEntityTcsDict.ContainsKey(entityId))
+                    {
+                        s_ShowEntityTcsDict.Remove(entityId);
+                    }
                     entityComponent.HideEntity(entityId);
                     tcs.TrySetResult(null);
                 }
             });
-            entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, AwaitDataWrap<Entity>.Create(userData, tcs, ctr));
+            entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, userData);
+            AwaitTaskWrap<Entity> awaitTaskWrap = AwaitTaskWrap<Entity>.Create(tcs, ctr);
+            s_ShowEntityTcsDict.Add(entityId, awaitTaskWrap);
             return tcs.Task;
         }
 
         private static void OnShowEntitySuccess(object sender, GameEventArgs e)
         {
             ShowEntitySuccessEventArgs ne = (ShowEntitySuccessEventArgs)e;
-            if (ne.UserData is AwaitDataWrap<Entity> awaitDataWrap)
+            int entityId = ne.Entity.Id;
+            if (s_ShowEntityTcsDict.TryGetValue(entityId, out AwaitTaskWrap<Entity> awaitTaskWrap))
             {
-                awaitDataWrap.CancellationTokenRegistration?.Dispose();
-                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
-                ReferencePool.Release(awaitDataWrap);
+                s_ShowEntityTcsDict.Remove(entityId);
+                awaitTaskWrap.CancellationTokenRegistration?.Dispose();
+                var taskCompletionSource = awaitTaskWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitTaskWrap);
                 taskCompletionSource.TrySetResult(ne.Entity);
             }
         }
@@ -146,11 +167,14 @@ namespace UnityGameFramework.Extension
         private static void OnShowEntityFailure(object sender, GameEventArgs e)
         {
             ShowEntityFailureEventArgs ne = (ShowEntityFailureEventArgs)e;
-            if (ne.UserData is AwaitDataWrap<Entity> awaitDataWrap)
+            int entityId = ne.EntityId;
+            if (s_ShowEntityTcsDict.TryGetValue(entityId, out AwaitTaskWrap<Entity> awaitTaskWrap))
             {
-                awaitDataWrap.CancellationTokenRegistration?.Dispose();
-                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
-                ReferencePool.Release(awaitDataWrap);
+                s_ShowEntityTcsDict.Remove(entityId);
+                Log.Error(ne.ErrorMessage);
+                awaitTaskWrap.CancellationTokenRegistration?.Dispose();
+                var taskCompletionSource = awaitTaskWrap.TaskCompletionSource;
+                ReferencePool.Release(awaitTaskWrap);
                 taskCompletionSource.TrySetException(new GameFrameworkException(ne.ErrorMessage));
             }
         }
@@ -166,7 +190,8 @@ namespace UnityGameFramework.Extension
             var tcs = AutoResetUniTaskCompletionSource.Create();
             try
             {
-                sceneComponent.LoadScene(sceneAssetName, priority, AwaitDataWrap.Create(userData, tcs));
+                sceneComponent.LoadScene(sceneAssetName, priority, userData);
+                s_LoadSceneTcsDict.Add(sceneAssetName, tcs);
             }
             catch (Exception e)
             {
@@ -179,10 +204,10 @@ namespace UnityGameFramework.Extension
         private static void OnLoadSceneSuccess(object sender, GameEventArgs e)
         {
             LoadSceneSuccessEventArgs ne = (LoadSceneSuccessEventArgs)e;
-            if (ne.UserData is AwaitDataWrap awaitDataWrap)
+            string sceneAssetName = ne.SceneAssetName;
+            if (s_LoadSceneTcsDict.TryGetValue(sceneAssetName, out AutoResetUniTaskCompletionSource taskCompletionSource))
             {
-                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
-                ReferencePool.Release(awaitDataWrap);
+                s_LoadSceneTcsDict.Remove(sceneAssetName);
                 taskCompletionSource.TrySetResult();
             }
         }
@@ -190,10 +215,10 @@ namespace UnityGameFramework.Extension
         private static void OnLoadSceneFailure(object sender, GameEventArgs e)
         {
             LoadSceneFailureEventArgs ne = (LoadSceneFailureEventArgs)e;
-            if (ne.UserData is AwaitDataWrap awaitDataWrap)
+            string sceneAssetName = ne.SceneAssetName;
+            if (s_LoadSceneTcsDict.TryGetValue(sceneAssetName, out AutoResetUniTaskCompletionSource taskCompletionSource))
             {
-                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
-                ReferencePool.Release(awaitDataWrap);
+                s_LoadSceneTcsDict.Remove(sceneAssetName);
                 Log.Error(ne.ErrorMessage);
                 taskCompletionSource.TrySetException(new GameFrameworkException(ne.ErrorMessage));
             }
@@ -211,6 +236,7 @@ namespace UnityGameFramework.Extension
             try
             {
                 sceneComponent.UnloadScene(sceneAssetName, AwaitDataWrap.Create(userData, tcs));
+                s_UnLoadSceneTcsDict.Add(sceneAssetName, tcs);
             }
             catch (Exception e)
             {
@@ -223,10 +249,10 @@ namespace UnityGameFramework.Extension
         private static void OnUnloadSceneSuccess(object sender, GameEventArgs e)
         {
             UnloadSceneSuccessEventArgs ne = (UnloadSceneSuccessEventArgs)e;
-            if (ne.UserData is AwaitDataWrap awaitDataWrap)
+            string sceneAssetName = ne.SceneAssetName;
+            if (s_LoadSceneTcsDict.TryGetValue(sceneAssetName, out AutoResetUniTaskCompletionSource taskCompletionSource))
             {
-                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
-                ReferencePool.Release(awaitDataWrap);
+                s_LoadSceneTcsDict.Remove(sceneAssetName);
                 taskCompletionSource.TrySetResult();
             }
         }
@@ -234,10 +260,10 @@ namespace UnityGameFramework.Extension
         private static void OnUnloadSceneFailure(object sender, GameEventArgs e)
         {
             UnloadSceneFailureEventArgs ne = (UnloadSceneFailureEventArgs)e;
-            if (ne.UserData is AwaitDataWrap awaitDataWrap)
+            string sceneAssetName = ne.SceneAssetName;
+            if (s_LoadSceneTcsDict.TryGetValue(sceneAssetName, out AutoResetUniTaskCompletionSource taskCompletionSource))
             {
-                var taskCompletionSource = awaitDataWrap.TaskCompletionSource;
-                ReferencePool.Release(awaitDataWrap);
+                s_LoadSceneTcsDict.Remove(sceneAssetName);
                 Log.Error($"Unload scene {ne.SceneAssetName} failure.");
                 taskCompletionSource.TrySetException(new GameFrameworkException($"Unload scene {ne.SceneAssetName} failure."));
             }
