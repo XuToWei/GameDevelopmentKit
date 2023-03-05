@@ -5,7 +5,7 @@
 1.定义事件
 ```csharp
 [DynamicEvent(SceneType.Client)]
-public class MovementSetMoveSpeed_DynamicEvent:ADynamicEvent<TestEntity,DynamicEventType.Test>
+public class Test_DynamicEvent:ADynamicEvent<TestEntity,DynamicEventType.Test>
 {
     protected override async ETTask Run(Scene scene, TestEntity self,DynamicEventType.Test arg)
     {
