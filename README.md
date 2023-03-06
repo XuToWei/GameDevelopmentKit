@@ -28,7 +28,11 @@
 
 1.安装 [.net6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)，服务器功能需要安装[MonogoDB](https://www.mongodb.com/)
 
-2.打开 ET/ET.sln 编译
+2.打开Unity项目，等待Unity编译完成
+
+3.打开 ET/ET.sln 编译（导表，代码分析等功能需要用到）
+
+4.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
 
 # 引用库 致谢
 [UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
