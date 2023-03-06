@@ -73,8 +73,8 @@ namespace UnityGameFramework.Extension
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
+            int serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData);
             var tcs = AutoResetUniTaskCompletionSource<UIForm>.Create();
-            int serialId = 0;
             CancellationTokenRegistration? ctr = cts?.Token.Register(() =>
             {
                 if (uiComponent.IsLoadingUIForm(serialId))
@@ -87,7 +87,6 @@ namespace UnityGameFramework.Extension
                     tcs.TrySetResult(null);
                 }
             });
-            serialId = uiComponent.OpenUIForm(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm, userData);
             AwaitTaskWrap<UIForm> awaitTaskWrap = AwaitTaskWrap<UIForm>.Create(tcs, ctr);
             s_OpenUFormTcsDict.Add(serialId, awaitTaskWrap);
             return tcs.Task;
@@ -131,6 +130,7 @@ namespace UnityGameFramework.Extension
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
+            entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, userData);
             var tcs = AutoResetUniTaskCompletionSource<Entity>.Create();
             CancellationTokenRegistration? ctr = cts?.Token.Register(() =>
             {
@@ -144,7 +144,6 @@ namespace UnityGameFramework.Extension
                     tcs.TrySetResult(null);
                 }
             });
-            entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, userData);
             AwaitTaskWrap<Entity> awaitTaskWrap = AwaitTaskWrap<Entity>.Create(tcs, ctr);
             s_ShowEntityTcsDict.Add(entityId, awaitTaskWrap);
             return tcs.Task;
@@ -250,9 +249,9 @@ namespace UnityGameFramework.Extension
         {
             UnloadSceneSuccessEventArgs ne = (UnloadSceneSuccessEventArgs)e;
             string sceneAssetName = ne.SceneAssetName;
-            if (s_LoadSceneTcsDict.TryGetValue(sceneAssetName, out AutoResetUniTaskCompletionSource taskCompletionSource))
+            if (s_UnLoadSceneTcsDict.TryGetValue(sceneAssetName, out AutoResetUniTaskCompletionSource taskCompletionSource))
             {
-                s_LoadSceneTcsDict.Remove(sceneAssetName);
+                s_UnLoadSceneTcsDict.Remove(sceneAssetName);
                 taskCompletionSource.TrySetResult();
             }
         }
@@ -261,9 +260,9 @@ namespace UnityGameFramework.Extension
         {
             UnloadSceneFailureEventArgs ne = (UnloadSceneFailureEventArgs)e;
             string sceneAssetName = ne.SceneAssetName;
-            if (s_LoadSceneTcsDict.TryGetValue(sceneAssetName, out AutoResetUniTaskCompletionSource taskCompletionSource))
+            if (s_UnLoadSceneTcsDict.TryGetValue(sceneAssetName, out AutoResetUniTaskCompletionSource taskCompletionSource))
             {
-                s_LoadSceneTcsDict.Remove(sceneAssetName);
+                s_UnLoadSceneTcsDict.Remove(sceneAssetName);
                 Log.Error($"Unload scene {ne.SceneAssetName} failure.");
                 taskCompletionSource.TrySetException(new GameFrameworkException($"Unload scene {ne.SceneAssetName} failure."));
             }
