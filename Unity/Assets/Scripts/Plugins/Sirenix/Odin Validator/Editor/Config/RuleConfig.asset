@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 188390376, guid: a4865f1ab4504ed8a368670db22f409c, type: 3}
-  m_Name: ImportSettingsConfig
+  m_Script: {fileID: 1434321088, guid: afbf832bc46149f5a291e87cab63e46d, type: 3}
+  m_Name: RuleConfig
   m_EditorClassIdentifier: 
-  automateBeforeBuild: 1
+  projectRules: []

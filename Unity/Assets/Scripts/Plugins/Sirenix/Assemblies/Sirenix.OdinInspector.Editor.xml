@@ -10458,6 +10458,11 @@
             </summary>
             <seealso cref="!:RegisterValidationRuleAttribute"/>
         </member>
+        <member name="T:Sirenix.OdinInspector.Editor.Validation.ValidationSetup">
+            <summary>
+            Use <see cref="M:Sirenix.OdinInspector.Editor.Validation.Validator.InitializeResult(Sirenix.OdinInspector.Editor.Validation.ValidationResult@)"/> to initialize an empty <see cref="T:Sirenix.OdinInspector.Editor.Validation.ValidationResult"/>. 
+            </summary>
+        </member>
         <member name="T:Sirenix.OdinInspector.Editor.ValueResolvers.RegisterDefaultValueResolverCreatorAttribute">
             <summary>
             This attribute can be placed on an assembly to register a value resolver creator that should be queried when a value resolver is being created.

@@ -4430,6 +4430,12 @@
             <param name="icon">The icon to be displayed.</param>
             <param name="overlay">If <c>true</c> the suffix label will be drawn on top of the property, instead of after.</param>
         </member>
+        <member name="M:Sirenix.OdinInspector.SuffixLabelAttribute.#ctor(Sirenix.OdinInspector.SdfIconType)">
+            <summary>
+            Draws a label at the end of the property.
+            </summary>
+            <param name="icon">The icon to be displayed.</param>
+        </member>
         <member name="T:Sirenix.OdinInspector.SuppressInvalidAttributeErrorAttribute">
              <summary>
              <para>SuppressInvalidAttributeError is used on members to suppress the inspector error message you get when applying an attribute to a value that it's not supposed to work on.</para>
