@@ -1,0 +1,29 @@
+{
+  "name": "com.baracuda.preprocessor-symbol-definition-files",
+  "version": "2.0.1",
+  "displayName": "Preprocessor Symbol Definition Files",
+  "description": "This package provides an easy way to manage custom #defines in a Unity project for multiple platforms by providing dedicated files called: Preprocessor Symbol Definition Files, that allow to handle preprocessor symbols in an intuitive way.",
+  "unity": "2019.4",
+  "documentationUrl": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files/blob/main/README.md",
+  "changelogUrl": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files/blob/main/LICENSE.md",
+  "keywords": [
+    "symbols",
+    "preprocessor",
+    "preprocessor symbols",
+    "defines"
+  ],
+  "samples": [
+    {
+      "displayName": "Documentation",
+      "description": "Contains documentation in multiple file formats: .md, .html, .pdf, .jpg and .png.",
+      "path": "Samples~/Documentation"
+    }
+  ],
+  "author": {
+    "name": "John Baracuda",
+    "email": "johnbaracudagames@gmail.com",
+    "url": "https://johnbaracuda.com/"
+  },
+  "type": "tool"
+}
