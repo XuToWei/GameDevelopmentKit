@@ -12,7 +12,7 @@
 
 5.项目全面使用[UniTask](Unity/Assets/Scripts/Library/UniTask)，已替换ETTask，对非ET的部分支持更全面，推荐使用
 
-6.[基于Luban优化过后的导表工具](Book/Luban%E9%85%8D%E7%BD%AE.md)，方便生成多项目多程序集的配置
+6.[基于Luban优化过后的导表工具](Book/Luban%E9%85%8D%E7%BD%AE.md)，省去大量的bat，sh配置，方便生成多项目多程序集的配置
 
 7.[ET代码生成工具](Book/ET%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7.md)，可以很方便的生成ETUI和GFEntity的代码
 
@@ -34,10 +34,21 @@
 
 4.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
 
+# TODO && Features（动态）
+
+- [ ] UGF中Awaitable取消逻辑优化，保持和UniTask实现方案（PlayerLoop）一致
+- [ ] ET中的Time模块支持Unity编辑器下加速功能（目前是DateTime）
+- [ ] 拆分代码绑定库，方便自取
+- [ ] 拆分Luban优化版，方便自取
+- [ ] 资源服务器，资源上传配套工具
+- [ ] 多语言工具
+- [ ] Demo
+- [ ] Jenkins远程打包，通知，分发等
+
 # 引用库 致谢
 [UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
 
-[ET](https://github.com/egametang/ET)
+[ET](https://github.com/egametang/ET)（版本：[d263539](https://github.com/egametang/ET/commit/d263539e3b789ae6a1d45c8732972671fc92178f)）
 
 [Luban](https://github.com/focus-creative-games/luban)
 
