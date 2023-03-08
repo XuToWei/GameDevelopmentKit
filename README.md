@@ -34,16 +34,20 @@
 
 4.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
 
-# TODO && Features（动态）
+# TODO && Features
 
 - [ ] UGF中Awaitable取消逻辑优化，保持和UniTask实现方案（PlayerLoop）一致
 - [ ] ET中的Time模块支持Unity编辑器下加速功能（目前是DateTime）
 - [ ] 拆分代码绑定库，方便自取
 - [ ] 拆分Luban优化版，方便自取
-- [ ] 资源服务器，资源上传配套工具
-- [ ] 多语言工具
+- [ ] MonoHook接入方便开发时Dll Reload，避免频繁重开
+- [ ] 资源服务器，资源打包上传配套工具（包含dll，pack等）
+- [ ] 多语言工具（包含图片，资源等）
 - [ ] Demo
 - [ ] Jenkins远程打包，通知，分发等
+- [ ] 带代码定位的Log
+- [ ] UGui扩展：~~滑动列表（包括ET）~~，UI特效 , 编辑器点击选取UI优化 等等
+
 
 # 引用库 致谢
 [UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
