@@ -11,9 +11,7 @@ namespace ET
             {
                 case ConsoleMode.ReloadDll:
                     contex.Parent.RemoveComponent<ModeContex>();
-
                     await CodeLoaderComponent.Instance.LoadHotfixAsync();
-
                     EventSystem.Instance.Load();
                     break;
             }

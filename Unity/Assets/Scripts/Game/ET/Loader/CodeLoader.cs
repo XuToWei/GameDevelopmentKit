@@ -15,18 +15,18 @@ namespace ET
 
         public async UniTask StartAsync()
         {
-            model = null;
-
             GlobalConfig globalConfig = await GameEntry.Resource.LoadAssetAsync<GlobalConfig>("ET/GlobalConfig.asset");
             Define.CodeMode = globalConfig.CodeMode;
             GameEntry.Resource.UnloadAsset(globalConfig);
+            
+            model = null;
             
             if (Define.EnableHotfix)
             {
                 byte[] assBytes = await LoadCodeBytesAsync("Model.dll");
                 byte[] pdbBytes = await LoadCodeBytesAsync("Model.pdb");
-
                 model = Assembly.Load(assBytes, pdbBytes);
+                
                 await LoadHotfixAsync();
             }
             else
@@ -50,6 +50,11 @@ namespace ET
 
         public async UniTask LoadHotfixAsync()
         {
+            if (!Define.EnableHotfix)
+            {
+                throw new GameFrameworkException("Client ET LoadHotfix only run when EnableHotfix!");
+            }
+            
             byte[] assBytes = await LoadCodeBytesAsync("Hotfix.dll");
             byte[] pdbBytes = await LoadCodeBytesAsync("Hotfix.pdb");
 
