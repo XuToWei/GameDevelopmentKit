@@ -4,6 +4,17 @@ namespace ET
 {
     public class TimeInfo: Singleton<TimeInfo>, ISingletonUpdate
     {
+        private ITimeNow iTimeNow;
+
+        public ITimeNow ITimeNow
+        {
+            set
+            {
+                this.iTimeNow = value;
+                this.FrameTime = this.ClientNow();
+            }
+        }
+        
         private int timeZone;
         
         public int TimeZone
@@ -30,11 +41,11 @@ namespace ET
         {
             this.dt1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             this.dt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            this.FrameTime = this.ClientNow();
         }
 
         public void Update()
         {
+            this.iTimeNow.Update();
             this.FrameTime = this.ClientNow();
         }
         
@@ -49,7 +60,7 @@ namespace ET
         // 线程安全
         public long ClientNow()
         {
-            return (DateTime.UtcNow.Ticks - this.dt1970.Ticks) / 10000;
+            return (this.iTimeNow.GetUtcNowTicks() - this.dt1970.Ticks) / 10000;
         }
         
         public long ServerNow()

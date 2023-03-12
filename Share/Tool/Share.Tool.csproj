@@ -30,6 +30,12 @@
     </PropertyGroup>
     
     <ItemGroup>
+        <Compile Include="..\..\DotNet\Loader\NLogger.cs">
+          <Link>NLogger.cs</Link>
+        </Compile>
+        <Compile Include="..\..\DotNet\Loader\TimeNow.cs">
+          <Link>TimeNow.cs</Link>
+        </Compile>
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\Module\Config\**\*.cs">
             <Link>Module\Config\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>

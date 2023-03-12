@@ -20,7 +20,7 @@ namespace ET
                         .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
                         .WithParsed(Game.AddSingleton);
 
-                Game.AddSingleton<TimeInfo>();
+                Game.AddSingleton<TimeInfo>().ITimeNow = new TimeNow();
                 Game.AddSingleton<Logger>().ILog =
                         new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, "../Config/NLog/NLog.config");
                 Game.AddSingleton<ObjectPool>();

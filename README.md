@@ -36,8 +36,7 @@
 
 # TODO && Features
 
-- [ ] UGF中Awaitable取消逻辑优化，保持和UniTask实现方案（PlayerLoop）一致
-- [ ] ET中的Time模块支持Unity编辑器下加速功能（目前是DateTime）
+- [X] ET中的Time模块支持Unity编辑器下加速功能（目前是DateTime）
 - [ ] 拆分代码绑定库，方便自取
 - [ ] 拆分Luban优化版，方便自取
 - [ ] MonoHook接入方便开发时Dll Reload，避免频繁重开

@@ -58,7 +58,7 @@ namespace ET
                     .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
                     .WithParsed(Game.AddSingleton);
 
-            Game.AddSingleton<TimeInfo>();
+            Game.AddSingleton<TimeInfo>().ITimeNow = new UnityTimeNow();
             Game.AddSingleton<Logger>().ILog = new UnityLogger();
             Game.AddSingleton<ObjectPool>();
             Game.AddSingleton<IdGenerater>();

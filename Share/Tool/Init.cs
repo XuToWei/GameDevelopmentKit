@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using CommandLine;
 
 namespace ET.Server
@@ -21,15 +20,13 @@ namespace ET.Server
                         .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
                         .WithParsed(Game.AddSingleton);
 
-                Game.AddSingleton<TimeInfo>();
+                Game.AddSingleton<TimeInfo>().ITimeNow = new TimeNow();
                 Game.AddSingleton<Logger>().ILog =
                         new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, "../Config/NLog/NLog.config");
                 Game.AddSingleton<ObjectPool>();
                 Game.AddSingleton<IdGenerater>();
                 Game.AddSingleton<EventSystem>();
                 Game.AddSingleton<Root>();
-
-                //ETTask.ExceptionHandler += Log.Error;
 
                 Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Game).Assembly);
                 EventSystem.Instance.Add(types);

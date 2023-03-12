@@ -10,7 +10,6 @@
     <assembly fullname="System.Net.Http" preserve="all" />
     <assembly fullname="mscorlib" preserve="all" />
     <assembly fullname="UnityEngine.AssetBundleModule" preserve="all" />
-    <assembly fullname="NLog" preserve="all" />
     <assembly fullname="UnityEngine.CoreModule" preserve="all" />
     <assembly fullname="UnityEngine.InputLegacyModule" preserve="all" />
     

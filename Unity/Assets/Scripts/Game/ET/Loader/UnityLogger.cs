@@ -1,4 +1,5 @@
 ﻿using System;
+using GFLog = UnityGameFramework.Runtime.Log;
 
 namespace ET
 {
@@ -6,57 +7,57 @@ namespace ET
     {
         public void Trace(string msg)
         {
-            UnityEngine.Debug.Log(msg);
+            GFLog.Debug(msg);
         }
 
         public void Debug(string msg)
         {
-            UnityEngine.Debug.Log(msg);
+            GFLog.Debug(msg);
         }
 
         public void Info(string msg)
         {
-            UnityEngine.Debug.Log(msg);
+            GFLog.Info(msg);
         }
 
         public void Warning(string msg)
         {
-            UnityEngine.Debug.LogWarning(msg);
+            GFLog.Warning(msg);
         }
 
         public void Error(string msg)
         {
-            UnityEngine.Debug.LogError(msg);
+            GFLog.Error(msg);
         }
 
         public void Error(Exception e)
         {
-            UnityEngine.Debug.LogException(e);
+            GFLog.Error(e);
         }
 
         public void Trace(string message, params object[] args)
         {
-            UnityEngine.Debug.LogFormat(message, args);
+            GFLog.Debug(message, args);
         }
 
         public void Warning(string message, params object[] args)
         {
-            UnityEngine.Debug.LogWarningFormat(message, args);
+            GFLog.Warning(message, args);
         }
 
         public void Info(string message, params object[] args)
         {
-            UnityEngine.Debug.LogFormat(message, args);
+            GFLog.Info(message, args);
         }
 
         public void Debug(string message, params object[] args)
         {
-            UnityEngine.Debug.LogFormat(message, args);
+            GFLog.Debug(message, args);
         }
 
         public void Error(string message, params object[] args)
         {
-            UnityEngine.Debug.LogErrorFormat(message, args);
+            GFLog.Error(message, args);
         }
     }
 }
