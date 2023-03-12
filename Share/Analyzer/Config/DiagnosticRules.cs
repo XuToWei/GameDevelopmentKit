@@ -218,23 +218,4 @@ namespace ET.Analyzer
                     true,
                     Description);
     }
-
-    public static class ETTaslAsyncMethodHasCancelTokenAnalyzerRule
-    {
-        private const string Title = "返回UniTask的异步函数必须含有CancellationTokenSource参数";
-    
-        private const string MessageFormat = "返回UniTask的异步函数必须含有CancellationTokenSource参数";
-    
-        private const string Description = "返回UniTask的异步函数必须含有CancellationTokenSource参数.";
-    
-        public static readonly DiagnosticDescriptor Rule =
-                new DiagnosticDescriptor(DiagnosticIds.ETTaslAsyncMethodHasCancelTokenAnalyzerRuleId,
-                    Title,
-                    MessageFormat,
-                    DiagnosticCategories.All,
-                    DiagnosticSeverity.Error,
-                    true,
-                    Description);
-    }
-
 }

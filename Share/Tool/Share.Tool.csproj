@@ -36,18 +36,12 @@
         <Compile Include="..\..\DotNet\Loader\TimeNow.cs">
           <Link>TimeNow.cs</Link>
         </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\Module\Config\**\*.cs">
-            <Link>Module\Config\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\Module\Log\**\*.cs">
             <Link>Module\Log\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
-
         <Compile Include="..\..\Unity\Assets\Scripts\Library\LubanLib\Editor\**\*.cs">
             <Link>ExcelExporter\LubanLib\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
-
         <Compile Include="..\..\Unity\Assets\Scripts\Game\Editor\Generate\Luban\**\*.cs">
             <Link>ExcelExporter\Luban\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
