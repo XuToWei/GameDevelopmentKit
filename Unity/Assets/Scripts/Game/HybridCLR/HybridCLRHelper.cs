@@ -1,20 +1,27 @@
-using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using HybridCLR;
 using UnityEngine;
+using UnityGameFramework.Extension;
 
-namespace ET
+namespace Game
 {
     public static class HybridCLRHelper
     {
-        public static void Load()
+        public static readonly string ConfigAsset = "Assets/Res/Code/HybridCLR/HybridCLRConfig.asset";
+        
+        public static async UniTask LoadAsync()
         {
-            //Dictionary<string, UnityEngine.Object> dictionary = AssetsBundleHelper.LoadBundle("aotdlls.unity3d");
-            Dictionary<string, UnityEngine.Object> dictionary = new Dictionary<string, Object>();
-            foreach (var kv in dictionary)
+            HybridCLRConfig aotGroup = await GameEntry.Resource.LoadAssetAsync<HybridCLRConfig>(ConfigAsset);
+            foreach (TextAsset textAsset in aotGroup.AOTAssemblies)
             {
-                byte[] bytes = (kv.Value as TextAsset).bytes;
-                RuntimeApi.LoadMetadataForAOTAssembly(bytes, HomologousImageMode.Consistent);
+                RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HomologousImageMode.Consistent);
             }
         }
+    }
+
+    [CreateAssetMenu(menuName = "Game/Create HybridCLRConfig", fileName = "HybridCLRConfig", order = 0)]
+    public class HybridCLRConfig : ScriptableObject
+    {
+        public TextAsset[] AOTAssemblies;
     }
 }

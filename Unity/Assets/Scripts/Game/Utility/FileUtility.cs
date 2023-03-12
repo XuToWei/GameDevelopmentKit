@@ -46,6 +46,24 @@ namespace Game
                 File.Delete(subFile);
             }
         }
+        
+        public static void CleanDirectoryFiles(string dir, string filterPattern = "*")
+        {
+            if (!Directory.Exists(dir))
+            {
+                return;
+            }
+
+            foreach (string subDir in Directory.GetDirectories(dir))
+            {
+                CleanDirectoryFiles(subDir, filterPattern);
+            }
+
+            foreach (string subFile in Directory.GetFiles(dir, filterPattern))
+            {
+                File.Delete(subFile);
+            }
+        }
 
         public static void CopyDirectory(string srcDir, string tgtDir)
         {

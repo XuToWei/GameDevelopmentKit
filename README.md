@@ -39,10 +39,9 @@
 - [X] ET中的Time模块支持Unity编辑器下加速功能（目前是DateTime）
 - [ ] 拆分代码绑定库，方便自取
 - [ ] 拆分Luban优化版，方便自取
-- [ ] MonoHook接入方便开发时Dll Reload，避免频繁重开
+- [ ] ~~MonoHook接入方便开发时Dll Reload，避免频繁重开~~
 - [ ] 资源服务器，资源打包上传配套工具（包含dll，pack等）
 - [ ] 多语言工具（包含图片，资源等）
-- [ ] 改为使用Luban中的Proto
 - [ ] 完善HybridCLR工作流，编辑器
 - [ ] 完善非热更时包体优化功能（优化link.xml）
 - [ ] 带代码定位的Log

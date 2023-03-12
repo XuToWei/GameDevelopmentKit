@@ -26,17 +26,24 @@ MonoBehaviour:
   - Temp/Bin/Debug
   strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip
   patchAOTAssemblies:
-  - Unity.ThirdParty.dll
-  - Unity.Loader.dll
-  - Unity.Core.dll
   - MongoDB.Bson.dll
   - CommandLine.dll
-  - NLog.dll
   - mscorlib.dll
   - System.dll
   - System.Core.dll
-  collectAssetReferenceTypes: 0
-  outputLinkFile: Scripts/Loader/Plugins/HybridCLR/Generated/link.xml
-  outputAOTGenericReferenceFile: Scripts/Loader/Plugins/HybridCLR/Generated/AOTGenericReferences.cs
+  - System.Core.dll
+  - ET.Runtime.dll
+  - Game.ET.Loader.dll
+  - CatJson.Runtime.dll
+  - CodeBind.Runtime.dll
+  - LubanLib.Runtime.dll
+  - ProtoBuf.dll
+  - GameFramework.dll
+  - UnityGameFramework.Runtime.dll
+  - UnityGameFramework.Extension.dll
+  - UniTask.dll
+  - Game.dll
+  outputLinkFile: Scripts/Game/HybridCLR/Generated/link.xml
+  outputAOTGenericReferenceFile: Scripts/Game/HybridCLR/Generated/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10
   maxMethodBridgeGenericIteration: 10

@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using System.IO;
 using HybridCLR.Editor;
 using UnityEditor;
+using UnityEngine;
 
-namespace ET
-{
+namespace Game.Editor{
     public static class HybridCLREditor
     {
         [MenuItem("HybridCLR/CopyAotDlls")]
@@ -12,24 +11,25 @@ namespace ET
         {
             BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
             string fromDir = Path.Combine(HybridCLRSettings.Instance.strippedAOTDllOutputRootDir, target.ToString());
-            string toDir = "Assets/Bundles/AotDlls";
-            if (Directory.Exists(toDir))
-            {
-                Directory.Delete(toDir, true);
-            }
-            Directory.CreateDirectory(toDir);
-            AssetDatabase.Refresh();
-            
+            string toDir = "Assets/Res/Code/Aot";
+            FileUtility.CleanDirectoryFiles(toDir, "*.dll.bytes");
             foreach (string aotDll in HybridCLRSettings.Instance.patchAOTAssemblies)
             {
                 File.Copy(Path.Combine(fromDir, aotDll), Path.Combine(toDir, $"{aotDll}.bytes"), true);
             }
-            
-            // 设置ab包
-            AssetImporter assetImporter = AssetImporter.GetAtPath(toDir);
-            assetImporter.assetBundleName = "AotDlls.unity3d";
+            AssetDatabase.ImportAsset(toDir, ImportAssetOptions.ForceUpdate);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            // 设置aot dlls的group
+            HybridCLRConfig hybridCLRConfig = AssetDatabase.LoadAssetAtPath<HybridCLRConfig>(HybridCLRHelper.ConfigAsset);
+            hybridCLRConfig.AOTAssemblies = new TextAsset[HybridCLRSettings.Instance.patchAOTAssemblies.Length];
+            for (int i = 0; i < HybridCLRSettings.Instance.patchAOTAssemblies.Length; i++)
+            {
+                hybridCLRConfig.AOTAssemblies[i] = AssetDatabase.LoadAssetAtPath<TextAsset>(
+                    Path.Combine(toDir, $"{HybridCLRSettings.Instance.patchAOTAssemblies[i]}.bytes"));
+            }
+            EditorUtility.SetDirty(hybridCLRConfig);
             AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
     }
 }

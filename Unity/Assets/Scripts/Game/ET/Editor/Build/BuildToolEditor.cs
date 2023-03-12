@@ -19,7 +19,7 @@ namespace ET.Editor
 
         private void OnEnable()
         {
-            globalConfig = Resources.Load<GlobalConfig>("ET/GlobalConfig");
+            globalConfig = AssetDatabase.LoadAssetAtPath<GlobalConfig>("Assets/Res/ET/GlobalConfig.asset");
             
         }
 

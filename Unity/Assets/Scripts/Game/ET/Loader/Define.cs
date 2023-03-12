@@ -21,22 +21,12 @@
 #else
         public static bool EnableEditorView => false;
 #endif
-        
+
 #if ENABLE_IL2CPP
         public static bool EnableIL2CPP = true;
 #else
         public static bool EnableIL2CPP = false;
 #endif
-        
-        public static CodeMode CodeMode
-        {
-            get;
-            private set;
-        }
-
-        public static void SetCodeMode(CodeMode codeMode)
-        {
-            CodeMode = codeMode;
-        }
+        public static CodeMode CodeMode { get; internal set; }
     }
 }

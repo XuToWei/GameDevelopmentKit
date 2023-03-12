@@ -21,8 +21,10 @@ namespace ET
             {
                 return $"../Config/Luban/{fileName}.json";
             }
-
-            return $"../Config/Luban/{fileName}.bytes";
+            else
+            {
+                return $"../Config/Luban/{fileName}.bytes";
+            }
         }
     }
 }

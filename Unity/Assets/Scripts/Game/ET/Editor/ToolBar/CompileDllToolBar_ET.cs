@@ -30,7 +30,7 @@ namespace ET.Editor
             {
                 if (GUILayout.Button(s_BuildReloadHotfixButtonGUIContent))
                 {
-                    GlobalConfig globalConfig = Resources.Load<GlobalConfig>("ET/GlobalConfig");
+                    GlobalConfig globalConfig = AssetDatabase.LoadAssetAtPath<GlobalConfig>("Assets/Res/ET/GlobalConfig.asset");;
                     BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, globalConfig.CodeMode);
                     ShowNotification("Build Hotfix Success!");
 
@@ -58,7 +58,7 @@ namespace ET.Editor
 
             if (GUILayout.Button(s_BuildHotfixModelButtonGUIContent))
             {
-                GlobalConfig globalConfig = Resources.Load<GlobalConfig>("ET/GlobalConfig");
+                GlobalConfig globalConfig = AssetDatabase.LoadAssetAtPath<GlobalConfig>("Assets/Res/ET/GlobalConfig.asset");;
                 BuildAssemblyHelper.BuildModel(s_CodeOptimization, globalConfig.CodeMode);
                 BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, globalConfig.CodeMode);
                 ShowNotification("Build Model And Hotfix Success!");

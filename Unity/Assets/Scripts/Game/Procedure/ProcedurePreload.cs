@@ -16,9 +16,13 @@ namespace Game
         private async UniTaskVoid PreloadAsync(ProcedureOwner procedureOwner)
         {
             Log.Info("Start load Game Tables!");
-            await TablesLoader.LoadAsync();
+            await GameEntry.Tables.LoadAsync();
             Log.Info("Finish load Game Tables!");
-            
+
+#if UNITY_HOTFIX && ENABLE_IL2CPP
+            await HybridCLRHelper.LoadAsync();
+#endif
+
 #if UNITY_ET
             ChangeState<ProcedureStartET>(procedureOwner);
 #elif UNITY_GAMEHOT

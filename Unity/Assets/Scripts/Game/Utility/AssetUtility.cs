@@ -49,14 +49,19 @@ namespace Game
             return Utility.Text.Format("Assets/Res/UI/UISprite/{0}.png", assetName);
         }
 
-        public static string GetCodeAsset(string assetName)
-        {
-            return Utility.Text.Format("Assets/Res/Code/{0}.bytes", assetName);
-        }
-
         public static string GetLubanAsset(string assetName, bool fromJson)
         {
             return Utility.Text.Format("Assets/Res/Luban/{0}.{1}", assetName, fromJson ? "json" : "bytes");
+        }
+        
+        public static string GetETAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/Res/ET/{0}", assetName);
+        }
+        
+        public static string GetHotAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/Res/Hot/{0}", assetName);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ET.Editor
         
         private void OnEnable()
         {
-            globalConfig = Resources.Load<GlobalConfig>("ET/GlobalConfig");
+            globalConfig = AssetDatabase.LoadAssetAtPath<GlobalConfig>("Assets/Res/ET/GlobalConfig.asset");
         }
 
         public override void OnInspectorGUI()
@@ -24,6 +24,7 @@ namespace ET.Editor
                 var codeMode = (CodeMode)EditorGUILayout.EnumPopup("CodeMode: ", this.globalConfig.CodeMode);
                 if (codeMode != this.globalConfig.CodeMode)
                 {
+                    this.globalConfig.CodeMode = codeMode;
                     EditorUtility.SetDirty(this.globalConfig);
                     AssetDatabase.SaveAssets();
                 }

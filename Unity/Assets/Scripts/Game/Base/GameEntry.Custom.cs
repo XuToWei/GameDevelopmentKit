@@ -1,6 +1,4 @@
-﻿using Game;
-using UnityEngine;
-using UnityGameFramework.Extension;
+﻿using UnityGameFramework.Extension;
 
 namespace Game
 {

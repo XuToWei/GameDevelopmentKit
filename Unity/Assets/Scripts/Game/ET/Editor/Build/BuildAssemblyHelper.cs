@@ -14,7 +14,7 @@ namespace ET.Editor
         /// <summary>
         /// 编译输出的目录
         /// </summary>
-        public const string CodeDir = "Assets/Res/Runtime/ET";
+        public const string CodeDir = "Assets/Res/ET/Code";
         
         /// <summary>
         /// ET Code的目录

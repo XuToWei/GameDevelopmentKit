@@ -4,6 +4,7 @@ using System.Reflection;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Game;
+using GameFramework;
 using UnityGameFramework.Extension;
 
 namespace ET
@@ -15,13 +16,13 @@ namespace ET
         public async UniTask StartAsync()
         {
             model = null;
+
+            GlobalConfig globalConfig = await GameEntry.Resource.LoadAssetAsync<GlobalConfig>("ET/GlobalConfig.asset");
+            Define.CodeMode = globalConfig.CodeMode;
+            GameEntry.Resource.UnloadAsset(globalConfig);
+            
             if (Define.EnableHotfix)
             {
-                if (!Define.IsEditor && Define.EnableHotfix)
-                {
-                    HybridCLRHelper.Load();
-                }
-                
                 byte[] assBytes = await LoadCodeBytesAsync("Model.dll");
                 byte[] pdbBytes = await LoadCodeBytesAsync("Model.pdb");
 
@@ -61,7 +62,8 @@ namespace ET
         
         private async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
         {
-            TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetCodeAsset(fileName));
+            fileName = AssetUtility.GetETAsset(Utility.Text.Format("Code/", fileName));
+            TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(fileName);
             byte[] bytes = textAsset.bytes;
             GameEntry.Resource.UnloadAsset(textAsset);
             return bytes;

@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Game;
+using GameFramework;
 using UnityEngine;
 using UnityGameFramework.Extension;
 
@@ -25,18 +26,24 @@ namespace ET
             {
                 if (isJson)
                 {
-                    return $"Assets/Res/ET/Client/Luban/{fileName}.json";
+                    return AssetUtility.GetETAsset(Utility.Text.Format("Client/Luban/{0}.json", fileName));
                 }
-
-                return $"Assets/Res/ET/Client/Luban/{fileName}.bytes";
+                else
+                {
+                    return AssetUtility.GetETAsset(Utility.Text.Format("Client/Luban/{0}.bytes", fileName));
+                }
             }
-            
-            if (isJson)
+            else
             {
-                return $"Assets/Res/ET/ClientServer/Luban/{fileName}.json";
+                if (isJson)
+                {
+                    return AssetUtility.GetETAsset(Utility.Text.Format("ClientServer/Luban/{0}.json", fileName));
+                }
+                else
+                {
+                    return AssetUtility.GetETAsset(Utility.Text.Format("ClientServer/Luban/{0}.bytes", fileName));
+                }
             }
-
-            return $"Assets/Res/ET/ClientServer/Luban/{fileName}.bytes";
         }
     }
 }
