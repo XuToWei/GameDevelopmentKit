@@ -1,18 +1,19 @@
 using System;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Bright.Serialization;
 using Cysharp.Threading.Tasks;
 using SimpleJSON;
 
-namespace ET.Server
+namespace ET.Client
 {
     [Invoke]
     public class LubanLoadAllAsyncHandler : AInvokeHandler<ConfigComponent.LoadAll, UniTask>
     {
         public override async UniTask Handle(ConfigComponent.LoadAll arg)
         {
+            Game.AddSingleton<Tables>();
+            
             Type tablesType = typeof (Tables);
 
             MethodInfo loadMethodInfo = tablesType.GetMethod("LoadAsync");
@@ -24,7 +25,7 @@ namespace ET.Server
             {
                 async Task<ByteBuf> LoadByteBuf(string file)
                 {
-                    return new ByteBuf(await File.ReadAllBytesAsync(GetLubanAssetPath(file, false)));
+                    return new ByteBuf(await ConfigComponent.Instance.ReadBytesAsync(file));
                 }
 
                 Func<string, Task<ByteBuf>> func = LoadByteBuf;
@@ -34,22 +35,12 @@ namespace ET.Server
             {
                 async Task<JSONNode> LoadJson(string file)
                 {
-                    return JSON.Parse(await File.ReadAllTextAsync(GetLubanAssetPath(file, true)));
+                    return JSON.Parse(await ConfigComponent.Instance.ReadTextAsync(file));
                 }
 
                 Func<string, Task<JSONNode>> func = LoadJson;
                 await (Task)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
             }
-        }
-        
-        private string GetLubanAssetPath(string fileName, bool isJson)
-        {
-            if (isJson)
-            {
-                return $"../Config/Luban/{fileName}.json";
-            }
-
-            return $"../Config/Luban/{fileName}.bytes";
         }
     }
     

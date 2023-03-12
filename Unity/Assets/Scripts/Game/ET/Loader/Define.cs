@@ -38,25 +38,5 @@
         {
             CodeMode = codeMode;
         }
-
-        public static string GetLubanAssetPath(string fileName, bool isJson)
-        {
-            if (CodeMode == CodeMode.Client)
-            {
-                if (isJson)
-                {
-                    return $"Assets/Res/ET/Client/Luban/{fileName}.json";
-                }
-
-                return $"Assets/Res/ET/Client/Luban/{fileName}.bytes";
-            }
-            
-            if (isJson)
-            {
-                return $"Assets/Res/ET/ClientServer/Luban/{fileName}.json";
-            }
-
-            return $"Assets/Res/ET/ClientServer/Luban/{fileName}.bytes";
-        }
     }
 }

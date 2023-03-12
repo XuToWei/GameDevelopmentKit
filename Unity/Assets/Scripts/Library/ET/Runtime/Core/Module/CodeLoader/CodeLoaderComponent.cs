@@ -4,22 +4,25 @@ namespace ET
 {
     public class CodeLoaderComponent : Singleton<CodeLoaderComponent>, ICodeLoader
     {
-        private ICodeLoader codeLoader;
+        private ICodeLoader iCodeLoader;
 
-        public void SetCodeLoader(ICodeLoader loader)
+        public ICodeLoader ICodeLoader
         {
-            this.codeLoader = loader;
+            set
+            {
+                this.iCodeLoader = value;
+            }
         }
-        
+
         public async UniTask StartAsync()
         {
-            await this.codeLoader.StartAsync();
+            await this.iCodeLoader.StartAsync();
         }
         
         // 热重载调用该方法
         public async UniTask LoadHotfixAsync()
         {
-            await this.codeLoader.LoadHotfixAsync();
+            await this.iCodeLoader.LoadHotfixAsync();
         }
     }
 }

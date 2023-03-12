@@ -2,11 +2,18 @@
 
 namespace ET
 {
-    public class ConfigComponent : Singleton<ConfigComponent>, ISingletonAwake
+    public class ConfigComponent : Singleton<ConfigComponent>
     {
-        public struct Init
+        private IConfigReader iConfigReader;
+
+        public IConfigReader IConfigReader
         {
+            set
+            {
+                this.iConfigReader = value;
+            }
         }
+        
         public struct LoadAll
         {
         }
@@ -28,12 +35,7 @@ namespace ET
         public struct ReloadAll
         {
         }
-        
-        public void Awake()
-        {
-            EventSystem.Instance.Invoke<Init>(new Init());
-        }
-        
+
         public async UniTask LoadAllAsync()
         {
             await EventSystem.Instance.Invoke<LoadAll, UniTask>(new LoadAll());
@@ -47,6 +49,16 @@ namespace ET
         public async UniTask ReloadAllAsync()
         {
             await EventSystem.Instance.Invoke<ReloadAll, UniTask>(new ReloadAll());
+        }
+
+        public UniTask<byte[]> ReadBytesAsync(string file)
+        {
+            return iConfigReader.ReadBytesAsync(file);
+        }
+
+        public UniTask<string> ReadTextAsync(string file)
+        {
+            return iConfigReader.ReadTextAsync(file);
         }
     }
 }

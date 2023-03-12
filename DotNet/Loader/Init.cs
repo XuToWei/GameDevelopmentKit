@@ -28,7 +28,8 @@ namespace ET
                 Game.AddSingleton<EventSystem>();
                 Game.AddSingleton<TimerComponent>();
                 Game.AddSingleton<CoroutineLockComponent>();
-                Game.AddSingleton<CodeLoaderComponent>().SetCodeLoader(new CodeLoader());
+                Game.AddSingleton<ConfigComponent>().IConfigReader = new ConfigReader();
+                Game.AddSingleton<CodeLoaderComponent>().ICodeLoader = new CodeLoader();
                 
                 Log.Console($"{Parser.Default.FormatCommandLine(Options.Instance)}");
                 

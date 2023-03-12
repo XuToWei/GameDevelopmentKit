@@ -38,7 +38,8 @@ namespace ET
             
             Game.AddSingleton<NetServices>();
             Game.AddSingleton<Root>();
-            await Game.AddSingleton<ConfigComponent>().LoadAllAsync();
+            
+            await ConfigComponent.Instance.LoadAllAsync();
             Root.Instance.Scene.AddComponent<DynamicEventWatcherComponent>();
 
             await EventSystem.Instance.PublishAsync(Root.Instance.Scene, new EventType.EntryEvent1());
