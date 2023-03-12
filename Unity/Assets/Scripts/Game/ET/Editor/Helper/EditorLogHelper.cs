@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEngine;
 
 namespace ET
 {
@@ -9,15 +10,15 @@ namespace ET
         {
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-            EditorApplication.update += CheckCompolingFinish;
+            EditorApplication.update += CheckCompilingFinish;
         }
 
-        private static void CheckCompolingFinish()
+        private static void CheckCompilingFinish()
         {
-            if (!EditorApplication.isCompiling)
+            if (!EditorApplication.isCompiling && !Application.isPlaying)
             {
                 CreateLog();
-                EditorApplication.update -= CheckCompolingFinish;
+                EditorApplication.update -= CheckCompilingFinish;
             }
         }
 
