@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using GameFramework;
 
-namespace Game
+namespace Game.Editor
 {
-    public static class FileUtility
+    public static class FileTool
     {
         public static List<string> GetAllFiles(string dir, string searchPattern = "*")
         {

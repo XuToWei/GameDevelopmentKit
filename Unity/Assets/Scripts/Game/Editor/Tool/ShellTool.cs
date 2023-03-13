@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Editor
 {
-    public static class ShellUtility
+    public static class ShellTool
     {
         public static void Run(string cmd, string workDirectory, string encodingName = "UTF-8", List<string> environmentVars = null)
         {

@@ -12,7 +12,7 @@ namespace Game.Editor{
             BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
             string fromDir = Path.Combine(HybridCLRSettings.Instance.strippedAOTDllOutputRootDir, target.ToString());
             string toDir = "Assets/Res/Code/Aot";
-            FileUtility.CleanDirectoryFiles(toDir, "*.dll.bytes");
+            FileTool.CleanDirectoryFiles(toDir, "*.dll.bytes");
             foreach (string aotDll in HybridCLRSettings.Instance.patchAOTAssemblies)
             {
                 File.Copy(Path.Combine(fromDir, aotDll), Path.Combine(toDir, $"{aotDll}.bytes"), true);

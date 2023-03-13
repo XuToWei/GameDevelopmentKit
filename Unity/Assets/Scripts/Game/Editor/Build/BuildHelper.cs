@@ -51,7 +51,7 @@ namespace Game.Editor
 
             if (Directory.Exists(fold))
             {
-                FileUtility.CleanDirectory(fold);
+                FileTool.CleanDirectory(fold);
             }
             else
             {
@@ -87,8 +87,8 @@ namespace Game.Editor
             ResourceBuildHelper.StartBuild(Platform.Windows);
             Debug.Log("finish build resource");
             
-            FileUtility.CleanDirectory(targetPath);
-            FileUtility.CopyDirectory(fold, targetPath);
+            FileTool.CleanDirectory(targetPath);
+            FileTool.CopyDirectory(fold, targetPath);
             Debug.Log($"src dir: {fold}    target: {targetPath}");
         }
         
@@ -105,8 +105,8 @@ namespace Game.Editor
             ResourceBuildHelper.StartBuild(Platform.Windows64);
             Debug.Log("finish build resource");
             
-            FileUtility.CleanDirectory(targetPath);
-            FileUtility.CopyDirectory(fold, targetPath);
+            FileTool.CleanDirectory(targetPath);
+            FileTool.CopyDirectory(fold, targetPath);
             Debug.Log($"src dir: {fold}    target: {targetPath}");
         }
     }
