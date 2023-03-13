@@ -63,7 +63,7 @@ namespace ET
         
         private async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
         {
-            fileName = AssetUtility.GetETAsset(Utility.Text.Format("Code/", fileName));
+            fileName = AssetUtility.GetETAsset(Utility.Text.Format("Code/{0}", fileName));
             TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(fileName);
             byte[] bytes = textAsset.bytes;
             GameEntry.Resource.UnloadAsset(textAsset);

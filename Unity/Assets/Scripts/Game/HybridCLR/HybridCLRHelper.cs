@@ -7,7 +7,7 @@ namespace Game
 {
     public static class HybridCLRHelper
     {
-        public static readonly string ConfigAsset = "Assets/Res/Code/HybridCLR/HybridCLRConfig.asset";
+        public static readonly string ConfigAsset = "Assets/Res/HybridCLR/HybridCLRConfig.asset";
         
         public static async UniTask LoadAsync()
         {
