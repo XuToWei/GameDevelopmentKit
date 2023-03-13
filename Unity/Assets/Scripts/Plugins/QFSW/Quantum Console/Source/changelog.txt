@@ -1,0 +1,378 @@
+V2.6.3
+Addition 0141: Added Quantum Localization object for configuring the messaging/localization throughout QC
+Addition 0142: New core command: clear-registry
+Bugfix 0071: Fixed ClearRegistry clearing all registries instead of the specified registry
+Bugfix 0082: Fixed issues with the registry not being cleared when using fast enter playmode
+
+V2.6.2
+Addition 0138: New user extendable custom scan rule system
+Addition 0139: Command overload suggestions can now be collapsed into a single suggestion with optional parameters
+Addition 0140: Nullable<T> (e.g int?) is now a supported parseable argument type
+Change 0071: Value typed generics are now supported in commands in IL2CPP from Unity 2022.2 onwards
+Change 0072: Improved avoidance of compiler generated code when scanning for commands
+Bug Fix 0070: Fixed a native crash that would occur under the editor with Facepunch.Steamworks installed
+
+V2.6.1
+Addition 0137: Commands can now be generated and added at runtime using lambda commands
+Change 0070: The BasicCachedQcSuggestor type was moved to the QFSW.QC namespace
+
+V2.6.0
+Addition 0124: New user extendable contextual autocomplete system
+Addition 0125: New user extandable suggestion filtering system
+Addition 0126: Macros can now be autocompleted
+Addition 0127: Enum parameters can now be autocompleted
+Addition 0128: GameObject/Component parameters can now be autocompleted
+Addition 0129: Enum parameters can now be autocompleted
+Addition 0130: bool parameters can now be autocompleted
+Addition 0131: New suggestor tag system
+Addition 0132: New suggestor tag: [command-name]
+Addition 0133: New suggestor tag: [scene-name]
+Addition 0134: Autocomplete can now be disabled entirely if desired
+Addition 0135: The KeyConfig in use can now be changed at runtime via C#
+Addition 0136: The command log format can now be configured from the QuantumTheme
+Change 0064: Command arguments for the current suggestion will be displayed as you type
+Change 0065: built in scene commands now use [scene-name] for improved autocomplete
+Change 0066: Optimised text generation and coloring
+Change 0067: Optimised QuantumConsoleProcessor.GetAllCommands/GetUniqueCommands
+Change 0068: Optimised macro expansion
+Change 0069: load-scene command can now be used on scenes not in the build list (editor only)
+Bug Fix 0065: loaded-scenes and get-scene-hierarchy commands now work in when the loaded scenes are not in the build list
+Bug Fix 0066: Fixed the console drag feature not working with the new input system
+Bug Fix 0067: Fixed loaded-scenes failing when multiple loaded scenes are not in the build list
+Bug Fix 0068: Fixed the type serializer incorrectly serializing generic parameter types (such as T)
+Bug Fix 0069: Fixed a bug where overlapping macro definition (such as #a and #ab) would be expanded incorrectly
+
+V2.5.4
+Addition 0121: Console zoom can now be triggered with hotkeys (default: ctrl+ and ctrl-)
+Addition 0122: Hotkey for dragging the console is now configurable (default: shift click)
+Addition 0123: AreActionsExecuting added to query if the console is currently executing actions
+Change 0064: Optimised input handling under new input system
+Bug Fix 0064: Fixed bug where speechmarks were not parsed properly for GameObject arguments
+
+V2.5.3
+Addition 0120: New core command: max-logs
+Change 0063: QC will now ignore compiler generated types during table generation resulting in faster load times
+Bug Fix 0063: Fixed a native crash that would occur under IL2CPP with GeNa installed
+
+V2.5.2
+Addition 0119: Added maximum log size setting to prevent huge logs from crashing the console
+Change 0062: Default prefab now has a maximum log count of 1024 logs
+Bug Fix 0062: Fixed grammar in error message for when there are no invocation targets
+
+V2.5.1
+Addition 0118: Included SRP friendly prefab and theme variants: 'Quantum Console (SRP)' and 'Default Theme (SRP)'
+Bug Fix 0061: Fixed a case where loggers could initialize too late causing errors when initialize on startup is disabled
+
+V2.5.0
+Addition 0113: [CommandPrefix] can now be applied to entire assemblies
+Addition 0114: New extra command: http.get
+Addition 0115: New extra command: http.put
+Addition 0116: New extra command: http.post
+Addition 0117: New extra command: http.delete
+Change 0058: Non static invocation will now throw an exception if no targets could be found
+Change 0059: Non static non MonoBehaviour commands not using MonoTargetType.Registry are now explicitly rejected
+Change 0060: call-instance now unwraps the inner exception
+Change 0061: man now uses pretty printing for declaring type names
+Bug Fix 0059: Fixed a bug where JSON strings would be parsed as expression bodies
+Bug Fix 0060: Fixed nested type names not being serialized correctly
+
+V2.4.7
+Bug Fix 0057: Console display will no longer incorrectly parse rich tags from invoked command
+Bug Fix 0058: Generic class commands now still work when the command method has overloads
+
+V2.4.6
+Addition 0110: Commands declared in generic classes are now supported
+Addition 0111: New extra command: quit
+Addition 0112: New extra command: capture-screenshot
+Change 0057: Improved the default format for timestamps
+Bug Fix 0055: Fixed issues with new input system when the device does not support a keyboard
+Bug Fix 0056: Fixed false positives of the IL2CPP primitive operator warning
+
+V2.4.5
+Change 0056: The OnLog event now receives an ILog, containing both the log text and type
+Bug Fix 0054: Fixed a bug where destroyed objects were not removed from the registry
+
+V2.4.4
+Bug Fix 0053: Fixed a bug where the max log lines setting would not work properly
+
+V2.4.3
+Bug Fix 0052: Fixed ReadKey action on new input system
+
+V2.4.2
+Note: In order to keep QC looking the same as before when using the included Blur material, set the Panel Color in the theme to white
+Change 0055: The blur shader now responds to vertex colors, meaning it is affected by the color of the Image/Sprite renderer
+Bug Fix 0051: Fixed the QC_DISABLED preprocessor
+
+V2.4.1
+Addition 0109: Command suggestions are now clickable
+Change 0054: call-static now unwraps the inner exception
+Bug Fix 0048: Fixed instances of the command name not including prefixes in its manual
+Bug Fix 0049: Fixed an issue where changes to the console scaling in edit mode would be lost
+Bug Fix 0050: Resolved an error that could occur during certain operator syntax checks
+
+V2.4.0
+Note: due to restructuring it is recommended that you remove your current installation before updating
+Addition 0106: Added the Command Actions system
+Addition 0107: Logs can now be made to the console without a leading newline
+Addition 0108: Timestamp format can now be configured via the QuantumTheme
+Change 0052: Blank log lines are now allowed
+Change 0053: Hardcoded color formatting has been removed
+Bug Fix 0047: Fixed the banner being rendered incorrectly on HighDPI displays
+
+V2.3.7
+Addition 0105: Native support for new input system
+
+V2.3.6
+Change 0051: Optimised text processing code to reduce allocations
+Bug Fix 0046: Type parser/serializer now support tuple syntax
+
+V2.3.5
+Change 0050: Optimised get-object-info
+Addition 0101: Console UI can now be resized at runtime
+Addition 0102: New extra command: get-scene-hierarchy
+Addition 0103: New extra command: write-file
+Addition 0104: New extra command: read-file
+
+V2.3.4
+Change 0046: Improved hotkey handling so there are no longer false positives or collisions
+Change 0047: Improved when the console steals input and no longer does it on mobile platforms
+Change 0048: Improved performance of GameObject parser
+Change 0049: Reverted the invocation message changes introduced in V2.3.3
+Addition 0097: New user extendable preprocessor system
+Addition 0098: New extra command: call-static
+Addition 0099: New extra command: call-instance
+Addition 0100: Addition of [NoInject] for all injection based systems
+Bug Fix 0041: Fixed a singleton QC destroying itself if the gameobject is disabled then enabled
+Bug Fix 0042: Fixed the GameObject parser being unable to parse inactive DontDestroyOnLoad objects
+Bug Fix 0043: Fixed IL2CPP alloc crash that could be encountered in a multi target command invocation
+Bug Fix 0044: Inner exceptions in binary operator invocation are now properly displayed in the console
+Bug Fix 0045: The AutoScroll:Always option now works
+
+V2.3.3
+Brand new documentation: https://qfsw.co.uk/docs/QC/
+Change 0045: Improved invocation messages for commands without a return
+Addition 0093: New MonoTargetType: SingleInactive
+Addition 0094: New MonoTargetType: AllInactive
+Addition 0095: Added logging level option and command
+Addition 0096: Added TryAddCommand to processor for runtime addition of commands
+Bug Fix 0039: Primitive parser now behave correctly on non English locales
+Bug Fix 0040: Fixed primitive operators with high stripping level enabled
+
+V2.3.2
+Change 0043: Optimised command table generation
+Change 0044: Changed sort order so that it is higher than default
+Bug Fix 0035: Fixed a bug where fuzzy case sensitive command suggestion sorting would not work
+Bug Fix 0036: Primitive casts in expression bodies now work in IL2CPP
+Bug Fix 0037: Fixed [Preserve] error reported in specific 2018.3 versions
+Bug Fix 0038: Fixed a bug where the UI control panel would not receive theme updates
+
+V2.3.1
+Change 0043: Vectors and Quaternions now use recursive parsing for their constituents
+Change 0044: Boolean parser now accepts yes and no values
+Bug Fix 0035: Reworked scoping so that nested collections using different scope tokens works again e.g. [(1,2),(3,4)]
+Bug Fix 0036: Fixed many stripping issues when high stripping level is enabled
+
+V2.3.0
+Upgrade Note: TMP and 2018.3+ are now required, full upgrade guide at https://www.qfsw.co.uk/docs/QC/Upgrade230/
+Addition 0071: UI can now be scaled at runtime
+Addition 0072: New user extendable serialization system
+Addition 0073: ITuples can now be serialized (.NET 4.6 compatibility level only)
+Addition 0074: Vector2Int/Vector3Int can now be serialized
+Addition 0075: New user extendable parser system
+Addition 0076: HashSets/LinkedList/ConcurrentStack/ConcurrentQueue/ConcurrentBags are now a parseable arguments
+Addition 0077: IEnumerable/ICollection/IReadOnlyCollection/IList/IReadOnlyLists are now a parseable arguments
+Addition 0078: Vector2Int/Vector3Ints are now a parseable arguments
+Addition 0079: Tuple/ValueTuples are now parseable arguments
+Addition 0080: New user extendable custom grammar construct system
+Addition 0081: Expression bodies can now be used to use one command as an argument to another - {expr}
+Addition 0082: Nullable expression bodies allow null values to pass through - {expr}?
+Addition 0083: Boolean values/expressions can now be negated with !
+Addition 0084: Binary operators can now be used in the console input (+ - * / %)
+Addition 0085: QC now has a proper singleton mode
+Addition 0086: New [QcIgnore] attribute which informs QC to ignore classes/assemblies
+Addition 0087: New command: user-commands
+Addition 0088: New command: qc-script-extern
+Addition 0089: New extra command: instantiate-prefab
+Addition 0090: New extra command: instantiate-model
+Addition 0091: New extra command: destroy-component
+Addition 0092: Stadia and Lumin platforms have been added to the command platforms
+Change 0032: Visual theme of the UI has been greatly improved
+Change 0033: Command table generation is now multithreaded and over 10x faster
+Change 0034: Parsing and serialization is now significantly faster
+Change 0035: Improved console text regeneration so that it happens at most once per frame
+Change 0036: Internal naming conventions and APIs have been overhauled
+Change 0037: Custom inspectors now work properly on 2019.3+
+Change 0038: man command now displays the declaring type(s)
+Change 0039: get-object-info command now displays direct children
+Change 0040: Key configuration has been moved to QuantumKeyConfiguration
+Change 0041: Increased the scroll sensitivity
+Change 0042: [CommandPrefix] can now be used on structs
+Bug Fix 0025: Fixed the drag not working
+Bug Fix 0026: Fixed a bug where the targets of a multicast command would not be alphanumerically ordered
+Bug Fix 0027: Multidimensional array type names are now serialized correctly
+Bug Fix 0028: Multidimensional array type names are now parsed correctly
+Bug Fix 0029: Fixed a concurrency bug with QC's async logging
+Bug Fix 0030: Job counter UI now receives theme changes
+Bug Fix 0031: Fixed a bug where generics could trigger rich formatting in the input field
+Bug Fix 0032: Fixed a bug where ColorText would fail on IL2CPP with non opaque colors
+Bug Fix 0033: BadImageFormatException issue has been tracked upstream to Mono and is now ignored
+Bug Fix 0034: Removed leading blank line in get-object-info
+
+V2.2.2
+Addition 0064: Quantum Console now has a brand new look
+Addition 0065: Non static commands can now be used on non-monobehaviours (Quantum Registry must be used)
+Addition 0066: Formatting in registry errors is now greatly improved
+Addition 0067: Quantum Theme can now take a custom material and color
+Addition 0068: Quantum Console can now be dragged (default shift + click)
+Addition 0069: New extra command: start-coroutine
+Addition 0070: New extra command: msaa
+Change 0029: Improved readability of collection formatters on dark theme
+Change 0030: Improved readability Quantum Theme inspector on dark theme
+Change 0031: Improved extra command get-object-info
+Bug Fix 0022: Improved stability of TMP upgrader
+Bug Fix 0023: Fixed stability issues with theme application
+Bug Fix 0024: Fixed a bug where QC would complain about weak delegates even if they were not being used as a command
+
+V2.2.1
+Addition 0064: New MonoTargetType: Singleton
+Addition 0065: New extra command: bind
+Addition 0066: New extra command: unbind
+Addition 0067: New extra command: unbind-all
+Addition 0068: New extra command: display-bindings
+Change 0029: Many parts of Quantum Console have been massively optimised
+Bug Fix 0022: Fixed a bug where the input field would not focus the first time the console is opened
+
+V2.2.0
+Addition 0060: Added TMP support
+Addition 0061: Added support for backwards command suggestion cycling
+Addition 0062: New console command: verbose-errors
+Addition 0063: New console command: verbose-logging
+Change 0026: Improved bool parsing to support on/off and 1/0
+Change 0027: Errors are now more user friendly when using enum arguments
+Change 0028: Optimised text generation to reduce string size
+
+V2.1.3
+Addition 0057: Font can now be controlled from the Quantum Theme
+Addition 0058: Added QC_DISABLE_BUILTIN_ALL to disable all built in commands
+Addition 0059: Added QC_DISABLE_BUILTIN_EXTRA to disable all extra commands
+Bug Fix 0021: Fixed a bug where abstract and virtual commands would cause duplicates to appear
+
+V2.1.2
+Addition 0039: Maximum number of logs can now be restricted
+Addition 0040: New extra command: enum-info (added enum colouring to default theme)
+Addition 0041: New extra command: all-scenes
+Addition 0042: New extra command: loaded-scenes
+Addition 0043: New extra command: active-scene
+Addition 0044: New extra command: set-active-scene
+Addition 0045: New extra command: unload-scene
+Addition 0046: New extra command: unload-scene-index
+Addition 0047: New extra command: max-fps
+Addition 0048: New extra command: vsync
+Addition 0049: New extra command: set-resolution
+Addition 0050: New extra command: current-resolutin
+Addition 0051: New extra command: supported-resolutions
+Addition 0052: New extra command: fullscreen
+Addition 0053: New extra command: screen-dpi
+Addition 0054: New extra command: screen-orientation
+Addition 0055: New extra command: time-scale
+Addition 0056: Added MobilePlatforms shortcut to Platform
+Change 0020: QC no longer needs the .NET 4.6 API compatability level and only the scripting backend
+Change 0021: QC now internally uses string builders for improved performance
+Change 0022: Default theme now has IEnumerators default to line seperation and ICollections to [a, b, c]
+Change 0023: Extra commands now use their own assembly
+Change 0024: Scene commands have been moved to their own file
+Change 0025: Scene load/unload commands are now async
+Bug Fix 0016: Fixed a bug where auto named commands and command prefixes would not work on fields or classes in Roslyn
+Bug Fix 0017: Fixed a bug where initialize on startup option would not hide the console
+Bug Fix 0018: Fixed a bug where whitespace would be treated as args
+Bug Fix 0019: Fixed the Switch enum value having the incorrect bit value
+Bug Fix 0020: Fixed .NET auto upgrader
+
+V2.1.1
+Addition 0037: Added [CommandPrefix] attribute. Adding this to a class will prepend its prefix to all commands created within the class
+Addition 0038: Console will now automatically open when a log of the specified severity is encountered
+
+V2.1.0
+Addition 0036: Async commands are now fully supported
+Change 0017: exec and exec-extern are now async commands
+Change 0018: exec and all related code has been moved to Extras/exec for easy removal if desired
+Change 0019: exec will no longer appear on iOS, PS4, Switch or Xbox One
+Bug Fix 0013: Input text no longer becomes highlighted when using the command history
+Bug Fix 0014: get-object-info command will now throw a proper error on failure
+Bug Fix 0015: Fixed a bug where TypeFormatters and thus theme objects would be corrupted when moving across specific Unity versions 
+
+V2.0.2
+Addition 0033: Added visibility toggle for scene view mode
+Addition 0034: QC can now be easily disabled on release builds, builds etc.
+Addition 0035: Added verbose modes to exception handling and log interception
+
+V2.0.1
+Addition 0030: Async and thread safe support for logs and Debug.Logs
+Addition 0031: Option to initialise the console on startup without activating it
+Addition 0032: Scene persistence option
+Change 0016: Exposed the Toggle function to the public API
+Bug Fix 0011: Fixed a bug where logs and Debug.Logs occuring before the console was initialised would be dropped
+Bug Fix 0012: Stopped editor warnings on 2018.3+
+
+V2.0.0
+Note: It is recommended you remove Quantum Console from your project before downloading this update
+Addition 0010: Generic commands are now supported
+Addition 0011: Macros are now supported
+Addition 0012: New Quantum Theme system; themes are fully customisable and control formatting of returns
+Addition 0013: Case sensitivity is now an option for command autocompletion
+Addition 0014: Optional popup display for suggested commands
+Addition 0015: Namespace system has been added for type resolution
+Addition 0016: Nested collections are now supported as arguments
+Addition 0017: Stacks and Queues are now supported as arguments
+Addition 0018: Type parser now supports primitives, arrays, generics and namespaces
+Addition 0019: Type formatter has been massively improved
+Addition 0020: Formatter now supports Dictionaries and KeyValuePairs
+Addition 0021: 'null' is now supported as an argument for all reference types
+Addition 0022: Toggleable timestamps for logs
+Addition 0023: Autoscrolling feature for the Quantum Console
+Addition 0024: Improved formatting for inputted commands in the console log
+Addition 0025: New extra command: add-component
+Addition 0026: New extra command: teleport-relative
+Addition 0027: New extra command: set-parent
+Addition 0028: New extra command: rotate
+Addition 0029: Brand new demo scene
+Change 0003: Return serialization has been massively improved
+Change 0004: Invocation and serialiazation have been decoupled
+Change 0005: Text processing has been hugely improved, properly supporting escape characters and scope control
+Change 0006: Color and vector parsing has been improved
+Change 0007: Scroll sensitivity has been increased
+Change 0008: Source has been restructured
+Change 0009: All parsing related functionality has been moved to QuantumParser
+Change 0010: All registry related functionality has been moved to QuantumRegistry
+Change 0011: Registry commands are now generic
+Change 0012: Formatting in get-object-info has been improved
+Change 0013: CTRL and CMD are now one option in keybindings, and SHIFT has been added as a modifier
+Change 0014: Removed various command aliases
+Change 0015: exec and exec-extern have been removed from WebGL
+Bug Fix 0002: Autocompletion sort order for fuzzy searches has been improved
+Bug Fix 0003: Command history is no longer cleared on console clear
+Bug Fix 0004: Fixed a bug where 'double' type would be displayed as 'int'
+Bug Fix 0005: Exception style logs are now formatted correctly
+Bug Fix 0006: Fixed GetRegistryContents<T>
+Bug Fix 0007: Fixed a bug where writer commands were generated for readonly/const fields
+Bug Fix 0008: CloseOnSubmit now works
+Bug Fix 0009: Fixed a bug where commands with unsupported array typed parameters would not be rejected
+Bug Fix 0010: Fixed a bug where the inspector would throw errors during playmode
+
+V1.0.2
+Addition 0006: Arrays are now a supported parameter type
+Addition 0007: Lists are now a supported paramater type
+Addition 0008: Processor now properly formats generic types
+Addition 0009: Arrays, Lists and all other IEnumerables will now be properly formatted when returned
+Change 0002: Improved internal assemblies
+
+V1.0.1
+Addition 0002: Added support for delegate commands
+Addition 0003: Enums are now a supported parameter type
+Addition 0004: New extra command: load-scene
+Addition 0005: New extra command: send-message
+Change 0001: Improved internal code organisation
+Bug Fix 0001: Better supports 2018.3b
+
+V1.0.0
+Initial release

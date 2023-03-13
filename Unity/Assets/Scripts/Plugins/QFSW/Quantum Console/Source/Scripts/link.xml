@@ -1,0 +1,11 @@
+<linker>
+  <assembly fullname="QFSW.QC" preserve="all"/>
+  <assembly fullname="QFSW.QC.Parsers" preserve="all"/>
+  <assembly fullname="QFSW.QC.Grammar" preserve="all"/>
+  <assembly fullname="QFSW.QC.Serializers" preserve="all"/>
+  <assembly fullname="QFSW.QC.Suggestors" preserve="all"/>
+  <assembly fullname="QFSW.QC.Extras" preserve="all"/>
+  <assembly fullname="System.Core">
+    <type fullname="System.Linq.Expressions.Interpreter.LightLambda" preserve="all" />
+  </assembly>
+</linker>

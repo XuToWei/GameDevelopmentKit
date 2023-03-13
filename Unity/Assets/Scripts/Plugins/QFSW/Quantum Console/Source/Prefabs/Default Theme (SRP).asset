@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49e15215dd5c7444aa955d9a8a83fea0, type: 3}
+  m_Name: Default Theme (SRP)
+  m_EditorClassIdentifier: 
+  Font: {fileID: 11400000, guid: 03667487b095d134cb5d244fc285c9d1, type: 2}
+  PanelMaterial: {fileID: 0}
+  PanelColor: {r: 0.105882354, g: 0.1254902, b: 0.14901961, a: 0.9411765}
+  CommandLogColor: {r: 0, g: 1, b: 1, a: 1}
+  SelectedSuggestionColor: {r: 1, g: 1, b: 0.427, a: 1}
+  SuggestionColor: {r: 0.601, g: 0.601, b: 0.601, a: 1}
+  ErrorColor: {r: 1, g: 0, b: 0, a: 1}
+  WarningColor: {r: 1, g: 0.5, b: 0, a: 1}
+  SuccessColor: {r: 0, g: 1, b: 0, a: 1}
+  TimestampFormat: '[{0:00}:{1:00}:{2:00}]'
+  DefaultReturnValueColor: {r: 1, g: 0.7372549, b: 0.54901963, a: 1}
+  TypeFormatters:
+  - _type: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - _type: System.Collections.IEnumerable, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    Color: {r: 0.99215686, g: 0.9490196, b: 0.4117647, a: 1}
+  - _type: System.Collections.Generic.KeyValuePair`2, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    Color: {r: 0.7311321, g: 1, b: 0.9315609, a: 1}
+  - _type: System.Collections.DictionaryEntry, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    Color: {r: 0.7294118, g: 1, b: 0.93333334, a: 1}
+  - _type: System.Enum, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+    Color: {r: 0.7698444, g: 1, b: 0.54901963, a: 1}
+  - _type: UnityEngine.Object, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Color: {r: 0.96862745, g: 0.6, b: 1, a: 1}
+  CollectionFormatters:
+  - _type: System.Collections.Generic.Dictionary`2, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    SeperatorString: \n
+    LeftScoper: 
+    RightScoper: 
+  - _type: System.Collections.ICollection, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    SeperatorString: ', '
+    LeftScoper: '['
+    RightScoper: ']'
+  - _type: System.Collections.IEnumerable, mscorlib, Version=4.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    SeperatorString: \n
+    LeftScoper: 
+    RightScoper: 

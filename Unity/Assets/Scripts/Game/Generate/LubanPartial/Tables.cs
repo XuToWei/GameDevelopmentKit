@@ -10,9 +10,9 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    public partial class Tables: GameFrameworkComponent
+    public partial class Tables : GameFrameworkComponent
     {
-        public async UniTask LoadAsync()
+        public async UniTask LoadAllAsync()
         {
             Type tablesType = this.GetType();
 
