@@ -13,13 +13,13 @@ namespace Game.Editor
         }
         
         [MenuItem("Tools/Open Folder/打开Proto文件夹", false, -98)]
-        public static void OpeProtoPath()
+        public static void OpenProtoPath()
         {
             OpenFolder.Execute($"{Application.dataPath}/../../Design/Proto");
         }
         
         [MenuItem("Tools/Open Folder/打开Build文件夹", false, -97)]
-        public static void OpeBuildPath()
+        public static void OpenBuildPath()
         {
             OpenFolder.Execute($"{Application.dataPath}/../../Temp");
         }

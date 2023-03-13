@@ -15,4 +15,16 @@ MonoBehaviour:
   removeSymbolsOnDelete: 1
   logMessages: 1
   showAllDefinedSymbols: 1
-  elevatedSymbols: []
+  elevatedSymbols:
+  - NETSTANDARD2_0
+  - ODIN_INSPECTOR
+  - ODIN_INSPECTOR_3_1
+  - ODIN_VALIDATOR
+  - ODIN_VALIDATOR_3_1
+  - UNITY_ET_VIEW
+  - ENABLE_LOG
+  - UNITY_GAMEHOT
+  - UNITY_ET
+  - ODIN_INSPECTOR_3
+  - UNITY_EDITOR_ET_CODEMODE_CLIENT
+  - UNITY_ET_CODEMODE_CLIENT

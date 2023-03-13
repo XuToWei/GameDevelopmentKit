@@ -7,14 +7,14 @@ namespace ET.Editor
     [InitializeOnLoad]
     sealed class ReloadExcelToolBar
     {
-        private static GUIContent s_ExportReloadButtonGUIConent;
+        private static readonly GUIContent s_ExportReloadButtonGUIConent;
         private static bool s_IsReloading;
         
         static ReloadExcelToolBar()
         {
             s_ExportReloadButtonGUIConent = new GUIContent("ReloadExcel", "Reload (No Export) All Excel!");
             s_IsReloading = false;
-            ToolbarExtender.AddRightToolbarGUI(0, OnToolbarGUI);
+            ToolbarExtender.AddRightToolbarGUI(98, OnToolbarGUI);
         }
 
         private static void OnToolbarGUI()
@@ -44,6 +44,7 @@ namespace ET.Editor
                     ReloadAsync();
                 }
             }
+            EditorGUI.EndDisabledGroup();
         }
 
         private static void ShowNotification(string msg)

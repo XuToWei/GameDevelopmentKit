@@ -7,7 +7,7 @@ namespace Game.Editor
     [InitializeOnLoad]
     sealed class ExcelExporterToolBar
     {
-        private static GUIContent s_ExportButtonGUIConent;
+        private static readonly GUIContent s_ExportButtonGUIConent;
 
         static ExcelExporterToolBar()
         {

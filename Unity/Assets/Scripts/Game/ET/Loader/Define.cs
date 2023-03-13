@@ -27,6 +27,15 @@
 #else
         public static bool EnableIL2CPP = false;
 #endif
-        public static CodeMode CodeMode { get; internal set; }
+            
+#if UNITY_ET_CODEMODE_CLIENT
+        public static CodeMode CodeMode => CodeMode.Client;
+#elif UNITY_ET_CODEMODE_SERVER
+        public static CodeMode CodeMode => CodeMode.Server;
+#elif UNITY_ET_CODEMODE_CLIENTSERVER
+        public static CodeMode CodeMode => CodeMode.ClientServer;
+#else
+        public static CodeMode CodeMode => CodeMode.Client;
+#endif
     }
 }

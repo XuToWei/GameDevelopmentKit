@@ -9,7 +9,7 @@ namespace ET.Editor
     public class BuildToolEditor: EditorWindow
     {
         private CodeOptimization codeOptimization = CodeOptimization.Debug;
-        private GlobalConfig globalConfig;
+        private CodeMode codeMode;
 
         [MenuItem("ET/Build Tool")]
         public static void ShowWindow()
@@ -19,8 +19,7 @@ namespace ET.Editor
 
         private void OnEnable()
         {
-            globalConfig = AssetDatabase.LoadAssetAtPath<GlobalConfig>("Assets/Res/ET/GlobalConfig.asset");
-            
+            this.codeMode = Define.CodeMode;
         }
 
         private void OnGUI()
@@ -35,7 +34,38 @@ namespace ET.Editor
             
             this.codeOptimization = (CodeOptimization)EditorGUILayout.EnumPopup("CodeOptimization:", this.codeOptimization);
 
-            this.globalConfig.CodeMode = (CodeMode)EditorGUILayout.EnumPopup("CodeMode:", this.globalConfig.CodeMode);
+            this.codeMode = (CodeMode)EditorGUILayout.EnumPopup("CodeMode:", this.codeMode);
+            if (this.codeMode != Define.CodeMode)
+            {
+#if UNITY_ET_CODEMODE_CLIENT
+                if (this.codeMode == CodeMode.Server)
+                {
+                    CodeModeDefineSymbolTool.UNITY_ET_CODEMODE_SERVER();
+                }
+                else if (this.codeMode == CodeMode.ClientServer)
+                {
+                    CodeModeDefineSymbolTool.UNITY_ET_CODEMODE_CLIENTSERVER();
+                }
+#elif UNITY_ET_CODEMODE_SERVER
+                if (this.codeMode == CodeMode.Client)
+                {
+                    CodeModeDefineSymbolTool.UNITY_ET_CODEMODE_CLIENT();
+                }
+                else if (this.codeMode == CodeMode.ClientServer)
+                {
+                    CodeModeDefineSymbolTool.UNITY_ET_CODEMODE_CLIENTSERVER();
+                }
+#elif  UNITY_ET_CODEMODE_CLIENTSERVER
+                if (this.codeMode == CodeMode.Client)
+                {
+                    CodeModeDefineSymbolTool.UNITY_ET_CODEMODE_CLIENT();
+                }
+                else if (this.codeMode == CodeMode.Server)
+                {
+                    CodeModeDefineSymbolTool.UNITY_ET_CODEMODE_SERVER();
+                }
+#endif
+            }
 
             if (GUILayout.Button("BuildModelAndHotfix"))
             {
@@ -44,8 +74,8 @@ namespace ET.Editor
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
 
-                BuildAssemblyHelper.BuildModel(this.codeOptimization, globalConfig.CodeMode);
-                BuildAssemblyHelper.BuildHotfix(this.codeOptimization, globalConfig.CodeMode);
+                BuildAssemblyHelper.BuildModel(this.codeOptimization, this.codeMode);
+                BuildAssemblyHelper.BuildHotfix(this.codeOptimization, this.codeMode);
 
                 AfterCompiling();
 
@@ -59,7 +89,7 @@ namespace ET.Editor
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
 
-                BuildAssemblyHelper.BuildModel(this.codeOptimization, globalConfig.CodeMode);
+                BuildAssemblyHelper.BuildModel(this.codeOptimization, this.codeMode);
 
                 AfterCompiling();
 
@@ -73,7 +103,7 @@ namespace ET.Editor
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
 
-                BuildAssemblyHelper.BuildHotfix(this.codeOptimization, globalConfig.CodeMode);
+                BuildAssemblyHelper.BuildHotfix(this.codeOptimization, this.codeMode);
 
                 AfterCompiling();
 

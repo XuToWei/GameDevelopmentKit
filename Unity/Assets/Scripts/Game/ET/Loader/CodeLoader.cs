@@ -15,10 +15,6 @@ namespace ET
 
         public async UniTask StartAsync()
         {
-            GlobalConfig globalConfig = await GameEntry.Resource.LoadAssetAsync<GlobalConfig>("ET/GlobalConfig.asset");
-            Define.CodeMode = globalConfig.CodeMode;
-            GameEntry.Resource.UnloadAsset(globalConfig);
-            
             model = null;
             
             if (Define.EnableHotfix)
