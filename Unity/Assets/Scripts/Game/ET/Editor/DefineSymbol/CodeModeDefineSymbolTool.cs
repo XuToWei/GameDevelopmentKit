@@ -29,6 +29,7 @@ namespace ET.Editor
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
             EnableETClientCode();
+            EnableETClientViewCode();
             DisableETServerCode();
             EnableModelGenerateClientCode();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
@@ -55,7 +56,8 @@ namespace ET.Editor
         {
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
-            DisableETClientCode();
+            EnableETClientCode();
+            DisableETClientViewCode();
             EnableETServerCode();
             EnableModelGenerateClientServerCode();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
@@ -83,6 +85,7 @@ namespace ET.Editor
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
             EnableETClientCode();
+            EnableETClientViewCode();
             EnableETServerCode();
             EnableModelGenerateClientServerCode();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
@@ -100,6 +103,7 @@ namespace ET.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 #endif
+        
         static void EnableETClientCode()
         {
             string asmdefFile = "Assets/Scripts/Game/ET/Code/Hotfix/Client/Ignore.asmdef";
@@ -108,13 +112,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefFile, asmdefDisableFile);
                 File.Delete(asmdefFile);
-            }
-            asmdefFile = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            if (File.Exists(asmdefFile))
-            {
-                File.Move(asmdefFile, asmdefDisableFile);
-                File.Delete(asmdefFile);
+                File.Delete($"{asmdefFile}.meta");
             }
             asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Client/Ignore.asmdef";
             asmdefDisableFile = $"{asmdefFile}.DISABLED";
@@ -122,13 +120,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefFile, asmdefDisableFile);
                 File.Delete(asmdefFile);
-            }
-            asmdefFile = "Assets/Scripts/Game/ET/Code/ModelView/Client/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            if (File.Exists(asmdefFile))
-            {
-                File.Move(asmdefFile, asmdefDisableFile);
-                File.Delete(asmdefFile);
+                File.Delete($"{asmdefFile}.meta");
             }
         }
         
@@ -140,13 +132,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefDisableFile, asmdefFile);
                 File.Delete(asmdefDisableFile);
-            }
-            asmdefFile = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            if (File.Exists(asmdefDisableFile))
-            {
-                File.Move(asmdefDisableFile, asmdefFile);
-                File.Delete(asmdefDisableFile);
+                File.Delete($"{asmdefDisableFile}.meta");
             }
             asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Client/Ignore.asmdef";
             asmdefDisableFile = $"{asmdefFile}.DISABLED";
@@ -154,6 +140,38 @@ namespace ET.Editor
             {
                 File.Move(asmdefDisableFile, asmdefFile);
                 File.Delete(asmdefDisableFile);
+                File.Delete($"{asmdefDisableFile}.meta");
+            }
+        }
+        static void EnableETClientViewCode()
+        {
+            string asmdefFile = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Ignore.asmdef";
+            string asmdefDisableFile = $"{asmdefFile}.DISABLED";
+            if (File.Exists(asmdefFile))
+            {
+                File.Move(asmdefFile, asmdefDisableFile);
+                File.Delete(asmdefFile);
+                File.Delete($"{asmdefFile}.meta");
+            }
+            asmdefFile = "Assets/Scripts/Game/ET/Code/ModelView/Client/Ignore.asmdef";
+            asmdefDisableFile = $"{asmdefFile}.DISABLED";
+            if (File.Exists(asmdefFile))
+            {
+                File.Move(asmdefFile, asmdefDisableFile);
+                File.Delete(asmdefFile);
+                File.Delete($"{asmdefFile}.meta");
+            }
+        }
+        
+        static void DisableETClientViewCode()
+        {
+            string asmdefFile = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Ignore.asmdef";
+            string asmdefDisableFile = $"{asmdefFile}.DISABLED";
+            if (File.Exists(asmdefDisableFile))
+            {
+                File.Move(asmdefDisableFile, asmdefFile);
+                File.Delete(asmdefDisableFile);
+                File.Delete($"{asmdefDisableFile}.meta");
             }
             asmdefFile = "Assets/Scripts/Game/ET/Code/ModelView/Client/Ignore.asmdef";
             asmdefDisableFile = $"{asmdefFile}.DISABLED";
@@ -161,6 +179,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefDisableFile, asmdefFile);
                 File.Delete(asmdefDisableFile);
+                File.Delete($"{asmdefDisableFile}.meta");
             }
         }
         
@@ -172,6 +191,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefFile, asmdefDisableFile);
                 File.Delete(asmdefFile);
+                File.Delete($"{asmdefFile}.meta");
             }
             asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Server/Ignore.asmdef";
             asmdefDisableFile = $"{asmdefFile}.DISABLED";
@@ -179,6 +199,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefFile, asmdefDisableFile);
                 File.Delete(asmdefFile);
+                File.Delete($"{asmdefFile}.meta");
             }
         }
         
@@ -190,6 +211,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefDisableFile, asmdefFile);
                 File.Delete(asmdefDisableFile);
+                File.Delete($"{asmdefDisableFile}.meta");
             }
             asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Server/Ignore.asmdef";
             asmdefDisableFile = $"{asmdefFile}.DISABLED";
@@ -197,6 +219,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefDisableFile, asmdefFile);
                 File.Delete(asmdefDisableFile);
+                File.Delete($"{asmdefDisableFile}.meta");
             }
         }
         
@@ -208,6 +231,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefFile, asmdefDisableFile);
                 File.Delete(asmdefFile);
+                File.Delete($"{asmdefFile}.meta");
             }
             asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Ignore.asmdef";
             asmdefDisableFile = $"{asmdefFile}.DISABLED";
@@ -215,6 +239,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefDisableFile, asmdefFile);
                 File.Delete(asmdefDisableFile);
+                File.Delete($"{asmdefDisableFile}.meta");
             }
         }
         
@@ -226,6 +251,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefFile, asmdefDisableFile);
                 File.Delete(asmdefFile);
+                File.Delete($"{asmdefFile}.meta");
             }
             asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Generate/Client/Ignore.asmdef";
             asmdefDisableFile = $"{asmdefFile}.DISABLED";
@@ -233,6 +259,7 @@ namespace ET.Editor
             {
                 File.Move(asmdefDisableFile, asmdefFile);
                 File.Delete(asmdefDisableFile);
+                File.Delete($"{asmdefDisableFile}.meta");
             }
         }
     }
