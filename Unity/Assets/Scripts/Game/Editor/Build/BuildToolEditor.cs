@@ -16,14 +16,14 @@ namespace Game.Editor
 
         public Platform GetCurPlatform()
         {
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+#if UNITY_IOS
+            return Platform.IOS;
+#elif UNITY_ANDROID
+            return Platform.Android;
+#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             return Platform.Windows;
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
             return Platform.MacOS;
-#elif UNITY_IOS
-             return Platform.IOS;
-#elif UNITY_ANDROID
-            return Platform.Android;
 #endif
         }
 

@@ -9,7 +9,7 @@ namespace Game.Editor
 {
     public static class BuildHelper
     {
-        private static readonly string BuildFolder = "../../Temp/Pkg";
+        private static readonly string BuildFolder = "../Temp/Pkg";
         
         public static void BuildPkg(Platform platform)
         {

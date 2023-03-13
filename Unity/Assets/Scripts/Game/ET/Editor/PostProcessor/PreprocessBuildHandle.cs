@@ -9,7 +9,7 @@ namespace ET.Editor
         
         public void OnPreprocessBuild(BuildReport report)
         {
-#if (UNITY_IPHONE || UNITY_ANDROID)&&(UNITY_ET_CODEMODE_SERVER || UNITY_ET_CODEMODE_CLIENTSERVER)
+#if (UNITY_IOS || UNITY_ANDROID)&&(UNITY_ET_CODEMODE_SERVER || UNITY_ET_CODEMODE_CLIENTSERVER)
             UnityEngine.Debug.LogError("iPhone and android use server not supported because MongoDB Driver!");
 #endif
         }

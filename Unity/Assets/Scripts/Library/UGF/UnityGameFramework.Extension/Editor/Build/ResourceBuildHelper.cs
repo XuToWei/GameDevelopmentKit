@@ -1,10 +1,3 @@
-//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
 using System;
 using System.IO;
 using UnityEditor;
@@ -21,17 +14,17 @@ namespace UnityGameFramework.Extension.Editor
         private static ResourceBuilderController m_Controller = null;
         private static Platform m_OriginalPlatform;
 
-        [MenuItem("Game Framework/Resource Tools/Resource Start Build", false, 39)]
+        [MenuItem("Game Framework/Resource Tools/Resource Start Build", false, 51)]
         public static void StartBuild()
         {
-            StartBuild(null);
+            StartBuild(Platform.Undefined);
         }
         
         /// <summary>
         /// build resource
         /// </summary>
-        /// <param name="specificPlatform">为null或Undefined使用设置的平台</param>
-        public static void StartBuild(Platform? specificPlatform)
+        /// <param name="specificPlatform">为Undefined使用设置的平台</param>
+        public static void StartBuild(Platform specificPlatform)
         {
             m_Controller = new ResourceBuilderController();
             m_Controller.OnLoadingResource += OnLoadingResource;
@@ -47,11 +40,11 @@ namespace UnityGameFramework.Extension.Editor
             if (m_Controller.Load())
             {
                 m_OriginalPlatform = m_Controller.Platforms;
-                if (specificPlatform.HasValue && specificPlatform != Platform.Undefined)
+                if (specificPlatform != Platform.Undefined)
                 {
-                    m_Controller.Platforms = specificPlatform.Value;
+                    m_Controller.Platforms = specificPlatform;
                 }
-                
+
                 Debug.Log("Load configuration success.");
 
                 m_Controller.RefreshCompressionHelper();
@@ -94,7 +87,7 @@ namespace UnityGameFramework.Extension.Editor
                     message += Environment.NewLine;
                 }
 
-                message += "Platform is invalid.";
+                message += $"Platform {m_Controller.Platforms} is invalid.";
             }
 
             if (string.IsNullOrEmpty(m_Controller.CompressionHelperTypeName))
@@ -114,7 +107,7 @@ namespace UnityGameFramework.Extension.Editor
                     message += Environment.NewLine;
                 }
 
-                message += "Output directory is invalid.";
+                message += $"Output directory {m_Controller.OutputDirectory} is invalid.";
             }
 
             if (!string.IsNullOrEmpty(message))
