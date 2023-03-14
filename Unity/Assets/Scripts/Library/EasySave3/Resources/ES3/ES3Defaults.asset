@@ -15,7 +15,7 @@ MonoBehaviour:
   settings:
     _location: 0
     path: SaveFile.es3
-    encryptionType: 1
+    encryptionType: 0
     compressionType: 0
     encryptionPassword: GameDevelopmentKit
     directory: 0
@@ -50,15 +50,15 @@ MonoBehaviour:
     - HybridCLR.Runtime
     - LubanLib.Runtime
     - ProtoBuf
+    - QFSW.QC
     - QFSW.QC.Demo
     - QFSW.QC.Extras
     - QFSW.QC.Grammar
     - QFSW.QC.Parsers
     - QFSW.QC.ScanRules
     - QFSW.QC.Serializers
-    - QuantumConsole
-    - QuantumConsole.Suggestors
-    - QuantumConsole.UI
+    - QFSW.QC.Suggestors
+    - QFSW.QC.UI
     - StompyRobot.SRDebugger
     - StompyRobot.SRF
     - UniTask

@@ -1,0 +1,8 @@
+{
+    "name": "QFSW.QC.Extras",
+    "references": [
+        "QFSW.QC"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}
