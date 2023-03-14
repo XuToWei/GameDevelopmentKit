@@ -14,8 +14,8 @@ namespace Game.Editor
         static FocusFolderToolBar()
         {
             s_UIResFocusGUIContent = new GUIContent("UI-Res", "Focus UI Res Folder.");
-            s_UIModelCodeFocusGUIContent = new GUIContent("UII-Model", "Focus UI Model Code Folder.");
-            s_UIHofixCodeFocusGUIContent = new GUIContent("UII-Hotfix", "Focus UI Hotfix Code Folder.");
+            s_UIModelCodeFocusGUIContent = new GUIContent("ETUI-Model", "Focus UI Model Code Folder.");
+            s_UIHofixCodeFocusGUIContent = new GUIContent("ETUI-Hotfix", "Focus UI Hotfix Code Folder.");
             ToolbarExtender.AddLeftToolbarGUI(-1, OnToolbarGUI);
         }
 
