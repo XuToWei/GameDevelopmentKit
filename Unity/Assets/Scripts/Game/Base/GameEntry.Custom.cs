@@ -19,12 +19,6 @@ namespace Game
             private set;
         }
         
-        public static ConsoleComponent Console
-        {
-            get;
-            private set;
-        }
-
         public static ETComponent ET
         {
             get;
@@ -59,7 +53,6 @@ namespace Game
         {
             Builtin = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinComponent>();
             Camera = UnityGameFramework.Runtime.GameEntry.GetComponent<CameraComponent>();
-            Console = UnityGameFramework.Runtime.GameEntry.GetComponent<ConsoleComponent>();
             ET = UnityGameFramework.Runtime.GameEntry.GetComponent<ETComponent>();
             Screen = UnityGameFramework.Runtime.GameEntry.GetComponent<ScreenComponent>();
             SpriteCollection = UnityGameFramework.Runtime.GameEntry.GetComponent<SpriteCollectionComponent>();
