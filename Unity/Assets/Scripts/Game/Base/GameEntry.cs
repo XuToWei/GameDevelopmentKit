@@ -5,6 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System;
 using UnityEngine;
 
 namespace Game
@@ -17,7 +18,13 @@ namespace Game
         private void Start()
         {
             InitBuiltinComponents();
-            InitCustomComponents();
+            InitExtensionComponents();
+            InitGameComponents();
+        }
+
+        private void OnApplicationQuit()
+        {
+            UnityGameFramework.Runtime.GameEntry.Shutdown(UnityGameFramework.Runtime.ShutdownType.Quit);
         }
     }
 }

@@ -18,12 +18,6 @@ namespace Game
             get;
             private set;
         }
-        
-        public static ETComponent ET
-        {
-            get;
-            private set;
-        }
 
         public static ScreenComponent Screen
         {
@@ -37,26 +31,18 @@ namespace Game
             private set;
         }
 
-        public static Tables Tables
-        {
-            get;
-            private set;
-        }
-        
         public static TextureSetComponent TextureSet
         {
             get;
             private set;
         }
 
-        private static void InitCustomComponents()
+        private static void InitExtensionComponents()
         {
             Builtin = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinComponent>();
             Camera = UnityGameFramework.Runtime.GameEntry.GetComponent<CameraComponent>();
-            ET = UnityGameFramework.Runtime.GameEntry.GetComponent<ETComponent>();
             Screen = UnityGameFramework.Runtime.GameEntry.GetComponent<ScreenComponent>();
             SpriteCollection = UnityGameFramework.Runtime.GameEntry.GetComponent<SpriteCollectionComponent>();
-            Tables = UnityGameFramework.Runtime.GameEntry.GetComponent<Tables>();
             TextureSet = UnityGameFramework.Runtime.GameEntry.GetComponent<TextureSetComponent>();
         }
     }
