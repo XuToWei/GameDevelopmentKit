@@ -1,14 +1,17 @@
 {
-    "name": "QFSW.QC.Serializers",
+    "name": "QuantumConsole.Demo",
+    "rootNamespace": "",
     "references": [
-        "QFSW.QC"
+        "QuantumConsole",
+        "Unity.TextMeshPro"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

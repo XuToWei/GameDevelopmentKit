@@ -1,7 +1,8 @@
 {
-    "name": "QFSW.QC.Suggestors",
+    "name": "QuantumConsole.Grammar",
+    "rootNamespace": "",
     "references": [
-        "QFSW.QC"
+        "QuantumConsole"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,12 +1,12 @@
 {
-    "name": "QFSW.QC.Editor",
+    "name": "QuantumConsole.Editor",
+    "rootNamespace": "",
     "references": [
-        "QFSW.QC",
-        "QFSW.QC.Editor.Tools",
-        "QFSW.QC.QGUI",
+        "QuantumConsole",
+        "QuantumConsole.Editor.Tools",
+        "QuantumConsole.QGUI",
         "Unity.TextMeshPro"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [
         "Editor"
     ],
@@ -15,5 +15,7 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

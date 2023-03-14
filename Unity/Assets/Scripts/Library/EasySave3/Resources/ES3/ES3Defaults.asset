@@ -50,15 +50,15 @@ MonoBehaviour:
     - HybridCLR.Runtime
     - LubanLib.Runtime
     - ProtoBuf
-    - QFSW.QC
     - QFSW.QC.Demo
     - QFSW.QC.Extras
     - QFSW.QC.Grammar
     - QFSW.QC.Parsers
     - QFSW.QC.ScanRules
     - QFSW.QC.Serializers
-    - QFSW.QC.Suggestors
-    - QFSW.QC.UI
+    - QuantumConsole
+    - QuantumConsole.Suggestors
+    - QuantumConsole.UI
     - StompyRobot.SRDebugger
     - StompyRobot.SRF
     - UniTask

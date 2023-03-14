@@ -1,8 +1,8 @@
 {
-    "name": "QFSW.QC.Demo",
+    "name": "QuantumConsole.Parsers",
+    "rootNamespace": "",
     "references": [
-        "QFSW.QC",
-        "Unity.TextMeshPro"
+        "QuantumConsole"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,14 +1,16 @@
 {
-    "name": "QFSW.QC.Parsers",
+    "name": "QuantumConsole.Suggestors",
+    "rootNamespace": "",
     "references": [
-        "QFSW.QC"
+        "QuantumConsole"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

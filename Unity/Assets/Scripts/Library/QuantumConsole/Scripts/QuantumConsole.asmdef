@@ -1,11 +1,13 @@
 {
-    "name": "QFSW.QC.ScanRules",
+    "name": "QuantumConsole",
+    "rootNamespace": "",
     "references": [
-        "GUID:fb24642277b1db2449da7ac148ce939d"
+        "Unity.TextMeshPro",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
