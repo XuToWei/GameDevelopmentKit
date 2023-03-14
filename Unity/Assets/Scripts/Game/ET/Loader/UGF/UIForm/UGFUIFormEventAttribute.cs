@@ -2,18 +2,27 @@ using System;
 
 namespace ET
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public sealed class UGFUIFormEventAttribute : BaseAttribute
     {
-        public int uiFormId { get; }
+        public int[] uiFormIds { get; }
 
-        public UGFUIFormEventAttribute(int uiFormId)
+        public UGFUIFormEventAttribute(params int[] uiFormIds)
         {
-            this.uiFormId = uiFormId;
-            if (uiFormId == 0)
+            this.uiFormIds = uiFormIds;
+#if UNITY_EDITOR
+            if (this.uiFormIds == null || this.uiFormIds.Length < 1)
             {
-                throw new Exception("UIFormId can't be 0!");
+                throw new Exception("UIFormIds can't be null!");
             }
+            foreach (var uiFormId in uiFormIds)
+            {
+                if (uiFormId == 0)
+                {
+                    throw new Exception("UIFormId can't be 0!");
+                }
+            }
+#endif
         }
     }
 }

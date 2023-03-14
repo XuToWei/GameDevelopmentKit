@@ -1,24 +1,18 @@
+using ToolbarExtension;
 using UnityEditor;
 using UnityEngine;
-using UnityToolbarExtender;
 
 namespace Game.Editor
 {
-    [InitializeOnLoad]
     public static class FocusFolderToolBar
     {
-        private static readonly GUIContent s_UIResFocusGUIContent;
-        private static readonly GUIContent s_UIModelCodeFocusGUIContent;
-        private static readonly GUIContent s_UIHofixCodeFocusGUIContent;
-        
-        static FocusFolderToolBar()
-        {
-            s_UIResFocusGUIContent = new GUIContent("UI-Res", "Focus UI Res Folder.");
-            s_UIModelCodeFocusGUIContent = new GUIContent("ETUI-Model", "Focus UI Model Code Folder.");
-            s_UIHofixCodeFocusGUIContent = new GUIContent("ETUI-Hotfix", "Focus UI Hotfix Code Folder.");
-            ToolbarExtender.AddLeftToolbarGUI(-1, OnToolbarGUI);
-        }
+        private static readonly GUIContent s_UIResFocusGUIContent = new GUIContent("UI-Res", "Focus UI Res Folder.");
+#if UNITY_ET
+        private static readonly GUIContent s_UIModelCodeFocusGUIContent = new GUIContent("ETUI-Model", "Focus UI Model Code Folder.");
+        private static readonly GUIContent s_UIHofixCodeFocusGUIContent = new GUIContent("ETUI-Hotfix", "Focus UI Hotfix Code Folder.");
+#endif
 
+        [Toolbar(OnGUISide.Left, -1)]
         static void OnToolbarGUI()
         {
             if (GUILayout.Button(s_UIResFocusGUIContent))
@@ -27,6 +21,7 @@ namespace Game.Editor
                 Object obj = AssetDatabase.LoadAssetAtPath<Object>("Assets/Res/UI/UIForm");
                 Selection.activeObject = obj;
             }
+#if UNITY_ET
             else if (GUILayout.Button(s_UIModelCodeFocusGUIContent))
             {
                 EditorUtility.FocusProjectWindow();
@@ -39,6 +34,7 @@ namespace Game.Editor
                 Object obj = AssetDatabase.LoadAssetAtPath<Object>("Assets/Scripts/Game/ET/Code/HotfixView/Client/Game/UI");
                 Selection.activeObject = obj;
             }
+#endif
         }
     }
 }

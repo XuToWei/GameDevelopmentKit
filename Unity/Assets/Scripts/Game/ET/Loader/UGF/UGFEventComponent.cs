@@ -22,9 +22,11 @@ namespace ET
                 object[] attrs = type.GetCustomAttributes(typeof(UGFUIFormEventAttribute), false);
                 UGFUIFormEventAttribute ugfUIFormEventAttribute = (UGFUIFormEventAttribute)attrs[0];
                 IUGFUIFormEvent ugfUIFormEvent = Activator.CreateInstance(type) as IUGFUIFormEvent;
-                this.UIFormEvents.Add(ugfUIFormEventAttribute.uiFormId, ugfUIFormEvent);
+                foreach (int uiFormId in ugfUIFormEventAttribute.uiFormIds)
+                {
+                    this.UIFormEvents.Add(uiFormId, ugfUIFormEvent);
+                }
             }
-            
             this.EntityEvents.Clear();
             
             Dictionary<string, Type> types = EventSystem.Instance.GetTypes();

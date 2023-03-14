@@ -1,37 +1,27 @@
 #if UNITY_HOTFIX
-using ET;
+using ToolbarExtension;
 using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEngine;
-using UnityToolbarExtender;
 
 namespace ET.Editor
 {
-    [InitializeOnLoad]
     sealed class CompileDllToolBar_ET
     {
         private const CodeOptimization s_CodeOptimization = CodeOptimization.Debug;
         
-        private static readonly GUIContent s_BuildReloadHotfixButtonGUIContent;
-        private static readonly GUIContent s_BuildHotfixModelButtonGUIContent;
-        private static bool s_IsReloading;
-        
-        static CompileDllToolBar_ET()
-        {
-            s_BuildReloadHotfixButtonGUIContent = new GUIContent("Reload ET.Hotfix", "Compile And Reload ET.Hotfix Dll When Playing.");
-            s_BuildHotfixModelButtonGUIContent = new GUIContent("Compile All ET", "Compile All ET Dll.");
-            s_IsReloading = false;
-            ToolbarExtender.AddLeftToolbarGUI(0, OnToolbarGUI);
-        }
+        private static readonly GUIContent s_BuildReloadHotfixButtonGUIContent = new GUIContent("Reload ET.Hotfix", "Compile And Reload ET.Hotfix Dll When Playing.");
+        private static readonly GUIContent s_BuildHotfixModelButtonGUIContent = new GUIContent("Compile All ET", "Compile All ET Dll.");
+        private static bool s_IsReloading = false;
 
+        [Toolbar(OnGUISide.Left, 0)]
         static void OnToolbarGUI()
         {
             EditorGUI.BeginDisabledGroup(!Application.isPlaying || s_IsReloading);
             {
                 if (GUILayout.Button(s_BuildReloadHotfixButtonGUIContent))
                 {
-                    GlobalConfig globalConfig = AssetDatabase.LoadAssetAtPath<GlobalConfig>("Assets/Res/ET/GlobalConfig.asset");;
-                    BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, globalConfig.CodeMode);
+                    BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, Define.CodeMode);
                     ShowNotification("Build Hotfix Success!");
 
                     if (s_IsReloading)
@@ -42,7 +32,7 @@ namespace ET.Editor
                     {
                         try
                         {
-                            await CodeLoader.Instance.LoadHotfixAsync();
+                            await CodeLoaderComponent.Instance.LoadHotfixAsync();
                             EventSystem.Instance.Load();
                         }
                         finally
@@ -58,9 +48,8 @@ namespace ET.Editor
 
             if (GUILayout.Button(s_BuildHotfixModelButtonGUIContent))
             {
-                GlobalConfig globalConfig = AssetDatabase.LoadAssetAtPath<GlobalConfig>("Assets/Res/ET/GlobalConfig.asset");;
-                BuildAssemblyHelper.BuildModel(s_CodeOptimization, globalConfig.CodeMode);
-                BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, globalConfig.CodeMode);
+                BuildAssemblyHelper.BuildModel(s_CodeOptimization, Define.CodeMode);
+                BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, Define.CodeMode);
                 ShowNotification("Build Model And Hotfix Success!");
             }
         }

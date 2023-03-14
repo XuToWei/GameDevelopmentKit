@@ -1,5 +1,6 @@
 {
-    "name": "ToolbarExtender.Editor",
+    "name": "ToolbarExtension.Editor",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [
         "Editor"
@@ -10,5 +11,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

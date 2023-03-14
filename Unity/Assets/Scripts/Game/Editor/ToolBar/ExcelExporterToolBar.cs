@@ -1,20 +1,13 @@
-using UnityEditor;
+using ToolbarExtension;
 using UnityEngine;
-using UnityToolbarExtender;
 
 namespace Game.Editor
 {
-    [InitializeOnLoad]
     sealed class ExcelExporterToolBar
     {
-        private static readonly GUIContent s_ExportButtonGUIConent;
+        private static readonly GUIContent s_ExportButtonGUIConent = new GUIContent("ExportExcel", "Export All Excel!");
 
-        static ExcelExporterToolBar()
-        {
-            s_ExportButtonGUIConent = new GUIContent("ExportExcel", "Export All Excel!");
-            ToolbarExtender.AddRightToolbarGUI(99, OnToolbarGUI);
-        }
-
+        [Toolbar(OnGUISide.Right, 99)]
         private static void OnToolbarGUI()
         {
             if (GUILayout.Button(s_ExportButtonGUIConent))

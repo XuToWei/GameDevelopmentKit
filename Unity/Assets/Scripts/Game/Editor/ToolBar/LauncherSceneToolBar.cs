@@ -1,21 +1,15 @@
-﻿using UnityEditor;
+﻿using ToolbarExtension;
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityToolbarExtender;
 
 namespace Game.Editor
 {
-    [InitializeOnLoad]
     internal sealed class LauncherSceneToolBar
     {
-        private static readonly GUIContent m_ButtonGUIContent;
-        
-        static LauncherSceneToolBar()
-        {
-            m_ButtonGUIContent = new GUIContent("Launcher", "Start Run Launcher Scene.");
-            ToolbarExtender.AddLeftToolbarGUI(100, OnToolbarGUI);
-        }
+        private static readonly GUIContent m_ButtonGUIContent = new GUIContent("Launcher", "Start Run Launcher Scene.");
 
+        [Toolbar(OnGUISide.Left, 100)]
         static void OnToolbarGUI()
         {
             if (GUILayout.Button(m_ButtonGUIContent))

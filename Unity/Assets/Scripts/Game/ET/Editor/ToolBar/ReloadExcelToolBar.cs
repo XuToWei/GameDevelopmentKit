@@ -1,22 +1,15 @@
+using ToolbarExtension;
 using UnityEditor;
 using UnityEngine;
-using UnityToolbarExtender;
 
 namespace ET.Editor
 {
-    [InitializeOnLoad]
     sealed class ReloadExcelToolBar
     {
-        private static readonly GUIContent s_ExportReloadButtonGUIConent;
-        private static bool s_IsReloading;
-        
-        static ReloadExcelToolBar()
-        {
-            s_ExportReloadButtonGUIConent = new GUIContent("ReloadExcel", "Reload (No Export) All Excel!");
-            s_IsReloading = false;
-            ToolbarExtender.AddRightToolbarGUI(98, OnToolbarGUI);
-        }
+        private static readonly GUIContent s_ExportReloadButtonGUIConent = new GUIContent("ReloadExcel", "Reload (No Export) All Excel!");
+        private static bool s_IsReloading = false;
 
+        [Toolbar(OnGUISide.Right, 98)]
         private static void OnToolbarGUI()
         {
             EditorGUI.BeginDisabledGroup(!Application.isPlaying || s_IsReloading);

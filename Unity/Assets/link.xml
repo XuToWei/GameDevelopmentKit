@@ -1,5 +1,5 @@
 <linker>
-    <!--UNITY_HOTFIX_FIRST-->
+    <!--UNITY_HOTFIX
     <assembly fullname="UnityEngine" preserve="all"/>
     <assembly fullname="System" preserve="all"/>
     <assembly fullname="CommandLine" preserve="all"/>
@@ -23,10 +23,10 @@
     <assembly fullname="UniTask" preserve="all" />
     
     <assembly fullname="Game" preserve="all"/>
-    <!--UNITY_HOTFIX_END-->
+    UNITY_HOTFIX-->
 
-    <!--UNITY_ET_FIRST-->
+    <!--UNITY_ET
     <assembly fullname="Game.ET.Loader" preserve="all"/>
     <assembly fullname="ET.Runtime" preserve="all"/>
-    <!--UNITY_ET_END-->
+    UNITY_ET-->
 </linker>
