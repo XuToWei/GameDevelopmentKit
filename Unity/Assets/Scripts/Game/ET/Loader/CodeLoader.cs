@@ -27,7 +27,7 @@ namespace ET
             }
             else
             {
-                Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                Assembly[] assemblies = Utility.Assembly.GetAssemblies();
                 Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(assemblies);
                 EventSystem.Instance.Add(types);
                 foreach (Assembly ass in assemblies)

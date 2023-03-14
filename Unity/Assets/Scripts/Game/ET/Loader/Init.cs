@@ -27,11 +27,24 @@ namespace ET
                 Game.FrameFinishUpdate();
             }
 
-            private void OnApplicationQuit()
+            private void OnDestroy()
             {
+                EventSystem.Instance.Publish(new EventType.OnApplicationQuit());
                 Game.Close();
             }
+
+            private void OnApplicationPause(bool pauseStatus)
+            {
+                EventSystem.Instance.Invoke(new EventType.OnApplicationPause(pauseStatus));
+            }
+
+            private void OnApplicationFocus(bool hasFocus)
+            {
+                EventSystem.Instance.Invoke(new EventType.OnApplicationFocus(hasFocus));
+            }
         }
+
+        private Runner m_RunnerComponent;
 
         private void Awake()
         {
@@ -44,6 +57,14 @@ namespace ET
         private void Start()
         {
             StartAsync().Forget();
+        }
+
+        private void OnDestroy()
+        {
+            if (this.m_RunnerComponent != null)
+            {
+                DestroyImmediate(this.m_RunnerComponent);
+            }
         }
 
         private async UniTaskVoid StartAsync()
@@ -69,7 +90,7 @@ namespace ET
             Game.AddSingleton<CodeLoaderComponent>().ICodeLoader = new CodeLoader();
 
             await CodeLoaderComponent.Instance.StartAsync();
-            this.gameObject.AddComponent<Runner>();
+            this.m_RunnerComponent = this.gameObject.AddComponent<Runner>();
         }
     }
 }

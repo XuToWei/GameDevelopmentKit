@@ -41,7 +41,7 @@ namespace ET
         {
             protected override void Load(UGFEntity self)
             {
-                self.etMonoEntity.Load();
+                self.etMonoEntity.OnLoad();
             }
         }
     }

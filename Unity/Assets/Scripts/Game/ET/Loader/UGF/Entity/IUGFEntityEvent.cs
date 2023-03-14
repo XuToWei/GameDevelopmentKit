@@ -5,6 +5,8 @@ namespace ET
 {
     public interface IUGFEntityEvent
     {
+        void OnLoad(UGFEntity entity);
+
         void OnInit(UGFEntity entity, object userData);
 
         void OnShow(UGFEntity entity, object userData);

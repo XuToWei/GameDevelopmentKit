@@ -5,18 +5,22 @@ namespace ET
     [FriendOf(typeof(UIComponent))]
     public abstract class AUGFUIFormEvent : IUGFUIFormEvent
     {
+        public virtual void OnLoad(UGFUIForm uiForm)
+        {
+        }
+
         public virtual void OnInit(UGFUIForm uiForm, object userData)
         {
         }
 
         public virtual void OnOpen(UGFUIForm uiForm, object userData)
         {
-            UIComponent.Instance.UIForms.Add(uiForm);
+            UIComponent.Instance.AllOpenUIForms.Add(uiForm);
         }
 
         public virtual void OnClose(UGFUIForm uiForm, bool isShutdown, object userData)
         {
-            UIComponent.Instance.UIForms.Remove(uiForm);
+            UIComponent.Instance.AllOpenUIForms.Remove(uiForm);
         }
 
         public virtual void OnPause(UGFUIForm uiForm)

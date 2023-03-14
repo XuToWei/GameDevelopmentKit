@@ -35,7 +35,7 @@ namespace ET.Client
                 formData.Release();
                 return null;
             }
-            return (entity.Logic as ETMonoEntity).UGFEntity;
+            return (entity.Logic as ETMonoEntity).ugfEntity;
         }
 
         public static void HideEntity(this EntityComponent self, UGFEntity entity)
@@ -61,7 +61,7 @@ namespace ET.Client
                 throw new Exception($"Get UGFEntity fail! entityId:{entityId}) is not ETMonoEntity!");
             }
 
-            return etMonoEntity.UGFEntity;
+            return etMonoEntity.ugfEntity;
         }
 
         public static void AttachEntity(this EntityComponent self, UGFEntity childEntity, UGFEntity parentEntity, string parentTransformPath, object userData = null)

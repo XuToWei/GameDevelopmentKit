@@ -12,6 +12,15 @@ namespace Game
             GameEntry.ET.StartRun();
             Log.Debug("Start run ET!");
         }
+
+        protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
+        {
+            if (isShutdown)
+            {
+                GameEntry.ET.ShutDown();
+            }
+            base.OnLeave(procedureOwner, isShutdown);
+        }
     }
 }
 #endif

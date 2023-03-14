@@ -1,10 +1,10 @@
 #if UNITY_ET
 using System;
-using System.Reflection;
 using GameFramework;
 #endif
 
 using Sirenix.OdinInspector;
+using UnityEngine;
 using UnityGameFramework.Runtime;
 
 namespace Game
@@ -14,20 +14,26 @@ namespace Game
 #if UNITY_ET
         [ShowInInspector]
         public bool IsOpen = true;
+
+        private Component m_InitComponent;
         
         public void StartRun()
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (Assembly ass in assemblies)
+            Type initType = Utility.Assembly.GetType("ET.Init");
+            if (initType == null)
             {
-                if (ass.GetName().Name == "Game.ET.Loader")
-                {
-                    Type initType = ass.GetType("ET.Init");
-                    gameObject.AddComponent(initType);
-                    return;
-                }
+                throw new GameFrameworkException("Not Found ET.Init(Game.ET.Loader)!");
             }
-            throw new GameFrameworkException("Not Found Game.ET.Loader or ET.Init!");
+            this.m_InitComponent = gameObject.AddComponent(initType);
+            if (this.m_InitComponent == null)
+            {
+                throw new GameFrameworkException("Add ET.Init(Game.ET.Loader) Fail!");
+            }
+        }
+
+        public void ShutDown()
+        {
+            DestroyImmediate(this.m_InitComponent);
         }
 #else
         public bool IsOpen = false;

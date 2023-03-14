@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace ET
 {
+    [EnableMethod]
     public sealed class UGFUIForm : Entity, IAwake<int, ETMonoUIForm>, ILoad
     {
         public ETMonoUIForm etMonoUIForm
@@ -23,6 +24,11 @@ namespace ET
         }
 
         public bool isOpen;
+        
+        public void SetUIFormId(int uiFormId)
+        {
+            this.uiFormId = uiFormId;
+        }
 
         [ObjectSystem]
         public sealed class UGFUIFormAwakeSystem: AwakeSystem<UGFUIForm, int, ETMonoUIForm>
@@ -40,7 +46,7 @@ namespace ET
         {
             protected override void Load(UGFUIForm self)
             {
-                self.etMonoUIForm.Load();
+                self.etMonoUIForm.OnLoad();
             }
         }
     }

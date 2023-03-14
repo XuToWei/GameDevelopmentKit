@@ -52,7 +52,7 @@ namespace ET.Client
         public static void CloseUIForm(this UIComponent self, int uiFormId)
         {
             HashSet<UGFUIForm> needRemoves = new HashSet<UGFUIForm>();
-            foreach (UGFUIForm uiForm in self.UIForms)
+            foreach (UGFUIForm uiForm in self.AllOpenUIForms)
             {
                 if (uiForm.uiFormId == uiFormId)
                 {

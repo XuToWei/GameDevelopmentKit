@@ -1,5 +1,6 @@
 using System;
 using Game;
+using GameFramework;
 using UnityEngine;
 
 namespace ET
@@ -10,10 +11,10 @@ namespace ET
         public UGFUIForm ugfUIForm { get; private set; }
         public int uiFormId { get; private set; }
         
-        private bool m_IsInitOpen = true;
+        private bool m_IsInit = false;
         private IUGFUIFormEvent m_UIFormEvent;
 
-        public void Load()
+        public void OnLoad()
         {
             if(UGFEventComponent.Instance.TryGetUIFormEvent(this.uiFormId, out IUGFUIFormEvent uiFormEvent))
             {
@@ -22,52 +23,46 @@ namespace ET
             else
             {
                 this.m_UIFormEvent = default;
-                Log.Warning($"UIFormId {this.uiFormId} doesn't exist UIFormEvent!");
+                throw new GameFrameworkException($"UIFormId {this.uiFormId} doesn't exist UIFormEvent!");
             }
-        }
-        
-        protected override void OnInit(object userData)
-        {
-            base.OnInit(userData);
-            this.m_IsInitOpen = true;
-            ETMonoUIFormData formData = userData as ETMonoUIFormData;
-            if (formData == null)
-            {
-                throw new Exception("UGFETUIFormData is null!");
-            }
-
-            if (formData.ParentEntity == null)
-            {
-                throw new Exception("UGFETUIFormData ParentEntity is null!");
-            }
-
-            this.uiFormId = formData.UIFormId;
-            this.ugfUIForm = formData.ParentEntity.AddChild<UGFUIForm, int, ETMonoUIForm>(this.uiFormId, this);
-
-            Load();
-            
-            this.m_UIFormEvent?.OnInit(this.ugfUIForm, formData.UserData);
-        }
-        
-        private void OnDestroy()
-        {
-            this.ugfUIForm.Dispose();
+            this.m_UIFormEvent.OnLoad(this.ugfUIForm);
         }
 
         protected override void OnOpen(object userData)
         {
             base.OnOpen(userData);
-            this.ugfUIForm.isOpen = true;
-            if (this.m_IsInitOpen)
+            ETMonoUIFormData formData = (ETMonoUIFormData)userData;
+            this.uiFormId = formData.UIFormId;
+            if(UGFEventComponent.Instance.TryGetUIFormEvent(this.uiFormId, out IUGFUIFormEvent uiFormEvent))
             {
-                this.m_IsInitOpen = false;
-                ETMonoUIFormData formData = userData as ETMonoUIFormData;
-                this.m_UIFormEvent?.OnOpen(this.ugfUIForm, formData.UserData);
-                formData.Release();
+                this.m_UIFormEvent = uiFormEvent;
             }
             else
             {
-                this.m_UIFormEvent?.OnOpen(this.ugfUIForm, userData);
+                this.m_UIFormEvent = default;
+                throw new GameFrameworkException($"UIFormId {this.uiFormId} doesn't exist UIFormEvent!");
+            }
+            if (!this.m_IsInit)
+            {
+                this.m_IsInit = true;
+                this.ugfUIForm = formData.ParentEntity.AddChild<UGFUIForm, int, ETMonoUIForm>(this.uiFormId, this);
+                this.m_UIFormEvent?.OnInit(this.ugfUIForm, formData.UserData);
+            }
+            else
+            {
+                this.ugfUIForm.SetUIFormId(this.uiFormId);
+            }
+            this.ugfUIForm.isOpen = true;
+            this.m_UIFormEvent?.OnOpen(this.ugfUIForm, formData.UserData);
+            formData.Release();
+        }
+        
+        private void OnDestroy()
+        {
+            if (this.ugfUIForm != default)
+            {
+                this.ugfUIForm.Dispose();
+                this.ugfUIForm = default;
             }
         }
 
@@ -75,6 +70,11 @@ namespace ET
         {
             this.m_UIFormEvent?.OnClose(this.ugfUIForm, isShutdown, userData);
             this.ugfUIForm.isOpen = false;
+            if (isShutdown)
+            {
+                this.ugfUIForm.Dispose();
+                this.ugfUIForm = default;
+            }
             base.OnClose(isShutdown, userData);
         }
 

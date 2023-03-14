@@ -9,7 +9,7 @@ namespace ET.Client
         [StaticField]
         public static UIComponent Instance;
 
-        //所有的UIForm实体
-        public readonly HashSet<UGFUIForm> UIForms = new HashSet<UGFUIForm>();
+        //所有打开的UIForm实体
+        public readonly HashSet<UGFUIForm> AllOpenUIForms = new HashSet<UGFUIForm>();
     }
 }
