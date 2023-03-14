@@ -29,7 +29,7 @@ namespace ET
 
             private void OnDestroy()
             {
-                EventSystem.Instance.Publish(new EventType.OnApplicationQuit());
+                EventSystem.Instance.Invoke(new EventType.OnApplicationQuit());
                 Game.Close();
             }
 
