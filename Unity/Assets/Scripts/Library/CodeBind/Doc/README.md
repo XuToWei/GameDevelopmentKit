@@ -1,10 +1,12 @@
 # 代码绑定工具
 
-基于节点命名规则自动生成代码和绑定数据，支持子节点嵌套，自定义命名规则（继承[ICodeBindNameTypeConfig](../Editor/ICodeBindNameTypeConfig.cs)即可）
+只需要添加简单的特性或脚本就能自动生成绑定的脚本的代码，方便快捷易用
+
+基于节点命名规则自动生成，支持子节点嵌套（列表使用），自定义命名规则（使用CodeBindNameTypeAttribute（引擎不能修改的代码）和CodeBindNameAttribute（经常修改的代码）来实现规则注入）
 
 说明：
 
-节点名字识别支持模糊匹配，比如需要绑定一个变量名为Self的Transform组件，节点名字Self_Tr就可以试别Tr为Transform
+节点名字识别支持模糊匹配，比如需要绑定一个变量名为Self的Transform组件，节点名字Self_Tr就可以识别Tr为Transform
 
 节点名字支持绑定多个不同组件，用分隔符连接起来即可，例如：Self_Transform_Button，Self_Tr_But等
 
