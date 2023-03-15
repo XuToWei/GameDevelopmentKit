@@ -22,9 +22,7 @@ namespace CodeBind.Editor
         //private readonly Component m_BindSelfMonoComponent;
 
         protected readonly List<CodeBindData> m_BindDatas;
-
-        private readonly Dictionary<string, Type> m_BindNameTypeDict;
-
+        
         protected BaseCodeBinder(MonoScript script, Transform rootTransform, char separatorChar)
         {
             if (!script.text.Contains("partial"))
@@ -34,39 +32,13 @@ namespace CodeBind.Editor
             
             this.m_RootTransform = rootTransform;
             this.m_BindDatas = new List<CodeBindData>();
-            this.m_BindNameTypeDict = new Dictionary<string, Type>();
             string scriptFullPath = AssetDatabase.GetAssetPath(script);
             this.m_BindScriptFullPath = scriptFullPath.Insert(scriptFullPath.LastIndexOf('.'), ".Bind");
             this.m_ScriptNameSpace = script.GetClass().Namespace;
             this.m_ScriptClassName = script.GetClass().Name;
             this.m_SeparatorChar = separatorChar;
-            GetAllBindNameTypes();
         }
 
-        private void GetAllBindNameTypes()
-        {
-            m_BindNameTypeDict.Clear();
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(x => x.GetTypes())
-                    .Where(x => x.IsClass && !x.IsAbstract && typeof(ICodeBindNameTypeConfig).IsAssignableFrom(x));
-            foreach (Type rType in types)
-            {
-                ICodeBindNameTypeConfig config = Activator.CreateInstance(rType) as ICodeBindNameTypeConfig;
-                foreach (var kv in config.BindNameTypeDict)
-                {
-                    if (kv.Value == null || !kv.Value.IsSubclassOf(typeof(Component)))
-                        throw new Exception($"Type:{kv.Value} error! Only can bind sub class of 'Component'!");
-                    
-                    if (this.m_BindNameTypeDict.TryGetValue(kv.Key, out Type type))
-                    {
-                        throw new Exception($"Type name:{kv.Key}({type}) exist!");
-                    }
-                
-                    this.m_BindNameTypeDict.Add(kv.Key, kv.Value);
-                }
-            }
-        }
-        
         private bool TryGenerateNameMapTypeData()
         {
             bool TryGetBindComponents(Transform child, out List<CodeBindData> bindDatas)
@@ -107,7 +79,7 @@ namespace CodeBind.Editor
                 for (int i = 1; i < strArray.Length; i++)
                 {
                     string typeStr = strArray[i];
-                    if (this.m_BindNameTypeDict.TryGetValue(typeStr, out Type type))
+                    if (CodeBindNameTypeCollection.BindNameTypeDict.TryGetValue(typeStr, out Type type))
                     {
                         CodeBindData bindData = new CodeBindData(bindName, type, typeStr, child);
                         bindDatas.Add(bindData);
@@ -166,7 +138,7 @@ namespace CodeBind.Editor
                     {
                         strList.RemoveAt(1);
                         //自动补齐所有存在的脚本
-                        foreach (var kv in this.m_BindNameTypeDict)
+                        foreach (var kv in CodeBindNameTypeCollection.BindNameTypeDict)
                         {
                             if (child.GetComponent(kv.Value) != null)
                             {
@@ -189,7 +161,7 @@ namespace CodeBind.Editor
                         {
                             string typeStr = strList[i];
                         
-                            foreach (var kv in this.m_BindNameTypeDict)
+                            foreach (var kv in CodeBindNameTypeCollection.BindNameTypeDict)
                             {
                                 if ((kv.Key.Contains(typeStr, StringComparison.OrdinalIgnoreCase) || typeStr.Contains(kv.Key, StringComparison.OrdinalIgnoreCase)) && child.GetComponent(kv.Value) != null)
                                 {

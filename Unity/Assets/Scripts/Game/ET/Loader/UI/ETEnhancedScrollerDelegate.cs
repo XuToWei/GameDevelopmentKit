@@ -1,10 +1,12 @@
 using System;
+using CodeBind;
 using EnhancedUI.EnhancedScroller;
 using GameFramework;
 using UnityEngine;
 
 namespace ET
 {
+    [CodeBindName("ETEnhancedScrollerDelegate")]
     [RequireComponent(typeof(EnhancedScroller))]
     public class ETEnhancedScrollerDelegate : MonoBehaviour, IEnhancedScrollerDelegate
     {

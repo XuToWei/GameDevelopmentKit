@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
@@ -7,12 +8,12 @@ namespace CodeBind.Editor
 {
     internal sealed class CSCodeBinder : BaseCodeBinder
     {
-        private readonly CSCodeBindMono mCsCodeBindMono;
+        private readonly CSCodeBindMono m_CsCodeBindMono;
         
         public CSCodeBinder(MonoScript script, Transform rootTransform, char separatorChar): base(script, rootTransform, separatorChar)
         {
-            this.mCsCodeBindMono = rootTransform.GetComponent<CSCodeBindMono>();
-            if (this.mCsCodeBindMono == null)
+            this.m_CsCodeBindMono = rootTransform.GetComponent<CSCodeBindMono>();
+            if (this.m_CsCodeBindMono == null)
             {
                 throw new Exception($"PureCSCodeBinder init fail! {rootTransform} has no MonoBind!");
             }
@@ -77,13 +78,14 @@ namespace CodeBind.Editor
 
         protected override void SetSerialization()
         {
-            this.mCsCodeBindMono.bindComponents.Clear();
-            this.mCsCodeBindMono.bindComponentNames.Clear();
+            List<string> bindNames = new List<string>();
+            List<Component> bindComponents = new List<Component>();
             foreach (CodeBindData bindData in m_BindDatas)
             {
-                this.mCsCodeBindMono.bindComponents.Add(bindData.BindTransform.GetComponent(bindData.BindType));
-                this.mCsCodeBindMono.bindComponentNames.Add(bindData.BindName);
+                bindNames.Add(bindData.BindName);
+                bindComponents.Add(bindData.BindTransform.GetComponent(bindData.BindType));
             }
+            this.m_CsCodeBindMono.SetBindComponents(bindNames.ToArray(), bindComponents.ToArray());
         }
     }
 }

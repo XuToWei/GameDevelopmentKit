@@ -1,8 +1,5 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace CodeBind
 {
@@ -11,27 +8,42 @@ namespace CodeBind
     public sealed class CSCodeBindMono : MonoBehaviour
     {
         private static readonly CSCodeBindPool s_Pool = new CSCodeBindPool();
+        
+        [SerializeField]
+        private Component[] m_BindComponents;
+
+        public Component[] bindComponents => this.m_BindComponents;
+
+        private ICSCodeBind m_CSCodeBindObject;
+
 #if UNITY_EDITOR
         [SerializeField]
         private char m_SeparatorChar = '_';
 
         [SerializeField]
-        private MonoScript m_BindScript;
+        private UnityEditor.MonoScript m_BindScript;
         
         [SerializeField]
-        private List<string> m_BindComponentNames = new List<string>();
+        private string[] m_BindComponentNames;
 
         public char separatorChar => this.m_SeparatorChar;
-        public MonoScript bindScript => this.m_BindScript;
-        public List<string> bindComponentNames => this.m_BindComponentNames;
+        public UnityEditor.MonoScript bindScript => this.m_BindScript;
+        public string[] bindComponentNames => this.m_BindComponentNames;
+
+        public void SetBindComponents(string[] names, Component[] components)
+        {
+            if (names == null || components == null)
+            {
+                throw new Exception("Name and Component cant be null!");
+            }
+            if (names.Length != components.Length)
+            {
+                throw new Exception("Name count must be same with Component count!");
+            }
+            this.m_BindComponentNames = names;
+            this.m_BindComponents = components;
+        }
 #endif
-
-        [SerializeField]
-        private List<Component> m_BindComponents = new List<Component>();
-
-        public List<Component> bindComponents => this.m_BindComponents;
-
-        private ICSCodeBind m_CSCodeBindObject;
 
         /// <summary>
         /// 获取绑定代码的的对象

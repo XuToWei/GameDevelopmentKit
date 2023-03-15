@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 
-namespace CodeBind.Editor
+namespace CodeBind
 {
-    public class DefaultCodeBindNameTypeConfig: ICodeBindNameTypeConfig
+    sealed class DefaultCodeBindNameTypeConfig
     {
-        public Dictionary<string, Type> BindNameTypeDict { get; } = new Dictionary<string, Type>()
+        [CodeBindNameType]
+        static Dictionary<string, Type> BindNameTypeDict = new Dictionary<string, Type>()
         {
             { "Transform", typeof (UnityEngine.Transform) },
             { "Animation", typeof (UnityEngine.Animation) },
@@ -29,9 +30,8 @@ namespace CodeBind.Editor
             { "Scrollbar", typeof (UnityEngine.UI.Scrollbar) },
             { "ScrollRect", typeof (UnityEngine.UI.ScrollRect) },
             { "Dropdown", typeof (UnityEngine.UI.Dropdown) },
-            { "TMPText", typeof (TMPro.TMP_Text) },
-            { "TMPInputField", typeof (TMPro.TMP_InputField) },
-            { "TMPProText", typeof (TMPro.TextMeshProUGUI) },
+
+            { "CSCodeBindMono", typeof (CSCodeBindMono) },
         };
     }
 }
