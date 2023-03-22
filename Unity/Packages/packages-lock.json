@@ -1,10 +1,11 @@
 {
   "dependencies": {
     "com.baracuda.preprocessor-symbol-definition-files": {
-      "version": "file:com.baracuda.preprocessor-symbol-definition-files",
+      "version": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "88e1f1776cb905a235b45697bffef5ccb09334cd"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git",
@@ -21,11 +22,11 @@
       "hash": "a499f0c04670e6e52893799f02a30aa7b5b4db05"
     },
     "com.focus-creative-games.hybridclr_unity": {
-      "version": "https://gitee.com/focus-creative-games/hybridclr_unity.git",
+      "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a9ca9fc6131b81cd3d4c48adcd871434475539c1"
+      "hash": "75cb53cb19f11782fbbf02447900578ad9563567"
     },
     "com.unity.burst": {
       "version": "1.7.3",
