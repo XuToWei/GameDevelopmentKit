@@ -25,7 +25,7 @@ namespace Game.Editor
             SafeOpenFolder($"{Application.dataPath}/../../Temp");
         }
 
-        private static void SafeOpenFolder(string folderPath)
+        public static void SafeOpenFolder(string folderPath)
         {
             folderPath = Path.GetFullPath(folderPath);
             if (Directory.Exists(folderPath))
