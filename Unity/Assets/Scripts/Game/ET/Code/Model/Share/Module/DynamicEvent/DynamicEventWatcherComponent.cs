@@ -52,6 +52,7 @@ namespace ET
         internal void Clear()
         {
             this.allDynamicEventInfos.Clear();
+            this.registeredEntityIds.Clear();
         }
 
         internal void Init()

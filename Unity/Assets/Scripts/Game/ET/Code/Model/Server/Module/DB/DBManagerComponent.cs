@@ -1,6 +1,5 @@
 ﻿namespace ET.Server
 {
-    
     public class DBManagerComponent: Entity, IAwake, IDestroy
     {
         [StaticField]

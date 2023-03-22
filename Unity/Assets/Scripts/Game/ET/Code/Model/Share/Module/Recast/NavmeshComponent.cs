@@ -3,7 +3,7 @@
 namespace ET
 {
     [ComponentOf(typeof(Scene))]
-    public class NavmeshComponent: Entity, IAwake
+    public class NavmeshComponent: Entity, IAwake, IDestroy
     {
         [StaticField]
         public static NavmeshComponent Instance;

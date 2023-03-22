@@ -65,6 +65,7 @@ namespace ET.Server
             protected override void Destroy(NetInnerComponent self)
             {
                 NetServices.Instance.RemoveService(self.ServiceId);
+                NetInnerComponent.Instance = null;
             }
         }
 

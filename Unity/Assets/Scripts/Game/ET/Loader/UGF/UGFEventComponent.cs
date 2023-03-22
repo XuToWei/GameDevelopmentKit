@@ -5,13 +5,19 @@ namespace ET
 {
     [EnableMethod]
     [ComponentOf(typeof(Scene))]
-    public sealed class UGFEventComponent : Entity, IAwake, ILoad
+    public sealed class UGFEventComponent : Entity, IAwake, IDestroy, ILoad
     {
         [StaticField] public static UGFEventComponent Instance;
 
         private readonly Dictionary<int, IUGFUIFormEvent> UIFormEvents = new Dictionary<int, IUGFUIFormEvent>();
 
         private readonly Dictionary<Type, IUGFEntityEvent> EntityEvents = new Dictionary<Type, IUGFEntityEvent>();
+
+        internal void Clear()
+        {
+            this.UIFormEvents.Clear();
+            this.EntityEvents.Clear();
+        }
         
         internal void Init()
         {
@@ -62,6 +68,16 @@ namespace ET
             {
                 UGFEventComponent.Instance = self;
                 self.Init();
+            }
+        }
+
+        [ObjectSystem]
+        public class UGFEventComponentDestroySystem : DestroySystem<UGFEventComponent>
+        {
+            protected override void Destroy(UGFEventComponent self)
+            {
+                self.Clear();
+                UGFEventComponent.Instance = null;
             }
         }
 
