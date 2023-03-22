@@ -9,7 +9,7 @@ using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Hotfix
+namespace Game.Hot
 {
    
 public sealed partial class DTOneConfig : IDataTable

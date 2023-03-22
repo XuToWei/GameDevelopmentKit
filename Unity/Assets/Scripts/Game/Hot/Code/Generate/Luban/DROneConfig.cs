@@ -9,7 +9,7 @@ using Bright.Serialization;
 using System.Collections.Generic;
 
 
-namespace Hotfix
+namespace Game.Hot
 {
 public sealed partial class DROneConfig :  Bright.Config.BeanBase 
 {

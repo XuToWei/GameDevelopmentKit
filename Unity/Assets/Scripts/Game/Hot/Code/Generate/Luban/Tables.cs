@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 
 
-namespace Hotfix
+namespace Game.Hot
 { 
 public partial class Tables
 {

@@ -11,7 +11,7 @@ using SimpleJSON;
 
 
 
-namespace Hotfix.Editor
+namespace Game.Hot.Editor
 {
 
 public sealed partial class DROneConfig :  Bright.Config.EditorBeanBase 

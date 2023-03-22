@@ -1,7 +1,7 @@
 <root>
-	<topmodule name="Hotfix"/>
+	<topmodule name="Game.Hot"/>
 	
-	<option name="editor.topmodule" value="Hotfix.Editor"/>
+	<option name="editor.topmodule" value="Game.Hot.Editor"/>
 
 	<patch name="cn"/>
 	<patch name="en"/>
