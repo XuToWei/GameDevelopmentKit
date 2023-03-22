@@ -6,7 +6,7 @@ namespace ET
 {
     [EnableMethod]
     [ComponentOf(typeof(Scene))]
-    public class DynamicEventWatcherComponent : Entity, IAwake, ILoad
+    public class DynamicEventWatcherComponent : Entity, IAwake, IDestroy, ILoad
     {
         [StaticField] public static DynamicEventWatcherComponent Instance;
 
@@ -25,7 +25,7 @@ namespace ET
         /// <summary>
         /// 参数Type：{Entity的Type：DynamicEventInfo}
         /// </summary>
-        private Dictionary<Type, ListComponent<DynamicEventInfo>> allDynamicEventInfos;
+        private readonly Dictionary<Type, ListComponent<DynamicEventInfo>> allDynamicEventInfos = new Dictionary<Type, ListComponent<DynamicEventInfo>>();
 
         private readonly HashSet<long> registeredEntityIds = new HashSet<long>();
         
@@ -49,9 +49,14 @@ namespace ET
             this.registeredEntityIds.Remove(instanceId);
         }
 
+        internal void Clear()
+        {
+            this.allDynamicEventInfos.Clear();
+        }
+
         internal void Init()
         {
-            this.allDynamicEventInfos = new Dictionary<Type, ListComponent<DynamicEventInfo>>();
+            this.allDynamicEventInfos.Clear();
             HashSet<Type> types = EventSystem.Instance.GetTypes(typeof(DynamicEventAttribute));
             foreach (Type type in types)
             {
@@ -145,6 +150,16 @@ namespace ET
             {
                 DynamicEventWatcherComponent.Instance = self;
                 self.Init();
+            }
+        }
+        
+        [ObjectSystem]
+        public class DynamicEventWatcherDestroySystem : DestroySystem<DynamicEventWatcherComponent>
+        {
+            protected override void Destroy(DynamicEventWatcherComponent self)
+            {
+                self.Clear();
+                DynamicEventWatcherComponent.Instance = null;
             }
         }
 
