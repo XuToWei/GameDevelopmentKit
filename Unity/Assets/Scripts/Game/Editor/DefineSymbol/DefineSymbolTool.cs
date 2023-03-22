@@ -12,6 +12,7 @@ namespace Game.Editor
         {
             RemoveLinkXML("UNITY_HOTFIX");
             RemoveLinkXML("UNITY_ET");
+            RemoveLinkXML("UNITY_GAMEHOT");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_HOTFIX");
         }
 #else
@@ -21,6 +22,9 @@ namespace Game.Editor
             AddLinkXML("UNITY_HOTFIX");
 #if UNITY_ET
             AddLinkXML("UNITY_ET");
+#endif
+#if UNITY_GAMEHOT
+            AddLinkXML("UNITY_GAMEHOT");
 #endif
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_HOTFIX");
         }
@@ -48,14 +52,20 @@ namespace Game.Editor
         
 #if UNITY_GAMEHOT
         [MenuItem("Tools/Define Symbol/Remove UNITY_GAMEHOT")]
-        private static void Remove_UNITY_UGFHOTFIX()
+        private static void Remove_UNITY_GAMEHOT()
         {
+#if UNITY_HOTFIX
+            RemoveLinkXML("UNITY_GAMEHOT");
+#endif
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_GAMEHOT");
         }
 #else
         [MenuItem("Tools/Define Symbol/Add UNITY_GAMEHOT")]
-        private static void Add_UNITY_UGFHOTFIX()
+        private static void Add_UNITY_GAMEHOT()
         {
+#if UNITY_HOTFIX
+            AddLinkXML("UNITY_GAMEHOT");
+#endif
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_GAMEHOT");
         }
 #endif

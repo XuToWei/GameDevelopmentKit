@@ -11,9 +11,15 @@
     <assembly fullname="mscorlib" preserve="all" />
     <assembly fullname="UnityEngine.AssetBundleModule" preserve="all" />
     <assembly fullname="UnityEngine.CoreModule" preserve="all" />
-    <assembly fullname="UnityEngine.InputLegacyModule" preserve="all" />
     
-    <assembly fullname="CatJson.Runtime" preserve="all"/>
+    <assembly fullname="Unity.InputSystem" preserve="all" />
+    <assembly fullname="Unity.Mathematics" preserve="all" />
+    <assembly fullname="UIEffect" preserve="all" />
+    <assembly fullname="Coffee.UIParticle" preserve="all" />
+    <assembly fullname="Unity.RenderPipelines.Universal.Runtime" preserve="all" />
+    <assembly fullname="UnityEngine.UI" preserve="all" />
+    
+    <assembly fullname="Newtonsoft.Json" preserve="all"/>
     <assembly fullname="CodeBind.Runtime" preserve="all"/>
     <assembly fullname="LubanLib.Runtime" preserve="all"/>
     <assembly fullname="ProtoBuf" preserve="all"/>
@@ -21,6 +27,7 @@
     <assembly fullname="UnityGameFramework.Runtime" preserve="all" />
     <assembly fullname="UnityGameFramework.Extension" preserve="all" />
     <assembly fullname="UniTask" preserve="all" />
+    <assembly fullname="EnhancedScroller" preserve="all" />
     
     <assembly fullname="Game" preserve="all"/>
     UNITY_HOTFIX-->
@@ -29,4 +36,9 @@
     <assembly fullname="Game.ET.Loader" preserve="all"/>
     <assembly fullname="ET.Runtime" preserve="all"/>
     UNITY_ET-->
+
+    <!--UNITY_GAMEHOT
+    <assembly fullname="Game.Hot.Loader" preserve="all"/>
+    <assembly fullname="Game.Hot.Code" preserve="all"/>
+    UNITY_GAMEHOT-->
 </linker>
