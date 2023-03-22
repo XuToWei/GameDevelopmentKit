@@ -12,13 +12,12 @@ namespace CodeBind.Editor
         private SerializedProperty m_BindComponents;
         private SerializedProperty m_BindComponentNames;
 
-        private bool m_ShowBindComponets;
+        private bool m_ShowBindComponents;
         
         private void OnEnable()
         {
             this.m_SeparatorChar = serializedObject.FindProperty("m_SeparatorChar");
             this.m_BindScript = serializedObject.FindProperty("m_BindScript");
-            
             this.m_BindComponents = serializedObject.FindProperty("m_BindComponents");
             this.m_BindComponentNames = serializedObject.FindProperty("m_BindComponentNames");
         }
@@ -26,21 +25,29 @@ namespace CodeBind.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            
+
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
-                if (GUILayout.Button("生成绑定代码和数据"))
+                if (GUILayout.Button("Generate BindCode and Serialization"))
                 {
-                    CSCodeBinder codeBinder = new CSCodeBinder(this.m_BindScript.objectReferenceValue as MonoScript, (this.target as MonoBehaviour).transform, (char)this.m_SeparatorChar.intValue);
+                    CSCodeBinder codeBinder = new CSCodeBinder((MonoScript)this.m_BindScript.objectReferenceValue, ((MonoBehaviour)this.target).transform, (char)this.m_SeparatorChar.intValue);
                     codeBinder.TryGenerateBindCode();
                     codeBinder.TrySetSerialization();
                 }
 
                 EditorGUILayout.PropertyField(this.m_SeparatorChar);
                 EditorGUILayout.PropertyField(this.m_BindScript);
-                this.m_ShowBindComponets = EditorGUILayout.BeginFoldoutHeaderGroup(this.m_ShowBindComponets, $"Bind Data (count:{this.m_BindComponents.arraySize})");
+                
+                if (GUILayout.Button("Clear Serialization"))
                 {
-                    if (this.m_ShowBindComponets)
+                    this.m_BindComponentNames.ClearArray();
+                    this.m_BindComponents.ClearArray();
+                    serializedObject.ApplyModifiedProperties();
+                }
+                
+                this.m_ShowBindComponents = EditorGUILayout.BeginFoldoutHeaderGroup(this.m_ShowBindComponents, $"Bind Data (count:{this.m_BindComponents.arraySize})");
+                {
+                    if (this.m_ShowBindComponents)
                     {
                         EditorGUI.BeginDisabledGroup(true);
                         {

@@ -19,8 +19,6 @@ namespace CodeBind.Editor
 
         private readonly Transform m_RootTransform;
 
-        //private readonly Component m_BindSelfMonoComponent;
-
         protected readonly List<CodeBindData> m_BindDatas;
         
         protected BaseCodeBinder(MonoScript script, Transform rootTransform, char separatorChar)
