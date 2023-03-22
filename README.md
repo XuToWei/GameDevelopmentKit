@@ -41,7 +41,7 @@
 - [X] ET中的Time模块支持Unity编辑器下加速功能（目前是DateTime）
 - [ ] 拆分代码绑定库，方便自取
 - [ ] 拆分Luban优化版，方便自取
-- [ ] ~~MonoHook接入方便开发时Dll Reload，避免频繁重开~~
+- [X] 加入HotReload
 - [ ] 资源服务器，资源打包上传配套工具（包含dll，pack等）
 - [ ] 多语言工具（包含图片，资源等）
 - [X] 完善HybridCLR工作流，编辑器
