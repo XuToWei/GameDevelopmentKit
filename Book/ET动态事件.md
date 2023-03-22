@@ -14,7 +14,7 @@ public class Test_DynamicEvent:ADynamicEvent<TestEntity,DynamicEventType.Test>
 }
 ```
 
-2.注册事件:或
+2.注册事件：
 ```csharp
 testEntity.AddComponent<DynamicEventComponent>();
 ```
