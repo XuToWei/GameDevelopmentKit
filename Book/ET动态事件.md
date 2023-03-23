@@ -2,7 +2,7 @@
 
 可以灵活的增删Entity响应的事件，不依赖委托实现，可以Reload
 
-1.定义事件
+1.定义事件：
 ```csharp
 [DynamicEvent(SceneType.Client)]
 public class Test_DynamicEvent:ADynamicEvent<TestEntity,DynamicEventType.Test>
@@ -14,7 +14,7 @@ public class Test_DynamicEvent:ADynamicEvent<TestEntity,DynamicEventType.Test>
 }
 ```
 
-2.注册事件：
+2.注册实体：
 ```csharp
 testEntity.AddComponent<DynamicEventComponent>();
 ```
@@ -23,7 +23,7 @@ testEntity.AddComponent<DynamicEventComponent>();
 DynamicEventWatcherComponent.Instance.Register(testEntity);
 ```
 
-3.销毁事件：
+3.反注册实体：
 ```csharp
 testEntity.RemoveComponent<DynamicEventComponent>();
 ```
@@ -32,5 +32,12 @@ testEntity.RemoveComponent<DynamicEventComponent>();
 DynamicEventWatcherComponent.Instance.UnRegister(testEntity);
 ```
 
-
+4.通知事件：
+```csharp
+DynamicEventWatcherComponent.Instance.Publish<DynamicEventType.Test>(scene, new DynamicEventType.Test())
+```
+或
+```csharp
+await DynamicEventWatcherComponent.Instance.PublishAsync<DynamicEventType.Test>(scene, new DynamicEventType.Test())
+```
 
