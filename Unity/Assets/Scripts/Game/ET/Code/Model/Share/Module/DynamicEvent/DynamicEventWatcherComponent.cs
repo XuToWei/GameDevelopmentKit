@@ -106,9 +106,9 @@ namespace ET
                         continue;
                     }
                     IDynamicEvent<A> dynamicEvent = (IDynamicEvent<A>)dynamicEventInfo.DynamicEvent;
-                    for (int i = this.registeredEntityIds.Count - 1; i >= 0; i--)
+                    foreach (long instanceId in this.registeredEntityIds)
                     {
-                        Entity entity = Root.Instance.Get(this.registeredEntityIds[i]);
+                        Entity entity = Root.Instance.Get(instanceId);
                         if (entity is { IsDisposed: false } && dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
                         {
                             dynamicEvent.Handle(scene, entity, arg).Forget();
