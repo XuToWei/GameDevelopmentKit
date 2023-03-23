@@ -6,7 +6,7 @@ namespace ET
 {
     [EnableMethod]
     [ComponentOf(typeof(Scene))]
-    public class DynamicEventWatcherComponent : Entity, IAwake, IDestroy, ILoad
+    public class DynamicEventWatcherComponent : Entity, IAwake, IDestroy, ILoad, IUpdate
     {
         [StaticField] public static DynamicEventWatcherComponent Instance;
 
@@ -28,7 +28,8 @@ namespace ET
         private readonly Dictionary<Type, ListComponent<DynamicEventInfo>> allDynamicEventInfos = new Dictionary<Type, ListComponent<DynamicEventInfo>>();
 
         private readonly HashSet<long> registeredEntityIds = new HashSet<long>();
-        
+        private readonly HashSet<long> needRemoveEntityIds = new HashSet<long>();
+
         public void Register(Entity component)
         {
             this.registeredEntityIds.Add(component.InstanceId);
@@ -41,18 +42,32 @@ namespace ET
 
         public void UnRegister(Entity component)
         {
-            this.registeredEntityIds.Remove(component.InstanceId);
+            this.needRemoveEntityIds.Add(component.InstanceId);
         }
         
         public void UnRegister(long instanceId)
         {
-            this.registeredEntityIds.Remove(instanceId);
+            this.needRemoveEntityIds.Add(instanceId);
         }
 
         internal void Clear()
         {
             this.allDynamicEventInfos.Clear();
             this.registeredEntityIds.Clear();
+            this.needRemoveEntityIds.Clear();
+        }
+
+        internal void RemoveUnRegisteredEntityIds()
+        {
+            if (this.needRemoveEntityIds.Count < 1)
+            {
+                return;
+            }
+            foreach (var id in this.needRemoveEntityIds)
+            {
+                this.registeredEntityIds.Remove(id);
+            }
+            this.needRemoveEntityIds.Clear();
         }
 
         internal void Init()
@@ -91,10 +106,10 @@ namespace ET
                         continue;
                     }
                     IDynamicEvent<A> dynamicEvent = (IDynamicEvent<A>)dynamicEventInfo.DynamicEvent;
-                    foreach (long instanceId in this.registeredEntityIds)
+                    for (int i = this.registeredEntityIds.Count - 1; i >= 0; i--)
                     {
-                        Entity entity = Root.Instance.Get(instanceId);
-                        if (entity != null && dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
+                        Entity entity = Root.Instance.Get(this.registeredEntityIds[i]);
+                        if (entity is { IsDisposed: false } && dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
                         {
                             dynamicEvent.Handle(scene, entity, arg).Forget();
                         }
@@ -122,7 +137,7 @@ namespace ET
                     foreach (long instanceId in this.registeredEntityIds)
                     {
                         Entity entity = Root.Instance.Get(instanceId);
-                        if (entity != null && dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
+                        if (entity is { IsDisposed: false } && dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
                         {
                             taskList.Add(dynamicEvent.Handle(scene, entity, arg));
                         }
@@ -170,6 +185,15 @@ namespace ET
             protected override void Load(DynamicEventWatcherComponent self)
             {
                 self.Init();
+            }
+        }
+        
+        [ObjectSystem]
+        public class DynamicEventWatcherUpdateSystem : UpdateSystem<DynamicEventWatcherComponent>
+        {
+            protected override void Update(DynamicEventWatcherComponent self)
+            {
+                self.RemoveUnRegisteredEntityIds();
             }
         }
     }
