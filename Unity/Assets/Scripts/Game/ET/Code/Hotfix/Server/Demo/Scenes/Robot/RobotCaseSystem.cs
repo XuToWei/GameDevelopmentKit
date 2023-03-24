@@ -6,6 +6,18 @@ namespace ET.Server
 {
     public static class RobotCaseSystem
     {
+        [ObjectSystem]
+        public class RobotCaseDestroySystem: DestroySystem<RobotCase>
+        {
+            protected override void Destroy(RobotCase self)
+            {
+                foreach (long id in self.Scenes)
+                {
+                    ClientSceneManagerComponent.Instance.Remove(id);
+                }
+            }
+        }
+
         // 创建机器人，生命周期是RobotCase
         public static async UniTask NewRobot(this RobotCase self, int count, List<Scene> scenes)
         {
@@ -69,6 +81,7 @@ namespace ET.Server
                 await Client.LoginHelper.Login(clientScene, zone.ToString(), zone.ToString());
                 await Client.EnterMapHelper.EnterMapAsync(clientScene);
                 Log.Debug($"create robot ok: {zone}");
+                self.Scenes.Add(clientScene.Id);
                 return clientScene;
             }
             catch (Exception e)
@@ -89,6 +102,7 @@ namespace ET.Server
                 await Client.LoginHelper.Login(clientScene, zone.ToString(), zone.ToString());
                 await Client.EnterMapHelper.EnterMapAsync(clientScene);
                 Log.Debug($"create robot ok: {zone}");
+                self.Scenes.Add(clientScene.Id);
                 return clientScene;
             }
             catch (Exception e)
