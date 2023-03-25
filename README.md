@@ -32,7 +32,7 @@
 
 2.打开Unity项目，等待Unity编译完成
 
-3.打开 ET/ET.sln 编译（导表，代码分析等功能需要用到）
+3.打开 Kit.sln 编译（导表，代码分析等功能需要用到）
 
 4.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
 
