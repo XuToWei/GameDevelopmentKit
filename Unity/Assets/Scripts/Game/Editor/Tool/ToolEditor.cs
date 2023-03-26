@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -46,6 +48,17 @@ namespace Game.Editor
 #endif
             ShellTool.Run($"{tools} --AppType=Proto2CS --Console=1", "../Bin/");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+        }
+        
+        [MenuItem("Tools/Tool/StartFileServer")]
+        public static void StartFileServer()
+        {
+            string dotnet = "dotnet.exe";
+#if UNITY_EDITOR_OSX
+            dotnet = "dotnet";
+#endif
+            string arguments = "FileServer.dll";
+            ProcessTool.Run(dotnet, arguments, "../Bin/");
         }
     }
 }

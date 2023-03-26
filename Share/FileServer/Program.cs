@@ -7,20 +7,17 @@ namespace FileServer
 {
     public class Program
     {
-        public static IConfigurationRoot mConfig;
+        public static Config Config;
         
         public static void Main(string[] args)
         {
-            mConfig = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true)
-                .Build();
+            Config = new Config();
             CreateWebHostBuilder(args).Build().Run();
         }
 
         private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args).UseUrls(mConfig["urls"])
+            return WebHost.CreateDefaultBuilder(args).UseUrls(Config.Url)
                 .UseStartup<Startup>();
         }
     }

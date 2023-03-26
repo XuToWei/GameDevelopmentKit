@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace FileServer
@@ -20,12 +21,25 @@ namespace FileServer
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
-            
-            string configDir = Program.mConfig["DirectoryPath"];
-            
-            configDir = new DirectoryInfo(configDir).FullName;
-            Console.WriteLine(configDir);
-            UseStaticFiles(app, configDir); 
+
+            List<string> fileDirs = new List<string>();
+            foreach (var directoryPath in Program.Config.DirectoryPaths)
+            {
+                string fileDir = new DirectoryInfo(directoryPath).FullName;
+                if (Directory.Exists(fileDir))
+                {
+                    UseStaticFiles(app, fileDir);
+                    fileDirs.Add(fileDir);
+                }
+            }
+            if (fileDirs.Count < 1)
+            {
+                throw new Exception("File directory is empty");
+            }
+            foreach (var dir in fileDirs)
+            {
+                Console.WriteLine($"File directory:{dir}");
+            }
             app.Run(async (context) => { await context.Response.WriteAsync("Welcome to the ET file server!"); });
         }
 
