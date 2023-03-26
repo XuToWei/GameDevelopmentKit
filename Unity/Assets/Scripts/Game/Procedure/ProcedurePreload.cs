@@ -24,11 +24,11 @@ namespace Game
 #endif
 
 #if UNITY_ET
-            ChangeState<ProcedureStartET>(procedureOwner);
+            ChangeState<ProcedureET>(procedureOwner);
 #elif UNITY_GAMEHOT
-            ChangeState<ProcedureStartHot>(procedureOwner);
+            ChangeState<ProcedureHot>(procedureOwner);
 #else
-            ChangeState<ProcedureStartGame>(procedureOwner);
+            ChangeState<ProcedureGame>(procedureOwner);
 #endif
         }
     }

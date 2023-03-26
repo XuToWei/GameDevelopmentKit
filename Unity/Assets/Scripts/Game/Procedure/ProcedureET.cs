@@ -4,7 +4,7 @@ using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedure
 
 namespace Game
 {
-    public class ProcedureStartET : ProcedureBase
+    public class ProcedureET : ProcedureBase
     {
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
@@ -21,6 +21,8 @@ namespace Game
             }
             base.OnLeave(procedureOwner, isShutdown);
         }
+        
+        
     }
 }
 #endif
