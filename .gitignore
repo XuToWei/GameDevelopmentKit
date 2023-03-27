@@ -82,3 +82,5 @@ Publish/
 global.json
 Unity/ProjectSettings/EditorBuildSettings.asset
 Unity/ProjectSettings/EditorBuildSettings.asset
+
+/Unity/Assets/StreamingAssets/*

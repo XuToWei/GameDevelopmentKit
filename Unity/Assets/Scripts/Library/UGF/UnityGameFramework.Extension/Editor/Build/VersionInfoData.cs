@@ -19,7 +19,6 @@ namespace UnityGameFramework.Extension.Editor
         [SerializeField] private int m_VersionListHashCode;
         [SerializeField] private int m_VersionListCompressedLength;
         [SerializeField] private int m_VersionListCompressedHashCode;
-        [SerializeField] private bool m_IsShowCanNotChangeProperty;
 
         public string ResourceVersion
         {
@@ -31,14 +30,6 @@ namespace UnityGameFramework.Extension.Editor
         {
             get => m_Platform;
             set => m_Platform = value;
-        }
-        /// <summary>
-        /// 是否展示无法修改的属性
-        /// </summary>
-        public bool IsShowCanNotChangeProperty
-        {
-            get => m_IsShowCanNotChangeProperty;
-            set => m_IsShowCanNotChangeProperty = value;
         }
 
         /// <summary>

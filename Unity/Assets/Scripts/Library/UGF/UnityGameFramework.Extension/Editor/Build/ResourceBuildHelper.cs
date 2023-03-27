@@ -162,7 +162,7 @@ namespace UnityGameFramework.Extension.Editor
             }
             else
             {
-                Debug.LogWarning("Build resources failure.");
+                Debug.LogError($"Build resources failure. <a href=\"file:///{GameFramework.Utility.Path.GetRegularPath(Path.Combine(m_Controller.BuildReportPath, "BuildLog.txt"))}\" line=\"0\">[ Open BuildLog.txt ]</a>");
             }
         }
 

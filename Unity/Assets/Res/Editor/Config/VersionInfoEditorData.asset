@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f84dac6a330c478988ed9b2576369bfe, type: 3}
+  m_Name: VersionInfoEditorData
+  m_EditorClassIdentifier: 
+  m_Active: Normal
+  m_ActiveIndex: 0
+  m_VersionInfos:
+  - m_Key: Normal
+    m_Value:
+      m_ForceUpdateGame: 0
+      m_LatestGameVersion: 1.0
+      m_InternalGameVersion: 6
+      m_ServerPath: 
+      m_ResourceVersion: 1_0_11
+      m_Platform: 1
+      m_VersionListLength: 515
+      m_InternalResourceVersion: 11
+      m_VersionListHashCode: 830839729
+      m_VersionListCompressedLength: 329
+      m_VersionListCompressedHashCode: 435061015
+      m_IsShowCanNotChangeProperty: 0
+  m_IsGenerateToFullPath: 0
+  m_OutPath: 

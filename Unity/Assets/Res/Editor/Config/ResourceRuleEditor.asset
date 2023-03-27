@@ -13,13 +13,63 @@ MonoBehaviour:
   m_Name: ResourceRuleEditor
   m_EditorClassIdentifier: 
   rules:
-  - valid: 1
+  - valid: 0
     name: Entity
     variant: 
     fileSystem: 
     groups: 
-    assetsDirectoryPath: Assets/Res/Runtime/Entity
+    assetsDirectoryPath: Assets/Res/Entity
     loadType: 0
     packed: 1
     filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Luban
+    variant: 
+    fileSystem: GameData
+    groups: 
+    assetsDirectoryPath: Assets/Res/Luban
+    loadType: 0
+    packed: 1
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: UI.UIForm
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UIForm
+    loadType: 0
+    packed: 1
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 0
+    name: UI.UIItem
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UIItem
+    loadType: 0
+    packed: 1
+    filterType: 2
+    searchPatterns: '*.*'
+  - valid: 0
+    name: UI.UISound
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UISound
+    loadType: 0
+    packed: 1
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 0
+    name: UI.UISprite
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UISprite
+    loadType: 0
+    packed: 1
+    filterType: 2
     searchPatterns: '*.*'

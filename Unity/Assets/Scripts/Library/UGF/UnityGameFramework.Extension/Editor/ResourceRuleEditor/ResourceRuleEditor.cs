@@ -32,7 +32,7 @@ namespace UnityGameFramework.Extension.Editor
         static void Open()
         {
             ResourceRuleEditor window = GetWindow<ResourceRuleEditor>(true, "Resource Rule Editor", true);
-            window.minSize = new Vector2(1555f, 420f);
+            window.minSize = new Vector2(1770f, 420f);
         }
 
         [OnOpenAsset]
@@ -195,7 +195,7 @@ namespace UnityGameFramework.Extension.Editor
             rule.name = EditorGUI.TextField(r, rule.name);
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMin + 100;
+            r.xMax = r.xMin + 250;
             rule.loadType = (LoadType)EditorGUI.EnumPopup(r, rule.loadType);
 
             r.xMin = r.xMax + GAP + 15;
@@ -234,7 +234,7 @@ namespace UnityGameFramework.Extension.Editor
             }
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMin + 85;
+            r.xMax = r.xMin + 150;
             rule.filterType = (ResourceFilterType)EditorGUI.EnumPopup(r, rule.filterType);
 
             r.xMin = r.xMax + GAP;
@@ -245,7 +245,7 @@ namespace UnityGameFramework.Extension.Editor
         private string SelectFolder()
         {
             string dataPath = Application.dataPath;
-            string selectedPath = EditorUtility.OpenFolderPanel("Path", dataPath, "");
+            string selectedPath = EditorUtility.OpenFolderPanel("Path", $"{dataPath}/Res/", "");
             if (!string.IsNullOrEmpty(selectedPath))
             {
                 if (selectedPath.StartsWith(dataPath))
@@ -309,7 +309,7 @@ namespace UnityGameFramework.Extension.Editor
             EditorGUI.TextField(r, "Name");
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMin + 100;
+            r.xMax = r.xMin + 250;
             EditorGUI.TextField(r, "Load Type");
 
             r.xMin = r.xMax + GAP;
@@ -333,7 +333,7 @@ namespace UnityGameFramework.Extension.Editor
             EditorGUI.TextField(r, "AssetDirectory");
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMin + 85;
+            r.xMax = r.xMin + 150;
             EditorGUI.TextField(r, "Filter Type");
 
             r.xMin = r.xMax + GAP;

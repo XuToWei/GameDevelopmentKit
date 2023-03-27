@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using GameFramework;
+using NUnit.Framework.Internal;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
@@ -27,8 +28,9 @@ namespace UnityGameFramework.Extension.Editor
             ResourceRuleEditor ruleEditor = ScriptableObject.CreateInstance<ResourceRuleEditor>();
             ruleEditor.RefreshResourceCollection();
             SpriteCollectionUtility.RefreshSpriteCollection();
-            
-            string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+
+            string streamingAssetsPath =
+                Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
             string[] fileNames = Directory.GetFiles(streamingAssetsPath, "*", SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
             {
@@ -37,6 +39,7 @@ namespace UnityGameFramework.Extension.Editor
                     File.Delete(fileName);
                 }
             }
+
             Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
         }
 
@@ -55,25 +58,24 @@ namespace UnityGameFramework.Extension.Editor
         public void OnOutputUpdatableVersionListData(Platform platform, string versionListPath, int versionListLength,
             int versionListHashCode, int versionListZipLength, int versionListZipHashCode)
         {
-            Type resourceBuilderType =
-                Type.GetType("UnityGameFramework.Editor.ResourceTools.ResourceBuilder,UnityGameFramework.Editor");
-            var window = EditorWindow.GetWindow(resourceBuilderType);
-            ResourceBuilderController builderController =
-                window.GetType().GetField("m_Controller", BindingFlags.Instance | BindingFlags.NonPublic)
-                    ?.GetValue(window) as ResourceBuilderController;
-            if (builderController == null)
+            Debug.LogError("Test");
+            ResourceBuilderController builderController = new ResourceBuilderController();
+            if (!builderController.Load())
             {
+                Debug.LogError("OnOutputUpdatableVersionListData Fail! ResourceBuilderController Load Fail!");
                 return;
             }
-            
+
             VersionInfoEditorData versionInfoEditorData =
-                AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>("Assets/Res/Configs/VersionInfoEditorData.asset");
+                AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(
+                    "Assets/Res/Editor/Config/VersionInfoEditorData.asset");
             if (versionInfoEditorData == null)
             {
                 versionInfoEditorData = ScriptableObject.CreateInstance<VersionInfoEditorData>();
                 versionInfoEditorData.VersionInfos = new List<VersionInfoWrapData>
                     { new VersionInfoWrapData() { Key = "Normal", Value = new VersionInfoData() } };
-                AssetDatabase.CreateAsset(versionInfoEditorData, "Assets/Res/Configs/VersionInfoEditorData.asset");
+                AssetDatabase.CreateAsset(versionInfoEditorData,
+                    "Assets/Res/Editor/Config/VersionInfoEditorData.asset");
                 Debug.Log("CreateVersionInfoEditorData Success!");
                 AssetDatabase.Refresh();
                 Selection.activeObject = versionInfoEditorData;
@@ -82,7 +84,8 @@ namespace UnityGameFramework.Extension.Editor
             VersionInfoData versionInfoData = versionInfoEditorData.GetActiveVersionInfoData();
             versionInfoData.AutoIncrementInternalGameVersion();
             versionInfoData.ForceUpdateGame = false;
-            versionInfoData.ResourceVersion = builderController.ApplicableGameVersion.Replace('.', '_')+ "_"+builderController.InternalResourceVersion;
+            versionInfoData.ResourceVersion = builderController.ApplicableGameVersion.Replace('.', '_') + "_" +
+                                              builderController.InternalResourceVersion;
             versionInfoData.Platform = (Platform)(int)platform;
             versionInfoData.LatestGameVersion = builderController.ApplicableGameVersion;
             versionInfoData.InternalResourceVersion = builderController.InternalResourceVersion;
@@ -95,7 +98,8 @@ namespace UnityGameFramework.Extension.Editor
 
             if (versionInfoEditorData.IsGenerateToFullPath)
             {
-                versionInfoEditorData.Generate(Path.Combine(builderController.OutputFullPath, platform.ToString(), $"{platform}Version.txt"));
+                versionInfoEditorData.Generate(Path.Combine(builderController.OutputFullPath, platform.ToString(),
+                    $"{platform}Version.txt"));
             }
         }
 
@@ -106,14 +110,16 @@ namespace UnityGameFramework.Extension.Editor
             bool isSuccess)
         {
             //如果有一下多个平台，自行处理
-            
+
             void CopyResource(string outputPath)
             {
-                string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+                string streamingAssetsPath =
+                    Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
                 string[] fileNames = Directory.GetFiles(outputPath, "*", SearchOption.AllDirectories);
                 foreach (string fileName in fileNames)
                 {
-                    string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName.Substring(outputPath.Length)));
+                    string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath,
+                        fileName.Substring(outputPath.Length)));
                     FileInfo destFileInfo = new FileInfo(destFileName);
                     if (destFileInfo.Directory is { Exists: false })
                     {
@@ -123,7 +129,7 @@ namespace UnityGameFramework.Extension.Editor
                     File.Copy(fileName, destFileName);
                 }
             }
-            
+
             if (outputPackedSelected)
             {
                 CopyResource(outputPackedPath);
