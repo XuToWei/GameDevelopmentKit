@@ -12,7 +12,7 @@ namespace ET
 {
     public static class ExcelExporter
     {
-        private const string work_dir = "../Bin";
+        private const string root_dir = "..";
         private const string luban_error_line = "=======================================================================";
 
         /// <summary>
@@ -56,12 +56,17 @@ namespace ET
             {
                 throw new Exception($"Directory {excel_dir} is empty");
             }
+            string workDir = $"{root_dir}/Temp/Luban";
+            if (!Directory.Exists(workDir))
+            {
+                Directory.CreateDirectory(workDir);
+            }
             bool useJson = Options.Instance.Customs.Contains("Json", StringComparison.OrdinalIgnoreCase);
             List<Input_Output_Gen_Info> genInfos = new List<Input_Output_Gen_Info>();
             for (int i = 0; i < dirs.Length; i++)
             {
-                string dir = dirs[i];
-                string genConfigFile = Path.Combine(dir, gen_config_name).Replace('\\', '/');
+                string dir = dirs[i].Replace('\\', '/');
+                string genConfigFile = Path.Combine(dir, gen_config_name);
                 if (!File.Exists(genConfigFile))
                 {
                     continue;
@@ -81,7 +86,8 @@ namespace ET
                 {
                     XmlNode xmlGen = xmlGens.Item(j);
                     Input_Output_Gen_Info info = new Input_Output_Gen_Info();
-                    info.Work_Dir = $"luban_temp_{i}_{j}";
+                    int lastIndex = dir.LastIndexOf('/');
+                    info.Work_Dir = $"{workDir}/{dir.Substring(lastIndex, dir.Length - lastIndex)}_{j}";
                     info.Input_Data_Dir = dir;
                     info.Output_Code_Dirs = xmlGen.SelectSingleNode("Output_Code_Dirs").Attributes.GetNamedItem("Value").Value.Split(',').ToList();
                     info.Output_Data_Dirs = xmlGen.SelectSingleNode("Output_Data_Dirs").Attributes.GetNamedItem("Value").Value.Split(',').ToList();
@@ -99,17 +105,17 @@ namespace ET
             Console.WriteLine("Export Excel Parallel ForEachAsync!");
             bool isSuccess = true;
             int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
+            int processCount = 0;
             Parallel.ForEachAsync(genInfos,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxParallelism },//luban并发IO会报错，这里设置为1
                 async (info, _) =>
                 {
-                    string workDir = $"{work_dir}/{info.Work_Dir}";
-                    if (!Directory.Exists(workDir))
+                    if (info.Work_Dir != null && !Directory.Exists(info.Work_Dir))
                     {
-                        Directory.CreateDirectory(workDir);
+                        Directory.CreateDirectory(info.Work_Dir);
                     }
                     string cmd = GetCommand(info);
-                    if (!await RunCommand(cmd, workDir))
+                    if (!await RunCommand(cmd, info.Work_Dir))
                     {
                         isSuccess = false;
                         return;
@@ -130,6 +136,8 @@ namespace ET
                             FileHelper.CopyDirectory(info.Output_Data_Dirs[0], info.Output_Data_Dirs[k]);
                         }
                     }
+                    processCount++;
+                    Console.WriteLine($"Export Process : {processCount}/{genInfos.Count} ");
                 }).Wait();
             
             if (!isSuccess)
@@ -152,11 +160,11 @@ namespace ET
                 cmd = cmd.Replace(" --output_data_dir %OUTPUT_DATA_DIR%", "");
             }
 
-            cmd = cmd.Replace("%GEN_CLIENT%", $"../{gen_client}")
-                    .Replace("%CUSTOM_TEMPLATE_DIR%", $"../{custom_template_dir}")
-                    .Replace("%INPUT_DATA_DIR%", $"../{info.Input_Data_Dir}")
-                    .Replace("%OUTPUT_CODE_DIR%", $"../{info.Output_Code_Dirs[0]}")
-                    .Replace("%OUTPUT_DATA_DIR%", $"../{info.Output_Data_Dirs[0]}")
+            cmd = cmd.Replace("%GEN_CLIENT%", $"../../{gen_client}")
+                    .Replace("%CUSTOM_TEMPLATE_DIR%", $"../../{custom_template_dir}")
+                    .Replace("%INPUT_DATA_DIR%", $"../../{info.Input_Data_Dir}")
+                    .Replace("%OUTPUT_CODE_DIR%", $"../../{info.Output_Code_Dirs[0]}")
+                    .Replace("%OUTPUT_DATA_DIR%", $"../../{info.Output_Data_Dirs[0]}")
                     .Replace("%GEN_TYPE_CODE_DATA%", info.Gen_Type_Code_Data)
                     .Replace("%GEN_GROUP%", info.Gen_Group);
             return cmd;
