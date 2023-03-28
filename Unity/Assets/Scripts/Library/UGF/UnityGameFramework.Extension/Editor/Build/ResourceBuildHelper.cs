@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using GameFramework;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
@@ -13,6 +14,7 @@ namespace UnityGameFramework.Extension.Editor
     {
         private static ResourceBuilderController m_Controller = null;
         private static Platform m_OriginalPlatform;
+        private const string OutputDirectory = "../Temp/Bundle";
 
         [MenuItem("Game Framework/Resource Tools/Resource Start Build", false, 51)]
         public static void StartBuild()
@@ -39,6 +41,15 @@ namespace UnityGameFramework.Extension.Editor
 
             if (m_Controller.Load())
             {
+                if (!string.Equals(m_Controller.OutputDirectory, OutputDirectory))
+                {
+                    throw new GameFrameworkException($"Please set OutputDirectory: {m_Controller.OutputDirectory} to {OutputDirectory}");
+                }
+                if (!Directory.Exists(OutputDirectory))
+                {
+                    Directory.CreateDirectory(OutputDirectory);
+                }
+                
                 m_OriginalPlatform = m_Controller.Platforms;
                 if (specificPlatform != Platform.Undefined)
                 {

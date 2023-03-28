@@ -58,7 +58,6 @@ namespace UnityGameFramework.Extension.Editor
         public void OnOutputUpdatableVersionListData(Platform platform, string versionListPath, int versionListLength,
             int versionListHashCode, int versionListZipLength, int versionListZipHashCode)
         {
-            Debug.LogError("Test");
             ResourceBuilderController builderController = new ResourceBuilderController();
             if (!builderController.Load())
             {
