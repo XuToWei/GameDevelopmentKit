@@ -107,7 +107,7 @@ namespace ET
             int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
             int processCount = 0;
             Parallel.ForEachAsync(genInfos,
-                new ParallelOptions() { MaxDegreeOfParallelism = maxParallelism },//luban并发IO会报错，这里设置为1
+                new ParallelOptions() { MaxDegreeOfParallelism = maxParallelism },
                 async (info, _) =>
                 {
                     if (info.Work_Dir != null && !Directory.Exists(info.Work_Dir))
