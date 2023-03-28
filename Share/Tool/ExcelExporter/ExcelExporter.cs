@@ -12,7 +12,7 @@ namespace ET
 {
     public static class ExcelExporter
     {
-        private const string working_dir = "../Bin/";
+        private const string work_dir = "../Bin";
         private const string luban_error_line = "=======================================================================";
 
         /// <summary>
@@ -30,6 +30,7 @@ namespace ET
 
         private struct Input_Output_Gen_Info
         {
+            public string Work_Dir;
             public string Input_Data_Dir;
             public List<string> Output_Code_Dirs;
             public List<string> Output_Data_Dirs;
@@ -80,6 +81,7 @@ namespace ET
                 {
                     XmlNode xmlGen = xmlGens.Item(j);
                     Input_Output_Gen_Info info = new Input_Output_Gen_Info();
+                    info.Work_Dir = $"luban_temp_{i}_{j}";
                     info.Input_Data_Dir = dir;
                     info.Output_Code_Dirs = xmlGen.SelectSingleNode("Output_Code_Dirs").Attributes.GetNamedItem("Value").Value.Split(',').ToList();
                     info.Output_Data_Dirs = xmlGen.SelectSingleNode("Output_Data_Dirs").Attributes.GetNamedItem("Value").Value.Split(',').ToList();
@@ -96,13 +98,18 @@ namespace ET
             }
             Console.WriteLine("Export Excel Parallel ForEachAsync!");
             bool isSuccess = true;
-            //int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
+            int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
             Parallel.ForEachAsync(genInfos,
-                new ParallelOptions() { MaxDegreeOfParallelism = 1 },//luban并发IO会报错，这里设置为1
+                new ParallelOptions() { MaxDegreeOfParallelism = maxParallelism },//luban并发IO会报错，这里设置为1
                 async (info, _) =>
                 {
+                    string workDir = $"{work_dir}/{info.Work_Dir}";
+                    if (!Directory.Exists(workDir))
+                    {
+                        Directory.CreateDirectory(workDir);
+                    }
                     string cmd = GetCommand(info);
-                    if (!await RunCommand(cmd))
+                    if (!await RunCommand(cmd, workDir))
                     {
                         isSuccess = false;
                         return;
@@ -145,11 +152,11 @@ namespace ET
                 cmd = cmd.Replace(" --output_data_dir %OUTPUT_DATA_DIR%", "");
             }
 
-            cmd = cmd.Replace("%GEN_CLIENT%", gen_client)
-                    .Replace("%CUSTOM_TEMPLATE_DIR%", custom_template_dir)
-                    .Replace("%INPUT_DATA_DIR%", info.Input_Data_Dir)
-                    .Replace("%OUTPUT_CODE_DIR%", info.Output_Code_Dirs[0])
-                    .Replace("%OUTPUT_DATA_DIR%", info.Output_Data_Dirs[0])
+            cmd = cmd.Replace("%GEN_CLIENT%", $"../{gen_client}")
+                    .Replace("%CUSTOM_TEMPLATE_DIR%", $"../{custom_template_dir}")
+                    .Replace("%INPUT_DATA_DIR%", $"../{info.Input_Data_Dir}")
+                    .Replace("%OUTPUT_CODE_DIR%", $"../{info.Output_Code_Dirs[0]}")
+                    .Replace("%OUTPUT_DATA_DIR%", $"../{info.Output_Data_Dirs[0]}")
                     .Replace("%GEN_TYPE_CODE_DATA%", info.Gen_Type_Code_Data)
                     .Replace("%GEN_GROUP%", info.Gen_Group);
             return cmd;
@@ -159,8 +166,9 @@ namespace ET
         /// 执行命令
         /// </summary>
         /// <param name="cmd">命令</param>
+        /// <param name="workDir">工作目录</param>
         /// <returns>错误信息</returns>
-        private static async Task<bool> RunCommand(string cmd)
+        private static async Task<bool> RunCommand(string cmd, string workDir)
         {
             bool isSuccess = true;
             Process process = new();
@@ -181,7 +189,7 @@ namespace ET
                 start.CreateNoWindow = true;
                 start.ErrorDialog = true;
                 start.UseShellExecute = false;
-                start.WorkingDirectory = working_dir;
+                start.WorkingDirectory = workDir;
 
                 start.RedirectStandardOutput = true;
                 start.RedirectStandardError = true;
