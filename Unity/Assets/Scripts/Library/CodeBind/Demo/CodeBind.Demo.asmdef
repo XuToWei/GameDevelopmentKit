@@ -2,7 +2,7 @@
     "name": "CodeBind.Demo",
     "rootNamespace": "",
     "references": [
-        "GUID:b782c2eb658bcb14cad945faf67de879"
+        "CodeBind.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

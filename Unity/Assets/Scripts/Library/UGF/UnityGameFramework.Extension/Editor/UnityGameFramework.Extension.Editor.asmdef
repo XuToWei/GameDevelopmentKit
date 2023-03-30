@@ -2,10 +2,10 @@
     "name": "UnityGameFramework.Extension.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:185999e4d3aadab45bf0f7ee77382397",
-        "GUID:363c5eb08ff8e6a439b85e37b8c20d96",
-        "GUID:6ce6ba9c57c5f6a4095678c0317f9b18",
-        "GUID:a2d8a19598eca814496b089021d08d60"
+        "GameFramework",
+        "UnityGameFramework.Runtime",
+        "UnityGameFramework.Extension.Runtime",
+        "UnityGameFramework.Editor"
     ],
     "includePlatforms": [
         "Editor"

@@ -21,10 +21,10 @@ namespace Game.Editor{
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             // 设置aot dlls的group
             HybridCLRConfig hybridCLRConfig = AssetDatabase.LoadAssetAtPath<HybridCLRConfig>(HybridCLRHelper.ConfigAsset);
-            hybridCLRConfig.AOTAssemblies = new TextAsset[HybridCLRSettings.Instance.patchAOTAssemblies.Length];
+            hybridCLRConfig.aotAssemblies = new TextAsset[HybridCLRSettings.Instance.patchAOTAssemblies.Length];
             for (int i = 0; i < HybridCLRSettings.Instance.patchAOTAssemblies.Length; i++)
             {
-                hybridCLRConfig.AOTAssemblies[i] = AssetDatabase.LoadAssetAtPath<TextAsset>(
+                hybridCLRConfig.aotAssemblies[i] = AssetDatabase.LoadAssetAtPath<TextAsset>(
                     Path.Combine(toDir, $"{HybridCLRSettings.Instance.patchAOTAssemblies[i]}.bytes"));
             }
             EditorUtility.SetDirty(hybridCLRConfig);

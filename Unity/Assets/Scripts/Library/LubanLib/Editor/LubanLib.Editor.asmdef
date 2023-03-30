@@ -2,7 +2,7 @@
     "name": "LubanLib.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:3fcf00d7a3c894e46a955a792eefb4da"
+        "LubanLib.Runtime"
     ],
     "includePlatforms": [
         "Editor"

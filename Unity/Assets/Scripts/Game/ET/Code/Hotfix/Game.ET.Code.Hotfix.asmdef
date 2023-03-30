@@ -2,12 +2,12 @@
     "name": "Game.ET.Code.Hotfix",
     "rootNamespace": "ET",
     "references": [
-        "GUID:5ea3d62eabfae09448c38636cef75a26",
-        "GUID:18693705313c79745a61ea5d393ed2d3",
-        "GUID:d8b63aba1907145bea998dd612889d6b",
-        "GUID:3fcf00d7a3c894e46a955a792eefb4da",
-        "GUID:9da5641325774b1468e1cb8e27edbc1f",
-        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+        "ET.Runtime",
+        "Game.ET.Code.Model",
+        "Unity.Mathematics",
+        "LubanLib.Runtime",
+        "ProtoBuf",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

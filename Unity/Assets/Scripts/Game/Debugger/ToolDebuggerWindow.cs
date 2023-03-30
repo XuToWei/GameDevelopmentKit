@@ -1,5 +1,4 @@
 using GameFramework.Debugger;
-using UnityEditor;
 using UnityEngine;
 
 namespace Game
@@ -9,7 +8,7 @@ namespace Game
         public void Initialize(params object[] args)
         {
 #if !DISABLE_SRDEBUGGER
-            SRDebug.Init();
+            //SRDebug.Init();
 #endif
         }
 
