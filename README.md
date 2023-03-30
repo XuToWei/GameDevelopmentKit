@@ -22,11 +22,11 @@
 
 9.[ET动态事件](Book/ET%E5%8A%A8%E6%80%81%E4%BA%8B%E4%BB%B6.md)
 
-10.编辑器HotReload，减少编译等待
-
 等等
 
 ## 运行步骤
+
+### **注意项目中需要有[Odin](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)这个工具，请自行购买导入**
 
 1.安装 [.net6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)，服务器功能需要安装[MonogoDB](https://www.mongodb.com/)
 
