@@ -50,5 +50,6 @@ crashlytics-build.properties
 /Unity.sln.DotSettings
 /[Aa]ssets/[Ss]treamingAssets/*.dat
 /[Aa]ssets/[Ss]treamingAssets/*.dat.meta
+/[Aa]ssets/.gitignore
 
 
