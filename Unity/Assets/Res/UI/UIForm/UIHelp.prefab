@@ -91,12 +91,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35484dcc77f5cfa4682f0453f330c54b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_BindComponents:
+  - {fileID: 476678119492089194}
   m_SeparatorChar: 95
   m_BindScript: {fileID: 11500000, guid: b4dd589b0dfbad34a877c9934564180c, type: 3}
   m_BindComponentNames:
   - desc
-  m_BindComponents:
-  - {fileID: 476678119492089194}
 --- !u!114 &-6867697261457961253
 MonoBehaviour:
   m_ObjectHideFlags: 0

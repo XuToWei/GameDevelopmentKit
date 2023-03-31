@@ -1,3 +1,5 @@
+// This is an automatically generated class by CodeBind. Please do not modify it.
+
 namespace CodeBind.Demo
 {
     public partial class TestCS : CodeBind.ICSCodeBind

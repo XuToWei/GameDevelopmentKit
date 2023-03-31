@@ -1,3 +1,5 @@
+// This is an automatically generated class by CodeBind. Please do not modify it.
+
 namespace ET.Client
 {
     public partial class UGFUIHelp : CodeBind.ICSCodeBind

@@ -22,7 +22,8 @@ namespace CodeBind.Editor
         protected override string GetGeneratorCode()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("/** This is an automatically generated class by CodeBind. Please do not modify it. **/");
+            stringBuilder.AppendLine("// This is an automatically generated class by CodeBind. Please do not modify it.");
+            stringBuilder.AppendLine("");
             string indentation = string.Empty;
             bool needNameSpace = !string.IsNullOrEmpty(this.m_ScriptNameSpace);
             //命名空间

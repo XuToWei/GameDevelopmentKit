@@ -171,16 +171,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35484dcc77f5cfa4682f0453f330c54b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_BindComponents:
+  - {fileID: 114341495829030012}
+  - {fileID: 114663064108016614}
+  - {fileID: 114630311973242952}
   m_SeparatorChar: 95
   m_BindScript: {fileID: 11500000, guid: 3b70aeffd4109a94981d0460bf28dae9, type: 3}
   m_BindComponentNames:
   - Account
   - Password
   - Login
-  m_BindComponents:
-  - {fileID: 114341495829030012}
-  - {fileID: 114663064108016614}
-  - {fileID: 114630311973242952}
 --- !u!114 &7000139577207080798
 MonoBehaviour:
   m_ObjectHideFlags: 0
