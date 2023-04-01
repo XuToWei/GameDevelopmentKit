@@ -11,13 +11,17 @@ namespace ET
         public async UniTask<byte[]> ReadBytesAsync(string file)
         {
             TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(GetLubanAssetPath(file, false));
-            return textAsset.bytes;
+            byte[] bytes = textAsset.bytes;
+            GameEntry.Resource.UnloadAsset(textAsset);
+            return bytes;
         }
 
         public async UniTask<string> ReadTextAsync(string file)
         {
             TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(GetLubanAssetPath(file, true));
-            return textAsset.text;
+            string text = textAsset.text;
+            GameEntry.Resource.UnloadAsset(textAsset);
+            return text;
         }
         
         private string GetLubanAssetPath(string fileName, bool isJson)
