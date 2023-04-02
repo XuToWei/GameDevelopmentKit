@@ -18,9 +18,9 @@ public sealed partial class DTStartProcessConfig : IDataTable
 
     private readonly Dictionary<(string, int), DRStartProcessConfig> _dataMapUnion;
 
-    private readonly Task<ByteBuf> _loadFunc;
+    private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public DTStartProcessConfig(Task<ByteBuf> loadFunc)
+    public DTStartProcessConfig(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataList = new List<DRStartProcessConfig>();
@@ -29,7 +29,7 @@ public sealed partial class DTStartProcessConfig : IDataTable
 
     public async Task LoadAsync()
     {
-        ByteBuf _buf = await _loadFunc;
+        ByteBuf _buf = await _loadFunc();
         _dataList.Clear();
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {

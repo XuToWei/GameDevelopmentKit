@@ -30,7 +30,7 @@ public sealed partial class {{name}}
     {
         _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
         {{~for table in tables ~}}
-        {{table.name}} = new {{table.full_name}}(loader("{{table.output_data_file}}"));
+        {{table.name}} = new {{table.full_name}}(() => loader("{{table.output_data_file}}"));
         await {{table.name}}.LoadAsync();
         _tables.Add("{{table.full_name}}", {{table.name}});
         {{~end~}}

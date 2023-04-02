@@ -24,9 +24,9 @@ public sealed partial class {{name}} : IDataTable
     private readonly Dictionary<{{cs_define_type key_type}}, {{cs_define_type value_type}}> _dataMap;
     private readonly List<{{cs_define_type value_type}}> _dataList;
 
-    private readonly Task<JSONNode> _loadFunc;
+    private readonly System.Func<Task<JSONNode>> _loadFunc;
 
-    public {{name}}(Task<JSONNode> loadFunc)
+    public {{name}}(System.Func<Task<JSONNode>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataMap = new Dictionary<{{cs_define_type key_type}}, {{cs_define_type value_type}}>();
@@ -35,7 +35,7 @@ public sealed partial class {{name}} : IDataTable
 
     public async Task LoadAsync()
     {
-        JSONNode _json = await _loadFunc;
+        JSONNode _json = await _loadFunc();
         _dataMap.Clear();
         _dataList.Clear();
 
@@ -87,9 +87,9 @@ public sealed partial class {{name}} : IDataTable
     {{~end~}}
     {{~end~}}
 
-    private readonly Task<JSONNode> _loadFunc;
+    private readonly System.Func<Task<JSONNode>> _loadFunc;
 
-    public {{name}}(Task<JSONNode> loadFunc)
+    public {{name}}(System.Func<Task<JSONNode>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataList = new List<{{cs_define_type value_type}}>();
@@ -98,7 +98,7 @@ public sealed partial class {{name}} : IDataTable
 
     public async Task LoadAsync()
     {
-        JSONNode _json = await _loadFunc;
+        JSONNode _json = await _loadFunc();
         _dataList.Clear();
         
         foreach(JSONNode _row in _json.Children)
@@ -157,16 +157,16 @@ public sealed partial class {{name}} : IDataTable
 
     private {{cs_define_type value_type}} _data;
 
-    private readonly Task<JSONNode> _loadFunc;
+    private readonly System.Func<Task<JSONNode>> _loadFunc;
 
-    public {{name}}(Task<JSONNode> loadFunc)
+    public {{name}}(System.Func<Task<JSONNode>> loadFunc)
     {
         _loadFunc = loadFunc;
     }
 
     public async Task LoadAsync()
     {
-        JSONNode _json = await _loadFunc;
+        JSONNode _json = await _loadFunc();
 
         if(!_json.IsArray)
         {

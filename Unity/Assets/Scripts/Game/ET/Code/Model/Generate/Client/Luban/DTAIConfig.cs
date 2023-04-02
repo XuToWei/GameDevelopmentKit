@@ -17,9 +17,9 @@ public sealed partial class DTAIConfig : IDataTable
     private readonly Dictionary<int, DRAIConfig> _dataMap;
     private readonly List<DRAIConfig> _dataList;
 
-    private readonly Task<ByteBuf> _loadFunc;
+    private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public DTAIConfig(Task<ByteBuf> loadFunc)
+    public DTAIConfig(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataMap = new Dictionary<int, DRAIConfig>();
@@ -28,7 +28,7 @@ public sealed partial class DTAIConfig : IDataTable
 
     public async Task LoadAsync()
     {
-        ByteBuf _buf = await _loadFunc;
+        ByteBuf _buf = await _loadFunc();
         _dataMap.Clear();
         _dataList.Clear();
         for(int n = _buf.ReadSize() ; n > 0 ; --n)

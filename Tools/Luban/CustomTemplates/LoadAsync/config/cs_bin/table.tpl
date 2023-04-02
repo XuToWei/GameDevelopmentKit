@@ -21,9 +21,9 @@ public sealed partial class {{name}} : IDataTable
     private readonly Dictionary<{{cs_define_type key_type}}, {{cs_define_type value_type}}> _dataMap;
     private readonly List<{{cs_define_type value_type}}> _dataList;
 
-    private readonly Task<ByteBuf> _loadFunc;
+    private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public {{name}}(Task<ByteBuf> loadFunc)
+    public {{name}}(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataMap = new Dictionary<{{cs_define_type key_type}}, {{cs_define_type value_type}}>();
@@ -32,7 +32,7 @@ public sealed partial class {{name}} : IDataTable
 
     public async Task LoadAsync()
     {
-        ByteBuf _buf = await _loadFunc;
+        ByteBuf _buf = await _loadFunc();
         _dataMap.Clear();
         _dataList.Clear();
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
@@ -83,9 +83,9 @@ public sealed partial class {{name}} : IDataTable
     {{~end~}}
     {{~end~}}
 
-    private readonly Task<ByteBuf> _loadFunc;
+    private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public {{name}}(Task<ByteBuf> loadFunc)
+    public {{name}}(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataList = new List<{{cs_define_type value_type}}>();
@@ -94,7 +94,7 @@ public sealed partial class {{name}} : IDataTable
 
     public async Task LoadAsync()
     {
-        ByteBuf _buf = await _loadFunc;
+        ByteBuf _buf = await _loadFunc();
         _dataList.Clear();
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
@@ -153,16 +153,16 @@ public sealed partial class {{name}} : IDataTable
 
     private {{cs_define_type value_type}} _data;
 
-    private readonly Task<ByteBuf> _loadFunc;
+    private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public {{name}}(Task<ByteBuf> loadFunc)
+    public {{name}}(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
     }
 
     public async Task LoadAsync()
     {
-        ByteBuf _buf = await _loadFunc;
+        ByteBuf _buf = await _loadFunc();
         int n = _buf.ReadSize();
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
         {{cs_deserialize '_buf' '_data' value_type}}

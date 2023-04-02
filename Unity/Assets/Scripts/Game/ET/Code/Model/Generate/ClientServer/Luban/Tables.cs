@@ -31,25 +31,25 @@ public partial class Tables
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
         _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
-        DTStartMachineConfig = new DTStartMachineConfig(loader("dtstartmachineconfig")); 
+        DTStartMachineConfig = new DTStartMachineConfig(() => loader("dtstartmachineconfig")); 
         await DTStartMachineConfig.LoadAsync();
         _tables.Add("DTStartMachineConfig", DTStartMachineConfig);
-        DTStartProcessConfig = new DTStartProcessConfig(loader("dtstartprocessconfig")); 
+        DTStartProcessConfig = new DTStartProcessConfig(() => loader("dtstartprocessconfig")); 
         await DTStartProcessConfig.LoadAsync();
         _tables.Add("DTStartProcessConfig", DTStartProcessConfig);
-        DTStartSceneConfig = new DTStartSceneConfig(loader("dtstartsceneconfig")); 
+        DTStartSceneConfig = new DTStartSceneConfig(() => loader("dtstartsceneconfig")); 
         await DTStartSceneConfig.LoadAsync();
         _tables.Add("DTStartSceneConfig", DTStartSceneConfig);
-        DTStartZoneConfig = new DTStartZoneConfig(loader("dtstartzoneconfig")); 
+        DTStartZoneConfig = new DTStartZoneConfig(() => loader("dtstartzoneconfig")); 
         await DTStartZoneConfig.LoadAsync();
         _tables.Add("DTStartZoneConfig", DTStartZoneConfig);
-        DTOneConfig = new DTOneConfig(loader("dtoneconfig")); 
+        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
         await DTOneConfig.LoadAsync();
         _tables.Add("DTOneConfig", DTOneConfig);
-        DTAIConfig = new DTAIConfig(loader("dtaiconfig")); 
+        DTAIConfig = new DTAIConfig(() => loader("dtaiconfig")); 
         await DTAIConfig.LoadAsync();
         _tables.Add("DTAIConfig", DTAIConfig);
-        DTUnitConfig = new DTUnitConfig(loader("dtunitconfig")); 
+        DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig")); 
         await DTUnitConfig.LoadAsync();
         _tables.Add("DTUnitConfig", DTUnitConfig);
 

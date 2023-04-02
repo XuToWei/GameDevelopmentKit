@@ -17,9 +17,9 @@ public sealed partial class DTScene : IDataTable
     private readonly Dictionary<int, DRScene> _dataMap;
     private readonly List<DRScene> _dataList;
 
-    private readonly Task<ByteBuf> _loadFunc;
+    private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public DTScene(Task<ByteBuf> loadFunc)
+    public DTScene(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataMap = new Dictionary<int, DRScene>();
@@ -28,7 +28,7 @@ public sealed partial class DTScene : IDataTable
 
     public async Task LoadAsync()
     {
-        ByteBuf _buf = await _loadFunc;
+        ByteBuf _buf = await _loadFunc();
         _dataMap.Clear();
         _dataList.Clear();
         for(int n = _buf.ReadSize() ; n > 0 ; --n)

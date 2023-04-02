@@ -27,13 +27,13 @@ public partial class Tables
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
         _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
-        DTOneConfig = new DTOneConfig(loader("dtoneconfig")); 
+        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
         await DTOneConfig.LoadAsync();
         _tables.Add("DTOneConfig", DTOneConfig);
-        DTAIConfig = new DTAIConfig(loader("dtaiconfig")); 
+        DTAIConfig = new DTAIConfig(() => loader("dtaiconfig")); 
         await DTAIConfig.LoadAsync();
         _tables.Add("DTAIConfig", DTAIConfig);
-        DTUnitConfig = new DTUnitConfig(loader("dtunitconfig")); 
+        DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig")); 
         await DTUnitConfig.LoadAsync();
         _tables.Add("DTUnitConfig", DTUnitConfig);
 

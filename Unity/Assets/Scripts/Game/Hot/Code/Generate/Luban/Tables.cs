@@ -25,7 +25,7 @@ public partial class Tables
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
         _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
-        DTOneConfig = new DTOneConfig(loader("dtoneconfig")); 
+        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
         await DTOneConfig.LoadAsync();
         _tables.Add("DTOneConfig", DTOneConfig);
 

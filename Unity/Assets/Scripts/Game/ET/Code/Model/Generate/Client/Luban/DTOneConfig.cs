@@ -17,16 +17,16 @@ public sealed partial class DTOneConfig : IDataTable
 
     private DROneConfig _data;
 
-    private readonly Task<ByteBuf> _loadFunc;
+    private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public DTOneConfig(Task<ByteBuf> loadFunc)
+    public DTOneConfig(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
     }
 
     public async Task LoadAsync()
     {
-        ByteBuf _buf = await _loadFunc;
+        ByteBuf _buf = await _loadFunc();
         int n = _buf.ReadSize();
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
         _data = DROneConfig.DeserializeDROneConfig(_buf);

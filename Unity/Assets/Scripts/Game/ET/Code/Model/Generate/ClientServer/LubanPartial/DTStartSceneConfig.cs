@@ -32,6 +32,15 @@ namespace ET
 
         partial void PostInit()
         {
+            this.Realms.Clear();
+            this.Gates.Clear();
+            this.Robots.Clear();
+            this.Routers.Clear();
+            this.StartProcessScenes.Clear();
+            this.ClientScenesByName.Clear();
+            this.LocationConfig = default;
+            this.BenchmarkServer = default;
+            
             foreach (DRStartSceneConfig startSceneConfig in this.DataList)
             {
                 if (!string.Equals(startSceneConfig.StartConfig, Options.Instance.StartConfig))

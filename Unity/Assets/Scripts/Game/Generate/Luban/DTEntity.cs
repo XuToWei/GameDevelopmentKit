@@ -17,9 +17,9 @@ public sealed partial class DTEntity : IDataTable
     private readonly Dictionary<int, DREntity> _dataMap;
     private readonly List<DREntity> _dataList;
 
-    private readonly Task<ByteBuf> _loadFunc;
+    private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public DTEntity(Task<ByteBuf> loadFunc)
+    public DTEntity(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataMap = new Dictionary<int, DREntity>();
@@ -28,7 +28,7 @@ public sealed partial class DTEntity : IDataTable
 
     public async Task LoadAsync()
     {
-        ByteBuf _buf = await _loadFunc;
+        ByteBuf _buf = await _loadFunc();
         _dataMap.Clear();
         _dataList.Clear();
         for(int n = _buf.ReadSize() ; n > 0 ; --n)

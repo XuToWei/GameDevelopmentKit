@@ -17,9 +17,9 @@ public sealed partial class DTMusic : IDataTable
     private readonly Dictionary<int, DRMusic> _dataMap;
     private readonly List<DRMusic> _dataList;
 
-    private readonly Task<ByteBuf> _loadFunc;
+    private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public DTMusic(Task<ByteBuf> loadFunc)
+    public DTMusic(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataMap = new Dictionary<int, DRMusic>();
@@ -28,7 +28,7 @@ public sealed partial class DTMusic : IDataTable
 
     public async Task LoadAsync()
     {
-        ByteBuf _buf = await _loadFunc;
+        ByteBuf _buf = await _loadFunc();
         _dataMap.Clear();
         _dataList.Clear();
         for(int n = _buf.ReadSize() ; n > 0 ; --n)

@@ -17,6 +17,7 @@ namespace ET
 
         partial void PostInit()
         {
+            this.AIConfigs.Clear();
             foreach (var kv in this.DataMap)
             {
                 SortedDictionary<int, DRAIConfig> aiNodeConfig;

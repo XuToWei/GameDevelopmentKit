@@ -17,9 +17,9 @@ public sealed partial class DTUIForm : IDataTable
     private readonly Dictionary<int, DRUIForm> _dataMap;
     private readonly List<DRUIForm> _dataList;
 
-    private readonly Task<ByteBuf> _loadFunc;
+    private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public DTUIForm(Task<ByteBuf> loadFunc)
+    public DTUIForm(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataMap = new Dictionary<int, DRUIForm>();
@@ -28,7 +28,7 @@ public sealed partial class DTUIForm : IDataTable
 
     public async Task LoadAsync()
     {
-        ByteBuf _buf = await _loadFunc;
+        ByteBuf _buf = await _loadFunc();
         _dataMap.Clear();
         _dataList.Clear();
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
