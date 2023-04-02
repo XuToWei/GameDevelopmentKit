@@ -20,7 +20,7 @@ MonoBehaviour:
     groups: 
     assetsDirectoryPath: Assets/Res/Entity
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
@@ -30,7 +30,7 @@ MonoBehaviour:
     groups: 
     assetsDirectoryPath: Assets/Res/Luban
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
@@ -40,7 +40,7 @@ MonoBehaviour:
     groups: 
     assetsDirectoryPath: Assets/Res/UI/UIForm
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 1
     searchPatterns: '*.*'
   - valid: 0
@@ -50,7 +50,7 @@ MonoBehaviour:
     groups: 
     assetsDirectoryPath: Assets/Res/UI/UIItem
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 2
     searchPatterns: '*.*'
   - valid: 0
@@ -60,7 +60,7 @@ MonoBehaviour:
     groups: 
     assetsDirectoryPath: Assets/Res/UI/UISound
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'
   - valid: 0
@@ -70,6 +70,16 @@ MonoBehaviour:
     groups: 
     assetsDirectoryPath: Assets/Res/UI/UISprite
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 2
+    searchPatterns: '*.*'
+  - valid: 1
+    name: ET
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/ET
+    loadType: 0
+    packed: 1
+    filterType: 0
     searchPatterns: '*.*'

@@ -6,7 +6,7 @@
 
         public string[] DirectoryPaths { get; } = new[]
         {
-            "../Temp/Bundle",
+            "../Temp/Bundle/Full",
             "../Bundle",
         };
     }

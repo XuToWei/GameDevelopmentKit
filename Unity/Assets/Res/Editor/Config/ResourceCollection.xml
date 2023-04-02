@@ -2,22 +2,33 @@
 <UnityGameFramework>
   <ResourceCollection>
     <Resources>
-      <Resource Name="Luban" FileSystem="GameData" LoadType="0" Packed="True" />
-      <Resource Name="Res/UI/UIForm/UIHelp" LoadType="0" Packed="True" />
-      <Resource Name="Res/UI/UIForm/UILobby" LoadType="0" Packed="True" />
-      <Resource Name="Res/UI/UIForm/UILogin" LoadType="0" Packed="True" />
+      <Resource Name="ET" LoadType="0" Packed="True" />
+      <Resource Name="Luban" FileSystem="GameData" LoadType="0" Packed="False" />
+      <Resource Name="Res/UI/UIForm/UIHelp" LoadType="0" Packed="False" />
+      <Resource Name="Res/UI/UIForm/UILobby" LoadType="0" Packed="False" />
+      <Resource Name="Res/UI/UIForm/UILogin" LoadType="0" Packed="False" />
     </Resources>
     <Assets>
+      <Asset Guid="08b1969f82430784f915a659ed9d66d5" ResourceName="ET" />
       <Asset Guid="09e587528c6da27469a8017d23136a0f" ResourceName="Luban" />
       <Asset Guid="172ab742804613d4f99fee07a3878843" ResourceName="Luban" />
       <Asset Guid="1abfbe65a6e3c034cb43df1cff7317cb" ResourceName="Luban" />
       <Asset Guid="3ec74aa98d7b1ba4599726fc79459c3c" ResourceName="Luban" />
+      <Asset Guid="4b955aa39c16bcb4d9ea0d5245638cdf" ResourceName="ET" />
+      <Asset Guid="4eb028c2d41731848b73b8784a0ec0f1" ResourceName="ET" />
+      <Asset Guid="6887965437e6cdd4994b29405da0cf20" ResourceName="ET" />
+      <Asset Guid="6f4f01fb0f74a674196c817368818daf" ResourceName="ET" />
+      <Asset Guid="96d83c7380035564ba399a83d77e7f91" ResourceName="ET" />
       <Asset Guid="9f6d9adc6f537764fa0fea29671e77bf" ResourceName="Res/UI/UIForm/UILogin" />
+      <Asset Guid="ab0e7d449081c5840b6ecbc53b9a60e4" ResourceName="ET" />
       <Asset Guid="c54e8d9624286b24fa23519e5df2ed0a" ResourceName="Res/UI/UIForm/UIHelp" />
       <Asset Guid="cd590f301d3662040841baada9b1dfb4" ResourceName="Luban" />
+      <Asset Guid="d0b662c758c98944e96c1bede0345ce3" ResourceName="ET" />
+      <Asset Guid="d6d2a8e7150a19c4a9aec43c56f70ed1" ResourceName="ET" />
       <Asset Guid="d8d87e53d93e234448658c9a801a9967" ResourceName="Res/UI/UIForm/UILobby" />
       <Asset Guid="dfc4233acbbd1c44fa552f08e23cd89c" ResourceName="Luban" />
       <Asset Guid="f1833b4cd407d8e408a62b46185431ff" ResourceName="Luban" />
+      <Asset Guid="f526acef4c0a80948b572f523598c71a" ResourceName="ET" />
     </Assets>
   </ResourceCollection>
 </UnityGameFramework>

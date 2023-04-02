@@ -71,10 +71,8 @@ namespace UnityGameFramework.Extension.Editor
             if (versionInfoEditorData == null)
             {
                 versionInfoEditorData = ScriptableObject.CreateInstance<VersionInfoEditorData>();
-                versionInfoEditorData.VersionInfos = new List<VersionInfoWrapData>
-                    { new VersionInfoWrapData() { Key = "Normal", Value = new VersionInfoData() } };
-                AssetDatabase.CreateAsset(versionInfoEditorData,
-                    "Assets/Res/Editor/Config/VersionInfoEditorData.asset");
+                versionInfoEditorData.VersionInfos = new List<VersionInfoWrapData> { new VersionInfoWrapData() { Key = "Normal", Value = new VersionInfoData() } };
+                AssetDatabase.CreateAsset(versionInfoEditorData, "Assets/Res/Editor/Config/VersionInfoEditorData.asset");
                 Debug.Log("CreateVersionInfoEditorData Success!");
                 AssetDatabase.Refresh();
                 Selection.activeObject = versionInfoEditorData;
@@ -83,8 +81,7 @@ namespace UnityGameFramework.Extension.Editor
             VersionInfoData versionInfoData = versionInfoEditorData.GetActiveVersionInfoData();
             versionInfoData.AutoIncrementInternalGameVersion();
             versionInfoData.ForceUpdateGame = false;
-            versionInfoData.ResourceVersion = builderController.ApplicableGameVersion.Replace('.', '_') + "_" +
-                                              builderController.InternalResourceVersion;
+            versionInfoData.ResourceVersion = builderController.ApplicableGameVersion.Replace('.', '_') + "_" + builderController.InternalResourceVersion;
             versionInfoData.Platform = (Platform)(int)platform;
             versionInfoData.LatestGameVersion = builderController.ApplicableGameVersion;
             versionInfoData.InternalResourceVersion = builderController.InternalResourceVersion;
@@ -97,8 +94,11 @@ namespace UnityGameFramework.Extension.Editor
 
             if (versionInfoEditorData.IsGenerateToFullPath)
             {
-                versionInfoEditorData.Generate(Path.Combine(builderController.OutputFullPath, platform.ToString(),
-                    $"{platform}Version.txt"));
+                string filePath = Path.Combine(builderController.OutputFullPath, platform.ToString(), $"{platform}Version.txt");
+                if (versionInfoEditorData.Generate(filePath))
+                {
+                    File.Copy(filePath, Path.Combine(builderController.OutputDirectory, $"Full/{platform}Version.txt"), true);
+                }
             }
         }
 

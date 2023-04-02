@@ -130,7 +130,7 @@ namespace UnityGameFramework.Extension.Editor
         }
         public string ToVersionInfoJson()
         {
-            throw new NotImplementedException("请自行实现Json 序列化. Serialize(ToVersionInfo())");
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
         }
 
         public void AutoIncrementInternalGameVersion()

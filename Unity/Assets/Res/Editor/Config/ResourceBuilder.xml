@@ -2,7 +2,7 @@
 <UnityGameFramework>
   <ResourceBuilder>
     <Settings>
-      <InternalResourceVersion>11</InternalResourceVersion>
+      <InternalResourceVersion>25</InternalResourceVersion>
       <Platforms>1</Platforms>
       <AssetBundleCompression>1</AssetBundleCompression>
       <CompressionHelperTypeName>UnityGameFramework.Runtime.DefaultCompressionHelper</CompressionHelperTypeName>
@@ -10,7 +10,7 @@
       <ForceRebuildAssetBundleSelected>False</ForceRebuildAssetBundleSelected>
       <BuildEventHandlerTypeName>UnityGameFramework.Extension.Editor.BuildEventHandle</BuildEventHandlerTypeName>
       <OutputDirectory>../Temp/Bundle</OutputDirectory>
-      <OutputPackageSelected>True</OutputPackageSelected>
+      <OutputPackageSelected>False</OutputPackageSelected>
       <OutputFullSelected>True</OutputFullSelected>
       <OutputPackedSelected>True</OutputPackedSelected>
     </Settings>
