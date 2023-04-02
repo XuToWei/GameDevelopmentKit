@@ -286,7 +286,7 @@ namespace UnityGameFramework.Extension.Editor
             }
             
             Rect reload = new Rect(rect.width-100, rect.y, 100, rect.height);
-            if (GUI.Button(reload,"Reload"))
+            if (GUI.Button(reload, "Reload"))
             {
                 Load();
             }
