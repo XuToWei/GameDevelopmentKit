@@ -40,7 +40,7 @@
 
 - [X] ET中的Time模块支持Unity编辑器下加速功能（目前是DateTime）
 - [X] 加入HotReload
-- [ ] 资源服务器，资源打包上传配套工具（包含dll，pack等）
+- [X] 资源服务器，资源打包上传配套工具（包含dll，pack等）
 - [ ] 多语言工具（包含图片，资源等）
 - [X] 完善HybridCLR工作流，编辑器
 - [X] 完善非热更时包体优化功能（优化link.xml）
