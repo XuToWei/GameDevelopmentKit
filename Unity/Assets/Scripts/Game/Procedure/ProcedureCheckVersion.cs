@@ -33,7 +33,7 @@ namespace Game
             GameEntry.Event.Subscribe(WebRequestFailureEventArgs.EventId, OnWebRequestFailure);
 
             // 向服务器请求版本信息
-            GameEntry.WebRequest.AddWebRequest(Utility.Text.Format(GameEntry.Builtin.BuildInfo.CheckVersionUrl, GetPlatformPath()), this);
+            GameEntry.WebRequest.AddWebRequest(Utility.Text.Format(GameEntry.Builtin.BuiltinBuildInfo.CheckVersionUrl, GetPlatformPath()), this);
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -71,7 +71,7 @@ namespace Game
         {
             string url = null;
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            url = GameEntry.Builtin.BuildInfo.WindowsAppUrl;
+            url = GameEntry.Builtin.BuiltinBuildInfo.WindowsAppUrl;
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
             url = GameEntry.Builtin.BuildInfo.MacOSAppUrl;
 #elif UNITY_IOS

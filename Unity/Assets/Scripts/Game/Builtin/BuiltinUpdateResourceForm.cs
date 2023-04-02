@@ -3,24 +3,13 @@ using UnityEngine.UI;
 
 namespace Game
 {
-    public class UpdateResourceForm : MonoBehaviour
+    public class BuiltinUpdateResourceForm : BaseBuiltinForm
     {
-        [SerializeField]
-        private Text m_DescriptionText = null;
+        [SerializeField] private Text m_DescriptionText;
 
         [SerializeField]
-        private Slider m_ProgressSlider = null;
-
-        private void Start()
-        {
-
-        }
-
-        private void Update()
-        {
-
-        }
-
+        private Slider m_ProgressSlider;
+        
         public void SetProgress(float progress, string description)
         {
             m_ProgressSlider.value = progress;

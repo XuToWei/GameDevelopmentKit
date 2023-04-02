@@ -14,7 +14,7 @@ namespace Game
         private long m_UpdateTotalCompressedLength = 0L;
         private int m_UpdateSuccessCount = 0;
         private List<UpdateLengthData> m_UpdateLengthData = new List<UpdateLengthData>();
-        private UpdateResourceForm m_UpdateResourceForm = null;
+        private BuiltinUpdateResourceForm m_UpdateResourceForm = null;
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {

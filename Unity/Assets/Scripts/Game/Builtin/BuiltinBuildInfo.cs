@@ -1,13 +1,9 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
+﻿using UnityEngine;
 
-namespace UnityGameFramework.Extension
+namespace Game
 {
-    public class BuildInfo
+    [CreateAssetMenu(menuName = "UGF/BuildInfo", fileName = "UGFBuildInfo", order = 0)]
+    public class BuiltinBuildInfo
     {
         public string GameVersion
         {

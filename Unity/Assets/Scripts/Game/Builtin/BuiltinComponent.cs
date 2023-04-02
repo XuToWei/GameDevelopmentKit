@@ -1,54 +1,25 @@
-﻿using GameFramework;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityGameFramework.Runtime;
-using UnityGameFramework.Extension;
 
 namespace Game
 {
     public class BuiltinComponent : GameFrameworkComponent
     {
         [SerializeField]
-        private TextAsset m_BuildInfoTextAsset = null;
+        private BuiltinBuildInfo m_BuiltinBuildInfo;
 
         [SerializeField]
-        private TextAsset m_DefaultDictionaryTextAsset = null;
+        private TextAsset m_DefaultDictionaryTextAsset;
 
         [SerializeField]
-        private UpdateResourceForm m_UpdateResourceFormTemplate = null;
-
-        private BuildInfo m_BuildInfo = null;
-
-        public BuildInfo BuildInfo
-        {
-            get
-            {
-                return m_BuildInfo;
-            }
-        }
-
-        public UpdateResourceForm UpdateResourceFormTemplate
-        {
-            get
-            {
-                return m_UpdateResourceFormTemplate;
-            }
-        }
-
-        public void InitBuildInfo()
-        {
-            if (m_BuildInfoTextAsset == null || string.IsNullOrEmpty(m_BuildInfoTextAsset.text))
-            {
-                Log.Info("Build info can not be found or empty.");
-                return;
-            }
-
-            m_BuildInfo = Utility.Json.ToObject<BuildInfo>(m_BuildInfoTextAsset.text);
-            if (m_BuildInfo == null)
-            {
-                Log.Warning("Parse build info failure.");
-                return;
-            }
-        }
+        private BuiltinUpdateResourceForm m_UpdateResourceFormTemplate;
+        
+        [SerializeField]
+        private BuiltinDialogForm m_DialogFormTemplate;
+        
+        public BuiltinBuildInfo BuiltinBuildInfo => m_BuiltinBuildInfo;
+        public BuiltinUpdateResourceForm UpdateResourceFormTemplate => m_UpdateResourceFormTemplate;
+        public BuiltinDialogForm DialogFormTemplate => m_DialogFormTemplate;
 
         public void InitDefaultDictionary()
         {
@@ -63,6 +34,13 @@ namespace Game
                 Log.Warning("Parse default dictionary failure.");
                 return;
             }
+        }
+
+        public BuiltinDialogForm OpenDialogForm(BuiltinDialogParams dialogParams)
+        {
+            BuiltinDialogForm dialogForm = Instantiate(m_DialogFormTemplate);
+            dialogForm.Open(dialogParams);
+            return dialogForm;
         }
     }
 }

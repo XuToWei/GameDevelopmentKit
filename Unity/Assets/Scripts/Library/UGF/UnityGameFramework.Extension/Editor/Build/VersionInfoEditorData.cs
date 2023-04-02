@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UnityGameFramework.Extension.Editor
 {
-    [CreateAssetMenu(fileName = "VersionInfoEditorData", menuName = "UGFExtension/VersionInfoEditorData", order = 0)]
+    [CreateAssetMenu(fileName = "VersionInfoEditorData", menuName = "UGF/VersionInfoEditorData", order = 0)]
     public class VersionInfoEditorData : ScriptableObject
     {
         private const string M_DataPath = "Assets/Res/Configs/VersionInfoEditorData.asset";
