@@ -3,48 +3,34 @@
 namespace Game
 {
     [CreateAssetMenu(menuName = "UGF/BuildInfo", fileName = "UGFBuildInfo", order = 0)]
-    public class BuiltinBuildInfo
+    public class BuiltinBuildInfo : ScriptableObject
     {
-        public string GameVersion
-        {
-            get;
-            set;
-        }
+        [SerializeField]
+        private string m_GameVersion;
+        public string GameVersion => m_GameVersion;
 
-        public int InternalGameVersion
-        {
-            get;
-            set;
-        }
+        [SerializeField]
+        private int m_InternalGameVersion;
+        public int InternalGameVersion => m_InternalGameVersion;
 
-        public string CheckVersionUrl
-        {
-            get;
-            set;
-        }
+        [SerializeField]
+        private string m_CheckVersionUrl;
+        public string CheckVersionUrl => m_CheckVersionUrl;
 
-        public string WindowsAppUrl
-        {
-            get;
-            set;
-        }
+        [SerializeField]
+        private string m_WindowsAppUrl;
+        public string WindowsAppUrl => m_WindowsAppUrl;
 
-        public string MacOSAppUrl
-        {
-            get;
-            set;
-        }
+        [SerializeField]
+        private string m_MacOSAppUrl;
+        public string MacOSAppUrl => m_MacOSAppUrl;
 
-        public string IOSAppUrl
-        {
-            get;
-            set;
-        }
+        [SerializeField]
+        private string m_IOSAppUrl;
+        public string IOSAppUrl => IOSAppUrl;
 
-        public string AndroidAppUrl
-        {
-            get;
-            set;
-        }
+        [SerializeField]
+        private string m_AndroidAppUrl;
+        public string AndroidAppUrl => m_AndroidAppUrl;
     }
 }

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 22245532}
   - component: {fileID: 22325564}
   - component: {fileID: 11473720}
-  - component: {fileID: 11487720}
+  - component: {fileID: 5642876425673278357}
   m_Layer: 5
-  m_Name: UpdateResourceForm
+  m_Name: BuiltinUpdateResourceForm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
---- !u!114 &11487720
+--- !u!114 &5642876425673278357
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,9 +102,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 107322}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d8946ea9933b16499cd11174ad3c410, type: 3}
+  m_Script: {fileID: 11500000, guid: c7144cf1665fb9e478960e628b844cc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_CanvasScaler: {fileID: 11473720}
   m_DescriptionText: {fileID: 4247415490090085342}
   m_ProgressSlider: {fileID: 4958007445262707400}
 --- !u!1 &2798977038246041064
