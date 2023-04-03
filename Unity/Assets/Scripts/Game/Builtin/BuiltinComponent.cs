@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityGameFramework.Runtime;
 
 namespace Game
 {
     public class BuiltinComponent : GameFrameworkComponent
     {
-        [SerializeField]
-        private BuiltinBuildInfo m_BuiltinBuildInfo;
+        [FormerlySerializedAs("m_BuiltinBuildInfo")] [SerializeField]
+        private BuiltinBuildInfo m_BuildInfo;
 
         [SerializeField]
         private TextAsset m_DefaultDictionaryTextAsset;
@@ -17,7 +18,7 @@ namespace Game
         [SerializeField]
         private BuiltinDialogForm m_DialogFormTemplate;
         
-        public BuiltinBuildInfo BuiltinBuildInfo => m_BuiltinBuildInfo;
+        public BuiltinBuildInfo BuildInfo => m_BuildInfo;
         public BuiltinUpdateResourceForm UpdateResourceFormTemplate => m_UpdateResourceFormTemplate;
         public BuiltinDialogForm DialogFormTemplate => m_DialogFormTemplate;
 
