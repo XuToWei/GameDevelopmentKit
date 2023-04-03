@@ -1,0 +1,292 @@
+== SmartUiSelection ==
+
+IMPORTANT: If you want to keep your settings when upgrading to a new version. Then please uncheck the SmartUiSelection_Settings.asset during import.
+
+This is an EDITOR ONLY plugin.
+This plugin enhances the ui selection functionality in the SceneView of the Unity Editor.
+It improves the selection by ignoring empty ui elements and allows for click-through selection of 3D objects behind the canvas.
+It also fixes the (sometimes) random order of ui selections done by the Editor.
+
+It also tries to address the issue that the screen space overlay canvases are quite often in the way of selecting anything in the 3D scene.
+It does so by disabling those canvases if you get very close to them.
+This feature is disabled by default to avoid confusing for new users ("help my canvas is gone").
+You can easily turn it on in the settings (Tools -> Smart Ui Selection -> Turn Auto Hide On).
+
+Versioning will use the semantic versioning paradigm, see
+https://semver.org.
+
+=== Hints for upgrading ===
+If you are upgrading your installation and you want to keep your settings then please uncheck the "SmartUiSelection Settings.asset" at import.
+
+= Support =
+
+If you find any errors then please write to office@kamgam.com.
+
+Please be patient, replies may take a few days. Please include
+your Asset Store Order Nr in your request.
+
+Thank you.
+
+
+= Known Issues / Wishlist =
+
+* The Click-through detection does not recognize if a texture on a Graphic component has transparent pixels. At the moment only alpha values of colors, renderers or canvas groups are recognized.
+
+* The "Enter Play Mode Options" Feature (Unity 2019.3+) has not yet been tested thoroughly. What is it? See here: https://blogs.unity3d.com/2019/11/05/enter-play-mode-faster-in-unity-2019-3/. Let me know if you have any issues using it.
+  
+= Settings =
+
+You can find or recreate the settings file (named "SmartUiSelection Settings") through the main menu (Tools > SmartUiSelection Settings).
+You can move it out of the plugins folder too. That's useful to avoid losing the settings if you reimport (update) the plugin.
+
+
+* Enable Plugin
+Enables or disables the whole plugin. Turn this off if you suspect the plugin to cause any weird behaviour (none known at the moment).
+
+* Multi Click Time Threshold
+If you click twice within this timeframe then the selection will cycle through all found elements. Time is in seconds.
+
+* Select Only Editable Objects
+If checked then objects whose hideFlags are set to HideFlags.NotEditable will be ignored.
+
+
+CLICK THROUGH CANVAS
+
+* Select 3D Objects Behind Canvas
+If no ui element has been selected then try to click through the canvas and select 3D objects behind it. Uses the 3d objects colliders or a bounding box if there is no collider.
+
+* Select 3D Objects By Mesh
+This may slow down the click handling (if clicked through a canvas in big scenes). Enabling this will make the click-through feature more accurate for meshes without colliders. It will do a raycast on all triangles of each mesh (even those without a collider).
+
+* Select 3D Colliders
+Select 3D objects based on their colliders too. Useful for invisible objects which solely consist of colliders (like a trigger).
+Usually 3D objects are only selected based on their mesh.
+
+* High Precision Sprite Selection
+Turn off if selection is slow in scenes with a lot of SpriteRenderers.
+If turned on then clicks are checked against the actual sprite mesh.
+
+* Max Distance For 3D Selection
+A raycast is used to detect 3D objects. This sets the maximum distance for the raycast in world units.
+
+
+SMART UI SELECTION
+
+* Enable Smart Ui Selection
+Enable ui selection improvements (always select what has been clicked).
+
+* Push Key To Use Ui Selection
+If checked then Smart Ui Selection is only enabled if you press the SPACE key.
+
+* Enable Smart Ui Key Code
+Push and HOLD this key to disable Smart UI Selection (works only if "Push Key To Use Ui Selection" is turned on).
+
+* Push Key To Disable Exclude Lists
+If checked and if the key is pressed then Smart Ui Selection will ignore your exclude lists (act as if they are empty).
+
+* Disable Exclude Lists Key Code
+Push and HOLD this key to disable the exclude lists (works only if "Push Key To Disable Exclude Lists" is turned on).
+
+* Limit Selection To Graphics
+Limit ui selection to elements with graphics (objects which have a 'Graphic' component).
+
+* Alpha Threshold
+Select elements only if they have an alpha value above the threshold. 'Limit Selection To Graphics' needs to be turned on for this to have any effect.
+
+* Ignore SelectionBase Attributes
+Check to completely ignore the [SelectionBase] Attributes.
+
+* Exclude By Name
+Add names of objects which should not be selectable. The names have to match exactly.
+
+* Exclude By Tag
+Add tags of objects which should not be selectable. The names have to match exactly.
+
+* Ignore ScrollRects
+Whether or not ScrollRects should be ignored.
+
+* Ignore Mask Images
+Whether or not the images used by Mask Components should be ignored.
+
+CANVAS AUTO-HIDE
+
+* Enable Auto Hide?
+Should ScreenSpaceOverlay canvases be hidden in the scene view if the editor camera gets very close?
+Useful to prohibit unwanted canvas selections while you edit the 3d scene.
+They will only be hidden if your mouse cursor is in the scene view.
+Notice that this will only affect ScreenSpaceOverlay canvases.
+
+* Auto Hide Always
+If enabled then auto hide will always affect the canvases independently of where the mouse cursor is. Enabling this works only in Unity 2019.2+. I found this turned on to be the most helpful setting BUT use it with caution. New Smart Ui Selection users may be confused by it because the only way to show the hidden canvases is to zoom out (thus it is disabled by default).
+
+* Auto Hide Distance Threshold
+ScreenSpaceOverlay canvases will be hidden if the editor camera distance to the XY plane is less than X.
+
+* Auto Hide During Playback
+Should ScreenSpaceOverlay canvases be hidden in play mode too?
+
+* Show Auto Hide Warning Gizmo
+Show a warning text next to canvases to indicate that auto-hide is turned on? Useful in team setups when others might not expect a canvas to automatically vanish in the SceneView.
+
+
+= License =
+Copyright (C) 2021 KAMGAM e.U. - All rights reserved
+The code can only be used under the standard Unity Asset Store End User License Agreement. A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
+
+I publish this plugin with full source code because as a developer I know how useful it is to have source code access.
+If you like it then please remind others to purchase the plugin.
+Don't just copy and paste it everywhere.
+Thank you
+
+= Changelog =
+v5.0.2
+* Fix for "Auto-Hide prohibiting users to hide sub-canvases" (thanks to SIWWC for reporting it)
+* Auto-Hide performance improvement (now the logic is only executed if a change is detected).
+* Auto-Hide now supports sub-canvas user overrides  (thanks to SIWWC for the feedback)
+* Auto-Hide now retains the user changes even across recompiles and domain reloads.
+* Finally removed some legacy code (Unity 2019.2 and below)
+
+v4.1.0
+* Improved handling of UI within masks (scroll rects and masks are now ignored).
+* Added a new setting called "ignoreScrollRects"
+* Added a new setting called "ignoreMaskImages"
+
+v4.0.0
+ * Dropped Support for Unity 5 and 2018 (this version still works for them but future release are no longer tested on these versions). 2019 LTS is now the new min version. Once 2022 is in LTS 2020 will become the new min version, ... . If you need a legacy version please contact me via e-mail.
+ * SmartUI now uses Assembly Definition files (still located under /Plugins folder for backwards compatibility)
+ * Unity 2021 and 2022 compatibility update
+ * Fixed the log of a warning in getSceneViewCamera() if the AutoHide feature was turned on.
+ * RectMask2D and Mask support (based on their rect transforms, padding is not taken into account).
+ * Fixed AutoHide creating unwanted UNDO stack entries (Ctrl+Z pollution) in Unity 2019.4.31f and newer. Thanks to Michael for reporting it.
+ * Fixed "Experimental" namespace warning for PrefabStageUtility.
+ * Option for "disable canvas auto hide if a RectTransorm is selected"
+
+v3.5.0
+ * Fixed the log of a warning in getSceneViewCamera() if the AutoHide feature was turned on.
+ * RectMask2D and Mask support (based on their rect transforms, padding is not taken into account).
+ * Fixed AudtoHide creating unwanted UNDO stack entries (Ctrl+Z pollution) in Unity 2019.4.31f and newer. Thanks to Michael for reporting it.
+
+v3.4.0
+ * FIX: Fixed a crash if "Select 3D Objects Behind Canvas" was turned on. Thanks to Michael for reporting it.
+ * NEW: New option: "Select 3D Objects By Mesh". Since we now have to do the checking of 3d meshes by hand (due to the bugfix above) it may be slow in very big scenes. Turn it off if you have performance issues (enabled by default).
+
+v3.3.0
+ * NEW: Unity 2020.x compatibility checked (all okay).
+ * FIX: Compability with other assets which use EditorScene GUI overlays (like ProBuilder).
+ * FIX: Fixed an error when working with canvases which do not have a CanvasScaler Component.
+ * NEW: New AutoHide option "Auto Hide Always" (hide canvases no matter where your cursor is).
+ * NEW: AutoHide now uses the new SceneVis (2019.1+) feature consistently instead of enabling/disabling objects in the hierarchy (less potential for side effects).
+ * NEW: AutoHide now automatically shows all auto-hidden canvases once the Build Settings are shown (works in Unity 2018.1+). This is done to avoid building with auto-hidden (disabled) canvases.
+ * Change: Default auto hide distance threshold increased to 400 in the settings.
+ * NEW: Error messages will now print the stacktrace too (makes support easier).
+
+v3.2.1
+ * FIX: Smart Ui now works properly in UI Prefab Stage Environment scenes.
+
+v3.2.0
+ * NEW: Now all key codes can be controlled in the settings (no
+        more code editing necessary).
+ * FEATURE: Press ESCAPE to disable the exclude lists (handy if
+            you have very long exclude lists).
+
+v3.1.1
+ * NEW: ExcludeByName and ExcludeByTag now work on canvases. Notice
+        that this does not (yet) support hierarchical ignores. If you
+        add a canvas to the exclude list then only the rect transforms
+        within that canvas are ignored. Transforms in sub-canvases
+        are still selectable.
+
+v3.1.0
+ * FEATURE: ExcludeByTag added in addition to ExcludeByName.
+
+v3.0.1
+ * FIX: ExcludeByName now also works if no 3D object has been found to select.
+
+v3.0.0
+ * NEW: High accuracy when selecting text objects. Now a bounding box
+        around the actual text is used instead of the rect transform.
+        Both TextMeshPro and Unity textfields are supported.
+ * NEW: High accuracy when selecting SpriteRenderer objects. The actual
+        mesh of the sprite renderers is used as hit target instead of
+        the bounding box. This can be controlled in the settings via the
+        "high precision sprite selection" option.
+ * FIX: 3D objects were missed by the click-through feature if no UI
+        element was in front as root (i.E. Prefabs).
+ * FIX: The new SceneVis feature (show/hide in scene view in 2019.1) is
+        now taken into account.
+ * FIX: "Exclude by name" now also works for 3D objects selected by the
+        click-through feature.
+
+
+v2.1.1
+ * FIX: Objects whose hideFlags are set to HideFlags.NotEditable will
+        be ignored (can be configured by "Select Only Editable Objects").
+
+v2.1.0
+ * FEATURE: Added "Push Key To Use Ui Selection" option to settings.
+        It's OFF by default but if turned on then then Smart Ui
+        Selection is only enabled if you press the SPACE key and click.
+
+v2.0.5
+ * FIX: Layer state "locked" and "visible" are now taken into
+        account. Notice that the "visibility" of layers is
+        ignored on UI elements since Unity does not hide ui
+        elements on invisible layers, only 3d objects are affected.
+
+v2.0.4
+ * FIX: Middle and right mouse button clicks are now ignored.
+
+v2.0.3
+ * MINOR-FIX: Fixed the warning "CS0618: 'SceneView.onSceneGUIDelegate'
+              is obsolete ... " in Unity 2019.1+
+
+v2.0.2
+ * FIX: Fixed a bug which caused SmartUiSelection to not register
+        clicks in PrefabMode / PrefabStage.
+
+v2.0.1
+ * NEW: Unity 2019.x support (works with old plugin versions too).
+ * FIX: Fixed a bug which sometimes* caused the first element in the
+   hierarchy to be selected once a click occurred outside the SceneView.
+   This also fixes a bug which sometimes* caused a random ui element
+   to be shown once a click occurred outside the SceneView.
+   * sometimes ... It happened in Unity 2017.x, 2018.x, 2019.x, not 5.x
+                   and only occurred if the same object has been clicked
+				   multiple times in the SceneView before exiting it.
+v2.0.0
+ * NEW: Introduced "autoHideDistanceThreshold" as replacement for
+        "autoHidePercentageThreshold" (is faster and works better).
+ * NEW: Auto-Hide Logic improved. It's now no longer in beta but
+        still disabled by default.
+ * FIX: Shift-Click deselect and Ctrl select support added.
+ * FIX: SmartUiSelection_Settings.excudeByName renamed to excludeByName.
+v1.2.0
+ * FIX: Changes made to the settings via the Tools menu are now
+   persisted across Unity reboots.
+ * FIX: If "smart ui selection" is turned on and nothing is found
+   then we will just keep the original selection.
+   Example: If you click into an empty canvas area without a 3D
+   object behind it, then we will now select the canvas just like
+   the regular unity editor would (previously the selection
+   remained empty).
+ * FIX: Elements in Canvases with a disabled Canvas Component are
+   now ignored.
+ * FIX: Elements in Canvases with a disabled Graphics Component are
+   now ignored.
+ * ENHANCEMENT: New options to turn "smart ui selection" and "click
+   through cavans" (aka "select 3D Objects behind canvas") on or off.
+ * ENHANCEMENT: Shift-Click support for multiselect added.
+ * ENHANCEMENT: TextMeshPro SubMeshUI is now ignored. Instead the
+   parent (aka TMPro.TextMeshProUGUI) is selected.
+ * ENHANCEMENT: #define KAMGAM_SMART_UI_SELECTION added to allow for
+   easy plugin detection in foreign code (defined in EDITOR only!).
+v1.1.0
+ * 3D selection now selects SpriteRenderers too (now selects any
+   object with a Renderer component).
+ * 3D selection now cycles through results just like unity does.
+ * Improved robustness against errors. Selection will fall back
+   to unity default on error.
+v1.0.4
+ * fix in settings file to improve compatibility with other plugins 
+v1.0.3
+ * Initial public release (has been used internally for months)

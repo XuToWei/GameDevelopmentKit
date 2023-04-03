@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1707bf26d16eccd498a313ab2a6b18f2, type: 3}
+  m_Name: SmartUiSelection Settings
+  m_EditorClassIdentifier: 
+  _enablePlugin: 1
+  _multiClickTimeThreshold: 1
+  _selectOnlyEditableObjects: 1
+  _excludeByName: []
+  _excludeByTag: []
+  _excludeByType: []
+  _select3dObjectsBehindCanvas: 1
+  _select3dObjectsByMesh: 1
+  _select3dColliders: 1
+  _highPrecisionSpriteSelection: 1
+  _maxDistanceFor3DSelection: 9000
+  _enableSmartUiSelection: 1
+  _pushKeyToUseUiSelection: 0
+  _enableSmartUiKeyCode: 32
+  _pushKeyToDisableExcludeLists: 0
+  _disableExcludeListsKeyCode: 27
+  _limitSelectionToGraphics: 1
+  _graphicsAlphaMinThreshold: 0
+  _ignoreSelectionBaseAttributes: 1
+  _ignoreScrollRects: 1
+  _ignoreMaskImages: 1
+  _enableAutoHide: 0
+  _autoHideAlways: 0
+  _dontAudoHideIfUiSelected: 0
+  _autoHideDistanceThreshold: 400
+  _autoHideDuringPlayback: 0
+  _showAutoHideWarningGizmo: 1
+  _autoHideWarningTextColor: {r: 1, g: 0.7, b: 0, a: 1}

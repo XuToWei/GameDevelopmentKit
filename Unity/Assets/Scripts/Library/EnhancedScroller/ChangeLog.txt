@@ -1,0 +1,606 @@
+EnhancedScroller
+http://u3d.as/fXk
+
+
+Version 2.33.0
+6 April 2022
+Requires Unity 2019.4.4f1+
+
+    Features:
+        - Added Application.targetFrameRate = 60; to all demo scenes to improve smooth scrolling on some devices
+
+
+Version 2.32.1
+26 January 2022
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Moved the container offset calculation after the position / rotation / scale to fix some issues with offsets
+        - Added FlickSnap button to the MainMenu scene
+
+
+
+Version 2.32.0
+22 December 2021
+Requires Unity 2019.4.4f1+
+
+    Feature:
+        - Added Demo #17 FlickSnap to show how you can create your own snapping component
+
+
+
+Version 2.31.1
+27 October 2021
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Updated ScrollBarVisibility to work correctly when setting to "Only if Needed" or "Never"
+
+
+
+Version 2.31.0
+9 October 2021
+Requires Unity 2019.4.4f1+
+
+    Features:
+        - Updated Chat Demo #16 to calculate the text space used inside the scroller, instead of relying ont the Unity Content Size Fitter. This has less accuracy, but is far more efficient for text cells.
+
+
+Version 2.30.2
+23 September 2021
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Updated CellView.cs in Demo #5 to handle UnityWebRequest results for Unity version 2020+ without getting a deprecated code warning.
+
+
+
+Version 2.30.1
+7 September 2021
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Added optional forceCalculateRange parameter (with default to false) to JumpToDataIndex to force a calculation of the active cell range immediately after the jump (instead of one frame after).
+
+
+
+Version 2.30.0
+19 August 2021
+Requires Unity 2019.4.4f1+
+
+    Features:
+        - Changed the parenting of recycled cell views to deactivate the game objects for efficiency
+
+    Fixes:
+        - Fixed Demo 16 return to main menu button
+
+
+
+Version 2.29.2
+10 August 2021
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Fixed snapping when using more than one finger on touchscreen devices
+
+
+Version 2.29.1
+18 March 2021
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Modified the clamping when setting the scroll position internally so that it does not exceed the ScrollSize
+
+
+Version 2.29.0
+18 March 2021
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Fixed Tween.cs to calculate the last position after assigning the new position so that the first instance of last position is correct
+        - Re-worked Demo #15 to accommodate looping
+        - Fixed Demo #13 Controller.cs LoadData method to jump back to the previous ScrollPosition after reload. This gives a smoother transition than the jump did
+
+    Features:
+        - Added SetScrollPositionImmediately to EnhancedScroller.cs to refresh the active cells immediately after setting the scroll position (normally this would occur when ScrollRect triggers the change in position on the next frame). This is useful if you need to manually change a cell's height after setting the position.
+        - Added IgnoreLoopJump to EnhancedScroller.cs to allow you to shut off the loop jumping that gives the illusion of a continous stream of cells. This is usefull if you are manually changing the cell's size around the jump trigger boundaries.
+        - Modified Data.cs in Demo #15 to have some properties that calculate the cell's size based on its expansion state
+        - Added preloadData flag to Demo #5 to show how to buffer cells before they are visible to cut down on the download visibility of remote resources
+
+
+Version 2.28.2
+13 March 2021
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Updated Demo #16 Chat.cs to continually update the size of the spacer so that there is no dead space at the top of the scroller.
+
+
+Version 2.28.1
+11 March 2021
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Updated Demo #16 Chat.cs to zero out the spacer after the initial cells scroll off screen. This allows you to scroll back to the top without going off screen.
+        - Fixed MyTextCellView prefab in Demo #16 to center the text better.
+
+
+Version 2.28.0
+5 March 2021
+Requires Unity 2019.4.4f1+
+
+    Features:
+        - Added demo #16 for chat simulation
+
+
+Version 2.27.1
+5 February 2021
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Modified SmallList "this" property to return default if the element is null.
+
+
+Version 2.27.0
+20 January 2021
+Requires Unity 2019.4.4f1+
+
+    Fixes:
+        - Changed clamping of scroll position to after the cell instead of before to accommodate scrollers with a single cell.
+
+
+
+Version 2.26.0
+6 October 2020
+Requires Unity 2019.4.4f1+
+
+    Features:
+        - Removed uneeded camera components in all scenes to avoid warnings
+        - Released for Unity 2019.4.4f1
+        - Reformatted Main Menu to fit cells correctly
+
+    Fixes:
+        - Commented out _RefreshActive(); call at the end of TweenPosition to avoid active cell range miscalculation when jumping to the end of the scroller
+
+
+Version 2.25.1
+29 June 2020
+Requires Unity 2017+
+
+    Features:
+        - Added access to the Container (RectTransform) that contains the ScrollRect's content
+
+    Fixes:
+        - Removed loop reset code in ScrollPosition property to avoid incorrect jumps while tweening.
+        - Fixed Demo #11 Controller to use the scroller's content anchored position instead of scroll position (which is always zero) for threshold calculations.
+
+
+Version 2.25.0
+03 June 2020
+Requires Unity 2017+
+
+    Features:
+        - Added tweening cell view heights to Demo 15
+        - Added accessors to FirstPadder and LastPadder objects of the scroller in EnhancedScroller.cs
+        - Added lookAheadBefore and lookAheadAfter values to EnhancedScroller.cs to allow pulling in more cell views than are visible, either before the visible cells or after them, respectively. Good for loading cell view resources before they become visible or for tweening.
+        - Modified _CalculateCurrentActiveCellRange to use the lookAheadBefore and lookAheadAfter values to calculate active cell range
+
+
+Version 2.24.0
+18 May 2020
+Requires Unity 2017+
+
+	Features:
+		- Added Demo 15 to show one way to expand and collapse cells
+
+
+
+Version 2.23.0
+14 May 2020
+Requires Unity 2017+
+
+	Features:
+		- Added Demo 14 for selection and navigation using arrow keys
+		- Added Demo 14b for selection and navigation using arrow keys inside a simulated grid
+
+
+Version 2.22.0
+16 October 2019
+Requires Unity 2017+
+
+	Features:
+		- Added snapWhileDragging toggle (default off) to remove jitter when dragging and jumping
+		- Added loopWhileDragging toggle (default on) to mitigate extreme velocities when dragging past the end of the list while Looping
+		- Added maxVelocity value to mitigate extreme velocities caused by aggressive user scrolling or loop calculations
+
+	Bug Fixes:
+		- Normalized line endings in Demo #5 controller
+
+
+Version 2.21.4
+26 September 2019
+Requires Unity 2017+
+
+    Bug Fixes:
+		- Modified JumpToDataIndex to work properly when jumping up or down while using scroller offset and looping.
+
+
+Version 2.21.3
+25 September 2019
+Requires Unity 2017+
+
+    Bug Fixes:
+		- Moved code to ensure jump locations from outside of TweenPosition to ScrollPosition property
+        - Fixed ScrollPosition to reset to correct jump group if looping
+		- Fixed JumpToDataIndex to not clamp scroller bounds if looping
+
+
+Version 2.21.2
+18 September 2019
+Requires Unity 2017+
+
+    Bug Fixes:
+        - Fixed bug in EnhancedScroller::_GetCellIndexAtPosition when padding is set to zero
+
+
+Version 2.21.1
+17 April 2019
+Requires Unity 2017+
+
+    Bug Fixes:
+        - Demo #12b: fixed HScrollbar to sync with the main scroller
+
+
+Version 2.21.0
+17 April 2019
+Requires Unity 2017+
+
+    Features:
+        - Added Demo 12b Nested Linked Scrollers (Alternative Grid)
+        - Demo #5:
+            - Modified CellView.cs: Added UnityWebRequest as a replacement for WWW in Unity versions 2017.4+
+            - Modified Controller.cs: Call the CellWillRecycle method on the cell view that is about to be recycled
+
+    Bug Fixes:
+        - Demo #4: Fixed scroll inertia decelaration
+        - Demo #11: Fixed _dragging to initialize to false so that the hint text is not visible at the start of some Unity versions.
+        - Demo #13: Fixed Controller.cs to respond to scroll positions greater than 1f and also to prevent loading data if it is already doing so.
+        - EnhancedScroller.cs: Added pixel offset to fix floating point comparison in _GetCellIndexAtPosition. This will properly calculate the Start and End data indices.
+        - EnhancedScroller.cs: Fixed JumpToDataIndex to use the _loopFirstCellIndex to properly calculate the loop jump position with small data sets where the total size of the cells is smaller than the scroll rect.
+        - EnhancedScroller.cs: Fixed _Resize to properly calculate the _loopFirstCellIndex to jump to the correct position with small data sets where the total size of the cells is smaller than the scroll rect.
+        - EnhancedScroller.cs: Modified TweenPosition to always set the end position when the coroutine is completed to make sure there is no slight offset due to device time lag.
+
+
+Version 2.20.2
+12 March 2019
+Requires Unity 2017.4.8f1+
+
+	Optimized demo #8 to only calculate the layout on the first pass
+
+
+Version 2.20.1
+11 March 2019
+Requires Unity 2017.4.8f1+
+
+    Fixed refreshing the active cell list after ReloadData and immediate jumping to index.
+    Modified Pagination to jump to the previous last index instead of calculating the normalized scroll position.
+
+
+Version 2.20.0
+1 March 2019
+Requires Unity 2017.4.8f1+
+
+    Added Pagination Demo 13
+
+
+Version 2.19.0
+25 January 2019
+Requires Unity 2017.4.8f1+
+
+    Added Grid Selection Demo 10b
+
+
+Version 2.18.2
+14 January 2019
+Requires Unity 2017.4.8f1+
+
+    Updated links in documentation
+
+
+Version 2.18.1
+26 September 2018
+Requires Unity 2017.4.8f1+
+
+    Fixed remote resources demo to work on WebGL
+
+
+Version 2.18.0
+Requires Unity 2017.4.8f1+
+
+    Changed remote resources demo to pull in a list of urls from a remote text file instead of reading from a hard-coded list
+
+
+Version 2.17.0
+Requires Unity 2017.4.8f1+
+
+    Added method GetCellViewAtDataIndex to retrieve a cell view at a particular data index. If no cell view is visible with this index, then null is returned.
+    Created CellViewInstantiated delegate that is fired when a cell view is created from scratch (not reused)
+    Created CellViewReused delegate that is fired when a cell view is reused from the recycled list
+
+
+Version 2.16.0
+September 10, 2018
+Requires Unity 2017.4.8f1+
+
+	Fixed snapping when at the start or end of the scroller
+	Added ability to change spacing at runtime and see the results immediately
+
+
+Version 2.15.6
+April 11, 2018
+Requires Unity 2017.3.0f3+
+
+    Fixed boundary conditions on ScrollSize so that they are not negative
+    Fixed boundary conditions on NormalizedScrollPosition so that it is not negative
+    Fixed condition that exited JumpToDataIndex so that it will not ignore bottom padding of scroller
+
+Version 2.15.5
+April 05, 2018
+Requires Unity 2017.3.0f3+
+
+    Modified Demo 12 Nested Scrollers to maintain the detail scroller position.
+
+
+Version 2.15.4
+March 21, 2018
+Requires Unity 2017.3.0+
+
+    Fixed bug in Unity 2017 where jumping to the end of the scroller would hide some cell views.
+
+
+Please see this FAQ if you are not able to see the latest version: http://www.echo17.com/forum/index.php?topic=1816.msg4035#msg4035
+
+
+Version 2.15.3
+March 15, 2018
+
+    Fixed bug in Pull Down Refresh demo #11: refresh would not work for a list smaller than the container area.
+
+
+Version 2.15.2
+February 12, 2018
+
+    Fixed bug when looping with spacing set. List will no longer jump without calculating the spacing when looping around.
+
+
+Version 2.15.1
+December 08, 2017
+
+    Added LoopJumpDirection to the JumpToDataIndex method to allow specifying the jump direction
+    Resubmitted last update to be compatible with Unity 5.5.1+
+
+
+Version 2.15.0
+December 03, 2017
+
+    Added Demo #12: Nested Scrollers
+
+
+Version 2.14.2
+July 28, 2017
+
+    Added in checks in ReloadData to ensure there are ScrollRect and Container objects present.
+
+
+Version 2.14
+May 17, 2017
+
+    Added Demo 11 to show one way pull down to refresh may be implemented
+
+
+Version 2.13
+April 02, 2017
+
+    Added Demo #10 to show how to simulate a grid of elements using sub view in each cell view.
+
+
+Version 2.12.1
+March 15, 2017
+
+    Added more keywords to search
+
+
+Version 2.12.0
+March 13, 2017
+
+    Added a reference to the snapped cellview in the ScrollerSnappedDelegate
+    Fixed main menu stretch bug
+
+
+Version 2.11.0
+January 31, 2017
+
+    Fixed JumpToDataIndex bug that would hide cells when all of the active cells were visible within the scroller. The JumpToDataIndex method will now call the jumpComplete action and exit when there is no need to jump.
+    Removed the obsolete JumpToDataIndex method
+
+
+Version 2.10.0
+December 19, 2016
+
+    Added NormalizedScrollPosition to return the scroll position between 0 and 1
+    Made the ScrollSize property public
+
+
+Version 2.9.3
+December 16, 2016
+
+    Fixed a bug that caused the scroller to go into an infinite loop if the velocity is zero, the cell offset is zero, and the auto-snapping is set to true.
+
+
+Version 2.9.2
+July 29, 2016
+
+    Fixed description in Demo 8 View Driven Cell Sizes to accurately describe the new process of calculating the cell size based on the view contents
+
+
+Version 2.9.1
+July 29, 2016
+
+    Fixed cell view driven size calculations so that the scroller can update in a single frame (instead of over 3 frames). This also eliminated a bug that occurred when using a large number of cells.
+
+
+Version 2.9.0
+May 19, 2016
+
+    Added cellViewWillRecycle callback which is called just before the cell view is recycled. This will allow you to clean up or get the properties of the cell just before it disappears.
+
+
+Version 2.8.0
+April 25, 2016
+
+    Modified ReloadData in EnhancedScroller.cs to allow default positioning of the scroller after a reload
+    Added default localPosition and localRotation values to the container and cell views to fix issues with World Camera canvas settings
+
+
+Version 2.7.2
+April 22, 2016
+
+    Fixed a bug that didn't move the scroller back to the top of the list when reloading data
+
+
+Version 2.7.1
+March 23, 2016
+
+    Added button to demo scene #8 to add new record
+
+
+Version 2.7.0
+March 22, 2016
+
+    Added ClearActive method to EnhancedScroller to allow deleting active cells
+    Added ClearAll method to EnhancedScroller to allow deleting active and recycled cells
+    Added AddNewRow method to the View driven demo #8 to show how to add a new record while allowing Unity to drive the cell view sizes.
+    Fixed inconsistent line endings warning in MainMenu
+    Updated LoadLevel to SceneManager.LoadScene in MainMenu and ReturnToMainMenu
+
+
+Version 2.6.2
+February 02, 2016
+
+    Fixed division by zero bug in snapping when cell count is zero
+
+
+Version 2.6.1
+November 06, 2015
+
+    Added Snap function to the EnhancedScroller class. This will allow you to snap your scroller using the snap settings even if the scroller is not moving.
+    Fixed the tweening to stop at the end position after the time has expired. This will get the scroller to the exact location specified, no matter how quickly the tween occurred.
+    Improved the View Driven Cell Size example to refresh in two frames instead of three.
+
+
+Version 2.6.0
+November 05, 2015
+
+    Added demo #8 to show how to dynamically calculate cell sizes based on content in the cell views
+    Added demo #9 to show how to respond to events in the cell views
+
+
+Version 2.5.0
+October 29, 2015
+
+    Added a virtual method RefreshCellView to the EnhancedScrollerCellView class. This method is called by the RefreshActiveCellViews method of the scroller.
+    Added RefreshActiveCellViews method to the EnhancedScroller class. This will call RefreshCellView on each active cell visible in the scroller.
+    Added Demo 7 : Refreshing for an example of how to use the above additions
+
+
+Version 2.4.0
+October 28, 2015
+
+    Added delegates for scroll state (scrollerScrollingChanged) and tween state (scrollerTweeningChanged) changes
+    Added properties that tell if the scroller is scrolling (IsScrolling) or tweening (IsTweening)
+    Updated the documentation
+
+
+Version 2.3.4
+October 26, 2015
+
+    Changed the tweening to use unscaledDeltaTime instead of deltaTime so that the tweening can continue even when the game's timescale is set to zero (paused)
+    Added ClearRecycled function to the EnhancedScroller script to allow you to delete all the recycled objects. This is useful if you will be loading an entirely different set of cell views and don't want the old cell views to stick around. Note that this new function does call garbage collection.
+
+
+Version 2.3.3
+October 12, 2015
+
+    Fixed the DivideByZeroException when loading in zero data rows
+
+
+Version 2.3.2
+October 12, 2015
+
+    Fixed "popping" effect when scrolling with the scrollbar. Refresh will now happen immediately instead of in the LateUpdate
+
+
+Version 2.3.1
+August 23, 2015
+
+    Updated user manual to reflect tweening changes
+
+
+Version 2.3.0
+August 23, 2015
+
+    Added tweening to the jump and snapping functions. You can now set easing for these methods, or just set them to immediate to make the process happen without any easing.
+
+
+Version 2.2.1
+August 21, 2015
+
+    Fixed the missing "Credits" label in the Demo 6
+
+
+Version 2.2.0
+August 21, 2015
+
+    Added new JumpToDataIndex function to allow specifying a cell offset for centering the cell on the jump location
+    Added snapping which will lock the scroller to a specified location when the velocity drops below a threshold. You can also specify the same settings that the JumpToDataIndex function accepts.
+    Exposed more properties and methods of the EnhancedScroller class.
+    Added a snapping demo that shows how snapping can be used in a slot machine game
+    Created a user manual for explanation of the different features of the plugin
+
+
+Version 2.1.0
+August 14, 2015
+
+    Fixed jumping to an index when padding and spacing is used
+    Added two new demos: Jumping to an index and remote resource loading
+
+
+Version 2.0.1
+August 13, 2015
+
+    Fixed spelling of method JumpToDataIndex in the EnhancedScroller.cs script.
+
+Version 2.0
+July 30, 2015
+
+Big changes in this release. Note: if you have already deeply integrated the 1.x scroller in your project, it might be better to hold off on upgrading until you start a new project. The new scroller is a lot less connected to the data and cell views, so there will be significant changes to your code if you are upgrading.
+
+    The scroller no longer requires the data to be passed to it. It is completely unaware of the underlying data, instead relying on a delegate script to give it the information it needs. You no longer have to have your list as a set of objects. This allows a more flexible model and better separation of concerns for a true MVC solution. The delegate provides the cell sizes, the number of cells, and the cell view to display for a given data index.
+    Setup of the scroller in the scene is much simpler now. You don't need to worry about anchors and pivots as much. You also don't need to set up much on the Scroll Rect component as that is handled automatically for you at scene start.
+    The scroller can handle more than one type of cell prefab. The scroller will recycle the correct type as long as your cell identifiers are unique.
+    Cell spacing and scroller padding have been added.
+    More robust SmallList class that can be used in your project on things other than just the scroller. The SmallList is memory friendly, not releasing memory to the garbage collector.
+    Three new demos to get your creative ideas flowing.
+    Internal improvements to memory usage and speed, as well as some bug fixes from 1.x.
+
+
+Version 1.2
+June 03, 2015
+
+    Added Demo 7 to show how images and selection can be incorporated
+
+
+Version 1.1
+May 29, 2015
+
+    Fixed canvas scaler bug. List items will now fit screens where the canvas scaler uses "scale with screen size"
