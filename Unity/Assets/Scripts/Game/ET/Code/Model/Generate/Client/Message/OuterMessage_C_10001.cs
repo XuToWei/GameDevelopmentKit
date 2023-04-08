@@ -13,6 +13,12 @@ namespace ET
 		[ProtoMember(2)]
 		public List<string> Routers { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			Realms?.Clear();
+			Routers?.Clear();
+		}
 	}
 
 	[Message(OuterMessage.RouterSync)]
@@ -25,6 +31,12 @@ namespace ET
 		[ProtoMember(2)]
 		public string Address { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			ConnectId = default;
+			Address = default;
+		}
 	}
 
 	[ResponseType(nameof(M2C_TestResponse))]
@@ -38,6 +50,12 @@ namespace ET
 		[ProtoMember(2)]
 		public string request { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			request = default;
+		}
 	}
 
 	[Message(OuterMessage.M2C_TestResponse)]
@@ -56,6 +74,14 @@ namespace ET
 		[ProtoMember(4)]
 		public string response { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Error = default;
+			Message = default;
+			response = default;
+		}
 	}
 
 	[ResponseType(nameof(Actor_TransferResponse))]
@@ -69,6 +95,12 @@ namespace ET
 		[ProtoMember(2)]
 		public int MapIndex { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			MapIndex = default;
+		}
 	}
 
 	[Message(OuterMessage.Actor_TransferResponse)]
@@ -84,6 +116,13 @@ namespace ET
 		[ProtoMember(3)]
 		public string Message { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Error = default;
+			Message = default;
+		}
 	}
 
 	[ResponseType(nameof(G2C_EnterMap))]
@@ -94,6 +133,11 @@ namespace ET
 		[ProtoMember(1)]
 		public int RpcId { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+		}
 	}
 
 	[Message(OuterMessage.G2C_EnterMap)]
@@ -113,6 +157,14 @@ namespace ET
 		[ProtoMember(4)]
 		public long MyId { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Error = default;
+			Message = default;
+			MyId = default;
+		}
 	}
 
 	[Message(OuterMessage.MoveInfo)]
@@ -128,6 +180,13 @@ namespace ET
 		[ProtoMember(3)]
 		public int TurnSpeed { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			Points?.Clear();
+			Rotation = default;
+			TurnSpeed = default;
+		}
 	}
 
 	[Message(OuterMessage.UnitInfo)]
@@ -155,6 +214,17 @@ namespace ET
 		[ProtoMember(7)]
 		public MoveInfo MoveInfo { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			UnitId = default;
+			ConfigId = default;
+			Type = default;
+			Position = default;
+			Forward = default;
+			KV?.Clear();
+			MoveInfo = default;
+		}
 	}
 
 	[Message(OuterMessage.M2C_CreateUnits)]
@@ -164,6 +234,11 @@ namespace ET
 		[ProtoMember(1)]
 		public List<UnitInfo> Units { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			Units?.Clear();
+		}
 	}
 
 	[Message(OuterMessage.M2C_CreateMyUnit)]
@@ -173,6 +248,11 @@ namespace ET
 		[ProtoMember(1)]
 		public UnitInfo Unit { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			Unit = default;
+		}
 	}
 
 	[Message(OuterMessage.M2C_StartSceneChange)]
@@ -185,6 +265,12 @@ namespace ET
 		[ProtoMember(2)]
 		public string SceneName { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			SceneInstanceId = default;
+			SceneName = default;
+		}
 	}
 
 	[Message(OuterMessage.M2C_RemoveUnits)]
@@ -194,6 +280,11 @@ namespace ET
 		[ProtoMember(2)]
 		public List<long> Units { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			Units?.Clear();
+		}
 	}
 
 	[Message(OuterMessage.C2M_PathfindingResult)]
@@ -206,6 +297,12 @@ namespace ET
 		[ProtoMember(2)]
 		public Unity.Mathematics.float3 Position { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Position = default;
+		}
 	}
 
 	[Message(OuterMessage.C2M_Stop)]
@@ -215,6 +312,11 @@ namespace ET
 		[ProtoMember(1)]
 		public int RpcId { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+		}
 	}
 
 	[Message(OuterMessage.M2C_PathfindingResult)]
@@ -230,6 +332,13 @@ namespace ET
 		[ProtoMember(3)]
 		public List<Unity.Mathematics.float3> Points { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			Id = default;
+			Position = default;
+			Points?.Clear();
+		}
 	}
 
 	[Message(OuterMessage.M2C_Stop)]
@@ -248,6 +357,14 @@ namespace ET
 		[ProtoMember(4)]
 		public Unity.Mathematics.quaternion Rotation { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			Error = default;
+			Id = default;
+			Position = default;
+			Rotation = default;
+		}
 	}
 
 	[ResponseType(nameof(G2C_Ping))]
@@ -258,6 +375,11 @@ namespace ET
 		[ProtoMember(1)]
 		public int RpcId { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+		}
 	}
 
 	[Message(OuterMessage.G2C_Ping)]
@@ -276,12 +398,24 @@ namespace ET
 		[ProtoMember(4)]
 		public long Time { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Error = default;
+			Message = default;
+			Time = default;
+		}
 	}
 
 	[Message(OuterMessage.G2C_Test)]
 	[ProtoContract]
 	public partial class G2C_Test: ProtoObject, IMessage
 	{
+		public override void Dispose()
+		{
+			base.Dispose();
+		}
 	}
 
 	[ResponseType(nameof(M2C_Reload))]
@@ -298,6 +432,13 @@ namespace ET
 		[ProtoMember(3)]
 		public string Password { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Account = default;
+			Password = default;
+		}
 	}
 
 	[Message(OuterMessage.M2C_Reload)]
@@ -313,6 +454,13 @@ namespace ET
 		[ProtoMember(3)]
 		public string Message { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Error = default;
+			Message = default;
+		}
 	}
 
 	[ResponseType(nameof(R2C_Login))]
@@ -329,6 +477,13 @@ namespace ET
 		[ProtoMember(3)]
 		public string Password { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Account = default;
+			Password = default;
+		}
 	}
 
 	[Message(OuterMessage.R2C_Login)]
@@ -353,6 +508,16 @@ namespace ET
 		[ProtoMember(6)]
 		public long GateId { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Error = default;
+			Message = default;
+			Address = default;
+			Key = default;
+			GateId = default;
+		}
 	}
 
 	[ResponseType(nameof(G2C_LoginGate))]
@@ -369,6 +534,13 @@ namespace ET
 		[ProtoMember(3)]
 		public long GateId { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Key = default;
+			GateId = default;
+		}
 	}
 
 	[Message(OuterMessage.G2C_LoginGate)]
@@ -387,6 +559,14 @@ namespace ET
 		[ProtoMember(4)]
 		public long PlayerId { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Error = default;
+			Message = default;
+			PlayerId = default;
+		}
 	}
 
 	[Message(OuterMessage.G2C_TestHotfixMessage)]
@@ -396,6 +576,11 @@ namespace ET
 		[ProtoMember(1)]
 		public string Info { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			Info = default;
+		}
 	}
 
 	[ResponseType(nameof(M2C_TestRobotCase))]
@@ -409,6 +594,12 @@ namespace ET
 		[ProtoMember(2)]
 		public int N { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			N = default;
+		}
 	}
 
 	[Message(OuterMessage.M2C_TestRobotCase)]
@@ -427,6 +618,14 @@ namespace ET
 		[ProtoMember(4)]
 		public int N { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Error = default;
+			Message = default;
+			N = default;
+		}
 	}
 
 	[Message(OuterMessage.C2M_TestRobotCase2)]
@@ -439,6 +638,12 @@ namespace ET
 		[ProtoMember(2)]
 		public int N { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			N = default;
+		}
 	}
 
 	[Message(OuterMessage.M2C_TestRobotCase2)]
@@ -451,6 +656,12 @@ namespace ET
 		[ProtoMember(2)]
 		public int N { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			N = default;
+		}
 	}
 
 	[ResponseType(nameof(M2C_TransferMap))]
@@ -461,6 +672,11 @@ namespace ET
 		[ProtoMember(1)]
 		public int RpcId { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+		}
 	}
 
 	[Message(OuterMessage.M2C_TransferMap)]
@@ -476,6 +692,13 @@ namespace ET
 		[ProtoMember(3)]
 		public string Message { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Error = default;
+			Message = default;
+		}
 	}
 
 	[ResponseType(nameof(G2C_Benchmark))]
@@ -486,6 +709,11 @@ namespace ET
 		[ProtoMember(1)]
 		public int RpcId { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+		}
 	}
 
 	[Message(OuterMessage.G2C_Benchmark)]
@@ -501,6 +729,13 @@ namespace ET
 		[ProtoMember(3)]
 		public string Message { get; set; }
 
+		public override void Dispose()
+		{
+			base.Dispose();
+			RpcId = default;
+			Error = default;
+			Message = default;
+		}
 	}
 
 	public static class OuterMessage

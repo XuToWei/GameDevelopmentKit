@@ -64,3 +64,6 @@
 
 [UGFExtensions](https://github.com/FingerCaster/UGFExtensions)
 
+
+# 记录
+1.ET的Proto对象添加缓存池，减少GC

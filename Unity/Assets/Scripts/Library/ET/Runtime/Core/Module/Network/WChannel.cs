@@ -222,7 +222,7 @@ namespace ET
                     {
                         ushort opcode = BitConverter.ToUInt16(memoryStream.GetBuffer(), Packet.KcpOpcodeIndex);
                         Type type = NetServices.Instance.GetType(opcode);
-                        message = SerializeHelper.Deserialize(type, memoryStream);
+                        message = SerializeHelper.DeserializeMessage(type, memoryStream);
                         break;
                     }
                     case ServiceType.Inner:
@@ -230,7 +230,7 @@ namespace ET
                         actorId = BitConverter.ToInt64(memoryStream.GetBuffer(), Packet.ActorIdIndex);
                         ushort opcode = BitConverter.ToUInt16(memoryStream.GetBuffer(), Packet.OpcodeIndex);
                         Type type = NetServices.Instance.GetType(opcode);
-                        message = SerializeHelper.Deserialize(type, memoryStream);
+                        message = SerializeHelper.DeserializeMessage(type, memoryStream);
                         break;
                     }
                 }

@@ -962,7 +962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4c8494330e440299f2f6a0461e36f4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BuiltinBuildInfo: {fileID: 11400000, guid: 8123453476da1a845b0085c7c4178c94, type: 2}
+  m_BuildInfo: {fileID: 11400000, guid: 8123453476da1a845b0085c7c4178c94, type: 2}
   m_DefaultDictionaryTextAsset: {fileID: 4900000, guid: 00759be143ffa5445b151c2540612e8f,
     type: 3}
   m_UpdateResourceFormTemplate: {fileID: 5642876425673278357, guid: a6c731de80e9d824d8f657301a357269,

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UGFUICompoent = UnityGameFramework.Runtime.UIComponent;
 
 namespace ET.Client
 {

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Game;
 using UnityGameFramework.Runtime;
@@ -24,7 +23,7 @@ namespace ET.Client
         {
             protected override void Destroy(UIComponent self)
             {
-                
+                UIComponent.Instance = null;
             }
         }
 
@@ -51,7 +50,7 @@ namespace ET.Client
 
         public static void CloseUIForm(this UIComponent self, int uiFormId)
         {
-            HashSet<UGFUIForm> needRemoves = new HashSet<UGFUIForm>();
+            using HashSetComponent<UGFUIForm> needRemoves = new HashSetComponent<UGFUIForm>();
             foreach (UGFUIForm uiForm in self.AllOpenUIForms)
             {
                 if (uiForm.uiFormId == uiFormId)
