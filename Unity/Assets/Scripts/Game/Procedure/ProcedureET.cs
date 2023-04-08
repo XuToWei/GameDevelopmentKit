@@ -21,8 +21,6 @@ namespace Game
             }
             base.OnLeave(procedureOwner, isShutdown);
         }
-        
-        
     }
 }
 #endif

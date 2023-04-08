@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Game;
 using UnityGameFramework.Runtime;
@@ -23,6 +24,7 @@ namespace ET.Client
         {
             protected override void Destroy(UIComponent self)
             {
+                self.CloseAllUIForm();
                 UIComponent.Instance = null;
             }
         }
@@ -68,6 +70,14 @@ namespace ET.Client
         public static void RefocusUIForm(this UIComponent self, UGFUIForm uiForm, object userData = null)
         {
             GameEntry.UI.RefocusUIForm(uiForm.etMonoUIForm.UIForm, userData);
+        }
+
+        public static void CloseAllUIForm(this UIComponent self)
+        {
+            foreach (UGFUIForm uiForm in self.AllOpenUIForms.ToArray())
+            {
+                self.CloseUIForm(uiForm);
+            }
         }
     }
 }
