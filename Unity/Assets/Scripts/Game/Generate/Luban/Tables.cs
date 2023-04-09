@@ -6,12 +6,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using Bright.Serialization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-
-
 namespace Game
-{ 
+{
+
 public partial class Tables
 {
     public DTUIForm DTUIForm { private set; get; }
@@ -22,36 +22,39 @@ public partial class Tables
     public DTMusic DTMusic { private set; get; }
     public DTOneConfig DTOneConfig { private set; get; }
 
-    private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
+    private Dictionary<string, IDataTable> _tables;
 
-    public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
+    public IEnumerable<IDataTable> DataTables => _tables.Values;
 
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
-        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
+        _tables = new Dictionary<string, IDataTable>();
+        List<Task> loadTasks = new List<Task>();
         DTUIForm = new DTUIForm(() => loader("dtuiform")); 
-        await DTUIForm.LoadAsync();
+        loadTasks.Add(DTUIForm.LoadAsync());
         _tables.Add("DTUIForm", DTUIForm);
         DTEntity = new DTEntity(() => loader("dtentity")); 
-        await DTEntity.LoadAsync();
+        loadTasks.Add(DTEntity.LoadAsync());
         _tables.Add("DTEntity", DTEntity);
         DTScene = new DTScene(() => loader("dtscene")); 
-        await DTScene.LoadAsync();
+        loadTasks.Add(DTScene.LoadAsync());
         _tables.Add("DTScene", DTScene);
         DTSound = new DTSound(() => loader("dtsound")); 
-        await DTSound.LoadAsync();
+        loadTasks.Add(DTSound.LoadAsync());
         _tables.Add("DTSound", DTSound);
         DTUISound = new DTUISound(() => loader("dtuisound")); 
-        await DTUISound.LoadAsync();
+        loadTasks.Add(DTUISound.LoadAsync());
         _tables.Add("DTUISound", DTUISound);
         DTMusic = new DTMusic(() => loader("dtmusic")); 
-        await DTMusic.LoadAsync();
+        loadTasks.Add(DTMusic.LoadAsync());
         _tables.Add("DTMusic", DTMusic);
         DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
-        await DTOneConfig.LoadAsync();
+        loadTasks.Add(DTOneConfig.LoadAsync());
         _tables.Add("DTOneConfig", DTOneConfig);
+
+        await Task.WhenAll(loadTasks);
 
         PostInit();
         DTUIForm.Resolve(_tables); 

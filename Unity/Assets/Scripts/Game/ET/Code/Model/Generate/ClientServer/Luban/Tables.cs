@@ -6,12 +6,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using Bright.Serialization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-
-
 namespace ET
-{ 
+{
+
 public partial class Tables
 {
     public DTStartMachineConfig DTStartMachineConfig { private set; get; }
@@ -22,36 +22,39 @@ public partial class Tables
     public DTAIConfig DTAIConfig { private set; get; }
     public DTUnitConfig DTUnitConfig { private set; get; }
 
-    private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
+    private Dictionary<string, IDataTable> _tables;
 
-    public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
+    public IEnumerable<IDataTable> DataTables => _tables.Values;
 
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
-        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
+        _tables = new Dictionary<string, IDataTable>();
+        List<Task> loadTasks = new List<Task>();
         DTStartMachineConfig = new DTStartMachineConfig(() => loader("dtstartmachineconfig")); 
-        await DTStartMachineConfig.LoadAsync();
+        loadTasks.Add(DTStartMachineConfig.LoadAsync());
         _tables.Add("DTStartMachineConfig", DTStartMachineConfig);
         DTStartProcessConfig = new DTStartProcessConfig(() => loader("dtstartprocessconfig")); 
-        await DTStartProcessConfig.LoadAsync();
+        loadTasks.Add(DTStartProcessConfig.LoadAsync());
         _tables.Add("DTStartProcessConfig", DTStartProcessConfig);
         DTStartSceneConfig = new DTStartSceneConfig(() => loader("dtstartsceneconfig")); 
-        await DTStartSceneConfig.LoadAsync();
+        loadTasks.Add(DTStartSceneConfig.LoadAsync());
         _tables.Add("DTStartSceneConfig", DTStartSceneConfig);
         DTStartZoneConfig = new DTStartZoneConfig(() => loader("dtstartzoneconfig")); 
-        await DTStartZoneConfig.LoadAsync();
+        loadTasks.Add(DTStartZoneConfig.LoadAsync());
         _tables.Add("DTStartZoneConfig", DTStartZoneConfig);
         DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
-        await DTOneConfig.LoadAsync();
+        loadTasks.Add(DTOneConfig.LoadAsync());
         _tables.Add("DTOneConfig", DTOneConfig);
         DTAIConfig = new DTAIConfig(() => loader("dtaiconfig")); 
-        await DTAIConfig.LoadAsync();
+        loadTasks.Add(DTAIConfig.LoadAsync());
         _tables.Add("DTAIConfig", DTAIConfig);
         DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig")); 
-        await DTUnitConfig.LoadAsync();
+        loadTasks.Add(DTUnitConfig.LoadAsync());
         _tables.Add("DTUnitConfig", DTUnitConfig);
+
+        await Task.WhenAll(loadTasks);
 
         PostInit();
         DTStartMachineConfig.Resolve(_tables); 

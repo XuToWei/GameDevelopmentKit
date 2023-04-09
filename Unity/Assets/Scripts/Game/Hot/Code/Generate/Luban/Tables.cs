@@ -6,28 +6,31 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using Bright.Serialization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-
-
 namespace Game.Hot
-{ 
+{
+
 public partial class Tables
 {
     public DTOneConfig DTOneConfig { private set; get; }
 
-    private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
+    private Dictionary<string, IDataTable> _tables;
 
-    public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
+    public IEnumerable<IDataTable> DataTables => _tables.Values;
 
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
-        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
+        _tables = new Dictionary<string, IDataTable>();
+        List<Task> loadTasks = new List<Task>();
         DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
-        await DTOneConfig.LoadAsync();
+        loadTasks.Add(DTOneConfig.LoadAsync());
         _tables.Add("DTOneConfig", DTOneConfig);
+
+        await Task.WhenAll(loadTasks);
 
         PostInit();
         DTOneConfig.Resolve(_tables); 

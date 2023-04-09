@@ -1,14 +1,14 @@
 using Bright.Serialization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-
 {{
     name = x.name
     namespace = x.namespace
     tables = x.tables
 
 }}
+{{cs_start_name_space_grace x.namespace}}
 
-{{cs_start_name_space_grace x.namespace}} 
 public partial class {{name}}
 {
     {{~for table in tables ~}}
@@ -20,20 +20,23 @@ public partial class {{name}}
     public {{table.full_name}} {{table.name}} { private set; get; }
     {{~end~}}
 
-    private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
+    private Dictionary<string, IDataTable> _tables;
 
-    public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
+    public IEnumerable<IDataTable> DataTables => _tables.Values;
 
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
-        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
+        _tables = new Dictionary<string, IDataTable>();
+        List<Task> loadTasks = new List<Task>();
         {{~for table in tables ~}}
         {{table.name}} = new {{table.full_name}}(() => loader("{{table.output_data_file}}")); 
-        await {{table.name}}.LoadAsync();
+        loadTasks.Add({{table.name}}.LoadAsync());
         _tables.Add("{{table.full_name}}", {{table.name}});
         {{~end~}}
+
+        await Task.WhenAll(loadTasks);
 
         PostInit();
         {{~for table in tables ~}}
