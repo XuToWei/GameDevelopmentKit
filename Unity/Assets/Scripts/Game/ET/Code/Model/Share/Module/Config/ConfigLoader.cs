@@ -5,7 +5,7 @@ using Bright.Serialization;
 using Cysharp.Threading.Tasks;
 using SimpleJSON;
 
-namespace ET.Client
+namespace ET
 {
     [Invoke]
     public class LubanLoadAllAsyncHandler : AInvokeHandler<ConfigComponent.LoadAll, UniTask>

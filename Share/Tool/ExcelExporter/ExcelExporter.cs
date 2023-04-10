@@ -100,7 +100,8 @@ namespace ET
                     {
                         info.Gen_Type_Code_Data = info.Gen_Type_Code_Data.
                                 Replace("code_cs_unity_bin", "code_cs_unity_json")
-                                .Replace("data_bin", "data_json");
+                                .Replace("data_bin", "data_json")
+                                .Replace("code_cs_bin", "code_cs_dotnet_json");
                     }
                     info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value;
                     genInfos.Add(info);

@@ -53,6 +53,22 @@ namespace ET.Server
                         Proto2CS.Export();
                         return 0;
                     }
+                    case AppType.RemoteBuilderClient:
+                    {
+                        Options.Instance.Console = 1;
+                        Root.Instance.Scene.AddComponent<ClientSceneManagerComponent>();
+                        Scene scene = EntitySceneFactory.CreateScene(1, 1, 1, SceneType.RemoteBuilderClient, "RemoteBuilderClient", ClientSceneManagerComponent.Instance);
+                        scene.AddComponent<RemoteBuilderClient>();
+                        return 0;
+                    }
+                    case AppType.RemoteBuilderServer:
+                    {
+                        Options.Instance.Console = 1;
+                        Root.Instance.Scene.AddComponent<ServerSceneManagerComponent>();
+                        Scene scene = EntitySceneFactory.CreateScene(1, 1, 1, SceneType.RemoteBuilderClient, "RemoteBuilderClient", ServerSceneManagerComponent.Instance);
+                        scene.AddComponent<RemoteBuilderServer>();
+                        return 0;
+                    }
                 }
             }
             catch (Exception e)
