@@ -877,7 +877,7 @@ GameObject:
   - component: {fileID: 359876813}
   - component: {fileID: 359876814}
   m_Layer: 0
-  m_Name: SpriteCollection
+  m_Name: Sprite Collection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1250,7 +1250,7 @@ GameObject:
   - component: {fileID: 1867878129}
   - component: {fileID: 1867878130}
   m_Layer: 0
-  m_Name: TextureSet
+  m_Name: Texture Set
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

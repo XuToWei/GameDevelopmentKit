@@ -1,0 +1,23 @@
+﻿<Config>
+  <Gen>
+    <Proto_File Value="OuterMessage_C_10001.proto" />
+    <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/Client/Message,
+    ../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Message" />
+    <Code_Type Value="ET" />
+  </Gen>
+  <Gen>
+    <Proto_File Value="InnerMessage_S_20001.proto" />
+    <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Message" />
+    <Code_Type Value="ET" />
+  </Gen>
+  <Gen>
+    <Proto_File Value="ShareTool.proto" />
+    <Code_Output_Dirs Value="../Share/Tool/Generate/Message" />
+    <Code_Type Value="ET" />
+  </Gen>
+  <Gen>
+    <Proto_File Value="Game.proto" />
+    <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/Generate/Message" />
+    <Code_Type Value="Game" />
+  </Gen>
+</Config>

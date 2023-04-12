@@ -15,7 +15,10 @@ public sealed partial class RemoteBuilderData :  Bright.Config.BeanBase
 {
     public RemoteBuilderData(ByteBuf _buf) 
     {
-        Test = _buf.ReadInt();
+        Client = _buf.ReadInt();
+        ServerInnerIP = _buf.ReadString();
+        ServerPort = _buf.ReadString();
+        ServerUnityPath = _buf.ReadString();
         PostInit();
     }
 
@@ -24,10 +27,10 @@ public sealed partial class RemoteBuilderData :  Bright.Config.BeanBase
         return new RemoteBuilderData(_buf);
     }
 
-    /// <summary>
-    /// 匹配最大时间
-    /// </summary>
-    public int Test { get; private set; }
+    public int Client { get; private set; }
+    public string ServerInnerIP { get; private set; }
+    public string ServerPort { get; private set; }
+    public string ServerUnityPath { get; private set; }
 
     public const int __ID__ = 726152607;
     public override int GetTypeId() => __ID__;
@@ -44,7 +47,10 @@ public sealed partial class RemoteBuilderData :  Bright.Config.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "Test:" + Test + ","
+        + "Client:" + Client + ","
+        + "ServerInnerIP:" + ServerInnerIP + ","
+        + "ServerPort:" + ServerPort + ","
+        + "ServerUnityPath:" + ServerUnityPath + ","
         + "}";
     }
     

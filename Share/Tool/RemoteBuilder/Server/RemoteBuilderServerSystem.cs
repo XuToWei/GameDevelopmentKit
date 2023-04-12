@@ -1,6 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Net;
+using Cysharp.Threading.Tasks;
 
-namespace ET
+namespace ET.Server
 {
     public static class RemoteBuilderServerSystem
     {
@@ -16,7 +17,8 @@ namespace ET
         public static async UniTaskVoid StartAsync(this RemoteBuilderServer self)
         {
             await self.GetComponent<RemoteBuilder>().StartAsync();
-            self.AddComponent<MailBoxComponent, MailboxType>(MailboxType.UnOrderMessageDispatcher);
+            Root.Instance.Scene.AddComponent<NetInnerComponent, IPEndPoint>(NetworkHelper.ToIPEndPoint(
+                $"{Tables.Instance.RemoteBuilderConfig.ServerInnerIP}:{Tables.Instance.RemoteBuilderConfig.ServerPort}"));
         }
     }
 }

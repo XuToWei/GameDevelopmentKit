@@ -1,5 +1,5 @@
 <root>
-	<topmodule name="ET.RemoteBuilder"/>
+	<topmodule name="ET"/>
 	
 	<patch name="cn"/>
 	<patch name="en"/>

@@ -34,10 +34,10 @@ public sealed partial class RemoteBuilderConfig : IDataTable
     }
 
 
-    /// <summary>
-    /// 匹配最大时间
-    /// </summary>
-     public int Test => _data.Test;
+     public int Client => _data.Client;
+     public string ServerInnerIP => _data.ServerInnerIP;
+     public string ServerPort => _data.ServerPort;
+     public string ServerUnityPath => _data.ServerUnityPath;
 
     public void Resolve(Dictionary<string, IDataTable> _tables)
     {

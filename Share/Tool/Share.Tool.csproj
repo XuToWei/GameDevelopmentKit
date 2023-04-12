@@ -38,15 +38,24 @@
         </Compile>
         
         <Compile Include="..\..\Unity\Assets\Scripts\Library\LubanLib\Editor\**\*.cs">
-            <Link>ExcelExporter\LubanLib\Editor\%(RecursiveDir)%(FileName)%(Extension)</Link>
+            <Link>ExcelExporter\Generate\LubanLib\Editor\%(RecursiveDir)%(FileName)%(Extension)</Link>
+        </Compile>
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\Editor\Generate\Luban\**\*.cs">
+            <Link>ExcelExporter\Generate\Luban\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\Editor\Generate\Luban\**\*.cs">
-            <Link>ExcelExporter\Luban\%(RecursiveDir)%(FileName)%(Extension)</Link>
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Generate\ClientServer\LubanPartial\Tables.cs">
+            <Link>Generate\LubanPartial\Tables.cs</Link>
         </Compile>
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\DotNet\Library\DotNet.Library.csproj" />
+        <ProjectReference Include="..\..\DotNet\Library\DotNet.Library.csproj" />
+        <ProjectReference Include="..\..\DotNet\Model\DotNet.Model.csproj" />
+        <ProjectReference Include="..\..\DotNet\Hotfix\DotNet.Hotfix.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Generate\LubanPartial" />
     </ItemGroup>
 </Project>

@@ -27,7 +27,7 @@
 #else
         public static bool EnableIL2CPP = false;
 #endif
-            
+
 #if UNITY_ET_CODEMODE_CLIENT
         public static CodeMode CodeMode => CodeMode.Client;
 #elif UNITY_ET_CODEMODE_SERVER
