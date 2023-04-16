@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace ET
 {
 
-public partial class Tables
+public partial class ToolConfig
 {
     public RemoteBuilderConfig RemoteBuilderConfig { private set; get; }
 

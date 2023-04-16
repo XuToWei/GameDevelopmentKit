@@ -50,7 +50,7 @@ namespace ET.Server
                     case AppType.Proto2CS:
                     {
                         Options.Instance.Console = 1;
-                        Proto2CS.Export();
+                        Proto2CS.Export(Proto2CSCodeType.ET);
                         return 0;
                     }
                     case AppType.RemoteBuilderClient:

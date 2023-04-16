@@ -2,7 +2,7 @@
 
 namespace ET
 {
-    internal enum Proto2CSCodeType
+    public enum Proto2CSCodeType
     {
         ET,
         Game
@@ -22,7 +22,7 @@ namespace ET
             switch (codeType)
             {
                 case Proto2CSCodeType.ET:
-                    Proto2CS_ET.Proto2CS();
+                    //Proto2CS_ET.Proto2CS();
                     break;
                 case Proto2CSCodeType.Game:
                     break;

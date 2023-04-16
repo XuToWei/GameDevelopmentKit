@@ -18,7 +18,7 @@ namespace ET.Server
         {
             await self.GetComponent<RemoteBuilder>().StartAsync();
             Root.Instance.Scene.AddComponent<NetInnerComponent, IPEndPoint>(NetworkHelper.ToIPEndPoint(
-                $"{Tables.Instance.RemoteBuilderConfig.ServerInnerIP}:{Tables.Instance.RemoteBuilderConfig.ServerPort}"));
+                $"{ToolConfig.Instance.RemoteBuilderConfig.ServerInnerIP}:{ToolConfig.Instance.RemoteBuilderConfig.ServerPort}"));
         }
     }
 }
