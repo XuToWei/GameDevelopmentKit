@@ -25,11 +25,6 @@ namespace UnityGameFramework.Extension
             waitSetImage.m_Image = obj;
             waitSetImage.SpritePath = spriteName;
             waitSetImage.CollectionPath = collection;
-            int index1 = waitSetImage.SpritePath.LastIndexOf("/", StringComparison.Ordinal);
-            int index2 = waitSetImage.SpritePath.LastIndexOf(".", StringComparison.Ordinal);
-            waitSetImage.SpriteName = index2 < index1
-                ? waitSetImage.SpritePath.Substring(index1 + 1)
-                : waitSetImage.SpritePath.Substring(index1 + 1, index2 - index1 - 1);
             return waitSetImage;
         }
 #if ODIN_INSPECTOR
@@ -43,19 +38,20 @@ namespace UnityGameFramework.Extension
 #if ODIN_INSPECTOR
         [ShowInInspector]
 #endif
-        private string SpriteName { get; set; }
+        public Sprite CurSprite { get; private set; }
 
         public void SetSprite(Sprite sprite)
         {
             if (m_Image != null)
             {
                 m_Image.sprite = sprite;
+                CurSprite = sprite;
             }
         }
 
         public bool IsCanRelease()
         {
-            return m_Image == null || m_Image.sprite == null || m_Image.sprite.name != SpriteName;
+            return m_Image == null || m_Image.sprite != CurSprite && CurSprite != null;
         }
 #if !ODIN_INSPECTOR && UNITY_EDITOR
         public Rect DrawSetSpriteObject(Rect rect)
@@ -83,7 +79,7 @@ namespace UnityGameFramework.Extension
             m_Image = null;
             SpritePath = null;
             CollectionPath = null;
-            SpriteName = null;
+            CurSprite = null;
         }
     }
 }

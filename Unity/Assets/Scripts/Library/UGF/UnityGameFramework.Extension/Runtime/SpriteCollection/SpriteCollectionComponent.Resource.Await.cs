@@ -22,19 +22,13 @@ namespace UnityGameFramework.Extension
                 m_LoadedSpriteObjectsLinkedList.AddLast(LoadSpriteObject.Create(setSpriteObject, collectionItem));
                 return;
             }
-
-            LinkedList<ISetSpriteObject> loadSp;
-            if (m_WaitSetObjects.ContainsKey(setSpriteObject.CollectionPath))
+            
+            if (!m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out var loadSp))
             { 
-                loadSp = m_WaitSetObjects[setSpriteObject.CollectionPath];
-                loadSp.AddLast(setSpriteObject);
-            }
-            else
-            { 
-                loadSp = new LinkedList<ISetSpriteObject>();
-                loadSp.AddFirst(setSpriteObject);
+                loadSp = new HashSet<ISetSpriteObject>();
                 m_WaitSetObjects.Add(setSpriteObject.CollectionPath, loadSp);
             }
+            loadSp.Add(setSpriteObject);
             
             CancellationTokenRegistration? ctr = cts?.Token.Register(() =>
             {
@@ -58,26 +52,22 @@ namespace UnityGameFramework.Extension
             m_SpriteCollectionPool.Register(SpriteCollectionItemObject.Create(setSpriteObject.CollectionPath, collection,m_ResourceComponent), false);
             m_SpriteCollectionBeingLoaded.Remove(setSpriteObject.CollectionPath);
             
-            if(m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out LinkedList<ISetSpriteObject> awaitSetImages))
+            if(m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out HashSet<ISetSpriteObject> awaitSets))
             {
-                if (awaitSetImages.Count > 0)
+                if (awaitSets.Count > 0)
                 {
-                    LinkedListNode<ISetSpriteObject> current = awaitSetImages.First;
-                    while (current != null)
+                    if (!awaitSets.Contains(setSpriteObject))
                     {
-                        if (m_SpriteObjectsToReleaseOnLoad.Contains(current.Value))
-                        {
-                            ReferencePool.Release(current.Value);
-                        }
-                        else
-                        {
-                            m_SpriteCollectionPool.Spawn(setSpriteObject.CollectionPath);
-                            current.Value.SetSprite(collection.GetSprite(current.Value.SpritePath));
-                            m_LoadedSpriteObjectsLinkedList.AddLast(LoadSpriteObject.Create(current.Value, collection));
-                        }
-                        current = current.Next;
+                        ReferencePool.Release(setSpriteObject);
+                        return;
                     }
-                    awaitSetImages.Clear();
+                    foreach (ISetSpriteObject awaitSet in awaitSets)
+                    {
+                        m_SpriteCollectionPool.Spawn(setSpriteObject.CollectionPath);
+                        awaitSet.SetSprite(collection.GetSprite(awaitSet.SpritePath));
+                        m_LoadedSpriteObjectsLinkedList.AddLast(LoadSpriteObject.Create(awaitSet, collection));
+                    }
+                    awaitSets.Clear();
                 }
             }
         }

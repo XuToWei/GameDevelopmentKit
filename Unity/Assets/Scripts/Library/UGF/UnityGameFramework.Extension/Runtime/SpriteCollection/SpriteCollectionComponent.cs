@@ -32,10 +32,10 @@ namespace UnityGameFramework.Extension
         [ReadOnly] [ShowInInspector]
 #endif
         private LinkedList<LoadSpriteObject> m_LoadedSpriteObjectsLinkedList;
-        
+
         private HashSet<string> m_SpriteCollectionBeingLoaded;
-        private Dictionary<string, LinkedList<ISetSpriteObject>> m_WaitSetObjects;
-        private HashSet<ISetSpriteObject> m_SpriteObjectsToReleaseOnLoad;
+        private Dictionary<string, HashSet<ISetSpriteObject>> m_WaitSetObjects;
+
 #if UNITY_EDITOR
         public LinkedList<LoadSpriteObject> LoadedSpriteObjectsLinkedList
         {
@@ -49,7 +49,7 @@ namespace UnityGameFramework.Extension
             m_SpriteCollectionPool = objectPoolComponent.CreateMultiSpawnObjectPool<SpriteCollectionItemObject>("SpriteCollection", m_AutoReleaseInterval, 16, 60, 0);
             m_LoadedSpriteObjectsLinkedList = new LinkedList<LoadSpriteObject>();
             m_SpriteCollectionBeingLoaded = new HashSet<string>();
-            m_WaitSetObjects = new Dictionary<string, LinkedList<ISetSpriteObject>>();
+            m_WaitSetObjects = new Dictionary<string, HashSet<ISetSpriteObject>>();
 
             InitializedResources();
         }
