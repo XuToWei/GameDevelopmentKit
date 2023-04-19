@@ -2,13 +2,6 @@
 
 namespace ET
 {
-    public enum Proto2CSCodeType
-    {
-        ET,
-        Game
-    }
-    
-    
     internal class OpcodeInfo
     {
         public string Name;
@@ -17,16 +10,9 @@ namespace ET
 
     public static partial class Proto2CS
     {
-        public static void Export(Proto2CSCodeType codeType)
+        public static void Export()
         {
-            switch (codeType)
-            {
-                case Proto2CSCodeType.ET:
-                    //Proto2CS_ET.Proto2CS();
-                    break;
-                case Proto2CSCodeType.Game:
-                    break;
-            }
+            //Proto2CS_ET.Proto2CS();
             Console.WriteLine("proto2cs succeed!");
         }
     }
