@@ -31,21 +31,27 @@ namespace UnityGameFramework.Extension
             SpriteCollection collection = (SpriteCollection)asset;
             m_SpriteCollectionPool.Register(SpriteCollectionItemObject.Create(setSpriteObject.CollectionPath, collection, m_ResourceComponent), false);
             m_SpriteCollectionBeingLoaded.Remove(setSpriteObject.CollectionPath);
-            m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out LinkedList<ISetSpriteObject> awaitSetImages);
-            LinkedListNode<ISetSpriteObject> current = awaitSetImages?.First;
-            while (current != null)
+            if(m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out LinkedList<ISetSpriteObject> awaitSetImages))
             {
-                if (m_SpriteObjectsToReleaseOnLoad.Contains(current.Value))
+                if (awaitSetImages.Count > 0)
                 {
-                    ReferencePool.Release(current.Value);
+                    LinkedListNode<ISetSpriteObject> current = awaitSetImages.First;
+                    while (current != null)
+                    {
+                        if (m_SpriteObjectsToReleaseOnLoad.Contains(current.Value))
+                        {
+                            ReferencePool.Release(current.Value);
+                        }
+                        else
+                        {
+                            m_SpriteCollectionPool.Spawn(setSpriteObject.CollectionPath);
+                            current.Value.SetSprite(collection.GetSprite(current.Value.SpritePath));
+                            m_LoadedSpriteObjectsLinkedList.AddLast(LoadSpriteObject.Create(current.Value, collection));
+                        }
+                        current = current.Next;
+                    }
+                    awaitSetImages.Clear();
                 }
-                else
-                {
-                    m_SpriteCollectionPool.Spawn(setSpriteObject.CollectionPath);
-                    current.Value.SetSprite(collection.GetSprite(current.Value.SpritePath));
-                    m_LoadedSpriteObjectsLinkedList.AddLast(LoadSpriteObject.Create(current.Value, collection));
-                }
-                current = current.Next;
             }
         }
         

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using GameFramework;
 
 namespace UnityGameFramework.Extension
 {
@@ -56,14 +57,28 @@ namespace UnityGameFramework.Extension
             
             m_SpriteCollectionPool.Register(SpriteCollectionItemObject.Create(setSpriteObject.CollectionPath, collection,m_ResourceComponent), false);
             m_SpriteCollectionBeingLoaded.Remove(setSpriteObject.CollectionPath);
-            m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out LinkedList<ISetSpriteObject> awaitSetImages);
-            LinkedListNode<ISetSpriteObject> current = awaitSetImages?.First;
-            while (current != null)
+            
+            if(m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out LinkedList<ISetSpriteObject> awaitSetImages))
             {
-                m_SpriteCollectionPool.Spawn(setSpriteObject.CollectionPath);
-                current.Value.SetSprite(collection.GetSprite(current.Value.SpritePath));
-                m_LoadedSpriteObjectsLinkedList.AddLast(LoadSpriteObject.Create(current.Value, collection));
-                current = current.Next;
+                if (awaitSetImages.Count > 0)
+                {
+                    LinkedListNode<ISetSpriteObject> current = awaitSetImages.First;
+                    while (current != null)
+                    {
+                        if (m_SpriteObjectsToReleaseOnLoad.Contains(current.Value))
+                        {
+                            ReferencePool.Release(current.Value);
+                        }
+                        else
+                        {
+                            m_SpriteCollectionPool.Spawn(setSpriteObject.CollectionPath);
+                            current.Value.SetSprite(collection.GetSprite(current.Value.SpritePath));
+                            m_LoadedSpriteObjectsLinkedList.AddLast(LoadSpriteObject.Create(current.Value, collection));
+                        }
+                        current = current.Next;
+                    }
+                    awaitSetImages.Clear();
+                }
             }
         }
     }
