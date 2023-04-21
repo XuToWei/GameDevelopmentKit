@@ -35,30 +35,30 @@ namespace ET.Server
                 ProtobufHelper.Init();
 
                 Log.Info($"server start........................ {Root.Instance.Scene.Id}");
-                
-                switch (Options.Instance.AppType)
-                {
-                    case AppType.ExcelExporter:
-                    {
-                        Options.Instance.Console = 1;
-                        //Options: Customs
-                        //Json-luban导出json
-                        //GB2312:使用GB2312编码解决中文乱码
-                        ExcelExporter.Export();
-                        return 0;
-                    }
-                    case AppType.Proto2CS:
-                    {
-                        Options.Instance.Console = 1;
-                        Proto2CS.Export();
-                        return 0;
-                    }
-                    case AppType.RemoteBuilder:
-                    {
-                        
-                        return 0;
-                    }
-                }
+                Proto2CS.Export();
+                // switch (Options.Instance.AppType)
+                // {
+                //     case AppType.ExcelExporter:
+                //     {
+                //         Options.Instance.Console = 1;
+                //         //Options: Customs
+                //         //Json-luban导出json
+                //         //GB2312:使用GB2312编码解决中文乱码
+                //         ExcelExporter.Export();
+                //         return 0;
+                //     }
+                //     case AppType.Proto2CS:
+                //     {
+                //         Options.Instance.Console = 1;
+                //         Proto2CS.Export();
+                //         return 0;
+                //     }
+                //     case AppType.RemoteBuilder:
+                //     {
+                //         
+                //         return 0;
+                //     }
+                // }
             }
             catch (Exception e)
             {

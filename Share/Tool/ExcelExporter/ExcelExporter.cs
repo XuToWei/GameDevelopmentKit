@@ -30,7 +30,7 @@ namespace ET
 
         private static Encoding s_Encoding;
 
-        private struct Input_Output_Gen_Info
+        private class Input_Output_Gen_Info
         {
             public string Luban_Work_Dir;
             public string Input_Data_Dir;
@@ -93,8 +93,10 @@ namespace ET
                     int lastIndex = dir.LastIndexOf('/');
                     info.Luban_Work_Dir = $"{lubanWorkDir}/{dir.Substring(lastIndex, dir.Length - lastIndex)}_{j}";
                     info.Input_Data_Dir = dir;
-                    info.Output_Code_Dirs = xmlGen.SelectSingleNode("Output_Code_Dirs").Attributes.GetNamedItem("Value").Value.Split(',').ToList();
-                    info.Output_Data_Dirs = xmlGen.SelectSingleNode("Output_Data_Dirs").Attributes.GetNamedItem("Value").Value.Split(',').ToList();
+                    string dirsStr = xmlGen.SelectSingleNode("Output_Code_Dirs").Attributes.GetNamedItem("Value").Value.Replace("\n", "");
+                    info.Output_Code_Dirs = dirsStr.Split(',').ToList();
+                    dirsStr = xmlGen.SelectSingleNode("Output_Data_Dirs").Attributes.GetNamedItem("Value").Value.Replace("\n", "");
+                    info.Output_Data_Dirs = dirsStr.Split(',').ToList();
                     info.Gen_Type_Code_Data = xmlGen.SelectSingleNode("Gen_Type_Code_Data").Attributes.GetNamedItem("Value").Value;
                     if (useJson)
                     {

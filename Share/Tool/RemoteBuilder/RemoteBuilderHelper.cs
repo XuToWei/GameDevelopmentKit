@@ -15,16 +15,12 @@ namespace ET
             {
                 Root.Instance.Scene.AddComponent<RemoteBuilderServer>();
             }
-            else if (Options.Instance.Customs.Equals("ClientServer", StringComparison.OrdinalIgnoreCase))
+            else//默认走ClientServer
             {
                 Root.Instance.Scene.AddComponent<ClientSceneManagerComponent>();
                 Scene scene = EntitySceneFactory.CreateScene(1, 1, 1, SceneType.RemoteBuilderClient, "RemoteBuilderClientServer", ClientSceneManagerComponent.Instance);
                 scene.AddComponent<RemoteBuilderClient>();
                 scene.AddComponent<RemoteBuilderServer>();
-            }
-            else
-            {
-                
             }
         }
     }

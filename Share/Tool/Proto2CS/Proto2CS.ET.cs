@@ -9,53 +9,13 @@ namespace ET
     {
         public static class Proto2CS_ET
         {
-            private const string protoDir = "../Design/Proto";
-            private const string clientMessagePath = "../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/Client/Message/";
-            private const string clientServerMessagePath = "../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Message/";
-            private static readonly char[] splitChars = { ' ', '\t' };
             private static readonly List<OpcodeInfo> msgOpcode = new List<OpcodeInfo>();
 
-            public static void Proto2CS(string protofile, List<string> csOutDirs)
-            {
-                msgOpcode.Clear();
-
-                foreach (var csOutDir in csOutDirs)
-                {
-                    if (Directory.Exists(clientMessagePath))
-                    {
-                        Directory.Delete(clientMessagePath, true);
-                    }
-                }
-                
-
-                if (Directory.Exists(clientServerMessagePath))
-                {
-                    Directory.Delete(clientServerMessagePath, true);
-                }
-
-                List<string> list = FileHelper.GetAllFiles(protoDir, "*proto");
-                foreach (string s in list)
-                {
-                    if (!s.EndsWith(".proto"))
-                    {
-                        continue;
-                    }
-
-                    string fileName = Path.GetFileNameWithoutExtension(s);
-                    string[] ss2 = fileName.Split('_');
-                    string protoName = ss2[0];
-                    string cs = ss2[1];
-                    int startOpcode = int.Parse(ss2[2]);
-                    ProtoFile2CS(fileName, protoName, cs, startOpcode);
-                }
-            }
-
-            private static void ProtoFile2CS(string fileName, string protoName, string cs, int startOpcode)
+            public static void Proto2CS(string protofile, string csName, List<string> csOutDirs, int startOpcode)
             {
                 string ns = "ET";
                 msgOpcode.Clear();
-                string proto = Path.Combine(protoDir, $"{fileName}.proto");
-
+                string proto = Path.Combine(ProtoDir, protofile);
                 string s = File.ReadAllText(proto);
 
                 StringBuilder sb = new StringBuilder();
@@ -109,7 +69,7 @@ namespace ET
 
                         msgOpcode.Add(new OpcodeInfo() { Name = msgName, Opcode = ++startOpcode });
 
-                        sb.Append($"\t[Message({protoName}.{msgName})]\n");
+                        sb.Append($"\t[Message({csName}.{msgName})]\n");
                         sb.Append($"\t[ProtoContract]\n");
                         sb.Append($"\tpublic partial class {msgName}: ProtoObject");
                         if (parentClass == "IActorMessage" || parentClass == "IActorRequest" || parentClass == "IActorResponse")
@@ -170,7 +130,7 @@ namespace ET
                     }
                 }
 
-                sb.Append("\tpublic static class " + protoName + "\n\t{\n");
+                sb.Append("\tpublic static class " + csName + "\n\t{\n");
                 foreach (OpcodeInfo info in msgOpcode)
                 {
                     sb.Append($"\t\t public const ushort {info.Name} = {info.Opcode};\n");
@@ -180,15 +140,9 @@ namespace ET
 
                 sb.Append("}\n");
 
-                if (cs.Contains("C"))
+                foreach (var csOutDir in csOutDirs)
                 {
-                    GenerateCS(sb, clientMessagePath, proto);
-                    GenerateCS(sb, clientServerMessagePath, proto);
-                }
-
-                if (cs.Contains("S"))
-                {
-                    GenerateCS(sb, clientServerMessagePath, proto);
+                    GenerateCS(sb, csOutDir, proto);
                 }
             }
 
@@ -203,6 +157,8 @@ namespace ET
                 using FileStream txt = new FileStream(csPath, FileMode.Create, FileAccess.ReadWrite);
                 using StreamWriter sw = new StreamWriter(txt);
                 sw.Write(sb.ToString());
+
+                Console.WriteLine($"proto2cs file : {csPath}");
             }
 
             private static void Map(StringBuilder sb, string newline, StringBuilder disposeSb)

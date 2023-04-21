@@ -17,7 +17,8 @@ namespace ET.Server
         public static async UniTaskVoid StartAsync(this RemoteBuilderServer self)
         {
             await self.GetComponent<RemoteBuilder>().StartAsync();
-            Root.Instance.Scene.AddComponent<NetInnerComponent, IPEndPoint>(NetworkHelper.ToIPEndPoint(
+            ServerSceneManagerComponent sceneManagerComponent = Root.Instance.Scene.AddComponent<ServerSceneManagerComponent>();
+            sceneManagerComponent.AddComponent<NetInnerComponent, IPEndPoint>(NetworkHelper.ToIPEndPoint(
                 $"{ToolConfig.Instance.RemoteBuilderConfig.ServerInnerIP}:{ToolConfig.Instance.RemoteBuilderConfig.ServerPort}"));
         }
     }
