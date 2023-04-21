@@ -32,7 +32,8 @@ namespace UnityGameFramework.Extension.Editor
         static void Open()
         {
             ResourceRuleEditor window = GetWindow<ResourceRuleEditor>(true, "Resource Rule Editor", true);
-            window.minSize = new Vector2(1770f, 420f);
+            window.minSize = new Vector2(1471f, 420f);
+            window.maxSize = new Vector2(1471f, 1000f);
         }
 
         [OnOpenAsset]
@@ -42,7 +43,8 @@ namespace UnityGameFramework.Extension.Editor
             if (config != null)
             {
                 ResourceRuleEditor window = GetWindow<ResourceRuleEditor>(true, "Resource Rule Editor", true);
-                window.minSize = new Vector2(1555f, 420f);
+                window.minSize = new Vector2(1471f, 420f);
+                window.maxSize = new Vector2(1471f, 1000f);
                 window.m_CurrentConfigPath = AssetDatabase.GetAssetPath(config);
                 window.Load();
                 return true;
@@ -72,37 +74,22 @@ namespace UnityGameFramework.Extension.Editor
                 InitRuleListDrawer();
             }
 
-            GUILayout.BeginHorizontal(EditorStyles.toolbar);
+            GUILayout.BeginHorizontal();
             {
-                if (GUILayout.Button("Add", EditorStyles.toolbarButton))
-                {
-                    Add();
-                }
-
-                if (GUILayout.Button("Save", EditorStyles.toolbarButton))
-                {
-                    Save();
-                }
-
-                if (GUILayout.Button("Refresh ResourceCollection.xml", EditorStyles.toolbarButton))
-                {
-                    RefreshResourceCollection();
-                }
+                OnListHeaderGUI();
             }
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             {
-                GUILayout.Space(10);
+                GUILayout.Space(23);
                 OnListElementLabelGUI();
             }
             GUILayout.EndHorizontal();
-
-
+            
             GUILayout.BeginVertical();
             {
-                GUILayout.Space(30);
-
+                GUILayout.Space(50);
                 m_ScrollPosition = GUILayout.BeginScrollView(m_ScrollPosition);
                 {
                     m_RuleList.DoLayoutList();
@@ -156,9 +143,9 @@ namespace UnityGameFramework.Extension.Editor
         {
             m_RuleList = new ReorderableList(m_Configuration.rules, typeof(ResourceRule));
             m_RuleList.drawElementCallback = OnListElementGUI;
-            m_RuleList.drawHeaderCallback = OnListHeaderGUI;
             m_RuleList.draggable = true;
             m_RuleList.elementHeight = 22;
+            m_RuleList.headerHeight = 0;
             m_RuleList.onAddCallback = (list) => Add();
         }
 
@@ -175,7 +162,7 @@ namespace UnityGameFramework.Extension.Editor
 
         private void OnListElementGUI(Rect rect, int index, bool isactive, bool isfocused)
         {
-            if (index>=m_Configuration.rules.Count)
+            if (index >= m_Configuration.rules.Count)
             {
                 return;
             }
@@ -185,20 +172,20 @@ namespace UnityGameFramework.Extension.Editor
             rect.y++;
 
             Rect r = rect;
-            r.width = 16;
+            r.width = 20 + GAP;
             r.height = 18;
             rule.valid = EditorGUI.Toggle(r, rule.valid);
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMax + 425;
+            r.xMax = r.xMax + 200;
             float assetBundleNameLength = r.width;
             rule.name = EditorGUI.TextField(r, rule.name);
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMin + 250;
+            r.xMax = r.xMin + 240;
             rule.loadType = (LoadType)EditorGUI.EnumPopup(r, rule.loadType);
 
-            r.xMin = r.xMax + GAP + 15;
+            r.xMin = r.xMax + GAP + 20;
             r.xMax = r.xMin + 30;
             rule.packed = EditorGUI.Toggle(r, rule.packed);
 
@@ -270,13 +257,13 @@ namespace UnityGameFramework.Extension.Editor
         private List<string> m_AllConfigPaths;
         private string[] m_ConfigNames;
 
-        private void OnListHeaderGUI(Rect rect)
+        private void OnListHeaderGUI()
         {
-            Rect rules = new Rect(rect.x, rect.y, 100, rect.height);
-            EditorGUI.LabelField(rules, "Rules");
-            Rect configLabel = new Rect(rect.x + rules.width, rect.y, 90, rect.height);
-            EditorGUI.LabelField(configLabel, "CurrentConfig:");
-            Rect configs = new Rect(rect.x + rules.width + configLabel.width, rect.y, 200, rect.height);
+            const float GAP = 5;
+            Rect rect = new Rect(GAP, 0, 40, 18);
+            Rect configLabel = new Rect(rect.x, rect.y, 75, rect.height);
+            EditorGUI.LabelField(configLabel, "RulesConfig:");
+            Rect configs = new Rect(configLabel.xMax + GAP, rect.y, 200, rect.height);
             m_CurrentConfigIndex = EditorGUI.Popup(configs, m_CurrentConfigIndex, m_ConfigNames);
             if (m_CurrentConfigPath != m_AllConfigPaths[m_CurrentConfigIndex])
             {
@@ -285,10 +272,25 @@ namespace UnityGameFramework.Extension.Editor
                 m_RuleList = null;
             }
             
-            Rect reload = new Rect(rect.width-100, rect.y, 100, rect.height);
+            Rect reload = new Rect(configs.xMax + GAP, rect.y, 100, rect.height);
             if (GUI.Button(reload, "Reload"))
             {
                 Load();
+            }
+            Rect add = new Rect(reload.xMax + GAP, rect.y, 100, rect.height);
+            if (GUI.Button(add, "Add"))
+            {
+                Add();
+            }
+            Rect save = new Rect(add.xMax + GAP, rect.y, 100, rect.height);
+            if (GUI.Button(save, "Save"))
+            {
+                Save();
+            }
+            Rect refresh = new Rect(save.xMax + GAP, rect.y, 200, rect.height);
+            if (GUI.Button(refresh, "Refresh ResourceCollection.xml"))
+            {
+                RefreshResourceCollection();
             }
         }
 
@@ -298,18 +300,18 @@ namespace UnityGameFramework.Extension.Editor
             const float GAP = 5;
             GUI.enabled = false;
 
-            Rect r = new Rect(0, 20, rect.width, rect.height);
-            r.width = 45;
+            Rect r = new Rect(GAP, 25, rect.width, rect.height);
+            r.width = 41;
             r.height = 18;
             EditorGUI.TextField(r, "Active");
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMax + 415;
+            r.xMax = r.xMax + 200;
             float assetBundleNameLength = r.width;
             EditorGUI.TextField(r, "Name");
 
             r.xMin = r.xMax + GAP;
-            r.xMax = r.xMin + 250;
+            r.xMax = r.xMin + 240;
             EditorGUI.TextField(r, "Load Type");
 
             r.xMin = r.xMax + GAP;
@@ -329,7 +331,7 @@ namespace UnityGameFramework.Extension.Editor
             EditorGUI.TextField(r, "Variant");
 
             r.xMin = r.xMax + GAP;
-            r.width = assetBundleNameLength + 50;
+            r.width = assetBundleNameLength + 39;
             EditorGUI.TextField(r, "AssetDirectory");
 
             r.xMin = r.xMax + GAP;
