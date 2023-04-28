@@ -21,6 +21,13 @@
       "dependencies": {},
       "hash": "a499f0c04670e6e52893799f02a30aa7b5b4db05"
     },
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "305695ad5d194dda0d6b00777c2459202a1ef4ea"
+    },
     "com.focus-creative-games.hybridclr_unity": {
       "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
       "depth": 0,
@@ -81,6 +88,13 @@
     "com.unity.mathematics": {
       "version": "1.2.6",
       "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.0",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
