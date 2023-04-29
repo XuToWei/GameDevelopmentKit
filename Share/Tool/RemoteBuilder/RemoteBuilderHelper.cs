@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Net.Sockets;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using ET.Client;
+using ET.Server;
 
 namespace ET
 {
@@ -45,7 +45,8 @@ namespace ET
             Game.AddSingleton<NetServices>();
             Game.AddSingleton<ConfigComponent>().IConfigReader = new ConfigReader();
             await ConfigComponent.Instance.LoadAllAsync();
-            
+
+            OpcodeHelper.IOpcodeIgnoreDebugLog = new OpcodeIgnoreDebugLog();
             Root.Instance.Scene.AddComponent<NetThreadComponent>();
             Root.Instance.Scene.AddComponent<OpcodeTypeComponent>();
             Root.Instance.Scene.AddComponent<MessageDispatcherComponent>();
@@ -54,27 +55,19 @@ namespace ET
 
         private static async UniTask InitClientAsync()
         {
-            await UniTask.CompletedTask;
             Scene clientScene = EntitySceneFactory.CreateScene
                     (1, SceneType.RemoteBuilderClient, "RemoteBuilderClient", ClientSceneManagerComponent.Instance);
-            clientScene.AddComponent<NetClientComponent, AddressFamily>(NetworkHelper
-                    .GetHostAddress(Tables.Instance.RemoteBuilderConfig.ServerInnerIP).AddressFamily);
-            
-            Session routerSession = clientScene.GetComponent<NetClientComponent>().Create(NetworkHelper.ToIPEndPoint
-                    ($"{Tables.Instance.RemoteBuilderConfig.ServerInnerIP}:{Tables.Instance.RemoteBuilderConfig.ServerPort}"));
-            
-            // Session gateSession = await RouterHelper
-            //         .CreateRouterSession(clientScene, );
-            // clientScene.AddComponent<SessionComponent>().Session = gateSession;
-            clientScene.AddComponent<ConsoleComponent>();
+            RemoteBuilderClient remoteBuilderClient = clientScene.AddComponent<RemoteBuilderClient>();
+            await remoteBuilderClient.InitAsync();
         }
-
+        
         private static async UniTask InitServerAsync()
         {
-            await UniTask.CompletedTask;
             Root.Instance.Scene.AddComponent<ServerSceneManagerComponent>();
-            Scene scene = EntitySceneFactory.CreateScene(1, 1, 1, SceneType.RemoteBuilderServer, "RemoteBuilderServer",
+            Scene scene = EntitySceneFactory.CreateScene(2, SceneType.RemoteBuilderServer, "RemoteBuilderServer",
                 ServerSceneManagerComponent.Instance);
+            RemoteBuilderServer remoteBuilderServer = scene.AddComponent<RemoteBuilderServer>();
+            await remoteBuilderServer.InitAsync();
         }
     }
 }

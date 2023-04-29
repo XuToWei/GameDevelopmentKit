@@ -36,7 +36,7 @@ namespace ET
                 ProtobufHelper.Init();
 
                 Log.Info($"server start........................ {Root.Instance.Scene.Id}");
-
+                Options.Instance.AppType = AppType.RemoteBuilder;
                 switch (Options.Instance.AppType)
                 {
                     case AppType.ExcelExporter:

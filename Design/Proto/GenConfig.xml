@@ -1,7 +1,7 @@
 ﻿<Config>
   <Gen>
     <Open Value="TRUE" />
-    <Proto_File Value="OuterMessage_C_10001.proto" />
+    <Proto_File Value="OuterMessage_C.proto" />
     <Start_Opcode Value="10001" />
     <Code_Name Value="OuterMessage" />
     <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/Client/Message,../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Message" />
@@ -9,7 +9,7 @@
   </Gen>
   <Gen>
     <Open Value="TRUE" />
-    <Proto_File Value="InnerMessage_S_20001.proto" />
+    <Proto_File Value="InnerMessage_S.proto" />
     <Start_Opcode Value="20001" />
     <Code_Name Value="InnerMessage" />
     <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Message" />

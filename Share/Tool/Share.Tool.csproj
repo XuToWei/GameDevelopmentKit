@@ -64,6 +64,9 @@
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Client\Module\Message\**\*.cs">
             <Link>Share\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Server\Module\Message\AMRpcHandler.cs">
+            <Link>Share\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
+        </Compile>
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Server\Module\Message\NetServerComponent.cs">
             <Link>Share\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>

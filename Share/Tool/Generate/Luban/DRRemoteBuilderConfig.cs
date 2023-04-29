@@ -11,30 +11,30 @@ using System.Collections.Generic;
 
 namespace ET
 {
-public sealed partial class RemoteBuilderData :  Bright.Config.BeanBase 
+public sealed partial class DRRemoteBuilderConfig :  Bright.Config.BeanBase 
 {
-    public RemoteBuilderData(ByteBuf _buf) 
+    public DRRemoteBuilderConfig(ByteBuf _buf) 
     {
         Client = _buf.ReadInt();
         ServerIP = _buf.ReadString();
         ServerInnerIP = _buf.ReadString();
-        ServerPort = _buf.ReadString();
+        ServerOuterPort = _buf.ReadString();
         ServerUnityPath = _buf.ReadString();
         PostInit();
     }
 
-    public static RemoteBuilderData DeserializeRemoteBuilderData(ByteBuf _buf)
+    public static DRRemoteBuilderConfig DeserializeDRRemoteBuilderConfig(ByteBuf _buf)
     {
-        return new RemoteBuilderData(_buf);
+        return new DRRemoteBuilderConfig(_buf);
     }
 
     public int Client { get; private set; }
     public string ServerIP { get; private set; }
     public string ServerInnerIP { get; private set; }
-    public string ServerPort { get; private set; }
+    public string ServerOuterPort { get; private set; }
     public string ServerUnityPath { get; private set; }
 
-    public const int __ID__ = 726152607;
+    public const int __ID__ = 60227753;
     public override int GetTypeId() => __ID__;
 
     public  void Resolve(Dictionary<string, IDataTable> _tables)
@@ -52,7 +52,7 @@ public sealed partial class RemoteBuilderData :  Bright.Config.BeanBase
         + "Client:" + Client + ","
         + "ServerIP:" + ServerIP + ","
         + "ServerInnerIP:" + ServerInnerIP + ","
-        + "ServerPort:" + ServerPort + ","
+        + "ServerOuterPort:" + ServerOuterPort + ","
         + "ServerUnityPath:" + ServerUnityPath + ","
         + "}";
     }

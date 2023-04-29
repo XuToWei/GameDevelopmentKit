@@ -12,14 +12,14 @@ using System.Threading.Tasks;
 namespace ET
 {
    
-public sealed partial class RemoteBuilderConfig : IDataTable
+public sealed partial class DTRemoteBuilderConfig : IDataTable
 {
 
-    private RemoteBuilderData _data;
+    private DRRemoteBuilderConfig _data;
 
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
-    public RemoteBuilderConfig(System.Func<Task<ByteBuf>> loadFunc)
+    public DTRemoteBuilderConfig(System.Func<Task<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
     }
@@ -29,7 +29,7 @@ public sealed partial class RemoteBuilderConfig : IDataTable
         ByteBuf _buf = await _loadFunc();
         int n = _buf.ReadSize();
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
-        _data = RemoteBuilderData.DeserializeRemoteBuilderData(_buf);
+        _data = DRRemoteBuilderConfig.DeserializeDRRemoteBuilderConfig(_buf);
         PostInit();
     }
 
@@ -37,7 +37,7 @@ public sealed partial class RemoteBuilderConfig : IDataTable
      public int Client => _data.Client;
      public string ServerIP => _data.ServerIP;
      public string ServerInnerIP => _data.ServerInnerIP;
-     public string ServerPort => _data.ServerPort;
+     public string ServerOuterPort => _data.ServerOuterPort;
      public string ServerUnityPath => _data.ServerUnityPath;
 
     public void Resolve(Dictionary<string, IDataTable> _tables)

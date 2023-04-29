@@ -14,7 +14,7 @@ namespace ET
 
 public partial class Tables
 {
-    public RemoteBuilderConfig RemoteBuilderConfig { private set; get; }
+    public DTRemoteBuilderConfig DTRemoteBuilderConfig { private set; get; }
 
     private Dictionary<string, IDataTable> _tables;
 
@@ -26,20 +26,20 @@ public partial class Tables
     {
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
-        RemoteBuilderConfig = new RemoteBuilderConfig(() => loader("remotebuilderconfig")); 
-        loadTasks.Add(RemoteBuilderConfig.LoadAsync());
-        _tables.Add("RemoteBuilderConfig", RemoteBuilderConfig);
+        DTRemoteBuilderConfig = new DTRemoteBuilderConfig(() => loader("dtremotebuilderconfig")); 
+        loadTasks.Add(DTRemoteBuilderConfig.LoadAsync());
+        _tables.Add("DTRemoteBuilderConfig", DTRemoteBuilderConfig);
 
         await Task.WhenAll(loadTasks);
 
         PostInit();
-        RemoteBuilderConfig.Resolve(_tables); 
+        DTRemoteBuilderConfig.Resolve(_tables); 
         PostResolve();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)
     {
-        RemoteBuilderConfig.TranslateText(translator); 
+        DTRemoteBuilderConfig.TranslateText(translator); 
     }
     
     partial void PostInit();

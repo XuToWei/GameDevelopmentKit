@@ -1,8 +1,21 @@
 syntax = "proto3";
 package ET;
 
-message RemoteBuilderMessage
+//ResponseType S2C_CanBuild
+message C2S_CanBuild // IRequest
 {
-	repeated string Realms = 1;
-	repeated string Routers = 2;
+	int32 RpcId = 1;
+}
+
+message S2C_CanBuild // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool CanBuild = 4;
+}
+
+message S2C_TipInfo // IMessage
+{
+	string Info = 1;
 }
