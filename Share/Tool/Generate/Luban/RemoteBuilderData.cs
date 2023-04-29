@@ -16,6 +16,7 @@ public sealed partial class RemoteBuilderData :  Bright.Config.BeanBase
     public RemoteBuilderData(ByteBuf _buf) 
     {
         Client = _buf.ReadInt();
+        ServerIP = _buf.ReadString();
         ServerInnerIP = _buf.ReadString();
         ServerPort = _buf.ReadString();
         ServerUnityPath = _buf.ReadString();
@@ -28,6 +29,7 @@ public sealed partial class RemoteBuilderData :  Bright.Config.BeanBase
     }
 
     public int Client { get; private set; }
+    public string ServerIP { get; private set; }
     public string ServerInnerIP { get; private set; }
     public string ServerPort { get; private set; }
     public string ServerUnityPath { get; private set; }
@@ -48,6 +50,7 @@ public sealed partial class RemoteBuilderData :  Bright.Config.BeanBase
     {
         return "{ "
         + "Client:" + Client + ","
+        + "ServerIP:" + ServerIP + ","
         + "ServerInnerIP:" + ServerInnerIP + ","
         + "ServerPort:" + ServerPort + ","
         + "ServerUnityPath:" + ServerUnityPath + ","

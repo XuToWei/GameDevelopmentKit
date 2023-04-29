@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommandLine;
+using Cysharp.Threading.Tasks;
 
-namespace ET.Server
+namespace ET
 {
-    internal static class Init
+    public static class Init
     {
-        private static int Main(string[] args)
+        public static async void StartAsync()
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
 
@@ -16,7 +17,7 @@ namespace ET.Server
                 Game.AddSingleton<MainThreadSynchronizationContext>();
 
                 // 命令行参数
-                Parser.Default.ParseArguments<Options>(args)
+                Parser.Default.ParseArguments<Options>(System.Environment.GetCommandLineArgs())
                         .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
                         .WithParsed(Game.AddSingleton);
 
@@ -28,13 +29,14 @@ namespace ET.Server
                 Game.AddSingleton<EventSystem>();
                 Game.AddSingleton<Root>();
 
-                Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Game).Assembly);
+                Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Init).Assembly, typeof (Game).Assembly);
                 EventSystem.Instance.Add(types);
 
                 MongoHelper.Init();
                 ProtobufHelper.Init();
 
                 Log.Info($"server start........................ {Root.Instance.Scene.Id}");
+
                 switch (Options.Instance.AppType)
                 {
                     case AppType.ExcelExporter:
@@ -44,18 +46,19 @@ namespace ET.Server
                         //Json-luban导出json
                         //GB2312:使用GB2312编码解决中文乱码
                         ExcelExporter.Export();
-                        return 0;
+                        break;
                     }
                     case AppType.Proto2CS:
                     {
                         Options.Instance.Console = 1;
                         Proto2CS.Export();
-                        return 0;
+                        break;
                     }
                     case AppType.RemoteBuilder:
                     {
-                        
-                        return 0;
+                        Options.Instance.Console = 1;
+                        await RemoteBuilder.RunAsync();
+                        break;
                     }
                 }
             }
@@ -63,8 +66,6 @@ namespace ET.Server
             {
                 Log.ConsoleError(e.ToString());
             }
-
-            return 1;
         }
     }
 }

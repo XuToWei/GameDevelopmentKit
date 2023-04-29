@@ -9,17 +9,8 @@ namespace ET.Server
         {
             protected override void Awake(RemoteBuilderServer self)
             {
-                self.AddComponent<RemoteBuilder>();
-                self.StartAsync().Forget();
+                
             }
-        }
-
-        public static async UniTaskVoid StartAsync(this RemoteBuilderServer self)
-        {
-            await self.GetComponent<RemoteBuilder>().StartAsync();
-            ServerSceneManagerComponent sceneManagerComponent = Root.Instance.Scene.AddComponent<ServerSceneManagerComponent>();
-            sceneManagerComponent.AddComponent<NetInnerComponent, IPEndPoint>(NetworkHelper.ToIPEndPoint(
-                $"{ToolConfig.Instance.RemoteBuilderConfig.ServerInnerIP}:{ToolConfig.Instance.RemoteBuilderConfig.ServerPort}"));
         }
     }
 }

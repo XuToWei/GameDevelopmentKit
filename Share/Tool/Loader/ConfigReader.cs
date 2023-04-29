@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using Cysharp.Threading.Tasks;
 
 namespace ET
@@ -21,11 +21,11 @@ namespace ET
         {
             if (isJson)
             {
-                return $"../Config/Luban/{fileName}.json";
+                return $"../Config/ShareTool/{fileName}.json";
             }
             else
             {
-                return $"../Config/Luban/{fileName}.bytes";
+                return $"../Config/ShareTool/{fileName}.bytes";
             }
         }
     }

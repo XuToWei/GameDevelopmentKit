@@ -34,10 +34,9 @@ namespace ET
 
         public async UniTask LoadHotfixAsync()
         {
-            SynchronizationContext current = SynchronizationContext.Current;
-            byte[] dllBytes = await File.ReadAllBytesAsync("./Hotfix.dll").ConfigureAwait(false);
-            byte[] pdbBytes = await File.ReadAllBytesAsync("./Hotfix.pdb").ConfigureAwait(false);
-            UniTask.ReturnToSynchronizationContext(current);//防止ReadAllBytesAsync闪退
+            await UniTask.CompletedTask;
+            byte[] dllBytes = File.ReadAllBytes("./Hotfix.dll");
+            byte[] pdbBytes = File.ReadAllBytes("./Hotfix.pdb");
 
             assemblyLoadContext?.Unload();
             GC.Collect();

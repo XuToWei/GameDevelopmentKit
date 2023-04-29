@@ -35,6 +35,7 @@ public sealed partial class RemoteBuilderConfig : IDataTable
 
 
      public int Client => _data.Client;
+     public string ServerIP => _data.ServerIP;
      public string ServerInnerIP => _data.ServerInnerIP;
      public string ServerPort => _data.ServerPort;
      public string ServerUnityPath => _data.ServerUnityPath;

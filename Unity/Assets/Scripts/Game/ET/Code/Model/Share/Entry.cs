@@ -35,6 +35,7 @@ namespace ET
             
             MongoHelper.Init();
             ProtobufHelper.Init();
+            OpcodeHelper.IOpcodeIgnoreDebugLog = new OpcodeIgnoreDebugLog();
             
             Game.AddSingleton<NetServices>();
             Game.AddSingleton<Root>();

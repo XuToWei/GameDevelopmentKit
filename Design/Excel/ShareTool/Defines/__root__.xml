@@ -10,5 +10,5 @@
 	<importexcel name="__enums__.xlsx" type="enum"/>相对data目录
 	<importexcel name="__beans__.xlsx" type="bean"/>相对data目录
 
-	<service name="all" manager="ToolConfig" group=""/>
+	<service name="all" manager="Tables" group=""/>
 </root>
