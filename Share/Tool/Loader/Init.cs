@@ -27,8 +27,10 @@ namespace ET
                 Game.AddSingleton<ObjectPool>();
                 Game.AddSingleton<IdGenerater>();
                 Game.AddSingleton<EventSystem>();
+                Game.AddSingleton<TimerComponent>();
+                Game.AddSingleton<CoroutineLockComponent>();
                 Game.AddSingleton<Root>();
-
+                
                 Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Init).Assembly, typeof (Game).Assembly);
                 EventSystem.Instance.Add(types);
 
@@ -36,7 +38,8 @@ namespace ET
                 ProtobufHelper.Init();
 
                 Log.Info($"server start........................ {Root.Instance.Scene.Id}");
-                Options.Instance.AppType = AppType.RemoteBuilder;
+                // Options.Instance.AppType = AppType.RemoteBuilder;
+                // Options.Instance.LogLevel = 5;
                 switch (Options.Instance.AppType)
                 {
                     case AppType.ExcelExporter:

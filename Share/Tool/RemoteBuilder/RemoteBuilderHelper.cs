@@ -42,10 +42,9 @@ namespace ET
 
         private static async UniTask InitShareAsync()
         {
-            Game.AddSingleton<NetServices>();
             Game.AddSingleton<ConfigComponent>().IConfigReader = new ConfigReader();
             await ConfigComponent.Instance.LoadAllAsync();
-
+            Game.AddSingleton<NetServices>();
             OpcodeHelper.IOpcodeIgnoreDebugLog = new OpcodeIgnoreDebugLog();
             Root.Instance.Scene.AddComponent<NetThreadComponent>();
             Root.Instance.Scene.AddComponent<OpcodeTypeComponent>();
