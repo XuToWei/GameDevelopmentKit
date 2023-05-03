@@ -37,73 +37,11 @@
             <Link>ExcelExporter\Generate\Luban\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\Module\Scene\**\*.cs">
-            <Link>Share\Model\Scene\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Share\Module\Scene\**\*.cs">
-            <Link>Share\Hotfix\Scene\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\Module\Message\**\*.cs">
-            <Link>Share\Model\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Share\Module\Message\**\*.cs">
-            <Link>Share\Hotfix\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Client\Module\Message\**\*.cs">
-            <Link>Share\Model\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Client\Module\Message\**\*.cs">
-            <Link>Share\Hotfix\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\Module\Actor\**\*.cs">
-            <Link>Share\Model\Actor\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Share\Module\Actor\**\*.cs">
-            <Link>Share\Hotfix\Actor\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\Module\ActorLocation\**\*.cs">
-            <Link>Share\Model\ActorLocation\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Share\Module\ActorLocation\**\*.cs">
-            <Link>Share\Hotfix\ActorLocation\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\Module\Config\**\*.cs">
-            <Link>Share\Model\Config\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\Module\Console\**\*.cs">
-            <Link>Share\Model\Console\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Share\Module\Console\**\*.cs">
-            <Link>Share\Hotfix\Console\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Server\Module\Message\NetServerComponent.cs">
-            <Link>Share\Model\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Server\Module\Message\NetServerComponentSystem.cs">
-            <Link>Share\Hotfix\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Server\Module\Message\AMRpcHandler.cs">
-            <Link>Share\Model\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\TimerInvokeType.cs">
-            <Link>Share\Model\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Share\ConstValue.cs">
-            <Link>Share\Hotfix\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
-        
         <Compile Include="..\..\DotNet\Loader\NLogger.cs">
-            <Link>Share\Loader\%(RecursiveDir)%(FileName)%(Extension)</Link>
+            <Link>Loader\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         <Compile Include="..\..\DotNet\Loader\TimeNow.cs">
-            <Link>Share\Loader\%(RecursiveDir)%(FileName)%(Extension)</Link>
+            <Link>Loader\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
     </ItemGroup>
     

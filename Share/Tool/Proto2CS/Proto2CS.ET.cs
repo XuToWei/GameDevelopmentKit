@@ -142,21 +142,21 @@ namespace ET
 
                 foreach (var csOutDir in csOutDirs)
                 {
-                    GenerateCS(sb, csOutDir, proto);
+                    GenerateCS(sb, csOutDir, csName);
                 }
             }
 
-            private static void GenerateCS(StringBuilder sb, string path, string proto)
+            private static void GenerateCS(StringBuilder sb, string path, string csName)
             {
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
 
-                string csPath = Path.Combine(path, Path.GetFileNameWithoutExtension(proto) + ".cs");
+                string csPath = Path.Combine(path, csName + ".cs");
                 using FileStream txt = new FileStream(csPath, FileMode.Create, FileAccess.ReadWrite);
                 using StreamWriter sw = new StreamWriter(txt);
-                sw.Write(sb.ToString());
+                sw.Write(sb.ToString().Replace("\t", "    "));
 
                 Console.WriteLine($"proto2cs file : {csPath}");
             }

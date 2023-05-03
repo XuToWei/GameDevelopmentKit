@@ -29,7 +29,7 @@ namespace ET
         private enum GenCodeType
         {
             ET,
-            Game
+            UGF
         }
         
         public static void Export()
@@ -76,9 +76,9 @@ namespace ET
                 {
                     Proto2CS_ET.Proto2CS(info.Proto_File, info.Code_Name, info.Code_Output_Dirs, info.Start_Opcode);
                 }
-                else if (info.Code_Type == GenCodeType.Game)
+                else if (info.Code_Type == GenCodeType.UGF)
                 {
-                    
+                    Proto2CS_UGF.Proto2CS(info.Proto_File, info.Code_Name, info.Code_Output_Dirs, info.Start_Opcode);
                 }
             }
             

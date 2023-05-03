@@ -7,16 +7,13 @@
 
 using ProtoBuf;
 using System;
+using UnityGameFramework.Extension;
 
-namespace UnityGameFramework.Extension
+namespace Game
 {
     [Serializable, ProtoContract(Name = @"SCHeartBeat")]
     public class SCHeartBeat : SCPacketBase
     {
-        public SCHeartBeat()
-        {
-        }
-
         public override int Id
         {
             get

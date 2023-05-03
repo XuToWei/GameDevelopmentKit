@@ -6,9 +6,10 @@
 //------------------------------------------------------------
 
 using GameFramework.Network;
+using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
 
-namespace UnityGameFramework.Extension
+namespace Game
 {
     public class SCHeartBeatHandler : PacketHandlerBase
     {

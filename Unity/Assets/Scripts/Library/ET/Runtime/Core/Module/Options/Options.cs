@@ -14,7 +14,6 @@ namespace ET
         Proto2CS,
         BenchmarkClient,
         BenchmarkServer,
-        RemoteBuilder,              //远程打包
     }
     
     public class Options: Singleton<Options>

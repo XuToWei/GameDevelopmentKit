@@ -1,0 +1,12 @@
+syntax = "proto3";
+package Game;
+
+message CSHeartBeatTest
+{
+	repeated int32 A = 1;
+}
+
+message SCHeartBeatTest
+{
+	repeated int32 A = 1;
+}

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommandLine;
-using Cysharp.Threading.Tasks;
 
-namespace ET
+namespace ET.Server
 {
-    public static class Init
+    internal static class Init
     {
-        public static async void StartAsync()
+        private static int Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
 
@@ -17,7 +16,7 @@ namespace ET
                 Game.AddSingleton<MainThreadSynchronizationContext>();
 
                 // 命令行参数
-                Parser.Default.ParseArguments<Options>(System.Environment.GetCommandLineArgs())
+                Parser.Default.ParseArguments<Options>(args)
                         .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
                         .WithParsed(Game.AddSingleton);
 
@@ -27,19 +26,15 @@ namespace ET
                 Game.AddSingleton<ObjectPool>();
                 Game.AddSingleton<IdGenerater>();
                 Game.AddSingleton<EventSystem>();
-                Game.AddSingleton<TimerComponent>();
-                Game.AddSingleton<CoroutineLockComponent>();
                 Game.AddSingleton<Root>();
-                
-                Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Init).Assembly, typeof (Game).Assembly);
+
+                Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Game).Assembly);
                 EventSystem.Instance.Add(types);
 
                 MongoHelper.Init();
                 ProtobufHelper.Init();
 
                 Log.Info($"server start........................ {Root.Instance.Scene.Id}");
-                // Options.Instance.AppType = AppType.RemoteBuilder;
-                // Options.Instance.LogLevel = 5;
                 switch (Options.Instance.AppType)
                 {
                     case AppType.ExcelExporter:
@@ -49,19 +44,13 @@ namespace ET
                         //Json-luban导出json
                         //GB2312:使用GB2312编码解决中文乱码
                         ExcelExporter.Export();
-                        break;
+                        return 0;
                     }
                     case AppType.Proto2CS:
                     {
                         Options.Instance.Console = 1;
                         Proto2CS.Export();
-                        break;
-                    }
-                    case AppType.RemoteBuilder:
-                    {
-                        Options.Instance.Console = 1;
-                        await RemoteBuilder.RunAsync();
-                        break;
+                        return 0;
                     }
                 }
             }
@@ -69,6 +58,8 @@ namespace ET
             {
                 Log.ConsoleError(e.ToString());
             }
+
+            return 1;
         }
     }
 }

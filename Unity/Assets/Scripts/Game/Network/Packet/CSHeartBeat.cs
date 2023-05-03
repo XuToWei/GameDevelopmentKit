@@ -7,16 +7,13 @@
 
 using ProtoBuf;
 using System;
+using UnityGameFramework.Extension;
 
-namespace UnityGameFramework.Extension
+namespace Game
 {
     [Serializable, ProtoContract(Name = @"CSHeartBeat")]
     public class CSHeartBeat : CSPacketBase
     {
-        public CSHeartBeat()
-        {
-        }
-
         public override int Id
         {
             get

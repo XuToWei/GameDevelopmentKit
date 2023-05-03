@@ -16,19 +16,11 @@
     <Code_Type Value="ET" />
   </Gen>
   <Gen>
-    <Open Value="FALSE" />
-    <Proto_File Value="Game.proto" />
+    <Open Value="TRUE" />
+    <Proto_File Value="Game_C.proto" />
     <Start_Opcode Value="30001" />
      <Code_Name Value="GameMessage" />
     <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/Generate/Message" />
-    <Code_Type Value="Game" />
-  </Gen>
-  <Gen>
-    <Open Value="TRUE" />
-    <Proto_File Value="ShareToolMessage.proto" />
-    <Start_Opcode Value="32001" />
-    <Code_Name Value="ToolMessage" />
-    <Code_Output_Dirs Value="../Share/Tool/Generate/Message" />
-    <Code_Type Value="ET" />
+    <Code_Type Value="UGF" />
   </Gen>
 </Config>
