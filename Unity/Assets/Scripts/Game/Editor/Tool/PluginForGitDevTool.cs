@@ -14,11 +14,6 @@ namespace Game.Editor
         {
             "Assets/Scripts/Game/Editor/Tool/PluginForGitDevTool.cs",
             "Assets/Scripts/Game/Debugger/ToolDebuggerWindow.cs",
-            "Assets/Scripts/Game/ET/Loader/UI/ETEnhancedScrollerCellView.cs",
-            "Assets/Scripts/Game/ET/Loader/UI/ETEnhancedScrollerDelegate.cs",
-            "Assets/Scripts/Game/ET/Loader/UI/ETEnhancedScrollerExtension.cs",
-            "Assets/Scripts/Library/EnhancedScroller",
-            "Assets/Scripts/Library/FastScriptReload",
             "Assets/Scripts/Library/SmartUiSelection",
             "Assets/Scripts/Library/StompyRobot",
             "Assets/Scripts/Plugins/Demigiant",

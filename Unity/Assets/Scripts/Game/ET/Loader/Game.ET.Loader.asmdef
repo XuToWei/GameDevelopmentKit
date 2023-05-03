@@ -9,9 +9,9 @@
         "Game",
         "CodeBind.Runtime",
         "UniTask",
-        "EnhancedScroller",
         "UIEffect",
-        "Coffee.UIParticle"
+        "Coffee.UIParticle",
+        "FancyScrollView"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

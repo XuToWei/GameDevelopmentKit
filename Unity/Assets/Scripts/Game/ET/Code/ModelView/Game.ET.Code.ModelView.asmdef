@@ -15,9 +15,9 @@
         "CodeBind.Runtime",
         "Unity.TextMeshPro",
         "UniTask",
-        "EnhancedScroller",
         "UIEffect",
-        "Coffee.UIParticle"
+        "Coffee.UIParticle",
+        "FancyScrollView"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

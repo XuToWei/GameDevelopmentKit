@@ -10,13 +10,13 @@
         "Unity.Mathematics",
         "HybridCLR.Runtime",
         "UniTask",
-        "EnhancedScroller",
         "StompyRobot.SRDebugger",
         "StompyRobot.SRF",
         "CodeBind.Runtime",
         "Unity.TextMeshPro",
         "UIEffect",
-        "Coffee.UIParticle"
+        "Coffee.UIParticle",
+        "FancyScrollView"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
