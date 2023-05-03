@@ -164,7 +164,7 @@ namespace ET
                 string n = ss[2];
                 
                 sb.Append($"\t\t[ProtoMember({n})]\n");
-                sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }}\n");
+                sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; }} = new Dictionary<{keyType}, {valueType}>();\n");
 
                 disposeSb.Append($"\t\t\t{v}?.Clear();\n");
             }
@@ -182,7 +182,7 @@ namespace ET
                     int n = int.Parse(ss[4]);
 
                     sb.Append($"\t\t[ProtoMember({n})]\n");
-                    sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }}\n\n");
+                    sb.Append($"\t\tpublic List<{type}> {name} {{ get; }} = new List<{type}>();\n\n");
 
                     disposeSb.Append($"\t\t\t{name}?.Clear();\n");
                 }

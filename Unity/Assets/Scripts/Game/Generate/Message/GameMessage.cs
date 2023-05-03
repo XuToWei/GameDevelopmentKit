@@ -9,7 +9,7 @@ namespace Game
     {
         public override int Id => 30002;
         [ProtoMember(1)]
-        public List<int> A { get; set; }
+        public List<int> A { get; } = new List<int>();
 
         public override void Clear()
         {
@@ -22,7 +22,7 @@ namespace Game
     {
         public override int Id => 30003;
         [ProtoMember(1)]
-        public List<int> A { get; set; }
+        public List<int> A { get; } = new List<int>();
 
         public override void Clear()
         {
