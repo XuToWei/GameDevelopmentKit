@@ -24,8 +24,6 @@ namespace ET
                 sb.Append($"namespace {ns}\n");
                 sb.Append("{\n");
 
-                StringBuilder disposeSb = new StringBuilder();
-
                 bool isMsgStart = false;
                 foreach (string line in s.Split('\n'))
                 {
@@ -53,11 +51,6 @@ namespace ET
                     {
                         string parentClass = "";
                         isMsgStart = true;
-
-                        disposeSb.Clear();
-                        disposeSb.Append($"\t\tpublic override void Dispose()\n");
-                        disposeSb.Append("\t\t{\n");
-                        disposeSb.Append("\t\t\tbase.Dispose();\n");
 
                         string msgName = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries)[1];
                         string[] ss = newline.Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
@@ -99,9 +92,6 @@ namespace ET
                         if (newline == "}")
                         {
                             isMsgStart = false;
-                            disposeSb.Append("\t\t}\n");
-                            sb.Append(disposeSb.ToString());
-                            disposeSb.Clear();
                             sb.Append("\t}\n\n");
                             continue;
                         }
@@ -116,15 +106,15 @@ namespace ET
                         {
                             if (newline.StartsWith("map<"))
                             {
-                                Map(sb, newline, disposeSb);
+                                Map(sb, newline);
                             }
                             else if (newline.StartsWith("repeated"))
                             {
-                                Repeated(sb, newline, disposeSb);
+                                Repeated(sb, newline);
                             }
                             else
                             {
-                                Members(sb, newline, disposeSb);
+                                Members(sb, newline);
                             }
                         }
                     }
@@ -161,7 +151,7 @@ namespace ET
                 Console.WriteLine($"proto2cs file : {csPath}");
             }
 
-            private static void Map(StringBuilder sb, string newline, StringBuilder disposeSb)
+            private static void Map(StringBuilder sb, string newline)
             {
                 int start = newline.IndexOf("<") + 1;
                 int end = newline.IndexOf(">");
@@ -178,11 +168,9 @@ namespace ET
                     "\t\t[MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]\n");
                 sb.Append($"\t\t[ProtoMember({n})]\n");
                 sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }}\n");
-
-                disposeSb.Append($"\t\t\t{v}?.Clear();\n");
             }
 
-            private static void Repeated(StringBuilder sb, string newline, StringBuilder disposeSb)
+            private static void Repeated(StringBuilder sb, string newline)
             {
                 try
                 {
@@ -196,8 +184,6 @@ namespace ET
 
                     sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }}\n\n");
-
-                    disposeSb.Append($"\t\t\t{name}?.Clear();\n");
                 }
                 catch (Exception e)
                 {
@@ -242,7 +228,7 @@ namespace ET
                 return typeCs;
             }
 
-            private static void Members(StringBuilder sb, string newline, StringBuilder disposeSb)
+            private static void Members(StringBuilder sb, string newline)
             {
                 try
                 {
@@ -256,8 +242,6 @@ namespace ET
 
                     sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\tpublic {typeCs} {name} {{ get; set; }}\n\n");
-
-                    disposeSb.Append($"\t\t\t{name} = default;\n");
                 }
                 catch (Exception e)
                 {

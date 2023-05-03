@@ -16,13 +16,6 @@ namespace ET
         [ProtoMember(3)]
         public long InstanceId { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Key = default;
-            InstanceId = default;
-        }
     }
 
     [ResponseType(nameof(A2M_Reload))]
@@ -33,11 +26,6 @@ namespace ET
         [ProtoMember(1)]
         public int RpcId { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-        }
     }
 
     [Message(InnerMessage.A2M_Reload)]
@@ -53,13 +41,6 @@ namespace ET
         [ProtoMember(3)]
         public string Message { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-        }
     }
 
     [ResponseType(nameof(G2G_LockResponse))]
@@ -76,13 +57,6 @@ namespace ET
         [ProtoMember(3)]
         public string Address { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Id = default;
-            Address = default;
-        }
     }
 
     [Message(InnerMessage.G2G_LockResponse)]
@@ -98,13 +72,6 @@ namespace ET
         [ProtoMember(3)]
         public string Message { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-        }
     }
 
     [ResponseType(nameof(G2G_LockReleaseResponse))]
@@ -121,13 +88,6 @@ namespace ET
         [ProtoMember(3)]
         public string Address { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Id = default;
-            Address = default;
-        }
     }
 
     [Message(InnerMessage.G2G_LockReleaseResponse)]
@@ -143,13 +103,6 @@ namespace ET
         [ProtoMember(3)]
         public string Message { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-        }
     }
 
     [ResponseType(nameof(ObjectAddResponse))]
@@ -166,13 +119,6 @@ namespace ET
         [ProtoMember(3)]
         public long InstanceId { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Key = default;
-            InstanceId = default;
-        }
     }
 
     [Message(InnerMessage.ObjectAddResponse)]
@@ -188,13 +134,6 @@ namespace ET
         [ProtoMember(3)]
         public string Message { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-        }
     }
 
     [ResponseType(nameof(ObjectLockResponse))]
@@ -214,14 +153,6 @@ namespace ET
         [ProtoMember(4)]
         public int Time { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Key = default;
-            InstanceId = default;
-            Time = default;
-        }
     }
 
     [Message(InnerMessage.ObjectLockResponse)]
@@ -237,13 +168,6 @@ namespace ET
         [ProtoMember(3)]
         public string Message { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-        }
     }
 
     [ResponseType(nameof(ObjectUnLockResponse))]
@@ -263,14 +187,6 @@ namespace ET
         [ProtoMember(4)]
         public long InstanceId { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Key = default;
-            OldInstanceId = default;
-            InstanceId = default;
-        }
     }
 
     [Message(InnerMessage.ObjectUnLockResponse)]
@@ -286,13 +202,6 @@ namespace ET
         [ProtoMember(3)]
         public string Message { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-        }
     }
 
     [ResponseType(nameof(ObjectRemoveResponse))]
@@ -306,12 +215,6 @@ namespace ET
         [ProtoMember(2)]
         public long Key { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Key = default;
-        }
     }
 
     [Message(InnerMessage.ObjectRemoveResponse)]
@@ -327,13 +230,6 @@ namespace ET
         [ProtoMember(3)]
         public string Message { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-        }
     }
 
     [ResponseType(nameof(ObjectGetResponse))]
@@ -347,12 +243,6 @@ namespace ET
         [ProtoMember(2)]
         public long Key { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Key = default;
-        }
     }
 
     [Message(InnerMessage.ObjectGetResponse)]
@@ -371,14 +261,6 @@ namespace ET
         [ProtoMember(4)]
         public long InstanceId { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-            InstanceId = default;
-        }
     }
 
     [ResponseType(nameof(G2R_GetLoginKey))]
@@ -392,12 +274,6 @@ namespace ET
         [ProtoMember(2)]
         public string Account { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Account = default;
-        }
     }
 
     [Message(InnerMessage.G2R_GetLoginKey)]
@@ -419,15 +295,6 @@ namespace ET
         [ProtoMember(5)]
         public long GateId { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-            Key = default;
-            GateId = default;
-        }
     }
 
     [Message(InnerMessage.G2M_SessionDisconnect)]
@@ -437,11 +304,6 @@ namespace ET
         [ProtoMember(1)]
         public int RpcId { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-        }
     }
 
     [Message(InnerMessage.ObjectQueryResponse)]
@@ -460,14 +322,6 @@ namespace ET
         [ProtoMember(4)]
         public byte[] Entity { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-            Entity = default;
-        }
     }
 
     [ResponseType(nameof(M2M_UnitTransferResponse))]
@@ -487,14 +341,6 @@ namespace ET
         [ProtoMember(4)]
         public List<byte[]> Entitys { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            OldInstanceId = default;
-            Unit = default;
-            Entitys?.Clear();
-        }
     }
 
     [Message(InnerMessage.M2M_UnitTransferResponse)]
@@ -510,13 +356,6 @@ namespace ET
         [ProtoMember(3)]
         public string Message { get; set; }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            RpcId = default;
-            Error = default;
-            Message = default;
-        }
     }
 
     public static class InnerMessage

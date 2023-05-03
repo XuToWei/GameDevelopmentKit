@@ -26,10 +26,9 @@ namespace ET
                 StringBuilder disposeSb = new StringBuilder();
 
                 bool isMsgStart = false;
-                string[] allLines = s.Split('\n');
-                for (int i = 0; i < allLines.Length; i++)
+                foreach (string line in s.Split('\n'))
                 {
-                    string newline = allLines[i].Trim();
+                    string newline = line.Trim();
 
                     if (newline == "")
                     {
@@ -92,14 +91,7 @@ namespace ET
                             disposeSb.Append("\t\t}\n");
                             sb.Append(disposeSb.ToString());
                             disposeSb.Clear();
-                            if (i == allLines.Length - 1)
-                            {
-                                sb.Append("\t}\n");
-                            }
-                            else
-                            {
-                                sb.Append("\t}\n\n");
-                            }
+                            sb.Append("\t}\n\n");
                             continue;
                         }
 

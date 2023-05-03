@@ -1,9 +1,0 @@
-﻿<Config>
-  <Open Value="TRUE" />
-  <Gen>
-    <Output_Code_Dirs Value="../Share/Tool/Generate/Luban" />
-    <Output_Data_Dirs Value="../Config/ShareTool" />
-    <Gen_Type_Code_Data Value="code_cs_bin,data_bin" />
-    <Gen_Group Value="all" />
-  </Gen>
-</Config>
