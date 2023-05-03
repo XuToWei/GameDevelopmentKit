@@ -90,7 +90,7 @@
             var rect = go.GetComponentOrAdd<RectTransform>();
 
             c.overrideSorting = true;
-            c.sortingOrder = 122;
+            c.sortingOrder = 32122;
 
             go.AddComponent<LayoutElement>().ignoreLayout = true;
 

@@ -1,4 +1,5 @@
 using GameFramework.Debugger;
+using SRDebugger.Internal;
 using UnityEngine;
 
 namespace Game
@@ -8,7 +9,15 @@ namespace Game
         public void Initialize(params object[] args)
         {
 #if !DISABLE_SRDEBUGGER
-            SRDebug.Init();
+            if (!SRDebug.IsInitialized)
+            {
+                SRDebug.Init();
+            }
+
+            Service.Panel.VisibilityChanged += (_, isVisible) =>
+            {
+                GameEntry.Debugger.ActiveWindow = !isVisible;
+            };
 #endif
         }
 
@@ -34,16 +43,7 @@ namespace Game
 
         public void OnDraw()
         {
-            GUILayout.BeginHorizontal();
-            // EditorGUI.BeginDisabledGroup(GameEntry.Console.IsShow);
-            // {
-            //     if(GUILayout.Button("Open Console", GUILayout.Height(30f)))
-            //     {
-            //         GameEntry.Console.Show();
-            //     }
-            // }
-            // EditorGUI.EndDisabledGroup();
-            GUILayout.EndHorizontal();
+
         }
     }
 }
