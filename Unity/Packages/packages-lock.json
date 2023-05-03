@@ -33,7 +33,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "75cb53cb19f11782fbbf02447900578ad9563567"
+      "hash": "3702411ac82129c1683c788d5f695628ad9c1966"
     },
     "com.handzlikchris.fastscriptreload": {
       "version": "https://github.com/handzlikchris/FastScriptReload.git?path=Assets",
