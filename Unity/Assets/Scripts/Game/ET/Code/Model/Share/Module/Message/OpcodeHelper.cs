@@ -1,21 +1,22 @@
+using System.Collections.Generic;
+
 namespace ET
 {
     public static class OpcodeHelper
     {
         [StaticField]
-        private static IOpcodeIgnoreDebugLog iOpcodeIgnoreDebugLog;
-
-        public static IOpcodeIgnoreDebugLog IOpcodeIgnoreDebugLog
+        private static readonly HashSet<ushort> ignoreDebugLogMessageSet = new HashSet<ushort>
         {
-            set
-            {
-                iOpcodeIgnoreDebugLog = value;
-            }
-        }
+            OuterMessage.C2G_Ping,
+            OuterMessage.G2C_Ping,
+            OuterMessage.C2G_Benchmark,
+            OuterMessage.G2C_Benchmark,
+            ushort.MaxValue, // ActorResponse
+        };
 
         private static bool IsNeedLogMessage(ushort opcode)
         {
-            if (iOpcodeIgnoreDebugLog.IgnoreDebugLogMessageSet.Contains(opcode))
+            if (ignoreDebugLogMessageSet.Contains(opcode))
             {
                 return false;
             }
