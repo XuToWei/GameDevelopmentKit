@@ -158,7 +158,7 @@ namespace ET
                 sb.Append($"\t\t[ProtoMember({n})]\n");
                 sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; }} = new Dictionary<{keyType}, {valueType}>();\n");
 
-                disposeSb.Append($"\t\t\t{v}?.Clear();\n");
+                disposeSb.Append($"\t\t\t{v}.Clear();\n");
             }
 
             private static void Repeated(StringBuilder sb, string newline, StringBuilder disposeSb)
@@ -176,7 +176,7 @@ namespace ET
                     sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\tpublic List<{type}> {name} {{ get; }} = new List<{type}>();\n\n");
 
-                    disposeSb.Append($"\t\t\t{name}?.Clear();\n");
+                    disposeSb.Append($"\t\t\t{name}.Clear();\n");
                 }
                 catch (Exception e)
                 {

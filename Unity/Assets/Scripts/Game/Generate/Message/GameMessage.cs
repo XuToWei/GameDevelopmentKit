@@ -13,7 +13,7 @@ namespace Game
 
         public override void Clear()
         {
-            A?.Clear();
+            A.Clear();
         }
     }
 
@@ -26,7 +26,7 @@ namespace Game
 
         public override void Clear()
         {
-            A?.Clear();
+            A.Clear();
         }
     }
 
