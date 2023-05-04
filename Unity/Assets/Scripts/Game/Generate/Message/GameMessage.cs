@@ -5,7 +5,7 @@ using UnityGameFramework.Extension;
 namespace Game
 {
     [Serializable, ProtoContract(Name = @"CSHeartBeatTest")]
-    public partial class CSHeartBeatTest : SCPacketBase
+    public partial class CSHeartBeatTest : CSPacketBase
     {
         public override int Id => 30002;
         [ProtoMember(1)]

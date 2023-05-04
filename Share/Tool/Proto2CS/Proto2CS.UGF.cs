@@ -59,18 +59,25 @@ namespace ET
                         }
                         
                         sb.Append($"\t[Serializable, ProtoContract(Name = @\"{msgName}\")]\n");
-                        sb.Append($"\tpublic partial class {msgName} : ");
-                        if (parentClass == "CS")
+                        sb.Append($"\tpublic partial class {msgName}");
+                        if (string.IsNullOrEmpty(parentClass))
                         {
-                            sb.Append($"CSPacketBase\n");
-                        }
-                        else if (parentClass != "SC")
-                        {
-                            sb.Append($"SCPacketBase\n");
+                            if (msgName.StartsWith("CS", StringComparison.OrdinalIgnoreCase))
+                            {
+                                sb.Append(" : CSPacketBase\n");
+                            }
+                            else if (msgName.StartsWith("SC", StringComparison.OrdinalIgnoreCase))
+                            {
+                                sb.Append(" : SCPacketBase\n");
+                            }
+                            else
+                            {
+                                throw new Exception("\n");
+                            }
                         }
                         else
                         {
-                            sb.Append("\n");
+                            sb.Append($" : {parentClass}\n");
                         }
                         
                         continue;
