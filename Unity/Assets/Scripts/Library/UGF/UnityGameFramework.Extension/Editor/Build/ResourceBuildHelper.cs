@@ -66,10 +66,8 @@ namespace UnityGameFramework.Extension.Editor
             {
                 Debug.LogWarning("Load configuration failure.");
             }
-            
-            string buildMessage = string.Empty;
-            MessageType buildMessageType = MessageType.None;
-            GetBuildMessage(out buildMessage, out buildMessageType);
+
+            GetBuildMessage(out string buildMessage, out MessageType buildMessageType);
             switch (buildMessageType)
             {
                 case MessageType.None:

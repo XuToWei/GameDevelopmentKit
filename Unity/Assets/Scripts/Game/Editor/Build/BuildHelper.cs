@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using GameFramework;
 using UnityEditor;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
 using UnityGameFramework.Extension.Editor;
@@ -70,7 +71,11 @@ namespace Game.Editor
             };
             Debug.Log("start build pkg");
             string locationPathName = $"{fold}/{appName}";
-            BuildPipeline.BuildPlayer(levels, locationPathName, buildTarget, BuildOptions.None);
+            BuildReport buildReport = BuildPipeline.BuildPlayer(levels, locationPathName, buildTarget, BuildOptions.None);
+            if (buildReport.summary.result != BuildResult.Succeeded)
+            {
+                throw new GameFrameworkException("build pkg fail!");
+            }
             Debug.Log($"finish build pkg at {locationPathName}");
         }
 
