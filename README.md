@@ -66,6 +66,6 @@
 
 
 # 记录
-1.ET的Proto对象添加缓存池，减少GC
+1.UGF框架ShutDown时候Awaitable部分UniTask需要取消（Resource等）
 
-2.远程打包
+2.ET框架异步加载过程中ShutDown处理

@@ -25,6 +25,7 @@ namespace Game
                 GameEntry.Sound.PlayUISound(1000);
             }
             //按钮添加点击音效
+            ExButton.AllButtonOnPointerDownEvent -= PlayButtonClickSound;
             ExButton.AllButtonOnPointerDownEvent += PlayButtonClickSound;
             
 #if UNITY_HOTFIX && ENABLE_IL2CPP
