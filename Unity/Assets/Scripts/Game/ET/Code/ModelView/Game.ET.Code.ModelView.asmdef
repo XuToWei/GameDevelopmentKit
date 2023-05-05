@@ -15,10 +15,11 @@
         "CodeBind.Runtime",
         "Unity.TextMeshPro",
         "UniTask",
+        "FancyScrollView",
         "UIEffect",
         "Coffee.UIParticle",
-        "FancyScrollView",
-        "UGuiExtension.Runtime"
+        "Coffee.SoftMaskForUGUI",
+        "Coffee.UnmaskForUGUI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

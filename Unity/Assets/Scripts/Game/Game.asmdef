@@ -14,10 +14,11 @@
         "StompyRobot.SRF",
         "CodeBind.Runtime",
         "Unity.TextMeshPro",
+        "FancyScrollView",
         "UIEffect",
         "Coffee.UIParticle",
-        "FancyScrollView",
-        "UGuiExtension.Runtime"
+        "Coffee.SoftMaskForUGUI",
+        "Coffee.UnmaskForUGUI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

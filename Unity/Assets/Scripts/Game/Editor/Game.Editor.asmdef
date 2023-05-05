@@ -20,7 +20,10 @@
         "Unity.TextMeshPro",
         "CodeBind.Runtime",
         "FancyScrollView",
-        "UGuiExtension.Runtime"
+        "UIEffect",
+        "Coffee.UIParticle",
+        "Coffee.SoftMaskForUGUI",
+        "Coffee.UnmaskForUGUI"
     ],
     "includePlatforms": [
         "Editor"

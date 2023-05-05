@@ -12,7 +12,7 @@ namespace UnityEngine.UI
         [Serializable]
         public class ButtonOnPointerDownEvent : UnityEvent {}
         
-        [FormerlySerializedAs("onClick")]
+        [FormerlySerializedAs("onPointerDown")]
         [SerializeField]
         private ButtonOnPointerDownEvent m_OnPointerDown = new ButtonOnPointerDownEvent();
 

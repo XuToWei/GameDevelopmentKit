@@ -9,10 +9,11 @@
         "Game",
         "ProtoBuf",
         "CodeBind.Runtime",
+        "FancyScrollView",
         "UIEffect",
         "Coffee.UIParticle",
-        "FancyScrollView",
-        "UGuiExtension.Runtime"
+        "Coffee.SoftMaskForUGUI",
+        "Coffee.UnmaskForUGUI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
