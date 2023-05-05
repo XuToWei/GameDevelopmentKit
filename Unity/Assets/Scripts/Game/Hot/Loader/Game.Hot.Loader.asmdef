@@ -11,7 +11,8 @@
         "CodeBind.Runtime",
         "UIEffect",
         "Coffee.UIParticle",
-        "FancyScrollView"
+        "FancyScrollView",
+        "UGuiExtension.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

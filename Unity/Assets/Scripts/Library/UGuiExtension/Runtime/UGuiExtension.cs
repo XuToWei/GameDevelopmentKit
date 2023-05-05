@@ -25,11 +25,13 @@ namespace UnityEngine.UI
                     throw new Exception($"click error", e);
                 }
             }
-
-            unityEvent.Set(delegate
+            
+            void OnClick()
             {
                 OnClickAsync().Forget();
-            });
+            }
+
+            unityEvent.Set(OnClick);
         }
 
         public static void SetAsync(this Button button, Func<UniTask> action)
@@ -51,10 +53,12 @@ namespace UnityEngine.UI
                 }
             }
 
-            button.onClick.Set(delegate
+            void OnClick()
             {
                 OnClickAsync().Forget();
-            });
+            }
+
+            button.onClick.Set(OnClick);
         }
 
         public static void Set<T>(this UnityEvent<T> unityEvent, UnityAction<T> unityAction) where T : Object

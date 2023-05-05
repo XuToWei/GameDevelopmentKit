@@ -13,13 +13,14 @@
         "ToolbarExtension.Editor",
         "UnityGameFramework.Extension.Editor",
         "GameFramework",
-        "EnhancedScroller",
         "StompyRobot.SRDebugger",
         "StompyRobot.SRDebugger.Editor",
         "StompyRobot.SRF",
         "StompyRobot.SRF.Editor",
         "Unity.TextMeshPro",
-        "CodeBind.Runtime"
+        "CodeBind.Runtime",
+        "FancyScrollView",
+        "UGuiExtension.Runtime"
     ],
     "includePlatforms": [
         "Editor"

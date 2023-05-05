@@ -34,6 +34,7 @@ namespace Game.Editor
                     LogWarningIfAnimatorComponentsAreFound(child, selectedGameObject.name);
                     AddARectMask2DToTheScrollRectIfItsMissingOne(child, out bool childHasScrollRect);
                     DisablePixelPerfectForCanvasContainingAScrollRect(ref canvas, ref hasScrollRect, child, childHasScrollRect);
+                    ReplaceTransparentImageWithRaycastGraphic(child);
                 }
 
                 resultMessage.AppendFormat(" <b>{0}</b>,", selectedGameObject.name);
@@ -93,6 +94,19 @@ namespace Game.Editor
             if (hasScrollRect && canvas != null)
             {
                 canvas.pixelPerfect = false;
+            }
+        }
+        
+        private static void ReplaceTransparentImageWithRaycastGraphic(Transform child)
+        {
+            var parentObj = child.parent.gameObject;
+            bool childHasInteractable = parentObj.TryGetComponent<Button>(out var childButton) || parentObj.TryGetComponent<Toggle>(out var childToggle);
+            bool childHasImage = child.gameObject.TryGetComponent<Image>(out var childImage);
+
+            if (childHasInteractable && childHasImage && childImage.raycastTarget && childImage.color.a == 0)
+            {
+                Object.DestroyImmediate(childImage);
+                child.gameObject.AddComponent<RaycastGraphic>();
             }
         }
     }

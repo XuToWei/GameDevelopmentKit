@@ -1,8 +1,10 @@
 {
   "dependencies": {
     "com.baracuda.preprocessor-symbol-definition-files": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
+    "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
+    "com.coffee.unmask": "https://github.com/mob-sakai/UnmaskForUGUI.git",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.focus-creative-games.hybridclr_unity": "https://github.com/focus-creative-games/hybridclr_unity.git",
     "com.handzlikchris.fastscriptreload": "https://github.com/handzlikchris/FastScriptReload.git?path=Assets",
