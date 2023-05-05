@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Name: SR_
   m_EditorClassIdentifier: 
   DecayTime: 0.15
-  DefaultColor: {r: 1, g: 1, b: 1, a: 0}
+  DefaultColor: {r: 1, g: 1, b: 1, a: 0.29803923}
   FlashColor: {r: 1, g: 1, b: 1, a: 0.18431373}
   Target: {fileID: 11432612}
 --- !u!1 &148474
@@ -424,7 +424,7 @@ MonoBehaviour:
   m_Name: SR_
   m_EditorClassIdentifier: 
   DecayTime: 0.15
-  DefaultColor: {r: 1, g: 1, b: 1, a: 0}
+  DefaultColor: {r: 1, g: 1, b: 1, a: 0.29803923}
   FlashColor: {r: 1, g: 1, b: 1, a: 0.18431373}
   Target: {fileID: 11448472}
 --- !u!1 &178442
@@ -613,7 +613,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.95686275, g: 0.35686275, b: 0.34117648, a: 0.703}
+  m_Color: {r: 0.95686275, g: 0.35686275, b: 0.34117648, a: 0.7647059}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
