@@ -17,6 +17,7 @@ public partial class Tables
     public DTOneConfig DTOneConfig { private set; get; }
     public DTAIConfig DTAIConfig { private set; get; }
     public DTUnitConfig DTUnitConfig { private set; get; }
+    public DTDemo DTDemo { private set; get; }
 
     private Dictionary<string, IDataTable> _tables;
 
@@ -37,6 +38,9 @@ public partial class Tables
         DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig")); 
         loadTasks.Add(DTUnitConfig.LoadAsync());
         _tables.Add("DTUnitConfig", DTUnitConfig);
+        DTDemo = new DTDemo(() => loader("dtdemo")); 
+        loadTasks.Add(DTDemo.LoadAsync());
+        _tables.Add("DTDemo", DTDemo);
 
         await Task.WhenAll(loadTasks);
 
@@ -44,6 +48,7 @@ public partial class Tables
         DTOneConfig.Resolve(_tables); 
         DTAIConfig.Resolve(_tables); 
         DTUnitConfig.Resolve(_tables); 
+        DTDemo.Resolve(_tables); 
         PostResolve();
     }
 
@@ -52,6 +57,7 @@ public partial class Tables
         DTOneConfig.TranslateText(translator); 
         DTAIConfig.TranslateText(translator); 
         DTUnitConfig.TranslateText(translator); 
+        DTDemo.TranslateText(translator); 
     }
     
     partial void PostInit();

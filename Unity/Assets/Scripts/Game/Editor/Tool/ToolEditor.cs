@@ -17,7 +17,11 @@ namespace Game.Editor
             const string tools = ".\\Tool.exe";
 #endif
             Stopwatch stopwatch = Stopwatch.StartNew();
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+            await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1", "../Bin/");
+#else
             await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=GB2312", "../Bin/");
+#endif
             stopwatch.Stop();
             UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
@@ -32,7 +36,11 @@ namespace Game.Editor
             const string tools = ".\\Tool.exe";
 #endif
             Stopwatch stopwatch = Stopwatch.StartNew();
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+            await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=Json", "../Bin/");
+#else
             await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=Json,GB2312", "../Bin/");
+#endif
             stopwatch.Stop();
             UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);

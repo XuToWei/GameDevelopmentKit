@@ -20,7 +20,7 @@ namespace ET
         /// luban命令模板，不能带换行符
         /// </summary>
         private const string lubanCommandTemplate =
-                "dotnet %GEN_CLIENT% --template_search_path %CUSTOM_TEMPLATE_DIR% -j cfg -- -d %INPUT_DATA_DIR%/Defines/__root__.xml --input_data_dir %INPUT_DATA_DIR%/Datas --output_code_dir %OUTPUT_CODE_DIR% --output_data_dir %OUTPUT_DATA_DIR% --gen_types %GEN_TYPE_CODE_DATA% -s %GEN_GROUP%";
+                "dotnet %GEN_CLIENT% --template_search_path %CUSTOM_TEMPLATE_DIR% -j cfg -- -d %INPUT_DATA_DIR%/Defines/__root__.xml --input_data_dir %INPUT_DATA_DIR%/Datas --output_code_dir %OUTPUT_CODE_DIR% --output_data_dir %OUTPUT_DATA_DIR% --gen_types %GEN_TYPE_CODE_DATA% -s %GEN_GROUP% --l10n:input_text_files %L10N_INPUT_TEXT_FILES% --l10n:text_field_name text_en --l10n:output_not_translated_text_file NotLocalized_CN.txt";
 
         private const string gen_client = "../Tools/Luban/Tools/Luban.ClientServer/Luban.ClientServer.dll";
         private const string custom_template_dir = "../Tools/Luban/CustomTemplates/LoadAsync";
@@ -38,6 +38,7 @@ namespace ET
             public List<string> Output_Data_Dirs;
             public string Gen_Type_Code_Data;
             public string Gen_Group;
+            public string L10n_Input_Text_Files;
         }
 
         public static void Export()
@@ -106,6 +107,17 @@ namespace ET
                                 .Replace("code_cs_bin", "code_cs_dotnet_json");
                     }
                     info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value;
+                    string filesStr = xmlGen.SelectSingleNode("L10n_Input_Text_Files").Attributes.GetNamedItem("Value").Value.Replace("\n", "");
+                    info.L10n_Input_Text_Files = "";
+                    string[] inputTextFiles = filesStr.Split(',');
+                    for (int k = 0; k < inputTextFiles.Length; k++)
+                    {
+                        info.L10n_Input_Text_Files += Path.GetFullPath($"{work_dir}/{inputTextFiles[k]}");
+                        if (k != inputTextFiles.Length - 1)
+                        {
+                            info.L10n_Input_Text_Files += ",";
+                        }
+                    }
                     genInfos.Add(info);
                 }
             }
@@ -172,7 +184,8 @@ namespace ET
                     .Replace("%OUTPUT_CODE_DIR%", Path.GetFullPath($"{work_dir}/{info.Output_Code_Dirs[0]}"))
                     .Replace("%OUTPUT_DATA_DIR%", Path.GetFullPath($"{work_dir}/{info.Output_Data_Dirs[0]}"))
                     .Replace("%GEN_TYPE_CODE_DATA%", info.Gen_Type_Code_Data)
-                    .Replace("%GEN_GROUP%", info.Gen_Group);
+                    .Replace("%GEN_GROUP%", info.Gen_Group)
+                    .Replace("%L10N_INPUT_TEXT_FILES%", info.L10n_Input_Text_Files);
             return cmd;
         }
 
