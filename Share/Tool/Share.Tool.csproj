@@ -43,9 +43,15 @@
         <Compile Include="..\..\DotNet\Loader\TimeNow.cs">
             <Link>Loader\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
+        <Compile Include="..\..\Unity\Assets\Scripts\Library\UGF\GameFramework\Localization\Language.cs">
+            <Link>ExcelExporter\%(RecursiveDir)%(FileName)%(Extension)</Link>
+        </Compile>
     </ItemGroup>
     
     <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="ExcelDataReader" Version="3.6.0" />
+        <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
         <ProjectReference Include="..\..\DotNet\Library\DotNet.Library.csproj" />
     </ItemGroup>
 </Project>

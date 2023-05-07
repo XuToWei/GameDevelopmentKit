@@ -9,8 +9,8 @@ namespace ET
 {
     public static class GenerateUGFEntityId
     {
-        private const string LubanEntityAsset = "../Unity/Assets/Res/Editor/Luban/dtentity.json";
-        private const string EntityIdCodeFile = "../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Game/Entity/UGFEntityId.cs";
+        private static readonly string LubanEntityAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtentity.json");
+        private static readonly string EntityIdCodeFile = Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Game/Entity/UGFEntityId.cs");
 
         public static void GenerateCode()
         {
@@ -43,7 +43,12 @@ namespace ET
 
             stringBuilder.AppendLine("    }");
             stringBuilder.AppendLine("}");
-            File.WriteAllText(EntityIdCodeFile, stringBuilder.ToString());
+            string codeContent = stringBuilder.ToString();
+            if (!File.Exists(EntityIdCodeFile) || !string.Equals(codeContent, File.ReadAllText(EntityIdCodeFile)))
+            {
+                File.WriteAllText(EntityIdCodeFile, codeContent);
+                Console.WriteLine($"Generate code : {EntityIdCodeFile}!");
+            }
         }
 
         private static string GetEntityName(DREntity drEntity)

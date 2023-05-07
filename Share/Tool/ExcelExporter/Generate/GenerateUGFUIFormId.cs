@@ -9,8 +9,8 @@ namespace ET
 {
     public class GenerateUGFUIFormId
     {
-        private const string UIFormIdCodeFile = "../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Game/UI/UGFUIFormId.cs";
-        private const string LubanUIFormAsset = "../Unity/Assets/Res/Editor/Luban/dtuiform.json";
+        private static readonly string UIFormIdCodeFile = Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Game/UI/UGFUIFormId.cs");
+        private static readonly string LubanUIFormAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtuiform.json");
 
         public static void GenerateCode()
         {
@@ -43,7 +43,12 @@ namespace ET
 
             stringBuilder.AppendLine("    }");
             stringBuilder.AppendLine("}");
-            File.WriteAllText(UIFormIdCodeFile, stringBuilder.ToString());
+            string codeContent = stringBuilder.ToString();
+            if (!File.Exists(UIFormIdCodeFile) || !string.Equals(codeContent, File.ReadAllText(UIFormIdCodeFile)))
+            {
+                File.WriteAllText(UIFormIdCodeFile, codeContent);
+                Console.WriteLine($"Generate code : {UIFormIdCodeFile}!");
+            }
         }
 
         private static string GetUIName(DRUIForm drUIForm)

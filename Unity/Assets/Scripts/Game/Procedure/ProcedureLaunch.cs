@@ -30,7 +30,7 @@ namespace Game
             //InitLanguageSettings();
 
             // 变体配置：根据使用的语言，通知底层加载对应的资源变体
-            //InitCurrentVariant();
+            InitCurrentVariant();
 
             // 声音配置：根据用户配置数据，设置即将使用的声音选项
             //InitSoundSettings();

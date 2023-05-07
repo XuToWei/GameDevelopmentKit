@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using GameFramework;
 using UnityEngine.Events;
 
 namespace UnityEngine.UI
@@ -22,7 +23,7 @@ namespace UnityEngine.UI
                 }
                 catch (Exception e)
                 {
-                    throw new Exception($"click error", e);
+                    throw new GameFrameworkException("Unity Event error", e);
                 }
             }
             
@@ -45,7 +46,7 @@ namespace UnityEngine.UI
                 }
                 catch (Exception e)
                 {
-                    throw new Exception($"{button.name} click error", e);
+                    throw new GameFrameworkException($"{button.name} click error", e);
                 }
                 finally
                 {

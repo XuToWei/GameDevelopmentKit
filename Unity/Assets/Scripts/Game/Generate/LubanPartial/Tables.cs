@@ -10,8 +10,25 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
+    public enum TablesLoadType : byte
+    {
+        Undefined = 0,
+        Bytes,
+        Json,
+    }
+    
     public partial class Tables : GameFrameworkComponent
     {
+        public TablesLoadType LoadType
+        {
+            get;
+            private set;
+        }
+        
+        /// <summary>
+        /// 加载所有的配置表Table
+        /// </summary>
+        /// <returns>是否是</returns>
         public async UniTask LoadAllAsync()
         {
             Type tablesType = this.GetType();
@@ -31,6 +48,7 @@ namespace Game
 
                 Func<string, Task<ByteBuf>> func = LoadByteBuf;
                 await (Task)loadMethodInfo.Invoke(this, new object[] { func });
+                LoadType = TablesLoadType.Bytes;
             }
             else
             {
@@ -42,6 +60,7 @@ namespace Game
 
                 Func<string, Task<JSONNode>> func = LoadJson;
                 await (Task)loadMethodInfo.Invoke(this, new object[] { func });
+                LoadType = TablesLoadType.Json;
             }
         }
     }

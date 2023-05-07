@@ -19,6 +19,7 @@ public sealed partial class DRDemo :  Bright.Config.EditorBeanBase
     public DRDemo()
     {
             Name = new Bright.Config.EditorText("", "");
+            TestMap = new System.Collections.Generic.Dictionary<string,string>();
     }
 
     public override void LoadJson(SimpleJSON.JSONObject _json)
@@ -39,6 +40,14 @@ public sealed partial class DRDemo :  Bright.Config.EditorBeanBase
             }
         }
         
+        { 
+            var _fieldJson = _json["testMap"];
+            if (_fieldJson != null)
+            {
+                if(!_fieldJson.IsArray) { throw new SerializationException(); } TestMap = new System.Collections.Generic.Dictionary<string, string>(); foreach(JSONNode __e in _fieldJson.Children) { string __k;  if(!__e[0].IsString) { throw new SerializationException(); }  __k = __e[0]; string __v;  if(!__e[1].IsString) { throw new SerializationException(); }  __v = __e[1];  TestMap.Add(__k, __v); }  
+            }
+        }
+        
     }
 
     public override void SaveJson(SimpleJSON.JSONObject _json)
@@ -50,6 +59,11 @@ public sealed partial class DRDemo :  Bright.Config.EditorBeanBase
 
             if (Name == null) { throw new System.ArgumentNullException(); }
             _json["name"] = Bright.Config.EditorText.SaveJson(Name);
+        }
+        {
+
+            if (TestMap == null) { throw new System.ArgumentNullException(); }
+            { var __cjson = new JSONArray(); foreach(var _e in TestMap) { var __entry = new JSONArray(); __cjson[null] = __entry; __entry["null"] = new JSONString(_e.Key); __entry["null"] = new JSONString(_e.Value); } _json["testMap"] = __cjson; }
         }
     }
 
@@ -71,6 +85,8 @@ public sealed partial class DRDemo :  Bright.Config.EditorBeanBase
     /// key
     /// </summary>
     public Bright.Config.EditorText Name { get; set; }
+
+    public System.Collections.Generic.Dictionary<string, string> TestMap { get; set; }
 
 }
 

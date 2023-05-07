@@ -2,7 +2,7 @@
 
 namespace Game
 {
-    public static class AssetUtility
+    public static partial class AssetUtility
     {
         public static string GetFontAsset(string assetName)
         {
@@ -12,6 +12,11 @@ namespace Game
         public static string GetSceneAsset(string assetName)
         {
             return Utility.Text.Format("Assets/Res/Scene/{0}.unity", assetName);
+        }
+        
+        public static string GetLocalizationAsset(string assetName, string extensionName)
+        {
+            return Utility.Text.Format("Assets/GameMain/Localization/{0}/Localization.{}", GameEntry.Localization.Language);
         }
 
         public static string GetMusicAsset(string assetName)

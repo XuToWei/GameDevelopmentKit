@@ -20,25 +20,14 @@ namespace Game
             await GameEntry.Tables.LoadAllAsync();
             Log.Info("Finish load Game Tables!");
             
-            void PlayButtonClickSound()
-            {
-                GameEntry.Sound.PlayUISound(1000);
-            }
-            //按钮添加点击音效
-            ExButton.AllButtonOnPointerDownEvent -= PlayButtonClickSound;
-            ExButton.AllButtonOnPointerDownEvent += PlayButtonClickSound;
-            
+            Log.Info("Start load Localization!");
+            GameEntry.Localization.ReadData(AssetUtility.GetLocalizationAsset(GameEntry.Localization.Language), Constant.AssetPriority.DictionaryAsset);
+            Log.Info("Finish load Localization!");
+
 #if UNITY_HOTFIX && ENABLE_IL2CPP
             await HybridCLRHelper.LoadAsync();
 #endif
-
-#if UNITY_ET
-            ChangeState<ProcedureET>(procedureOwner);
-#elif UNITY_GAMEHOT
-            ChangeState<ProcedureHot>(procedureOwner);
-#else
-            ChangeState<ProcedureGame>(procedureOwner);
-#endif
+            ChangeState<ProcedurePreset>(procedureOwner);
         }
     }
 }

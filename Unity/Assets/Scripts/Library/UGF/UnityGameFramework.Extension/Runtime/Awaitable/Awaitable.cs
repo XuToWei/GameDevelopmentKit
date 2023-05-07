@@ -20,6 +20,7 @@ namespace UnityGameFramework.Extension
         private static readonly Dictionary<int, AwaitTaskWrap<Entity>> s_ShowEntityTcsDict = new Dictionary<int, AwaitTaskWrap<Entity>>();
         private static readonly Dictionary<string, AutoResetUniTaskCompletionSource> s_LoadSceneTcsDict = new Dictionary<string, AutoResetUniTaskCompletionSource>();
         private static readonly Dictionary<string, AutoResetUniTaskCompletionSource> s_UnLoadSceneTcsDict = new Dictionary<string, AutoResetUniTaskCompletionSource>();
+        private static readonly Dictionary<string, AutoResetUniTaskCompletionSource> s_LoadDictionaryTcsDict = new Dictionary<string, AutoResetUniTaskCompletionSource>();
 
         /// <summary>
         /// 注册需要的事件 (需再流程入口处调用 防止框架重启导致事件被取消问题)
@@ -27,7 +28,8 @@ namespace UnityGameFramework.Extension
         public static void SubscribeEvent()
         {
             if (s_OpenUFormTcsDict.Count > 0 || s_ShowEntityTcsDict.Count > 0 ||
-                s_LoadSceneTcsDict.Count > 0 || s_UnLoadSceneTcsDict.Count > 0)
+                s_LoadSceneTcsDict.Count > 0 || s_UnLoadSceneTcsDict.Count > 0 ||
+                s_LoadDictionaryTcsDict.Count > 0)
             {
                 throw new GameFrameworkException("Awaitable Task is not clean!");
             }
@@ -49,6 +51,9 @@ namespace UnityGameFramework.Extension
 
             eventComponent.Subscribe(DownloadSuccessEventArgs.EventId, OnDownloadSuccess);
             eventComponent.Subscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);
+            
+            eventComponent.Subscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
+            eventComponent.Subscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
 #if UNITY_EDITOR
             s_IsSubscribeEvent = true;
 #endif
@@ -436,6 +441,26 @@ namespace UnityGameFramework.Extension
                 ReferencePool.Release(awaitDataWrap);
                 tcs.TrySetResult(result);
             }
+        }
+
+        // public static UniTask ReadDataAsync(this LocalizationComponent localizationComponent, string dictionaryAssetName)
+        // {
+        //     localizationComponent.ReadData(dictionaryAssetName);
+        //     s_LoadDictionaryTcsDict
+        // }
+        
+        private static void OnLoadDictionarySuccess(object sender, GameEventArgs e)
+        {
+            LoadDictionarySuccessEventArgs ne = (LoadDictionarySuccessEventArgs)e;
+            
+            Log.Info("Load dictionary '{0}' OK.", ne.DictionaryAssetName);
+        }
+
+        private static void OnLoadDictionaryFailure(object sender, GameEventArgs e)
+        {
+            LoadDictionaryFailureEventArgs ne = (LoadDictionaryFailureEventArgs)e;
+            
+            Log.Error("Can not load dictionary '{0}' from '{1}' with error message '{2}'.", ne.DictionaryAssetName, ne.DictionaryAssetName, ne.ErrorMessage);
         }
     }
 }
