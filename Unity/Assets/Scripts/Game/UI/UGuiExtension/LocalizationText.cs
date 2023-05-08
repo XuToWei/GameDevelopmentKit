@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Game;
 using GameFramework.Localization;
 using Sirenix.OdinInspector;

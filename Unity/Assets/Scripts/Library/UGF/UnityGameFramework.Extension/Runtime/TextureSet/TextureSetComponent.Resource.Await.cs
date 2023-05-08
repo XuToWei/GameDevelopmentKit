@@ -11,9 +11,9 @@ namespace UnityGameFramework.Extension
         /// 通过资源系统设置图片
         /// </summary>
         /// <param name="setTexture2dObject">需要设置图片的对象</param>
-        /// <param name="cancelAction">取消图片设置函数</param>
+        /// <param name="cancellationToken"></param>
         /// <returns>是否成功</returns>
-        public async UniTask SetTextureByResourcesAsync(ISetTexture2dObject setTexture2dObject, CancellationTokenSource cts = null)
+        public async UniTask SetTextureByResourcesAsync(ISetTexture2dObject setTexture2dObject, CancellationToken cancellationToken = default)
         {
             Texture2D texture;
             if (m_TexturePool.CanSpawn(setTexture2dObject.Texture2dFilePath))
@@ -24,20 +24,18 @@ namespace UnityGameFramework.Extension
             else
             {
                 int serialId = m_SerialId++;
+                texture = await m_ResourceComponent.LoadAssetAsync<Texture2D>(setTexture2dObject.Texture2dFilePath, cancellationToken : cancellationToken);
                 
-                CancellationTokenRegistration? ctr = cts?.Token.Register(delegate
-                {
-                    CancelSetTexture(serialId);
-                });
-                
-                texture = await m_ResourceComponent.LoadAssetAsync<Texture2D>(setTexture2dObject.Texture2dFilePath, cts: cts);
-                
-                if (cts is { IsCancellationRequested : true })
+                if (texture == null)
                 {
                     return;
                 }
-
-                ctr?.Dispose();
+                
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    m_ResourceComponent.UnloadAsset(texture);
+                    return;
+                }
                 
                 if (!m_TexturePool.CanSpawn(setTexture2dObject.Texture2dFilePath))
                 {

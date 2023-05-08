@@ -22,5 +22,13 @@
     "UIGroupName": "Default",
     "AllowMultiInstance": false,
     "PauseCoveredUIForm": false
+  },
+  {
+    "Id": 999,
+    "Desc": "测试界面",
+    "AssetName": "UITest",
+    "UIGroupName": "Test",
+    "AllowMultiInstance": true,
+    "PauseCoveredUIForm": false
   }
 ]

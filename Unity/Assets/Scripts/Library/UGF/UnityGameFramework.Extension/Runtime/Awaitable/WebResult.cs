@@ -11,38 +11,36 @@ namespace UnityGameFramework.Extension
         /// web请求 返回数据
         /// </summary>
         public byte[] Bytes { get; private set; }
+
         /// <summary>
         /// 是否有错误
         /// </summary>
         public bool IsError { get; private set; }
+
         /// <summary>
         /// 错误信息
         /// </summary>
         public string ErrorMessage { get; private set; }
+
         /// <summary>
         /// 自定义数据
         /// </summary>
         public object UserData { get; private set; }
 
 
-        public static WebResult Create(byte[] bytes, bool isError, string errorMessage, object userData)
+        public static WebResult Create()
         {
-            WebResult webResult = ReferencePool.Acquire<WebResult>();
-            webResult.Bytes = bytes;
-            webResult.IsError = isError;
-            webResult.ErrorMessage = errorMessage;
-            webResult.UserData = userData;
-            return webResult;
+            return ReferencePool.Acquire<WebResult>();
         }
-        
-        public WebResult Init(byte[] bytes, bool isError, string errorMessage, object userData)
+
+        public void Fill(byte[] bytes, bool isError, string errorMessage, object userData)
         {
-            this.Bytes = bytes;
-            this.IsError = isError;
-            this.ErrorMessage = errorMessage;
-            this.UserData = userData;
-            return this;
+            Bytes = bytes;
+            IsError = isError;
+            ErrorMessage = errorMessage;
+            UserData = userData;
         }
+
         public void Clear()
         {
             Bytes = null;

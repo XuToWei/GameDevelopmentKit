@@ -40,7 +40,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "305695ad5d194dda0d6b00777c2459202a1ef4ea"
+      "hash": "f2773f585e762480c835ac718b82b87cb111e500"
     },
     "com.focus-creative-games.hybridclr_unity": {
       "version": "https://github.com/focus-creative-games/hybridclr_unity.git",

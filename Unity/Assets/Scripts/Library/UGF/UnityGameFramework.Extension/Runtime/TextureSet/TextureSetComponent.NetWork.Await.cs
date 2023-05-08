@@ -12,8 +12,8 @@ namespace UnityGameFramework.Extension
         /// </summary>
         /// <param name="setTexture2dObject">需要设置图片的对象</param>
         /// <param name="saveFilePath">保存网络图片到本地的路径</param>
-        /// <param name="cancelAction">取消图片设置函数</param>
-        public async UniTask<bool> SetTextureByNetworkAsync(ISetTexture2dObject setTexture2dObject, string saveFilePath = null, CancellationTokenSource cts = null)
+        /// <param name="cancellationToken">CancellationToken</param>
+        public async UniTask<bool> SetTextureByNetworkAsync(ISetTexture2dObject setTexture2dObject, string saveFilePath = null, CancellationToken cancellationToken = default)
         {
             Texture2D texture;
             if (m_TexturePool.CanSpawn(setTexture2dObject.Texture2dFilePath))
@@ -25,21 +25,13 @@ namespace UnityGameFramework.Extension
             else
             {
                 int serialId = m_SerialId++;
-                
-                CancellationTokenRegistration? ctr = cts?.Token.Register(delegate
-                {
-                    CancelSetTexture(serialId);
-                });
-                
-                var data = await m_WebRequestComponent.WebRequestAsync(setTexture2dObject.Texture2dFilePath, cts: cts);
+                WebResult data = await m_WebRequestComponent.WebRequestAsync(setTexture2dObject.Texture2dFilePath, cancellationToken : cancellationToken);
 
-                if (cts is { IsCancellationRequested: true })
+                if (cancellationToken.IsCancellationRequested || data == null)
                 {
                     return false;
                 }
 
-                ctr?.Dispose();
-                
                 if (!data.IsError)
                 {
                     texture = new Texture2D(0, 0, TextureFormat.RGBA32, false);
