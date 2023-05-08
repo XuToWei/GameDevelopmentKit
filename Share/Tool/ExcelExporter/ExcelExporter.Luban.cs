@@ -47,6 +47,7 @@ namespace ET
                 public string Gen_Type_Code_Data;
                 public string Gen_Group;
                 public string Text_Field_Name;
+                public string Extra_Command;
             }
 
             public static void Export()
@@ -117,14 +118,9 @@ namespace ET
                         }
                         info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value;
                         XmlNode textFieldNameNode = xmlGen.SelectSingleNode("Text_Field_Name");
-                        if (textFieldNameNode == null)
-                        {
-                            info.Text_Field_Name = string.Empty;
-                        }
-                        else
-                        {
-                            info.Text_Field_Name = textFieldNameNode.Attributes.GetNamedItem("Value").Value;
-                        }
+                        info.Text_Field_Name = textFieldNameNode == null? string.Empty : textFieldNameNode.Attributes.GetNamedItem("Value").Value;
+                        XmlNode extraCommandNode = xmlGen.SelectSingleNode("Extra_Command");
+                        info.Extra_Command = extraCommandNode == null? string.Empty : $" {extraCommandNode.Attributes.GetNamedItem("Value").Value}";
                         genInfos.Add(info);
                     }
                 }
@@ -213,9 +209,15 @@ namespace ET
                         .Replace("%OUTPUT_DATA_DIR%",  Path.GetFullPath($"{WorkDir}/{info.Output_Data_Dirs[0]}"))
                         .Replace("%GEN_TYPE_CODE_DATA%", info.Gen_Type_Code_Data)
                         .Replace("%GEN_GROUP%", info.Gen_Group);
+                
                 if (!string.IsNullOrEmpty(info.Text_Field_Name))//如果Text_Field_Name有配置就执行本地化
                 {
                     cmd += lubanLocalizationCommandTemplate.Replace("%TEXT_FIELD_NAME%", info.Text_Field_Name);
+                }
+                
+                if (!string.IsNullOrEmpty(info.Extra_Command))
+                {
+                    cmd += info.Extra_Command;
                 }
                 return cmd;
             }
