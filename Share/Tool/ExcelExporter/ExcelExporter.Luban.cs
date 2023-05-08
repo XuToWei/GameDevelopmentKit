@@ -63,15 +63,15 @@ namespace ET
                 {
                     s_Encoding = Encoding.UTF8;
                 }
-                
-                string excelDir =  Path.GetFullPath($"{WorkDir}/{excel_dir}");
+
+                string excelDir = Path.GetFullPath(Path.Combine(WorkDir, excel_dir));
                 string[] dirs = Directory.GetDirectories(excelDir);
                 if (dirs.Length < 1)
                 {
                     throw new Exception($"Directory {excelDir} is empty");
                 }
 
-                string lubanWorkDir = Path.GetFullPath($"{WorkDir}/{luban_work_dir}");
+                string lubanWorkDir = Path.GetFullPath(Path.Combine(WorkDir, luban_work_dir));
                 if (!Directory.Exists(lubanWorkDir))
                 {
                     Directory.CreateDirectory(lubanWorkDir);
@@ -81,13 +81,12 @@ namespace ET
                 List<Input_Output_Gen_Info> genInfos = new List<Input_Output_Gen_Info>();
                 for (int i = 0; i < dirs.Length; i++)
                 {
-                    string dir = Path.GetFullPath(dirs[i]).Replace('/', '\\');
-                    string genConfigFile =  Path.GetFullPath(Path.Combine(dir, gen_config_name));
+                    string dir = Path.GetFullPath(dirs[i]);
+                    string genConfigFile = Path.Combine(dir, gen_config_name);
                     if (!File.Exists(genConfigFile))
                     {
                         continue;
                     }
-
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.LoadXml(File.ReadAllText(genConfigFile));
                     XmlNode xmlRoot = xmlDocument.SelectSingleNode("Config");
@@ -96,14 +95,13 @@ namespace ET
                     {
                         continue;
                     }
-
                     XmlNodeList xmlGens = xmlRoot.SelectNodes("Gen");
                     for (int j = 0; j < xmlGens.Count; j++)
                     {
                         XmlNode xmlGen = xmlGens.Item(j);
                         Input_Output_Gen_Info info = new Input_Output_Gen_Info();
-                        int lastIndex = dir.LastIndexOf('\\');
-                        info.Luban_Work_Dir =  Path.GetFullPath($"{lubanWorkDir}/{dir.Substring(lastIndex, dir.Length - lastIndex)}_{j}");
+                        int lastIndex = dir.LastIndexOf(Path.DirectorySeparatorChar) + 1;
+                        info.Luban_Work_Dir = Path.Combine(lubanWorkDir, $"{dir.Substring(lastIndex, dir.Length - lastIndex)}_{j}");
                         info.Input_Data_Dir = dir;
                         string dirsStr = xmlGen.SelectSingleNode("Output_Code_Dirs").Attributes.GetNamedItem("Value").Value.Replace("\n", "");
                         info.Output_Code_Dirs = dirsStr.Split(',').ToList();
@@ -127,14 +125,14 @@ namespace ET
                 
                 foreach (var genInfo in genInfos)
                 {
-                    string file = Path.GetFullPath($"{genInfo.Luban_Work_Dir}/{not_translated_text_file}");
+                    string file = Path.Combine(genInfo.Luban_Work_Dir, not_translated_text_file);
                     if (File.Exists(file))
                     {
                         File.Delete(file);
                     }
                 }
 
-                Console.WriteLine("Export Luban Excel Parallel ForEachAsync!");
+                Console.WriteLine($"Export Luban Excel Parallel {genInfos.Count} ForEachAsync!");
                 bool isSuccess = true;
                 int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
                 int processCount = 0;
@@ -178,7 +176,7 @@ namespace ET
 
                 foreach (var genInfo in genInfos)
                 {
-                    string file = Path.GetFullPath($"{genInfo.Luban_Work_Dir}/{not_translated_text_file}");
+                    string file = Path.Combine(genInfo.Luban_Work_Dir, not_translated_text_file);
                     if (File.Exists(file))
                     {
                         if (File.ReadAllText(file).Length > 0)
@@ -202,11 +200,11 @@ namespace ET
                     cmd = cmd.Replace(" --output_data_dir %OUTPUT_DATA_DIR%", "");
                 }
 
-                cmd = cmd.Replace("%GEN_CLIENT%",  Path.GetFullPath($"{WorkDir}/{gen_client}"))
-                        .Replace("%CUSTOM_TEMPLATE_DIR%",  Path.GetFullPath($"{WorkDir}/{custom_template_dir}"))
-                        .Replace("%INPUT_DATA_DIR%",  Path.GetFullPath(info.Input_Data_Dir))
-                        .Replace("%OUTPUT_CODE_DIR%",  Path.GetFullPath($"{WorkDir}/{info.Output_Code_Dirs[0]}"))
-                        .Replace("%OUTPUT_DATA_DIR%",  Path.GetFullPath($"{WorkDir}/{info.Output_Data_Dirs[0]}"))
+                cmd = cmd.Replace("%GEN_CLIENT%", Path.GetFullPath(Path.Combine(WorkDir, gen_client)))
+                        .Replace("%CUSTOM_TEMPLATE_DIR%", Path.GetFullPath(Path.Combine(WorkDir, custom_template_dir)))
+                        .Replace("%INPUT_DATA_DIR%", Path.Combine(info.Input_Data_Dir))
+                        .Replace("%OUTPUT_CODE_DIR%", Path.Combine(WorkDir, info.Output_Code_Dirs[0]))
+                        .Replace("%OUTPUT_DATA_DIR%", Path.Combine(WorkDir, info.Output_Data_Dirs[0]))
                         .Replace("%GEN_TYPE_CODE_DATA%", info.Gen_Type_Code_Data)
                         .Replace("%GEN_GROUP%", info.Gen_Group);
                 
