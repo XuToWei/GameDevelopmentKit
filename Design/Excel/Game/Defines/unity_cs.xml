@@ -1,0 +1,69 @@
+<module>
+    <bean name="Color" sep=",">
+        <var name="r" type="float"/>
+        <var name="g" type="float"/>
+        <var name="b" type="float"/>
+        <var name="a" type="float"/>
+    </bean>
+
+    <bean name="Color32" sep=",">
+        <var name="r" type="byte"/>
+        <var name="g" type="byte"/>
+        <var name="b" type="byte"/>
+        <var name="a" type="byte"/>
+    </bean>
+
+    <bean name="Vector2" sep=",">
+        <var name="x" type="float"/>
+        <var name="y" type="float"/>
+    </bean>
+
+    <bean name="Vector3" sep=",">
+        <var name="x" type="float"/>
+        <var name="y" type="float"/>
+        <var name="z" type="float"/>
+    </bean>
+
+
+    <bean name="Quaternion" sep=",">
+        <var name="x" type="float"/>
+        <var name="y" type="float"/>
+        <var name="z" type="float"/>
+        <var name="w" type="float"/>
+    </bean>
+
+    <externaltype name="unity_color" origin_type_name="Color">
+        <mapper lan="cs" selector="unity_cs">
+            <target_type_name>UnityEngine.Color</target_type_name>
+            <create_external_object_function>ExternalTypeUtility.NewFromColor</create_external_object_function>
+        </mapper>
+    </externaltype>
+
+    <externaltype name="unity_color32" origin_type_name="Color32">
+        <mapper lan="cs" selector="unity_cs">
+            <target_type_name>UnityEngine.Color32</target_type_name>
+            <create_external_object_function>ExternalTypeUtility.NewFromColor32</create_external_object_function>
+        </mapper>
+    </externaltype>
+
+    <externaltype name="unity_vector2" origin_type_name="Vector2">
+        <mapper lan="cs" selector="unity_cs">
+            <target_type_name>UnityEngine.Vector2</target_type_name>
+            <create_external_object_function>ExternalTypeUtility.NewFromVector2</create_external_object_function>
+        </mapper>
+    </externaltype>
+
+    <externaltype name="unity_vector3" origin_type_name="Vector3">
+        <mapper lan="cs" selector="unity_cs">
+            <target_type_name>UnityEngine.Vector3</target_type_name>
+            <create_external_object_function>ExternalTypeUtility.NewFromVector3</create_external_object_function>
+        </mapper>
+    </externaltype>
+
+    <externaltype name="unity_quaternion" origin_type_name="Quaternion">
+        <mapper lan="cs" selector="unity_cs">
+            <target_type_name>UnityEngine.Quaternion</target_type_name>
+            <create_external_object_function>ExternalTypeUtility.NewFromQuaternion</create_external_object_function>
+        </mapper>
+    </externaltype>
+</module>

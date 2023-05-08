@@ -15,6 +15,8 @@
 	<importexcel name="__enums__.xlsx" type="enum"/>相对data目录
 	<importexcel name="__beans__.xlsx" type="bean"/>相对data目录
 
+	<externalselector name="unity_cs"/>
+
 	<service name="client" manager="Tables" group="c"/>
 	<service name="all" manager="Tables" group="c,e"/>
 </root>

@@ -6,7 +6,7 @@
     <Gen_Type_Code_Data Value="code_cs_unity_bin,data_bin" />
     <Gen_Group Value="client" />
     <Text_Field_Name Value="English" /> <!--本地化目标映射列的列名-->
-    <Extra_Command Value="--external:selectors unity_cs" /> <!--额外命令-->
+    <Extra_Command Value="" /> <!--额外命令-->
   </Gen>
   <Gen>
     <Output_Code_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Luban" />

@@ -18,6 +18,7 @@ public sealed partial class DROneConfig :  Bright.Config.EditorBeanBase
 {
     public DROneConfig()
     {
+            TestVector3 = new Vector3();
     }
 
     public override void LoadJson(SimpleJSON.JSONObject _json)
@@ -30,12 +31,25 @@ public sealed partial class DROneConfig :  Bright.Config.EditorBeanBase
             }
         }
         
+        { 
+            var _fieldJson = _json["TestVector3"];
+            if (_fieldJson != null)
+            {
+                if(!_fieldJson.IsObject) { throw new SerializationException(); }  TestVector3 = Vector3.LoadJsonVector3(_fieldJson);
+            }
+        }
+        
     }
 
     public override void SaveJson(SimpleJSON.JSONObject _json)
     {
         {
             _json["Test"] = new JSONNumber(Test);
+        }
+        {
+
+            if (TestVector3 == null) { throw new System.ArgumentNullException(); }
+            { var __bjson = new JSONObject();  Vector3.SaveJsonVector3(TestVector3, __bjson); _json["TestVector3"] = __bjson; }
         }
     }
 
@@ -55,6 +69,8 @@ public sealed partial class DROneConfig :  Bright.Config.EditorBeanBase
     /// 匹配最大时间
     /// </summary>
     public int Test { get; set; }
+
+    public Vector3 TestVector3 { get; set; }
 
 }
 
