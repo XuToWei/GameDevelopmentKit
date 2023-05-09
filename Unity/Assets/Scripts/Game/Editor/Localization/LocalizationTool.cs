@@ -72,8 +72,8 @@ namespace Game.Editor
                 }
             }
             AllKeys = s_Dictionary.Keys.ToArray();
-            LocalizationText.EditorLocalizationAllKey = AllKeys;
-            LocalizationText.EditorLocalizationReadyLanguage = LocalizationReadyLanguage.Languages;
+            Localize.EditorLocalizationAllKey = AllKeys;
+            Localize.EditorLocalizationReadyLanguage = LocalizationReadyLanguage.Languages;
         }
 
         public static string GetString(Language language, string key)

@@ -5,8 +5,10 @@ using Sirenix.OdinInspector;
 namespace UnityEngine.UI
 {
     [ExecuteAlways]
+    [DisallowMultipleComponent]
+    [AddComponentMenu("Localize")]
     [RequireComponent(typeof(Text))]
-    public class LocalizationText : MonoBehaviour
+    public class LocalizeText : Localize
     {
         [SerializeField]
         [HideInInspector]
@@ -23,9 +25,7 @@ namespace UnityEngine.UI
 
         public string LocalizationKey => m_LocalizationKey;
         public Text Text => m_Text;
-
-        public static string[] EditorLocalizationAllKey;
-        public static Language[] EditorLocalizationReadyLanguage;
+        
         private void Awake()
         {
             if (Application.isPlaying)
