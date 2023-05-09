@@ -11,13 +11,10 @@ namespace UnityGameFramework.Extension
         /// 设置精灵
         /// </summary>
         /// <param name="setSpriteObject">需要设置精灵的对象</param>
-        /// <param name="cancellationToken">CancellationToken</param>
-        public async UniTask SetSpriteAsync(ISetSpriteObject setSpriteObject, CancellationToken cancellationToken = default)
+        public async UniTask SetSpriteAsync(ISetSpriteObject setSpriteObject, CancellationTokenSource cts = null)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
+            if (cts is { IsCancellationRequested: true })
                 return;
-            }
             if (m_SpriteCollectionPool.CanSpawn(setSpriteObject.CollectionPath))
             {
                 SpriteCollection collectionItem = (SpriteCollection)m_SpriteCollectionPool.Spawn(setSpriteObject.CollectionPath).Target;
@@ -32,6 +29,11 @@ namespace UnityGameFramework.Extension
                 m_WaitSetObjects.Add(setSpriteObject.CollectionPath, loadSp);
             }
             loadSp.Add(setSpriteObject);
+            
+            CancellationTokenRegistration? ctr = cts?.Token.Register(() =>
+            {
+                loadSp.Remove(setSpriteObject);
+            });
 
             if (m_SpriteCollectionBeingLoaded.Contains(setSpriteObject.CollectionPath))
             {
@@ -39,21 +41,14 @@ namespace UnityGameFramework.Extension
             }
 
             m_SpriteCollectionBeingLoaded.Add(setSpriteObject.CollectionPath);
-            SpriteCollection collection = await m_ResourceComponent.LoadAssetAsync<SpriteCollection>(setSpriteObject.CollectionPath, cancellationToken: cancellationToken);
+            SpriteCollection collection = await m_ResourceComponent.LoadAssetAsync<SpriteCollection>(setSpriteObject.CollectionPath, cts: cts);
             
-            if (collection == null)
+            if (cts is { IsCancellationRequested: true })
             {
-                loadSp.Remove(setSpriteObject);
                 return;
             }
+            ctr?.Dispose();
             
-            if (cancellationToken.IsCancellationRequested)
-            {
-                loadSp.Remove(setSpriteObject);
-                m_ResourceComponent.UnloadAsset(collection);
-                return;
-            }
-
             m_SpriteCollectionPool.Register(SpriteCollectionItemObject.Create(setSpriteObject.CollectionPath, collection,m_ResourceComponent), false);
             m_SpriteCollectionBeingLoaded.Remove(setSpriteObject.CollectionPath);
             

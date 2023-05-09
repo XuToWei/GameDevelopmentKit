@@ -1,6 +1,6 @@
 {
     "name": "UnityGameFramework.Extension.Editor",
-    "rootNamespace": "UnityGameFramework.Extension.Editor",
+    "rootNamespace": "",
     "references": [
         "GameFramework",
         "UnityGameFramework.Runtime",

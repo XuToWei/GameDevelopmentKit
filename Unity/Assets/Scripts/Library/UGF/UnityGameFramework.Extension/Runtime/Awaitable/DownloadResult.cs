@@ -20,16 +20,13 @@ namespace UnityGameFramework.Extension
         /// </summary>
         public object UserData { get; private set; }
 
-        public static DownloadResult Create()
+        public static DownloadResult Create(bool isError, string errorMessage, object userData)
         {
-            return ReferencePool.Acquire<DownloadResult>();
-        }
-
-        public void Fill(bool isError, string errorMessage, object userData)
-        {
-            IsError = isError;
-            ErrorMessage = errorMessage;
-            UserData = userData;
+            DownloadResult downloadResult = ReferencePool.Acquire<DownloadResult>();
+            downloadResult.IsError = isError;
+            downloadResult.ErrorMessage = errorMessage;
+            downloadResult.UserData = userData;
+            return downloadResult;
         }
 
         public void Clear()

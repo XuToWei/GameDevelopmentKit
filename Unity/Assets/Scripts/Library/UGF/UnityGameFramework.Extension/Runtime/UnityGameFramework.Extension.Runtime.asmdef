@@ -1,6 +1,6 @@
 {
     "name": "UnityGameFramework.Extension.Runtime",
-    "rootNamespace": "UnityGameFramework.Extension",
+    "rootNamespace": "",
     "references": [
         "GameFramework",
         "UnityGameFramework.Runtime",

@@ -74,5 +74,7 @@ namespace UnityGameFramework.Extension
             SetTexture(webGetTextureData.SetTexture2dObject, tex,webGetTextureData.SerialId);
             ReferencePool.Release(webGetTextureData);
         }
+        
+        
     }
 }

@@ -21,10 +21,5 @@ namespace ET.Client
         /// 登录界面。
         /// </summary>
         public const int UILogin = 103;
-
-        /// <summary>
-        /// 测试界面。
-        /// </summary>
-        public const int UITest = 999;
     }
 }
