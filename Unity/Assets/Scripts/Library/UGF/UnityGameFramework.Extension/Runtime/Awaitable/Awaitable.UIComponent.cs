@@ -78,7 +78,7 @@ namespace UnityGameFramework.Extension
 
             void ReturnAction()
             {
-                s_ShowEntityEventDataDict.Remove(serialId);
+                s_OpenUIFormEventDataDict.Remove(serialId);
                 ReferencePool.Release(eventData);
             }
             return NewUniTask<UIForm>(MoveNext, cancellationToken, ReturnAction);
