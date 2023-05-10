@@ -1,11 +1,9 @@
-using GameFramework;
-
 namespace UnityGameFramework.Extension
 {
     /// <summary>
     /// DownLoad 结果
     /// </summary>
-    public class DownloadResult : IReference
+    public struct DownloadResult
     {
         /// <summary>
         /// 是否有错误
@@ -16,24 +14,26 @@ namespace UnityGameFramework.Extension
         /// </summary>
         public string ErrorMessage { get; private set; }
         /// <summary>
-        /// 自定义数据
+        /// 下载文件长度
         /// </summary>
-        public object UserData { get; private set; }
+        public long DownloadLength { get; private set; }
 
-        public static DownloadResult Create(bool isError, string errorMessage, object userData)
+        public static DownloadResult Create(string errorMessage)
         {
-            DownloadResult downloadResult = ReferencePool.Acquire<DownloadResult>();
-            downloadResult.IsError = isError;
+            DownloadResult downloadResult = new DownloadResult();
+            downloadResult.IsError = true;
             downloadResult.ErrorMessage = errorMessage;
-            downloadResult.UserData = userData;
+            downloadResult.DownloadLength = 0;
             return downloadResult;
         }
-
-        public void Clear()
+        
+        public static DownloadResult Create(long downloadLength)
         {
-            IsError = false;
-            ErrorMessage = string.Empty;
-            UserData = null;
+            DownloadResult downloadResult = new DownloadResult();
+            downloadResult.IsError = false;
+            downloadResult.ErrorMessage = null;
+            downloadResult.DownloadLength = downloadLength;
+            return downloadResult;
         }
     }
 }

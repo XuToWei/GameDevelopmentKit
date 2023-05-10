@@ -8,7 +8,8 @@ namespace Game
 {
     public static partial class EntityExtension
     {
-        public static async UniTask<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityTypeId, Type logicType, object userData = null, CancellationTokenSource cts = null)
+        public static async UniTask<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityTypeId, Type logicType,
+            object userData = null, CancellationToken cancellationToken = default, Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null)
         {
             DREntity drEntity = GameEntry.Tables.DTEntity.GetOrDefault(entityTypeId);
             if (drEntity == null)
@@ -17,12 +18,14 @@ namespace Game
                 return null;
             }
             
-            return await entityComponent.ShowEntityAsync(entityComponent.GenerateSerialId(), logicType, AssetUtility.GetEntityAsset(drEntity.AssetName), drEntity.EntityGroupName, drEntity.Priority, userData, cts);
+            return await entityComponent.ShowEntityAsync(entityComponent.GenerateSerialId(), logicType, AssetUtility.GetEntityAsset(drEntity.AssetName),
+                drEntity.EntityGroupName, drEntity.Priority, userData, cancellationToken, updateEvent, dependencyAssetEvent);
         }
         
-        public static async UniTask<Entity> ShowEntityAsync<T>(this EntityComponent entityComponent, int entityTypeId, object userData = null, CancellationTokenSource cts = null) where T : EntityLogic
+        public static UniTask<Entity> ShowEntityAsync<T>(this EntityComponent entityComponent, int entityTypeId, object userData = null,
+            CancellationToken cancellationToken = default, Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null) where T : EntityLogic
         {
-            return await entityComponent.ShowEntityAsync(entityTypeId, typeof (T), userData, cts);
+            return entityComponent.ShowEntityAsync(entityTypeId, typeof (T), userData, cancellationToken, updateEvent, dependencyAssetEvent);
         }
     }
 }

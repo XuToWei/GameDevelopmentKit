@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityGameFramework.Runtime;
@@ -7,7 +8,8 @@ namespace Game
 {
     public static partial class UIExtension
     {
-        public static async UniTask<UIForm> OpenUIFormAsync(this UIComponent uiComponent, int uiFormId, object userData = null, CancellationTokenSource cts = null)
+        public static async UniTask<UIForm> OpenUIFormAsync(this UIComponent uiComponent, int uiFormId, object userData = null,
+            CancellationToken cancellationToken = default, Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null)
         {
             DRUIForm drUIForm = GameEntry.Tables.DTUIForm.GetOrDefault(uiFormId);
             if (drUIForm == null)
@@ -30,7 +32,8 @@ namespace Game
                 }
             }
 
-            return await uiComponent.OpenUIFormAsync(assetName, drUIForm.UIGroupName, Constant.AssetPriority.UIFormAsset, drUIForm.PauseCoveredUIForm, userData, cts);
+            return await uiComponent.OpenUIFormAsync(assetName, drUIForm.UIGroupName, Constant.AssetPriority.UIFormAsset, 
+                drUIForm.PauseCoveredUIForm, userData, cancellationToken, updateEvent, dependencyAssetEvent);
         }
     }
 }

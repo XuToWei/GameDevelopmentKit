@@ -18,9 +18,9 @@ namespace Game
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            
             // 注册异步需要的事件
             Awaitable.SubscribeEvent();
+            
             if (GameEntry.Debugger.ActiveWindow)
             {
                 GameEntry.Debugger.RegisterDebuggerWindow("Tool", new ToolDebuggerWindow());
@@ -38,6 +38,12 @@ namespace Game
             // 默认字典：加载默认字典文件 Assets/GameMain/Configs/DefaultDictionary.xml
             // 此字典文件记录了资源更新前使用的各种语言的字符串，会随 App 一起发布，故不可更新
             //GameEntry.Builtin.InitDefaultDictionary();
+        }
+
+        protected override void OnDestroy(ProcedureOwner procedureOwner)
+        {
+            Awaitable.UnsubscribeEvent();
+            base.OnDestroy(procedureOwner);
         }
 
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
