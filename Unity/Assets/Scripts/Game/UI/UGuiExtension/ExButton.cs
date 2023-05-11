@@ -1,10 +1,14 @@
 using System;
+using CodeBind;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
-namespace UnityEngine.UI
+namespace Game
 {
+    [CodeBindName("ExButton")]
     public class ExButton : Button
     {
         public static event Action AllButtonOnPointerDownEvent;

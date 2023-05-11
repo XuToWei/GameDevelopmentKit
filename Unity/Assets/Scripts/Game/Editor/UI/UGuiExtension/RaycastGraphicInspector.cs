@@ -1,9 +1,9 @@
-using UnityEngine.UI;
+using UnityEditor;
 
-namespace UnityEditor.UI
+namespace Game.Editor
 {
     [CustomEditor(typeof(RaycastGraphic))]
-    public sealed class RaycastGraphicInspector : Editor
+    public sealed class RaycastGraphicInspector : UnityEditor.Editor
     {
         SerializedProperty m_RaycastTarget;
         

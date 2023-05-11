@@ -1,6 +1,7 @@
-using UnityEngine.UI;
+using UnityEditor;
+using UnityEditor.UI;
 
-namespace UnityEditor.UI
+namespace Game.Editor
 {
     [CustomEditor(typeof(ExButton))]
     public class ExButtonInspector : ButtonEditor

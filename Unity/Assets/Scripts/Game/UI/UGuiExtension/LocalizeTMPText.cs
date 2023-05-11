@@ -1,20 +1,22 @@
 using CodeBind;
-using Game;
 using GameFramework.Localization;
 using Sirenix.OdinInspector;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace UnityEngine.UI
+namespace Game
 {
     [ExecuteAlways]
     [DisallowMultipleComponent]
     [AddComponentMenu("Localize")]
-    [RequireComponent(typeof(Text))]
-    [CodeBindName("LocalizeText")]
-    public class LocalizeText : Localize
+    [RequireComponent(typeof(TMP_Text))]
+    [CodeBindName("LocalizeTMPText")]
+    public class LocalizeTMPText : Localize
     {
         [SerializeField]
         [HideInInspector]
-        private Text m_Text;
+        private TMP_Text m_TMP_Text;
         
         [SerializeField]
         [ValueDropdown("EditorLocalizationAllKey", DropdownTitle = "Localization Key")]
@@ -26,13 +28,13 @@ namespace UnityEngine.UI
         public Language EditorLocalizationLanguage;
 
         public string LocalizationKey => m_LocalizationKey;
-        public Text Text => m_Text;
+        public TMP_Text TMP_Text => m_TMP_Text;
         
         private void Awake()
         {
             if (Application.isPlaying)
                 return;
-            m_Text = GetComponent<Text>();
+            m_TMP_Text = GetComponent<TMP_Text>();
         }
 #endif
         
@@ -44,7 +46,7 @@ namespace UnityEngine.UI
                 return;
             }
 #endif
-            m_Text.text = GameEntry.Localization.GetString(m_LocalizationKey);
+            m_TMP_Text.text = GameEntry.Localization.GetString(m_LocalizationKey);
         }
     }
 }

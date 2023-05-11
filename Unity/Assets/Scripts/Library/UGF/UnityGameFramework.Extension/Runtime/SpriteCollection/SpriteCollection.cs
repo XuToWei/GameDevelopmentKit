@@ -54,7 +54,7 @@ namespace UnityGameFramework.Extension
         }
 
         [Button("Pack Preview", Expanded = false, ButtonHeight = 18)]
-        [HorizontalGroup("Pack Preview", width: 82)]
+        [HorizontalGroup("Pack Preview", width: 150)]
         [PropertySpace(16, 16)]
         public void Pack()
         {

@@ -70,9 +70,7 @@ namespace UnityGameFramework.Extension
         public float StandardHorizontalRatio { private set; get; }
         
         private RectTransform m_UIRootRectTransform;
-
         
-
         protected override void Awake()
         {
             base.Awake();

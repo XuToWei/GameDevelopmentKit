@@ -2,8 +2,9 @@ using System;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
-namespace UnityEngine.UI
+namespace Game
 {
     public static class UGuiExtension
     {
@@ -62,7 +63,7 @@ namespace UnityEngine.UI
             button.onClick.Set(OnClick);
         }
 
-        public static void Set<T>(this UnityEvent<T> unityEvent, UnityAction<T> unityAction) where T : Object
+        public static void Set<T>(this UnityEvent<T> unityEvent, UnityAction<T> unityAction)
         {
             unityEvent.RemoveAllListeners();
             unityEvent.AddListener(unityAction);
