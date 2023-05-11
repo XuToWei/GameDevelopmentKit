@@ -3,7 +3,8 @@ using HybridCLR.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace Game.Editor{
+namespace Game.Editor
+{
     public static class HybridCLREditor
     {
         static readonly string ResDir = "Assets/Res/HybridCLR";
@@ -20,7 +21,14 @@ namespace Game.Editor{
             }
             AssetDatabase.ImportAsset(ResDir, ImportAssetOptions.ForceUpdate);
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            // 设置aot dlls的group
+        }
+
+        /// <summary>
+        /// 自动链接AotDlls到HybridCLRConfig
+        /// </summary>
+        public static void AutoLinkAotDllsToHybridCLRConfig()
+        {
+            // 设置aot dlls
             HybridCLRConfig hybridCLRConfig = AssetDatabase.LoadAssetAtPath<HybridCLRConfig>(HybridCLRHelper.ConfigAsset);
             hybridCLRConfig.aotAssemblies = new TextAsset[HybridCLRSettings.Instance.patchAOTAssemblies.Length];
             for (int i = 0; i < HybridCLRSettings.Instance.patchAOTAssemblies.Length; i++)
@@ -31,6 +39,7 @@ namespace Game.Editor{
             EditorUtility.SetDirty(hybridCLRConfig);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            Debug.Log($"{HybridCLRHelper.ConfigAsset} 链接AotDlls！");
         }
     }
 }

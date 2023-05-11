@@ -27,7 +27,7 @@
 
 7.更完善的[多语言](Book/%E5%A4%9A%E8%AF%AD%E8%A8%80.md)支持，导表自动生成多语言配置，支持编辑器配置和预览
 
-8.[HybridCLR](https://github.com/focus-creative-games/hybridclr)热更新
+8.[HybridCLR](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)热更新
 
 9.[ET代码生成工具](Book/ET%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7.md)，可以很方便的生成ETUI和GFEntity的代码
 
