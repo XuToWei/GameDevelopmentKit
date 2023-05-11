@@ -21,13 +21,7 @@ namespace Game.Editor
             }
             AssetDatabase.ImportAsset(ResDir, ImportAssetOptions.ForceUpdate);
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-        }
 
-        /// <summary>
-        /// 自动链接AotDlls到HybridCLRConfig
-        /// </summary>
-        public static void AutoLinkAotDllsToHybridCLRConfig()
-        {
             // 设置aot dlls
             HybridCLRConfig hybridCLRConfig = AssetDatabase.LoadAssetAtPath<HybridCLRConfig>(HybridCLRHelper.ConfigAsset);
             hybridCLRConfig.aotAssemblies = new TextAsset[HybridCLRSettings.Instance.patchAOTAssemblies.Length];
