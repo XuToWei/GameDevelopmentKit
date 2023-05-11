@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
+using Game;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ET.Client
 {
