@@ -19,7 +19,7 @@
 
 3.使用极其灵活方便的[代码绑定工具](Unity/Assets/Scripts/Library/CodeBind/Doc/README.md)，解决代码与资源映射的最后一公里
 
-4.模块[切换](Book/Project%E7%BB%93%E6%9E%84.md)方便，ET逻辑或GF逻辑，热更或非热更选择随心所欲
+4.模块[切换](Book/Project%E7%BB%93%E6%9E%84.md)方便，ET逻辑或GF逻辑，热更或非热更选择随心所欲，当然也可以只用GF
 
 5.项目全面使用[UniTask](https://github.com/Cysharp/UniTask)异步方案，已替换ETTask，对非ET的部分支持更全面，扩展支持了GF，推荐使用
 
