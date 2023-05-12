@@ -13,6 +13,6 @@
   - Code_Output_Dirs -- 生成代码目录
   - Code_Type -- 生成的代码类型，目前支持了ET，UGF（GF使用）
 
-***
+![](png/proto_genconfig.png)
 
 3.执行proto2cs.bat（需要编译Kit.sln）
