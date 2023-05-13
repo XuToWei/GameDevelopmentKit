@@ -69,7 +69,7 @@ namespace ET.Editor
 
             if (GUILayout.Button("BuildModelAndHotfix"))
             {
-                if (Define.EnableHotfix)
+                if (!Define.EnableHotfix)
                 {
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
@@ -84,7 +84,7 @@ namespace ET.Editor
 
             if (GUILayout.Button("BuildModel"))
             {
-                if (Define.EnableHotfix)
+                if (!Define.EnableHotfix)
                 {
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
@@ -98,7 +98,7 @@ namespace ET.Editor
 
             if (GUILayout.Button("BuildHotfix"))
             {
-                if (Define.EnableHotfix)
+                if (!Define.EnableHotfix)
                 {
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }

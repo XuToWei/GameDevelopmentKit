@@ -51,7 +51,7 @@ namespace ET.Editor
                         $"{ETSourceCodeDir}/Model/Share/",
                         $"{ETSourceCodeDir}/Model/Client/",
                         $"{ETSourceCodeDir}/ModelView/Client/",
-                        $"{ETSourceCodeDir}/Generate/ClientServer/",
+                        $"{ETSourceCodeDir}/Model/Generate/ClientServer/",
                         $"{ETSourceCodeDir}/Model/Server/",
                     };
                     break;
@@ -130,7 +130,7 @@ namespace ET.Editor
             for (int i = 0; i < CodeDirectorys.Count; i++)
             {
                 DirectoryInfo dti = new DirectoryInfo(CodeDirectorys[i]);
-                FileInfo[] fileInfos = dti.GetFiles("*.cs", System.IO.SearchOption.AllDirectories);
+                FileInfo[] fileInfos = dti.GetFiles("*.cs", SearchOption.AllDirectories);
                 for (int j = 0; j < fileInfos.Length; j++)
                 {
                     scripts.Add(fileInfos[j].FullName);

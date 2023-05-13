@@ -19,8 +19,8 @@ namespace ET
             
             if (Define.EnableHotfix)
             {
-                byte[] assBytes = await LoadCodeBytesAsync("Model.dll");
-                byte[] pdbBytes = await LoadCodeBytesAsync("Model.pdb");
+                byte[] assBytes = await LoadCodeBytesAsync("Model.dll.bytes");
+                byte[] pdbBytes = await LoadCodeBytesAsync("Model.pdb.bytes");
                 model = Assembly.Load(assBytes, pdbBytes);
                 
                 await LoadHotfixAsync();
@@ -51,8 +51,8 @@ namespace ET
                 throw new GameFrameworkException("Client ET LoadHotfix only run when EnableHotfix!");
             }
             
-            byte[] assBytes = await LoadCodeBytesAsync("Hotfix.dll");
-            byte[] pdbBytes = await LoadCodeBytesAsync("Hotfix.pdb");
+            byte[] assBytes = await LoadCodeBytesAsync("Hotfix.dll.bytes");
+            byte[] pdbBytes = await LoadCodeBytesAsync("Hotfix.pdb.bytes");
 
             Assembly hotfixAssembly = Assembly.Load(assBytes, pdbBytes);
 

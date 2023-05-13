@@ -14,7 +14,7 @@ namespace UnityGameFramework.Extension.Editor
     {
         private static ResourceBuilderController m_Controller = null;
         private static Platform m_OriginalPlatform;
-        private const string OutputDirectory = "../Temp/Bundle";
+        public const string OutputDirectory = "../Temp/Bundle";
 
         [MenuItem("Game Framework/Resource Tools/Resource Start Build", false, 51)]
         public static void StartBuild()
@@ -85,6 +85,15 @@ namespace UnityGameFramework.Extension.Editor
             }
         }
 
+        public static string GetNewestBundlePath()
+        {
+#if UNITY_HOTFIX
+            return m_Controller.OutputPackedPath;
+#else
+            return m_Controller.OutputPackagePath;
+#endif
+        }
+
         private static void GetBuildMessage(out string message, out MessageType messageType)
         {
             message = string.Empty;
@@ -127,7 +136,7 @@ namespace UnityGameFramework.Extension.Editor
             messageType = MessageType.Info;
             if (Directory.Exists(m_Controller.OutputPackagePath))
             {
-                message += GameFramework.Utility.Text.Format("{0} will be overwritten.",
+                message += Utility.Text.Format("{0} will be overwritten.",
                     m_Controller.OutputPackagePath);
                 messageType = MessageType.Warning;
             }
@@ -139,7 +148,7 @@ namespace UnityGameFramework.Extension.Editor
                     message += " ";
                 }
 
-                message += GameFramework.Utility.Text.Format("{0} will be overwritten.", m_Controller.OutputFullPath);
+                message += Utility.Text.Format("{0} will be overwritten.", m_Controller.OutputFullPath);
                 messageType = MessageType.Warning;
             }
 
@@ -150,7 +159,7 @@ namespace UnityGameFramework.Extension.Editor
                     message += " ";
                 }
 
-                message += GameFramework.Utility.Text.Format("{0} will be overwritten.", m_Controller.OutputPackedPath);
+                message += Utility.Text.Format("{0} will be overwritten.", m_Controller.OutputPackedPath);
                 messageType = MessageType.Warning;
             }
 
@@ -171,7 +180,7 @@ namespace UnityGameFramework.Extension.Editor
             }
             else
             {
-                Debug.LogError($"Build resources failure. <a href=\"file:///{GameFramework.Utility.Path.GetRegularPath(Path.Combine(m_Controller.BuildReportPath, "BuildLog.txt"))}\" line=\"0\">[ Open BuildLog.txt ]</a>");
+                Debug.LogError($"Build resources failure. <a href=\"file:///{Utility.Path.GetRegularPath(Path.Combine(m_Controller.BuildReportPath, "BuildLog.txt"))}\" line=\"0\">[ Open BuildLog.txt ]</a>");
             }
         }
 
@@ -191,14 +200,14 @@ namespace UnityGameFramework.Extension.Editor
         private static void OnLoadingResource(int index, int count)
         {
             EditorUtility.DisplayProgressBar("Loading Resources",
-                GameFramework.Utility.Text.Format("Loading resources, {0}/{1} loaded.", index, count),
+                Utility.Text.Format("Loading resources, {0}/{1} loaded.", index, count),
                 (float)index / count);
         }
 
         private static void OnLoadingAsset(int index, int count)
         {
             EditorUtility.DisplayProgressBar("Loading Assets",
-                GameFramework.Utility.Text.Format("Loading assets, {0}/{1} loaded.", index, count),
+                Utility.Text.Format("Loading assets, {0}/{1} loaded.", index, count),
                 (float)index / count);
         }
 
@@ -210,7 +219,7 @@ namespace UnityGameFramework.Extension.Editor
         private static void OnAnalyzingAsset(int index, int count)
         {
             EditorUtility.DisplayProgressBar("Analyzing Assets",
-                GameFramework.Utility.Text.Format("Analyzing assets, {0}/{1} analyzed.", index, count),
+                Utility.Text.Format("Analyzing assets, {0}/{1} analyzed.", index, count),
                 (float)index / count);
         }
 
@@ -222,7 +231,7 @@ namespace UnityGameFramework.Extension.Editor
         private static bool OnProcessingAssetBundle(string assetBundleName, float progress)
         {
             if (EditorUtility.DisplayCancelableProgressBar("Processing AssetBundle",
-                    GameFramework.Utility.Text.Format("Processing '{0}'...", assetBundleName), progress))
+                    Utility.Text.Format("Processing '{0}'...", assetBundleName), progress))
             {
                 EditorUtility.ClearProgressBar();
                 return true;
@@ -236,7 +245,7 @@ namespace UnityGameFramework.Extension.Editor
         private static bool OnProcessingBinary(string binaryName, float progress)
         {
             if (EditorUtility.DisplayCancelableProgressBar("Processing Binary",
-                    GameFramework.Utility.Text.Format("Processing '{0}'...", binaryName), progress))
+                    Utility.Text.Format("Processing '{0}'...", binaryName), progress))
             {
                 EditorUtility.ClearProgressBar();
                 return true;
@@ -250,14 +259,14 @@ namespace UnityGameFramework.Extension.Editor
         private static void OnProcessResourceComplete(Platform platform)
         {
             EditorUtility.ClearProgressBar();
-            Debug.Log(GameFramework.Utility.Text.Format("Build resources {0}({1}) for '{2}' complete.",
+            Debug.Log(Utility.Text.Format("Build resources {0}({1}) for '{2}' complete.",
                 m_Controller.ApplicableGameVersion, m_Controller.InternalResourceVersion, platform));
         }
 
         private static void OnBuildResourceError(string errorMessage)
         {
             EditorUtility.ClearProgressBar();
-            Debug.LogWarning(GameFramework.Utility.Text.Format("Build resources error with error message '{0}'.",
+            Debug.LogWarning(Utility.Text.Format("Build resources error with error message '{0}'.",
                 errorMessage));
         }
     }

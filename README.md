@@ -3,7 +3,7 @@
 
 服务端以[ET框架](https://github.com/egametang/ET)为基础
 
-客户端以[UnityGameFramework框架（GF）](https://github.com/EllanJiang/UnityGameFramework)为基础，将[ET框架](https://github.com/egametang/ET)子模块化入GF，完善ET的客户端功能
+客户端以[UnityGameFramework框架（GF）](https://github.com/EllanJiang/UnityGameFramework)为基础，将ET框架子模块化入GF，完善ET的客户端功能
 
 配置工具使用[Luban](https://github.com/focus-creative-games/luban)
 
@@ -19,7 +19,7 @@
 
 3.使用极其灵活方便的[代码绑定工具](Unity/Assets/Scripts/Library/CodeBind/Doc/README.md)，解决代码与资源映射的最后一公里
 
-4.模块[切换](Book/Project%E7%BB%93%E6%9E%84.md)方便，ET逻辑或GF逻辑，热更或非热更选择随心所欲，当然也可以只用GF
+4.[模块切换](Book/Project%E7%BB%93%E6%9E%84.md)方便，ET逻辑或GF逻辑，热更或非热更选择随心所欲，当然也可以只用GF
 
 5.项目全面使用[UniTask](https://github.com/Cysharp/UniTask)异步方案，已替换ETTask，对非ET的部分支持更全面，扩展支持了GF，推荐使用
 
@@ -27,7 +27,7 @@
 
 7.更完善的[多语言](Book/%E5%A4%9A%E8%AF%AD%E8%A8%80.md)支持，导表自动生成多语言配置，支持编辑器配置和预览
 
-8.[HybridCLR](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)热更新
+8.[HybridCLR热更新](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)
 
 9.[Proto生成工具](Book/Proto%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7.md)，支持ET和GF两种格式的proto代码生成
 

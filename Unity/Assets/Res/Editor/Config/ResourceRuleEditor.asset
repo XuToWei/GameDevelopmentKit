@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ResourceRuleEditor
   m_EditorClassIdentifier: 
   rules:
-  - valid: 0
+  - valid: 1
     name: Entity
     variant: 
     fileSystem: 
@@ -43,7 +43,7 @@ MonoBehaviour:
     packed: 0
     filterType: 1
     searchPatterns: '*.*'
-  - valid: 0
+  - valid: 1
     name: UI.UIItem
     variant: 
     fileSystem: 
@@ -53,7 +53,7 @@ MonoBehaviour:
     packed: 0
     filterType: 2
     searchPatterns: '*.*'
-  - valid: 0
+  - valid: 1
     name: UI.UISound
     variant: 
     fileSystem: 
@@ -63,7 +63,7 @@ MonoBehaviour:
     packed: 0
     filterType: 0
     searchPatterns: '*.*'
-  - valid: 0
+  - valid: 1
     name: UI.UISprite
     variant: 
     fileSystem: 
@@ -76,10 +76,30 @@ MonoBehaviour:
   - valid: 1
     name: ET
     variant: 
-    fileSystem: 
+    fileSystem: GameData
     groups: 
     assetsDirectoryPath: Assets/Res/ET
     loadType: 0
-    packed: 1
+    packed: 0
     filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Scene
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Scene
+    loadType: 0
+    packed: 0
+    filterType: 1
+    searchPatterns: '*.unity'
+  - valid: 1
+    name: Localization
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Localization
+    loadType: 0
+    packed: 0
+    filterType: 2
     searchPatterns: '*.*'

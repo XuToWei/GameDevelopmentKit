@@ -1,5 +1,8 @@
+using System.IO;
+using GameFramework;
 using UnityEditor;
 using UnityEngine;
+using UnityGameFramework.Editor;
 using UnityGameFramework.Editor.ResourceTools;
 
 namespace Game.Editor
@@ -85,6 +88,19 @@ namespace Game.Editor
 
                     BuildHelper.RefreshWindowsPkgResource();
                     ShowNotification("Build Model Success!");
+                }
+
+                if (GUILayout.Button("Open Pkg Folder"))
+                {
+                    string folderPath = $"{BuildHelper.BuildPkgFolder}/{m_Platform}";
+                    if (Directory.Exists(folderPath))
+                    {
+                        OpenFolder.Execute(folderPath);
+                    }
+                    else
+                    {
+                        Debug.LogError($"Open folder fail! {folderPath} not exist!");
+                    }
                 }
             }
             EditorGUI.EndDisabledGroup();

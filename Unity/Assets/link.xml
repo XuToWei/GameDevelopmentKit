@@ -2,9 +2,7 @@
     <!--UNITY_HOTFIX
     <assembly fullname="UnityEngine" preserve="all"/>
     <assembly fullname="System" preserve="all"/>
-    <assembly fullname="CommandLine" preserve="all"/>
     <assembly fullname="ICSharpCode.SharpZipLib" preserve="all"/>
-    <assembly fullname="MongoDB.Bson" preserve="all"/>
     <assembly fullname="System.Runtime.CompilerServices.Unsafe" preserve="all"/>
     <assembly fullname="UnityEngine.AnimationModule" preserve="all" />
     <assembly fullname="System.Net.Http" preserve="all" />
@@ -27,18 +25,29 @@
     <assembly fullname="UnityGameFramework.Runtime" preserve="all" />
     <assembly fullname="UnityGameFramework.Extension" preserve="all" />
     <assembly fullname="UniTask" preserve="all" />
-    <assembly fullname="EnhancedScroller" preserve="all" />
     
     <assembly fullname="Game" preserve="all"/>
     UNITY_HOTFIX-->
 
-    <!--UNITY_ET
-    <assembly fullname="Game.ET.Loader" preserve="all"/>
-    <assembly fullname="ET.Runtime" preserve="all"/>
-    UNITY_ET-->
+    <!--UNITY_!HOTFIX_ET_FIRST-->
+    <assembly fullname="Game.ET.Code.Hotfix" preserve="all"/>
+    <assembly fullname="Game.ET.Code.HotfixView" preserve="all"/>
+    <assembly fullname="Game.ET.Code.Model" preserve="all"/>
+    <assembly fullname="Game.ET.Code.ModelView" preserve="all"/>
+    <!--UNITY_!HOTFIX_ET_END-->
 
-    <!--UNITY_GAMEHOT
-    <assembly fullname="Game.Hot.Loader" preserve="all"/>
+    <!--UNITY_HOTFIX_ET
+    <assembly fullname="MongoDB.Bson" preserve="all"/>
+    <assembly fullname="CommandLine" preserve="all"/>
+    <assembly fullname="ET.Runtime" preserve="all"/>
+    <assembly fullname="Game.ET.Loader" preserve="all"/>
+    UNITY_HOTFIX_ET-->
+
+    <!--UNITY_!HOTFIX_GAMEHOT_FIRST-->
     <assembly fullname="Game.Hot.Code" preserve="all"/>
-    UNITY_GAMEHOT-->
+    <!--UNITY_!HOTFIX_GAMEHOT_END-->
+
+    <!--UNITY_HOTFIX_GAMEHOT
+    <assembly fullname="Game.Hot.Loader" preserve="all"/>
+    UNITY_HOTFIX_GAMEHOT-->
 </linker>

@@ -368,6 +368,7 @@ namespace UnityGameFramework.Extension.Editor
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptTypeFilter);
             m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptLabelFilter);
             AnalysisResourceFilters();
+            CheckRemoveEmptyResource();
             if (SaveCollection())
             {
                 Debug.Log("Refresh ResourceCollection.xml success");
@@ -430,6 +431,18 @@ namespace UnityGameFramework.Extension.Editor
             }
 
             return false;
+        }
+
+        private void CheckRemoveEmptyResource()
+        {
+            GFResource[] resources = GetResources();
+            foreach (GFResource resource in resources)
+            {
+                if (resource.GetFirstAsset() == null)
+                {
+                    m_ResourceCollection.RemoveResource(resource.Name, resource.Variant);
+                }
+            }
         }
 
         private void AnalysisResourceFilters()

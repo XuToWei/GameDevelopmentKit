@@ -10,8 +10,8 @@ namespace Game.Editor
 {
     public static class BuildHelper
     {
-        private static readonly string BuildFolder = "../Temp/Pkg";
-        
+        public static readonly string BuildPkgFolder = Path.GetFullPath("../Temp/Pkg");
+
         public static void BuildPkg(Platform platform)
         {
             BuildTarget buildTarget = BuildTarget.StandaloneWindows;
@@ -48,7 +48,7 @@ namespace Game.Editor
 
             Debug.Log($"start build {platform}");
             
-            string fold = $"{BuildFolder}/{platform}";
+            string fold = $"{BuildPkgFolder}/{platform}";
 
             if (Directory.Exists(fold))
             {
@@ -81,8 +81,7 @@ namespace Game.Editor
 
         public static void RefreshWindowsPkgResource()
         {
-            string fold = $"{BuildFolder}/{Platform.Windows}";
-            string targetPath = Path.Combine(fold, $"{Application.productName}_Data/StreamingAssets/");
+            string targetPath = $"{BuildPkgFolder}/{Platform.Windows}/{Application.productName}_Data/StreamingAssets/";
             if (!Directory.Exists(targetPath))
             {
                 throw new GameFrameworkException($"RefreshExePkgResource fail! {targetPath} not exist!");
@@ -93,14 +92,15 @@ namespace Game.Editor
             Debug.Log("finish build resource");
             
             FileTool.CleanDirectory(targetPath);
-            FileTool.CopyDirectory(fold, targetPath);
-            Debug.Log($"src dir: {fold}    target: {targetPath}");
+            string bundleFold = Path.Combine(ResourceBuildHelper.GetNewestBundlePath(), Platform.Windows.ToString());
+            bundleFold = Utility.Path.GetRegularPath(bundleFold);
+            FileTool.CopyDirectory(bundleFold, targetPath);
+            Debug.Log($"src dir: {bundleFold}    target: {targetPath}");
         }
         
         public static void RefreshWindows64PkgResource()
         {
-            string fold = $"{BuildFolder}/{Platform.Windows64}";
-            string targetPath = Path.Combine(fold, $"{Application.productName}_Data/StreamingAssets/");
+            string targetPath = $"{BuildPkgFolder}/{Platform.Windows64}/{Application.productName}_Data/StreamingAssets/";
             if (!Directory.Exists(targetPath))
             {
                 throw new GameFrameworkException($"RefreshExePkgResource fail! {targetPath} not exist!");
@@ -111,8 +111,10 @@ namespace Game.Editor
             Debug.Log("finish build resource");
             
             FileTool.CleanDirectory(targetPath);
-            FileTool.CopyDirectory(fold, targetPath);
-            Debug.Log($"src dir: {fold}    target: {targetPath}");
+            string bundleFold = Path.Combine(ResourceBuildHelper.GetNewestBundlePath(), Platform.Windows64.ToString());
+            bundleFold = Utility.Path.GetRegularPath(bundleFold);
+            FileTool.CopyDirectory(bundleFold, targetPath);
+            Debug.Log($"src dir: {bundleFold}    target: {targetPath}");
         }
     }
 }

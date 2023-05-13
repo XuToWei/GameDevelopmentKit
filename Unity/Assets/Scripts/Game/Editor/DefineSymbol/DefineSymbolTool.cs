@@ -1,5 +1,7 @@
 using System.IO;
+using HybridCLR.Editor;
 using UnityEditor;
+using UnityEngine;
 using UnityGameFramework.Editor;
 
 namespace Game.Editor
@@ -10,21 +12,43 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_HOTFIX")]
         private static void Remove_UNITY_HOTFIX()
         {
+            DisableHybridCLR();
             RemoveLinkXML("UNITY_HOTFIX");
-            RemoveLinkXML("UNITY_ET");
-            RemoveLinkXML("UNITY_GAMEHOT");
+#if UNITY_ET
+            AddLinkXML("UNITY_!HOTFIX_ET");
+            RemoveLinkXML("UNITY_HOTFIX_ET");
+#else
+            RemoveLinkXML("UNITY_HOTFIX_ET");
+            RemoveLinkXML("UNITY_!HOTFIX_ET");
+#endif
+#if UNITY_GAMEHOT
+            AddLinkXML("UNITY_!HOTFIX_GAMEHOT");
+            RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
+#else
+            RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
+            RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
+#endif
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_HOTFIX");
         }
 #else
         [MenuItem("Tools/Define Symbol/Add UNITY_HOTFIX")]
         private static void Add_UNITY_HOTFIX()
         {
+            EnableHybridCLR();
             AddLinkXML("UNITY_HOTFIX");
 #if UNITY_ET
-            AddLinkXML("UNITY_ET");
+            AddLinkXML("UNITY_HOTFIX_ET");
+            RemoveLinkXML("UNITY_!HOTFIX_ET");
+#else
+            RemoveLinkXML("UNITY_HOTFIX_ET");
+            RemoveLinkXML("UNITY_!HOTFIX_ET");
 #endif
 #if UNITY_GAMEHOT
-            AddLinkXML("UNITY_GAMEHOT");
+            AddLinkXML("UNITY_HOTFIX_GAMEHOT");
+            RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
+#else
+            RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
+            RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #endif
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_HOTFIX");
         }
@@ -34,9 +58,8 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_ET")]
         private static void Remove_UNITY_ET()
         {
-#if UNITY_HOTFIX
-            RemoveLinkXML("UNITY_ET");
-#endif
+            RemoveLinkXML("UNITY_HOTFIX_ET");
+            RemoveLinkXML("UNITY_!HOTFIX_ET");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET");
         }
 #else
@@ -44,7 +67,11 @@ namespace Game.Editor
         private static void Add_UNITY_ET()
         {
 #if UNITY_HOTFIX
-            AddLinkXML("UNITY_ET");
+            AddLinkXML("UNITY_HOTFIX_ET");
+            RemoveLinkXML("UNITY_!HOTFIX_ET");
+#else
+            AddLinkXML("UNITY_!HOTFIX_ET");
+            RemoveLinkXML("UNITY_HOTFIX_ET");
 #endif
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET");
         }
@@ -54,9 +81,8 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_GAMEHOT")]
         private static void Remove_UNITY_GAMEHOT()
         {
-#if UNITY_HOTFIX
-            RemoveLinkXML("UNITY_GAMEHOT");
-#endif
+            RemoveLinkXML("UNITY_HOTFIX_ET");
+            RemoveLinkXML("UNITY_!HOTFIX_ET");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_GAMEHOT");
         }
 #else
@@ -64,7 +90,11 @@ namespace Game.Editor
         private static void Add_UNITY_GAMEHOT()
         {
 #if UNITY_HOTFIX
-            AddLinkXML("UNITY_GAMEHOT");
+            AddLinkXML("UNITY_HOTFIX_GAMEHOTT");
+            RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
+#else
+            AddLinkXML("UNITY_!HOTFIX_GAMEHOT");
+            RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
 #endif
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_GAMEHOT");
         }
@@ -98,6 +128,37 @@ namespace Game.Editor
             content = content.Replace($"<!--{scriptingDefineSymbol}_END-->", $"{scriptingDefineSymbol}-->");
             File.WriteAllText("Assets/Link.xml", content);
             AssetDatabase.Refresh();
+        }
+
+        private static void EnableHybridCLR()
+        {
+            HybridCLRSettings.Instance.enable = true;
+            string linkFile = $"{Application.dataPath}/{HybridCLRSettings.Instance.outputLinkFile}";
+            string linkDisableFile = $"{linkFile}.DISABLED";
+            if (File.Exists(linkDisableFile))
+            {
+                File.Move(linkDisableFile, linkFile);
+                File.Delete(linkDisableFile);
+                File.Delete($"{linkDisableFile}.meta");
+                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            }
+            HybridCLRSettings.Save();
+        }
+
+        private static void DisableHybridCLR()
+        {
+            HybridCLRSettings.Instance.enable = false;
+            string linkFile = $"{Application.dataPath}/{HybridCLRSettings.Instance.outputLinkFile}";
+            Debug.Log(linkFile);
+            string linkDisableFile = $"{linkFile}.DISABLED";
+            if (File.Exists(linkFile))
+            {
+                File.Move(linkFile, linkDisableFile);
+                File.Delete(linkFile);
+                File.Delete($"{linkFile}.meta");
+                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            }
+            HybridCLRSettings.Save();
         }
     }
 }
