@@ -48,7 +48,7 @@ namespace Game.Editor
 
             Debug.Log($"start build {platform}");
             
-            string fold = $"{BuildPkgFolder}/{platform}";
+            string fold = Utility.Path.GetRegularPath($"{BuildPkgFolder}/{platform}");
 
             if (Directory.Exists(fold))
             {

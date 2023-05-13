@@ -24,7 +24,7 @@ namespace Game.Editor
 #elif UNITY_ANDROID
             return Platform.Android;
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            return Platform.Windows;
+            return Platform.Windows64;
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
             return Platform.MacOS;
 #endif

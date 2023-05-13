@@ -92,7 +92,6 @@ namespace ET
             RegisterStruct<float3>();
             RegisterStruct<float4>();
             RegisterStruct<quaternion>();
-#if UNITY_HOTFIX
             Dictionary<string, Type> types = EventSystem.Instance.GetTypes();
             foreach (Type type in types.Values)
             {
@@ -108,7 +107,6 @@ namespace ET
 
                 BsonClassMap.LookupClassMap(type);
             }
-#endif
         }
 
         public static void Init()

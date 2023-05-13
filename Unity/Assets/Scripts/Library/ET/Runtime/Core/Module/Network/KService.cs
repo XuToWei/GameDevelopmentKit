@@ -55,8 +55,8 @@ namespace ET
             Kcp.KcpSetoutput(KcpOutput);
         }
         
-#if UNITY_ET_IL2CPP
-		[AOT.MonoPInvokeCallback(typeof(KcpOutput))]
+#if ENABLE_IL2CPP
+        [AOT.MonoPInvokeCallback(typeof(KcpOutput))]
 #endif
         private static void KcpLog(IntPtr bytes, int len, IntPtr kcp, IntPtr user)
         {
@@ -75,8 +75,8 @@ namespace ET
             }
         }
 
-#if UNITY_ET_IL2CPP
-		[AOT.MonoPInvokeCallback(typeof(KcpOutput))]
+#if ENABLE_IL2CPP
+        [AOT.MonoPInvokeCallback(typeof(KcpOutput))]
 #endif
         private static int KcpOutput(IntPtr bytes, int len, IntPtr kcp, IntPtr user)
         {
