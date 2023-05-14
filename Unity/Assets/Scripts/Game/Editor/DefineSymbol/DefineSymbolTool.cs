@@ -8,11 +8,28 @@ namespace Game.Editor
 {
     internal static class DefineSymbolTool
     {
+        public static readonly string LinkXML = "Assets/Scripts/Generate/link.xml";
+
+        [MenuItem("Tools/Define Symbol/Refresh")]
+        private static void Refresh()
+        {
+#if UNITY_HOTFIX
+            EnableHybridCLR();
+            AddLinkXML("UNITY_HOTFIX");
+            RemoveLinkXML("UNITY_!HOTFIX");
+#else
+            DisableHybridCLR();
+            AddLinkXML("UNITY_!HOTFIX");
+            RemoveLinkXML("UNITY_HOTFIX");
+#endif
+        }
+        
 #if UNITY_HOTFIX
         [MenuItem("Tools/Define Symbol/Remove UNITY_HOTFIX")]
         private static void Remove_UNITY_HOTFIX()
         {
             DisableHybridCLR();
+            AddLinkXML("UNITY_!HOTFIX");
             RemoveLinkXML("UNITY_HOTFIX");
 #if UNITY_ET
             AddLinkXML("UNITY_!HOTFIX_ET");
@@ -36,6 +53,7 @@ namespace Game.Editor
         {
             EnableHybridCLR();
             AddLinkXML("UNITY_HOTFIX");
+            RemoveLinkXML("UNITY_!HOTFIX");
 #if UNITY_ET
             AddLinkXML("UNITY_HOTFIX_ET");
             RemoveLinkXML("UNITY_!HOTFIX_ET");
@@ -106,12 +124,12 @@ namespace Game.Editor
         /// <param name="scriptingDefineSymbol"></param>
         private static void AddLinkXML(string scriptingDefineSymbol)
         {
-            string content = File.ReadAllText("Assets/Link.xml");
+            string content = File.ReadAllText(LinkXML);
             if (content.Contains($"<!--{scriptingDefineSymbol}_FIRST-->") && content.Contains($"<!--{scriptingDefineSymbol}_END-->"))
                 return;
             content = content.Replace($"<!--{scriptingDefineSymbol}", $"<!--{scriptingDefineSymbol}_FIRST-->");
             content = content.Replace($"{scriptingDefineSymbol}-->", $"<!--{scriptingDefineSymbol}_END-->");
-            File.WriteAllText("Assets/Link.xml", content);
+            File.WriteAllText(LinkXML, content);
             AssetDatabase.Refresh();
         }
         
@@ -121,12 +139,12 @@ namespace Game.Editor
         /// <param name="scriptingDefineSymbol"></param>
         private static void RemoveLinkXML(string scriptingDefineSymbol)
         {
-            string content = File.ReadAllText("Assets/Link.xml");
+            string content = File.ReadAllText(LinkXML);
             if (!content.Contains($"<!--{scriptingDefineSymbol}_FIRST-->") && !content.Contains($"<!--{scriptingDefineSymbol}_END-->"))
                 return;
             content = content.Replace($"<!--{scriptingDefineSymbol}_FIRST-->", $"<!--{scriptingDefineSymbol}");
             content = content.Replace($"<!--{scriptingDefineSymbol}_END-->", $"{scriptingDefineSymbol}-->");
-            File.WriteAllText("Assets/Link.xml", content);
+            File.WriteAllText(LinkXML, content);
             AssetDatabase.Refresh();
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using GameFramework;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
@@ -14,7 +15,7 @@ namespace Game.Editor
 
         public static void BuildPkg(Platform platform)
         {
-            BuildTarget buildTarget = BuildTarget.StandaloneWindows;
+            BuildTarget buildTarget = BuildTarget.NoTarget;
             string appName = Application.productName;
             switch (platform)
             {
@@ -71,6 +72,11 @@ namespace Game.Editor
             };
             Debug.Log("start build pkg");
             string locationPathName = $"{fold}/{appName}";
+#if !UNITY_HOTFIX && UNITY_ET && !UNITY_2022_1_OR_NEWER//兼容ET的Bson
+            EditorUserBuildSettings.il2CppCodeGeneration = Il2CppCodeGeneration.OptimizeSize;
+#else
+            EditorUserBuildSettings.il2CppCodeGeneration = Il2CppCodeGeneration.OptimizeSpeed;
+#endif
             BuildReport buildReport = BuildPipeline.BuildPlayer(levels, locationPathName, buildTarget, BuildOptions.None);
             if (buildReport.summary.result != BuildResult.Succeeded)
             {

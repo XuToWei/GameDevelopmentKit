@@ -86,7 +86,7 @@ namespace Game.Editor
                         }
                     }
 
-                    BuildHelper.RefreshWindowsPkgResource();
+                    BuildHelper.RefreshWindows64PkgResource();
                     ShowNotification("Build Model Success!");
                 }
 
