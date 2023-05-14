@@ -8,7 +8,7 @@ namespace Game.Editor
 {
     internal static class DefineSymbolTool
     {
-        public static readonly string LinkXML = "Assets/Scripts/Generate/link.xml";
+        public static readonly string LinkXML = "Assets/link.xml";
 
         [MenuItem("Tools/Define Symbol/Refresh")]
         private static void Refresh()
