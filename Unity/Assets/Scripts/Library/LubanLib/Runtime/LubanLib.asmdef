@@ -1,10 +1,10 @@
 {
-    "name": "CodeBind.Runtime",
-    "rootNamespace": "CodeBind",
+    "name": "LubanLib",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,

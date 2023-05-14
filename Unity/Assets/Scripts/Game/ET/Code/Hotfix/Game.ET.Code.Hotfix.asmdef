@@ -5,9 +5,9 @@
         "ET.Runtime",
         "Game.ET.Code.Model",
         "Unity.Mathematics",
-        "LubanLib.Runtime",
         "ProtoBuf",
-        "UniTask"
+        "UniTask",
+        "LubanLib"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

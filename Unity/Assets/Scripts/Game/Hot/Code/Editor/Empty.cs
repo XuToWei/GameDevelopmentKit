@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Hotfix.Editor
+namespace Game.Hot.Editor
 {
     public class Empty : MonoBehaviour
     {

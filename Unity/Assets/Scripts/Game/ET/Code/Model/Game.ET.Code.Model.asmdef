@@ -6,7 +6,7 @@
         "Game.ET.Loader",
         "Unity.Mathematics",
         "ProtoBuf",
-        "LubanLib.Runtime",
+        "LubanLib",
         "UniTask"
     ],
     "includePlatforms": [],

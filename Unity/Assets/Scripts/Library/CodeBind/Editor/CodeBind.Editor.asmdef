@@ -2,7 +2,7 @@
     "name": "CodeBind.Editor",
     "rootNamespace": "CodeBind.Editor",
     "references": [
-        "CodeBind.Runtime"
+        "CodeBind"
     ],
     "includePlatforms": [
         "Editor"

@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using GameFramework;
-using NUnit.Framework.Internal;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
@@ -25,10 +24,6 @@ namespace UnityGameFramework.Extension.Editor
             bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath,
             bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
-            ResourceRuleEditor ruleEditor = ScriptableObject.CreateInstance<ResourceRuleEditor>();
-            ruleEditor.RefreshResourceCollection();
-            SpriteCollectionUtility.RefreshSpriteCollection();
-
             string streamingAssetsPath =
                 Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
             string[] fileNames = Directory.GetFiles(streamingAssetsPath, "*", SearchOption.AllDirectories);
@@ -39,8 +34,30 @@ namespace UnityGameFramework.Extension.Editor
                     File.Delete(fileName);
                 }
             }
-
             Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
+            
+            ResourceRuleEditor ruleEditor = ScriptableObject.CreateInstance<ResourceRuleEditor>();
+            ruleEditor.RefreshResourceCollection();
+            SpriteCollectionUtility.RefreshSpriteCollection();
+
+            TypeCache.MethodCollection methodCollection = TypeCache.GetMethodsWithAttribute<UGFPreprocessBuildEventAttribute>();
+            var methodInfos = methodCollection.ToList();
+            for (int i = methodInfos.Count - 1; i >= 0; i--)
+            {
+                if (!methodInfos[i].IsStatic)
+                {
+                    methodInfos.RemoveAt(i);
+                }
+            }
+
+            methodInfos.Sort((a, b) =>
+                a.GetCustomAttribute<UGFPreprocessBuildEventAttribute>().CallbackOrder
+                    .CompareTo(b.GetCustomAttribute<UGFPreprocessBuildEventAttribute>().CallbackOrder));
+
+            foreach (var methodInfo in methodInfos)
+            {
+                methodInfo.Invoke(null, null);
+            }
         }
 
         public void OnPreprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected,

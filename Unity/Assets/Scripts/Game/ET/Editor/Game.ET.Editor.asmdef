@@ -5,13 +5,14 @@
         "ET.Runtime",
         "ET.Editor",
         "Game.ET.Loader",
+        "LubanLib",
         "LubanLib.Editor",
-        "LubanLib.Runtime",
         "Game",
         "Game.Editor",
         "UniTask",
         "ToolbarExtension.Editor",
-        "UnityGameFramework.Editor"
+        "UnityGameFramework.Editor",
+        "UnityGameFramework.Extension.Editor"
     ],
     "includePlatforms": [
         "Editor"

@@ -1,7 +1,7 @@
 ﻿<Config>
   <Open Value="TRUE" />
   <Gen>
-    <Output_Code_Dirs Value="../Unity/Assets/Scripts/Game/Hot/Code/Generate/Luban" />
+    <Output_Code_Dirs Value="../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/Luban" />
     <Output_Data_Dirs Value="../Unity/Assets/Res/Hot/Generate/Luban" />
     <Gen_Type_Code_Data Value="code_cs_unity_bin,data_bin" />
     <Gen_Group Value="client" />

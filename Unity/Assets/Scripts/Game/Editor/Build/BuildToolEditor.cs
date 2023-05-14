@@ -1,5 +1,4 @@
 using System.IO;
-using GameFramework;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor;
@@ -11,7 +10,7 @@ namespace Game.Editor
     {
         private Platform m_Platform;
         
-        [MenuItem("Tools/Build Tool")]
+        [MenuItem("Tools/Build Pkg Tool")]
         public static void ShowWindow()
         {
             GetWindow<BuildToolEditor>("Build Tool");
