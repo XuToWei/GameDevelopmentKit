@@ -3,12 +3,12 @@ using UnityGameFramework.Extension.Editor;
 
 namespace Game.Hot.Editor
 {
-    public static class PreprocessBuildGameHotDll
+    public static class PreprocessCompileDll
     {
         [UGFPreprocessBuildEvent(1)]
-        public static void BuildDlls()
+        public static void CompileDll()
         {
-            BuildGameHotDllTool.Build();
+            BuildAssemblyTool.Build();
         }
     }
 }

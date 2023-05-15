@@ -1,6 +1,9 @@
 using System;
+using System.Reflection;
 using Cysharp.Threading.Tasks;
+using GameFramework;
 using UnityEngine;
+using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
 
 namespace Game.Hot
@@ -64,9 +67,41 @@ namespace Game.Hot
 
         private async UniTaskVoid StartAsync()
         {
+            Assembly assembly = null;
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
+            if (Define.EnableHotfix)
+            {
+                byte[] assBytes = await LoadCodeBytesAsync("Game.Hot.Code.dll");
+                byte[] pdbBytes = await LoadCodeBytesAsync("Game.Hot.Code.pdb");
+                assembly = Assembly.Load(assBytes, pdbBytes);
+            }
+            else
+            {
+                Assembly[] assemblies = Utility.Assembly.GetAssemblies();
+                foreach (Assembly ass in assemblies)
+                {
+                    string name = ass.GetName().Name;
+                    if (name == "Game.Hot.Code")
+                    {
+                        assembly = ass;
+                        break;
+                    }
+                }
+            }
+            
+            MethodInfo methodInfo = assembly.GetType("Game.Hot.Entry").GetMethod("Start");
+            methodInfo.Invoke(null, null);
             
             this.m_RunnerComponent = this.gameObject.AddComponent<Runner>();
+        }
+        
+        private async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
+        {
+            fileName = AssetUtility.GetGameHotAsset(Utility.Text.Format("Code/{0}.bytes", fileName));
+            TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(fileName);
+            byte[] bytes = textAsset.bytes;
+            GameEntry.Resource.UnloadAsset(textAsset);
+            return bytes;
         }
     }
 }

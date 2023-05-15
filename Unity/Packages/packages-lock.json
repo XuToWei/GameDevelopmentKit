@@ -47,14 +47,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "fbeeb3d9595cc7f745fb0cdc4551d751f56e1dd1"
+      "hash": "07b52bed050e90c718271f198428647c19792b85"
     },
     "com.handzlikchris.fastscriptreload": {
       "version": "https://github.com/handzlikchris/FastScriptReload.git?path=Assets",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "5f73a1ba43dfe4f840b535f40aeff7d8a7e42a52"
+      "hash": "a3df94f9a49cca348e3d003321fc28b3ecf2a87e"
     },
     "com.unity.burst": {
       "version": "1.8.2",

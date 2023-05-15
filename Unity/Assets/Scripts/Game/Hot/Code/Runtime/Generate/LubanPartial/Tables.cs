@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Bright.Serialization;
 using Cysharp.Threading.Tasks;
+using GameFramework;
 using SimpleJSON;
 using UnityEngine;
 using UnityGameFramework.Extension;
@@ -26,7 +27,8 @@ namespace Game.Hot
             {
                 async Task<ByteBuf> LoadByteBuf(string file)
                 {
-                    TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetLubanAsset(file, false));
+                    string lubanAssetFile = AssetUtility.GetGameHotAsset(Utility.Text.Format("Generate/Luban/{0}.bytes", file));
+                    TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(lubanAssetFile);
                     return new ByteBuf(textAsset.bytes);
                 }
 
@@ -37,7 +39,8 @@ namespace Game.Hot
             {
                 async Task<JSONNode> LoadJson(string file)
                 {
-                    TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetLubanAsset(file, true));
+                    string lubanAssetFile = AssetUtility.GetGameHotAsset(Utility.Text.Format("Generate/Luban/{0}.json", file));
+                    TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(lubanAssetFile);
                     return JSON.Parse(textAsset.text);
                 }
 

@@ -103,3 +103,13 @@ MonoBehaviour:
     packed: 0
     filterType: 2
     searchPatterns: '*.*'
+  - valid: 1
+    name: GameHot
+    variant: 
+    fileSystem: GameData
+    groups: 
+    assetsDirectoryPath: Assets/Res/Hot
+    loadType: 0
+    packed: 1
+    filterType: 0
+    searchPatterns: '*.*'

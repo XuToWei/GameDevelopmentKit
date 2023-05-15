@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityGameFramework.Extension.Editor;
 
 namespace Game.Editor
 {
@@ -14,7 +15,7 @@ namespace Game.Editor
         public static void AllScenes()
         {
             List<EditorBuildSettingsScene> scenes = new List<EditorBuildSettingsScene>();
-            scenes.Add(new EditorBuildSettingsScene("Assets/Launcher.unity", true));
+            scenes.Add(new EditorBuildSettingsScene(EntryUtility.EntrySceneName, true));
 
             string[] sceneGuids = AssetDatabase.FindAssets("t:Scene", s_SearchScenePaths);
             foreach (string sceneGuid in sceneGuids)

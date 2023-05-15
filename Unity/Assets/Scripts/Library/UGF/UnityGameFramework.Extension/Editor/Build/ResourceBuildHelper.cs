@@ -1,9 +1,14 @@
 using System;
 using System.IO;
+using System.Reflection;
 using GameFramework;
+using GameFramework.Resource;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
+using UnityGameFramework.Runtime;
+using Object = UnityEngine.Object;
 
 namespace UnityGameFramework.Extension.Editor
 {
@@ -28,6 +33,13 @@ namespace UnityGameFramework.Extension.Editor
         /// <param name="specificPlatform">为Undefined使用设置的平台</param>
         public static void StartBuild(Platform specificPlatform)
         {
+            //获取启动场景的资源加载类型来打包
+            ResourceMode resourceMode = EntryUtility.GetEntryResourceMode();
+            if (resourceMode == ResourceMode.Unspecified)
+            {
+                throw new GameFrameworkException("Resource mode is invalid.");
+            }
+            
             m_Controller = new ResourceBuilderController();
             m_Controller.OnLoadingResource += OnLoadingResource;
             m_Controller.OnLoadingAsset += OnLoadingAsset;
@@ -49,7 +61,20 @@ namespace UnityGameFramework.Extension.Editor
                 {
                     Directory.CreateDirectory(OutputDirectory);
                 }
-                
+
+                if (resourceMode == ResourceMode.Package)
+                {
+                    m_Controller.OutputPackageSelected = true;
+                    m_Controller.OutputFullSelected = false;
+                    m_Controller.OutputPackedSelected = false;
+                }
+                else
+                {
+                    m_Controller.OutputPackageSelected = false;
+                    m_Controller.OutputFullSelected = true;
+                    m_Controller.OutputPackedSelected = true;
+                }
+
                 m_OriginalPlatform = m_Controller.Platforms;
                 if (specificPlatform != Platform.Undefined)
                 {

@@ -64,7 +64,7 @@ namespace Game
             return Utility.Text.Format("Assets/Res/ET/{0}", assetName);
         }
         
-        public static string GetHotAsset(string assetName)
+        public static string GetGameHotAsset(string assetName)
         {
             return Utility.Text.Format("Assets/Res/Hot/{0}", assetName);
         }

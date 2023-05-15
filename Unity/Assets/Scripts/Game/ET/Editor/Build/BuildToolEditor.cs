@@ -74,8 +74,8 @@ namespace ET.Editor
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
 
-                BuildAssemblyHelper.BuildModel(this.codeOptimization, this.codeMode);
-                BuildAssemblyHelper.BuildHotfix(this.codeOptimization, this.codeMode);
+                BuildAssemblyTool.BuildModel(this.codeOptimization, this.codeMode);
+                BuildAssemblyTool.BuildHotfix(this.codeOptimization, this.codeMode);
 
                 AfterCompiling();
 
@@ -89,7 +89,7 @@ namespace ET.Editor
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
 
-                BuildAssemblyHelper.BuildModel(this.codeOptimization, this.codeMode);
+                BuildAssemblyTool.BuildModel(this.codeOptimization, this.codeMode);
 
                 AfterCompiling();
 
@@ -103,7 +103,7 @@ namespace ET.Editor
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
 
-                BuildAssemblyHelper.BuildHotfix(this.codeOptimization, this.codeMode);
+                BuildAssemblyTool.BuildHotfix(this.codeOptimization, this.codeMode);
 
                 AfterCompiling();
 

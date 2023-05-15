@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.IO;
 using HybridCLR.Editor;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityGameFramework.Editor;
 
@@ -84,6 +86,9 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Add UNITY_ET")]
         private static void Add_UNITY_ET()
         {
+#if UNITY_GAMEHOT
+            Remove_UNITY_GAMEHOT();
+#endif
 #if UNITY_HOTFIX
             AddLinkXML("UNITY_HOTFIX_ET");
             RemoveLinkXML("UNITY_!HOTFIX_ET");
@@ -99,14 +104,17 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_GAMEHOT")]
         private static void Remove_UNITY_GAMEHOT()
         {
-            RemoveLinkXML("UNITY_HOTFIX_ET");
-            RemoveLinkXML("UNITY_!HOTFIX_ET");
+            RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
+            RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_GAMEHOT");
         }
 #else
         [MenuItem("Tools/Define Symbol/Add UNITY_GAMEHOT")]
         private static void Add_UNITY_GAMEHOT()
         {
+#if UNITY_ET
+            Remove_UNITY_ET();
+#endif
 #if UNITY_HOTFIX
             AddLinkXML("UNITY_HOTFIX_GAMEHOTT");
             RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
@@ -160,6 +168,10 @@ namespace Game.Editor
                 File.Delete($"{linkDisableFile}.meta");
                 AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             }
+            // List<string> 
+            // #if UNITY_ET
+            // HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions.
+            // #endif
             HybridCLRSettings.Save();
         }
 

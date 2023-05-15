@@ -11,7 +11,7 @@ namespace Game.Editor
     public static class BuildAssemblyHelper
     {
         public static string BuildOutputDir => "./Temp/Bin/Debug";
-        
+
         public static void Build(string assemblyName, List<string> codeDirectories, string[] additionalReferences, string[] excludeReferences, CodeOptimization codeOptimization)
         {
             if (!Directory.Exists(BuildOutputDir))
@@ -30,10 +30,16 @@ namespace Game.Editor
                 }
             }
 
-            string dllPath = Path.Combine(BuildOutputDir, $"{assemblyName}.dll");
-            string pdbPath = Path.Combine(BuildOutputDir, $"{assemblyName}.pdb");
-            File.Delete(dllPath);
-            File.Delete(pdbPath);
+            string dllPath = Path.GetFullPath($"{BuildOutputDir}/{assemblyName}.dll");
+            string pdbPath = Path.GetFullPath($"{BuildOutputDir}/{assemblyName}.pdb");
+            if (File.Exists(dllPath))
+            {
+                File.Delete(dllPath);
+            }
+            if (File.Exists(pdbPath))
+            {
+                File.Delete(pdbPath);
+            }
 
             Directory.CreateDirectory(BuildOutputDir);
 
@@ -71,7 +77,14 @@ namespace Game.Editor
 
                 if (warningCount > 0)
                 {
-                    Debug.LogFormat("有{0}个Warning!!!", warningCount);
+                    for (int i = 0; i < compilerMessages.Length; i++)
+                    {
+                        if (compilerMessages[i].type == CompilerMessageType.Warning)
+                        {
+                            string filename = Path.GetFullPath(compilerMessages[i].file);
+                            Debug.LogWarningFormat($"{compilerMessages[i].message} (at <a href=\"file:///{filename}/\" line=\"{compilerMessages[i].line}\">{Path.GetFileName(filename)}</a>)");
+                        }
+                    }
                 }
 
                 if (errorCount > 0)

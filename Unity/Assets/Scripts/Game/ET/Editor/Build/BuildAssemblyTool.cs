@@ -9,7 +9,7 @@ using UnityEditor.Compilation;
 
 namespace ET.Editor
 {
-    public static class BuildAssemblyHelper
+    public static class BuildAssemblyTool
     {
         /// <summary>
         /// 编译输出的目录
@@ -20,6 +20,8 @@ namespace ET.Editor
         /// ET Code的目录
         /// </summary>
         public const string ETSourceCodeDir = "Assets/Scripts/Game/ET/Code";
+        
+        public static CodeOptimization CodeOptimization => CodeOptimization.Debug;
 
         public static void BuildModel(CodeOptimization codeOptimization, CodeMode codeMode)
         {

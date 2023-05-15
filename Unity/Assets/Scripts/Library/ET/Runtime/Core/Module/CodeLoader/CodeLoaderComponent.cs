@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 
 namespace ET
 {
-    public class CodeLoaderComponent : Singleton<CodeLoaderComponent>, ICodeLoader
+    public class CodeLoaderComponent : Singleton<CodeLoaderComponent>
     {
         private ICodeLoader iCodeLoader;
 

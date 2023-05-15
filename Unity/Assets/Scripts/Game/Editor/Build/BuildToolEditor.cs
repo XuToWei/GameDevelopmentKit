@@ -1,8 +1,10 @@
 using System.IO;
+using GameFramework;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor;
 using UnityGameFramework.Editor.ResourceTools;
+using UnityGameFramework.Extension.Editor;
 
 namespace Game.Editor
 {
@@ -10,7 +12,7 @@ namespace Game.Editor
     {
         private Platform m_Platform;
         
-        [MenuItem("Tools/Build Pkg Tool")]
+        [MenuItem("Tools/Build Tool Editor")]
         public static void ShowWindow()
         {
             GetWindow<BuildToolEditor>("Build Tool");
@@ -36,55 +38,37 @@ namespace Game.Editor
 
         private void OnGUI()
         {
-            GUIStyle titleGUIStyle = new GUIStyle(GUI.skin.label)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontStyle = FontStyle.Bold
-            };
-
             EditorGUI.BeginDisabledGroup(Application.isPlaying);
             {
                 m_Platform = (Platform)EditorGUILayout.EnumPopup("Platform: ", m_Platform);
 
-                if (GUILayout.Button("Build Pkg"))
+                if (GUILayout.Button("Build Pkg (Contains Rebuild Resource)"))
                 {
-                    if (m_Platform != GetCurPlatform())
+                    if (!SwitchActiveBuildTarget(m_Platform))
                     {
-                        switch (EditorUtility.DisplayDialogComplex("Warning!",
-                                    $"current platform is {GetCurPlatform()}, if change to {m_Platform}, may be take a long time",
-                                    "change", "cancel", "no change"))
-                        {
-                            case 0:
-                                break;
-                            case 1:
-                                return;
-                            case 2:
-                                m_Platform = GetCurPlatform();
-                                break;
-                        }
+                        return;
                     }
-
                     BuildHelper.BuildPkg(m_Platform);
                     ShowNotification($"Build {m_Platform} Pkg Success!");
                 }
-                GUILayout.Space(20);
-                if (GUILayout.Button("Refresh Windows Pkg Resource"))
+                
+                if (GUILayout.Button("Build Resource"))
                 {
-                    if (Platform.Windows != GetCurPlatform())
+                    if (!SwitchActiveBuildTarget(m_Platform))
                     {
-                        switch (EditorUtility.DisplayDialogComplex("Warning!",
-                                    $"current platform is {GetCurPlatform()}, if change to {Platform.Windows}, may be take a long time",
-                                    "change", "cancel", null))
-                        {
-                            case 0:
-                                break;
-                            case 1:
-                                return;
-                            case 2:
-                                return;
-                        }
+                        return;
                     }
-
+                    ResourceBuildHelper.StartBuild(m_Platform);
+                    ShowNotification($"Build {m_Platform} Resource Success!");
+                }
+                
+                GUILayout.Space(20);
+                if (GUILayout.Button("Build And Refresh Windows64 Pkg Resource"))
+                {
+                    if (!SwitchActiveBuildTarget(Platform.Windows))
+                    {
+                        return;
+                    }
                     BuildHelper.RefreshWindows64PkgResource();
                     ShowNotification("Build Model Success!");
                 }
@@ -110,6 +94,60 @@ namespace Game.Editor
             Debug.Log(tips);
             EditorWindow game = GetWindow(typeof (EditorWindow).Assembly.GetType("UnityEditor.GameView"));
             if (game != null) game.ShowNotification(new GUIContent($"{tips}"));
+        }
+        
+        private bool SwitchActiveBuildTarget(Platform platform)
+        {
+            if (platform != GetCurPlatform())
+            {
+                switch (EditorUtility.DisplayDialogComplex("Warning!",
+                            $"current platform is {GetCurPlatform()}, if change to {platform}, may be take a long time",
+                            "change", "cancel", null))
+                {
+                    case 0:
+                        break;
+                    default:
+                        return false;
+                }
+            }
+            BuildTarget buildTarget = BuildTarget.NoTarget;
+            BuildTargetGroup buildTargetGroup = BuildTargetGroup.Unknown;
+            switch (platform)
+            {
+                case Platform.Windows:
+                    buildTarget = BuildTarget.StandaloneWindows;
+                    buildTargetGroup = BuildTargetGroup.Standalone;
+                    break;
+                case Platform.Windows64:
+                    buildTarget = BuildTarget.StandaloneWindows64;
+                    buildTargetGroup = BuildTargetGroup.Standalone;
+                    break;
+                case Platform.Android:
+                    buildTarget = BuildTarget.Android;
+                    buildTargetGroup = BuildTargetGroup.Android;
+                    break;
+                case Platform.IOS:
+                    buildTarget = BuildTarget.iOS;
+                    buildTargetGroup = BuildTargetGroup.iOS;
+                    break;
+                case Platform.MacOS:
+                    buildTarget = BuildTarget.StandaloneOSX;
+                    buildTargetGroup = BuildTargetGroup.Standalone;
+                    break;
+                case Platform.Linux:
+                    buildTarget = BuildTarget.StandaloneLinux64;
+                    buildTargetGroup = BuildTargetGroup.Standalone;
+                    break;
+                case Platform.WebGL:
+                    buildTarget = BuildTarget.WebGL;
+                    buildTargetGroup = BuildTargetGroup.WebGL;
+                    break;
+                default:
+                    throw new GameFrameworkException($"No Support {platform}!");
+            }
+            EditorUserBuildSettings.SwitchActiveBuildTarget(buildTargetGroup, buildTarget);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            return true;
         }
     }
 }

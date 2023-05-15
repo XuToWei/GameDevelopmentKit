@@ -109,14 +109,29 @@ namespace UnityGameFramework.Extension.Editor
             EditorUtility.SetDirty(versionInfoEditorData);
             AssetDatabase.SaveAssets();
 
+            string filePath = Path.Combine(builderController.OutputFullPath, platform.ToString(), $"{platform}Version.txt");
             if (versionInfoEditorData.IsGenerateToFullPath)
             {
-                string filePath = Path.Combine(builderController.OutputFullPath, platform.ToString(), $"{platform}Version.txt");
                 if (versionInfoEditorData.Generate(filePath))
                 {
-                    File.Copy(filePath, Path.Combine(builderController.OutputDirectory, $"Full/{platform}Version.txt"), true);
+                    Debug.Log($"Generate version info : {filePath} .");
                 }
             }
+            
+            //拷贝到本地的资源服务器
+            string localServerFilePath = $"../Temp/Version/{platform}Version.txt";
+            if (File.Exists(localServerFilePath))
+            {
+                File.Delete(localServerFilePath);
+            }
+
+            VersionInfo versionInfo = versionInfoData.ToVersionInfo();
+            versionInfo.UpdatePrefixUri = versionInfoData.GetCustomUpdatePrefixUri("http://127.0.0.1:8088");
+            if (!UriUtility.CheckUri(versionInfo.UpdatePrefixUri))
+            {
+                Debug.LogError($"{versionInfo.UpdatePrefixUri} is wrong, please check!");
+            }
+            File.WriteAllText(localServerFilePath, Newtonsoft.Json.JsonConvert.SerializeObject(versionInfo));
         }
 
         public void OnPostprocessPlatform(Platform platform, string workingPath,

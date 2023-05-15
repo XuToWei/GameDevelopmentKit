@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
-  <assembly fullname="CodeBind.Runtime">
+  <assembly fullname="CodeBind">
     <type fullname="CodeBind.CodeBindExtension" preserve="all" />
     <type fullname="CodeBind.CSCodeBindMono" preserve="all" />
     <type fullname="CodeBind.ICSCodeBind" preserve="all" />
@@ -12,7 +12,7 @@
     <type fullname="CommandLine.ParserResult`1" preserve="all" />
     <type fullname="CommandLine.ParserResultExtensions" preserve="all" />
   </assembly>
-  <assembly fullname="ET.Runtime">
+  <assembly fullname="ET">
     <type fullname="ET.AEvent`1" preserve="all" />
     <type fullname="ET.AInvokeHandler`1" preserve="all" />
     <type fullname="ET.AInvokeHandler`2" preserve="all" />
@@ -122,7 +122,7 @@
     <type fullname="ET.UGFUIForm" preserve="all" />
     <type fullname="ET.UGFUIFormEventAttribute" preserve="all" />
   </assembly>
-  <assembly fullname="LubanLib.Runtime">
+  <assembly fullname="LubanLib">
     <type fullname="Bright.Common.StringUtil" preserve="all" />
     <type fullname="Bright.Config.BeanBase" preserve="all" />
     <type fullname="Bright.Serialization.ByteBuf" preserve="all" />
@@ -189,8 +189,11 @@
     <type fullname="System.Console" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
+    <type fullname="System.Diagnostics.DebuggerBrowsableAttribute" preserve="all" />
+    <type fullname="System.Diagnostics.DebuggerBrowsableState" preserve="all" />
     <type fullname="System.Diagnostics.DebuggerDisplayAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggerHiddenAttribute" preserve="all" />
+    <type fullname="System.Diagnostics.DebuggerStepThroughAttribute" preserve="all" />
     <type fullname="System.Enum" preserve="all" />
     <type fullname="System.Exception" preserve="all" />
     <type fullname="System.FlagsAttribute" preserve="all" />
@@ -232,6 +235,9 @@
     <type fullname="System.RuntimeFieldHandle" preserve="all" />
     <type fullname="System.RuntimeMethodHandle" preserve="all" />
     <type fullname="System.RuntimeTypeHandle" preserve="all" />
+    <type fullname="System.Security.Permissions.SecurityAction" preserve="all" />
+    <type fullname="System.Security.Permissions.SecurityPermissionAttribute" preserve="all" />
+    <type fullname="System.Security.UnverifiableCodeAttribute" preserve="all" />
     <type fullname="System.Single" preserve="all" />
     <type fullname="System.String" preserve="all" />
     <type fullname="System.StringSplitOptions" preserve="all" />
@@ -328,7 +334,6 @@
     <type fullname="UnityEngine.Object" preserve="all" />
     <type fullname="UnityEngine.Quaternion" preserve="all" />
     <type fullname="UnityEngine.Ray" preserve="all" />
-    <type fullname="UnityEngine.TextAsset" preserve="all" />
     <type fullname="UnityEngine.Transform" preserve="all" />
     <type fullname="UnityEngine.Vector3" preserve="all" />
   </assembly>
@@ -345,7 +350,7 @@
     <type fullname="UnityEngine.UI.InputField" preserve="all" />
     <type fullname="UnityEngine.UI.Text" preserve="all" />
   </assembly>
-  <assembly fullname="UnityGameFramework.Extension.Runtime">
+  <assembly fullname="UnityGameFramework.Extension">
     <type fullname="UnityGameFramework.Extension.Awaitable" preserve="all" />
   </assembly>
   <assembly fullname="UnityGameFramework.Runtime">

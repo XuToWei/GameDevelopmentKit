@@ -20,7 +20,7 @@ namespace Game
 #if UNITY_ET
             ChangeState<ProcedureET>(procedureOwner);
 #elif UNITY_GAMEHOT
-            ChangeState<ProcedureHot>(procedureOwner);
+            ChangeState<ProcedureGameHot>(procedureOwner);
 #else
             ChangeState<ProcedureGame>(procedureOwner);
 #endif

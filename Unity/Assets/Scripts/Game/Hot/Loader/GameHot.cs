@@ -16,27 +16,27 @@ namespace Game.Hot
 
         internal static void Update()
         {
-            UpdateEvent();
+            UpdateEvent?.Invoke();
         }
 
         internal static void LateUpdate()
         {
-            LateUpdateEvent();
+            LateUpdateEvent?.Invoke();
         }
 
         internal static void OnApplicationQuit()
         {
-            OnApplicationQuitEvent();
+            OnApplicationQuitEvent?.Invoke();
         }
 
         internal static void OnApplicationPause(bool pauseStatus)
         {
-            OnApplicationPauseEvent(pauseStatus);
+            OnApplicationPauseEvent?.Invoke(pauseStatus);
         }
 
         internal static void OnApplicationFocus(bool hasFocus)
         {
-            OnApplicationFocusEvent(hasFocus);
+            OnApplicationFocusEvent?.Invoke(hasFocus);
         }
     }
 }

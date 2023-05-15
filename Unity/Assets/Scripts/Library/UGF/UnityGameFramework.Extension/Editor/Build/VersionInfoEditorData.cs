@@ -73,7 +73,7 @@ namespace UnityGameFramework.Extension.Editor
                 Selection.activeObject = AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(M_DataPath);
                 return false;
             }
-            File.WriteAllText(path,versionInfoData.ToVersionInfoJson());
+            File.WriteAllText(path, versionInfoData.ToVersionInfoJson());
             return true;
 
         }

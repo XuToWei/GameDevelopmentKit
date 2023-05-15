@@ -6,14 +6,14 @@ namespace Game.Hot.Editor
 {
     internal sealed class CompileDllToolBar_UGFHotfix
     {
-        private static readonly GUIContent s_ButtonGUIContent = new GUIContent($"Compile {BuildGameHotDllTool.DllName}", $"Compile {BuildGameHotDllTool.DllName} Dll.");
+        private static readonly GUIContent s_ButtonGUIContent = new GUIContent($"Compile {BuildAssemblyTool.DllName}", $"Compile {BuildAssemblyTool.DllName} Dll.");
 
         [Toolbar(OnGUISide.Left, 50)]
         static void OnToolbarGUI()
         {
             if (GUILayout.Button(s_ButtonGUIContent))
             {
-                BuildGameHotDllTool.Build();
+                BuildAssemblyTool.Build();
             }
         }
     }

@@ -146,7 +146,7 @@ namespace Game
             {
                 case RuntimePlatform.WindowsEditor:
                 case RuntimePlatform.WindowsPlayer:
-                    return "Windows";
+                    return "Windows64";
 
                 case RuntimePlatform.OSXEditor:
                 case RuntimePlatform.OSXPlayer:

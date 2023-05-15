@@ -12,21 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f84dac6a330c478988ed9b2576369bfe, type: 3}
   m_Name: VersionInfoEditorData
   m_EditorClassIdentifier: 
-  m_Active: Editor
+  m_Active: Debug
   m_ActiveIndex: 0
   m_VersionInfos:
-  - m_Key: Editor
+  - m_Key: Debug
     m_Value:
       m_ForceUpdateGame: 0
       m_LatestGameVersion: 1.0
-      m_InternalGameVersion: 16
+      m_InternalGameVersion: 18
       m_ServerPath: http://127.0.0.1:8088
-      m_ResourceVersion: 1_0_25
-      m_Platform: 1
-      m_VersionListLength: 1077
-      m_InternalResourceVersion: 25
-      m_VersionListHashCode: -1700481074
-      m_VersionListCompressedLength: 512
-      m_VersionListCompressedHashCode: -1073782992
+      m_ResourceVersion: 1_0_47
+      m_Platform: 2
+      m_VersionListLength: 2317
+      m_InternalResourceVersion: 47
+      m_VersionListHashCode: 2082274785
+      m_VersionListCompressedLength: 1054
+      m_VersionListCompressedHashCode: -2115946672
   m_IsGenerateToFullPath: 1
-  m_OutPath: 
+  m_OutPath: G:/MyFiles/Study/GameDevelopmentKit/Temp/Version/WindowsVersion.txt

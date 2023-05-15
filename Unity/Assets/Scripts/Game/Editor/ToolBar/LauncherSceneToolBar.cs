@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityGameFramework.Extension.Editor;
 
 namespace Game.Editor
 {
@@ -15,7 +16,7 @@ namespace Game.Editor
             if (GUILayout.Button(m_ButtonGUIContent))
             {
                 BuildSceneSetting.AllScenes();
-                SceneHelper.StartScene("Assets/Launcher.unity");
+                SceneHelper.StartScene(EntryUtility.EntrySceneName);
             }
         }
     }

@@ -72,8 +72,21 @@ namespace UnityGameFramework.Extension.Editor
         /// 资源更新下载地址
         /// </summary>
         public string UpdatePrefixUri =>
-            GameFramework.Utility.Path.GetRegularPath(Path.Combine(m_ServerPath??string.Empty, m_ResourceVersion??string.Empty,
+            GameFramework.Utility.Path.GetRegularPath(Path.Combine(m_ServerPath ?? string.Empty,
+                m_ResourceVersion ?? string.Empty,
                 m_Platform.ToString()));
+
+        /// <summary>
+        /// 获取自定义的下载地址
+        /// </summary>
+        /// <param name="serverPath"></param>
+        /// <returns></returns>
+        public string GetCustomUpdatePrefixUri(string serverPath)
+        {
+            return GameFramework.Utility.Path.GetRegularPath(Path.Combine(serverPath ?? string.Empty,
+                m_ResourceVersion ?? string.Empty,
+                m_Platform.ToString()));
+        }
 
         /// <summary>
         /// 资源版本列表长度

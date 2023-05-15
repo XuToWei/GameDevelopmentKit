@@ -1,18 +1,18 @@
-#if UNITY_ET
+#if UNITY_GAMEHOT
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
 namespace Game
 {
-    public class ProcedureET : ProcedureBase
+    public class ProcedureGameHot : ProcedureBase
     {
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            GameEntry.CodeRunner.StartRun("ET.Init");
-            Log.Debug("Start run ET!");
+            GameEntry.CodeRunner.StartRun("Game.Hot.Init");
+            Log.Debug("Start run Game.Hot!");
         }
-
+        
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
         {
             GameEntry.CodeRunner.Shutdown();

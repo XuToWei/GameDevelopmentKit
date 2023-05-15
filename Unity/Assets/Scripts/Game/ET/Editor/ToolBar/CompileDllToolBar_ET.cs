@@ -8,8 +8,6 @@ namespace ET.Editor
 {
     sealed class CompileDllToolBar_ET
     {
-        private const CodeOptimization s_CodeOptimization = CodeOptimization.Debug;
-        
         private static readonly GUIContent s_BuildReloadHotfixButtonGUIContent = new GUIContent("Reload ET.Hotfix", "Compile And Reload ET.Hotfix Dll When Playing.");
         private static readonly GUIContent s_BuildHotfixModelButtonGUIContent = new GUIContent("Compile All ET", "Compile All ET Dll.");
         private static bool s_IsReloading = false;
@@ -21,7 +19,7 @@ namespace ET.Editor
             {
                 if (GUILayout.Button(s_BuildReloadHotfixButtonGUIContent))
                 {
-                    BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, Define.CodeMode);
+                    BuildAssemblyTool.BuildHotfix(BuildAssemblyTool.CodeOptimization, Define.CodeMode);
                     ShowNotification("Build Hotfix Success!");
 
                     if (s_IsReloading)
@@ -48,8 +46,8 @@ namespace ET.Editor
 
             if (GUILayout.Button(s_BuildHotfixModelButtonGUIContent))
             {
-                BuildAssemblyHelper.BuildModel(s_CodeOptimization, Define.CodeMode);
-                BuildAssemblyHelper.BuildHotfix(s_CodeOptimization, Define.CodeMode);
+                BuildAssemblyTool.BuildModel(BuildAssemblyTool.CodeOptimization, Define.CodeMode);
+                BuildAssemblyTool.BuildHotfix(BuildAssemblyTool.CodeOptimization, Define.CodeMode);
                 ShowNotification("Build Model And Hotfix Success!");
             }
         }
