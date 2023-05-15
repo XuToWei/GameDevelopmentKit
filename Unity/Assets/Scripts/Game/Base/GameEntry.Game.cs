@@ -5,7 +5,7 @@
     /// </summary>
     public partial class GameEntry
     {
-        public static ETComponent ET
+        public static CodeRunnerComponent CodeRunner
         {
             get;
             private set;
@@ -19,7 +19,7 @@
 
         private void InitGameComponents()
         {
-            ET = UnityGameFramework.Runtime.GameEntry.GetComponent<ETComponent>();
+            CodeRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<CodeRunnerComponent>();
             Tables = UnityGameFramework.Runtime.GameEntry.GetComponent<Tables>();
         }
     }

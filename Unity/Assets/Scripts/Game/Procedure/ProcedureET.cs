@@ -9,7 +9,7 @@ namespace Game
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-            GameEntry.ET.StartRun();
+            GameEntry.CodeRunner.StartRun("ET.Init");
             Log.Debug("Start run ET!");
         }
 
@@ -17,7 +17,7 @@ namespace Game
         {
             if (isShutdown)
             {
-                GameEntry.ET.ShutDown();
+                GameEntry.CodeRunner.Shutdown();
             }
             base.OnLeave(procedureOwner, isShutdown);
         }
