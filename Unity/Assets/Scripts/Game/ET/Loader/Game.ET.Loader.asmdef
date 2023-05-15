@@ -2,7 +2,7 @@
     "name": "Game.ET.Loader",
     "rootNamespace": "ET",
     "references": [
-        "ET.Runtime",
+        "ET",
         "GameFramework",
         "UnityGameFramework.Runtime",
         "UnityGameFramework.Extension",

@@ -2,7 +2,7 @@
     "name": "Game.ET.Editor",
     "rootNamespace": "ET.Editor",
     "references": [
-        "ET.Runtime",
+        "ET",
         "ET.Editor",
         "Game.ET.Loader",
         "LubanLib",

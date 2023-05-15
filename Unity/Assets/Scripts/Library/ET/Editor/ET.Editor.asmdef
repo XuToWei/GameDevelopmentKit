@@ -2,7 +2,7 @@
     "name": "ET.Editor",
     "rootNamespace": "ET",
     "references": [
-        "ET.Runtime"
+        "ET"
     ],
     "includePlatforms": [
         "Editor"

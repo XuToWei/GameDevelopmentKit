@@ -2,13 +2,13 @@
     "name": "Game.ET.Code.Editor",
     "rootNamespace": "ET",
     "references": [
-        "ET.Runtime",
         "ET.Editor",
         "Game.ET.Editor",
         "Game.ET.Code.Hotfix",
         "Game.ET.Code.HotfixView",
         "Game.ET.Code.Model",
-        "Game.ET.Code.ModelView"
+        "Game.ET.Code.ModelView",
+        "ET"
     ],
     "includePlatforms": [
         "Editor"

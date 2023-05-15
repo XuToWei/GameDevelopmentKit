@@ -2,7 +2,7 @@
     "name": "Game.ET.Code.Model",
     "rootNamespace": "ET",
     "references": [
-        "ET.Runtime",
+        "ET",
         "Game.ET.Loader",
         "Unity.Mathematics",
         "ProtoBuf",
