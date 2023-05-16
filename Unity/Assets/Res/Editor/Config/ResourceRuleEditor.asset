@@ -110,6 +110,16 @@ MonoBehaviour:
     groups: 
     assetsDirectoryPath: Assets/Res/Hot
     loadType: 0
-    packed: 1
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: HybridCLR
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/HybridCLR
+    loadType: 0
+    packed: 0
     filterType: 0
     searchPatterns: '*.*'

@@ -2,8 +2,6 @@
 {
     public static class Define
     {
-        public const string BuildOutputDir = "./Temp/Bin/Debug";
-
 #if UNITY_EDITOR
         public static bool IsEditor => true;
 #else

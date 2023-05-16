@@ -16,9 +16,9 @@ namespace Game.Hot.Editor
         
         private static string s_CodeDir = "Assets/Res/Hot/Code";
 
-        public const string DllName = "Game.Hot.Code";
+        public const string DllName = "GameHot";
         
-        private const CodeOptimization s_CodeOptimization = CodeOptimization.Debug;
+        private const CodeOptimization s_CodeOptimization = CodeOptimization.Release;
         
         [MenuItem("GameHot/Build GameHotCode Dll")]
         public static void Build()

@@ -71,8 +71,8 @@ namespace Game.Hot
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
             if (Define.EnableHotfix)
             {
-                byte[] assBytes = await LoadCodeBytesAsync("Game.Hot.Code.dll");
-                byte[] pdbBytes = await LoadCodeBytesAsync("Game.Hot.Code.pdb");
+                byte[] assBytes = await LoadCodeBytesAsync("Game.Hot.Code.dll.bytes");
+                byte[] pdbBytes = await LoadCodeBytesAsync("Game.Hot.Code.pdb.bytes");
                 assembly = Assembly.Load(assBytes, pdbBytes);
             }
             else
@@ -97,7 +97,7 @@ namespace Game.Hot
         
         private async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
         {
-            fileName = AssetUtility.GetGameHotAsset(Utility.Text.Format("Code/{0}.bytes", fileName));
+            fileName = AssetUtility.GetGameHotAsset(Utility.Text.Format("Code/{0}", fileName));
             TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(fileName);
             byte[] bytes = textAsset.bytes;
             GameEntry.Resource.UnloadAsset(textAsset);

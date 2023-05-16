@@ -14,7 +14,7 @@ namespace Game
             HybridCLRConfig aotGroup = await GameEntry.Resource.LoadAssetAsync<HybridCLRConfig>(ConfigAsset);
             foreach (TextAsset textAsset in aotGroup.aotAssemblies)
             {
-                RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HomologousImageMode.Consistent);
+                RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HomologousImageMode.SuperSet);
             }
         }
     }

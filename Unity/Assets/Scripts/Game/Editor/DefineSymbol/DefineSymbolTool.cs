@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using System.IO;
-using HybridCLR.Editor;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityGameFramework.Editor;
 
@@ -16,7 +13,7 @@ namespace Game.Editor
         private static void Refresh()
         {
 #if UNITY_HOTFIX
-            EnableHybridCLR();
+            HybridCLRTool.EnableHybridCLR();
             AddLinkXML("UNITY_HOTFIX");
             RemoveLinkXML("UNITY_!HOTFIX");
 #else
@@ -24,13 +21,16 @@ namespace Game.Editor
             AddLinkXML("UNITY_!HOTFIX");
             RemoveLinkXML("UNITY_HOTFIX");
 #endif
+            HybridCLRTool.Save();
+            Debug.Log("Refresh!");
         }
         
 #if UNITY_HOTFIX
         [MenuItem("Tools/Define Symbol/Remove UNITY_HOTFIX")]
         private static void Remove_UNITY_HOTFIX()
         {
-            DisableHybridCLR();
+            BuildAssemblyHelper.ClearBuildOutputDir();
+            HybridCLRTool.DisableHybridCLR();
             AddLinkXML("UNITY_!HOTFIX");
             RemoveLinkXML("UNITY_HOTFIX");
 #if UNITY_ET
@@ -47,13 +47,15 @@ namespace Game.Editor
             RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
             RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #endif
+            HybridCLRTool.Save();
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_HOTFIX");
         }
 #else
         [MenuItem("Tools/Define Symbol/Add UNITY_HOTFIX")]
         private static void Add_UNITY_HOTFIX()
         {
-            EnableHybridCLR();
+            BuildAssemblyHelper.ClearBuildOutputDir();
+            HybridCLRTool.EnableHybridCLR();
             AddLinkXML("UNITY_HOTFIX");
             RemoveLinkXML("UNITY_!HOTFIX");
 #if UNITY_ET
@@ -70,6 +72,7 @@ namespace Game.Editor
             RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
             RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #endif
+            HybridCLRTool.Save();
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_HOTFIX");
         }
 #endif
@@ -78,6 +81,7 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_ET")]
         private static void Remove_UNITY_ET()
         {
+            BuildAssemblyHelper.ClearBuildOutputDir();
             RemoveLinkXML("UNITY_HOTFIX_ET");
             RemoveLinkXML("UNITY_!HOTFIX_ET");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET");
@@ -86,6 +90,7 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Add UNITY_ET")]
         private static void Add_UNITY_ET()
         {
+            BuildAssemblyHelper.ClearBuildOutputDir();
 #if UNITY_GAMEHOT
             Remove_UNITY_GAMEHOT();
 #endif
@@ -104,6 +109,7 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_GAMEHOT")]
         private static void Remove_UNITY_GAMEHOT()
         {
+            BuildAssemblyHelper.ClearBuildOutputDir();
             RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
             RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_GAMEHOT");
@@ -154,41 +160,6 @@ namespace Game.Editor
             content = content.Replace($"<!--{scriptingDefineSymbol}_END-->", $"{scriptingDefineSymbol}-->");
             File.WriteAllText(LinkXML, content);
             AssetDatabase.Refresh();
-        }
-
-        private static void EnableHybridCLR()
-        {
-            HybridCLRSettings.Instance.enable = true;
-            string linkFile = $"{Application.dataPath}/{HybridCLRSettings.Instance.outputLinkFile}";
-            string linkDisableFile = $"{linkFile}.DISABLED";
-            if (File.Exists(linkDisableFile))
-            {
-                File.Move(linkDisableFile, linkFile);
-                File.Delete(linkDisableFile);
-                File.Delete($"{linkDisableFile}.meta");
-                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            }
-            // List<string> 
-            // #if UNITY_ET
-            // HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions.
-            // #endif
-            HybridCLRSettings.Save();
-        }
-
-        private static void DisableHybridCLR()
-        {
-            HybridCLRSettings.Instance.enable = false;
-            string linkFile = $"{Application.dataPath}/{HybridCLRSettings.Instance.outputLinkFile}";
-            Debug.Log(linkFile);
-            string linkDisableFile = $"{linkFile}.DISABLED";
-            if (File.Exists(linkFile))
-            {
-                File.Move(linkFile, linkDisableFile);
-                File.Delete(linkFile);
-                File.Delete($"{linkFile}.meta");
-                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            }
-            HybridCLRSettings.Save();
         }
     }
 }

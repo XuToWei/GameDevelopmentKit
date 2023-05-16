@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: HybridCLRConfig
   m_EditorClassIdentifier: 
   aotAssemblies:
+  - {fileID: 4900000, guid: 398e08f999aa9e14f8af4832311381a6, type: 3}
+  - {fileID: 4900000, guid: c684e1067b0986b4394214445d6fb97a, type: 3}
   - {fileID: 4900000, guid: b70dc448b09e4be48bf296f4ae1d324a, type: 3}
   - {fileID: 4900000, guid: ebe1de0fd09339f4ea5cbdbfa2e746e5, type: 3}
   - {fileID: 4900000, guid: fabb38b3794a2eb489851f9ada7f8a84, type: 3}
   - {fileID: 4900000, guid: 9547fce50e5d6fd47a6ad77622f5c324, type: 3}
-  - {fileID: 4900000, guid: c684e1067b0986b4394214445d6fb97a, type: 3}
-  - {fileID: 4900000, guid: 398e08f999aa9e14f8af4832311381a6, type: 3}
   - {fileID: 4900000, guid: 99d46881b2c0bba4d9d509dec3efd9c1, type: 3}
   - {fileID: 4900000, guid: 28f60f57c19905848a225fae3a19dfde, type: 3}
   - {fileID: 4900000, guid: 7552a1c72a59c7a47a0939ca44aa4d84, type: 3}

@@ -1,4 +1,3 @@
-#if UNITY_GAMEHOT
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
@@ -6,6 +5,7 @@ namespace Game
 {
     public class ProcedureGameHot : ProcedureBase
     {
+#if UNITY_GAMEHOT
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
@@ -18,6 +18,6 @@ namespace Game
             GameEntry.CodeRunner.Shutdown();
             base.OnLeave(procedureOwner, isShutdown);
         }
+#endif
     }
 }
-#endif

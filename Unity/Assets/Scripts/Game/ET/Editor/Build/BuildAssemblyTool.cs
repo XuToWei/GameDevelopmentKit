@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Game.Editor;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Compilation;
@@ -61,24 +62,15 @@ namespace ET.Editor
                     throw new Exception("not found enum");
             }
 
-            BuildMuteAssembly("Model", codes, Array.Empty<string>(), codeOptimization, codeMode);
+            BuildAssemblyHelper.Build("Model", codes, Array.Empty<string>(), GetExcludeReferences(codeMode), codeOptimization);
             
-            File.Copy(Path.Combine(Define.BuildOutputDir, $"Model.dll"), Path.Combine(CodeDir, $"Model.dll.bytes"), true);
-            File.Copy(Path.Combine(Define.BuildOutputDir, $"Model.pdb"), Path.Combine(CodeDir, $"Model.pdb.bytes"), true);
+            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, $"Model.dll"), Path.Combine(CodeDir, $"Model.dll.bytes"), true);
+            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, $"Model.pdb"), Path.Combine(CodeDir, $"Model.pdb.bytes"), true);
             Debug.Log("copy Model.dll to Bundles/Code success!");
         }
 
         public static void BuildHotfix(CodeOptimization codeOptimization, CodeMode codeMode)
         {
-            string[] logicFiles = Directory.GetFiles(Define.BuildOutputDir, "Hotfix_*");
-            foreach (string file in logicFiles)
-            {
-                File.Delete(file);
-            }
-
-            int random = RandomGenerator.RandomNumber(100000000, 999999999);
-            string logicFile = $"Hotfix_{random}";
-
             List<string> codes;
             switch (codeMode)
             {
@@ -111,21 +103,39 @@ namespace ET.Editor
                     throw new Exception("not found enum");
             }
 
-            BuildMuteAssembly("Hotfix", codes, new[] { Path.Combine(Define.BuildOutputDir, "Model.dll") }, codeOptimization, codeMode);
-
-            File.Copy(Path.Combine(Define.BuildOutputDir, "Hotfix.dll"), Path.Combine(CodeDir, $"Hotfix.dll.bytes"), true);
-            File.Copy(Path.Combine(Define.BuildOutputDir, "Hotfix.pdb"), Path.Combine(CodeDir, $"Hotfix.pdb.bytes"), true);
-            File.Copy(Path.Combine(Define.BuildOutputDir, "Hotfix.dll"), Path.Combine(Define.BuildOutputDir, $"{logicFile}.dll"), true);
-            File.Copy(Path.Combine(Define.BuildOutputDir, "Hotfix.pdb"), Path.Combine(Define.BuildOutputDir, $"{logicFile}.pdb"), true);
+            string[] additionalReferences = new[] { Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Model.dll") };
+            BuildAssemblyHelper.Build("Hotfix", codes,  additionalReferences, GetExcludeReferences(codeMode), codeOptimization);
+            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Hotfix.dll"), Path.Combine(CodeDir, "Hotfix.dll.bytes"), true);
+            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Hotfix.pdb"), Path.Combine(CodeDir, "Hotfix.pdb.bytes"), true);
             Debug.Log("copy Hotfix.dll to Bundles/Code success!");
+        }
+
+        private static string[] GetExcludeReferences(CodeMode codeMode)
+        {
+            if (codeMode == CodeMode.Client || codeMode == CodeMode.ClientServer)
+            {
+                return new string[]
+                {
+                    "DnsClient.dll",
+                    "MongoDB.Driver.Core.dll",
+                    "MongoDB.Driver.dll",
+                    "MongoDB.Driver.Legacy.dll",
+                    "MongoDB.Libmongocrypt.dll",
+                    "SharpCompress.dll",
+                    "System.Buffers.dll",
+                    "System.Runtime.CompilerServices.Unsafe.dll",
+                    "System.Text.Encoding.CodePages.dll"
+                };
+            }
+            return null;
         }
 
         private static void BuildMuteAssembly(string assemblyName, List<string> CodeDirectorys,
             string[] additionalReferences, CodeOptimization codeOptimization, CodeMode codeMode = CodeMode.Client)
         {
-            if (!Directory.Exists(Define.BuildOutputDir))
+            if (!Directory.Exists(BuildAssemblyHelper.BuildOutputDir))
             {
-                Directory.CreateDirectory(Define.BuildOutputDir);
+                Directory.CreateDirectory(BuildAssemblyHelper.BuildOutputDir);
             }
 
             List<string> scripts = new List<string>();
@@ -139,16 +149,22 @@ namespace ET.Editor
                 }
             }
 
-            string dllPath = Path.Combine(Define.BuildOutputDir, $"{assemblyName}.dll");
-            string pdbPath = Path.Combine(Define.BuildOutputDir, $"{assemblyName}.pdb");
-            File.Delete(dllPath);
-            File.Delete(pdbPath);
+            string dllPath = Path.Combine(BuildAssemblyHelper.BuildOutputDir, $"{assemblyName}.dll");
+            string pdbPath = Path.Combine(BuildAssemblyHelper.BuildOutputDir, $"{assemblyName}.pdb");
+            if (File.Exists(dllPath))
+            {
+                File.Delete(dllPath);
+            }
+            if (File.Exists(pdbPath))
+            {
+                File.Delete(pdbPath);
+            }
 
-            Directory.CreateDirectory(Define.BuildOutputDir);
+            Directory.CreateDirectory(BuildAssemblyHelper.BuildOutputDir);
 
             AssemblyBuilder assemblyBuilder = new AssemblyBuilder(dllPath, scripts.ToArray());
 
-            if (codeMode == CodeMode.Client)
+            if (codeMode == CodeMode.Client || codeMode == CodeMode.ClientServer)
             {
                 assemblyBuilder.excludeReferences = new string[]
                 {

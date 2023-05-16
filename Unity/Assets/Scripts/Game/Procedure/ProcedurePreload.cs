@@ -23,7 +23,8 @@ namespace Game
             Log.Info("Finish load Game Tables!");
             
             Log.Info("Start load Localization!");
-            GameEntry.Localization.ReadData(AssetUtility.GetLocalizationAsset(GameEntry.Localization.Language), Constant.AssetPriority.DictionaryAsset);
+            await GameEntry.Localization.ReadDataAsync(AssetUtility.GetLocalizationAsset(GameEntry.Localization.Language),
+                Constant.AssetPriority.DictionaryAsset);
             Log.Info("Finish load Localization!");
 
 #if UNITY_HOTFIX && ENABLE_IL2CPP
