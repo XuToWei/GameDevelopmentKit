@@ -27,7 +27,7 @@
 
 7.更完善的[多语言](Book/%E5%A4%9A%E8%AF%AD%E8%A8%80.md)支持，导表自动生成多语言配置，支持编辑器配置和预览
 
-8.[HybridCLR热更新](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)
+8.完善的基于HybridCLR[热更新](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)流程和工具
 
 9.[Proto生成工具](Book/Proto%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7.md)，支持ET和GF两种格式的proto代码生成
 
