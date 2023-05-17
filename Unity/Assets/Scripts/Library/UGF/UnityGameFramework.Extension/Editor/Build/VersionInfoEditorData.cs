@@ -8,7 +8,8 @@ namespace UnityGameFramework.Extension.Editor
     [CreateAssetMenu(fileName = "VersionInfoEditorData", menuName = "UGF/VersionInfoEditorData", order = 0)]
     public class VersionInfoEditorData : ScriptableObject
     {
-        private const string M_DataPath = "Assets/Res/Configs/VersionInfoEditorData.asset";
+        public const string DataAssetPath = "Assets/Res/Editor/Config/VersionInfoEditorData.asset";
+
         [SerializeField] private string m_Active;
         [SerializeField] private int m_ActiveIndex = 0;
         [SerializeField] private List<VersionInfoWrapData> m_VersionInfos;
@@ -70,7 +71,7 @@ namespace UnityGameFramework.Extension.Editor
             if (!UriUtility.CheckUri(versionInfoData.UpdatePrefixUri))
             {
                 EditorUtility.DisplayDialog("提示", $"VersionInfo:{VersionInfos[m_ActiveIndex].Key}.UpdatePrefixUri:{versionInfoData.UpdatePrefixUri} is not valid.无法自动生成", "确定");
-                Selection.activeObject = AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(M_DataPath);
+                Selection.activeObject = AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(DataAssetPath);
                 return false;
             }
             File.WriteAllText(path, versionInfoData.ToVersionInfoJson());

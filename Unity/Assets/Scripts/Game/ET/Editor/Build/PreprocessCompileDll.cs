@@ -1,15 +1,16 @@
 #if UNITY_HOTFIX
+using UnityGameFramework.Editor.ResourceTools;
 using UnityGameFramework.Extension.Editor;
 
 namespace ET.Editor
 {
     public static class PreprocessCompileDll
     {
-        [UGFPreprocessBuildEvent(1)]
-        public static void CompileDll()
+        [UGFBuildOnPreprocessAllPlatforms(1)]
+        public static void CompileDll(Platform platform)
         {
-            BuildAssemblyTool.BuildModel(BuildAssemblyTool.CodeOptimization, Define.CodeMode);
-            BuildAssemblyTool.BuildHotfix(BuildAssemblyTool.CodeOptimization, Define.CodeMode);
+            BuildAssemblyTool.BuildModel(BuildAssemblyTool.DefaultCodeOptimization, Define.CodeMode);
+            BuildAssemblyTool.BuildHotfix(BuildAssemblyTool.DefaultCodeOptimization, Define.CodeMode);
         }
     }
 }

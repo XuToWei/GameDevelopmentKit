@@ -22,7 +22,7 @@ namespace ET.Editor
         /// </summary>
         public const string ETSourceCodeDir = "Assets/Scripts/Game/ET/Code";
         
-        public static CodeOptimization CodeOptimization => CodeOptimization.Debug;
+        public static CodeOptimization DefaultCodeOptimization => CodeOptimization.Debug;
 
         public static void BuildModel(CodeOptimization codeOptimization, CodeMode codeMode)
         {

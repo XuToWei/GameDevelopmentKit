@@ -16,6 +16,28 @@ namespace UnityGameFramework.Extension.Editor
             get { return false; }
         }
 
+        private void CallBuildEvent<T>(Platform platform) where T : UGFBuildEventAttribute
+        {
+            TypeCache.MethodCollection methodCollection = TypeCache.GetMethodsWithAttribute<T>();
+            var methodInfos = methodCollection.ToList();
+            for (int i = methodInfos.Count - 1; i >= 0; i--)
+            {
+                if (!methodInfos[i].IsStatic)
+                {
+                    methodInfos.RemoveAt(i);
+                }
+            }
+
+            methodInfos.Sort((a, b) =>
+                a.GetCustomAttribute<T>().CallbackOrder
+                    .CompareTo(b.GetCustomAttribute<T>().CallbackOrder));
+
+            foreach (var methodInfo in methodInfos)
+            {
+                methodInfo.Invoke(null, new object[] { platform });
+            }
+        }
+
         public void OnPreprocessAllPlatforms(string productName, string companyName, string gameIdentifier,
             string gameFrameworkVersion, string unityVersion, string applicableGameVersion, int internalResourceVersion,
             Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName,
@@ -40,36 +62,21 @@ namespace UnityGameFramework.Extension.Editor
             ruleEditor.RefreshResourceCollection();
             SpriteCollectionUtility.RefreshSpriteCollection();
 
-            TypeCache.MethodCollection methodCollection = TypeCache.GetMethodsWithAttribute<UGFPreprocessBuildEventAttribute>();
-            var methodInfos = methodCollection.ToList();
-            for (int i = methodInfos.Count - 1; i >= 0; i--)
-            {
-                if (!methodInfos[i].IsStatic)
-                {
-                    methodInfos.RemoveAt(i);
-                }
-            }
-
-            methodInfos.Sort((a, b) =>
-                a.GetCustomAttribute<UGFPreprocessBuildEventAttribute>().CallbackOrder
-                    .CompareTo(b.GetCustomAttribute<UGFPreprocessBuildEventAttribute>().CallbackOrder));
-
-            foreach (var methodInfo in methodInfos)
-            {
-                methodInfo.Invoke(null, null);
-            }
+            CallBuildEvent<UGFBuildOnPreprocessAllPlatformsAttribute>(platforms);
         }
 
         public void OnPreprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected,
             string outputPackagePath,
             bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath)
         {
+            CallBuildEvent<UGFBuildOnPreprocessPlatformAttribute>(platform);
         }
 
         public void OnBuildAssetBundlesComplete(Platform platform, string workingPath, bool outputPackageSelected,
             string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected,
             string outputPackedPath, AssetBundleManifest assetBundleManifest)
         {
+            CallBuildEvent<UGFBuildOnBuildAssetBundlesCompleteAttribute>(platform);
         }
 
         public void OnOutputUpdatableVersionListData(Platform platform, string versionListPath, int versionListLength,
@@ -83,15 +90,13 @@ namespace UnityGameFramework.Extension.Editor
             }
 
             VersionInfoEditorData versionInfoEditorData =
-                AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(
-                    "Assets/Res/Editor/Config/VersionInfoEditorData.asset");
+                AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(VersionInfoEditorData.DataAssetPath);
             if (versionInfoEditorData == null)
             {
                 versionInfoEditorData = ScriptableObject.CreateInstance<VersionInfoEditorData>();
                 versionInfoEditorData.VersionInfos = new List<VersionInfoWrapData> { new VersionInfoWrapData() { Key = "Normal", Value = new VersionInfoData() } };
-                AssetDatabase.CreateAsset(versionInfoEditorData, "Assets/Res/Editor/Config/VersionInfoEditorData.asset");
+                AssetDatabase.CreateAsset(versionInfoEditorData, VersionInfoEditorData.DataAssetPath);
                 Debug.Log("CreateVersionInfoEditorData Success!");
-                AssetDatabase.Refresh();
                 Selection.activeObject = versionInfoEditorData;
             }
 
@@ -108,6 +113,7 @@ namespace UnityGameFramework.Extension.Editor
             versionInfoData.VersionListCompressedHashCode = versionListZipHashCode;
             EditorUtility.SetDirty(versionInfoEditorData);
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 
             string filePath = Path.Combine(builderController.OutputFullPath, platform.ToString(), $"{platform}Version.txt");
             if (versionInfoEditorData.IsGenerateToFullPath)
@@ -118,20 +124,7 @@ namespace UnityGameFramework.Extension.Editor
                 }
             }
             
-            //拷贝到本地的资源服务器
-            string localServerFilePath = $"../Temp/Version/{platform}Version.txt";
-            if (File.Exists(localServerFilePath))
-            {
-                File.Delete(localServerFilePath);
-            }
-
-            VersionInfo versionInfo = versionInfoData.ToVersionInfo();
-            versionInfo.UpdatePrefixUri = versionInfoData.GetCustomUpdatePrefixUri("http://127.0.0.1:8088");
-            if (!UriUtility.CheckUri(versionInfo.UpdatePrefixUri))
-            {
-                Debug.LogError($"{versionInfo.UpdatePrefixUri} is wrong, please check!");
-            }
-            File.WriteAllText(localServerFilePath, Newtonsoft.Json.JsonConvert.SerializeObject(versionInfo));
+            CallBuildEvent<UGFBuildOnOutputUpdatableVersionListDataAttribute>(platform);
         }
 
         public void OnPostprocessPlatform(Platform platform, string workingPath,
@@ -141,7 +134,6 @@ namespace UnityGameFramework.Extension.Editor
             bool isSuccess)
         {
             //如果有一下多个平台，自行处理
-
             void CopyResource(string outputPath)
             {
                 string streamingAssetsPath =
@@ -169,6 +161,8 @@ namespace UnityGameFramework.Extension.Editor
             {
                 CopyResource(outputPackagePath);
             }
+            
+            CallBuildEvent<UGFBuildOnPostprocessPlatformAttribute>(platform);
         }
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier,
@@ -179,6 +173,7 @@ namespace UnityGameFramework.Extension.Editor
             bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath,
             bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
+            CallBuildEvent<UGFBuildOnPostprocessAllPlatformsAttribute>(platforms);
         }
     }
 }

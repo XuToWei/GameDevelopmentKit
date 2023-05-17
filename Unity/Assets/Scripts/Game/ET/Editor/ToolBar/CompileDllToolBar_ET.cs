@@ -19,7 +19,7 @@ namespace ET.Editor
             {
                 if (GUILayout.Button(s_BuildReloadHotfixButtonGUIContent))
                 {
-                    BuildAssemblyTool.BuildHotfix(BuildAssemblyTool.CodeOptimization, Define.CodeMode);
+                    BuildAssemblyTool.BuildHotfix(BuildAssemblyTool.DefaultCodeOptimization, Define.CodeMode);
                     ShowNotification("Build Hotfix Success!");
 
                     if (s_IsReloading)
@@ -46,8 +46,8 @@ namespace ET.Editor
 
             if (GUILayout.Button(s_BuildHotfixModelButtonGUIContent))
             {
-                BuildAssemblyTool.BuildModel(BuildAssemblyTool.CodeOptimization, Define.CodeMode);
-                BuildAssemblyTool.BuildHotfix(BuildAssemblyTool.CodeOptimization, Define.CodeMode);
+                BuildAssemblyTool.BuildModel(BuildAssemblyTool.DefaultCodeOptimization, Define.CodeMode);
+                BuildAssemblyTool.BuildHotfix(BuildAssemblyTool.DefaultCodeOptimization, Define.CodeMode);
                 ShowNotification("Build Model And Hotfix Success!");
             }
         }
