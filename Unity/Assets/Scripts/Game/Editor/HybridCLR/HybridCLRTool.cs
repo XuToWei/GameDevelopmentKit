@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using HybridCLR.Editor;
 using UnityEditor;
 using UnityEditorInternal;
@@ -20,6 +22,8 @@ namespace Game.Editor
                 File.Delete(linkDisableFile);
                 File.Delete($"{linkDisableFile}.meta");
             }
+            HybridCLRSettings.Save();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
         public static void DisableHybridCLR()
@@ -34,6 +38,8 @@ namespace Game.Editor
                 File.Delete(linkFile);
                 File.Delete($"{linkFile}.meta");
             }
+            HybridCLRSettings.Save();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
         public static void AddHotfixAssemblyDefinition(string fileName)
@@ -49,6 +55,8 @@ namespace Game.Editor
                 return;
             allAssets.Add(asset);
             HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions = allAssets.ToArray();
+            HybridCLRSettings.Save();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
         
         public static void RemoveHotfixAssemblyDefinition(string fileName)
@@ -64,12 +72,33 @@ namespace Game.Editor
                 return;
             allAssets.Remove(asset);
             HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions = allAssets.ToArray();
+            HybridCLRSettings.Save();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
-        public static void Save()
+        public static void RefreshSettingsByLinkXML()
         {
-            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(LinkXMLHelper.LinkXMLPath);
+            XmlNode xmlRoot = xmlDocument.SelectSingleNode("linker");
+            XmlNodeList xmlLinker = xmlRoot.ChildNodes;
+
+            List<string> assemblyNames = new List<string>();
+            for (int i = 0; i < xmlLinker.Count; i++)
+            {
+                XmlNode xmlNodeString = xmlLinker.Item(i);
+                if (xmlNodeString.Name != "assembly")
+                {
+                    continue;
+                }
+
+                string assemblyName = xmlNodeString.Attributes.GetNamedItem("fullname").Value;
+                assemblyNames.Add(assemblyName);
+            }
+
+            HybridCLRSettings.Instance.patchAOTAssemblies = assemblyNames.ToArray();
             HybridCLRSettings.Save();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
     }
 }

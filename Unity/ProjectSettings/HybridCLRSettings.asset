@@ -17,32 +17,46 @@ MonoBehaviour:
   hybridclrRepoURL: https://gitee.com/focus-creative-games/hybridclr
   il2cppPlusRepoURL: https://gitee.com/focus-creative-games/il2cpp_plus
   hotUpdateAssemblyDefinitions: []
-  hotUpdateAssemblies: []
-  preserveHotUpdateAssemblies:
-  - 
+  hotUpdateAssemblies:
+  - Hotfix
+  - Model
+  preserveHotUpdateAssemblies: []
   hotUpdateDllCompileOutputRootDir: HybridCLRData/HotUpdateDlls
   externalHotUpdateAssembliyDirs:
   - ./Temp/Bin/CustomBuild
   strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip
   patchAOTAssemblies:
-  - MongoDB.Bson
-  - CommandLine
   - mscorlib
   - System
   - System.Core
+  - System.Net.Http
+  - System.Runtime.CompilerServices.Unsafe
+  - UnityEngine
+  - UnityEngine.AnimationModule
+  - UnityEngine.AssetBundleModule
   - UnityEngine.CoreModule
-  - LubanLib.Runtime
-  - ET.Runtime
-  - CodeBind.Runtime
+  - Unity.RenderPipelines.Universal.Runtime
+  - UnityEngine.UI
+  - Unity.InputSystem
+  - Unity.Mathematics
+  - ICSharpCode.SharpZipLib
+  - UIEffect
+  - Coffee.UIParticle
+  - Newtonsoft.Json
+  - CodeBind
+  - LubanLib
   - ProtoBuf
   - GameFramework
-  - UniTask
   - UnityGameFramework.Runtime
-  - UnityGameFramework.Extension.Runtime
+  - UnityGameFramework.Extension
+  - UniTask
   - Game
+  - MongoDB.Bson
+  - ET.Runtime
   - Game.ET.Loader
-  - Game.Hot.Loader
-  outputLinkFile: Scripts/Game/HybridCLR/Generate/link.xml
-  outputAOTGenericReferenceFile: Scripts/Game/HybridCLR/Generate/AOTGenericReferences.cs
+  - MongoDB.Driver
+  - CommandLine
+  outputLinkFile: Res/Editor/HybridCLR/Generate/link.xml
+  outputAOTGenericReferenceFile: Res/Editor/HybridCLR/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10
   maxMethodBridgeGenericIteration: 10

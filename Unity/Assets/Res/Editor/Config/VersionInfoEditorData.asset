@@ -19,14 +19,14 @@ MonoBehaviour:
     m_Value:
       m_ForceUpdateGame: 0
       m_LatestGameVersion: 1.0
-      m_InternalGameVersion: 24
+      m_InternalGameVersion: 32
       m_ServerPath: http://127.0.0.1:8088
-      m_ResourceVersion: 1_0_53
+      m_ResourceVersion: 1_0_61
       m_Platform: 2
-      m_VersionListLength: 3222
-      m_InternalResourceVersion: 53
-      m_VersionListHashCode: -1112658729
-      m_VersionListCompressedLength: 1392
-      m_VersionListCompressedHashCode: -1088036354
+      m_VersionListLength: 3766
+      m_InternalResourceVersion: 61
+      m_VersionListHashCode: -1241618521
+      m_VersionListCompressedLength: 1680
+      m_VersionListCompressedHashCode: 1843536498
   m_IsGenerateToFullPath: 1
   m_OutPath: G:/MyFiles/Study/GameDevelopmentKit/Temp/Version/WindowsVersion.txt

@@ -1,4 +1,3 @@
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor;
@@ -7,21 +6,29 @@ namespace Game.Editor
 {
     internal static class DefineSymbolTool
     {
-        public static readonly string LinkXML = "Assets/link.xml";
-
         [MenuItem("Tools/Define Symbol/Refresh")]
         private static void Refresh()
         {
 #if UNITY_HOTFIX
             HybridCLRTool.EnableHybridCLR();
-            AddLinkXML("UNITY_HOTFIX");
-            RemoveLinkXML("UNITY_!HOTFIX");
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX");
 #else
             DisableHybridCLR();
-            AddLinkXML("UNITY_!HOTFIX");
-            RemoveLinkXML("UNITY_HOTFIX");
+            BuildLinkXMLHelper.AddLinkXML("UNITY_!HOTFIX");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX");
 #endif
-            HybridCLRTool.Save();
+#if UNITY_HOTFIX && UNITY_ET && (UNITY_ET_CODEMODE_CLIENT || UNITY_ET_CODEMODE_CLIENTSERVER)
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_CLIENT");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+#endif
+#if UNITY_HOTFIX && UNITY_ET && (UNITY_ET_CODEMODE_SERVER || UNITY_ET_CODEMODE_CLIENTSERVER)
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_SERVER");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+#endif
+            HybridCLRTool.RefreshSettingsByLinkXML();
             Debug.Log("Refresh!");
         }
         
@@ -31,23 +38,25 @@ namespace Game.Editor
         {
             BuildAssemblyHelper.ClearBuildOutputDir();
             HybridCLRTool.DisableHybridCLR();
-            AddLinkXML("UNITY_!HOTFIX");
-            RemoveLinkXML("UNITY_HOTFIX");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
 #if UNITY_ET
-            AddLinkXML("UNITY_!HOTFIX_ET");
-            RemoveLinkXML("UNITY_HOTFIX_ET");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET");
 #else
-            RemoveLinkXML("UNITY_HOTFIX_ET");
-            RemoveLinkXML("UNITY_!HOTFIX_ET");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET");
 #endif
 #if UNITY_GAMEHOT
-            AddLinkXML("UNITY_!HOTFIX_GAMEHOT");
-            RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
+            BuildLinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_GAMEHOT");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
 #else
-            RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
-            RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #endif
-            HybridCLRTool.Save();
+            HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_HOTFIX");
         }
 #else
@@ -56,23 +65,33 @@ namespace Game.Editor
         {
             BuildAssemblyHelper.ClearBuildOutputDir();
             HybridCLRTool.EnableHybridCLR();
-            AddLinkXML("UNITY_HOTFIX");
-            RemoveLinkXML("UNITY_!HOTFIX");
+            BuildLinkXMLHelper.AddLinkXML("UNITY_HOTFIX");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX");
 #if UNITY_ET
-            AddLinkXML("UNITY_HOTFIX_ET");
-            RemoveLinkXML("UNITY_!HOTFIX_ET");
+            BuildLinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET");
 #else
-            RemoveLinkXML("UNITY_HOTFIX_ET");
-            RemoveLinkXML("UNITY_!HOTFIX_ET");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET");
 #endif
 #if UNITY_GAMEHOT
-            AddLinkXML("UNITY_HOTFIX_GAMEHOT");
-            RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
+            BuildLinkXMLHelper.AddLinkXML("UNITY_HOTFIX_GAMEHOT");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #else
-            RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
-            RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #endif
-            HybridCLRTool.Save();
+#if UNITY_ET && (UNITY_ET_CODEMODE_CLIENT || UNITY_ET_CODEMODE_CLIENTSERVER)
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_CLIENT");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+#endif
+#if UNITY_ET && (UNITY_ET_CODEMODE_SERVER || UNITY_ET_CODEMODE_CLIENTSERVER)
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_SERVER");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+#endif
+            HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_HOTFIX");
         }
 #endif
@@ -82,8 +101,12 @@ namespace Game.Editor
         private static void Remove_UNITY_ET()
         {
             BuildAssemblyHelper.ClearBuildOutputDir();
-            RemoveLinkXML("UNITY_HOTFIX_ET");
-            RemoveLinkXML("UNITY_!HOTFIX_ET");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+
+            HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET");
         }
 #else
@@ -92,15 +115,26 @@ namespace Game.Editor
         {
             BuildAssemblyHelper.ClearBuildOutputDir();
 #if UNITY_GAMEHOT
-            Remove_UNITY_GAMEHOT();
+            BuildLinkXMLHelper.Remove_UNITY_GAMEHOT();
 #endif
 #if UNITY_HOTFIX
-            AddLinkXML("UNITY_HOTFIX_ET");
-            RemoveLinkXML("UNITY_!HOTFIX_ET");
+            BuildLinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET");
 #else
-            AddLinkXML("UNITY_!HOTFIX_ET");
-            RemoveLinkXML("UNITY_HOTFIX_ET");
+            BuildLinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET");
 #endif
+#if UNITY_HOTFIX && (UNITY_ET_CODEMODE_CLIENT || UNITY_ET_CODEMODE_CLIENTSERVER)
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_CLIENT");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+#endif
+#if UNITY_HOTFIX && (UNITY_ET_CODEMODE_SERVER || UNITY_ET_CODEMODE_CLIENTSERVER)
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_SERVER");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+#endif
+            HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET");
         }
 #endif
@@ -110,8 +144,10 @@ namespace Game.Editor
         private static void Remove_UNITY_GAMEHOT()
         {
             BuildAssemblyHelper.ClearBuildOutputDir();
-            RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
-            RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
+
+            HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_GAMEHOT");
         }
 #else
@@ -122,44 +158,15 @@ namespace Game.Editor
             Remove_UNITY_ET();
 #endif
 #if UNITY_HOTFIX
-            AddLinkXML("UNITY_HOTFIX_GAMEHOTT");
-            RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_GAMEHOTT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #else
-            AddLinkXML("UNITY_!HOTFIX_GAMEHOT");
-            RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
+            BuildLinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_GAMEHOT");
+            BuildLinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
 #endif
+            HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_GAMEHOT");
         }
 #endif
-        
-        /// <summary>
-        /// 开启link.xml，防止代码裁剪，导致热更缺少接口
-        /// </summary>
-        /// <param name="scriptingDefineSymbol"></param>
-        private static void AddLinkXML(string scriptingDefineSymbol)
-        {
-            string content = File.ReadAllText(LinkXML);
-            if (content.Contains($"<!--{scriptingDefineSymbol}_FIRST-->") && content.Contains($"<!--{scriptingDefineSymbol}_END-->"))
-                return;
-            content = content.Replace($"<!--{scriptingDefineSymbol}", $"<!--{scriptingDefineSymbol}_FIRST-->");
-            content = content.Replace($"{scriptingDefineSymbol}-->", $"<!--{scriptingDefineSymbol}_END-->");
-            File.WriteAllText(LinkXML, content);
-            AssetDatabase.Refresh();
-        }
-        
-        /// <summary>
-        /// 关闭link.xml，减少包体
-        /// </summary>
-        /// <param name="scriptingDefineSymbol"></param>
-        private static void RemoveLinkXML(string scriptingDefineSymbol)
-        {
-            string content = File.ReadAllText(LinkXML);
-            if (!content.Contains($"<!--{scriptingDefineSymbol}_FIRST-->") && !content.Contains($"<!--{scriptingDefineSymbol}_END-->"))
-                return;
-            content = content.Replace($"<!--{scriptingDefineSymbol}_FIRST-->", $"<!--{scriptingDefineSymbol}");
-            content = content.Replace($"<!--{scriptingDefineSymbol}_END-->", $"{scriptingDefineSymbol}-->");
-            File.WriteAllText(LinkXML, content);
-            AssetDatabase.Refresh();
-        }
     }
 }

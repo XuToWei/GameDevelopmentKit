@@ -1,25 +1,29 @@
 <linker>
     <!--UNITY_HOTFIX_FIRST-->
-    <assembly fullname="UnityEngine" preserve="all" />
-    <assembly fullname="System" preserve="all" />
-    <assembly fullname="ICSharpCode.SharpZipLib" preserve="all" />
-    <assembly fullname="System.Runtime.CompilerServices.Unsafe" preserve="all" />
-    <assembly fullname="UnityEngine.AnimationModule" preserve="all" />
-    <assembly fullname="System.Net.Http" preserve="all" />
     <assembly fullname="mscorlib" preserve="all" />
+    <assembly fullname="System" preserve="all" />
+    <assembly fullname="System.Core" preserve="all" />
+    <assembly fullname="System.Net.Http" preserve="all" />
+    <assembly fullname="System.Runtime.CompilerServices.Unsafe" preserve="all" />
+    
+    <assembly fullname="UnityEngine" preserve="all" />
+    <assembly fullname="UnityEngine.AnimationModule" preserve="all" />
     <assembly fullname="UnityEngine.AssetBundleModule" preserve="all" />
     <assembly fullname="UnityEngine.CoreModule" preserve="all" />
-    
-    <assembly fullname="Unity.InputSystem" preserve="all" />
-    <assembly fullname="Unity.Mathematics" preserve="all" />
-    <assembly fullname="UIEffect" preserve="all" />
-    <assembly fullname="Coffee.UIParticle" preserve="all" />
     <assembly fullname="Unity.RenderPipelines.Universal.Runtime" preserve="all" />
     <assembly fullname="UnityEngine.UI" preserve="all" />
+
+    <assembly fullname="Unity.InputSystem" preserve="all" />
+    <assembly fullname="Unity.Mathematics" preserve="all" />
+    
+    <assembly fullname="ICSharpCode.SharpZipLib" preserve="all" />
+    
+    <assembly fullname="UIEffect" preserve="all" />
+    <assembly fullname="Coffee.UIParticle" preserve="all" />
     
     <assembly fullname="Newtonsoft.Json" preserve="all" />
-    <assembly fullname="CodeBind.Runtime" preserve="all" />
-    <assembly fullname="LubanLib.Runtime" preserve="all" />
+    <assembly fullname="CodeBind" preserve="all" />
+    <assembly fullname="LubanLib" preserve="all" />
     <assembly fullname="ProtoBuf" preserve="all" />
     <assembly fullname="GameFramework" preserve="all" />
     <assembly fullname="UnityGameFramework.Runtime" preserve="all" />
@@ -39,12 +43,19 @@
     <assembly fullname="Game.ET.Code.ModelView" preserve="all" />
     UNITY_!HOTFIX_ET-->
 
-    <!--UNITY_HOTFIX_FIRST-->_ET
+    <!--UNITY_HOTFIX_ET_FIRST-->
     <assembly fullname="MongoDB.Bson" preserve="all" />
-    <assembly fullname="CommandLine" preserve="all" />
     <assembly fullname="ET.Runtime" preserve="all" />
     <assembly fullname="Game.ET.Loader" preserve="all" />
     <!--UNITY_HOTFIX_ET_END-->
+
+    <!--UNITY_HOTFIX_ET_CLIENT_FIRST-->
+    <!--UNITY_HOTFIX_ET_CLIENT_END-->
+
+    <!--UNITY_HOTFIX_ET_SERVER_FIRST-->
+    <assembly fullname="MongoDB.Driver" preserve="all" />
+    <assembly fullname="CommandLine" preserve="all" />
+    <!--UNITY_HOTFIX_ET_SERVER_END-->
 
     <!--UNITY_!HOTFIX_GAMEHOT
     <assembly fullname="Game.Hot.Code" preserve="all" />

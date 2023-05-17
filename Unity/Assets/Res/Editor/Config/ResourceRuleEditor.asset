@@ -123,3 +123,13 @@ MonoBehaviour:
     packed: 0
     filterType: 0
     searchPatterns: '*.*'
+  - valid: 1
+    name: Prefab
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Prefab
+    loadType: 0
+    packed: 0
+    filterType: 1
+    searchPatterns: '*.*'

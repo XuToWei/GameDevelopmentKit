@@ -20,3 +20,8 @@
 7. 若有需要，根据Dll的依赖关系来调整AotDll的顺序
 
 8. 执行[一键打包功能](../Book/%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85.md)
+
+## 提示
+1. 如果使用ET模块的Demo，CodeMode为Server或ClientServer会有部分服务器读取需要的文件，可以把根目录中的Config文件夹移动到Temp/Pkg下面即可，或者按需更改为Unity来加载
+
+2. 编辑Unity/Assets/link.xml，执行菜单栏Tools/Define Symbol/Refresh可以更具link.xml自动优化HybridCLRSetting配置，优化包体
