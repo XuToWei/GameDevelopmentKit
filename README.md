@@ -53,8 +53,6 @@
 
 - 4.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
 
-***
-
 ### Windows Build
 
 - 1.[代码热更处理](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)
