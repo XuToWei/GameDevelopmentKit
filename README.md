@@ -43,15 +43,23 @@
 
 # 运行步骤
 
-1.安装 [.net6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)，服务器功能需要安装[MonogoDB](https://www.mongodb.com/)
+### Unity Editor
 
-2.打开Unity项目，等待Unity编译完成
+- 1.安装 [.net6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)，服务器功能需要安装[MonogoDB](https://www.mongodb.com/)
 
-3.打开 Kit.sln 编译（导表，资源服务器，代码分析等功能需要用到）
+- 2.打开Unity项目，等待Unity编译完成
 
-4.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
+- 3.打开 Kit.sln 编译（导表，资源服务器，代码分析等功能需要用到）
 
-Tips: [热更打包](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)
+- 4.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
+
+***
+
+### Windows Build
+
+- 1.[代码热更处理](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)
+
+- 2.[一键打包](../Book/%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85.md)，运行程序即可
 
 ***
 
