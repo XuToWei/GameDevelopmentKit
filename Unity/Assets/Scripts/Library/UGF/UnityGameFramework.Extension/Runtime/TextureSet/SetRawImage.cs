@@ -1,7 +1,6 @@
 using System;
 using GameFramework;
-
-#if UNITY_EDITOR
+#if !ODIN_INSPECTOR && UNITY_EDITOR
 using UnityEditor;
 #endif
 #if ODIN_INSPECTOR
