@@ -21,7 +21,8 @@ namespace UnityGameFramework.Extension.Editor
         [MenuItem("Game Framework/Default Setting Editor", false, 0)]
         private static void Open()
         {
-            GetWindow<DefaultSettingEditor>("Default Setting Editor", true);
+            var window = GetWindow<DefaultSettingEditor>("Default Setting Editor", true);
+            window.minSize = new Vector2(500f, 600f);
         }
         
         [MenuItem("Game Framework/Default Setting Editor", true)]
@@ -46,7 +47,8 @@ namespace UnityGameFramework.Extension.Editor
         {
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
-                EditorGUILayout.LabelField("Add Setting", EditorStyles.boldLabel);
+                EditorGUILayout.LabelField("Value", GUILayout.Width(200f));
+                EditorGUILayout.LabelField("Add Setting (Key - Value)", EditorStyles.boldLabel);
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("+", GUILayout.Width(30f)))
                 {
@@ -66,7 +68,7 @@ namespace UnityGameFramework.Extension.Editor
                 
                 EditorGUILayout.Space();
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("All Settings", EditorStyles.boldLabel);
+                EditorGUILayout.LabelField("All Settings (Key - Value)", EditorStyles.boldLabel);
                 if (GUILayout.Button("Remove All Settings", GUILayout.Width(150f)))
                 {
                     m_Settings.RemoveAllSettings();
@@ -86,7 +88,7 @@ namespace UnityGameFramework.Extension.Editor
                             m_SettingsNames = m_Settings.GetAllSettingNames();
                             Save();
                         }
-                        EditorGUILayout.LabelField(settingName, GUILayout.Width(200f));
+                        GUILayout.Box(settingName, GUILayout.Width(200f));
                         string value = m_Settings.GetString(settingName);
                         string newValue = EditorGUILayout.TextField(value);
                         if (!string.Equals(newValue, value))
