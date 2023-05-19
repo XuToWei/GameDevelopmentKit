@@ -12,7 +12,6 @@ namespace UnityGameFramework.Extension
         public static UniTask ReadDataAsync(this LocalizationComponent localizationComponent, string dictionaryAssetName,
             int priority = 0, Action<float> updateEvent = null, Action<string> dependencyAsset = null)
         {
-            localizationComponent.ReadData(dictionaryAssetName);
 #if UNITY_EDITOR
             TipsSubscribeEvent();
 #endif
