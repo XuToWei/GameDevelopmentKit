@@ -10,9 +10,14 @@ namespace UnityGameFramework.Extension
     [InfoBox("目前只针对于UGui")]
     public class ScreenComponent : GameFrameworkComponent
     {
-        [SerializeField] private CanvasScaler m_UIRootCanvasScaler;
-        [SerializeField] private int m_DefaultStandardWidth;
-        [SerializeField] private int m_DefaultStandardHeight;
+        [SerializeField]
+        private CanvasScaler m_UIRootCanvasScaler;
+        
+        [SerializeField, OnValueChanged("OnDefaultStandardSizeChange"), DisableInPlayMode]
+        private int m_DefaultStandardWidth;
+        
+        [SerializeField, OnValueChanged("OnDefaultStandardSizeChange"), DisableInPlayMode]
+        private int m_DefaultStandardHeight;
 
         public CanvasScaler UIRootCanvasScaler => this.m_UIRootCanvasScaler;
         /// <summary>
@@ -97,6 +102,11 @@ namespace UnityGameFramework.Extension
             Vector2 sizeDelta = this.m_UIRootRectTransform.sizeDelta;
             this.UIWidth = sizeDelta.x;
             this.UIHeight = sizeDelta.y;
+        }
+
+        private void OnDefaultStandardSizeChange()
+        {
+            this.m_UIRootCanvasScaler.referenceResolution = new Vector2(this.m_DefaultStandardWidth, this.m_DefaultStandardHeight);
         }
     }
 }
