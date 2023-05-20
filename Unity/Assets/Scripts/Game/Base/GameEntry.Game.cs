@@ -11,6 +11,12 @@
             private set;
         }
         
+        public static PlatformComponent Platform
+        {
+            get;
+            private set;
+        }
+        
         public static Tables Tables
         {
             get;
@@ -20,6 +26,7 @@
         private void InitGameComponents()
         {
             CodeRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<CodeRunnerComponent>();
+            Platform = UnityGameFramework.Runtime.GameEntry.GetComponent<PlatformComponent>();
             Tables = UnityGameFramework.Runtime.GameEntry.GetComponent<Tables>();
         }
     }
