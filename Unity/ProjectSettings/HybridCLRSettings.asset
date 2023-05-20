@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e189374413a3f00468e49d51d8b27a09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enable: 1
+  enable: 0
   useGlobalIl2cpp: 0
   hybridclrRepoURL: https://gitee.com/focus-creative-games/hybridclr
   il2cppPlusRepoURL: https://gitee.com/focus-creative-games/il2cpp_plus
@@ -26,36 +26,11 @@ MonoBehaviour:
   - ./Temp/Bin/CustomBuild
   strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip
   patchAOTAssemblies:
-  - mscorlib
-  - System
-  - System.Core
-  - System.Net.Http
-  - System.Runtime.CompilerServices.Unsafe
-  - UnityEngine
-  - UnityEngine.AnimationModule
-  - UnityEngine.AssetBundleModule
-  - UnityEngine.CoreModule
-  - Unity.RenderPipelines.Universal.Runtime
-  - UnityEngine.UI
-  - Unity.InputSystem
-  - Unity.Mathematics
-  - ICSharpCode.SharpZipLib
-  - UIEffect
-  - Coffee.UIParticle
-  - Newtonsoft.Json
-  - CodeBind
-  - LubanLib
-  - ProtoBuf
-  - GameFramework
-  - UnityGameFramework.Runtime
-  - UnityGameFramework.Extension
-  - UniTask
-  - Game
-  - MongoDB.Bson
-  - ET.Runtime
-  - Game.ET.Loader
-  - MongoDB.Driver
-  - CommandLine
+  - Game.ET.Code.Hotfix
+  - Game.ET.Code.HotfixView
+  - Game.ET.Code.Model
+  - Game.ET.Code.ModelView
+  - Game.Hot.Code
   outputLinkFile: Res/Editor/HybridCLR/Generate/link.xml
   outputAOTGenericReferenceFile: Res/Editor/HybridCLR/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10
