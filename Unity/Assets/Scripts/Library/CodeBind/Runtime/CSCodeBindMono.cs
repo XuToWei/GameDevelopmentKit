@@ -68,6 +68,7 @@ namespace CodeBind
             {
                 if (m_CSCodeBindObject is not T)
                 {
+                    Debug.LogWarning($"Get different object(type:{typeof(T)}, the old object(type:{m_CSCodeBindObject.GetType()} will recycle!)");
                     s_Pool.Recycle(m_CSCodeBindObject);
                     m_CSCodeBindObject = s_Pool.Fetch<T>(this);
                 }
