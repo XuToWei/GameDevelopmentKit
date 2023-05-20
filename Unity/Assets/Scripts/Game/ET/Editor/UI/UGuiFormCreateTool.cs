@@ -1,5 +1,8 @@
+using Game.Editor;
 using UnityEditor;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 namespace ET.Editor
 {
@@ -7,7 +10,7 @@ namespace ET.Editor
     {
         private static readonly string UGuiFormTemplate = "Assets/Res/Editor/UI/UGuiTemplateForm-ET.prefab";
         
-        [MenuItem("GameObject/UI/UGuiForm-ET")]
+        [MenuItem("GameObject/UI/UGuiForm-ET", false, UIEditorDefine.MenuPriority)]
         public static void CreateUGuiForm()
         {
             GameObject obj = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(UGuiFormTemplate));

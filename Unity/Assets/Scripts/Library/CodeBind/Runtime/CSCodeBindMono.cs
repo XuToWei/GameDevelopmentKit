@@ -52,6 +52,14 @@ namespace CodeBind
         /// <returns></returns>
         public T GetCSCodeBindObject<T>() where T : ICSCodeBind, new()
         {
+#if UNITY_EDITOR
+            Type bindType = m_BindScript.GetClass();
+            Type getType = typeof(T);
+            if (bindType != getType)
+            {
+                Debug.LogWarning($"{gameObject.name} bind type is {bindType}, but get is {getType}.");
+            }
+#endif
             if (m_CSCodeBindObject == null)
             {
                 m_CSCodeBindObject = s_Pool.Fetch<T>(this);

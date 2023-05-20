@@ -16,7 +16,8 @@
         "UIEffect",
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
-        "Coffee.UnmaskForUGUI"
+        "Coffee.UnmaskForUGUI",
+        "LoopScrollRect.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

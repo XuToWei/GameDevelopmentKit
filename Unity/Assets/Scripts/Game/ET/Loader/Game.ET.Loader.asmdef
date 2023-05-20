@@ -11,7 +11,8 @@
         "UniTask",
         "UIEffect",
         "Coffee.UIParticle",
-        "FancyScrollView"
+        "FancyScrollView",
+        "LoopScrollRect.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

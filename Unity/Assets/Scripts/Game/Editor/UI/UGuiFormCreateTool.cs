@@ -6,7 +6,7 @@ namespace Game.Editor
     {
         private static readonly string UGuiFormTemplate = "Assets/Res/Editor/UI/UGuiTemplateForm.prefab";
         
-        [MenuItem("GameObject/UI/UGuiForm")]
+        [MenuItem("GameObject/UI/UGuiForm", false, UIEditorDefine.MenuPriority)]
         public static void CreateUGuiForm()
         {
             UnityEngine.GameObject obj = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<UnityEngine.GameObject>(UGuiFormTemplate));
