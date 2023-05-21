@@ -10,10 +10,30 @@ namespace ET
     public static class GenerateUGFEntityId
     {
         private static readonly string LubanEntityAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtentity.json");
-        private static readonly string EntityIdCodeFile = Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Game/Entity/UGFEntityId.cs");
 
         public static void GenerateCode()
         {
+            GenerateCS("ET.Client", "UGFEntityId",
+                Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/Entity/UGFEntityId.cs"));
+            GenerateCS("Game.Hot", "EntityId",
+                Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/Entity/EntityId.cs"));
+        }
+        
+        private static void GenerateCS(string nameSpaceName, string className, string codeFile)
+        {
+            if (string.IsNullOrEmpty(nameSpaceName))
+            {
+                throw new Exception($"Generate UGFEntityId code fail, namespace is empty.");
+            }
+            if (string.IsNullOrEmpty(className))
+            {
+                throw new Exception($"Generate UGFEntityId code fail, class name is empty.");
+            }
+            if (string.IsNullOrEmpty(codeFile))
+            {
+                throw new Exception($"Generate UGFEntityId code fail, code file is empty.");
+            }
+            
             JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(LubanEntityAsset));
             List<DREntity> drEntities = new List<DREntity>();
             foreach (var childNode in jsonNode.Children)
@@ -23,12 +43,14 @@ namespace ET
             }
 
             StringBuilder stringBuilder = new();
-            stringBuilder.AppendLine("namespace ET.Client");
+            stringBuilder.AppendLine("// This is an automatically generated class by Share.Tool. Please do not modify it.");
+            stringBuilder.AppendLine("");
+            stringBuilder.AppendLine($"namespace {nameSpaceName}");
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine("    /// <summary>");
             stringBuilder.AppendLine("    /// 实体编号。");
             stringBuilder.AppendLine("    /// </summary>");
-            stringBuilder.AppendLine("    public static class UGFEntityId");
+            stringBuilder.AppendLine($"    public static class {className}");
             stringBuilder.AppendLine("    {");
             stringBuilder.AppendLine("        public const int Undefined = 0;");
             foreach (DREntity drEntity in drEntities)
@@ -44,10 +66,15 @@ namespace ET
             stringBuilder.AppendLine("    }");
             stringBuilder.AppendLine("}");
             string codeContent = stringBuilder.ToString();
-            if (!File.Exists(EntityIdCodeFile) || !string.Equals(codeContent, File.ReadAllText(EntityIdCodeFile)))
+            string dir = Path.GetDirectoryName(codeFile);
+            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
             {
-                File.WriteAllText(EntityIdCodeFile, codeContent);
-                Console.WriteLine($"Generate code : {EntityIdCodeFile}!");
+                Directory.CreateDirectory(dir);
+            }
+            if (!File.Exists(codeFile) || !string.Equals(codeContent, File.ReadAllText(codeFile)))
+            {
+                File.WriteAllText(codeFile, codeContent);
+                Console.WriteLine($"Generate code : {codeFile}!");
             }
         }
 
