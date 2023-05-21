@@ -974,10 +974,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4c8494330e440299f2f6a0461e36f4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BuildInfo: {fileID: 11400000, guid: 8123453476da1a845b0085c7c4178c94, type: 2}
-  m_DebugBuildInfo: {fileID: 11400000, guid: b1031378de14f7d42add6fc4841c13ec, type: 2}
-  m_DefaultDictionaryTextAsset: {fileID: 4900000, guid: 00759be143ffa5445b151c2540612e8f,
-    type: 3}
+  m_BuildInfoRelease: {fileID: 11400000, guid: 8123453476da1a845b0085c7c4178c94, type: 2}
+  m_BuildInfoDebug: {fileID: 11400000, guid: b1031378de14f7d42add6fc4841c13ec, type: 2}
+  m_LocalizationDictionaries:
+  - {fileID: 11400000, guid: 4896147b713f9aa4abd840e4ca33bd47, type: 2}
+  - {fileID: 11400000, guid: 99b23739d64635c4bbfba2da32b27e9f, type: 2}
+  - {fileID: 11400000, guid: 369a8562a7b6662459e9134740a51846, type: 2}
+  - {fileID: 11400000, guid: a1a28b5e694e7f247ad3d05ae1f0cc19, type: 2}
   m_UpdateResourceFormTemplate: {fileID: 5642876425673278357, guid: a6c731de80e9d824d8f657301a357269,
     type: 3}
   m_DialogFormTemplate: {fileID: 0}

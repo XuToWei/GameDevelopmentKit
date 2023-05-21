@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 11473720}
   - component: {fileID: 5642876425673278357}
   m_Layer: 5
-  m_Name: BuiltinUpdateResourceForm
+  m_Name: UpdateResourceForm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Bright.Serialization;
 using Cysharp.Threading.Tasks;
 using SimpleJSON;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
@@ -19,11 +20,11 @@ namespace Game
     
     public partial class Tables : GameFrameworkComponent
     {
-        public TablesLoadType LoadType
-        {
-            get;
-            private set;
-        }
+        /// <summary>
+        /// Luaban加载类型
+        /// </summary>
+        [ShowInInspector, ReadOnly]
+        public TablesLoadType LoadType { get; private set; }
         
         /// <summary>
         /// 加载所有的配置表Table

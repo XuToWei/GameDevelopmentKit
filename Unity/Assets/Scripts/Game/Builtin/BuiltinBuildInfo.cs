@@ -2,7 +2,7 @@
 
 namespace Game
 {
-    [CreateAssetMenu(menuName = "UGF/BuildInfo", fileName = "UGFBuildInfo", order = 0)]
+    [CreateAssetMenu(menuName = "Game/BuildInfo", fileName = "UGFBuildInfo", order = 0)]
     public class BuiltinBuildInfo : ScriptableObject
     {
         [SerializeField]
