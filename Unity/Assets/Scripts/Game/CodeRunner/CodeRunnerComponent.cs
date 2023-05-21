@@ -8,8 +8,8 @@ namespace Game
 {
     public class CodeRunnerComponent : GameFrameworkComponent
     {
-        [ShowInInspector]
-        public bool IsOpen { get; private set; } = false;
+        [ShowInInspector, ReadOnly]
+        public bool IsRunning { get; private set; } = false;
 
         private Component m_InitComponent;
         
@@ -25,12 +25,12 @@ namespace Game
             {
                 throw new GameFrameworkException($"Add {initType} Fail!");
             }
-            IsOpen = true;
+            IsRunning = true;
         }
 
         public void Shutdown()
         {
-            IsOpen = false;
+            IsRunning = false;
             DestroyImmediate(this.m_InitComponent);
         }
     }
