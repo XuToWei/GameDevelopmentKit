@@ -7,7 +7,6 @@
 
 using ProtoBuf;
 using System;
-using UnityGameFramework.Extension;
 
 namespace Game
 {

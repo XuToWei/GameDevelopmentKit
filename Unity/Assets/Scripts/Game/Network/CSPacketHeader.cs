@@ -5,7 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-namespace UnityGameFramework.Extension
+namespace Game
 {
     public sealed class CSPacketHeader : PacketHeaderBase
     {

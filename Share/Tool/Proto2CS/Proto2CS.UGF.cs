@@ -19,7 +19,6 @@ namespace ET
                 sb.Append("using ProtoBuf;\n");
                 sb.Append("using System;\n");
                 sb.Append("using System.Collections.Generic;\n");
-                sb.Append("using UnityGameFramework.Extension;\n");
                 sb.Append($"namespace {ns}\n");
                 sb.Append("{\n");
 

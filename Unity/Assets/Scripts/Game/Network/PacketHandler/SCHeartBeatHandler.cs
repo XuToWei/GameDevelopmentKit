@@ -6,7 +6,6 @@
 //------------------------------------------------------------
 
 using GameFramework.Network;
-using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
 
 namespace Game

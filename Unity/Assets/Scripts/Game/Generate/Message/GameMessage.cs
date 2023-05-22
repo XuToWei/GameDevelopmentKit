@@ -1,7 +1,7 @@
 using ProtoBuf;
 using System;
 using System.Collections.Generic;
-using UnityGameFramework.Extension;
+
 namespace Game
 {
     [Serializable, ProtoContract(Name = @"CSHeartBeatTest")]
