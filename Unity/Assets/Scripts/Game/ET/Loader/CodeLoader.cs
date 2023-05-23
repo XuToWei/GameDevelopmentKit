@@ -17,7 +17,7 @@ namespace ET
         {
             model = null;
             
-            if (Define.EnableHotfix && Define.IsHotfixEditorRun)
+            if (Define.EnableHotfix && GameEntry.CodeRunner.EditorCodeBytesMode)
             {
                 byte[] assBytes = await LoadCodeBytesAsync("Model.dll.bytes");
                 byte[] pdbBytes = await LoadCodeBytesAsync("Model.pdb.bytes");
