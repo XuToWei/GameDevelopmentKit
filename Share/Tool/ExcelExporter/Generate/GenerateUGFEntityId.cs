@@ -14,9 +14,9 @@ namespace ET
         public static void GenerateCode()
         {
             GenerateCS("ET.Client", "UGFEntityId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/Entity/UGFEntityId.cs"));
+                Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFEntityId.cs"));
             GenerateCS("Game.Hot", "EntityId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/Entity/EntityId.cs"));
+                Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/EntityId.cs"));
         }
         
         private static void GenerateCS(string nameSpaceName, string className, string codeFile)
@@ -55,12 +55,15 @@ namespace ET
             stringBuilder.AppendLine("        public const int Undefined = 0;");
             foreach (DREntity drEntity in drEntities)
             {
+                if (string.IsNullOrEmpty(drEntity.CSName))
+                {
+                    throw new Exception($"UGFEntityId {drEntity.Id} CSName is empty!");
+                }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
                 stringBuilder.AppendLine($"        /// {drEntity.Desc}。");
                 stringBuilder.AppendLine("        /// </summary>");
-
-                stringBuilder.AppendLine($"        public const int {GetEntityName(drEntity)} = {drEntity.Id};");
+                stringBuilder.AppendLine($"        public const int {drEntity.CSName} = {drEntity.Id};");
             }
 
             stringBuilder.AppendLine("    }");

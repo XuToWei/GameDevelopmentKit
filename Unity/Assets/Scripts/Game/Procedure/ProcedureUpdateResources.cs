@@ -36,7 +36,7 @@ namespace Game
 
             if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
             {
-                GameEntry.UI.OpenDialog(new DialogParams
+                GameEntry.Builtin.OpenDialogForm(new BuiltinDialogParams
                 {
                     Mode = 2,
                     Title = GameEntry.Localization.GetString("UpdateResourceViaCarrierDataNetwork.Title"),

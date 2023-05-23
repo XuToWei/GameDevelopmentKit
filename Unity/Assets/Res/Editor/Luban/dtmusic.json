@@ -1,11 +1,15 @@
 [
   {
     "Id": 2000,
+    "CSName": "BgMusic",
+    "Desc": "音乐",
     "AssetName": "music_background",
     "Volume": 0.5
   },
   {
     "Id": 2001,
+    "CSName": "FightMusic",
+    "Desc": "战斗音乐",
     "AssetName": "music_background_fight",
     "Volume": 0.5
   }

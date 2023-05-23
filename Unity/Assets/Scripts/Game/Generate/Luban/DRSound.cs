@@ -17,6 +17,7 @@ public sealed partial class DRSound :  Bright.Config.BeanBase
     {
         Id = _buf.ReadInt();
         AssetName = _buf.ReadString();
+        SoundGroupName = _buf.ReadString();
         Priority = _buf.ReadInt();
         Loop = _buf.ReadBool();
         Volume = _buf.ReadFloat();
@@ -38,6 +39,10 @@ public sealed partial class DRSound :  Bright.Config.BeanBase
     /// 资源名称
     /// </summary>
     public string AssetName { get; private set; }
+    /// <summary>
+    /// 声音组名称
+    /// </summary>
+    public string SoundGroupName { get; private set; }
     /// <summary>
     /// 优先级（默认0，128最高，-128最低）
     /// </summary>
@@ -76,6 +81,7 @@ public sealed partial class DRSound :  Bright.Config.BeanBase
         return "{ "
         + "Id:" + Id + ","
         + "AssetName:" + AssetName + ","
+        + "SoundGroupName:" + SoundGroupName + ","
         + "Priority:" + Priority + ","
         + "Loop:" + Loop + ","
         + "Volume:" + Volume + ","

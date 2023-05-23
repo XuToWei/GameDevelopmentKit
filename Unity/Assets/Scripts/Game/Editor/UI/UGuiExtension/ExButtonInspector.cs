@@ -3,7 +3,8 @@ using UnityEditor.UI;
 
 namespace Game.Editor
 {
-    [CustomEditor(typeof(ExButton))]
+    [CustomEditor(typeof(ExButton), true)]
+    [CanEditMultipleObjects]
     public class ExButtonInspector : ButtonEditor
     {
         SerializedProperty m_OnPointerDownProperty;
@@ -16,7 +17,11 @@ namespace Game.Editor
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
+            EditorGUILayout.Space();
+            
+            serializedObject.Update();
             EditorGUILayout.PropertyField(m_OnPointerDownProperty);
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

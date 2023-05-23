@@ -18,6 +18,7 @@ public sealed partial class DRUIForm :  Bright.Config.EditorBeanBase
 {
     public DRUIForm()
     {
+            CSName = "";
             Desc = "";
             AssetName = "";
             UIGroupName = "";
@@ -30,6 +31,14 @@ public sealed partial class DRUIForm :  Bright.Config.EditorBeanBase
             if (_fieldJson != null)
             {
                 if(!_fieldJson.IsNumber) { throw new SerializationException(); }  Id = _fieldJson;
+            }
+        }
+        
+        { 
+            var _fieldJson = _json["CSName"];
+            if (_fieldJson != null)
+            {
+                if(!_fieldJson.IsString) { throw new SerializationException(); }  CSName = _fieldJson;
             }
         }
         
@@ -82,6 +91,11 @@ public sealed partial class DRUIForm :  Bright.Config.EditorBeanBase
         }
         {
 
+            if (CSName == null) { throw new System.ArgumentNullException(); }
+            _json["CSName"] = new JSONString(CSName);
+        }
+        {
+
             if (Desc == null) { throw new System.ArgumentNullException(); }
             _json["Desc"] = new JSONString(Desc);
         }
@@ -119,6 +133,11 @@ public sealed partial class DRUIForm :  Bright.Config.EditorBeanBase
     /// 界面编号
     /// </summary>
     public int Id { get; set; }
+
+    /// <summary>
+    /// 代码名（程序填）
+    /// </summary>
+    public string CSName { get; set; }
 
     /// <summary>
     /// 备注

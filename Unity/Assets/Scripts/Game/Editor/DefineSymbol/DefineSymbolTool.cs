@@ -150,9 +150,9 @@ namespace Game.Editor
         {
             BuildAssemblyHelper.ClearBuildOutputDir();
             LinkXMLHelper.AddLinkXML("UNITY_ET");
-#if UNITY_GAMEHOT
-            Remove_UNITY_GAMEHOT();
-#endif
+// #if UNITY_GAMEHOT
+//             Remove_UNITY_GAMEHOT();
+// #endif
 #if UNITY_HOTFIX
             LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET");
 #else
@@ -196,9 +196,9 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Add UNITY_GAMEHOT")]
         private static void Add_UNITY_GAMEHOT()
         {
-#if UNITY_ET
-            Remove_UNITY_ET();
-#endif
+// #if UNITY_ET
+//             Remove_UNITY_ET();
+// #endif
 #if UNITY_HOTFIX
             LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_GAMEHOTT");
 #else

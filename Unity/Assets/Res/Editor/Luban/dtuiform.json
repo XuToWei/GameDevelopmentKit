@@ -1,6 +1,7 @@
 [
   {
     "Id": 101,
+    "CSName": "UIHelp",
     "Desc": "帮助界面",
     "AssetName": "UIHelp",
     "UIGroupName": "Pop",
@@ -9,6 +10,7 @@
   },
   {
     "Id": 102,
+    "CSName": "UILobby",
     "Desc": "大厅面",
     "AssetName": "UILobby",
     "UIGroupName": "Pop",
@@ -17,6 +19,7 @@
   },
   {
     "Id": 103,
+    "CSName": "UILogin",
     "Desc": "登录界面",
     "AssetName": "UILogin",
     "UIGroupName": "Default",

@@ -1,6 +1,8 @@
 [
   {
     "Id": 1000,
+    "CSName": "Click",
+    "Desc": "点击音效",
     "AssetName": "click",
     "Priority": 0,
     "Volume": 1

@@ -195,6 +195,8 @@ namespace ET
             private static void GenerateAssetUtilityCode(string extensionName)
             {
                 StringBuilder stringBuilder = new();
+                stringBuilder.AppendLine("// This is an automatically generated class by Share.Tool. Please do not modify it.");
+                stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("using GameFramework;");
                 stringBuilder.AppendLine("using GameFramework.Localization;");
                 stringBuilder.AppendLine("");

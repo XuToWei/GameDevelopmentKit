@@ -18,7 +18,10 @@ public sealed partial class DRSound :  Bright.Config.EditorBeanBase
 {
     public DRSound()
     {
+            CSName = "";
+            Desc = "";
             AssetName = "";
+            SoundGroupName = "";
     }
 
     public override void LoadJson(SimpleJSON.JSONObject _json)
@@ -32,10 +35,34 @@ public sealed partial class DRSound :  Bright.Config.EditorBeanBase
         }
         
         { 
+            var _fieldJson = _json["CSName"];
+            if (_fieldJson != null)
+            {
+                if(!_fieldJson.IsString) { throw new SerializationException(); }  CSName = _fieldJson;
+            }
+        }
+        
+        { 
+            var _fieldJson = _json["Desc"];
+            if (_fieldJson != null)
+            {
+                if(!_fieldJson.IsString) { throw new SerializationException(); }  Desc = _fieldJson;
+            }
+        }
+        
+        { 
             var _fieldJson = _json["AssetName"];
             if (_fieldJson != null)
             {
                 if(!_fieldJson.IsString) { throw new SerializationException(); }  AssetName = _fieldJson;
+            }
+        }
+        
+        { 
+            var _fieldJson = _json["SoundGroupName"];
+            if (_fieldJson != null)
+            {
+                if(!_fieldJson.IsString) { throw new SerializationException(); }  SoundGroupName = _fieldJson;
             }
         }
         
@@ -88,8 +115,23 @@ public sealed partial class DRSound :  Bright.Config.EditorBeanBase
         }
         {
 
+            if (CSName == null) { throw new System.ArgumentNullException(); }
+            _json["CSName"] = new JSONString(CSName);
+        }
+        {
+
+            if (Desc == null) { throw new System.ArgumentNullException(); }
+            _json["Desc"] = new JSONString(Desc);
+        }
+        {
+
             if (AssetName == null) { throw new System.ArgumentNullException(); }
             _json["AssetName"] = new JSONString(AssetName);
+        }
+        {
+
+            if (SoundGroupName == null) { throw new System.ArgumentNullException(); }
+            _json["SoundGroupName"] = new JSONString(SoundGroupName);
         }
         {
             _json["Priority"] = new JSONNumber(Priority);
@@ -126,9 +168,24 @@ public sealed partial class DRSound :  Bright.Config.EditorBeanBase
     public int Id { get; set; }
 
     /// <summary>
+    /// 代码名（程序填）
+    /// </summary>
+    public string CSName { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Desc { get; set; }
+
+    /// <summary>
     /// 资源名称
     /// </summary>
     public string AssetName { get; set; }
+
+    /// <summary>
+    /// 声音组名称
+    /// </summary>
+    public string SoundGroupName { get; set; }
 
     /// <summary>
     /// 优先级（默认0，128最高，-128最低）

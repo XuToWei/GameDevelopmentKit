@@ -14,24 +14,24 @@ namespace ET
         public static void GenerateCode()
         {
             GenerateCS("ET.Client", "UGFUIFormId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UI/UGFUIFormId.cs"));
+                Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFUIFormId.cs"));
             GenerateCS("Game.Hot", "UIFormId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UI/UIFormId.cs"));
+                Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/UIFormId.cs"));
         }
         
         private static void GenerateCS(string nameSpaceName, string className, string codeFile)
         {
             if (string.IsNullOrEmpty(nameSpaceName))
             {
-                throw new Exception($"Generate UGFEntityId code fail, namespace is empty.");
+                throw new Exception($"Generate UGFUIFormId code fail, namespace is empty.");
             }
             if (string.IsNullOrEmpty(className))
             {
-                throw new Exception($"Generate UGFEntityId code fail, class name is empty.");
+                throw new Exception($"Generate UGFUIFormId code fail, class name is empty.");
             }
             if (string.IsNullOrEmpty(codeFile))
             {
-                throw new Exception($"Generate UGFEntityId code fail, code file is empty.");
+                throw new Exception($"Generate UGFUIFormId code fail, code file is empty.");
             }
             
             JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(LubanUIFormAsset));
@@ -55,12 +55,15 @@ namespace ET
             stringBuilder.AppendLine("        public const int Undefined = 0;");
             foreach (DRUIForm drUIForm in drUIForms)
             {
+                if (string.IsNullOrEmpty(drUIForm.CSName))
+                {
+                    throw new Exception($"UGFUIFormId {drUIForm.Id} CSName is empty!");
+                }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
                 stringBuilder.AppendLine($"        /// {drUIForm.Desc}。");
                 stringBuilder.AppendLine("        /// </summary>");
-
-                stringBuilder.AppendLine($"        public const int {GetUIName(drUIForm)} = {drUIForm.Id};");
+                stringBuilder.AppendLine($"        public const int {drUIForm.CSName} = {drUIForm.Id};");
             }
 
             stringBuilder.AppendLine("    }");
@@ -76,12 +79,6 @@ namespace ET
                 File.WriteAllText(codeFile, codeContent);
                 Console.WriteLine($"Generate code : {codeFile}!");
             }
-        }
-
-        private static string GetUIName(DRUIForm drUIForm)
-        {
-            return drUIForm.AssetName.EndsWith("Form", StringComparison.OrdinalIgnoreCase)
-                    ? drUIForm.AssetName.Substring(0, drUIForm.AssetName.Length - 4) : drUIForm.AssetName;
         }
     }
 }

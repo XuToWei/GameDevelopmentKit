@@ -18,6 +18,7 @@ public sealed partial class DREntity :  Bright.Config.EditorBeanBase
 {
     public DREntity()
     {
+            CSName = "";
             Desc = "";
             AssetName = "";
             EntityGroupName = "";
@@ -30,6 +31,14 @@ public sealed partial class DREntity :  Bright.Config.EditorBeanBase
             if (_fieldJson != null)
             {
                 if(!_fieldJson.IsNumber) { throw new SerializationException(); }  Id = _fieldJson;
+            }
+        }
+        
+        { 
+            var _fieldJson = _json["CSName"];
+            if (_fieldJson != null)
+            {
+                if(!_fieldJson.IsString) { throw new SerializationException(); }  CSName = _fieldJson;
             }
         }
         
@@ -74,6 +83,11 @@ public sealed partial class DREntity :  Bright.Config.EditorBeanBase
         }
         {
 
+            if (CSName == null) { throw new System.ArgumentNullException(); }
+            _json["CSName"] = new JSONString(CSName);
+        }
+        {
+
             if (Desc == null) { throw new System.ArgumentNullException(); }
             _json["Desc"] = new JSONString(Desc);
         }
@@ -108,6 +122,11 @@ public sealed partial class DREntity :  Bright.Config.EditorBeanBase
     /// 实体编号
     /// </summary>
     public int Id { get; set; }
+
+    /// <summary>
+    /// 代码名（程序填）
+    /// </summary>
+    public string CSName { get; set; }
 
     /// <summary>
     /// 策划备注

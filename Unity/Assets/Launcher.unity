@@ -584,11 +584,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[1].m_Name
-      value: Sound
+      value: UISound
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[2].m_Name
-      value: UISound
+      value: Sound.Default
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[0].m_Volume
@@ -608,11 +608,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[1].m_AgentHelperCount
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[2].m_AgentHelperCount
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 11431030, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_NetworkHelperTypeName

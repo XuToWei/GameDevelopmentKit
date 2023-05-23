@@ -181,13 +181,14 @@ namespace ET
                     {
                         if (File.ReadAllText(file).Length > 0)
                         {
-                            Console.WriteLine($"Please check {file} to solve not translated text!");
+                            ConsoleHelper.WriteErrorLine($"Please check {file} to solve not translated text!");
                         }
                     }
                 }
 
                 GenerateUGFEntityId.GenerateCode();
                 GenerateUGFUIFormId.GenerateCode();
+                GenerateUGFAllSoundId.GenerateCode();
                 Console.WriteLine("Export Luban Excel Success!");
             }
 
@@ -265,14 +266,14 @@ namespace ET
                             {
                                 isSuccess = false;
                                 inError = !inError;
-                                Console.Error.WriteLine(args.Data);
+                                ConsoleHelper.WriteErrorLine(args.Data);
                             }
                             else if (inError)
                             {
                                 isSuccess = false;
                                 if (!string.IsNullOrEmpty(args.Data))
                                 {
-                                    Console.Error.WriteLine(args.Data);
+                                    ConsoleHelper.WriteErrorLine(args.Data);
                                 }
                             }
                         }
@@ -282,7 +283,7 @@ namespace ET
                         if (!string.IsNullOrEmpty(args.Data))
                         {
                             isSuccess = false;
-                            Console.Error.WriteLine(args.Data);
+                            ConsoleHelper.WriteErrorLine(args.Data);
                         }
                     };
 
@@ -294,7 +295,7 @@ namespace ET
                 catch (Exception e)
                 {
                     isSuccess = false;
-                    await Console.Error.WriteLineAsync(e.ToString());
+                    ConsoleHelper.WriteErrorLine(e.ToString());
                 }
                 finally
                 {

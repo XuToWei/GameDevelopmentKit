@@ -18,6 +18,8 @@ public sealed partial class DRUISound :  Bright.Config.EditorBeanBase
 {
     public DRUISound()
     {
+            CSName = "";
+            Desc = "";
             AssetName = "";
     }
 
@@ -28,6 +30,22 @@ public sealed partial class DRUISound :  Bright.Config.EditorBeanBase
             if (_fieldJson != null)
             {
                 if(!_fieldJson.IsNumber) { throw new SerializationException(); }  Id = _fieldJson;
+            }
+        }
+        
+        { 
+            var _fieldJson = _json["CSName"];
+            if (_fieldJson != null)
+            {
+                if(!_fieldJson.IsString) { throw new SerializationException(); }  CSName = _fieldJson;
+            }
+        }
+        
+        { 
+            var _fieldJson = _json["Desc"];
+            if (_fieldJson != null)
+            {
+                if(!_fieldJson.IsString) { throw new SerializationException(); }  Desc = _fieldJson;
             }
         }
         
@@ -64,6 +82,16 @@ public sealed partial class DRUISound :  Bright.Config.EditorBeanBase
         }
         {
 
+            if (CSName == null) { throw new System.ArgumentNullException(); }
+            _json["CSName"] = new JSONString(CSName);
+        }
+        {
+
+            if (Desc == null) { throw new System.ArgumentNullException(); }
+            _json["Desc"] = new JSONString(Desc);
+        }
+        {
+
             if (AssetName == null) { throw new System.ArgumentNullException(); }
             _json["AssetName"] = new JSONString(AssetName);
         }
@@ -91,6 +119,16 @@ public sealed partial class DRUISound :  Bright.Config.EditorBeanBase
     /// 声音编号
     /// </summary>
     public int Id { get; set; }
+
+    /// <summary>
+    /// 代码名（程序填）
+    /// </summary>
+    public string CSName { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Desc { get; set; }
 
     /// <summary>
     /// 资源名称

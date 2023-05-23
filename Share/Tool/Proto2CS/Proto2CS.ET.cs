@@ -19,6 +19,8 @@ namespace ET
                 string s = File.ReadAllText(proto);
 
                 StringBuilder sb = new StringBuilder();
+                sb.AppendLine("// This is an automatically generated class by Share.Tool. Please do not modify it.");
+                sb.AppendLine("");
                 sb.Append("using ProtoBuf;\n");
                 sb.Append("using System.Collections.Generic;\n");
                 sb.Append($"namespace {ns}\n");
@@ -187,7 +189,7 @@ namespace ET
                 }
                 catch (Exception e)
                 {
-                    Console.Error.WriteLine($"{newline}\n {e}");
+                    ConsoleHelper.WriteErrorLine($"{newline}\n {e}");
                 }
             }
 
@@ -245,7 +247,7 @@ namespace ET
                 }
                 catch (Exception e)
                 {
-                    Console.Error.WriteLine($"{newline}\n {e}");
+                    ConsoleHelper.WriteErrorLine($"{newline}\n {e}");
                 }
             }
         }

@@ -16,8 +16,9 @@ namespace Game
 
         protected virtual void Close()
         {
-            gameObject.SetActive(false);
-            Destroy(gameObject);
+            GameObject go = gameObject;
+            go.SetActive(false);
+            Destroy(go);
         }
     }
 }

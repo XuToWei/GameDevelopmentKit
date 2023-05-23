@@ -108,7 +108,7 @@ namespace Game
             if (m_VersionInfo.ForceUpdateGame)
             {
                 // 需要强制更新游戏应用
-                GameEntry.UI.OpenDialog(new DialogParams
+                GameEntry.Builtin.OpenDialogForm(new BuiltinDialogParams
                 {
                     Mode = 2,
                     Title = GameEntry.Localization.GetString("ForceUpdate.Title"),

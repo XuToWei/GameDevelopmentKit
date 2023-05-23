@@ -1,3 +1,5 @@
+// This is an automatically generated class by Share.Tool. Please do not modify it.
+
 using ProtoBuf;
 using System.Collections.Generic;
 namespace ET

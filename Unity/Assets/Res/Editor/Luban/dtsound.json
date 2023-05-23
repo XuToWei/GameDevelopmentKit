@@ -1,7 +1,10 @@
 [
   {
     "Id": 3000,
+    "CSName": "JellyDestroy",
+    "Desc": "方块消除",
     "AssetName": "Jelly_destroy_02",
+    "SoundGroupName": "Sound.Default",
     "Priority": 0,
     "Loop": false,
     "Volume": 1,

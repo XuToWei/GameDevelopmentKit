@@ -56,7 +56,7 @@ namespace ET.Server
             }
             catch (Exception e)
             {
-                Log.ConsoleError(e.ToString());
+                ConsoleHelper.WriteErrorLine(e.ToString());
             }
 
             return 1;

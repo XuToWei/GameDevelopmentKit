@@ -1,6 +1,7 @@
 [
   {
     "Id": 1000,
+    "CSName": "PlayerShip",
     "Desc": "飞船",
     "AssetName": "PlayerShip",
     "EntityGroupName": "Aircraft",

@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using Cysharp.Threading.Tasks;
 using GameFramework;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -8,6 +10,34 @@ namespace Game
 {
     public static class UGuiExtension
     {
+        public static IEnumerator FadeToAlpha(this CanvasGroup canvasGroup, float alpha, float duration)
+        {
+            float time = 0f;
+            float originalAlpha = canvasGroup.alpha;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Lerp(originalAlpha, alpha, time / duration);
+                yield return new WaitForEndOfFrame();
+            }
+
+            canvasGroup.alpha = alpha;
+        }
+
+        public static IEnumerator SmoothValue(this Slider slider, float value, float duration)
+        {
+            float time = 0f;
+            float originalValue = slider.value;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                slider.value = Mathf.Lerp(originalValue, value, time / duration);
+                yield return new WaitForEndOfFrame();
+            }
+
+            slider.value = value;
+        }
+        
         public static void Set(this UnityEvent unityEvent, UnityAction unityAction)
         {
             unityEvent.RemoveAllListeners();
