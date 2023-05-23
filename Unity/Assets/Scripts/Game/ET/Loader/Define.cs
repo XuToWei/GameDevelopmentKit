@@ -14,6 +14,12 @@
         public static bool EnableHotfix => false;
 #endif
 
+#if UNITY_HOTFIX && UNITY_EDITOR && UNITY_HOTFIX_EDITORRUN
+        public static bool IsHotfixEditorRun => true;
+#else
+        public static bool IsHotfixEditorRun => false;
+#endif
+
 #if UNITY_ET_VIEW && UNITY_EDITOR
         public static bool EnableEditorView => true;
 #else

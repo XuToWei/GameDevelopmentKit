@@ -196,6 +196,8 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Add UNITY_GAMEHOT")]
         private static void Add_UNITY_GAMEHOT()
         {
+            BuildAssemblyHelper.ClearBuildOutputDir();
+            LinkXMLHelper.AddLinkXML("UNITY_GAMEHOT");
 // #if UNITY_ET
 //             Remove_UNITY_ET();
 // #endif
@@ -207,6 +209,22 @@ namespace Game.Editor
             HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_GAMEHOT");
         }
+#endif
+
+#if UNITY_HOTFIX && UNITY_EDITOR
+#if UNITY_HOTFIX_EDITOR_RUN
+        [MenuItem("Tools/Define Symbol/Remove UNITY_HOTFIX_EDITOR_RUN")]
+        private static void Remove_UNITY_HOTFIX_EDITOR_RUN()
+        {
+            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_HOTFIX_EDITOR_RUN");
+        }
+#else
+        [MenuItem("Tools/Define Symbol/Add UNITY_HOTFIX_EDITOR_RUN")]
+        private static void Add_UNITY_HOTFIX_EDITOR_RUN()
+        {
+            ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_HOTFIX_EDITOR_RUN");
+        }
+#endif
 #endif
     }
 }

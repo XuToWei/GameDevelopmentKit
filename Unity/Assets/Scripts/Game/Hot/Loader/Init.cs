@@ -69,7 +69,7 @@ namespace Game.Hot
         {
             Assembly assembly = null;
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
-            if (Define.EnableHotfix)
+            if (Define.EnableHotfix && Define.IsHotfixEditorRun)
             {
                 byte[] assBytes = await LoadCodeBytesAsync("Game.Hot.Code.dll.bytes");
                 byte[] pdbBytes = await LoadCodeBytesAsync("Game.Hot.Code.pdb.bytes");
