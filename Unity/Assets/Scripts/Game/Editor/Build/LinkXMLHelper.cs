@@ -16,8 +16,8 @@ namespace Game.Editor
             string content = File.ReadAllText(LinkXMLPath);
             if (content.Contains($"<!--{scriptingDefineSymbol}_FIRST-->") && content.Contains($"<!--{scriptingDefineSymbol}_END-->"))
                 return;
-            content = content.Replace($"<!--{scriptingDefineSymbol}", $"<!--{scriptingDefineSymbol}_FIRST-->");
-            content = content.Replace($"{scriptingDefineSymbol}-->", $"<!--{scriptingDefineSymbol}_END-->");
+            content = content.Replace($"<!--{scriptingDefineSymbol}-", $"<!--{scriptingDefineSymbol}_FIRST-->");
+            content = content.Replace($"-{scriptingDefineSymbol}-->", $"<!--{scriptingDefineSymbol}_END-->");
             File.WriteAllText(LinkXMLPath, content);
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
@@ -31,8 +31,8 @@ namespace Game.Editor
             string content = File.ReadAllText(LinkXMLPath);
             if (!content.Contains($"<!--{scriptingDefineSymbol}_FIRST-->") && !content.Contains($"<!--{scriptingDefineSymbol}_END-->"))
                 return;
-            content = content.Replace($"<!--{scriptingDefineSymbol}_FIRST-->", $"<!--{scriptingDefineSymbol}");
-            content = content.Replace($"<!--{scriptingDefineSymbol}_END-->", $"{scriptingDefineSymbol}-->");
+            content = content.Replace($"<!--{scriptingDefineSymbol}_FIRST-->", $"<!--{scriptingDefineSymbol}-");
+            content = content.Replace($"<!--{scriptingDefineSymbol}_END-->", $"-{scriptingDefineSymbol}-->");
             File.WriteAllText(LinkXMLPath, content);
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }

@@ -30,7 +30,6 @@ MonoBehaviour:
   - Game.ET.Code.HotfixView
   - Game.ET.Code.Model
   - Game.ET.Code.ModelView
-  - Game.Hot.Code
   outputLinkFile: Res/Editor/HybridCLR/Generate/link.xml
   outputAOTGenericReferenceFile: Res/Editor/HybridCLR/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10

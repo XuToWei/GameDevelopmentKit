@@ -31,7 +31,7 @@ namespace Game.Hot
 
             private void OnDestroy()
             {
-                GameHot.OnApplicationQuit();
+                GameHot.OnShutdown();
             }
 
             private void OnApplicationPause(bool pauseStatus)
@@ -89,7 +89,7 @@ namespace Game.Hot
                 }
             }
             
-            MethodInfo methodInfo = assembly.GetType("Game.Hot.Entry").GetMethod("Start");
+            MethodInfo methodInfo = assembly.GetType("Game.Hot.HotEntry").GetMethod("Start");
             methodInfo.Invoke(null, null);
             
             this.m_RunnerComponent = this.gameObject.AddComponent<Runner>();

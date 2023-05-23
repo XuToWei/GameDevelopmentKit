@@ -25,9 +25,9 @@ namespace ET.Client
     }
     
     [Invoke]
-    public class UnityOnShutDownHandler : AInvokeHandler<EventType.OnApplicationQuit>
+    public class UnityOnShutDownHandler : AInvokeHandler<EventType.OnShutdown>
     {
-        public override void Handle(EventType.OnApplicationQuit arg)
+        public override void Handle(EventType.OnShutdown arg)
         {
             if (Root.Instance != null)
             {

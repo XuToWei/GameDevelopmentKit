@@ -5,7 +5,7 @@ namespace Game.Hot.Editor
 {
     public static class PreprocessCompileDll
     {
-        [UGFPreprocessBuildEvent(1)]
+        [UGFBuildOnPreprocessAllPlatforms(1)]
         public static void CompileDll()
         {
             BuildAssemblyTool.Build();

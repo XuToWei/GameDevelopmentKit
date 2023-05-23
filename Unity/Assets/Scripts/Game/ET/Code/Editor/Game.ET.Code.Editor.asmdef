@@ -20,7 +20,7 @@
     "autoReferenced": true,
     "defineConstraints": [
         "UNITY_ET",
-        "!UNITY_HOTFIX"
+        "!UNITY_HOTFIX || UNITY_EDITOR"
     ],
     "versionDefines": [],
     "noEngineReferences": false

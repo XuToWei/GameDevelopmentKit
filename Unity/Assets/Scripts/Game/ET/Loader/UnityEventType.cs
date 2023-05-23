@@ -28,7 +28,7 @@ namespace ET
             }
         }
 
-        public struct OnApplicationQuit
+        public struct OnShutdown
         {
         }
     }

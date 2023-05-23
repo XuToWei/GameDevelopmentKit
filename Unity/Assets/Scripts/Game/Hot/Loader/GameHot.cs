@@ -8,7 +8,7 @@ namespace Game.Hot
         
         public static event Action LateUpdateEvent;
 
-        public static event Action OnApplicationQuitEvent;
+        public static event Action OnShutdownEvent;
 
         public static event Action<bool> OnApplicationPauseEvent;
 
@@ -24,9 +24,9 @@ namespace Game.Hot
             LateUpdateEvent?.Invoke();
         }
 
-        internal static void OnApplicationQuit()
+        internal static void OnShutdown()
         {
-            OnApplicationQuitEvent?.Invoke();
+            OnShutdownEvent?.Invoke();
         }
 
         internal static void OnApplicationPause(bool pauseStatus)
