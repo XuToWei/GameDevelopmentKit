@@ -5,7 +5,6 @@
         "GameFramework",
         "UnityGameFramework.Runtime",
         "UnityGameFramework.Extension",
-        "ProtoBuf",
         "LubanLib",
         "Unity.Mathematics",
         "HybridCLR.Runtime",
@@ -19,7 +18,9 @@
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
-        "LoopScrollRect.Runtime"
+        "LoopScrollRect.Runtime",
+        "ZString",
+        "protobuf-net"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

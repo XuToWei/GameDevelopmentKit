@@ -7,14 +7,14 @@
         "UnityGameFramework.Extension",
         "UniTask",
         "Game",
-        "ProtoBuf",
         "CodeBind",
         "FancyScrollView",
         "UIEffect",
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
-        "LoopScrollRect.Runtime"
+        "LoopScrollRect.Runtime",
+        "ZString"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

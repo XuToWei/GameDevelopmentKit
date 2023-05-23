@@ -870,6 +870,10 @@ PrefabInstance:
       propertyPath: m_JsonHelperTypeName
       value: Game.NewtonsoftJsonHelper
       objectReference: {fileID: 0}
+    - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_TextHelperTypeName
+      value: Game.ZStringTextHelper
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
 --- !u!4 &343730743 stripped

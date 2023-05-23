@@ -23,12 +23,12 @@ namespace Game
             Type initType = Utility.Assembly.GetType(startMonoType);
             if (initType == null)
             {
-                throw new GameFrameworkException($"Not Found {startMonoType}!");
+                throw new GameFrameworkException(Utility.Text.Format("Not Found {0}!", startMonoType));
             }
             m_InitComponent = gameObject.AddComponent(initType);
             if (m_InitComponent == null)
             {
-                throw new GameFrameworkException($"Add {initType} Fail!");
+                throw new GameFrameworkException(Utility.Text.Format("Add {0} Fail!", initType));
             }
             IsRunning = true;
         }

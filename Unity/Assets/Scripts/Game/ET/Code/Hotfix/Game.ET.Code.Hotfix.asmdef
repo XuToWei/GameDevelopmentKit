@@ -5,9 +5,10 @@
         "ET",
         "Game.ET.Code.Model",
         "Unity.Mathematics",
-        "ProtoBuf",
         "UniTask",
-        "LubanLib"
+        "LubanLib",
+        "ZString",
+        "protobuf-net"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -8,7 +8,6 @@
         "Game",
         "LubanLib",
         "UnityEngine.UI",
-        "ProtoBuf",
         "CodeBind",
         "UniTask",
         "Game.Hot.Loader",
@@ -17,7 +16,9 @@
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
-        "LoopScrollRect.Runtime"
+        "LoopScrollRect.Runtime",
+        "ZString",
+        "protobuf-net"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

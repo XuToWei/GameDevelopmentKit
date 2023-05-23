@@ -36,11 +36,18 @@
       "hash": "a276ef6e7eaba3a265abb9dd2fbd981ad2ef2cc3"
     },
     "com.cysharp.unitask": {
-      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.3.3",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f2773f585e762480c835ac718b82b87cb111e500"
+      "hash": "b992a061fbf68ff1eb475d0837065b0549ed31ba"
+    },
+    "com.cysharp.zstring": {
+      "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString#2.5.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "f33a12a6cbfeb69dd792d69d8d58f14ca73a4e1b"
     },
     "com.focus-creative-games.hybridclr_unity": {
       "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
@@ -48,6 +55,13 @@
       "source": "git",
       "dependencies": {},
       "hash": "f5afc4362523d400fd3d6f4261dc81b5f62a84b3"
+    },
+    "com.github-glitchenzo.nugetforunity": {
+      "version": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "03353e7a94bd01ef6daa80e3a5fd85c7f5fa4725"
     },
     "com.handzlikchris.fastscriptreload": {
       "version": "https://github.com/handzlikchris/FastScriptReload.git?path=Assets",
@@ -200,13 +214,13 @@
       "hash": "e5d10d3e5961848f93be43c2911344750b509a88"
     },
     "me.qiankanglai.loopscrollrect": {
-      "version": "https://github.com/qiankanglai/LoopScrollRect.git",
+      "version": "https://github.com/qiankanglai/LoopScrollRect.git#v1.1.2",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "e5e343e7fd6330359730c84b3cd6b11dd15c82d9"
+      "hash": "1943d80ac916c5898a0f030db1d92f4fa81c531c"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

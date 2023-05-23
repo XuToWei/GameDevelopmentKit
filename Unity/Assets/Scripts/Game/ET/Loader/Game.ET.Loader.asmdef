@@ -12,7 +12,8 @@
         "UIEffect",
         "Coffee.UIParticle",
         "FancyScrollView",
-        "LoopScrollRect.Runtime"
+        "LoopScrollRect.Runtime",
+        "ZString"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

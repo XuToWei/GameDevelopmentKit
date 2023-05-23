@@ -3,8 +3,8 @@
     "rootNamespace": "ET",
     "references": [
         "Unity.Mathematics",
-        "ProtoBuf",
-        "UniTask"
+        "UniTask",
+        "protobuf-net"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

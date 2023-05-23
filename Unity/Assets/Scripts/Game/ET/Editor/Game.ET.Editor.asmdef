@@ -12,7 +12,8 @@
         "UniTask",
         "ToolbarExtension.Editor",
         "UnityGameFramework.Editor",
-        "UnityGameFramework.Extension.Editor"
+        "UnityGameFramework.Extension.Editor",
+        "ZString"
     ],
     "includePlatforms": [
         "Editor"

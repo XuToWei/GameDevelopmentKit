@@ -6,7 +6,6 @@
         "Game.ET.Code.Model",
         "Game.ET.Loader",
         "Game",
-        "ProtoBuf",
         "Unity.Mathematics",
         "UnityEngine.UI",
         "LubanLib",
@@ -20,7 +19,9 @@
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
-        "LoopScrollRect.Runtime"
+        "LoopScrollRect.Runtime",
+        "ZString",
+        "protobuf-net"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
