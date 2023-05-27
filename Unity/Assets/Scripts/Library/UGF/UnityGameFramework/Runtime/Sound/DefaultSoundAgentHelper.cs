@@ -416,6 +416,7 @@ namespace UnityGameFramework.Runtime
         private IEnumerator PauseCo(float fadeOutSeconds)
         {
             yield return FadeToVolume(m_AudioSource, 0f, fadeOutSeconds);
+            m_IsPaused = true;
             m_AudioSource.Pause();
         }
 
