@@ -72,10 +72,15 @@ namespace Game.Editor
             };
             Debug.Log("start build pkg");
             string locationPathName = $"{fold}/{appName}";
-#if !UNITY_HOTFIX && UNITY_ET && !UNITY_2022_1_OR_NEWER//兼容ET的Bson
+#if !UNITY_HOTFIX && UNITY_ET && UNITY_2021//兼容ET的Bson
             EditorUserBuildSettings.il2CppCodeGeneration = Il2CppCodeGeneration.OptimizeSize;
-#else
+#elif UNITY_2021
             EditorUserBuildSettings.il2CppCodeGeneration = Il2CppCodeGeneration.OptimizeSpeed;
+#endif
+#if !UNITY_HOTFIX && UNITY_ET && UNITY_2022//兼容ET的Bson
+            PlayerSettings.SetIl2CppCodeGeneration(NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(buildTarget)), Il2CppCodeGeneration.OptimizeSize);
+#elif UNITY_2022
+            PlayerSettings.SetIl2CppCodeGeneration(NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(buildTarget)), Il2CppCodeGeneration.OptimizeSpeed);
 #endif
             BuildReport buildReport = BuildPipeline.BuildPlayer(levels, locationPathName, buildTarget, BuildOptions.None);
             if (buildReport.summary.result != BuildResult.Succeeded)
