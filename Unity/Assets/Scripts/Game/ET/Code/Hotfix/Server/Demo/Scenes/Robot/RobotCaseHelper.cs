@@ -15,7 +15,7 @@ namespace ET.Server
                 tasks[i] = self.NewRobot(scenes);
             }
 
-            await ETTaskHelper.WaitAll(tasks);
+            await UniTask.WhenAll(tasks);
         }
 
         private static async UniTask NewRobot(this RobotCase self, List<Scene> scenes)
@@ -43,7 +43,7 @@ namespace ET.Server
         }
 
         // 这个方法创建的是进程所属的机器人，建议使用RobotCase.NewRobot来创建
-        private static async UniTaskTask NewZoneRobot(this RobotCase self, int zone, List<Scene> scenes)
+        private static async UniTask NewZoneRobot(this RobotCase self, int zone, List<Scene> scenes)
         {
             try
             {
