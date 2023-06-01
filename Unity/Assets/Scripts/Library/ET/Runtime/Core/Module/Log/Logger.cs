@@ -155,25 +155,5 @@ namespace ET
             }
             Log.Debug(s);
         }
-        
-        public void ConsoleError(string message)
-        {
-            string s = $"{message} \n {new StackTrace(2, true)}";
-            if (Options.Instance.Console == 1)
-            {
-                System.Console.Error.WriteLine(s);
-            }
-            Log.Error(s);
-        }
-        
-        public void ConsoleError(string message, params object[] args)
-        {
-            string s = $"{string.Format(message, args)} \n {new StackTrace(2, true)}";
-            if (Options.Instance.Console == 1)
-            {
-                System.Console.Error.WriteLine(s);
-            }
-            Log.Error(s);
-        }
     }
 }

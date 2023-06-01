@@ -14,10 +14,7 @@ namespace ET
             {
                 foreach (Type type in ass.GetTypes())
                 {
-                    if (type.FullName != null)
-                    {
-                        types[type.FullName] = type;
-                    }
+                    types[type.FullName] = type;
                 }
             }
 

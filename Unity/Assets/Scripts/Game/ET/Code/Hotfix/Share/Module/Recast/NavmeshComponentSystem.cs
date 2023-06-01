@@ -13,14 +13,6 @@ namespace ET
             }
         }
         
-        public class DestroySystem: DestroySystem<NavmeshComponent>
-        {
-            protected override void Destroy(NavmeshComponent self)
-            {
-                NavmeshComponent.Instance = null;
-            }
-        }
-        
         public static long Get(this NavmeshComponent self, string name)
         {
             long ptr;

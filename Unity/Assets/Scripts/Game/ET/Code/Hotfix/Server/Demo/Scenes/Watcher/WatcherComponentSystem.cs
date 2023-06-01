@@ -26,16 +26,10 @@ namespace ET.Server
             string[] localIP = NetworkHelper.GetAddressIPs();
             foreach (DRStartProcessConfig startProcessConfig in Tables.Instance.DTStartProcessConfig.DataList)
             {
-                if (Options.Instance.StartConfig != startProcessConfig.StartConfig)
-                {
-                    continue;
-                }
-
                 if (!WatcherHelper.IsThisMachine(startProcessConfig.InnerIP, localIP))
                 {
                     continue;
                 }
-
                 Process process = WatcherHelper.StartProcess(startProcessConfig.Id, createScenes);
                 self.Processes.Add(startProcessConfig.Id, process);
             }

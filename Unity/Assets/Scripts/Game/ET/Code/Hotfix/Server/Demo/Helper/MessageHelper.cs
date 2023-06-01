@@ -25,8 +25,7 @@ namespace ET.Server
             // 网络底层做了优化，同一个消息不会多次序列化
             foreach (AOIEntity u in dict.Values)
             {
-                ActorMessageSenderComponent.Instance.Send(u.Unit.GetComponent<UnitGateComponent>().GateSessionActorId,
-                    message);
+                ActorMessageSenderComponent.Instance.Send(u.Unit.GetComponent<UnitGateComponent>().GateSessionActorId, message);
             }
         }
 

@@ -7,7 +7,6 @@ namespace ET.Client
     {
         protected override async UniTask Run(Scene scene, EventType.AfterCreateClientScene args)
         {
-            
             await UniTask.CompletedTask;
         }
     }

@@ -63,13 +63,10 @@ namespace ET.Server
                     {
                         return;
                     }
-
-                    Log.Info(
-                        $"location timeout unlock key: {key} instanceId: {instanceId} newInstanceId: {instanceId}");
+                    Log.Info($"location timeout unlock key: {key} instanceId: {instanceId} newInstanceId: {instanceId}");
                     self.UnLock(key, instanceId, instanceId);
                 }
-
-                TimeWaitAsync().Forget();
+                TimeWaitAsync().Coroutine();
             }
         }
 

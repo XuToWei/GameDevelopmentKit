@@ -44,11 +44,6 @@ namespace ET
             Logger.Instance.Console(message);
         }
         
-        public static void ConsoleError(string message)
-        {
-            Logger.Instance.ConsoleError(message);
-        }
-        
 #if DOTNET
         public static void Trace(ref System.Runtime.CompilerServices.DefaultInterpolatedStringHandler message)
         {

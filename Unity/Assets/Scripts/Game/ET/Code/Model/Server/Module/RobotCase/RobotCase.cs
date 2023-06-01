@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using System.Collections.Generic;
 
 namespace ET.Server
 {
@@ -8,6 +7,5 @@ namespace ET.Server
     {
         public CancellationTokenSource Cts;
         public string CommandLine;
-        public HashSet<long> Scenes { get; } = new HashSet<long>();
     }
 }

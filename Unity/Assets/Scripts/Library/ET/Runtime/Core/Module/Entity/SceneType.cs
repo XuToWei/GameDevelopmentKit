@@ -20,9 +20,5 @@
         // 客户端Model层
         Client = 31,
         Current = 34,
-        
-        //Tool
-        RemoteBuilderClient = 10001,
-        RemoteBuilderServer = 10002,
     }
 }

@@ -29,7 +29,7 @@ namespace ET
         {
             protected override void Destroy(MoveComponent self)
             {
-                self.MoveFinish(false);
+                self.MoveFinish(true);
             }
         }
 
