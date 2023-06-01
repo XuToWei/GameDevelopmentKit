@@ -24,7 +24,7 @@
     <assembly fullname="Newtonsoft.Json" preserve="all" />
     <assembly fullname="CodeBind" preserve="all" />
     <assembly fullname="LubanLib" preserve="all" />
-    <assembly fullname="ProtoBuf" preserve="all" />
+    <assembly fullname="protobuf-net" preserve="all" />
     <assembly fullname="GameFramework" preserve="all" />
     <assembly fullname="UnityGameFramework.Runtime" preserve="all" />
     <assembly fullname="UnityGameFramework.Extension" preserve="all" />
