@@ -6,8 +6,6 @@
         
         public const string ETTask = "UniTask";
 
-        public const string ETTaskFullName = "Cysharp.Threading.Tasks.UniTask";
-
         public static readonly string[] AddChildMethods = { "AddChild", "AddChildWithId" };
 
         public static readonly string[] ComponentMethod = {"AddComponent","GetComponent"};
@@ -31,10 +29,6 @@
         public const string EnableAccessEntiyChildAttribute = "ET.EnableAccessEntiyChildAttribute";
 
         public const string StaticFieldAttribute = "ET.StaticFieldAttribute";
-
-        public const string ETCancellationToken = "System.Threading.CancellationTokenSource";
-
-        public const string ETTaskCompleteTask = "UniTask.CompletedTask";
     }
 }
 
