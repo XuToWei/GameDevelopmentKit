@@ -69,6 +69,8 @@ namespace UnityGameFramework.Extension
 #endif
         public void ReleaseUnused()
         {
+            if (m_LoadedSpriteObjectsLinkedList == null)
+                return;
             LinkedListNode<LoadSpriteObject> current = m_LoadedSpriteObjectsLinkedList.First;
             while (current != null)
             {
