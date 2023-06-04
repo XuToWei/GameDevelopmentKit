@@ -10,19 +10,24 @@ namespace ET
         
         public ServiceType ServiceType { get; protected set; }
         
-        private (object Message, MemoryStream MemoryStream) lastMessageInfo;
+        private (MessageObject Message, MemoryBuffer MemoryStream) lastMessageInfo;
         
-        // 缓存上一个发送的消息，这样广播消息的时候省掉多次序列化,这样有个另外的问题,客户端就不能保存发送的消息来减少gc，
-        // 不过这个问题并不大，因为客户端发送的消息是比较少的，如果实在需要，也可以修改这个方法，把outer的消息过滤掉。
-        protected MemoryStream GetMemoryStream(object message)
+        // 缓存上一个发送的消息，这样广播消息的时候省掉多次序列化
+        public MemoryBuffer Fetch(MessageObject message)
         {
-            if (object.ReferenceEquals(lastMessageInfo.Message, message))
+            // 这里虽然用了对象池，但是相邻的两个消息不会是池中来的同一个消息，因为lastMessageInfo中的消息还没回收
+            if (ReferenceEquals(message, this.lastMessageInfo.Message))
             {
-                Log.Debug($"message serialize cache: {message.GetType().Name}");
+                Log.Debug($"message serialize cache: {message.GetType().FullName}");
                 return lastMessageInfo.MemoryStream;
             }
+            
+            // 回收上一个消息跟MemoryBuffer
+            NetServices.Instance.RecycleMessage(this.lastMessageInfo.Message);
+            NetServices.Instance.RecycleMemoryBuffer(this.lastMessageInfo.MemoryStream);
 
-            (ushort _, MemoryStream stream) = MessageSerializeHelper.MessageToStream(message);
+            MemoryBuffer stream = NetServices.Instance.FetchMemoryBuffer();
+            MessageSerializeHelper.MessageToStream(stream, message);
             this.lastMessageInfo = (message, stream);
             return stream;
         }
@@ -39,7 +44,7 @@ namespace ET
 
         public abstract void Create(long id, IPEndPoint address);
 
-        public abstract void Send(long channelId, long actorId, object message);
+        public abstract void Send(long channelId, long actorId, MessageObject message);
 
         public virtual (uint, uint) GetChannelConn(long channelId)
         {

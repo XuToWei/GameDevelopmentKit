@@ -1,7 +1,7 @@
 using System;
 using UnityEditor;
 
-namespace ET.Editor
+namespace ET
 {
     [TypeDrawer]
     public class EnumTypeDrawer: ITypeDrawer
@@ -13,6 +13,12 @@ namespace ET.Editor
 
         public object DrawAndGetNewValue(Type memberType, string memberName, object value, object target)
         {
+            if (memberType == typeof (SceneType))
+            {
+                string sceneType = EditorGUILayout.DelayedTextField(memberName, value.ToString());
+                return EnumHelper.FromString<SceneType>(sceneType);
+            }
+            
             if (memberType.IsDefined(typeof (FlagsAttribute), false))
             {
                 return EditorGUILayout.EnumFlagsField(memberName, (Enum) value);

@@ -20,10 +20,10 @@ namespace ET
     }
     
     [FriendOf(typeof(Session))]
-    public static class SessionSystem
+    public static partial class SessionSystem
     {
-        [ObjectSystem]
-        public class SessionAwakeSystem: AwakeSystem<Session, int>
+        [EntitySystem]
+        private class SessionAwakeSystem : AwakeSystem<Session, int>
         {
             protected override void Awake(Session self, int serviceId)
             {
@@ -37,9 +37,9 @@ namespace ET
                 Log.Info($"session create: zone: {self.DomainZone()} id: {self.Id} {timeNow} ");
             }
         }
-        
-        [ObjectSystem]
-        public class SessionDestroySystem: DestroySystem<Session>
+
+        [EntitySystem]
+        private class SessionDestroySystem : DestroySystem<Session>
         {
             protected override void Destroy(Session self)
             {
@@ -55,7 +55,7 @@ namespace ET
                 self.requestCallbacks.Clear();
             }
         }
-        
+
         public static void OnResponse(this Session self, IResponse response)
         {
             if (!self.requestCallbacks.TryGetValue(response.RpcId, out var action))
@@ -127,8 +127,8 @@ namespace ET
         public static void Send(this Session self, long actorId, IMessage message)
         {
             self.LastSendTime = TimeHelper.ClientNow();
-            OpcodeHelper.LogMsg(self.DomainZone(), message);
-            NetServices.Instance.SendMessage(self.ServiceId, self.Id, actorId, message);
+            self.LogMsg(message);
+            NetServices.Instance.SendMessage(self.ServiceId, self.Id, actorId, message as MessageObject);
         }
     }
 

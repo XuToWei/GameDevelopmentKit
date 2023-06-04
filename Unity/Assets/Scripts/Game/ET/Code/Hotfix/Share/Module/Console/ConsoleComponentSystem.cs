@@ -8,29 +8,30 @@ namespace ET
 {
     [FriendOf(typeof(ConsoleComponent))]
     [FriendOf(typeof(ModeContex))]
-    public static class ConsoleComponentSystem
+    public static partial class ConsoleComponentSystem
     {
-        [ObjectSystem]
-        public class ConsoleComponentAwakeSystem: AwakeSystem<ConsoleComponent>
+        [EntitySystem]
+        private class ConsoleComponentAwakeSystem : AwakeSystem<ConsoleComponent>
         {
             protected override void Awake(ConsoleComponent self)
             {
                 self.Load();
-            
+        
                 self.Start().Forget();
             }
         }
 
-        [ObjectSystem]
-        public class ConsoleComponentLoadSystem: LoadSystem<ConsoleComponent>
+
+        [EntitySystem]
+        private class ConsoleComponentLoadSystem : LoadSystem<ConsoleComponent>
         {
             protected override void Load(ConsoleComponent self)
             {
                 self.Load();
             }
         }
-        
-        public static void Load(this ConsoleComponent self)
+
+        private static void Load(this ConsoleComponent self)
         {
             self.Handlers.Clear();
 
@@ -56,8 +57,8 @@ namespace ET
                 self.Handlers.Add(consoleHandlerAttribute.Mode, iConsoleHandler);
             }
         }
-        
-        public static async UniTaskVoid Start(this ConsoleComponent self)
+
+        private static async UniTaskVoid Start(this ConsoleComponent self)
         {
             self.CancellationTokenSource = new CancellationTokenSource();
 

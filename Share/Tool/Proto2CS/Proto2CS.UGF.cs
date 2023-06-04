@@ -137,12 +137,12 @@ namespace ET
 
             private static void GenerateCS(StringBuilder sb, string path, string csName)
             {
-                if (!Directory.Exists(path))
+                if (!string.IsNullOrEmpty(path) && !Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
 
-                string csPath = Path.Combine(path, csName + ".cs");
+                string csPath = $"{path}/{csName}.cs";
                 using FileStream txt = new FileStream(csPath, FileMode.Create, FileAccess.ReadWrite);
                 using StreamWriter sw = new StreamWriter(txt);
                 sw.Write(sb.ToString().Replace("\t", "    "));
@@ -241,7 +241,6 @@ namespace ET
                     int n = int.Parse(ss[3]);
                     string typeCs = ConvertType(type);
 
-                    sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\tpublic {typeCs} {name} {{ get; set; }}\n\n");
 

@@ -1,361 +1,472 @@
 // This is an automatically generated class by Share.Tool. Please do not modify it.
 
-using ProtoBuf;
+using MemoryPack;
 using System.Collections.Generic;
 namespace ET
 {
+// using
     [ResponseType(nameof(ObjectQueryResponse))]
     [Message(InnerMessage.ObjectQueryRequest)]
-    [ProtoContract]
-    public partial class ObjectQueryRequest: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class ObjectQueryRequest: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static ObjectQueryRequest Create(bool isFromPool = false) { return !isFromPool? new ObjectQueryRequest() : NetServices.Instance.FetchMessage(typeof(ObjectQueryRequest)) as ObjectQueryRequest; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public long Key { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public long InstanceId { get; set; }
 
     }
 
     [ResponseType(nameof(A2M_Reload))]
     [Message(InnerMessage.M2A_Reload)]
-    [ProtoContract]
-    public partial class M2A_Reload: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class M2A_Reload: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static M2A_Reload Create(bool isFromPool = false) { return !isFromPool? new M2A_Reload() : NetServices.Instance.FetchMessage(typeof(M2A_Reload)) as M2A_Reload; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
     }
 
     [Message(InnerMessage.A2M_Reload)]
-    [ProtoContract]
-    public partial class A2M_Reload: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class A2M_Reload: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static A2M_Reload Create(bool isFromPool = false) { return !isFromPool? new A2M_Reload() : NetServices.Instance.FetchMessage(typeof(A2M_Reload)) as A2M_Reload; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
     }
 
     [ResponseType(nameof(G2G_LockResponse))]
     [Message(InnerMessage.G2G_LockRequest)]
-    [ProtoContract]
-    public partial class G2G_LockRequest: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class G2G_LockRequest: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static G2G_LockRequest Create(bool isFromPool = false) { return !isFromPool? new G2G_LockRequest() : NetServices.Instance.FetchMessage(typeof(G2G_LockRequest)) as G2G_LockRequest; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public long Id { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Address { get; set; }
 
     }
 
     [Message(InnerMessage.G2G_LockResponse)]
-    [ProtoContract]
-    public partial class G2G_LockResponse: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class G2G_LockResponse: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static G2G_LockResponse Create(bool isFromPool = false) { return !isFromPool? new G2G_LockResponse() : NetServices.Instance.FetchMessage(typeof(G2G_LockResponse)) as G2G_LockResponse; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
     }
 
     [ResponseType(nameof(G2G_LockReleaseResponse))]
     [Message(InnerMessage.G2G_LockReleaseRequest)]
-    [ProtoContract]
-    public partial class G2G_LockReleaseRequest: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class G2G_LockReleaseRequest: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static G2G_LockReleaseRequest Create(bool isFromPool = false) { return !isFromPool? new G2G_LockReleaseRequest() : NetServices.Instance.FetchMessage(typeof(G2G_LockReleaseRequest)) as G2G_LockReleaseRequest; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public long Id { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Address { get; set; }
 
     }
 
     [Message(InnerMessage.G2G_LockReleaseResponse)]
-    [ProtoContract]
-    public partial class G2G_LockReleaseResponse: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class G2G_LockReleaseResponse: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static G2G_LockReleaseResponse Create(bool isFromPool = false) { return !isFromPool? new G2G_LockReleaseResponse() : NetServices.Instance.FetchMessage(typeof(G2G_LockReleaseResponse)) as G2G_LockReleaseResponse; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
     }
 
     [ResponseType(nameof(ObjectAddResponse))]
     [Message(InnerMessage.ObjectAddRequest)]
-    [ProtoContract]
-    public partial class ObjectAddRequest: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class ObjectAddRequest: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static ObjectAddRequest Create(bool isFromPool = false) { return !isFromPool? new ObjectAddRequest() : NetServices.Instance.FetchMessage(typeof(ObjectAddRequest)) as ObjectAddRequest; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
+        public int Type { get; set; }
+
+        [MemoryPackOrder(2)]
         public long Key { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(3)]
         public long InstanceId { get; set; }
 
     }
 
     [Message(InnerMessage.ObjectAddResponse)]
-    [ProtoContract]
-    public partial class ObjectAddResponse: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class ObjectAddResponse: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static ObjectAddResponse Create(bool isFromPool = false) { return !isFromPool? new ObjectAddResponse() : NetServices.Instance.FetchMessage(typeof(ObjectAddResponse)) as ObjectAddResponse; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
     }
 
     [ResponseType(nameof(ObjectLockResponse))]
     [Message(InnerMessage.ObjectLockRequest)]
-    [ProtoContract]
-    public partial class ObjectLockRequest: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class ObjectLockRequest: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static ObjectLockRequest Create(bool isFromPool = false) { return !isFromPool? new ObjectLockRequest() : NetServices.Instance.FetchMessage(typeof(ObjectLockRequest)) as ObjectLockRequest; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
+        public int Type { get; set; }
+
+        [MemoryPackOrder(2)]
         public long Key { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(3)]
         public long InstanceId { get; set; }
 
-        [ProtoMember(4)]
+        [MemoryPackOrder(4)]
         public int Time { get; set; }
 
     }
 
     [Message(InnerMessage.ObjectLockResponse)]
-    [ProtoContract]
-    public partial class ObjectLockResponse: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class ObjectLockResponse: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static ObjectLockResponse Create(bool isFromPool = false) { return !isFromPool? new ObjectLockResponse() : NetServices.Instance.FetchMessage(typeof(ObjectLockResponse)) as ObjectLockResponse; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
     }
 
     [ResponseType(nameof(ObjectUnLockResponse))]
     [Message(InnerMessage.ObjectUnLockRequest)]
-    [ProtoContract]
-    public partial class ObjectUnLockRequest: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class ObjectUnLockRequest: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static ObjectUnLockRequest Create(bool isFromPool = false) { return !isFromPool? new ObjectUnLockRequest() : NetServices.Instance.FetchMessage(typeof(ObjectUnLockRequest)) as ObjectUnLockRequest; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
+        public int Type { get; set; }
+
+        [MemoryPackOrder(2)]
         public long Key { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(3)]
         public long OldInstanceId { get; set; }
 
-        [ProtoMember(4)]
+        [MemoryPackOrder(4)]
         public long InstanceId { get; set; }
 
     }
 
     [Message(InnerMessage.ObjectUnLockResponse)]
-    [ProtoContract]
-    public partial class ObjectUnLockResponse: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class ObjectUnLockResponse: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static ObjectUnLockResponse Create(bool isFromPool = false) { return !isFromPool? new ObjectUnLockResponse() : NetServices.Instance.FetchMessage(typeof(ObjectUnLockResponse)) as ObjectUnLockResponse; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
     }
 
     [ResponseType(nameof(ObjectRemoveResponse))]
     [Message(InnerMessage.ObjectRemoveRequest)]
-    [ProtoContract]
-    public partial class ObjectRemoveRequest: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class ObjectRemoveRequest: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static ObjectRemoveRequest Create(bool isFromPool = false) { return !isFromPool? new ObjectRemoveRequest() : NetServices.Instance.FetchMessage(typeof(ObjectRemoveRequest)) as ObjectRemoveRequest; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
+        public int Type { get; set; }
+
+        [MemoryPackOrder(2)]
         public long Key { get; set; }
 
     }
 
     [Message(InnerMessage.ObjectRemoveResponse)]
-    [ProtoContract]
-    public partial class ObjectRemoveResponse: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class ObjectRemoveResponse: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static ObjectRemoveResponse Create(bool isFromPool = false) { return !isFromPool? new ObjectRemoveResponse() : NetServices.Instance.FetchMessage(typeof(ObjectRemoveResponse)) as ObjectRemoveResponse; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
     }
 
     [ResponseType(nameof(ObjectGetResponse))]
     [Message(InnerMessage.ObjectGetRequest)]
-    [ProtoContract]
-    public partial class ObjectGetRequest: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class ObjectGetRequest: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static ObjectGetRequest Create(bool isFromPool = false) { return !isFromPool? new ObjectGetRequest() : NetServices.Instance.FetchMessage(typeof(ObjectGetRequest)) as ObjectGetRequest; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
+        public int Type { get; set; }
+
+        [MemoryPackOrder(2)]
         public long Key { get; set; }
 
     }
 
     [Message(InnerMessage.ObjectGetResponse)]
-    [ProtoContract]
-    public partial class ObjectGetResponse: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class ObjectGetResponse: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static ObjectGetResponse Create(bool isFromPool = false) { return !isFromPool? new ObjectGetResponse() : NetServices.Instance.FetchMessage(typeof(ObjectGetResponse)) as ObjectGetResponse; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
-        [ProtoMember(4)]
+        [MemoryPackOrder(3)]
+        public int Type { get; set; }
+
+        [MemoryPackOrder(4)]
         public long InstanceId { get; set; }
 
     }
 
     [ResponseType(nameof(G2R_GetLoginKey))]
     [Message(InnerMessage.R2G_GetLoginKey)]
-    [ProtoContract]
-    public partial class R2G_GetLoginKey: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class R2G_GetLoginKey: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static R2G_GetLoginKey Create(bool isFromPool = false) { return !isFromPool? new R2G_GetLoginKey() : NetServices.Instance.FetchMessage(typeof(R2G_GetLoginKey)) as R2G_GetLoginKey; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public string Account { get; set; }
 
     }
 
     [Message(InnerMessage.G2R_GetLoginKey)]
-    [ProtoContract]
-    public partial class G2R_GetLoginKey: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class G2R_GetLoginKey: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static G2R_GetLoginKey Create(bool isFromPool = false) { return !isFromPool? new G2R_GetLoginKey() : NetServices.Instance.FetchMessage(typeof(G2R_GetLoginKey)) as G2R_GetLoginKey; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
-        [ProtoMember(4)]
+        [MemoryPackOrder(3)]
         public long Key { get; set; }
 
-        [ProtoMember(5)]
+        [MemoryPackOrder(4)]
         public long GateId { get; set; }
 
     }
 
     [Message(InnerMessage.G2M_SessionDisconnect)]
-    [ProtoContract]
-    public partial class G2M_SessionDisconnect: ProtoObject, IActorLocationMessage
+    [MemoryPackable]
+    public partial class G2M_SessionDisconnect: MessageObject, IActorLocationMessage
     {
-        [ProtoMember(1)]
+        public static G2M_SessionDisconnect Create(bool isFromPool = false) { return !isFromPool? new G2M_SessionDisconnect() : NetServices.Instance.FetchMessage(typeof(G2M_SessionDisconnect)) as G2M_SessionDisconnect; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
     }
 
     [Message(InnerMessage.ObjectQueryResponse)]
-    [ProtoContract]
-    public partial class ObjectQueryResponse: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class ObjectQueryResponse: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static ObjectQueryResponse Create(bool isFromPool = false) { return !isFromPool? new ObjectQueryResponse() : NetServices.Instance.FetchMessage(typeof(ObjectQueryResponse)) as ObjectQueryResponse; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
-        [ProtoMember(4)]
+        [MemoryPackOrder(3)]
         public byte[] Entity { get; set; }
 
     }
 
     [ResponseType(nameof(M2M_UnitTransferResponse))]
     [Message(InnerMessage.M2M_UnitTransferRequest)]
-    [ProtoContract]
-    public partial class M2M_UnitTransferRequest: ProtoObject, IActorRequest
+    [MemoryPackable]
+    public partial class M2M_UnitTransferRequest: MessageObject, IActorRequest
     {
-        [ProtoMember(1)]
+        public static M2M_UnitTransferRequest Create(bool isFromPool = false) { return !isFromPool? new M2M_UnitTransferRequest() : NetServices.Instance.FetchMessage(typeof(M2M_UnitTransferRequest)) as M2M_UnitTransferRequest; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public long OldInstanceId { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public byte[] Unit { get; set; }
 
-        [ProtoMember(4)]
+        [MemoryPackOrder(3)]
         public List<byte[]> Entitys { get; set; }
 
     }
 
     [Message(InnerMessage.M2M_UnitTransferResponse)]
-    [ProtoContract]
-    public partial class M2M_UnitTransferResponse: ProtoObject, IActorResponse
+    [MemoryPackable]
+    public partial class M2M_UnitTransferResponse: MessageObject, IActorResponse
     {
-        [ProtoMember(1)]
+        public static M2M_UnitTransferResponse Create(bool isFromPool = false) { return !isFromPool? new M2M_UnitTransferResponse() : NetServices.Instance.FetchMessage(typeof(M2M_UnitTransferResponse)) as M2M_UnitTransferResponse; }
+
+        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+
+        [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        [ProtoMember(2)]
+        [MemoryPackOrder(1)]
         public int Error { get; set; }
 
-        [ProtoMember(3)]
+        [MemoryPackOrder(2)]
         public string Message { get; set; }
 
     }

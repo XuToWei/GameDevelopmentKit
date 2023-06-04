@@ -3,27 +3,23 @@
 namespace ET.Server
 {
     [FriendOf(typeof(PlayerComponent))]
-    public static class PlayerComponentSystem
+    public static partial class PlayerComponentSystem
     {
         public static void Add(this PlayerComponent self, Player player)
         {
-            self.idPlayers.Add(player.Id, player);
+            self.dictionary.Add(player.Account, player);
         }
-
-        public static Player Get(this PlayerComponent self, long id)
+        
+        public static void Remove(this PlayerComponent self, Player player)
         {
-            self.idPlayers.TryGetValue(id, out Player gamer);
-            return gamer;
+            self.dictionary.Remove(player.Account);
+            player.Dispose();
         }
-
-        public static void Remove(this PlayerComponent self, long id)
+        
+        public static Player GetByAccount(this PlayerComponent self,  string account)
         {
-            self.idPlayers.Remove(id);
-        }
-
-        public static Player[] GetAll(this PlayerComponent self)
-        {
-            return self.idPlayers.Values.ToArray();
+            self.dictionary.TryGetValue(account, out Player player);
+            return player;
         }
     }
 }

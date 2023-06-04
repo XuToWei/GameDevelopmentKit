@@ -2,13 +2,13 @@
 
 namespace ET.Client
 {
-    [Event(SceneType.Client)]
-    public class LoginFinish_RemoveLoginUI : AEvent<EventType.LoginFinish>
-    {
-        protected override async UniTask Run(Scene scene, EventType.LoginFinish args)
-        {
-            await UniTask.CompletedTask;
-            UIComponent.Instance.CloseUIForm(UGFUIFormId.UILogin);
-        }
-    }
+	[Event(SceneType.Demo)]
+	public class LoginFinish_RemoveLoginUI: AEvent<Scene, EventType.LoginFinish>
+	{
+		protected override async UniTask Run(Scene scene, EventType.LoginFinish args)
+		{
+			await UniTask.CompletedTask;
+			scene.GetComponent<UIComponent>().CloseUIForm(UGFUIFormId.UILogin);
+		}
+	}
 }

@@ -5,25 +5,33 @@ namespace ET
 {
     public static class MessageSerializeHelper
     {
-        private static MemoryStream GetStream(int count = 0)
+        public static byte[] Serialize(MessageObject message)
         {
-            MemoryStream stream;
-            if (count > 0)
-            {
-                stream = new MemoryStream(count);
-            }
-            else
-            {
-                stream = new MemoryStream();
-            }
+            return MemoryPackHelper.Serialize(message);
+        }
 
-            return stream;
+        public static void Serialize(MessageObject message, MemoryBuffer stream)
+        {
+            MemoryPackHelper.Serialize(message, stream);
+        }
+		
+        public static MessageObject Deserialize(Type type, byte[] bytes, int index, int count)
+        {
+            object o = NetServices.Instance.FetchMessage(type);
+            MemoryPackHelper.Deserialize(type, bytes, index, count, ref o);
+            return o as MessageObject;
+        }
+
+        public static MessageObject Deserialize(Type type, MemoryBuffer stream)
+        {
+            object o = NetServices.Instance.FetchMessage(type);
+            MemoryPackHelper.Deserialize(type, stream, ref o);
+            return o as MessageObject;
         }
         
-        public static (ushort, MemoryStream) MessageToStream(object message)
+        public static ushort MessageToStream(MemoryBuffer stream, MessageObject message)
         {
             int headOffset = Packet.ActorIdLength;
-            MemoryStream stream = GetStream(headOffset + Packet.OpcodeLength);
 
             ushort opcode = NetServices.Instance.GetOpcode(message.GetType());
             
@@ -32,10 +40,10 @@ namespace ET
             
             stream.GetBuffer().WriteTo(headOffset, opcode);
             
-            SerializeHelper.Serialize(message, stream);
+            MessageSerializeHelper.Serialize(message, stream);
             
             stream.Seek(0, SeekOrigin.Begin);
-            return (opcode, stream);
+            return opcode;
         }
     }
 }

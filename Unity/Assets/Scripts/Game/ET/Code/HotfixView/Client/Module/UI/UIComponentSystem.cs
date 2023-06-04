@@ -10,22 +10,21 @@ namespace ET.Client
     [FriendOf(typeof (UIComponent))]
     public static class UIComponentSystem
     {
-        [ObjectSystem]
-        public class UIComponentAwakeSystem: AwakeSystem<UIComponent>
+        [EntitySystem]
+        private sealed class UIComponentAwakeSystem: AwakeSystem<UIComponent>
         {
             protected override void Awake(UIComponent self)
             {
-                UIComponent.Instance = self;
+                self.AllOpenUIForms.Clear();
             }
         }
 
-        [ObjectSystem]
-        public class UIComponentDestroySystem: DestroySystem<UIComponent>
+        [EntitySystem]
+        private sealed class UIComponentDestroySystem: DestroySystem<UIComponent>
         {
             protected override void Destroy(UIComponent self)
             {
-                self.CloseAllUIForm();
-                UIComponent.Instance = null;
+                self.CloseAllUIForms();
             }
         }
 
@@ -72,7 +71,7 @@ namespace ET.Client
             GameEntry.UI.RefocusUIForm(uiForm.etMonoUIForm.UIForm, userData);
         }
 
-        public static void CloseAllUIForm(this UIComponent self)
+        public static void CloseAllUIForms(this UIComponent self)
         {
             foreach (UGFUIForm uiForm in self.AllOpenUIForms.ToArray())
             {

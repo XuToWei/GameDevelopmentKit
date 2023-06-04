@@ -4,28 +4,10 @@ using UnityEngine;
 namespace ET.Client
 {
 	[FriendOf(typeof(AnimatorComponent))]
-	public static class AnimatorComponentSystem
+	public static partial class AnimatorComponentSystem
 	{
-		[ObjectSystem]
-		public class AnimatorComponentAwakeSystem : AwakeSystem<AnimatorComponent>
-		{
-			protected override void Awake(AnimatorComponent self)
-			{
-				self.Awake();
-			}
-		}
-
-		[ObjectSystem]
-		public class AnimatorComponentUpdateSystem : UpdateSystem<AnimatorComponent>
-		{
-			protected override void Update(AnimatorComponent self)
-			{
-				self.Update();
-			}
-		}
-	
-		[ObjectSystem]
-		public class AnimatorComponentDestroySystem : DestroySystem<AnimatorComponent>
+		[EntitySystem]
+		private class AnimatorComponentDestroySystem : DestroySystem<AnimatorComponent>
 		{
 			protected override void Destroy(AnimatorComponent self)
 			{
@@ -34,60 +16,68 @@ namespace ET.Client
 				self.Animator = null;
 			}
 		}
-		
-		public static void Awake(this AnimatorComponent self)
+
+		[EntitySystem]
+		private class AnimatorComponentAwakeSystem : AwakeSystem<AnimatorComponent>
 		{
-			Animator animator = self.GetParent<Unit>().GetComponent<GameObjectComponent>().GameObject.GetComponent<Animator>();
+			protected override void Awake(AnimatorComponent self)
+			{
+				Animator animator = self.GetParent<Unit>().GetComponent<GameObjectComponent>().GameObject.GetComponent<Animator>();
 
-			if (animator == null)
-			{
-				return;
-			}
+				if (animator == null)
+				{
+					return;
+				}
 
-			if (animator.runtimeAnimatorController == null)
-			{
-				return;
-			}
+				if (animator.runtimeAnimatorController == null)
+				{
+					return;
+				}
 
-			if (animator.runtimeAnimatorController.animationClips == null)
-			{
-				return;
-			}
-			self.Animator = animator;
-			foreach (AnimationClip animationClip in animator.runtimeAnimatorController.animationClips)
-			{
-				self.animationClips[animationClip.name] = animationClip;
-			}
-			foreach (AnimatorControllerParameter animatorControllerParameter in animator.parameters)
-			{
-				self.Parameter.Add(animatorControllerParameter.name);
+				if (animator.runtimeAnimatorController.animationClips == null)
+				{
+					return;
+				}
+				self.Animator = animator;
+				foreach (AnimationClip animationClip in animator.runtimeAnimatorController.animationClips)
+				{
+					self.animationClips[animationClip.name] = animationClip;
+				}
+				foreach (AnimatorControllerParameter animatorControllerParameter in animator.parameters)
+				{
+					self.Parameter.Add(animatorControllerParameter.name);
+				}
 			}
 		}
 
-		public static void Update(this AnimatorComponent self)
+		[EntitySystem]
+		private class AnimatorComponentUpdateSystem : UpdateSystem<AnimatorComponent>
 		{
-			if (self.isStop)
+			protected override void Update(AnimatorComponent self)
 			{
-				return;
-			}
+				if (self.isStop)
+				{
+					return;
+				}
 
-			if (self.MotionType == MotionType.None)
-			{
-				return;
-			}
+				if (self.MotionType == MotionType.None)
+				{
+					return;
+				}
 
-			try
-			{
-				self.Animator.SetFloat("MotionSpeed", self.MontionSpeed);
+				try
+				{
+					self.Animator.SetFloat("MotionSpeed", self.MontionSpeed);
 
-				self.Animator.SetTrigger(self.MotionType.ToString());
+					self.Animator.SetTrigger(self.MotionType.ToString());
 
-				self.MontionSpeed = 1;
-				self.MotionType = MotionType.None;
-			}
-			catch (Exception ex)
-			{
-				throw new Exception($"动作播放失败: {self.MotionType}", ex);
+					self.MontionSpeed = 1;
+					self.MotionType = MotionType.None;
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"动作播放失败: {self.MotionType}", ex);
+				}
 			}
 		}
 

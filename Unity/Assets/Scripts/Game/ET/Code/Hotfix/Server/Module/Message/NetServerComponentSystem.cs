@@ -3,10 +3,10 @@
 namespace ET.Server
 {
     [FriendOf(typeof(NetServerComponent))]
-    public static class NetServerComponentSystem
+    public static partial class NetServerComponentSystem
     {
-        [ObjectSystem]
-        public class AwakeSystem: AwakeSystem<NetServerComponent, IPEndPoint>
+        [EntitySystem]
+        private class NetServerComponentAwakeSystem : AwakeSystem<NetServerComponent, IPEndPoint>
         {
             protected override void Awake(NetServerComponent self, IPEndPoint address)
             {
@@ -17,8 +17,8 @@ namespace ET.Server
             }
         }
 
-        [ObjectSystem]
-        public class NetKcpComponentDestroySystem: DestroySystem<NetServerComponent>
+        [EntitySystem]
+        private class NetServerComponentDestroySystem : DestroySystem<NetServerComponent>
         {
             protected override void Destroy(NetServerComponent self)
             {
@@ -44,7 +44,7 @@ namespace ET.Server
             Session session = self.AddChildWithId<Session, int>(channelId, self.ServiceId);
             session.RemoteAddress = ipEndPoint;
 
-            if (self.DomainScene().SceneType != SceneType.BenchmarkServer)
+            if (self.Domain.SceneType != SceneType.BenchmarkServer)
             {
                 // 挂上这个组件，5秒就会删除session，所以客户端验证完成要删除这个组件。该组件的作用就是防止外挂一直连接不发消息也不进行权限验证
                 session.AddComponent<SessionAcceptTimeoutComponent>();
@@ -62,8 +62,8 @@ namespace ET.Server
             }
             session.LastRecvTime = TimeHelper.ClientNow();
             
-            OpcodeHelper.LogMsg(self.DomainZone(), message);
-            
+            self.LogMsg(message);
+			
             EventSystem.Instance.Publish(Root.Instance.Scene, new NetServerComponentOnRead() {Session = session, Message = message});
         }
     }

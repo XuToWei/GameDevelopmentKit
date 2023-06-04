@@ -1,13 +1,14 @@
-using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace ET.Client
 {
     [FriendOf(typeof(OperaComponent))]
-    public static class OperaComponentSystem
+    public static partial class OperaComponentSystem
     {
-        [ObjectSystem]
-        public class OperaComponentAwakeSystem : AwakeSystem<OperaComponent>
+        [EntitySystem]
+        private class OperaComponentAwakeSystem : AwakeSystem<OperaComponent>
         {
             protected override void Awake(OperaComponent self)
             {
@@ -15,10 +16,10 @@ namespace ET.Client
             }
         }
 
-        [ObjectSystem]
-        public class OperaComponentUpdateSystem : UpdateSystem<OperaComponent>
+        [EntitySystem]
+        private class OperaComponentUpdateSystem : UpdateSystem<OperaComponent>
         {
-            protected override async void Update(OperaComponent self)
+            protected override void Update(OperaComponent self)
             {
                 if (Input.GetMouseButtonDown(1))
                 {
@@ -34,11 +35,10 @@ namespace ET.Client
 
                 if (Input.GetKeyDown(KeyCode.R))
                 {
-                    await CodeLoaderComponent.Instance.LoadHotfixAsync();
-                    EventSystem.Instance.Load();
+                    Game.Load();
                     Log.Debug("hot reload success!");
                 }
-            
+        
                 if (Input.GetKeyDown(KeyCode.T))
                 {
                     C2M_TransferMap c2MTransferMap = new C2M_TransferMap();

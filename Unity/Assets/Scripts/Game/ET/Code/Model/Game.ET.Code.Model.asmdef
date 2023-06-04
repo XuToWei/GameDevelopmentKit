@@ -8,7 +8,7 @@
         "LubanLib",
         "UniTask",
         "ZString",
-        "protobuf-net"
+        "MemoryPack"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

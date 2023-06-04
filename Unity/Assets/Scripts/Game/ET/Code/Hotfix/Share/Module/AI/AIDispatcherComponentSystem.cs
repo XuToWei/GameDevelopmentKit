@@ -3,10 +3,10 @@ using System;
 namespace ET
 {
     [FriendOf(typeof(AIDispatcherComponent))]
-    public static class AIDispatcherComponentSystem
+    public static partial class AIDispatcherComponentSystem
     {
-        [ObjectSystem]
-        public class AIDispatcherComponentAwakeSystem: AwakeSystem<AIDispatcherComponent>
+        [EntitySystem]
+        private class AIDispatcherComponentAwakeSystem : AwakeSystem<AIDispatcherComponent>
         {
             protected override void Awake(AIDispatcherComponent self)
             {
@@ -15,17 +15,8 @@ namespace ET
             }
         }
 
-        [ObjectSystem]
-        public class AIDispatcherComponentLoadSystem: LoadSystem<AIDispatcherComponent>
-        {
-            protected override void Load(AIDispatcherComponent self)
-            {
-                self.Load();
-            }
-        }
-
-        [ObjectSystem]
-        public class AIDispatcherComponentDestroySystem: DestroySystem<AIDispatcherComponent>
+        [EntitySystem]
+        private class AIDispatcherComponentDestroySystem : DestroySystem<AIDispatcherComponent>
         {
             protected override void Destroy(AIDispatcherComponent self)
             {
@@ -33,7 +24,16 @@ namespace ET
                 AIDispatcherComponent.Instance = null;
             }
         }
-        
+
+        [EntitySystem]
+        private class AIDispatcherComponentLoadSystem : LoadSystem<AIDispatcherComponent>
+        {
+            protected override void Load(AIDispatcherComponent self)
+            {
+                self.Load();
+            }
+        }
+
         private static void Load(this AIDispatcherComponent self)
         {
             self.AIHandlers.Clear();

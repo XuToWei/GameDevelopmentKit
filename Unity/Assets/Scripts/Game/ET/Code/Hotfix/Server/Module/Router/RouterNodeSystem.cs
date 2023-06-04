@@ -1,10 +1,10 @@
 ﻿namespace ET.Server
 {
     [FriendOf(typeof(RouterNode))]
-    public static class RouterNodeSystem
+    public static partial class RouterNodeSystem
     {
-        [ObjectSystem]
-        public class RouterNodeAwakeSystem: AwakeSystem<RouterNode>
+        [EntitySystem]
+        private class RouterNodeAwakeSystem : AwakeSystem<RouterNode>
         {
             protected override void Awake(RouterNode self)
             {
@@ -19,8 +19,8 @@
             }
         }
 
-        [ObjectSystem]
-        public class RouterNodeDestroySystem: DestroySystem<RouterNode>
+        [EntitySystem]
+        private class RouterNodeDestroySystem : DestroySystem<RouterNode>
         {
             protected override void Destroy(RouterNode self)
             {
@@ -35,7 +35,7 @@
                 self.SyncCount = 0;
             }
         }
-        
+
         public static bool CheckOuterCount(this RouterNode self, long timeNow)
         {
             if (self.LastCheckTime == 0)

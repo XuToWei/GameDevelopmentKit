@@ -23,5 +23,20 @@ namespace ET.Client
         /// 登录界面。
         /// </summary>
         public const int UILogin = 103;
+
+        /// <summary>
+        /// 登录界面。
+        /// </summary>
+        public const int UILSLogin = 201;
+
+        /// <summary>
+        /// 大厅面。
+        /// </summary>
+        public const int UILSLobby = 202;
+
+        /// <summary>
+        /// 房间界面。
+        /// </summary>
+        public const int UILSRoom = 203;
     }
 }

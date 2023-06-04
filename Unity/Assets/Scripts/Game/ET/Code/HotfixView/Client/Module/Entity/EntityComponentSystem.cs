@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Game;
 
@@ -8,21 +9,21 @@ namespace ET.Client
     [FriendOf(typeof(UGFEntity))]
     public static class EntityComponentSystem
     {
-        [ObjectSystem]
-        public class EntityComponentAwakeSystem: AwakeSystem<EntityComponent>
+        [EntitySystem]
+        private class EntityComponentAwakeSystem: AwakeSystem<EntityComponent>
         {
             protected override void Awake(EntityComponent self)
             {
-                EntityComponent.Instance = self;
+                self.AllShowEntities.Clear();
             }
         }
 
-        [ObjectSystem]
-        public class EntityComponentDestroySystem: DestroySystem<EntityComponent>
+        [EntitySystem]
+        private class EntityComponentDestroySystem: DestroySystem<EntityComponent>
         {
             protected override void Destroy(EntityComponent self)
             {
-                EntityComponent.Instance = null;
+                self.HideAllEntities();
             }
         }
         
@@ -35,7 +36,11 @@ namespace ET.Client
                 formData.Release();
                 return null;
             }
-            return (entity.Logic as ETMonoEntity).ugfEntity;
+            if (entity.Logic is not ETMonoEntity etMonoEntity)
+            {
+                throw new Exception($"Get UGFEntity fail! EntityTypeId:{entityTypeId}) is not ETMonoEntity!");
+            }
+            return etMonoEntity.ugfEntity;
         }
 
         public static void HideEntity(this EntityComponent self, UGFEntity entity)
@@ -43,9 +48,17 @@ namespace ET.Client
             GameEntry.Entity.HideEntity(entity.etMonoEntity);
         }
 
-        public static void HideEntity(this UIComponent self, int entityId)
+        public static void HideEntity(this EntityComponent self, int entityId)
         {
             GameEntry.Entity.HideEntity(entityId);
+        }
+        
+        public static void HideAllEntities(this EntityComponent self)
+        {
+            foreach (UGFEntity entity in self.AllShowEntities.ToArray())
+            {
+                self.HideEntity(entity);
+            }
         }
         
         public static UGFEntity GetEntity(this EntityComponent self, int entityId)

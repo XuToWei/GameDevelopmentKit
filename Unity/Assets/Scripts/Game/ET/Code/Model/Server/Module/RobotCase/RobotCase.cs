@@ -1,11 +1,13 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 
 namespace ET.Server
 {
     [ChildOf(typeof(RobotCaseComponent))]
     public class RobotCase: Entity, IAwake, IDestroy
     {
-        public CancellationTokenSource Cts;
+        public CancellationTokenSource CancellationToken;
         public string CommandLine;
+        public HashSet<long> Scenes { get; } = new HashSet<long>();
     }
 }

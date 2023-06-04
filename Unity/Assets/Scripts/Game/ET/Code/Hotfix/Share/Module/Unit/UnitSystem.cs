@@ -1,11 +1,14 @@
 namespace ET
 {
-    [ObjectSystem]
-    public class UnitSystem: AwakeSystem<Unit, int>
+    public static partial class UnitSystem
     {
-        protected override void Awake(Unit self, int configId)
+        [EntitySystem]
+        private class UnitAwakeSystem : AwakeSystem<Unit, int>
         {
-            self.ConfigId = configId;
+            protected override void Awake(Unit self, int configId)
+            {
+                self.ConfigId = configId;
+            }
         }
     }
 }

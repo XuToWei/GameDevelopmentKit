@@ -21,12 +21,13 @@ namespace ET
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("// This is an automatically generated class by Share.Tool. Please do not modify it.");
                 sb.AppendLine("");
-                sb.Append("using ProtoBuf;\n");
+                sb.Append("using MemoryPack;\n");
                 sb.Append("using System.Collections.Generic;\n");
                 sb.Append($"namespace {ns}\n");
                 sb.Append("{\n");
 
                 bool isMsgStart = false;
+                string msgName = string.Empty;
                 foreach (string line in s.Split('\n'))
                 {
                     string newline = line.Trim();
@@ -54,7 +55,7 @@ namespace ET
                         string parentClass = "";
                         isMsgStart = true;
 
-                        string msgName = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries)[1];
+                        msgName = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries)[1];
                         string[] ss = newline.Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
 
                         if (ss.Length == 2)
@@ -65,8 +66,8 @@ namespace ET
                         msgOpcode.Add(new OpcodeInfo() { Name = msgName, Opcode = ++startOpcode });
 
                         sb.Append($"\t[Message({csName}.{msgName})]\n");
-                        sb.Append($"\t[ProtoContract]\n");
-                        sb.Append($"\tpublic partial class {msgName}: ProtoObject");
+                        sb.Append($"\t[MemoryPackable]\n");
+                        sb.Append($"\tpublic partial class {msgName}: MessageObject");
                         if (parentClass == "IActorMessage" || parentClass == "IActorRequest" || parentClass == "IActorResponse")
                         {
                             sb.Append($", {parentClass}\n");
@@ -88,6 +89,9 @@ namespace ET
                         if (newline == "{")
                         {
                             sb.Append("\t{\n");
+                            
+                            sb.Append($"\t\tpublic static {msgName} Create(bool isFromPool = false) {{ return !isFromPool? new {msgName}() : NetServices.Instance.FetchMessage(typeof({msgName})) as {msgName}; }}\n\n");
+                            sb.Append($"\t\tpublic override void Dispose() {{ NetServices.Instance.RecycleMessage(this); }}\n\n");
                             continue;
                         }
 
@@ -140,12 +144,12 @@ namespace ET
 
             private static void GenerateCS(StringBuilder sb, string path, string csName)
             {
-                if (!Directory.Exists(path))
+                if (!string.IsNullOrEmpty(path) && !Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
 
-                string csPath = Path.Combine(path, csName + ".cs");
+                string csPath = $"{path}/{csName}.cs";
                 using FileStream txt = new FileStream(csPath, FileMode.Create, FileAccess.ReadWrite);
                 using StreamWriter sw = new StreamWriter(txt);
                 sw.Write(sb.ToString().Replace("\t", "    "));
@@ -164,11 +168,10 @@ namespace ET
                 string tail = newline.Substring(end + 1);
                 ss = tail.Trim().Replace(";", "").Split(" ");
                 string v = ss[0];
-                string n = ss[2];
+                int n = int.Parse(ss[2]);
 
-                sb.Append(
-                    "\t\t[MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]\n");
-                sb.Append($"\t\t[ProtoMember({n})]\n");
+                sb.Append("\t\t[MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]\n");
+                sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
                 sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }}\n");
             }
 
@@ -184,7 +187,7 @@ namespace ET
                     string name = ss[2];
                     int n = int.Parse(ss[4]);
 
-                    sb.Append($"\t\t[ProtoMember({n})]\n");
+                    sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
                     sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }}\n\n");
                 }
                 catch (Exception e)
@@ -242,7 +245,7 @@ namespace ET
                     int n = int.Parse(ss[3]);
                     string typeCs = ConvertType(type);
 
-                    sb.Append($"\t\t[ProtoMember({n})]\n");
+                    sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
                     sb.Append($"\t\tpublic {typeCs} {name} {{ get; set; }}\n\n");
                 }
                 catch (Exception e)

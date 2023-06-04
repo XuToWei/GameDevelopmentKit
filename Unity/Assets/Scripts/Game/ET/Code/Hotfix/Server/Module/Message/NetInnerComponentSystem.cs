@@ -4,10 +4,10 @@ using System.Net.Sockets;
 namespace ET.Server
 {
     [FriendOf(typeof(NetInnerComponent))]
-    public static class NetInnerComponentSystem
+    public static partial class NetInnerComponentSystem
     {
-        [ObjectSystem]
-        public class NetInnerComponentAwakeSystem: AwakeSystem<NetInnerComponent>
+        [EntitySystem]
+        private class NetInnerComponentAwakeSystem1 : AwakeSystem<NetInnerComponent>
         {
             protected override void Awake(NetInnerComponent self)
             {
@@ -32,8 +32,8 @@ namespace ET.Server
             }
         }
 
-        [ObjectSystem]
-        public class NetInnerComponentAwake1System: AwakeSystem<NetInnerComponent, IPEndPoint>
+        [EntitySystem]
+        private class NetInnerComponentAwakeSystem2 : AwakeSystem<NetInnerComponent, IPEndPoint>
         {
             protected override void Awake(NetInnerComponent self, IPEndPoint address)
             {
@@ -59,8 +59,8 @@ namespace ET.Server
             }
         }
 
-        [ObjectSystem]
-        public class NetInnerComponentDestroySystem: DestroySystem<NetInnerComponent>
+        [EntitySystem]
+        private class NetInnerComponentDestroySystem : DestroySystem<NetInnerComponent>
         {
             protected override void Destroy(NetInnerComponent self)
             {

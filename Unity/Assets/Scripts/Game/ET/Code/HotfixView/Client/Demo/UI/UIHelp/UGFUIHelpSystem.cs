@@ -6,7 +6,8 @@ namespace ET.Client
     [FriendOf(typeof (UGFUIHelp))]
     public static partial class UGFUIHelpSystem
     {
-        public class UGFUIHelpAwakeSystem : AwakeSystem<UGFUIHelp, Transform>
+        [EntitySystem]
+        private class UGFUIHelpAwakeSystem : AwakeSystem<UGFUIHelp, Transform>
         {
              protected override void Awake(UGFUIHelp self, Transform uiTransform)
              {
@@ -14,7 +15,8 @@ namespace ET.Client
              }
         }
         
-        public class UGFUIHelpDestroySystem : DestroySystem<UGFUIHelp>
+        [EntitySystem]
+        private class UGFUIHelpDestroySystem : DestroySystem<UGFUIHelp>
         {
             protected override void Destroy(UGFUIHelp self)
             {

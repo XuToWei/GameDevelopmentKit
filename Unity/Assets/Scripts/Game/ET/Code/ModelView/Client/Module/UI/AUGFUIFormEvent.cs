@@ -15,12 +15,12 @@ namespace ET
 
         public virtual void OnOpen(UGFUIForm uiForm, object userData)
         {
-            UIComponent.Instance.AllOpenUIForms.Add(uiForm);
+            uiForm.DomainScene().GetComponent<UIComponent>().AllOpenUIForms.Add(uiForm);
         }
 
         public virtual void OnClose(UGFUIForm uiForm, bool isShutdown, object userData)
         {
-            UIComponent.Instance.AllOpenUIForms.Remove(uiForm);
+            uiForm.DomainScene().GetComponent<UIComponent>().AllOpenUIForms.Remove(uiForm);
         }
 
         public virtual void OnPause(UGFUIForm uiForm)

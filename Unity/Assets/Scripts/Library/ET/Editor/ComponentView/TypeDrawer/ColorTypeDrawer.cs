@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace ET.Editor
+namespace ET
 {
     [TypeDrawer]
     public class ColorTypeDrawer: ITypeDrawer

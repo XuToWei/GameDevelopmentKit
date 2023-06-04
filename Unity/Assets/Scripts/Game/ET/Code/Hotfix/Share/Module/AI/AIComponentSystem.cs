@@ -6,7 +6,7 @@ namespace ET
 {
     [FriendOf(typeof(AIComponent))]
     [FriendOf(typeof(AIDispatcherComponent))]
-    public static class AIComponentSystem
+    public static partial class AIComponentSystem
     {
         [Invoke(TimerInvokeType.AITimer)]
         public class AITimer: ATimer<AIComponent>
@@ -24,8 +24,8 @@ namespace ET
             }
         }
     
-        [ObjectSystem]
-        public class AIComponentAwakeSystem: AwakeSystem<AIComponent, int>
+        [EntitySystem]
+        private class AIComponentAwakeSystem : AwakeSystem<AIComponent, int>
         {
             protected override void Awake(AIComponent self, int aiConfigId)
             {
@@ -34,18 +34,18 @@ namespace ET
             }
         }
 
-        [ObjectSystem]
-        public class AIComponentDestroySystem: DestroySystem<AIComponent>
+        [EntitySystem]
+        private class AIComponentDestroySystem : DestroySystem<AIComponent>
         {
             protected override void Destroy(AIComponent self)
             {
                 TimerComponent.Instance?.Remove(ref self.Timer);
-                self.Cts?.Cancel();
-                self.Cts = null;
+                self.CancellationToken?.Cancel();
+                self.CancellationToken = null;
                 self.Current = 0;
             }
         }
-        
+
         public static void Check(this AIComponent self)
         {
             if (self.Parent == null)
@@ -80,7 +80,7 @@ namespace ET
 
                 self.Cancel(); // 取消之前的行为
                 CancellationTokenSource cancellationToken = new CancellationTokenSource();
-                self.Cts = cancellationToken;
+                self.CancellationToken = cancellationToken;
                 self.Current = aiConfig.Id;
 
                 aaiHandler.Execute(self, aiConfig, cancellationToken).Forget();
@@ -91,9 +91,9 @@ namespace ET
 
         private static void Cancel(this AIComponent self)
         {
-            self.Cts?.Cancel();
+            self.CancellationToken?.Cancel();
             self.Current = 0;
-            self.Cts = null;
+            self.CancellationToken = null;
         }
     }
 } 

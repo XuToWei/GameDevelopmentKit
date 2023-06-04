@@ -6,7 +6,8 @@ namespace ET.Client
     [FriendOf(typeof (UGFEntity#NAME#))]
     public static partial class UGFEntity#NAME#System
     {
-        public class UGFEntity#NAME#AwakeSystem : AwakeSystem<UGFEntity#NAME#, Transform>
+        [EntitySystem]
+        private class UGFEntity#NAME#AwakeSystem : AwakeSystem<UGFEntity#NAME#, Transform>
         {
              protected override void Awake(UGFEntity#NAME# self, Transform transform)
              {
@@ -14,7 +15,8 @@ namespace ET.Client
              }
         }
         
-        public class UGFEntity#NAME#DestroySystem : DestroySystem<UGFEntity#NAME#>
+        [EntitySystem]
+        private class UGFEntity#NAME#DestroySystem : DestroySystem<UGFEntity#NAME#>
         {
             protected override void Destroy(UGFEntity#NAME# self)
             {

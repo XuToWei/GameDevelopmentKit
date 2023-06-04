@@ -4,14 +4,14 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    public static class RobotManagerComponentSystem
+    public static partial class RobotManagerComponentSystem
     {
         public static async UniTask<Scene> NewRobot(this RobotManagerComponent self, int zone)
         {
             Scene clientScene = null;
             try
             {
-                clientScene = await Client.SceneFactory.CreateClientScene(zone, "Robot");
+                clientScene = await Client.SceneFactory.CreateClientScene(zone, SceneType.Robot, "Robot");
                 await Client.LoginHelper.Login(clientScene, zone.ToString(), zone.ToString());
                 await Client.EnterMapHelper.EnterMapAsync(clientScene);
                 Log.Debug($"create robot ok: {zone}");

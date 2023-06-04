@@ -6,7 +6,7 @@ using UnityGameFramework.Extension;
 namespace ET.Client
 {
     [Event(SceneType.Current)]
-    public class AfterUnitCreate_CreateUnitView : AEvent<EventType.AfterUnitCreate>
+    public class AfterUnitCreate_CreateUnitView: AEvent<Scene, EventType.AfterUnitCreate>
     {
         protected override async UniTask Run(Scene scene, EventType.AfterUnitCreate args)
         {

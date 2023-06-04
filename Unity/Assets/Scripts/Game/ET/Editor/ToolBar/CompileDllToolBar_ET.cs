@@ -31,7 +31,7 @@ namespace ET.Editor
                         try
                         {
                             await CodeLoaderComponent.Instance.LoadHotfixAsync();
-                            EventSystem.Instance.Load();
+                            Game.Load();
                         }
                         finally
                         {

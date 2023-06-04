@@ -4,10 +4,7 @@ namespace ET.Client
 {
     public class EntityComponent : Entity, IAwake, IDestroy
     {
-        [StaticField]
-        public static EntityComponent Instance;
-
-        //所有显示的UIForm实体
+        //所有显示的Entity实体
         public readonly HashSet<UGFEntity> AllShowEntities = new HashSet<UGFEntity>();
     }
 }

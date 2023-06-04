@@ -23,6 +23,8 @@ namespace ET
 		private bool isConnected;
 
 		private readonly PacketParser parser;
+		
+		public IPEndPoint RemoteAddress { get; set; }
 
 		private readonly byte[] sendCache = new byte[Packet.OpcodeLength + Packet.ActorIdLength];
 
@@ -90,12 +92,14 @@ namespace ET
 			this.socket = null;
 		}
 
-		public void Send(long actorId, MemoryStream stream)
+		public void Send(long actorId, MessageObject message)
 		{
 			if (this.IsDisposed)
 			{
 				throw new Exception("TChannel已经被Dispose, 不能发送消息");
 			}
+			
+			MemoryBuffer stream = this.Service.Fetch(message);
 
 			switch (this.Service.ServiceType)
 			{
@@ -352,7 +356,7 @@ namespace ET
 			}
 		}
 		
-		private void OnRead(MemoryStream memoryStream)
+		private void OnRead(MemoryBuffer memoryStream)
 		{
 			try
 			{
@@ -365,7 +369,7 @@ namespace ET
 					{
 						ushort opcode = BitConverter.ToUInt16(memoryStream.GetBuffer(), Packet.KcpOpcodeIndex);
 						Type type = NetServices.Instance.GetType(opcode);
-						message = SerializeHelper.Deserialize(type, memoryStream);
+						message = MessageSerializeHelper.Deserialize(type, memoryStream);
 						break;
 					}
 					case ServiceType.Inner:
@@ -373,7 +377,7 @@ namespace ET
 						actorId = BitConverter.ToInt64(memoryStream.GetBuffer(), Packet.ActorIdIndex);
 						ushort opcode = BitConverter.ToUInt16(memoryStream.GetBuffer(), Packet.OpcodeIndex);
 						Type type = NetServices.Instance.GetType(opcode);
-						message = SerializeHelper.Deserialize(type, memoryStream);
+						message = MessageSerializeHelper.Deserialize(type, memoryStream);
 						break;
 					}
 				}

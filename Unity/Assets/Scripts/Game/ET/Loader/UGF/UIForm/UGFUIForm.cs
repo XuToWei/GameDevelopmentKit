@@ -30,8 +30,8 @@ namespace ET
             this.uiFormId = uiFormId;
         }
 
-        [ObjectSystem]
-        public sealed class UGFUIFormAwakeSystem: AwakeSystem<UGFUIForm, int, ETMonoUIForm>
+        [EntitySystem]
+        private class UGFUIFormAwakeSystem: AwakeSystem<UGFUIForm, int, ETMonoUIForm>
         {
             protected override void Awake(UGFUIForm self, int uiFormId, ETMonoUIForm ugfETUIForm)
             {
@@ -41,8 +41,8 @@ namespace ET
             }
         }
         
-        [ObjectSystem]
-        public sealed class UGFUIFormLoadSystem: LoadSystem<UGFUIForm>
+        [EntitySystem]
+        private class UGFUIFormLoadSystem: LoadSystem<UGFUIForm>
         {
             protected override void Load(UGFUIForm self)
             {

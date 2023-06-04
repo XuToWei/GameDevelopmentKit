@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using Cysharp.Threading.Tasks;
 
 namespace ET.Server
@@ -7,7 +9,7 @@ namespace ET.Server
     [HttpHandler(SceneType.RouterManager, "/get_router")]
     public class HttpGetRouterHandler : IHttpHandler
     {
-        public async UniTask Handle(Entity domain, HttpListenerContext context)
+        public async UniTask Handle(Scene scene, HttpListenerContext context)
         {
             HttpGetRouterResponse response = new HttpGetRouterResponse();
             response.Realms = new List<string>();

@@ -25,7 +25,7 @@ namespace ET.Editor
                         try
                         {
                             await ConfigComponent.Instance.ReloadAllAsync();
-                            EventSystem.Instance.Load();
+                            Game.Load();
                             ShowNotification("Export And Reload All Excel!");
                         }
                         finally

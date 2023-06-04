@@ -1,24 +1,46 @@
-﻿namespace ET
-{
-    public enum SceneType
-    {
-        None = -1,
-        Process = 0,
-        Manager = 1,
-        Realm = 2,
-        Gate = 3,
-        Http = 4,
-        Location = 5,
-        Map = 6,
-        Router = 7,
-        RouterManager = 8,
-        Robot = 9,
-        BenchmarkClient = 10,
-        BenchmarkServer = 11,
-        Benchmark = 12,
+﻿using System;
 
-        // 客户端Model层
-        Client = 31,
-        Current = 34,
-    }
+namespace ET
+{
+	[Flags]
+	public enum SceneType: ulong
+	{
+		None = 0,
+		Process = 1,
+		Manager = 1 << 2,
+		Realm = 1 << 3,
+		Gate = 1 << 4,
+		Http = 1 << 5,
+		Location = 1 << 6,
+		Map = 1 << 7,
+		Router = 1 << 8,
+		RouterManager = 1 << 9,
+		Robot = 1 << 10,
+		BenchmarkClient = 1 << 11,
+		BenchmarkServer = 1 << 12,
+		Benchmark = 1 << 13,
+		Match = 1 << 14,
+		Room = 1 << 15,
+		LockStepClient = 1 << 16,
+		LockStepServer = 1 << 17,
+
+		// 客户端Model层
+		Demo = 1 << 30,
+		Current = 1ul << 31,
+		LockStep = 1ul << 32,
+
+		All = ulong.MaxValue,
+	}
+
+	public static class SceneTypeHelper
+	{
+		public static bool HasSameFlag(this SceneType a, SceneType b)
+		{
+			if (((ulong) a & (ulong) b) == 0)
+			{
+				return false;
+			}
+			return true;
+		}
+	}
 }

@@ -20,7 +20,7 @@
         "Coffee.UnmaskForUGUI",
         "LoopScrollRect.Runtime",
         "ZString",
-        "protobuf-net"
+        "MemoryPack"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

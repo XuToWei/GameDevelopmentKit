@@ -1,4 +1,4 @@
-#if UNITY_ET_VIEW
+#if ENABLE_VIEW
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -6,10 +6,10 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace ET.Editor
+namespace ET
 {
     [CustomEditor(typeof (ComponentView))]
-    public class ComponentViewEditor: UnityEditor.Editor
+    public class ComponentViewEditor: Editor
     {
         public override void OnInspectorGUI()
         {

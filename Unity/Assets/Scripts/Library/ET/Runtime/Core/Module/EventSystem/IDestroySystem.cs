@@ -11,7 +11,7 @@ namespace ET
 		void Run(Entity o);
 	}
 
-	[ObjectSystem]
+	[EntitySystem]
 	public abstract class DestroySystem<T> : IDestroySystem where T: Entity, IDestroy
 	{
 		void IDestroySystem.Run(Entity o)
@@ -24,7 +24,7 @@ namespace ET
 			return typeof(IDestroySystem);
 		}
 
-		InstanceQueueIndex ISystemType.GetInstanceQueueIndex()
+		int ISystemType.GetInstanceQueueIndex()
 		{
 			return InstanceQueueIndex.None;
 		}

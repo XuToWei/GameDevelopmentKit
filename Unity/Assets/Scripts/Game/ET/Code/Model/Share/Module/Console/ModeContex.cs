@@ -1,22 +1,28 @@
 ﻿namespace ET
 {
-    [ObjectSystem]
-    public class ModeContexAwakeSystem: AwakeSystem<ModeContex>
+    [FriendOf(typeof(ModeContex))]
+    public static partial class ModeContexSystem
     {
-        protected override void Awake(ModeContex self)
+        [EntitySystem]
+        private class ModeContexAwakeSystem : AwakeSystem<ModeContex>
         {
-            self.Mode = "";
+            protected override void Awake(ModeContex self)
+            {
+                self.Mode = "";
+            }
         }
-    }
 
-    [ObjectSystem]
-    public class ModeContexDestroySystem: DestroySystem<ModeContex>
-    {
-        protected override void Destroy(ModeContex self)
+        [EntitySystem]
+        private class ModeContexDestroySystem : DestroySystem<ModeContex>
         {
-            self.Mode = "";
+            protected override void Destroy(ModeContex self)
+            {
+                self.Mode = "";
+            }
         }
     }
+    
+
 
     [ComponentOf(typeof(ConsoleComponent))]
     public class ModeContex: Entity, IAwake, IDestroy

@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Client
 {
-    public static class RouterHelper
+    public static partial class RouterHelper
     {
         // 注册router
         public static async UniTask<Session> CreateRouterSession(Scene clientScene, IPEndPoint address)

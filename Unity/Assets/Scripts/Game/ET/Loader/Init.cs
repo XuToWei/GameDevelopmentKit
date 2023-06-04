@@ -73,11 +73,15 @@ namespace ET
 
             Game.AddSingleton<MainThreadSynchronizationContext>();
 
+            Game.AddSingleton<GlobalComponent>();
+
             // 命令行参数
             string[] args = "".Split(" ");
             Parser.Default.ParseArguments<Options>(args)
                     .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
                     .WithParsed(Game.AddSingleton);
+
+            Options.Instance.StartConfig = "Localhost";
 
             Game.AddSingleton<TimeInfo>().ITimeNow = new UnityTimeNow();
             Game.AddSingleton<Logger>().ILog = new UnityLogger();

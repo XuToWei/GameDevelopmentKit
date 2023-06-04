@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace ET.Server
 {
-    public static class WatcherHelper
+    public static partial class WatcherHelper
     {
         public static DRStartMachineConfig GetThisMachineConfig()
         {
@@ -50,7 +50,8 @@ namespace ET.Server
                     $" --LogLevel={Options.Instance.LogLevel}" +
                     $" --Console={Options.Instance.Console}";
             Log.Debug($"{exe} {arguments}");
-            return ProcessHelper.Run(exe, arguments);
+            Process process = ProcessHelper.Run(exe, arguments);
+            return process;
         }
     }
 }

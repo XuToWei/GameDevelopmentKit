@@ -7,7 +7,8 @@ namespace ET.Client
     [FriendOf(typeof (UGFUILogin))]
     public static partial class UGFUILoginSystem
     {
-        public class UGFUILoginAwakeSystem : AwakeSystem<UGFUILogin, Transform>
+        [EntitySystem]
+        private class UGFUILoginAwakeSystem : AwakeSystem<UGFUILogin, Transform>
         {
              protected override void Awake(UGFUILogin self, Transform uiTransform)
              {
@@ -15,7 +16,8 @@ namespace ET.Client
              }
         }
         
-        public class UGFUILoginDestroySystem : DestroySystem<UGFUILogin>
+        [EntitySystem]
+        private class UGFUILoginDestroySystem : DestroySystem<UGFUILogin>
         {
             protected override void Destroy(UGFUILogin self)
             {
@@ -23,12 +25,12 @@ namespace ET.Client
             }
         }
         
-        public static void OnLogin(this UGFUILogin self)
+        public static UniTask OnLogin(this UGFUILogin self)
         {
-            LoginHelper.Login(
-                self.DomainScene(), 
-                self.AccountInputField.text, 
-                self.PasswordInputField.text).Forget();
+            return LoginHelper.Login(
+                self.DomainScene(),
+                self.accountInputField.text,
+                self.passwordInputField.text);
         }
     }
 }

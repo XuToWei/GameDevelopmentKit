@@ -4,11 +4,10 @@ using Unity.Mathematics;
 namespace ET.Server
 {
     [FriendOf(typeof(AOIEntity))]
-    [FriendOf(typeof(Cell))]
-    public static class AOIEntitySystem
+    public static partial class AOIEntitySystem2
     {
-        [ObjectSystem]
-        public class AwakeSystem: AwakeSystem<AOIEntity, int, float3>
+        [EntitySystem]
+        private class AOIEntityAwakeSystem : AwakeSystem<AOIEntity, int, float3>
         {
             protected override void Awake(AOIEntity self, int distance, float3 pos)
             {
@@ -17,8 +16,8 @@ namespace ET.Server
             }
         }
 
-        [ObjectSystem]
-        public class DestroySystem: DestroySystem<AOIEntity>
+        [EntitySystem]
+        private class AOIEntityDestroySystem : DestroySystem<AOIEntity>
         {
             protected override void Destroy(AOIEntity self)
             {
@@ -30,10 +29,14 @@ namespace ET.Server
                 self.BeSeeUnits.Clear();
                 self.SubEnterCells.Clear();
                 self.SubLeaveCells.Clear();
-                self.Cell = null;
             }
         }
-        
+    }
+    
+    [FriendOf(typeof(AOIEntity))]
+    [FriendOf(typeof(Cell))]
+    public static partial class AOIEntitySystem
+    {
         // 获取在自己视野中的对象
         public static Dictionary<long, AOIEntity> GetSeeUnits(this AOIEntity self)
         {

@@ -93,6 +93,11 @@ namespace Game
             button.onClick.Set(OnClick);
         }
 
+        public static void Set(this Button button, UnityAction unityAction)
+        {
+            button.onClick.Set(unityAction);
+        }
+
         public static void Set<T>(this UnityEvent<T> unityEvent, UnityAction<T> unityAction)
         {
             unityEvent.RemoveAllListeners();

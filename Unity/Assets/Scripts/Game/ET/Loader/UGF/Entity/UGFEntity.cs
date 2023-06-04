@@ -25,8 +25,8 @@ namespace ET
         
         public bool isShow;
         
-        [ObjectSystem]
-        public sealed class UGFEntityAwakeSystem: AwakeSystem<UGFEntity, Type, ETMonoEntity>
+        [EntitySystem]
+        private class UGFEntityAwakeSystem: AwakeSystem<UGFEntity, Type, ETMonoEntity>
         {
             protected override void Awake(UGFEntity self, Type entityEventType, ETMonoEntity ugfETUIForm)
             {
@@ -36,8 +36,8 @@ namespace ET
             }
         }
         
-        [ObjectSystem]
-        public sealed class UGFEntityLoadSystem: LoadSystem<UGFEntity>
+        [EntitySystem]
+        private class UGFEntityLoadSystem: LoadSystem<UGFEntity>
         {
             protected override void Load(UGFEntity self)
             {

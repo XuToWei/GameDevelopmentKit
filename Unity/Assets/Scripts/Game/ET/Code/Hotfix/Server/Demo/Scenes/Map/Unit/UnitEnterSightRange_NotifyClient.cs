@@ -4,7 +4,7 @@ namespace ET.Server
 {
     // 进入视野通知
     [Event(SceneType.Map)]
-    public class UnitEnterSightRange_NotifyClient: AEvent<EventType.UnitEnterSightRange>
+    public class UnitEnterSightRange_NotifyClient: AEvent<Scene, EventType.UnitEnterSightRange>
     {
         protected override async UniTask Run(Scene scene, EventType.UnitEnterSightRange args)
         {

@@ -4,7 +4,7 @@ using Unity.Mathematics;
 
 namespace ET.Client
 {
-    public class AI_XunLuo : AAIHandler
+    public class AI_XunLuo: AAIHandler
     {
         public override int Check(AIComponent aiComponent, DRAIConfig aiConfig)
         {
@@ -13,11 +13,10 @@ namespace ET.Client
             {
                 return 0;
             }
-
             return 1;
         }
 
-        public override async UniTaskVoid Execute(AIComponent aiComponent, DRAIConfig aiConfig, CancellationTokenSource cts)
+        public override async UniTaskVoid Execute(AIComponent aiComponent, DRAIConfig aiConfig, CancellationTokenSource cancellationToken)
         {
             Scene clientScene = aiComponent.DomainScene();
 
@@ -26,19 +25,18 @@ namespace ET.Client
             {
                 return;
             }
-
+            
             Log.Debug("开始巡逻");
 
             while (true)
             {
                 XunLuoPathComponent xunLuoPathComponent = myUnit.GetComponent<XunLuoPathComponent>();
                 float3 nextTarget = xunLuoPathComponent.GetCurrent();
-                await myUnit.MoveToAsync(nextTarget, cts);
-                if (cts.IsCancellationRequested)
+                await myUnit.MoveToAsync(nextTarget, cancellationToken);
+                if (cancellationToken.IsCancellationRequested)
                 {
                     return;
                 }
-
                 xunLuoPathComponent.MoveNext();
             }
         }
