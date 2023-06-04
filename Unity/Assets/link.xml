@@ -66,14 +66,14 @@
     <assembly fullname="MongoDB.Driver" preserve="all" />
     <!--UNITY_HOTFIX_ET_SERVER_END-->
 
-    <!--UNITY_GAMEHOT_FIRST-->
-    <!--UNITY_GAMEHOT_END-->
+    <!--UNITY_GAMEHOT-
+    -UNITY_GAMEHOT-->
 
     <!--UNITY_!HOTFIX_GAMEHOT-
     <assembly fullname="Game.Hot.Code" preserve="all" />
     -UNITY_!HOTFIX_GAMEHOT-->
 
-    <!--UNITY_HOTFIX_GAMEHOT_FIRST-->
+    <!--UNITY_HOTFIX_GAMEHOT-
     <assembly fullname="Game.Hot.Loader" preserve="all" />
-    <!--UNITY_HOTFIX_GAMEHOT_END-->
+    -UNITY_HOTFIX_GAMEHOT-->
 </linker>
