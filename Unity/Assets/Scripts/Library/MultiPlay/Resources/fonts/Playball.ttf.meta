@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 014ff1f7803362c4fb3ccdbe94fd5c9a
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Playball
+  fontNames:
+  - Playball
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: cb4f7fcf666d397468f0e962a6b1c504, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,28 @@
+{
+	"name": "com.panettonegames.MultiPlay",
+	"version": "1.5.5",
+	"displayName": "MultiPlay",
+	"description": "Helps Multiplayer development by running multiple editors for the same project",
+	"type": "library",
+	"unity": "2020.1",
+	"author": {
+	"name": "Panettone Games",
+	"email": "panettonegames@gmail.com",
+	"url": "https://panettonegames.com"
+	},
+	"keywords": [
+	"Multiplayer",
+	"Photon",
+	"Mirror",
+	"PUN", 
+	"Editor",
+	"Multiple"
+  ],
+    "samples": [
+    {
+      "displayName": "Demo",
+      "description": "A basic demo showing client ID",
+      "path": "Demo"
+    }
+	]
+}
