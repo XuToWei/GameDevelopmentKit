@@ -1,6 +1,7 @@
-﻿using Game;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityGameFramework.Extension;
+using UnityGameFramework.Runtime;
+using GameEntry = Game.GameEntry;
 
 namespace ET.Client
 {
@@ -17,10 +18,9 @@ namespace ET.Client
                 {
                     LSUnit lsUnit = lsUnitComponent.GetChild<LSUnit>(playerId);
                 
-                    // GameObject prefab = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
-                    //
-                    // GameObject unitGo = UnityEngine.Object.Instantiate(prefab, GlobalComponent.Instance.Unit, true);
-                    GameObject unitGo = new GameObject();
+                    GameObject unitGo = GameEntry.DataNode.GetData<VarGameObject>("UnitGameObject");
+                    
+                    unitGo = UnityEngine.Object.Instantiate(unitGo);
                     unitGo.transform.position = lsUnit.Position.ToVector();
 
                     LSUnitView lsUnitView = self.AddChildWithId<LSUnitView, GameObject>(lsUnit.Id, unitGo);

@@ -24,7 +24,7 @@ namespace ET.Client
         {
             protected override void Destroy(UIComponent self)
             {
-                self.CloseAllUIForms();
+                
             }
         }
 
@@ -46,7 +46,9 @@ namespace ET.Client
 
         public static void CloseUIForm(this UIComponent self, UGFUIForm uiForm)
         {
-            GameEntry.UI.CloseUIForm(uiForm.etMonoUIForm.UIForm);
+            if (!self.AllOpenUIForms.Contains(uiForm))
+                return;
+            GameEntry.UI.CloseUIForm(uiForm.uiForm);
         }
 
         public static void CloseUIForm(this UIComponent self, int uiFormId)
@@ -68,7 +70,9 @@ namespace ET.Client
 
         public static void RefocusUIForm(this UIComponent self, UGFUIForm uiForm, object userData = null)
         {
-            GameEntry.UI.RefocusUIForm(uiForm.etMonoUIForm.UIForm, userData);
+            if (!self.AllOpenUIForms.Contains(uiForm))
+                return;
+            GameEntry.UI.RefocusUIForm(uiForm.uiForm, userData);
         }
 
         public static void CloseAllUIForms(this UIComponent self)

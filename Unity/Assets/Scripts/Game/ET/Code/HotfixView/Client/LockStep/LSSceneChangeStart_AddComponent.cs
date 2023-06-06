@@ -9,13 +9,15 @@ namespace ET.Client
     {
         protected override async UniTask Run(Scene clientScene, EventType.LSSceneChangeStart args)
         {
-            Room room = clientScene.GetComponent<Room>();
+            Room room = args.Room;
+            room.AddComponent<UIComponent>();
+            room.AddComponent<EntityComponent>();
             
             // 创建房间UI
-            await clientScene.GetComponent<UIComponent>().OpenUIFormAsync(UGFUIFormId.UILSRoom);
+            await room.GetComponent<UIComponent>().OpenUIFormAsync(UGFUIFormId.UILSRoom);
             
             // 切换到map场景
-            await GameEntry.Scene.LoadSceneAsync(room.Name);
+            await GameEntry.Scene.LoadSceneAsync(AssetUtility.GetSceneAsset(room.Name));
         }
     }
 }

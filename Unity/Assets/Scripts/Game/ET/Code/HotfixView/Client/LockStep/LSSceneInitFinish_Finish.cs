@@ -1,4 +1,9 @@
 using Cysharp.Threading.Tasks;
+using Game;
+using UnityEngine;
+using UnityGameFramework.Extension;
+using UnityGameFramework.Runtime;
+using GameEntry = Game.GameEntry;
 
 namespace ET.Client
 {
@@ -8,6 +13,9 @@ namespace ET.Client
         protected override async UniTask Run(Scene clientScene, EventType.LSSceneInitFinish args)
         {
             Room room = clientScene.GetComponent<Room>();
+            
+            GameObject unitGo = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
+            GameEntry.DataNode.SetData<VarGameObject>("UnitGameObject", unitGo);
             
             room.AddComponent<LSUnitViewComponent>();
             

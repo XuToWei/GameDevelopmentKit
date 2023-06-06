@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
-using Game;
 using UnityEngine;
-using UnityGameFramework.Extension;
+using UnityGameFramework.Runtime;
+using GameEntry = Game.GameEntry;
 
 namespace ET.Client
 {
@@ -13,7 +13,7 @@ namespace ET.Client
             Unit unit = args.Unit;
             // Unit View层
             // 这里资源需要卸载，Demo就不搞了
-            GameObject go = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
+            GameObject go = GameEntry.DataNode.GetData<VarGameObject>("UnitGameObject");
             
             go = UnityEngine.Object.Instantiate(go);
             go.transform.position = unit.Position;

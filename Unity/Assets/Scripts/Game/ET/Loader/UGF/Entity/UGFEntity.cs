@@ -3,45 +3,48 @@ using UnityEngine;
 
 namespace ET
 {
-    public sealed class UGFEntity : Entity, IAwake<Type, ETMonoEntity>, ILoad
+    public sealed class UGFEntity : Entity, IAwake<Type, ETMonoEntity>, IDestroy, ILoad
     {
-        public ETMonoEntity etMonoEntity
-        {
-            get;
-            private set;
-        }
+        public UnityGameFramework.Runtime.Entity entity { get; private set; }
 
-        public Type entityEventType
-        {
-            get;
-            private set;
-        }
-        
-        public Transform transform
-        {
-            get;
-            private set;
-        }
-        
-        public bool isShow;
-        
+        public Type entityEventType { get; private set; }
+
+        public Transform transform { get; private set; }
+
+        public bool isShow => this.m_ETMonoEntity.isShow;
+
+        private ETMonoEntity m_ETMonoEntity;
+
         [EntitySystem]
-        private class UGFEntityAwakeSystem: AwakeSystem<UGFEntity, Type, ETMonoEntity>
+        private class UGFEntityAwakeSystem : AwakeSystem<UGFEntity, Type, ETMonoEntity>
         {
-            protected override void Awake(UGFEntity self, Type entityEventType, ETMonoEntity ugfETUIForm)
+            protected override void Awake(UGFEntity self, Type entityEventType, ETMonoEntity etMonoEntity)
             {
-                self.etMonoEntity = ugfETUIForm;
+                self.m_ETMonoEntity = etMonoEntity;
                 self.entityEventType = entityEventType;
-                self.transform = self.etMonoEntity.CachedTransform;
+                self.transform = etMonoEntity.CachedTransform;
+                self.entity = etMonoEntity.Entity;
             }
         }
-        
+
         [EntitySystem]
-        private class UGFEntityLoadSystem: LoadSystem<UGFEntity>
+        private class UGFEntityDestroySystem : DestroySystem<UGFEntity>
+        {
+            protected override void Destroy(UGFEntity self)
+            {
+                self.m_ETMonoEntity = default;
+                self.entityEventType = default;
+                self.transform = default;
+                self.entity = default;
+            }
+        }
+
+        [EntitySystem]
+        private class UGFEntityLoadSystem : LoadSystem<UGFEntity>
         {
             protected override void Load(UGFEntity self)
             {
-                self.etMonoEntity.OnLoad();
+                self.m_ETMonoEntity.OnLoad();
             }
         }
     }

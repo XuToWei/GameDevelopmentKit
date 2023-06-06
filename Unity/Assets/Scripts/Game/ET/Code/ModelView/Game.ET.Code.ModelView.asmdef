@@ -9,6 +9,7 @@
         "Unity.Mathematics",
         "UnityEngine.UI",
         "LubanLib",
+        "GameFramework",
         "UnityGameFramework.Runtime",
         "UnityGameFramework.Extension",
         "CodeBind",
