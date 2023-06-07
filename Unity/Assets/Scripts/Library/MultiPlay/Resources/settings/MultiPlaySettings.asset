@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxNumberOfClones: 3
   clonesPath: ../Temp
-  linkLibraryAndProjectSettings: 0
+  linkLibrary: 1
