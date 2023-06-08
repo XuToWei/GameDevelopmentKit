@@ -54,13 +54,13 @@ namespace ET.Editor
             
             if (GUILayout.Button("Start Server(Single Process)"))
             {
-                string arguments = $"App.dll --Process=1 --StartConfig=StartConfig/{this.startConfig} --Console=1";
+                string arguments = $"App.dll --Process=1 --StartConfig={this.startConfig} --Console=1";
                 ProcessHelper.Run(dotnet, arguments, "../Bin/");
             }
             
             if (GUILayout.Button("Start Watcher"))
             {
-                string arguments = $"App.dll --AppType=Watcher --StartConfig=StartConfig/{this.startConfig} --Console=1";
+                string arguments = $"App.dll --AppType=Watcher --StartConfig={this.startConfig} --Console=1";
                 ProcessHelper.Run(dotnet, arguments, "../Bin/");
             }
 
