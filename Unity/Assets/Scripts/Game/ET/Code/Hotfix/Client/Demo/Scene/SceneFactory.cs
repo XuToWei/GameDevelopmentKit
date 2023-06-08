@@ -3,15 +3,16 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Client
 {
-    public static class SceneFactory
+    public static partial class SceneFactory
     {
-        public static async UniTask<Scene> CreateClientScene(int zone, string name)
+        public static async UniTask<Scene> CreateClientScene(int zone, SceneType sceneType, string name)
         {
             await UniTask.CompletedTask;
-            Scene clientScene = EntitySceneFactory.CreateScene(zone, SceneType.Client, name, ClientSceneManagerComponent.Instance);
-            clientScene.AddComponent<CurrentScenesComponent>();
+            
+            Scene clientScene = EntitySceneFactory.CreateScene(zone, sceneType, name, ClientSceneManagerComponent.Instance);
             clientScene.AddComponent<ObjectWait>();
             clientScene.AddComponent<PlayerComponent>();
+            clientScene.AddComponent<CurrentScenesComponent>();
             
             EventSystem.Instance.Publish(clientScene, new EventType.AfterCreateClientScene());
             return clientScene;
@@ -25,7 +26,5 @@ namespace ET.Client
             EventSystem.Instance.Publish(currentScene, new EventType.AfterCreateCurrentScene());
             return currentScene;
         }
-        
-        
     }
 }

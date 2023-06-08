@@ -1,7 +1,7 @@
 ﻿<Config>
   <Gen>
     <Open Value="TRUE" />
-    <Proto_File Value="OuterMessage_C.proto" />
+    <Proto_File Value="OuterMessage_C_10001.proto" />
     <Start_Opcode Value="10001" />
     <Code_Name Value="OuterMessage" />
     <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/Client/Message,../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Message" />
@@ -9,7 +9,7 @@
   </Gen>
   <Gen>
     <Open Value="TRUE" />
-    <Proto_File Value="InnerMessage_S.proto" />
+    <Proto_File Value="InnerMessage_S_20001.proto" />
     <Start_Opcode Value="20001" />
     <Code_Name Value="InnerMessage" />
     <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Message" />
@@ -17,10 +17,26 @@
   </Gen>
   <Gen>
     <Open Value="TRUE" />
-    <Proto_File Value="Game_C.proto" />
+    <Proto_File Value="LockStepOuter_C_11001.proto" />
+    <Start_Opcode Value="11001" />
+    <Code_Name Value="LockStepOuter" />
+    <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/Client/Message,../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Message" />
+    <Code_Type Value="ET" />
+  </Gen>
+  <Gen>
+    <Open Value="TRUE" />
+    <Proto_File Value="LockStepInner_S_21001.proto" />
+    <Start_Opcode Value="21001" />
+    <Code_Name Value="LockStepInner" />
+    <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Message" />
+    <Code_Type Value="ET" />
+  </Gen>
+  <Gen>
+    <Open Value="TRUE" />
+    <Proto_File Value="GameHot_C_30001.proto" />
     <Start_Opcode Value="30001" />
-     <Code_Name Value="GameMessage" />
-    <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/Generate/Message" />
+     <Code_Name Value="GameHotMessage" />
+    <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/Message" />
     <Code_Type Value="UGF" />
   </Gen>
 </Config>

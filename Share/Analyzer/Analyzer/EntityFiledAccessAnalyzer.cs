@@ -61,7 +61,7 @@ namespace ET.Analyzer
                 return;
             }
 
-            if (filedSymbol.ContainingType.BaseType?.ToString() != Definition.EntityType)
+            if (filedSymbol.ContainingType.BaseType?.ToString() != Definition.EntityType && filedSymbol.ContainingType.BaseType?.ToString() != Definition.LSEntityType)
             {
                 return;
             }
@@ -83,17 +83,17 @@ namespace ET.Analyzer
             }
 
             // 实体基类忽略处理
-            if (accessFieldClassSymbol.ToString() == Definition.EntityType)
+            if (accessFieldClassSymbol.ToString() is Definition.EntityType or Definition.LSEntityType)
             {
                 return;
             }
 
             // 允许类内部访问字段
-            if (accessFieldClassSymbol.ToString()== filedSymbol.ContainingType.ToString() )
+            if (accessFieldClassSymbol.ToString() == filedSymbol.ContainingType.ToString())
             {
                 return;
             }
-            
+
             //判断是否在实体类生命周期System中
             if (this.CheckIsEntityLifecycleSystem(accessFieldClassSymbol, filedSymbol.ContainingType))
             {
@@ -107,8 +107,8 @@ namespace ET.Analyzer
             }
 
             var builder = ImmutableDictionary.CreateBuilder<string, string?>();
-            builder.Add("FriendOfType",filedSymbol.ContainingType.ToString());
-            Diagnostic diagnostic = Diagnostic.Create(Rule, memberAccessExpressionSyntax.GetLocation(), builder.ToImmutable(),filedSymbol.ContainingType.ToString(),
+            builder.Add("FriendOfType", filedSymbol.ContainingType.ToString());
+            Diagnostic diagnostic = Diagnostic.Create(Rule, memberAccessExpressionSyntax.GetLocation(), builder.ToImmutable(), filedSymbol.ContainingType.ToString(),
                 filedSymbol.Name);
             context.ReportDiagnostic(diagnostic);
         }

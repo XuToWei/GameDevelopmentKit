@@ -1,4 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.IO;
+using Cysharp.Threading.Tasks;
+using MemoryPack;
 
 namespace ET
 {
@@ -28,16 +30,36 @@ namespace ET
         {
             StartAsync().Forget();
         }
+
+        private static async UniTask Test1()
+        {
+            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, 1, 2000))
+            {
+                await TimerComponent.Instance.WaitAsync(100000);
+            }
+        }
+        
+        private static async UniTask Test2()
+        {
+            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, 1, 10000))
+            {
+                await TimerComponent.Instance.WaitAsync(100000);
+            }
+        }
         
         private static async UniTask StartAsync()
         {
             WinPeriod.Init();
             
-            MongoHelper.Init();
-            ProtobufHelper.Init();
+            MongoHelper.RegisterStruct<LSInput>();
+            MongoHelper.Register();
             
+            Game.AddSingleton<EntitySystemSingleton>();
+            Game.AddSingleton<LSEntitySystemSington>();
+
             Game.AddSingleton<NetServices>();
             Game.AddSingleton<Root>();
+
             
             await ConfigComponent.Instance.LoadAllAsync();
             Root.Instance.Scene.AddComponent<DynamicEventWatcherComponent>();

@@ -8,13 +8,13 @@ namespace ET.Client
     public static partial class UGFUILobbySystem
     {
         [UGFUIFormEvent(UGFUIFormId.UILobby)]
-        public class UGFUILobbyEvent: AUGFUIFormEvent
+        private class UGFUILobbyEvent: AUGFUIFormEvent
         {
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
                 UGFUILobby uiLobby = uiForm.AddComponent<UGFUILobby, Transform>(uiForm.transform);
-                uiLobby.EnterMapButton.onClick.Set(() => { uiLobby.EnterMap().Forget(); });
+                uiLobby.enterMapButton.SetAsync(uiLobby.EnterMap);
             }
             
             public override void OnOpen(UGFUIForm uiForm, object userData)

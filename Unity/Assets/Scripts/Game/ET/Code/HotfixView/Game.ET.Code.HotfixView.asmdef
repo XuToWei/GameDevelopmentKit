@@ -8,6 +8,7 @@
         "Game.ET.Code.ModelView",
         "Game.ET.Loader",
         "Game",
+        "GameFramework",
         "UnityGameFramework.Runtime",
         "UnityGameFramework.Extension",
         "Unity.Mathematics",
@@ -23,7 +24,7 @@
         "Coffee.UnmaskForUGUI",
         "LoopScrollRect.Runtime",
         "ZString",
-        "protobuf-net"
+        "MemoryPack"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

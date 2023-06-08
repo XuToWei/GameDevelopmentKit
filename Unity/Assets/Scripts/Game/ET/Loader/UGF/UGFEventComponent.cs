@@ -61,18 +61,22 @@ namespace ET
     [FriendOf(typeof(UGFEventComponent))]
     public static class UGFEventComponentSystem
     {
-        [ObjectSystem]
-        public class UGFEventComponentAwakeSystem : AwakeSystem<UGFEventComponent>
+        [EntitySystem]
+        private class UGFEventComponentAwakeSystem : AwakeSystem<UGFEventComponent>
         {
             protected override void Awake(UGFEventComponent self)
             {
+                if (UGFEventComponent.Instance != null)
+                {
+                    throw new Exception("UGFEventComponent already exist!");
+                }
                 UGFEventComponent.Instance = self;
                 self.Init();
             }
         }
 
-        [ObjectSystem]
-        public class UGFEventComponentDestroySystem : DestroySystem<UGFEventComponent>
+        [EntitySystem]
+        private class UGFEventComponentDestroySystem : DestroySystem<UGFEventComponent>
         {
             protected override void Destroy(UGFEventComponent self)
             {
@@ -81,8 +85,8 @@ namespace ET
             }
         }
 
-        [ObjectSystem]
-        public class UGFEventComponentLoadSystem : LoadSystem<UGFEventComponent>
+        [EntitySystem]
+        private class UGFEventComponentLoadSystem : LoadSystem<UGFEventComponent>
         {
             protected override void Load(UGFEventComponent self)
             {

@@ -13,7 +13,7 @@ namespace ET.Client
             {
                 base.OnInit(uiForm, userData);
                 UGFUILogin uiLogin = uiForm.AddComponent<UGFUILogin, Transform>(uiForm.transform);
-                uiLogin.LoginButton.onClick.Set(()=> { uiLogin.OnLogin(); });
+                uiLogin.loginButton.SetAsync(uiLogin.OnLogin);
             }
             
             public override void OnOpen(UGFUIForm uiForm, object userData)

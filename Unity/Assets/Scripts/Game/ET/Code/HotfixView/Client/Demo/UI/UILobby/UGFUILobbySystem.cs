@@ -7,7 +7,8 @@ namespace ET.Client
     [FriendOf(typeof (UGFUILobby))]
     public static partial class UGFUILobbySystem
     {
-        public class UGFUILobbyAwakeSystem : AwakeSystem<UGFUILobby, Transform>
+        [EntitySystem]
+        private class UGFUILobbyAwakeSystem : AwakeSystem<UGFUILobby, Transform>
         {
              protected override void Awake(UGFUILobby self, Transform uiTransform)
              {
@@ -15,7 +16,8 @@ namespace ET.Client
              }
         }
         
-        public class UGFUILobbyDestroySystem : DestroySystem<UGFUILobby>
+        [EntitySystem]
+        private class UGFUILobbyDestroySystem : DestroySystem<UGFUILobby>
         {
             protected override void Destroy(UGFUILobby self)
             {
@@ -26,7 +28,7 @@ namespace ET.Client
         public static async UniTask EnterMap(this UGFUILobby self)
         {
             await EnterMapHelper.EnterMapAsync(self.ClientScene());
-            UIComponent.Instance.CloseUIForm(UGFUIFormId.UILobby);
+            self.DomainScene().GetComponent<UIComponent>().CloseUIForm(UGFUIFormId.UILobby);
         }
     }
 }

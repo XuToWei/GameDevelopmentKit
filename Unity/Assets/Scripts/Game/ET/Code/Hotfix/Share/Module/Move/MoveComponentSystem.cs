@@ -6,7 +6,7 @@ using Unity.Mathematics;
 namespace ET
 {
     [FriendOf(typeof(MoveComponent))]
-    public static class MoveComponentSystem
+    public static partial class MoveComponentSystem
     {
         [Invoke(TimerInvokeType.MoveTimer)]
         public class MoveTimer: ATimer<MoveComponent>
@@ -24,19 +24,20 @@ namespace ET
             }
         }
     
-        [ObjectSystem]
-        public class DestroySystem: DestroySystem<MoveComponent>
+        
+        [EntitySystem]
+        private class MoveComponentDestroySystem : DestroySystem<MoveComponent>
         {
             protected override void Destroy(MoveComponent self)
             {
-                self.MoveFinish(true);
+                self.MoveFinish(false);
             }
         }
 
-        [ObjectSystem]
-        public class AwakeSystem: AwakeSystem<MoveComponent>
+        [EntitySystem]
+        private class MoveComponentAwakeSystem : AwakeSystem<MoveComponent>
         {
-            protected override void Awake(MoveComponent self)
+           protected override void Awake(MoveComponent self)
             {
                 self.StartTime = 0;
                 self.StartPos = float3.zero;
@@ -49,7 +50,7 @@ namespace ET
                 self.TurnTime = 0;
             }
         }
-        
+
         public static bool IsArrived(this MoveComponent self)
         {
             return self.Targets.Count == 0;

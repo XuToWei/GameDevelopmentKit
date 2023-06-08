@@ -4,6 +4,18 @@
     [ComponentOf(typeof(Scene))]
     public class CurrentScenesComponent: Entity, IAwake
     {
-        public Scene Scene { get; set; }
+        private EntityRef<Scene> scene;
+
+        public Scene Scene
+        {
+            get
+            {
+                return this.scene;
+            }
+            set
+            {
+                this.scene = value;
+            }
+        }
     }
 }

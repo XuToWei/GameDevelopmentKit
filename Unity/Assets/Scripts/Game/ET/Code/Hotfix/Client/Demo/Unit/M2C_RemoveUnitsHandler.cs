@@ -2,8 +2,8 @@
 
 namespace ET.Client
 {
-	[MessageHandler(SceneType.Client)]
-	public class M2C_RemoveUnitsHandler : AMHandler<M2C_RemoveUnits>
+	[MessageHandler(SceneType.Demo)]
+	public class M2C_RemoveUnitsHandler : MessageHandler<M2C_RemoveUnits>
 	{
 		protected override async UniTask Run(Session session, M2C_RemoveUnits message)
 		{	

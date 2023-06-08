@@ -61,7 +61,7 @@ namespace ET
         /// <summary>
         /// key: time, value: timer id
         /// </summary>
-        private readonly MultiMap<long, long> TimeId = new();
+        private readonly MultiMap<long, long> TimeId = new(1000);
 
         private readonly Queue<long> timeOutTime = new();
 
@@ -98,16 +98,20 @@ namespace ET
                 return;
             }
 
-            foreach (KeyValuePair<long, List<long>> kv in this.TimeId)
+            using (var enumerator = this.TimeId.GetEnumerator())
             {
-                long k = kv.Key;
-                if (k > timeNow)
+                while (enumerator.MoveNext())
                 {
-                    this.minTime = k;
-                    break;
-                }
+                    var kv = enumerator.Current;
+                    long k = kv.Key;
+                    if (k > timeNow)
+                    {
+                        this.minTime = k;
+                        break;
+                    }
 
-                this.timeOutTime.Enqueue(k);
+                    this.timeOutTime.Enqueue(k);
+                }
             }
 
             while (this.timeOutTime.Count > 0)
@@ -120,6 +124,11 @@ namespace ET
                     this.timeOutTimerIds.Enqueue(timerId);
                 }
                 this.TimeId.Remove(time);
+            }
+
+            if (this.TimeId.Count == 0)
+            {
+                this.minTime = long.MaxValue;
             }
 
             while (this.timeOutTimerIds.Count > 0)
@@ -208,7 +217,7 @@ namespace ET
             TimerAction timer = TimerAction.Create(this.GetId(), TimerClass.OnceWaitTimer, timeNow, tillTime - timeNow, 0, tcs);
             this.AddTimer(timer);
             long timerId = timer.Id;
-            
+
             void CancelAction()
             {
                 if (this.Remove(timerId))
@@ -225,7 +234,7 @@ namespace ET
             }
             finally
             {
-                if (cancellationToken is {IsCancellationRequested : false })
+                if (cancellationToken is { IsCancellationRequested : false })
                 {
                     ctr?.Dispose();
                 }

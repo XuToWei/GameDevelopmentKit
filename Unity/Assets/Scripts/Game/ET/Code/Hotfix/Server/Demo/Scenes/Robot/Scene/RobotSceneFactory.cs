@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    public static class RobotSceneFactory
+    public static partial class RobotSceneFactory
     {
         public static async UniTask<Scene> Create(
             Entity parent,

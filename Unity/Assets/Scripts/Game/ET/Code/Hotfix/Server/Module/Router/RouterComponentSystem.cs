@@ -7,10 +7,10 @@ namespace ET.Server
 {
     [FriendOf(typeof (RouterComponent))]
     [FriendOf(typeof (RouterNode))]
-    public static class RouterComponentSystem
+    public static partial class RouterComponentSystem
     {
-        [ObjectSystem]
-        public class RouterComponentAwakeSystem: AwakeSystem<RouterComponent, IPEndPoint, string>
+        [EntitySystem]
+        private class RouterComponentAwakeSystem : AwakeSystem<RouterComponent, IPEndPoint, string>
         {
             protected override void Awake(RouterComponent self, IPEndPoint outerAddress, string innerIP)
             {
@@ -36,8 +36,8 @@ namespace ET.Server
             }
         }
 
-        [ObjectSystem]
-        public class RouterComponentDestroySystem: DestroySystem<RouterComponent>
+        [EntitySystem]
+        private class RouterComponentDestroySystem : DestroySystem<RouterComponent>
         {
             protected override void Destroy(RouterComponent self)
             {
@@ -48,8 +48,9 @@ namespace ET.Server
             }
         }
 
-        [ObjectSystem]
-        public class RouterComponentUpdateSystem: UpdateSystem<RouterComponent>
+
+        [EntitySystem]
+        private class RouterComponentUpdateSystem : UpdateSystem<RouterComponent>
         {
             protected override void Update(RouterComponent self)
             {

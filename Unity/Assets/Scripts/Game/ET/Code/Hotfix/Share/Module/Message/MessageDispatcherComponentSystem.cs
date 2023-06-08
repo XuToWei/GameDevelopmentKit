@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ET
 {
@@ -7,10 +8,10 @@ namespace ET
     /// 消息分发组件
     /// </summary>
     [FriendOf(typeof(MessageDispatcherComponent))]
-    public static class MessageDispatcherComponentHelper
+    public static partial class MessageDispatcherComponentHelper
     {
-        [ObjectSystem]
-        public class MessageDispatcherComponentAwakeSystem: AwakeSystem<MessageDispatcherComponent>
+        [EntitySystem]
+        private class MessageDispatcherComponentAwakeSystem : AwakeSystem<MessageDispatcherComponent>
         {
             protected override void Awake(MessageDispatcherComponent self)
             {
@@ -19,22 +20,22 @@ namespace ET
             }
         }
 
-        [ObjectSystem]
-        public class MessageDispatcherComponentLoadSystem: LoadSystem<MessageDispatcherComponent>
-        {
-            protected override void Load(MessageDispatcherComponent self)
-            {
-                self.Load();
-            }
-        }
-
-        [ObjectSystem]
-        public class MessageDispatcherComponentDestroySystem: DestroySystem<MessageDispatcherComponent>
+        [EntitySystem]
+        private class MessageDispatcherComponentDestroySystem : DestroySystem<MessageDispatcherComponent>
         {
             protected override void Destroy(MessageDispatcherComponent self)
             {
                 MessageDispatcherComponent.Instance = null;
                 self.Handlers.Clear();
+            }
+        }
+
+        [EntitySystem]
+        private class MessageDispatcherComponentLoadSystem : LoadSystem<MessageDispatcherComponent>
+        {
+            protected override void Load(MessageDispatcherComponent self)
+            {
+                self.Load();
             }
         }
 
@@ -53,7 +54,7 @@ namespace ET
                     continue;
                 }
 
-                object[] attrs = type.GetCustomAttributes(typeof(MessageHandlerAttribute), false);
+                object[] attrs = type.GetCustomAttributes(typeof(MessageHandlerAttribute), true);
                 
                 foreach (object attr in attrs)
                 {
@@ -94,10 +95,10 @@ namespace ET
                 return;
             }
 
-            SceneType sceneType = session.DomainScene().SceneType;
+            SceneType sceneType = session.Domain.SceneType;
             foreach (MessageDispatcherInfo ev in actions)
             {
-                if (ev.SceneType != sceneType)
+                if (!ev.SceneType.HasSameFlag(sceneType))
                 {
                     continue;
                 }

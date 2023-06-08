@@ -6,9 +6,10 @@ using Cysharp.Threading.Tasks;
 namespace ET.Server
 {
     [FriendOf(typeof(HttpComponent))]
-    public static class HttpComponentSystem
+    public static partial class HttpComponentSystem
     {
-        public class HttpComponentAwakeSystem : AwakeSystem<HttpComponent, string>
+        [EntitySystem]
+        private class HttpComponentAwakeSystem : AwakeSystem<HttpComponent, string>
         {
             protected override void Awake(HttpComponent self, string address)
             {
@@ -38,17 +39,8 @@ namespace ET.Server
             }
         }
 
-        [ObjectSystem]
-        public class HttpComponentLoadSystem: LoadSystem<HttpComponent>
-        {
-            protected override void Load(HttpComponent self)
-            {
-                self.Load();
-            }
-        }
-
-        [ObjectSystem]
-        public class HttpComponentDestroySystem: DestroySystem<HttpComponent>
+        [EntitySystem]
+        private class HttpComponentDestroySystem : DestroySystem<HttpComponent>
         {
             protected override void Destroy(HttpComponent self)
             {
@@ -56,14 +48,22 @@ namespace ET.Server
                 self.Listener.Close();
             }
         }
-        
+
+        [EntitySystem]
+        private class HttpComponentLoadSystem : LoadSystem<HttpComponent>
+        {
+            protected override void Load(HttpComponent self)
+            {
+                self.Load();
+            }
+        }
         private static void Load(this HttpComponent self)
         {
             self.dispatcher = new Dictionary<string, IHttpHandler>();
 
             HashSet<Type> types = EventSystem.Instance.GetTypes(typeof (HttpHandlerAttribute));
 
-            SceneType sceneType = self.GetParent<Scene>().SceneType;
+            SceneType sceneType = (self.Parent as IScene).SceneType;
 
             foreach (Type type in types)
             {
@@ -91,7 +91,7 @@ namespace ET.Server
             }
         }
         
-        private static async UniTaskVoid Accept(this HttpComponent self)
+        public static async UniTaskVoid Accept(this HttpComponent self)
         {
             long instanceId = self.InstanceId;
             while (self.InstanceId == instanceId)
@@ -111,14 +111,14 @@ namespace ET.Server
             }
         }
 
-        private static async UniTaskVoid Handle(this HttpComponent self, HttpListenerContext context)
+        public static async UniTaskVoid Handle(this HttpComponent self, HttpListenerContext context)
         {
             try
             {
                 IHttpHandler handler;
                 if (self.dispatcher.TryGetValue(context.Request.Url.AbsolutePath, out handler))
                 {
-                    await handler.Handle(self.Domain, context);
+                    await handler.Handle(self.DomainScene(), context);
                 }
             }
             catch (Exception e)

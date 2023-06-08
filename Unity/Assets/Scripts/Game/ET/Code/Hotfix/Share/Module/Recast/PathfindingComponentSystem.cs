@@ -5,10 +5,10 @@ using Unity.Mathematics;
 namespace ET
 {
     [FriendOf(typeof(PathfindingComponent))]
-    public static class PathfindingComponentSystem
+    public static partial class PathfindingComponentSystem
     {
-        [ObjectSystem]
-        public class AwakeSystem: AwakeSystem<PathfindingComponent, string>
+        [EntitySystem]
+        private class PathfindingComponentAwakeSystem : AwakeSystem<PathfindingComponent, string>
         {
             protected override void Awake(PathfindingComponent self, string name)
             {
@@ -22,8 +22,8 @@ namespace ET
             }
         }
 
-        [ObjectSystem]
-        public class DestroySystem: DestroySystem<PathfindingComponent>
+        [EntitySystem]
+        private class PathfindingComponentDestroySystem : DestroySystem<PathfindingComponent>
         {
             protected override void Destroy(PathfindingComponent self)
             {
@@ -31,7 +31,7 @@ namespace ET
                 self.NavMesh = 0;
             }
         }
-        
+
         public static void Find(this PathfindingComponent self, float3 start, float3 target, List<float3> result)
         {
             if (self.NavMesh == 0)

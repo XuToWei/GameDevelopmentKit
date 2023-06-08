@@ -53,7 +53,7 @@ namespace ET
                 info.Proto_File = xmlGen.SelectSingleNode("Proto_File").Attributes.GetNamedItem("Value").Value;
                 info.Start_Opcode = int.Parse(xmlGen.SelectSingleNode("Start_Opcode").Attributes.GetNamedItem("Value").Value);
                 info.Code_Name = xmlGen.SelectSingleNode("Code_Name").Attributes.GetNamedItem("Value").Value;
-                string dirsStr = xmlGen.SelectSingleNode("Code_Output_Dirs").Attributes.GetNamedItem("Value").Value.Replace("\n", "");
+                string dirsStr = xmlGen.SelectSingleNode("Code_Output_Dirs").Attributes.GetNamedItem("Value").Value;
                 info.Code_Output_Dirs = dirsStr.Split(',').ToList();
                 info.Code_Type = Enum.Parse<GenCodeType>(xmlGen.SelectSingleNode("Code_Type").Attributes.GetNamedItem("Value").Value);
                 genInfos.Add(info);
@@ -74,10 +74,12 @@ namespace ET
             {
                 if (info.Code_Type == GenCodeType.ET)
                 {
+                    //MemoryPack
                     Proto2CS_ET.Proto2CS(info.Proto_File, info.Code_Name, info.Code_Output_Dirs, info.Start_Opcode);
                 }
                 else if (info.Code_Type == GenCodeType.UGF)
                 {
+                    //Protobuf，为了通用
                     Proto2CS_UGF.Proto2CS(info.Proto_File, info.Code_Name, info.Code_Output_Dirs, info.Start_Opcode);
                 }
             }

@@ -1,13 +1,14 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
     [ActorMessageHandler(SceneType.Location)]
-    public class ObjectRemoveRequestHandler: AMActorRpcHandler<Scene, ObjectRemoveRequest, ObjectRemoveResponse>
+    public class ObjectRemoveRequestHandler: ActorMessageHandler<Scene, ObjectRemoveRequest, ObjectRemoveResponse>
     {
         protected override async UniTask Run(Scene scene, ObjectRemoveRequest request, ObjectRemoveResponse response)
         {
-            await scene.GetComponent<LocationComponent>().Remove(request.Key);
+            await scene.GetComponent<LocationManagerComponent>().Get(request.Type).Remove(request.Key);
         }
     }
 }

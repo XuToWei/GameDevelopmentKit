@@ -103,22 +103,22 @@ namespace ET
                         int lastIndex = dir.LastIndexOf(Path.DirectorySeparatorChar) + 1;
                         info.Luban_Work_Dir = Path.Combine(lubanWorkDir, $"{dir.Substring(lastIndex, dir.Length - lastIndex)}_{j}");
                         info.Input_Data_Dir = dir;
-                        string dirsStr = xmlGen.SelectSingleNode("Output_Code_Dirs").Attributes.GetNamedItem("Value").Value.Replace("\n", "");
+                        string dirsStr = xmlGen.SelectSingleNode("Output_Code_Dirs").Attributes.GetNamedItem("Value").Value;
                         info.Output_Code_Dirs = dirsStr.Split(',').ToList();
-                        dirsStr = xmlGen.SelectSingleNode("Output_Data_Dirs").Attributes.GetNamedItem("Value").Value.Replace("\n", "");
+                        dirsStr = xmlGen.SelectSingleNode("Output_Data_Dirs").Attributes.GetNamedItem("Value").Value;
                         info.Output_Data_Dirs = dirsStr.Split(',').ToList();
-                        info.Gen_Type_Code_Data = xmlGen.SelectSingleNode("Gen_Type_Code_Data").Attributes.GetNamedItem("Value").Value.Replace("\n", "");
+                        info.Gen_Type_Code_Data = xmlGen.SelectSingleNode("Gen_Type_Code_Data").Attributes.GetNamedItem("Value").Value;
                         if (useJson)
                         {
                             info.Gen_Type_Code_Data = info.Gen_Type_Code_Data.Replace("code_cs_unity_bin", "code_cs_unity_json")
                                     .Replace("data_bin", "data_json")
                                     .Replace("code_cs_bin", "code_cs_dotnet_json");
                         }
-                        info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value.Replace("\n", "");
+                        info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value;
                         XmlNode textFieldNameNode = xmlGen.SelectSingleNode("Text_Field_Name");
-                        info.Text_Field_Name = textFieldNameNode == null? string.Empty : textFieldNameNode.Attributes.GetNamedItem("Value").Value.Replace("\n", "");
+                        info.Text_Field_Name = textFieldNameNode == null? string.Empty : textFieldNameNode.Attributes.GetNamedItem("Value").Value;
                         XmlNode extraCommandNode = xmlGen.SelectSingleNode("Extra_Command");
-                        info.Extra_Command = extraCommandNode == null? string.Empty : $" {extraCommandNode.Attributes.GetNamedItem("Value").Value.Replace("\n", " ")}";
+                        info.Extra_Command = extraCommandNode == null? string.Empty : $" {extraCommandNode.Attributes.GetNamedItem("Value").Value}";
                         genInfos.Add(info);
                     }
                 }

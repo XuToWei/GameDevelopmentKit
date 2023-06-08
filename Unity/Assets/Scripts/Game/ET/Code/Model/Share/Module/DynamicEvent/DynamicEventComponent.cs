@@ -2,8 +2,8 @@ namespace ET
 {
     public static class DynamicEventComponentSystem
     {
-        [ObjectSystem]
-        public class DynamicEventAwakeSystem: AwakeSystem<DynamicEventComponent>
+        [EntitySystem]
+        private class DynamicEventAwakeSystem: AwakeSystem<DynamicEventComponent>
         {
             protected override void Awake(DynamicEventComponent self)
             {
@@ -11,8 +11,8 @@ namespace ET
             }
         }
 
-        [ObjectSystem]
-        public class DynamicEventDestroySystem : DestroySystem<DynamicEventComponent>
+        [EntitySystem]
+        private class DynamicEventDestroySystem : DestroySystem<DynamicEventComponent>
         {
             protected override void Destroy(DynamicEventComponent self)
             {

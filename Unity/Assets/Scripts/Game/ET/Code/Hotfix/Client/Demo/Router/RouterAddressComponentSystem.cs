@@ -1,12 +1,15 @@
-﻿using System.Net;
+﻿using System;
+using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
 
 namespace ET.Client
 {
     [FriendOf(typeof(RouterAddressComponent))]
-    public static class RouterAddressComponentSystem
+    public static partial class RouterAddressComponentSystem
     {
+        [EntitySystem]
         public class RouterAddressComponentAwakeSystem : AwakeSystem<RouterAddressComponent, string, int>
         {
             protected override void Awake(RouterAddressComponent self, string address, int port)
@@ -31,13 +34,13 @@ namespace ET.Client
             HttpGetRouterResponse httpGetRouterResponse = JsonHelper.FromJson<HttpGetRouterResponse>(routerInfo);
             self.Info = httpGetRouterResponse;
             Log.Debug($"start get router info finish: {JsonHelper.ToJson(httpGetRouterResponse)}");
-
+            
             // 打乱顺序
             RandomGenerator.BreakRank(self.Info.Routers);
-
+            
             self.WaitTenMinGetAllRouter().Forget();
         }
-
+        
         // 等10分钟再获取一次
         public static async UniTask WaitTenMinGetAllRouter(this RouterAddressComponent self)
         {
@@ -46,7 +49,6 @@ namespace ET.Client
             {
                 return;
             }
-
             await self.GetAllRouter();
         }
 
@@ -61,13 +63,12 @@ namespace ET.Client
             string[] ss = address.Split(':');
             IPAddress ipAddress = IPAddress.Parse(ss[0]);
             if (self.RouterManagerIPAddress.AddressFamily == AddressFamily.InterNetworkV6)
-            {
+            { 
                 ipAddress = ipAddress.MapToIPv6();
             }
-
             return new IPEndPoint(ipAddress, int.Parse(ss[1]));
         }
-
+        
         public static IPEndPoint GetRealmAddress(this RouterAddressComponent self, string account)
         {
             int v = account.Mode(self.Info.Realms.Count);

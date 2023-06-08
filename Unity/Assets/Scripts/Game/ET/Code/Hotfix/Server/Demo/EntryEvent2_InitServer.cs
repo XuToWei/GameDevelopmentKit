@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 namespace ET.Server
 {
     [Event(SceneType.Process)]
-    public class EntryEvent2_InitServer : AEvent<ET.EventType.EntryEvent2>
+    public class EntryEvent2_InitServer: AEvent<Scene, ET.EventType.EntryEvent2>
     {
         protected override async UniTask Run(Scene scene, ET.EventType.EntryEvent2 args)
         {
@@ -20,8 +20,7 @@ namespace ET.Server
 
             Root.Instance.Scene.AddComponent<NavmeshComponent>();
 
-            DRStartProcessConfig processConfig =
-                Tables.Instance.DTStartProcessConfig.Get(Options.Instance.StartConfig, Options.Instance.Process);
+            DRStartProcessConfig processConfig = Tables.Instance.DTStartProcessConfig.Get(Options.Instance.StartConfig, Options.Instance.Process);
             switch (Options.Instance.AppType)
             {
                 case AppType.Server:

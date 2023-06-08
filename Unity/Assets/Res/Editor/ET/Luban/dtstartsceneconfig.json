@@ -67,13 +67,22 @@
     "Id": 5,
     "Process": 1,
     "Zone": 1,
+    "SceneType": "Match",
+    "Name": "Match",
+    "OuterPort": 0
+  },
+  {
+    "StartConfig": "Localhost",
+    "Id": 6,
+    "Process": 1,
+    "Zone": 1,
     "SceneType": "Map",
     "Name": "Map1",
     "OuterPort": 0
   },
   {
     "StartConfig": "Localhost",
-    "Id": 6,
+    "Id": 7,
     "Process": 1,
     "Zone": 1,
     "SceneType": "Map",

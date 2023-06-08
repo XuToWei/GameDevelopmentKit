@@ -1,12 +1,14 @@
+using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
     [FriendOf(typeof(RobotCaseComponent))]
-    public static class RobotCaseComponentSystem
+    public static partial class RobotCaseComponentSystem
     {
-        [ObjectSystem]
-        public class RobotCaseComponentAwakeSystem : AwakeSystem<RobotCaseComponent>
+        [EntitySystem]
+        private class RobotCaseComponentAwakeSystem : AwakeSystem<RobotCaseComponent>
         {
             protected override void Awake(RobotCaseComponent self)
             {
@@ -14,8 +16,8 @@ namespace ET.Server
             }
         }
 
-        [ObjectSystem]
-        public class RobotCaseComponentDestroySystem : DestroySystem<RobotCaseComponent>
+        [EntitySystem]
+        private class RobotCaseComponentDestroySystem : DestroySystem<RobotCaseComponent>
         {
             protected override void Destroy(RobotCaseComponent self)
             {
@@ -27,7 +29,7 @@ namespace ET.Server
         {
             return ++self.N;
         }
-
+        
         public static async UniTask<RobotCase> New(this RobotCaseComponent self)
         {
             await UniTask.CompletedTask;

@@ -10,22 +10,21 @@ namespace ET.Client
     [FriendOf(typeof (UIComponent))]
     public static class UIComponentSystem
     {
-        [ObjectSystem]
-        public class UIComponentAwakeSystem: AwakeSystem<UIComponent>
+        [EntitySystem]
+        private sealed class UIComponentAwakeSystem: AwakeSystem<UIComponent>
         {
             protected override void Awake(UIComponent self)
             {
-                UIComponent.Instance = self;
+                self.AllOpenUIForms.Clear();
             }
         }
 
-        [ObjectSystem]
-        public class UIComponentDestroySystem: DestroySystem<UIComponent>
+        [EntitySystem]
+        private sealed class UIComponentDestroySystem: DestroySystem<UIComponent>
         {
             protected override void Destroy(UIComponent self)
             {
-                self.CloseAllUIForm();
-                UIComponent.Instance = null;
+                
             }
         }
 
@@ -47,7 +46,9 @@ namespace ET.Client
 
         public static void CloseUIForm(this UIComponent self, UGFUIForm uiForm)
         {
-            GameEntry.UI.CloseUIForm(uiForm.etMonoUIForm.UIForm);
+            if (!self.AllOpenUIForms.Contains(uiForm))
+                return;
+            GameEntry.UI.CloseUIForm(uiForm.uiForm);
         }
 
         public static void CloseUIForm(this UIComponent self, int uiFormId)
@@ -69,10 +70,12 @@ namespace ET.Client
 
         public static void RefocusUIForm(this UIComponent self, UGFUIForm uiForm, object userData = null)
         {
-            GameEntry.UI.RefocusUIForm(uiForm.etMonoUIForm.UIForm, userData);
+            if (!self.AllOpenUIForms.Contains(uiForm))
+                return;
+            GameEntry.UI.RefocusUIForm(uiForm.uiForm, userData);
         }
 
-        public static void CloseAllUIForm(this UIComponent self)
+        public static void CloseAllUIForms(this UIComponent self)
         {
             foreach (UGFUIForm uiForm in self.AllOpenUIForms.ToArray())
             {

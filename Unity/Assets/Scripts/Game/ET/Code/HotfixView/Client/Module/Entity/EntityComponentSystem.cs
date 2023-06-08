@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Game;
 
@@ -8,21 +9,21 @@ namespace ET.Client
     [FriendOf(typeof(UGFEntity))]
     public static class EntityComponentSystem
     {
-        [ObjectSystem]
-        public class EntityComponentAwakeSystem: AwakeSystem<EntityComponent>
+        [EntitySystem]
+        private class EntityComponentAwakeSystem: AwakeSystem<EntityComponent>
         {
             protected override void Awake(EntityComponent self)
             {
-                EntityComponent.Instance = self;
+                self.AllShowEntities.Clear();
             }
         }
 
-        [ObjectSystem]
-        public class EntityComponentDestroySystem: DestroySystem<EntityComponent>
+        [EntitySystem]
+        private class EntityComponentDestroySystem: DestroySystem<EntityComponent>
         {
             protected override void Destroy(EntityComponent self)
             {
-                EntityComponent.Instance = null;
+                self.HideAllEntities();
             }
         }
         
@@ -35,17 +36,29 @@ namespace ET.Client
                 formData.Release();
                 return null;
             }
-            return (entity.Logic as ETMonoEntity).ugfEntity;
+            if (entity.Logic is not ETMonoEntity etMonoEntity)
+            {
+                throw new Exception($"Get UGFEntity fail! EntityTypeId:{entityTypeId}) is not ETMonoEntity!");
+            }
+            return etMonoEntity.ugfEntity;
         }
 
         public static void HideEntity(this EntityComponent self, UGFEntity entity)
         {
-            GameEntry.Entity.HideEntity(entity.etMonoEntity);
+            GameEntry.Entity.HideEntity(entity.entity);
         }
 
-        public static void HideEntity(this UIComponent self, int entityId)
+        public static void HideEntity(this EntityComponent self, int entityId)
         {
             GameEntry.Entity.HideEntity(entityId);
+        }
+        
+        public static void HideAllEntities(this EntityComponent self)
+        {
+            foreach (UGFEntity entity in self.AllShowEntities.ToArray())
+            {
+                self.HideEntity(entity);
+            }
         }
         
         public static UGFEntity GetEntity(this EntityComponent self, int entityId)
@@ -66,17 +79,17 @@ namespace ET.Client
 
         public static void AttachEntity(this EntityComponent self, UGFEntity childEntity, UGFEntity parentEntity, string parentTransformPath, object userData = null)
         {
-            GameEntry.Entity.AttachEntity(childEntity.etMonoEntity.Entity, parentEntity.etMonoEntity.Entity, parentTransformPath, userData);
+            GameEntry.Entity.AttachEntity(childEntity.entity, parentEntity.entity, parentTransformPath, userData);
         }
 
         public static void DetachEntity(this EntityComponent self, UGFEntity childEntity, object userData = null)
         {
-            GameEntry.Entity.DetachEntity(childEntity.etMonoEntity.Entity, userData);
+            GameEntry.Entity.DetachEntity(childEntity.entity, userData);
         }
         
         public static void DetachChildEntities(this EntityComponent self, UGFEntity parentEntity, object userData = null)
         {
-            GameEntry.Entity.DetachChildEntities(parentEntity.etMonoEntity.Entity, userData);
+            GameEntry.Entity.DetachChildEntities(parentEntity.entity, userData);
         }
     }
 }

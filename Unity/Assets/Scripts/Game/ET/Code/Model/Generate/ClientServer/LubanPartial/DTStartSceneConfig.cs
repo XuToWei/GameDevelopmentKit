@@ -17,6 +17,10 @@ namespace ET
         public List<DRStartSceneConfig> Routers = new List<DRStartSceneConfig>();
         
         public List<DRStartSceneConfig> Robots = new List<DRStartSceneConfig>();
+        
+        public List<DRStartSceneConfig> Maps = new List<DRStartSceneConfig>();
+        
+        public DRStartSceneConfig Match;
 
         public DRStartSceneConfig BenchmarkServer;
         
@@ -36,10 +40,12 @@ namespace ET
             this.Gates.Clear();
             this.Robots.Clear();
             this.Routers.Clear();
+            this.Maps.Clear();
             this.StartProcessScenes.Clear();
             this.ClientScenesByName.Clear();
             this.LocationConfig = default;
             this.BenchmarkServer = default;
+            this.Match = default;
             
             foreach (DRStartSceneConfig startSceneConfig in this.DataList)
             {
@@ -75,6 +81,12 @@ namespace ET
                         break;
                     case SceneType.BenchmarkServer:
                         this.BenchmarkServer = startSceneConfig;
+                        break;
+                    case SceneType.Map:
+                        this.Maps.Add(startSceneConfig);
+                        break;
+                    case SceneType.Match:
+                        this.Match = startSceneConfig;
                         break;
                 }
             }

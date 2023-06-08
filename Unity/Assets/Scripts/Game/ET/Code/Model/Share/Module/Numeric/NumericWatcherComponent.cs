@@ -4,10 +4,10 @@ using System.Collections.Generic;
 namespace ET
 {
     [FriendOf(typeof(NumericWatcherComponent))]
-    public static class NumericWatcherComponentSystem
+    public static partial class NumericWatcherComponentSystem
     {
-        [ObjectSystem]
-        public class NumericWatcherComponentAwakeSystem : AwakeSystem<NumericWatcherComponent>
+        [EntitySystem]
+        private class NumericWatcherComponentAwakeSystem : AwakeSystem<NumericWatcherComponent>
         {
             protected override void Awake(NumericWatcherComponent self)
             {
@@ -16,8 +16,8 @@ namespace ET
             }
         }
 
-	
-        public class NumericWatcherComponentLoadSystem : LoadSystem<NumericWatcherComponent>
+        [EntitySystem]
+        private class NumericWatcherComponentLoadSystem : LoadSystem<NumericWatcherComponent>
         {
             protected override void Load(NumericWatcherComponent self)
             {
@@ -56,10 +56,10 @@ namespace ET
                 return;
             }
 
-            SceneType unitDomainSceneType = unit.DomainScene().SceneType;
+            SceneType unitDomainSceneType = unit.Domain.SceneType;
             foreach (NumericWatcherInfo numericWatcher in list)
             {
-                if (numericWatcher.SceneType != unitDomainSceneType)
+                if (!numericWatcher.SceneType.HasSameFlag(unitDomainSceneType))
                 {
                     continue;
                 }

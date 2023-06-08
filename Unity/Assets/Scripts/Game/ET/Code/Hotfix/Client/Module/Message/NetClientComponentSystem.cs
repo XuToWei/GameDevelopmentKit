@@ -4,10 +4,10 @@ using System.Net.Sockets;
 namespace ET.Client
 {
     [FriendOf(typeof(NetClientComponent))]
-    public static class NetClientComponentSystem
+    public static partial class NetClientComponentSystem
     {
-        [ObjectSystem]
-        public class AwakeSystem: AwakeSystem<NetClientComponent, AddressFamily>
+        [EntitySystem]
+        private class NetClientComponentAwakeSystem : AwakeSystem<NetClientComponent, AddressFamily>
         {
             protected override void Awake(NetClientComponent self, AddressFamily addressFamily)
             {
@@ -17,8 +17,8 @@ namespace ET.Client
             }
         }
 
-        [ObjectSystem]
-        public class DestroySystem: DestroySystem<NetClientComponent>
+        [EntitySystem]
+        private class NetClientComponentDestroySystem : DestroySystem<NetClientComponent>
         {
             protected override void Destroy(NetClientComponent self)
             {
@@ -36,7 +36,7 @@ namespace ET.Client
 
             session.LastRecvTime = TimeHelper.ClientNow();
             
-            OpcodeHelper.LogMsg(self.DomainZone(), message);
+            self.LogMsg(message);
             
             EventSystem.Instance.Publish(Root.Instance.Scene, new NetClientComponentOnRead() {Session = session, Message = message});
         }
@@ -58,7 +58,7 @@ namespace ET.Client
             long channelId = NetServices.Instance.CreateConnectChannelId();
             Session session = self.AddChildWithId<Session, int>(channelId, self.ServiceId);
             session.RemoteAddress = realIPEndPoint;
-            if (self.DomainScene().SceneType != SceneType.Benchmark)
+            if (self.Domain.SceneType != SceneType.Benchmark)
             {
                 session.AddComponent<SessionIdleCheckerComponent>();
             }
@@ -72,7 +72,7 @@ namespace ET.Client
             long channelId = localConn;
             Session session = self.AddChildWithId<Session, int>(channelId, self.ServiceId);
             session.RemoteAddress = realIPEndPoint;
-            if (self.DomainScene().SceneType != SceneType.Benchmark)
+            if (self.Domain.SceneType != SceneType.Benchmark)
             {
                 session.AddComponent<SessionIdleCheckerComponent>();
             }

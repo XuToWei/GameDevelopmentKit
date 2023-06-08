@@ -24,10 +24,10 @@ namespace ET
     }
 
     [FriendOf(typeof(ObjectWait))]
-    public static class ObjectWaitSystem
+    public static partial class ObjectWaitSystem
     {
-        [ObjectSystem]
-        public class ObjectWaitAwakeSystem: AwakeSystem<ObjectWait>
+        [EntitySystem]
+        private class ObjectWaitAwakeSystem : AwakeSystem<ObjectWait>
         {
             protected override void Awake(ObjectWait self)
             {
@@ -35,8 +35,8 @@ namespace ET
             }
         }
 
-        [ObjectSystem]
-        public class ObjectWaitDestroySystem: DestroySystem<ObjectWait>
+        [EntitySystem]
+        private class ObjectWaitDestroySystem : DestroySystem<ObjectWait>
         {
             protected override void Destroy(ObjectWait self)
             {

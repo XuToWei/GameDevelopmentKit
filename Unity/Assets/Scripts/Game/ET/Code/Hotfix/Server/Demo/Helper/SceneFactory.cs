@@ -1,9 +1,10 @@
 using System.Net;
+using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    public static class SceneFactory
+    public static partial class SceneFactory
     {
         public static async UniTask<Scene> CreateServerScene(Entity parent, long id, long instanceId, int zone, string name, SceneType sceneType, DRStartSceneConfig startSceneConfig = null)
         {
@@ -15,9 +16,6 @@ namespace ET.Server
             switch (scene.SceneType)
             {
                 case SceneType.Router:
-                    // 云服务器中，一般来说router要单独部署，不过大家经常放在一起，那么下面要修改
-                    // startSceneConfig.OuterIPPort改成startSceneConfig.InnerIPOutPort
-                    // 然后云服务器防火墙把端口映射过来
                     scene.AddComponent<RouterComponent, IPEndPoint, string>(startSceneConfig.OuterIPPort,
                         startSceneConfig.StartProcessConfig.InnerIP
                     );
@@ -37,9 +35,10 @@ namespace ET.Server
                 case SceneType.Map:
                     scene.AddComponent<UnitComponent>();
                     scene.AddComponent<AOIManagerComponent>();
+                    scene.AddComponent<RoomManagerComponent>();
                     break;
                 case SceneType.Location:
-                    scene.AddComponent<LocationComponent>();
+                    scene.AddComponent<LocationManagerComponent>();
                     break;
                 case SceneType.Robot:
                     scene.AddComponent<RobotManagerComponent>();
@@ -50,6 +49,9 @@ namespace ET.Server
                     break;
                 case SceneType.BenchmarkClient:
                     scene.AddComponent<BenchmarkClientComponent>();
+                    break;
+                case SceneType.Match:
+                    scene.AddComponent<MatchComponent>();
                     break;
             }
 

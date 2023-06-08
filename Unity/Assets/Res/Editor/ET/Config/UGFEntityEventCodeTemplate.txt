@@ -6,7 +6,7 @@ namespace ET.Client
     public static partial class UGFEntity#NAME#System
     {
         [EnableClass]
-        public class UGFEntity#NAME#Event: AUGFEntityEvent
+        private class UGFEntity#NAME#Event: AUGFEntityEvent
         {
             public override void OnInit(UGFEntity entity, object userData)
             {

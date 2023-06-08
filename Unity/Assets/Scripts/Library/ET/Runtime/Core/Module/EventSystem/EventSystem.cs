@@ -6,57 +6,8 @@ using Cysharp.Threading.Tasks;
 
 namespace ET
 {
-    public class EventSystem: Singleton<EventSystem>, ISingletonUpdate, ISingletonLateUpdate
+    public class EventSystem: Singleton<EventSystem>
     {
-        private class OneTypeSystems
-        {
-            public readonly UnOrderMultiMap<Type, object> Map = new();
-            // 这里不用hash，数量比较少，直接for循环速度更快
-            public readonly bool[] QueueFlag = new bool[(int)InstanceQueueIndex.Max];
-        }
-        
-        private class TypeSystems
-        {
-            private readonly Dictionary<Type, OneTypeSystems> typeSystemsMap = new();
-
-            public OneTypeSystems GetOrCreateOneTypeSystems(Type type)
-            {
-                OneTypeSystems systems = null;
-                this.typeSystemsMap.TryGetValue(type, out systems);
-                if (systems != null)
-                {
-                    return systems;
-                }
-
-                systems = new OneTypeSystems();
-                this.typeSystemsMap.Add(type, systems);
-                return systems;
-            }
-
-            public OneTypeSystems GetOneTypeSystems(Type type)
-            {
-                OneTypeSystems systems = null;
-                this.typeSystemsMap.TryGetValue(type, out systems);
-                return systems;
-            }
-
-            public List<object> GetSystems(Type type, Type systemType)
-            {
-                OneTypeSystems oneTypeSystems = null;
-                if (!this.typeSystemsMap.TryGetValue(type, out oneTypeSystems))
-                {
-                    return null;
-                }
-
-                if (!oneTypeSystems.Map.TryGetValue(systemType, out List<object> systems))
-                {
-                    return null;
-                }
-
-                return systems;
-            }
-        }
-
         private class EventInfo
         {
             public IEvent IEvent { get; }
@@ -77,19 +28,7 @@ namespace ET
         private readonly Dictionary<Type, List<EventInfo>> allEvents = new();
         
         private Dictionary<Type, Dictionary<int, object>> allInvokes = new(); 
-
-        private TypeSystems typeSystems = new();
-
-        private readonly Queue<long>[] queues = new Queue<long>[(int)InstanceQueueIndex.Max];
-
-        public EventSystem()
-        {
-            for (int i = 0; i < this.queues.Length; i++)
-            {
-                this.queues[i] = new Queue<long>();
-            }
-        }
-
+        
         public void Add(Dictionary<string, Type> addTypes)
         {
             this.allTypes.Clear();
@@ -110,24 +49,6 @@ namespace ET
                 foreach (object o in objects)
                 {
                     this.types.Add(o.GetType(), type);
-                }
-            }
-
-            this.typeSystems = new TypeSystems();
-
-            foreach (Type type in this.GetTypes(typeof (ObjectSystemAttribute)))
-            {
-                object obj = Activator.CreateInstance(type);
-
-                if (obj is ISystemType iSystemType)
-                {
-                    OneTypeSystems oneTypeSystems = this.typeSystems.GetOrCreateOneTypeSystems(iSystemType.Type());
-                    oneTypeSystems.Map.Add(iSystemType.SystemType(), obj);
-                    InstanceQueueIndex index = iSystemType.GetInstanceQueueIndex();
-                    if (index > InstanceQueueIndex.None && index < InstanceQueueIndex.Max)
-                    {
-                        oneTypeSystems.QueueFlag[(int)index] = true;
-                    }
                 }
             }
 
@@ -186,9 +107,10 @@ namespace ET
                     {
                         throw new Exception($"action type duplicate: {iInvoke.Type.Name} {invokeAttribute.Type}", e);
                     }
-                    
                 }
             }
+            
+            Game.Load();
         }
 
         private readonly HashSet<Type> emptyHashSetType = new HashSet<Type>();
@@ -213,382 +135,7 @@ namespace ET
             return this.allTypes[typeName];
         }
 
-        public void RegisterSystem(Entity component)
-        {
-            Type type = component.GetType();
-
-            OneTypeSystems oneTypeSystems = this.typeSystems.GetOneTypeSystems(type);
-            if (oneTypeSystems == null)
-            {
-                return;
-            }
-            for (int i = 0; i < oneTypeSystems.QueueFlag.Length; ++i)
-            {
-                if (!oneTypeSystems.QueueFlag[i])
-                {
-                    continue;
-                }
-                this.queues[i].Enqueue(component.InstanceId);
-            }
-        }
-
-        public void Deserialize(Entity component)
-        {
-            List<object> iDeserializeSystems = this.typeSystems.GetSystems(component.GetType(), typeof (IDeserializeSystem));
-            if (iDeserializeSystems == null)
-            {
-                return;
-            }
-
-            foreach (IDeserializeSystem deserializeSystem in iDeserializeSystems)
-            {
-                if (deserializeSystem == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    deserializeSystem.Run(component);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-        
-        // GetComponentSystem
-        public void GetComponent(Entity entity, Entity component)
-        {
-            List<object> iGetSystem = this.typeSystems.GetSystems(entity.GetType(), typeof (IGetComponentSystem));
-            if (iGetSystem == null)
-            {
-                return;
-            }
-
-            foreach (IGetComponentSystem getSystem in iGetSystem)
-            {
-                if (getSystem == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    getSystem.Run(entity, component);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-        
-        // AddComponentSystem
-        public void AddComponent(Entity entity, Entity component)
-        {
-            List<object> iAddSystem = this.typeSystems.GetSystems(entity.GetType(), typeof (IAddComponentSystem));
-            if (iAddSystem == null)
-            {
-                return;
-            }
-
-            foreach (IAddComponentSystem addComponentSystem in iAddSystem)
-            {
-                if (addComponentSystem == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    addComponentSystem.Run(entity, component);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
-        public void Awake(Entity component)
-        {
-            List<object> iAwakeSystems = this.typeSystems.GetSystems(component.GetType(), typeof (IAwakeSystem));
-            if (iAwakeSystems == null)
-            {
-                return;
-            }
-
-            foreach (IAwakeSystem aAwakeSystem in iAwakeSystems)
-            {
-                if (aAwakeSystem == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    aAwakeSystem.Run(component);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
-        public void Awake<P1>(Entity component, P1 p1)
-        {
-            List<object> iAwakeSystems = this.typeSystems.GetSystems(component.GetType(), typeof (IAwakeSystem<P1>));
-            if (iAwakeSystems == null)
-            {
-                return;
-            }
-
-            foreach (IAwakeSystem<P1> aAwakeSystem in iAwakeSystems)
-            {
-                if (aAwakeSystem == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    aAwakeSystem.Run(component, p1);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
-        public void Awake<P1, P2>(Entity component, P1 p1, P2 p2)
-        {
-            List<object> iAwakeSystems = this.typeSystems.GetSystems(component.GetType(), typeof (IAwakeSystem<P1, P2>));
-            if (iAwakeSystems == null)
-            {
-                return;
-            }
-
-            foreach (IAwakeSystem<P1, P2> aAwakeSystem in iAwakeSystems)
-            {
-                if (aAwakeSystem == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    aAwakeSystem.Run(component, p1, p2);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
-        public void Awake<P1, P2, P3>(Entity component, P1 p1, P2 p2, P3 p3)
-        {
-            List<object> iAwakeSystems = this.typeSystems.GetSystems(component.GetType(), typeof (IAwakeSystem<P1, P2, P3>));
-            if (iAwakeSystems == null)
-            {
-                return;
-            }
-
-            foreach (IAwakeSystem<P1, P2, P3> aAwakeSystem in iAwakeSystems)
-            {
-                if (aAwakeSystem == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    aAwakeSystem.Run(component, p1, p2, p3);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
-        public void Awake<P1, P2, P3, P4>(Entity component, P1 p1, P2 p2, P3 p3, P4 p4)
-        {
-            List<object> iAwakeSystems = this.typeSystems.GetSystems(component.GetType(), typeof (IAwakeSystem<P1, P2, P3, P4>));
-            if (iAwakeSystems == null)
-            {
-                return;
-            }
-
-            foreach (IAwakeSystem<P1, P2, P3, P4> aAwakeSystem in iAwakeSystems)
-            {
-                if (aAwakeSystem == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    aAwakeSystem.Run(component, p1, p2, p3, p4);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
-        public void Load()
-        {
-            Queue<long> queue = this.queues[(int)InstanceQueueIndex.Load];
-            int count = queue.Count;
-            while (count-- > 0)
-            {
-                long instanceId = queue.Dequeue();
-                Entity component = Root.Instance.Get(instanceId);
-                if (component == null)
-                {
-                    continue;
-                }
-
-                if (component.IsDisposed)
-                {
-                    continue;
-                }
-
-                List<object> iLoadSystems = this.typeSystems.GetSystems(component.GetType(), typeof (ILoadSystem));
-                if (iLoadSystems == null)
-                {
-                    continue;
-                }
-
-                queue.Enqueue(instanceId);
-
-                foreach (ILoadSystem iLoadSystem in iLoadSystems)
-                {
-                    try
-                    {
-                        iLoadSystem.Run(component);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                    }
-                }
-            }
-        }
-
-        public void Destroy(Entity component)
-        {
-            List<object> iDestroySystems = this.typeSystems.GetSystems(component.GetType(), typeof (IDestroySystem));
-            if (iDestroySystems == null)
-            {
-                return;
-            }
-
-            foreach (IDestroySystem iDestroySystem in iDestroySystems)
-            {
-                if (iDestroySystem == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    iDestroySystem.Run(component);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
-        public void Update()
-        {
-            Queue<long> queue = this.queues[(int)InstanceQueueIndex.Update];
-            int count = queue.Count;
-            while (count-- > 0)
-            {
-                long instanceId = queue.Dequeue();
-                Entity component = Root.Instance.Get(instanceId);
-                if (component == null)
-                {
-                    continue;
-                }
-
-                if (component.IsDisposed)
-                {
-                    continue;
-                }
-
-                List<object> iUpdateSystems = this.typeSystems.GetSystems(component.GetType(), typeof (IUpdateSystem));
-                if (iUpdateSystems == null)
-                {
-                    continue;
-                }
-
-                queue.Enqueue(instanceId);
-
-                foreach (IUpdateSystem iUpdateSystem in iUpdateSystems)
-                {
-                    try
-                    {
-                        iUpdateSystem.Run(component);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                    }
-                }
-            }
-        }
-
-        public void LateUpdate()
-        {
-            Queue<long> queue = this.queues[(int)InstanceQueueIndex.LateUpdate];
-            int count = queue.Count;
-            while (count-- > 0)
-            {
-                long instanceId = queue.Dequeue();
-                Entity component = Root.Instance.Get(instanceId);
-                if (component == null)
-                {
-                    continue;
-                }
-
-                if (component.IsDisposed)
-                {
-                    continue;
-                }
-
-                List<object> iLateUpdateSystems = this.typeSystems.GetSystems(component.GetType(), typeof (ILateUpdateSystem));
-                if (iLateUpdateSystems == null)
-                {
-                    continue;
-                }
-
-                queue.Enqueue(instanceId);
-
-                foreach (ILateUpdateSystem iLateUpdateSystem in iLateUpdateSystems)
-                {
-                    try
-                    {
-                        iLateUpdateSystem.Run(component);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                    }
-                }
-            }
-        }
-
-        public async UniTask PublishAsync<T>(Scene scene, T a) where T : struct
+        public async UniTask PublishAsync<S, T>(S scene, T a) where S: class, IScene where T : struct
         {
             List<EventInfo> iEvents;
             if (!this.allEvents.TryGetValue(typeof(T), out iEvents))
@@ -600,14 +147,14 @@ namespace ET
             
             foreach (EventInfo eventInfo in iEvents)
             {
-                if (scene.SceneType != eventInfo.SceneType && eventInfo.SceneType != SceneType.None)
+                if (!scene.SceneType.HasSameFlag(eventInfo.SceneType))
                 {
                     continue;
                 }
                     
-                if (!(eventInfo.IEvent is AEvent<T> aEvent))
+                if (!(eventInfo.IEvent is AEvent<S, T> aEvent))
                 {
-                    Log.Error($"event error: {eventInfo.IEvent.GetType().Name}");
+                    Log.Error($"event error: {eventInfo.IEvent.GetType().FullName}");
                     continue;
                 }
 
@@ -624,7 +171,7 @@ namespace ET
             }
         }
 
-        public void Publish<T>(Scene scene, T a) where T : struct
+        public void Publish<S, T>(S scene, T a) where S: class, IScene where T : struct
         {
             List<EventInfo> iEvents;
             if (!this.allEvents.TryGetValue(typeof (T), out iEvents))
@@ -635,15 +182,15 @@ namespace ET
             SceneType sceneType = scene.SceneType;
             foreach (EventInfo eventInfo in iEvents)
             {
-                if (sceneType != eventInfo.SceneType && eventInfo.SceneType != SceneType.None)
+                if (!sceneType.HasSameFlag(eventInfo.SceneType))
                 {
                     continue;
                 }
 
                 
-                if (!(eventInfo.IEvent is AEvent<T> aEvent))
+                if (!(eventInfo.IEvent is AEvent<S, T> aEvent))
                 {
-                    Log.Error($"event error: {eventInfo.IEvent.GetType().Name}");
+                    Log.Error($"event error: {eventInfo.IEvent.GetType().FullName}");
                     continue;
                 }
                 

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ET.Client
 {
     [Event(SceneType.Current)]
-    public class ChangePosition_SyncGameObjectPos: AEvent<EventType.ChangePosition>
+    public class ChangePosition_SyncGameObjectPos: AEvent<Scene, EventType.ChangePosition>
     {
         protected override async UniTask Run(Scene scene, EventType.ChangePosition args)
         {
@@ -14,7 +14,8 @@ namespace ET.Client
             {
                 return;
             }
-            Transform transform = gameObjectComponent.GameObject.transform;
+
+            Transform transform = gameObjectComponent.Transform;
             transform.position = unit.Position;
             await UniTask.CompletedTask;
         }

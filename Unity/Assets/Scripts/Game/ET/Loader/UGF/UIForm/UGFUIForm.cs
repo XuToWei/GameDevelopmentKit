@@ -1,52 +1,57 @@
 using UnityEngine;
+using UnityGameFramework.Runtime;
+using GameEntry = Game.GameEntry;
 
 namespace ET
 {
     [EnableMethod]
-    public sealed class UGFUIForm : Entity, IAwake<int, ETMonoUIForm>, ILoad
+    public sealed class UGFUIForm : Entity, IAwake<int, ETMonoUIForm>, IDestroy, ILoad
     {
-        public ETMonoUIForm etMonoUIForm
-        {
-            get;
-            private set;
-        }
-
-        public int uiFormId
-        {
-            get;
-            private set;
-        }
-
-        public Transform transform
-        {
-            get;
-            private set;
-        }
-
-        public bool isOpen;
+        public UIForm uiForm { get; private set; }
+        public int uiFormId { get; private set; }
+        public Transform transform { get; private set; }
+        /// <summary>
+        /// 界面是否开启
+        /// </summary>
+        public bool isOpen => this.m_ETMonoUIForm.isOpen;
         
-        public void SetUIFormId(int uiFormId)
-        {
-            this.uiFormId = uiFormId;
-        }
+        private ETMonoUIForm m_ETMonoUIForm;
 
-        [ObjectSystem]
-        public sealed class UGFUIFormAwakeSystem: AwakeSystem<UGFUIForm, int, ETMonoUIForm>
+        [EntitySystem]
+        private class UGFUIFormAwakeSystem : AwakeSystem<UGFUIForm, int, ETMonoUIForm>
         {
             protected override void Awake(UGFUIForm self, int uiFormId, ETMonoUIForm ugfETUIForm)
             {
                 self.uiFormId = uiFormId;
-                self.etMonoUIForm = ugfETUIForm;
-                self.transform = self.etMonoUIForm.CachedTransform;
+                self.m_ETMonoUIForm = ugfETUIForm;
+                self.uiForm = ugfETUIForm.UIForm;
+                self.transform = ugfETUIForm.CachedTransform;
             }
         }
-        
-        [ObjectSystem]
-        public sealed class UGFUIFormLoadSystem: LoadSystem<UGFUIForm>
+
+        [EntitySystem]
+        private class UGFUIFormDestroySystem : DestroySystem<UGFUIForm>
+        {
+            protected override void Destroy(UGFUIForm self)
+            {
+                ETMonoUIForm etMonoUIForm = self.m_ETMonoUIForm;
+                self.uiFormId = default;
+                self.m_ETMonoUIForm = default;
+                self.uiForm = default;
+                self.transform = default;
+                if (etMonoUIForm != default && etMonoUIForm.isOpen)
+                {
+                    GameEntry.UI.CloseUIForm(etMonoUIForm.UIForm);
+                }
+            }
+        }
+
+        [EntitySystem]
+        private class UGFUIFormLoadSystem : LoadSystem<UGFUIForm>
         {
             protected override void Load(UGFUIForm self)
             {
-                self.etMonoUIForm.OnLoad();
+                self.m_ETMonoUIForm.OnLoad();
             }
         }
     }

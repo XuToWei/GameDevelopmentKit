@@ -10,7 +10,19 @@ namespace ET.Server
 
         public int ViewDistance;
 
-        public Cell Cell;
+        private EntityRef<Cell> cell;
+
+        public Cell Cell
+        {
+            get
+            {
+                return this.cell;
+            }
+            set
+            {
+                this.cell = value;
+            }
+        }
 
         // 观察进入视野的Cell
         public HashSet<long> SubEnterCells = new HashSet<long>();

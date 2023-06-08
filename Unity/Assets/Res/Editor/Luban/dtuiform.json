@@ -3,7 +3,7 @@
     "Id": 101,
     "CSName": "UIHelp",
     "Desc": "帮助界面",
-    "AssetName": "UIHelp",
+    "AssetName": "Demo/UIHelp",
     "UIGroupName": "Pop",
     "AllowMultiInstance": false,
     "PauseCoveredUIForm": false
@@ -12,7 +12,7 @@
     "Id": 102,
     "CSName": "UILobby",
     "Desc": "大厅面",
-    "AssetName": "UILobby",
+    "AssetName": "Demo/UILobby",
     "UIGroupName": "Pop",
     "AllowMultiInstance": false,
     "PauseCoveredUIForm": false
@@ -21,8 +21,35 @@
     "Id": 103,
     "CSName": "UILogin",
     "Desc": "登录界面",
-    "AssetName": "UILogin",
+    "AssetName": "Demo/UILogin",
     "UIGroupName": "Default",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": false
+  },
+  {
+    "Id": 201,
+    "CSName": "UILSLogin",
+    "Desc": "登录界面",
+    "AssetName": "LockStep/UILSLogin",
+    "UIGroupName": "Default",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": false
+  },
+  {
+    "Id": 202,
+    "CSName": "UILSLobby",
+    "Desc": "大厅面",
+    "AssetName": "LockStep/UILSLobby",
+    "UIGroupName": "Pop",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": false
+  },
+  {
+    "Id": 203,
+    "CSName": "UILSRoom",
+    "Desc": "房间界面",
+    "AssetName": "LockStep/UILSRoom",
+    "UIGroupName": "Pop",
     "AllowMultiInstance": false,
     "PauseCoveredUIForm": false
   }

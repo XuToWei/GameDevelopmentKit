@@ -27,27 +27,17 @@ namespace ET
         /// </summary>
         private readonly Dictionary<Type, ListComponent<DynamicEventInfo>> allDynamicEventInfos = new Dictionary<Type, ListComponent<DynamicEventInfo>>();
 
-        private readonly HashSet<long> registeredEntityIds = new HashSet<long>();
-        private readonly HashSet<long> needRemoveEntityIds = new HashSet<long>();
+        private readonly HashSet<Entity> registeredEntities = new HashSet<Entity>();
+        private readonly HashSet<Entity> needRemoveEntities = new HashSet<Entity>();
 
-        public void Register(Entity component)
+        public void Register(Entity entity)
         {
-            this.registeredEntityIds.Add(component.InstanceId);
-        }
-        
-        public void Register(long instanceId)
-        {
-            this.registeredEntityIds.Add(instanceId);
+            this.registeredEntities.Add(entity);
         }
 
-        public void UnRegister(Entity component)
+        public void UnRegister(Entity entity)
         {
-            this.needRemoveEntityIds.Add(component.InstanceId);
-        }
-        
-        public void UnRegister(long instanceId)
-        {
-            this.needRemoveEntityIds.Add(instanceId);
+            this.needRemoveEntities.Add(entity);
         }
 
         internal void Clear()
@@ -57,21 +47,21 @@ namespace ET
                 list.Dispose();
             }
             this.allDynamicEventInfos.Clear();
-            this.registeredEntityIds.Clear();
-            this.needRemoveEntityIds.Clear();
+            this.registeredEntities.Clear();
+            this.needRemoveEntities.Clear();
         }
 
         internal void RemoveUnRegisteredEntityIds()
         {
-            if (this.needRemoveEntityIds.Count < 1)
+            if (this.needRemoveEntities.Count < 1)
             {
                 return;
             }
-            foreach (var id in this.needRemoveEntityIds)
+            foreach (var id in this.needRemoveEntities)
             {
-                this.registeredEntityIds.Remove(id);
+                this.registeredEntities.Remove(id);
             }
-            this.needRemoveEntityIds.Clear();
+            this.needRemoveEntities.Clear();
         }
 
         internal void Init()
@@ -114,9 +104,8 @@ namespace ET
                         continue;
                     }
                     IDynamicEvent<A> dynamicEvent = (IDynamicEvent<A>)dynamicEventInfo.DynamicEvent;
-                    foreach (long instanceId in this.registeredEntityIds)
+                    foreach (Entity entity in this.registeredEntities)
                     {
-                        Entity entity = Root.Instance.Get(instanceId);
                         if (entity is { IsDisposed: false } && dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
                         {
                             dynamicEvent.Handle(scene, entity, arg).Forget();
@@ -142,9 +131,8 @@ namespace ET
                         continue;
                     }
                     IDynamicEvent<A> dynamicEvent = (IDynamicEvent<A>)dynamicEventInfo.DynamicEvent;
-                    foreach (long instanceId in this.registeredEntityIds)
+                    foreach (Entity entity in this.registeredEntities)
                     {
-                        Entity entity = Root.Instance.Get(instanceId);
                         if (entity is { IsDisposed: false } && dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
                         {
                             taskList.Add(dynamicEvent.Handle(scene, entity, arg));
@@ -167,8 +155,8 @@ namespace ET
     [FriendOf(typeof(DynamicEventWatcherComponent))]
     public static class DynamicEventWatcherSystem
     {
-        [ObjectSystem]
-        public class DynamicEventWatcherAwakeSystem : AwakeSystem<DynamicEventWatcherComponent>
+        [EntitySystem]
+        private class DynamicEventWatcherAwakeSystem : AwakeSystem<DynamicEventWatcherComponent>
         {
             protected override void Awake(DynamicEventWatcherComponent self)
             {
@@ -177,8 +165,8 @@ namespace ET
             }
         }
         
-        [ObjectSystem]
-        public class DynamicEventWatcherDestroySystem : DestroySystem<DynamicEventWatcherComponent>
+        [EntitySystem]
+        private class DynamicEventWatcherDestroySystem : DestroySystem<DynamicEventWatcherComponent>
         {
             protected override void Destroy(DynamicEventWatcherComponent self)
             {
@@ -187,8 +175,8 @@ namespace ET
             }
         }
 
-        [ObjectSystem]
-        public class DynamicEventWatcherLoadSystem : LoadSystem<DynamicEventWatcherComponent>
+        [EntitySystem]
+        private class DynamicEventWatcherLoadSystem : LoadSystem<DynamicEventWatcherComponent>
         {
             protected override void Load(DynamicEventWatcherComponent self)
             {
@@ -196,8 +184,8 @@ namespace ET
             }
         }
         
-        [ObjectSystem]
-        public class DynamicEventWatcherUpdateSystem : UpdateSystem<DynamicEventWatcherComponent>
+        [EntitySystem]
+        private class DynamicEventWatcherUpdateSystem : UpdateSystem<DynamicEventWatcherComponent>
         {
             protected override void Update(DynamicEventWatcherComponent self)
             {

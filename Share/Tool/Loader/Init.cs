@@ -21,18 +21,16 @@ namespace ET.Server
                         .WithParsed(Game.AddSingleton);
 
                 Game.AddSingleton<TimeInfo>().ITimeNow = new TimeNow();
-                Game.AddSingleton<Logger>().ILog =
-                        new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, "../Config/NLog/NLog.config");
+                Game.AddSingleton<Logger>().ILog = new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, "../Config/NLog/NLog.config");
                 Game.AddSingleton<ObjectPool>();
                 Game.AddSingleton<IdGenerater>();
                 Game.AddSingleton<EventSystem>();
-                Game.AddSingleton<Root>();
-
                 Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Game).Assembly);
                 EventSystem.Instance.Add(types);
+                Game.AddSingleton<EntitySystemSingleton>();
+                Game.AddSingleton<Root>();
 
-                MongoHelper.Init();
-                ProtobufHelper.Init();
+                MongoHelper.Register();
 
                 Log.Info($"server start........................ {Root.Instance.Scene.Id}");
                 switch (Options.Instance.AppType)

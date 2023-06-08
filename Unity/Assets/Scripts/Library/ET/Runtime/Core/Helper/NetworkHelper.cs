@@ -55,7 +55,7 @@ namespace ET
 			int port = int.Parse(p);
 			return ToIPEndPoint(host, port);
 		}
-		
+
 		public static void SetSioUdpConnReset(Socket socket)
 		{
 			if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

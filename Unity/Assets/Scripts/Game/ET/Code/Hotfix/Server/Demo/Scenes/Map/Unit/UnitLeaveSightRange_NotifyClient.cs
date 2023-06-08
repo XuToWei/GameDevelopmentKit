@@ -4,7 +4,7 @@ namespace ET.Server
 {
     // 离开视野
     [Event(SceneType.Map)]
-    public class UnitLeaveSightRange_NotifyClient: AEvent<EventType.UnitLeaveSightRange>
+    public class UnitLeaveSightRange_NotifyClient: AEvent<Scene, EventType.UnitLeaveSightRange>
     {
         protected override async UniTask Run(Scene scene, EventType.UnitLeaveSightRange args)
         {

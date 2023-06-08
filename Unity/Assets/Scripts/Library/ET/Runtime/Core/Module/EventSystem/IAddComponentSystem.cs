@@ -11,7 +11,7 @@ namespace ET
 		void Run(Entity o, Entity component);
 	}
 
-	[ObjectSystem]
+	[EntitySystem]
 	public abstract class AddComponentSystem<T> : IAddComponentSystem where T: Entity, IAddComponent
 	{
 		void IAddComponentSystem.Run(Entity o, Entity component)
@@ -24,7 +24,7 @@ namespace ET
 			return typeof(IAddComponentSystem);
 		}
 
-		InstanceQueueIndex ISystemType.GetInstanceQueueIndex()
+		int ISystemType.GetInstanceQueueIndex()
 		{
 			return InstanceQueueIndex.None;
 		}

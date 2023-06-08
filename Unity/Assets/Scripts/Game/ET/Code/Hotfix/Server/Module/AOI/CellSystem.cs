@@ -4,10 +4,10 @@ using System.Text;
 namespace ET.Server
 {
     [FriendOf(typeof(Cell))]
-    public static class CellSystem
+    public static partial class CellSystem
     {
-        [ObjectSystem]
-        public class CellDestroySystem: DestroySystem<Cell>
+        [EntitySystem]
+        private class CellDestroySystem : DestroySystem<Cell>
         {
             protected override void Destroy(Cell self)
             {
@@ -18,7 +18,7 @@ namespace ET.Server
                 self.SubsLeaveEntities.Clear();
             }
         }
-        
+
         public static void Add(this Cell self, AOIEntity aoiEntity)
         {
             self.AOIUnits.Add(aoiEntity.Id, aoiEntity);

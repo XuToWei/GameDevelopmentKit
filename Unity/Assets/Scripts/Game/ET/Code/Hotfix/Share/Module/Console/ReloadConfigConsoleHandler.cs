@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 namespace ET
 {
     [ConsoleHandler(ConsoleMode.ReloadConfig)]
-    public class ReloadConfigConsoleHandler : IConsoleHandler
+    public class ReloadConfigConsoleHandler: IConsoleHandler
     {
         public async UniTask Run(ModeContex contex, string content)
         {
@@ -28,7 +28,7 @@ namespace ET
                     Log.Console($"reload config {configName} finish!");
                     break;
             }
-
+            
             await UniTask.CompletedTask;
         }
     }

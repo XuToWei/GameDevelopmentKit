@@ -4,16 +4,16 @@ using Unity.Mathematics;
 namespace ET.Server
 {
     [Event(SceneType.Map)]
-    public class ChangePosition_NotifyAOI : AEvent<ET.EventType.ChangePosition>
+    public class ChangePosition_NotifyAOI: AEvent<Scene, ET.EventType.ChangePosition>
     {
         protected override async UniTask Run(Scene scene, ET.EventType.ChangePosition args)
         {
             Unit unit = args.Unit;
             float3 oldPos = args.OldPos;
-            int oldCellX = (int)(oldPos.x * 1000) / AOIManagerComponent.CellSize;
-            int oldCellY = (int)(oldPos.z * 1000) / AOIManagerComponent.CellSize;
-            int newCellX = (int)(unit.Position.x * 1000) / AOIManagerComponent.CellSize;
-            int newCellY = (int)(unit.Position.z * 1000) / AOIManagerComponent.CellSize;
+            int oldCellX = (int) (oldPos.x * 1000) / AOIManagerComponent.CellSize;
+            int oldCellY = (int) (oldPos.z * 1000) / AOIManagerComponent.CellSize;
+            int newCellX = (int) (unit.Position.x * 1000) / AOIManagerComponent.CellSize;
+            int newCellY = (int) (unit.Position.z * 1000) / AOIManagerComponent.CellSize;
             if (oldCellX == newCellX && oldCellY == newCellY)
             {
                 return;

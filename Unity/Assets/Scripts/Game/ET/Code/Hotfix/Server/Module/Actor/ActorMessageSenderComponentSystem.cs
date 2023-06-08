@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 namespace ET.Server
 {
     [FriendOf(typeof(ActorMessageSenderComponent))]
-    public static class ActorMessageSenderComponentSystem
+    public static partial class ActorMessageSenderComponentSystem
     {
         [Invoke(TimerInvokeType.ActorMessageSenderChecker)]
         public class ActorMessageSenderChecker: ATimer<ActorMessageSenderComponent>
@@ -23,8 +23,8 @@ namespace ET.Server
             }
         }
     
-        [ObjectSystem]
-        public class ActorMessageSenderComponentAwakeSystem: AwakeSystem<ActorMessageSenderComponent>
+        [EntitySystem]
+        private class ActorMessageSenderComponentAwakeSystem : AwakeSystem<ActorMessageSenderComponent>
         {
             protected override void Awake(ActorMessageSenderComponent self)
             {
@@ -34,8 +34,8 @@ namespace ET.Server
             }
         }
 
-        [ObjectSystem]
-        public class ActorMessageSenderComponentDestroySystem: DestroySystem<ActorMessageSenderComponent>
+        [EntitySystem]
+        private class ActorMessageSenderComponentDestroySystem : DestroySystem<ActorMessageSenderComponent>
         {
             protected override void Destroy(ActorMessageSenderComponent self)
             {
@@ -104,16 +104,23 @@ namespace ET.Server
             
             ProcessActorId processActorId = new(actorId);
             
-            // 这里做了优化，如果发向同一个进程，则直接处理，不需要通过网络层
+            // 这里做了优化，如果发向同一个进程，则等一帧直接处理，不需要通过网络层
             if (processActorId.Process == Options.Instance.Process)
             {
-                NetInnerComponent.Instance.HandleMessage(actorId, message);
+                async UniTask HandleMessageInNextFrame()
+                {
+                    await TimerComponent.Instance.WaitFrameAsync();
+                    NetInnerComponent.Instance.HandleMessage(actorId, message);    
+                }
+                HandleMessageInNextFrame().Forget();
                 return;
             }
             
             Session session = NetInnerComponent.Instance.Get(processActorId.Process);
             session.Send(processActorId.ActorId, message);
         }
+
+
 
         public static int GetRpcId(this ActorMessageSenderComponent self)
         {

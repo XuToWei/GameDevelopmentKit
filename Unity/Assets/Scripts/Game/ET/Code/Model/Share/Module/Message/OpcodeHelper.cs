@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ET
 {
@@ -11,6 +12,9 @@ namespace ET
             OuterMessage.G2C_Ping,
             OuterMessage.C2G_Benchmark,
             OuterMessage.G2C_Benchmark,
+            LockStepOuter.OneFrameInputs,
+            LockStepOuter.FrameMessage,
+            LockStepOuter.C2Room_CheckHash,
             ushort.MaxValue, // ActorResponse
         };
 
@@ -34,7 +38,8 @@ namespace ET
             return opcode >= OpcodeRangeDefine.InnerMinOpcode;
         }
 
-        public static void LogMsg(int zone, object message)
+        [Conditional("DEBUG")]
+        public static void LogMsg(this Entity entity, object message)
         {
             ushort opcode = NetServices.Instance.GetOpcode(message.GetType());
             if (!IsNeedLogMessage(opcode))
@@ -42,18 +47,7 @@ namespace ET
                 return;
             }
             
-            Logger.Instance.Debug("zone: {0} {1}", zone, message);
-        }
-        
-        public static void LogMsg(long actorId, object message)
-        {
-            ushort opcode = NetServices.Instance.GetOpcode(message.GetType());
-            if (!IsNeedLogMessage(opcode))
-            {
-                return;
-            }
-            
-            Logger.Instance.Debug("actorId: {0} {1}", actorId, message);
+            Logger.Instance.Debug($"{entity.Domain.SceneType} {message}");
         }
     }
 }

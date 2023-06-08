@@ -16,12 +16,12 @@ namespace ET.Client
 
         public virtual void OnShow(UGFEntity entity, object userData)
         {
-            EntityComponent.Instance.AllShowEntities.Add(entity);
+            entity.DomainScene().GetComponent<EntityComponent>().AllShowEntities.Add(entity);
         }
 
         public virtual void OnHide(UGFEntity entity, bool isShutdown, object userData)
         {
-            EntityComponent.Instance.AllShowEntities.Remove(entity);
+            entity.DomainScene().GetComponent<EntityComponent>().AllShowEntities.Remove(entity);
         }
 
         public virtual void OnAttached(UGFEntity entity, EntityLogic childEntity, Transform parentTransform, object userData)

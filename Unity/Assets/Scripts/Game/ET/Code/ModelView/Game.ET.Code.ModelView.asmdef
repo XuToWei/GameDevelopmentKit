@@ -9,6 +9,7 @@
         "Unity.Mathematics",
         "UnityEngine.UI",
         "LubanLib",
+        "GameFramework",
         "UnityGameFramework.Runtime",
         "UnityGameFramework.Extension",
         "CodeBind",
@@ -21,7 +22,7 @@
         "Coffee.UnmaskForUGUI",
         "LoopScrollRect.Runtime",
         "ZString",
-        "protobuf-net"
+        "MemoryPack"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

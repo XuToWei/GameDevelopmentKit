@@ -14,7 +14,8 @@
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
         "LoopScrollRect.Runtime",
-        "ZString"
+        "ZString",
+        "protobuf-net"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

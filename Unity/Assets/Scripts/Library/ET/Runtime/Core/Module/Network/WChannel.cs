@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.WebSockets;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -15,13 +16,15 @@ namespace ET
 
         private readonly WebSocket webSocket;
 
-        private readonly Queue<MemoryStream> queue = new Queue<MemoryStream>();
+        private readonly Queue<MemoryBuffer> queue = new();
 
         private bool isSending;
 
         private bool isConnected;
 
-        private readonly MemoryStream recvStream;
+        private readonly MemoryBuffer recvStream;
+        
+        public IPEndPoint RemoteAddress { get; set; }
 
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
@@ -32,7 +35,7 @@ namespace ET
             this.ChannelType = ChannelType.Accept;
             this.WebSocketContext = webSocketContext;
             this.webSocket = webSocketContext.WebSocket;
-            this.recvStream = new MemoryStream(ushort.MaxValue);
+            this.recvStream = new MemoryBuffer(ushort.MaxValue);
 
             isConnected = true;
             
@@ -49,7 +52,7 @@ namespace ET
             this.Service = service;
             this.ChannelType = ChannelType.Connect;
             this.webSocket = webSocket;
-            this.recvStream = new MemoryStream(ushort.MaxValue);
+            this.recvStream = new MemoryBuffer(ushort.MaxValue);
 
             isConnected = false;
             
@@ -87,8 +90,10 @@ namespace ET
             }
         }
 
-        public void Send(MemoryStream stream)
+        public void Send(MessageObject message)
         {
+            MemoryBuffer stream = this.Service.Fetch(message);
+            
             switch (this.Service.ServiceType)
             {
                 case ServiceType.Inner:
@@ -130,10 +135,11 @@ namespace ET
                         return;
                     }
 
-                    MemoryStream bytes = this.queue.Dequeue();
+                    MemoryBuffer bytes = this.queue.Dequeue();
                     try
                     {
-                        await this.webSocket.SendAsync(new ReadOnlyMemory<byte>(bytes.GetBuffer(), (int)bytes.Position, (int)(bytes.Length - bytes.Position)), WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
+                        await this.webSocket.SendAsync(bytes.GetMemory(), WebSocketMessageType.Binary, true, cancellationTokenSource.Token);
+                        
                         if (this.IsDisposed)
                         {
                             return;
@@ -153,7 +159,7 @@ namespace ET
             }
         }
 
-        private byte[] cache = new byte[ushort.MaxValue];
+        private readonly byte[] cache = new byte[ushort.MaxValue];
 
         public async UniTaskVoid StartRecv()
         {
@@ -209,7 +215,7 @@ namespace ET
             }
         }
         
-        private void OnRead(MemoryStream memoryStream)
+        private void OnRead(MemoryBuffer memoryStream)
         {
             try
             {
@@ -222,7 +228,7 @@ namespace ET
                     {
                         ushort opcode = BitConverter.ToUInt16(memoryStream.GetBuffer(), Packet.KcpOpcodeIndex);
                         Type type = NetServices.Instance.GetType(opcode);
-                        message = SerializeHelper.Deserialize(type, memoryStream);
+                        message = MessageSerializeHelper.Deserialize(type, memoryStream);
                         break;
                     }
                     case ServiceType.Inner:
@@ -230,7 +236,7 @@ namespace ET
                         actorId = BitConverter.ToInt64(memoryStream.GetBuffer(), Packet.ActorIdIndex);
                         ushort opcode = BitConverter.ToUInt16(memoryStream.GetBuffer(), Packet.OpcodeIndex);
                         Type type = NetServices.Instance.GetType(opcode);
-                        message = SerializeHelper.Deserialize(type, memoryStream);
+                        message = MessageSerializeHelper.Deserialize(type, memoryStream);
                         break;
                     }
                 }

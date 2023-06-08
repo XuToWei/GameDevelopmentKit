@@ -5,9 +5,10 @@ using ET.Client;
 
 namespace ET.Server
 {
-    public static class BenchmarkClientComponentSystem
+    public static partial class BenchmarkClientComponentSystem
     {
-        public class AwakeSystem: AwakeSystem<BenchmarkClientComponent>
+        [EntitySystem]
+        private class BenchmarkClientComponentAwakeSystem : AwakeSystem<BenchmarkClientComponent>
         {
             protected override void Awake(BenchmarkClientComponent self)
             {
@@ -25,16 +26,16 @@ namespace ET.Server
             Scene scene = await SceneFactory.CreateServerScene(self, IdGenerater.Instance.GenerateId(), IdGenerater.Instance.GenerateInstanceId(),
                 self.DomainZone(), "bechmark", SceneType.Benchmark);
             
-            NetClientComponent netClientComponent = scene.AddComponent<NetClientComponent, AddressFamily>(AddressFamily.InterNetwork);
+            Client.NetClientComponent netClientComponent = scene.AddComponent<Client.NetClientComponent, AddressFamily>(AddressFamily.InterNetwork);
 
             using Session session = netClientComponent.Create(Tables.Instance.DTStartSceneConfig.BenchmarkServer.OuterIPPort);
             List<UniTask> list = new List<UniTask>(100000);
 
             async UniTask Call(Session s)
             {
-                await s.Call(new C2G_Benchmark());
+                using G2C_Benchmark benchmark = await s.Call(C2G_Benchmark.Create(true)) as G2C_Benchmark;
             }
-
+            
             for (int j = 0; j < 100000000; ++j)
             {
                 list.Clear();

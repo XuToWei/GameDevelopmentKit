@@ -4,15 +4,18 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Client
 {
-    [ObjectSystem]
-    public class RouterCheckComponentAwakeSystem: AwakeSystem<RouterCheckComponent>
+    public static partial class RouterCheckComponentSystem
     {
-        protected override void Awake(RouterCheckComponent self)
+        [EntitySystem]
+        private class RouterCheckComponentAwakeSystem : AwakeSystem<RouterCheckComponent>
         {
-            CheckAsync(self).Forget();
+            protected override void Awake(RouterCheckComponent self)
+            {
+                self.CheckAsync().Forget();
+            }
         }
 
-        private static async UniTaskVoid CheckAsync(RouterCheckComponent self)
+        private static async UniTask CheckAsync(this RouterCheckComponent self)
         {
             Session session = self.GetParent<Session>();
             long instanceId = self.InstanceId;

@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 namespace ET
 {
     [ConsoleHandler(ConsoleMode.ReloadDll)]
-    public class ReloadDllConsoleHandler : IConsoleHandler
+    public class ReloadDllConsoleHandler: IConsoleHandler
     {
         public async UniTask Run(ModeContex contex, string content)
         {
@@ -12,11 +12,9 @@ namespace ET
                 case ConsoleMode.ReloadDll:
                     contex.Parent.RemoveComponent<ModeContex>();
                     await CodeLoaderComponent.Instance.LoadHotfixAsync();
-                    EventSystem.Instance.Load();
+                    Game.Load();
                     break;
             }
-
-            await UniTask.CompletedTask;
         }
     }
 }

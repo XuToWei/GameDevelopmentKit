@@ -15,7 +15,7 @@ namespace ET
 	/// 反序列化后执行的System
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	[ObjectSystem]
+	[EntitySystem]
 	public abstract class DeserializeSystem<T> : IDeserializeSystem where T: Entity, IDeserialize
 	{
 		void IDeserializeSystem.Run(Entity o)
@@ -28,7 +28,7 @@ namespace ET
 			return typeof(IDeserializeSystem);
 		}
 
-		InstanceQueueIndex ISystemType.GetInstanceQueueIndex()
+		int ISystemType.GetInstanceQueueIndex()
 		{
 			return InstanceQueueIndex.None;
 		}

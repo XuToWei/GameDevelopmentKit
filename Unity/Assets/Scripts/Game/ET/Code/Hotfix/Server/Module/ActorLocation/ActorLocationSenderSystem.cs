@@ -2,26 +2,30 @@ using System;
 
 namespace ET.Server
 {
-    [ObjectSystem]
-    public class ActorLocationSenderAwakeSystem: AwakeSystem<ActorLocationSender>
+    [FriendOf(typeof(ActorLocationSender))]
+    public static partial class ActorLocationSenderSystem
     {
-        protected override void Awake(ActorLocationSender self)
+        [EntitySystem]
+        private class ActorLocationSenderAwakeSystem : AwakeSystem<ActorLocationSender>
         {
-            self.LastSendOrRecvTime = TimeHelper.ServerNow();
-            self.ActorId = 0;
-            self.Error = 0;
+            protected override void Awake(ActorLocationSender self)
+            {
+                self.LastSendOrRecvTime = TimeHelper.ServerNow();
+                self.ActorId = 0;
+                self.Error = 0;
+            }
         }
-    }
 
-    [ObjectSystem]
-    public class ActorLocationSenderDestroySystem: DestroySystem<ActorLocationSender>
-    {
-        protected override void Destroy(ActorLocationSender self)
+        [EntitySystem]
+        private class ActorLocationSenderDestroySystem : DestroySystem<ActorLocationSender>
         {
-            Log.Debug($"actor location remove: {self.Id}");
-            self.LastSendOrRecvTime = 0;
-            self.ActorId = 0;
-            self.Error = 0;
+            protected override void Destroy(ActorLocationSender self)
+            {
+                Log.Debug($"actor location remove: {self.Id}");
+                self.LastSendOrRecvTime = 0;
+                self.ActorId = 0;
+                self.Error = 0;
+            }
         }
     }
 }

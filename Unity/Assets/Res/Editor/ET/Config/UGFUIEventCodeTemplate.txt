@@ -6,7 +6,7 @@ namespace ET.Client
     public static partial class UGFUI#NAME#System
     {
         [UGFUIFormEvent(UGFUIFormId.Undefined)]
-        public class UGFUI#NAME#Event: AUGFUIFormEvent
+        private class UGFUI#NAME#Event: AUGFUIFormEvent
         {
             public override void OnInit(UGFUIForm uiForm, object userData)
             {

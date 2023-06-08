@@ -1,6 +1,6 @@
 using System;
 
-namespace ET.Editor
+namespace ET
 {
     public class TypeDrawerAttribute: Attribute
     {
