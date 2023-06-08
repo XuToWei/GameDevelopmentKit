@@ -87,6 +87,11 @@ namespace Game.Editor
                 }
             }
             EditorGUI.EndDisabledGroup();
+            
+            if (GUILayout.Button("Build Kit.sln"))
+            {
+                ShellTool.Run("dotnet build", "../");
+            }
         }
         
         private static void ShowNotification(string tips)

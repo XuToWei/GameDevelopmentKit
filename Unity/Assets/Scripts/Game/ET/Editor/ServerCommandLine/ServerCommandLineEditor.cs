@@ -68,6 +68,11 @@ namespace ET.Editor
             {
                 ProcessHelper.Run("mongod", @"--dbpath=db", "../Database/bin/");
             }
+
+            if (GUILayout.Button("Build DotNet/DotNet.sln"))
+            {
+                ShellHelper.Run("dotnet build", "../DotNet");
+            }
         }
     }
 }
