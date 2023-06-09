@@ -32,7 +32,7 @@
     "autoReferenced": true,
     "defineConstraints": [
         "UNITY_ET",
-        "!UNITY_HOTFIX || UNITY_EDITOR"
+        "!UNITY_HOTFIX || UNITY_COMPILE || UNITY_EDITOR"
     ],
     "versionDefines": [],
     "noEngineReferences": false

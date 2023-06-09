@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
 using GameEntry = Game.GameEntry;
 

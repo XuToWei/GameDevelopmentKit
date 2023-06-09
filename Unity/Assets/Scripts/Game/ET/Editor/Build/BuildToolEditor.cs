@@ -66,50 +66,21 @@ namespace ET.Editor
                 }
 #endif
             }
-
-            if (GUILayout.Button("BuildModelAndHotfix"))
+#if UNITY_HOTFIX
+            if (GUILayout.Button("Compile Dll"))
             {
                 if (!Define.EnableHotfix)
                 {
                     throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
                 }
 
-                BuildAssemblyTool.BuildModel(this.codeOptimization, this.codeMode);
-                BuildAssemblyTool.BuildHotfix(this.codeOptimization, this.codeMode);
-
-                AfterCompiling();
-
-                ShowNotification("Build Model And Hotfix Success!");
-            }
-
-            if (GUILayout.Button("BuildModel"))
-            {
-                if (!Define.EnableHotfix)
-                {
-                    throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
-                }
-
-                BuildAssemblyTool.BuildModel(this.codeOptimization, this.codeMode);
-
-                AfterCompiling();
-
-                ShowNotification("Build Model Success!");
-            }
-
-            if (GUILayout.Button("BuildHotfix"))
-            {
-                if (!Define.EnableHotfix)
-                {
-                    throw new Exception("now in UNITY_ET_CODE mode, do not need Build!");
-                }
-
-                BuildAssemblyTool.BuildHotfix(this.codeOptimization, this.codeMode);
+                BuildAssemblyTool.Build();
 
                 AfterCompiling();
 
                 ShowNotification("Build Hotfix Success!");
             }
-
+#endif
             GUILayout.Label("Tool", titleGUIStyle);
             if (GUILayout.Button("ExcelExporter"))
             {
@@ -133,7 +104,6 @@ namespace ET.Editor
 
         private static void ShowNotification(string tips)
         {
-            Debug.Log(tips);
             EditorWindow game = GetWindow(typeof (EditorWindow).Assembly.GetType("UnityEditor.GameView"));
             if (game != null) game.ShowNotification(new GUIContent($"{tips}"));
         }

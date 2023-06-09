@@ -85,18 +85,17 @@ namespace Game.Editor
                         Debug.LogError($"Open folder fail! {folderPath} not exist!");
                     }
                 }
+                
+                if (GUILayout.Button("Build Kit.sln"))
+                {
+                    ShellTool.Run("dotnet build", "../");
+                }
             }
             EditorGUI.EndDisabledGroup();
-            
-            if (GUILayout.Button("Build Kit.sln"))
-            {
-                ShellTool.Run("dotnet build", "../");
-            }
         }
         
         private static void ShowNotification(string tips)
         {
-            Debug.Log(tips);
             EditorWindow game = GetWindow(typeof (EditorWindow).Assembly.GetType("UnityEditor.GameView"));
             if (game != null) game.ShowNotification(new GUIContent($"{tips}"));
         }

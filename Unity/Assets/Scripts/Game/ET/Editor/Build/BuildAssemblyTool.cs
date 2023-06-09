@@ -1,245 +1,123 @@
-using System;
-using System.Collections.Generic;
+#if UNITY_HOTFIX
 using System.IO;
-using System.Linq;
-using System.Threading;
 using Game.Editor;
-using UnityEngine;
 using UnityEditor;
-using UnityEditor.Compilation;
+using UnityEditor.Build.Player;
+using UnityEngine;
+using UnityGameFramework.Extension.Editor;
 
 namespace ET.Editor
 {
     public static class BuildAssemblyTool
     {
-        /// <summary>
-        /// 编译输出的目录
-        /// </summary>
-        public const string CodeDir = "Assets/Res/ET/Code";
+        public static readonly string CodeDir = "Assets/Res/ET/Code";
+        public static readonly string[] ExtraScriptingDefines = new[] { "UNITY_COMPILE", "UNITY_ET" };
+        public static readonly string[] DllNames = new[] { "Game.ET.Code.Model", "Game.ET.Code.ModelView", "Game.ET.Code.Hotfix", "Game.ET.Code.HotfixView" };
+
+        public static void Build(BuildTarget target, ScriptCompilationOptions options)
+        {
+            CompileAssemblyHelper.CompileDlls(target, ExtraScriptingDefines, options);
+            CompileAssemblyHelper.CopyHotUpdateDlls(target, CodeDir, DllNames);
+            AssetDatabase.Refresh();
+        }
         
-        /// <summary>
-        /// ET Code的目录
-        /// </summary>
-        public const string ETSourceCodeDir = "Assets/Scripts/Game/ET/Code";
+        [MenuItem("ET/Compile Dll")]
+        public static void Build()
+        {
+            BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
+            ScriptCompilationOptions options = EditorUserBuildSettings.development
+                ? ScriptCompilationOptions.DevelopmentBuild
+                : ScriptCompilationOptions.None;
+            Build(target, options);
+        }
         
-        public static CodeOptimization DefaultCodeOptimization => CodeOptimization.Debug;
-
-        public static void BuildModel(CodeOptimization codeOptimization, CodeMode codeMode)
+        public static void Build(BuildTarget target)
         {
-            List<string> codes;
-
-            switch (codeMode)
-            {
-                case CodeMode.Client:
-                    codes = new List<string>()
-                    {
-                        $"{ETSourceCodeDir}/Model/Generate/Client/",
-                        $"{ETSourceCodeDir}/Model/Share/",
-                        $"{ETSourceCodeDir}/Model/Client/",
-                        $"{ETSourceCodeDir}/ModelView/Client/",
-                    };
-                    break;
-                case CodeMode.Server:
-                    codes = new List<string>()
-                    {
-                        $"{ETSourceCodeDir}/Model/Generate/ClientServer/",
-                        $"{ETSourceCodeDir}/Model/Share/",
-                        $"{ETSourceCodeDir}/Model/Server/",
-                        $"{ETSourceCodeDir}/Model/Client/",
-                    };
-                    break;
-                case CodeMode.ClientServer:
-                    codes = new List<string>()
-                    {
-                        $"{ETSourceCodeDir}/Model/Share/",
-                        $"{ETSourceCodeDir}/Model/Client/",
-                        $"{ETSourceCodeDir}/ModelView/Client/",
-                        $"{ETSourceCodeDir}/Model/Generate/ClientServer/",
-                        $"{ETSourceCodeDir}/Model/Server/",
-                    };
-                    break;
-                default:
-                    throw new Exception("not found enum");
-            }
-
-            BuildAssemblyHelper.Build("Model", codes, Array.Empty<string>(), GetExcludeReferences(codeMode), codeOptimization);
-            
-            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, $"Model.dll"), Path.Combine(CodeDir, $"Model.dll.bytes"), true);
-            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, $"Model.pdb"), Path.Combine(CodeDir, $"Model.pdb.bytes"), true);
-            Debug.Log("copy Model.dll to Bundles/Code success!");
+            ScriptCompilationOptions options = EditorUserBuildSettings.development
+                ? ScriptCompilationOptions.DevelopmentBuild
+                : ScriptCompilationOptions.None;
+            Build(target, options);
         }
 
-        public static void BuildHotfix(CodeOptimization codeOptimization, CodeMode codeMode)
+        [InitializeOnLoadMethod]
+        static void Initialize()
         {
-            List<string> codes;
-            switch (codeMode)
+            //删掉Library中Unity编译的dll，不然在编辑器下Assembly.Load多个dll时，dll会与Library中的dll引用错乱
+            EditorApplication.playModeStateChanged += change =>
             {
-                case CodeMode.Client:
-                    codes = new List<string>()
+                if (change == PlayModeStateChange.ExitingEditMode)
+                {
+                    if (CodeRunnerUtility.IsEditorCodeBytesMode())
                     {
-                        $"{ETSourceCodeDir}/Hotfix/Share/",
-                        $"{ETSourceCodeDir}/Hotfix/Client/",
-                        $"{ETSourceCodeDir}/HotfixView/Client/",
-                    };
-                    break;
-                case CodeMode.Server:
-                    codes = new List<string>()
-                    {
-                        $"{ETSourceCodeDir}/Hotfix/Share/",
-                        $"{ETSourceCodeDir}/Hotfix/Server/",
-                        $"{ETSourceCodeDir}/Hotfix/Client/",
-                    };
-                    break;
-                case CodeMode.ClientServer:
-                    codes = new List<string>()
-                    {
-                        $"{ETSourceCodeDir}/Hotfix/Share/",
-                        $"{ETSourceCodeDir}/Hotfix/Client/",
-                        $"{ETSourceCodeDir}/HotfixView/Client/",
-                        $"{ETSourceCodeDir}/Hotfix/Server/",
-                    };
-                    break;
-                default:
-                    throw new Exception("not found enum");
-            }
-
-            string[] additionalReferences = new[] { Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Model.dll") };
-            BuildAssemblyHelper.Build("Hotfix", codes,  additionalReferences, GetExcludeReferences(codeMode), codeOptimization);
-            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Hotfix.dll"), Path.Combine(CodeDir, "Hotfix.dll.bytes"), true);
-            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Hotfix.pdb"), Path.Combine(CodeDir, "Hotfix.pdb.bytes"), true);
-            Debug.Log("copy Hotfix.dll to Bundles/Code success!");
-        }
-
-        private static string[] GetExcludeReferences(CodeMode codeMode)
-        {
-            if (codeMode == CodeMode.Client || codeMode == CodeMode.ClientServer)
-            {
-                return new string[]
-                {
-                    "DnsClient.dll",
-                    "MongoDB.Driver.Core.dll",
-                    "MongoDB.Driver.dll",
-                    "MongoDB.Driver.Legacy.dll",
-                    "MongoDB.Libmongocrypt.dll",
-                    "SharpCompress.dll",
-                    "System.Buffers.dll",
-                    "System.Runtime.CompilerServices.Unsafe.dll",
-                    "System.Text.Encoding.CodePages.dll"
-                };
-            }
-            return null;
-        }
-
-        private static void BuildMuteAssembly(string assemblyName, List<string> CodeDirectorys,
-            string[] additionalReferences, CodeOptimization codeOptimization, CodeMode codeMode = CodeMode.Client)
-        {
-            if (!Directory.Exists(BuildAssemblyHelper.BuildOutputDir))
-            {
-                Directory.CreateDirectory(BuildAssemblyHelper.BuildOutputDir);
-            }
-
-            List<string> scripts = new List<string>();
-            for (int i = 0; i < CodeDirectorys.Count; i++)
-            {
-                DirectoryInfo dti = new DirectoryInfo(CodeDirectorys[i]);
-                FileInfo[] fileInfos = dti.GetFiles("*.cs", SearchOption.AllDirectories);
-                for (int j = 0; j < fileInfos.Length; j++)
-                {
-                    scripts.Add(fileInfos[j].FullName);
-                }
-            }
-
-            string dllPath = Path.Combine(BuildAssemblyHelper.BuildOutputDir, $"{assemblyName}.dll");
-            string pdbPath = Path.Combine(BuildAssemblyHelper.BuildOutputDir, $"{assemblyName}.pdb");
-            if (File.Exists(dllPath))
-            {
-                File.Delete(dllPath);
-            }
-            if (File.Exists(pdbPath))
-            {
-                File.Delete(pdbPath);
-            }
-
-            Directory.CreateDirectory(BuildAssemblyHelper.BuildOutputDir);
-
-            AssemblyBuilder assemblyBuilder = new AssemblyBuilder(dllPath, scripts.ToArray());
-
-            if (codeMode == CodeMode.Client || codeMode == CodeMode.ClientServer)
-            {
-                assemblyBuilder.excludeReferences = new string[]
-                {
-                    "DnsClient.dll",
-                    "MongoDB.Driver.Core.dll",
-                    "MongoDB.Driver.dll",
-                    "MongoDB.Driver.Legacy.dll",
-                    "MongoDB.Libmongocrypt.dll",
-                    "SharpCompress.dll",
-                    "System.Buffers.dll",
-                    "System.Runtime.CompilerServices.Unsafe.dll",
-                    "System.Text.Encoding.CodePages.dll"
-                };
-            }
-
-            //启用UnSafe
-            assemblyBuilder.compilerOptions.AllowUnsafeCode = true;
-
-            BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
-
-            assemblyBuilder.compilerOptions.CodeOptimization = codeOptimization;
-            assemblyBuilder.compilerOptions.ApiCompatibilityLevel = PlayerSettings.GetApiCompatibilityLevel(buildTargetGroup);
-            // assemblyBuilder.compilerOptions.ApiCompatibilityLevel = ApiCompatibilityLevel.NET_4_6;
-
-            assemblyBuilder.additionalReferences = additionalReferences;
-
-            assemblyBuilder.flags = AssemblyBuilderFlags.None;
-            //AssemblyBuilderFlags.None                 正常发布
-            //AssemblyBuilderFlags.DevelopmentBuild     开发模式打包
-            //AssemblyBuilderFlags.EditorAssembly       编辑器状态
-            assemblyBuilder.referencesOptions = ReferencesOptions.UseEngineModules;
-
-            assemblyBuilder.buildTarget = EditorUserBuildSettings.activeBuildTarget;
-
-            assemblyBuilder.buildTargetGroup = buildTargetGroup;
-
-            assemblyBuilder.buildStarted += assemblyPath => Debug.LogFormat("build start：" + assemblyPath);
-
-            assemblyBuilder.buildFinished += (assemblyPath, compilerMessages) =>
-            {
-                int errorCount = compilerMessages.Count(m => m.type == CompilerMessageType.Error);
-                int warningCount = compilerMessages.Count(m => m.type == CompilerMessageType.Warning);
-
-                Debug.LogFormat("Warnings: {0} - Errors: {1}", warningCount, errorCount);
-
-                if (warningCount > 0)
-                {
-                    Debug.LogFormat("有{0}个Warning!!!", warningCount);
-                }
-
-                if (errorCount > 0)
-                {
-                    for (int i = 0; i < compilerMessages.Length; i++)
-                    {
-                        if (compilerMessages[i].type == CompilerMessageType.Error)
+                        foreach (var dll in DllNames)
                         {
-                            string filename = Path.GetFullPath(compilerMessages[i].file);
-                            Debug.LogError($"{compilerMessages[i].message} (at <a href=\"file:///{filename}/\" line=\"{compilerMessages[i].line}\">{Path.GetFileName(filename)}</a>)");
+                            string dllFile = $"{Application.dataPath}/../Library/ScriptAssemblies/{dll}.dll";
+                            if (File.Exists(dllFile))
+                            {
+                                string dllDisableFile = $"{Application.dataPath}/../Library/ScriptAssemblies/{dll}.dll.DISABLE";
+                                if (File.Exists(dllDisableFile))
+                                {
+                                    File.Delete(dllDisableFile);
+                                }
+
+                                File.Move(dllFile, dllDisableFile);
+                            }
+
+                            string pdbFile = $"{Application.dataPath}/../Library/ScriptAssemblies/{dll}.pdb";
+                            if (File.Exists(pdbFile))
+                            {
+                                string pdbDisableFile = $"{Application.dataPath}/../Library/ScriptAssemblies/{dll}.pdb.DISABLE";
+                                if (File.Exists(pdbDisableFile))
+                                {
+                                    File.Delete(pdbDisableFile);
+                                }
+
+                                File.Move(pdbFile, pdbDisableFile);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var dll in DllNames)
+                        {
+                            string dllFile = $"{Application.dataPath}/../Library/ScriptAssemblies/{dll}.dll";
+                            string dllDisableFile = $"{Application.dataPath}/../Library/ScriptAssemblies/{dll}.dll.DISABLE";
+                            if (File.Exists(dllFile))
+                            {
+                                if (File.Exists(dllDisableFile))
+                                {
+                                    File.Delete(dllDisableFile);
+                                }
+                            }
+                            else
+                            {
+                                if (File.Exists(dllDisableFile))
+                                {
+                                    File.Move(dllDisableFile, dllFile);
+                                }
+                            }
+
+                            string pdbDisableFile = $"{Application.dataPath}/../Library/ScriptAssemblies/{dll}.pdb.DISABLE";
+                            string pdbFile = $"{Application.dataPath}/../Library/ScriptAssemblies/{dll}.pdb";
+                            if (File.Exists(pdbFile))
+                            {
+                                if (File.Exists(pdbDisableFile))
+                                {
+                                    File.Delete(pdbDisableFile);
+                                }
+                            }
+                            else
+                            {
+                                if (File.Exists(pdbDisableFile))
+                                {
+                                    File.Move(pdbDisableFile, pdbFile);
+                                }
+                            }
                         }
                     }
                 }
             };
-
-            //开始构建
-            if (!assemblyBuilder.Build())
-            {
-                Debug.LogErrorFormat("build fail：" + assemblyBuilder.assemblyPath);
-                return;
-            }
-
-            while (EditorApplication.isCompiling)
-            {
-                // 主线程sleep并不影响编译线程
-                Thread.Sleep(1);
-            }
         }
     }
 }
+#endif

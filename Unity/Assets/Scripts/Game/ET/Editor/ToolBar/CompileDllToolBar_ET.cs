@@ -1,15 +1,14 @@
 #if UNITY_HOTFIX
 using ToolbarExtension;
 using UnityEditor;
-using UnityEditor.Compilation;
 using UnityEngine;
 
 namespace ET.Editor
 {
     sealed class CompileDllToolBar_ET
     {
-        private static readonly GUIContent s_BuildReloadHotfixButtonGUIContent = new GUIContent("Reload ET.Hotfix", "Compile And Reload ET.Hotfix Dll When Playing.");
-        private static readonly GUIContent s_BuildHotfixModelButtonGUIContent = new GUIContent("Compile All ET", "Compile All ET Dll.");
+        private static readonly GUIContent s_BuildReloadHotfixButtonGUIContent = new GUIContent("ETReload", "Compile And Reload ET.Hotfix Dll When Playing.");
+        private static readonly GUIContent s_BuildHotfixModelButtonGUIContent = new GUIContent("ETCompile", "Compile All ET Dll.");
         private static bool s_IsReloading = false;
 
         [Toolbar(OnGUISide.Left, 0)]
@@ -19,8 +18,8 @@ namespace ET.Editor
             {
                 if (GUILayout.Button(s_BuildReloadHotfixButtonGUIContent))
                 {
-                    BuildAssemblyTool.BuildHotfix(BuildAssemblyTool.DefaultCodeOptimization, Define.CodeMode);
-                    ShowNotification("Build Hotfix Success!");
+                    BuildAssemblyTool.Build();
+                    ShowNotification("compile success!");
 
                     if (s_IsReloading)
                         return;
@@ -32,6 +31,7 @@ namespace ET.Editor
                         {
                             await CodeLoaderComponent.Instance.LoadHotfixAsync();
                             Game.Load();
+                            ShowNotification("reload hotfix success!");
                         }
                         finally
                         {
@@ -46,15 +46,13 @@ namespace ET.Editor
 
             if (GUILayout.Button(s_BuildHotfixModelButtonGUIContent))
             {
-                BuildAssemblyTool.BuildModel(BuildAssemblyTool.DefaultCodeOptimization, Define.CodeMode);
-                BuildAssemblyTool.BuildHotfix(BuildAssemblyTool.DefaultCodeOptimization, Define.CodeMode);
-                ShowNotification("Build Model And Hotfix Success!");
+                BuildAssemblyTool.Build();
+                ShowNotification("compile success!");
             }
         }
 
         private static void ShowNotification(string msg)
         {
-            Debug.Log(msg);
             EditorWindow game = EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));
             if (game != null) game.ShowNotification(new GUIContent(msg));
         }

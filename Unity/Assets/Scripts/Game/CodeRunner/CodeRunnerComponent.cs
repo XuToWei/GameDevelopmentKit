@@ -9,8 +9,16 @@ namespace Game
     public class CodeRunnerComponent : GameFrameworkComponent
     {
         [Tooltip("编辑器模式下能否加载bytes方式运行代码")]
-        [SerializeField]
+        [SerializeField, ShowIf("IsHotFix")]
         private bool m_EditorCodeBytesMode = false;
+
+#if UNITY_HOTFIX
+        [ShowInInspector, ReadOnly]
+        public bool IsHotFix => true;
+#else
+        [ShowInInspector, ReadOnly]
+        public bool IsHotFix => false;
+#endif
 
         [ShowInInspector, ReadOnly]
         public bool IsRunning { get; private set; } = false;

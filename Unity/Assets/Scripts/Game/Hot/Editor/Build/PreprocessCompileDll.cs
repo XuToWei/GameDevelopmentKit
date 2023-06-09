@@ -1,14 +1,16 @@
 #if UNITY_HOTFIX
+using Game.Editor;
+using UnityGameFramework.Editor.ResourceTools;
 using UnityGameFramework.Extension.Editor;
 
 namespace Game.Hot.Editor
 {
     public static class PreprocessCompileDll
     {
-        [UGFBuildOnPreprocessAllPlatforms(1)]
-        public static void CompileDll()
+        [UGFBuildOnPreprocessPlatform(1)]
+        public static void CompileDll(Platform platform)
         {
-            BuildAssemblyTool.Build();
+            BuildAssemblyTool.Build(CompileAssemblyHelper.GetBuildTarget(platform));
         }
     }
 }

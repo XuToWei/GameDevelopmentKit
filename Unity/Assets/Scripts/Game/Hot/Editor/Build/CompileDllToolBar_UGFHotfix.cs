@@ -6,7 +6,7 @@ namespace Game.Hot.Editor
 {
     internal sealed class CompileDllToolBar_UGFHotfix
     {
-        private static readonly GUIContent s_ButtonGUIContent = new GUIContent($"Compile {BuildAssemblyTool.DllName}", $"Compile {BuildAssemblyTool.DllName} Dll.");
+        private static readonly GUIContent s_ButtonGUIContent = new GUIContent("HotCompile", "Compile GameHot Dll.");
 
         [Toolbar(OnGUISide.Left, 50)]
         static void OnToolbarGUI()

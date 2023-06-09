@@ -5,7 +5,7 @@ namespace ET.Client
     /// <summary>
     /// 管理Scene上的UI
     /// </summary>
-    [ComponentOf(typeof(Scene))]
+    [ComponentOf]
     public sealed class UIComponent : Entity, IAwake, IDestroy
     {
         //所有打开的UIForm实体

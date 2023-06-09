@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ET
 {
     [EnableMethod]
-    [ComponentOf(typeof(Scene))]
+    [ComponentOf]
     public sealed class UGFEventComponent : Entity, IAwake, IDestroy, ILoad
     {
         [StaticField] public static UGFEventComponent Instance;

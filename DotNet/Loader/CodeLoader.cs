@@ -17,11 +17,11 @@ namespace ET
         public async UniTask StartAsync()
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (Assembly assembly in assemblies)
+            foreach (Assembly ass in assemblies)
             {
-                if (assembly.GetName().Name == "Model")
+                if (ass.GetName().Name == "Model")
                 {
-                    model = assembly;
+                    model = ass;
                     break;
                 }
             }
@@ -41,9 +41,9 @@ namespace ET
             assemblyLoadContext?.Unload();
             GC.Collect();
             assemblyLoadContext = new AssemblyLoadContext("Hotfix", true);
-            Assembly hotfixAssembly = assemblyLoadContext.LoadFromStream(new MemoryStream(dllBytes), new MemoryStream(pdbBytes));
+            Assembly hotfix = assemblyLoadContext.LoadFromStream(new MemoryStream(dllBytes), new MemoryStream(pdbBytes));
 
-            Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(Assembly.GetEntryAssembly(), typeof (Init).Assembly, typeof (Game).Assembly, model, hotfixAssembly);
+            Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(Assembly.GetEntryAssembly(), typeof (Init).Assembly, typeof (Game).Assembly, model, hotfix);
 
             EventSystem.Instance.Add(types);
         }

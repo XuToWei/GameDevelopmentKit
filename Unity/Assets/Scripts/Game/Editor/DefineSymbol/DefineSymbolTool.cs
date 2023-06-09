@@ -69,6 +69,7 @@ namespace Game.Editor
             LinkXMLHelper.RemoveLinkXML("UNITY_GAMEHOT");
 #endif
             HybridCLRTool.RefreshSettingsByLinkXML();
+            AssetDatabase.SaveAssets();
             Debug.Log("Refresh!");
         }
 
@@ -76,7 +77,7 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_HOTFIX")]
         private static void Remove_UNITY_HOTFIX()
         {
-            BuildAssemblyHelper.ClearBuildOutputDir();
+            CompileAssemblyHelper.ClearBuildDir();
             HybridCLRTool.DisableHybridCLR();
             LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX");
             LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX");
@@ -98,12 +99,13 @@ namespace Game.Editor
 #endif
             HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_HOTFIX");
+            AssetDatabase.SaveAssets();
         }
 #else
         [MenuItem("Tools/Define Symbol/Add UNITY_HOTFIX")]
         private static void Add_UNITY_HOTFIX()
         {
-            BuildAssemblyHelper.ClearBuildOutputDir();
+            CompileAssemblyHelper.ClearBuildDir();
             HybridCLRTool.EnableHybridCLR();
             LinkXMLHelper.AddLinkXML("UNITY_HOTFIX");
             LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX");
@@ -125,6 +127,7 @@ namespace Game.Editor
 #endif
             HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_HOTFIX");
+            AssetDatabase.SaveAssets();
         }
 #endif
 
@@ -132,7 +135,7 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_ET")]
         private static void Remove_UNITY_ET()
         {
-            BuildAssemblyHelper.ClearBuildOutputDir();
+            CompileAssemblyHelper.ClearBuildDir();
             LinkXMLHelper.RemoveLinkXML("UNITY_ET");
             LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET");
             LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET");
@@ -143,12 +146,13 @@ namespace Game.Editor
 
             HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET");
+            AssetDatabase.SaveAssets();
         }
 #else
         [MenuItem("Tools/Define Symbol/Add UNITY_ET")]
         private static void Add_UNITY_ET()
         {
-            BuildAssemblyHelper.ClearBuildOutputDir();
+            CompileAssemblyHelper.ClearBuildDir();
             LinkXMLHelper.AddLinkXML("UNITY_ET");
 #if UNITY_GAMEHOT
             Remove_UNITY_GAMEHOT();
@@ -177,6 +181,7 @@ namespace Game.Editor
 #endif
             HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET");
+            AssetDatabase.SaveAssets();
         }
 #endif
 
@@ -184,19 +189,20 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_GAMEHOT")]
         private static void Remove_UNITY_GAMEHOT()
         {
-            BuildAssemblyHelper.ClearBuildOutputDir();
+            CompileAssemblyHelper.ClearBuildDir();
             LinkXMLHelper.RemoveLinkXML("UNITY_GAMEHOT");
             LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
             LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 
             HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_GAMEHOT");
+            AssetDatabase.SaveAssets();
         }
 #else
         [MenuItem("Tools/Define Symbol/Add UNITY_GAMEHOT")]
         private static void Add_UNITY_GAMEHOT()
         {
-            BuildAssemblyHelper.ClearBuildOutputDir();
+            CompileAssemblyHelper.ClearBuildDir();
             LinkXMLHelper.AddLinkXML("UNITY_GAMEHOT");
 #if UNITY_ET
             Remove_UNITY_ET();
@@ -208,6 +214,7 @@ namespace Game.Editor
 #endif
             HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_GAMEHOT");
+            AssetDatabase.SaveAssets();
         }
 #endif
     }

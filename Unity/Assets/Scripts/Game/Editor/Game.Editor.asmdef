@@ -2,8 +2,8 @@
     "name": "Game.Editor",
     "rootNamespace": "Game.Editor",
     "references": [
-        "UnityGameFramework.Extension",
         "UnityGameFramework.Editor",
+        "UnityGameFramework.Runtime",
         "LubanLib",
         "LubanLib.Editor",
         "Game",
@@ -11,6 +11,7 @@
         "HybridCLR.Editor",
         "UniTask",
         "ToolbarExtension.Editor",
+        "UnityGameFramework.Extension",
         "UnityGameFramework.Extension.Editor",
         "GameFramework",
         "StompyRobot.SRDebugger",

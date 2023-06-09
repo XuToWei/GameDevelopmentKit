@@ -8,17 +8,12 @@ namespace ET.Editor
     {
         private static string OnGeneratedCSProject(string path, string content)
         {
-            if (path.EndsWith("Game.csproj"))
+            if (path.EndsWith("Game.ET.Loader.csproj"))
             {
                 return GenerateCustomProject(content);
             }
             
-            if (path.EndsWith("Game.Hot.csproj"))
-            {
-                return GenerateCustomProject(content);
-            }
-            
-            if (path.EndsWith("ET.Runtime.csproj"))
+            if (path.EndsWith("ET.csproj"))
             {
                 return GenerateCustomProject(content);
             }
