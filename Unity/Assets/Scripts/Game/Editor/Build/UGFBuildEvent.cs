@@ -13,7 +13,9 @@ namespace Game.Editor
         public static void GenerateLocalUpdatableVersion(Platform platform)
         {
             //拷贝到本地的资源服务器
-            string localServerFilePath = $"../Temp/Version/{platform}Version.txt";
+            string localServerFileDir = "../Temp/Version";
+            string localServerFilePath = $"{localServerFileDir}/{platform}Version.txt";
+            Directory.CreateDirectory(localServerFileDir);
             if (File.Exists(localServerFilePath))
             {
                 File.Delete(localServerFilePath);
