@@ -77,9 +77,9 @@ namespace Game.Editor
 #elif UNITY_2021
             EditorUserBuildSettings.il2CppCodeGeneration = Il2CppCodeGeneration.OptimizeSpeed;
 #endif
-#if !UNITY_HOTFIX && UNITY_ET && UNITY_2022//兼容ET的Bson
+#if !UNITY_HOTFIX && UNITY_ET && UNITY_2022_1_OR_NEWER//兼容ET的Bson
             PlayerSettings.SetIl2CppCodeGeneration(NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(buildTarget)), Il2CppCodeGeneration.OptimizeSize);
-#elif UNITY_2022
+#elif UNITY_2022_1_OR_NEWER
             PlayerSettings.SetIl2CppCodeGeneration(NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(buildTarget)), Il2CppCodeGeneration.OptimizeSpeed);
 #endif
             BuildReport buildReport = BuildPipeline.BuildPlayer(levels, locationPathName, buildTarget, BuildOptions.None);

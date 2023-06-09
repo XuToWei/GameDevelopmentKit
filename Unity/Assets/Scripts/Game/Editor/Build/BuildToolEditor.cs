@@ -65,7 +65,7 @@ namespace Game.Editor
                 GUILayout.Space(20);
                 if (GUILayout.Button("Build And Refresh Windows64 Pkg Resource"))
                 {
-                    if (!SwitchActiveBuildTarget(Platform.Windows))
+                    if (!SwitchActiveBuildTarget(Platform.Windows64))
                     {
                         return;
                     }

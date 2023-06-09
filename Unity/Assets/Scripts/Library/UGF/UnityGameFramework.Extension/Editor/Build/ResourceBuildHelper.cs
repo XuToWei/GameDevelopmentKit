@@ -1,14 +1,10 @@
 using System;
 using System.IO;
-using System.Reflection;
 using GameFramework;
 using GameFramework.Resource;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
-using UnityGameFramework.Runtime;
-using Object = UnityEngine.Object;
 
 namespace UnityGameFramework.Extension.Editor
 {
@@ -112,11 +108,14 @@ namespace UnityGameFramework.Extension.Editor
 
         public static string GetNewestBundlePath()
         {
-#if UNITY_HOTFIX
-            return m_Controller.OutputPackedPath;
-#else
-            return m_Controller.OutputPackagePath;
-#endif
+            if (m_Controller.OutputPackageSelected)
+            {
+                return m_Controller.OutputPackagePath;
+            }
+            else
+            {
+                return m_Controller.OutputPackedPath;
+            }
         }
 
         private static void GetBuildMessage(out string message, out MessageType messageType)

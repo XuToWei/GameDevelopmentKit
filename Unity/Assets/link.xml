@@ -49,7 +49,7 @@
     <!--UNITY_HOTFIX_ET_FIRST-->
     <assembly fullname="MongoDB.Bson" preserve="all" />
     <assembly fullname="CommandLine" preserve="all" />
-    <assembly fullname="ET.Runtime" preserve="all" />
+    <assembly fullname="ET" preserve="all" />
     <assembly fullname="Game.ET.Loader" preserve="all" />
     <!--UNITY_HOTFIX_ET_END-->
 

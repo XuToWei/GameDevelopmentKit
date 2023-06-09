@@ -53,10 +53,10 @@ MonoBehaviour:
   - Game
   - MongoDB.Bson
   - CommandLine
-  - ET.Runtime
+  - ET
   - Game.ET.Loader
   - MongoDB.Driver
   outputLinkFile: Res/Editor/HybridCLR/Generate/link.xml
-  outputAOTGenericReferenceFile: Res/Editor/HybridCLR/AOTGenericReferences.cs
+  outputAOTGenericReferenceFile: Res/Editor/HybridCLR/Generate/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10
   maxMethodBridgeGenericIteration: 10
