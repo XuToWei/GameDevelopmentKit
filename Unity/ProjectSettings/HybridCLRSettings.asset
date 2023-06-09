@@ -43,7 +43,6 @@ MonoBehaviour:
   - Newtonsoft.Json
   - CodeBind
   - LubanLib
-  - protobuf-net
   - GameFramework
   - UnityGameFramework.Runtime
   - UnityGameFramework.Extension
@@ -53,6 +52,7 @@ MonoBehaviour:
   - CommandLine
   - ET
   - Game.ET.Loader
+  - System.Configuration
   outputLinkFile: Res/Editor/HybridCLR/Generate/link.xml
   outputAOTGenericReferenceFile: Res/Editor/HybridCLR/Generate/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10
