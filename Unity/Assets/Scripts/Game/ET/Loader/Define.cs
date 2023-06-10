@@ -22,9 +22,9 @@
 #endif
 
 #if ENABLE_IL2CPP
-        public static bool EnableIL2CPP = true;
+        public static bool EnableIL2CPP => true;
 #else
-        public static bool EnableIL2CPP = false;
+        public static bool EnableIL2CPP => false;
 #endif
 
 #if UNITY_ET_CODEMODE_CLIENT
