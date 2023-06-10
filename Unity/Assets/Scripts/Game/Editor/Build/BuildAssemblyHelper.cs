@@ -10,7 +10,7 @@ namespace Game.Editor
 {
     public static class BuildAssemblyHelper
     {
-        public static string BuildOutputDir => "./Temp/Bin/CustomBuild";
+        public static string BuildOutputDir => "./Temp/GameBin";
         
         public static void ClearBuildOutputDir()
         {
@@ -20,10 +20,7 @@ namespace Game.Editor
         public static void Build(string assemblyName, List<string> codeDirectories,
             string[] additionalReferences, string[] excludeReferences, CodeOptimization codeOptimization)
         {
-            if (!Directory.Exists(BuildOutputDir))
-            {
-                Directory.CreateDirectory(BuildOutputDir);
-            }
+            Directory.CreateDirectory(BuildOutputDir);
 
             List<string> scripts = new List<string>();
             for (int i = 0; i < codeDirectories.Count; i++)

@@ -1,7 +1,7 @@
 namespace ET.Client
 {
     [Invoke]
-    public class UnityOnApplicationPauseHandler : AInvokeHandler<EventType.OnApplicationPause>
+    public class UnityOnApplicationPauseInvokeHandler : AInvokeHandler<EventType.OnApplicationPause>
     {
         public override void Handle(EventType.OnApplicationPause arg)
         {
@@ -13,7 +13,7 @@ namespace ET.Client
     }
     
     [Invoke]
-    public class UnityOnApplicationFocusHandler : AInvokeHandler<EventType.OnApplicationFocus>
+    public class UnityOnApplicationFocusInvokeHandler : AInvokeHandler<EventType.OnApplicationFocus>
     {
         public override void Handle(EventType.OnApplicationFocus arg)
         {
@@ -25,7 +25,7 @@ namespace ET.Client
     }
     
     [Invoke]
-    public class UnityOnShutDownHandler : AInvokeHandler<EventType.OnShutdown>
+    public class UnityOnShutDownInvokeHandler : AInvokeHandler<EventType.OnShutdown>
     {
         public override void Handle(EventType.OnShutdown arg)
         {

@@ -28,7 +28,7 @@
     "autoReferenced": true,
     "defineConstraints": [
         "UNITY_GAMEHOT",
-        "!UNITY_HOTFIX || UNITY_EDITOR"
+        "!UNITY_HOTFIX"
     ],
     "versionDefines": [],
     "noEngineReferences": false

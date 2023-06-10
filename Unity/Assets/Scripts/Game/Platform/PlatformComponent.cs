@@ -14,6 +14,8 @@ namespace Game
         private readonly IPlatform m_Platform = new PlatformAndroid();
 #elif UNITY_IOS
         private readonly IPlatform m_Platform = new PlatformIOS();
+#else
+        private readonly IPlatform m_Platform = new PlatformEditor();
 #endif
 
         public void TrackEvent(string eventName, string key, object value)

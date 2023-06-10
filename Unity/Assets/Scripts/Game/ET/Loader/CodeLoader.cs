@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace ET
         {
             model = null;
             
-            if (Define.EnableHotfix && GameEntry.CodeRunner.EditorCodeBytesMode)
+            if (Define.EnableHotfix)
             {
                 byte[] assBytes = await LoadCodeBytesAsync("Model.dll.bytes");
                 byte[] pdbBytes = await LoadCodeBytesAsync("Model.pdb.bytes");
@@ -50,9 +51,21 @@ namespace ET
             {
                 throw new GameFrameworkException("Client ET LoadHotfix only run when EnableHotfix!");
             }
-            
+#if UNITY_EDITOR
+            // 傻屌Unity在这里搞了个傻逼优化，认为同一个路径的dll，返回的程序集就一样。所以这里每次编译都要随机名字
+            string[] logicFiles = Directory.GetFiles(Define.BuildOutputDir, "Hotfix_*.dll");
+            if (logicFiles.Length != 1)
+            {
+                throw new Exception("Logic dll count != 1");
+            }
+            string logicName = Path.GetFileNameWithoutExtension(logicFiles[0]);
+            byte[] assBytes = File.ReadAllBytes(Path.Combine(Define.BuildOutputDir, $"{logicName}.dll"));
+            byte[] pdbBytes = File.ReadAllBytes(Path.Combine(Define.BuildOutputDir, $"{logicName}.pdb"));
+           
+#else
             byte[] assBytes = await LoadCodeBytesAsync("Hotfix.dll.bytes");
             byte[] pdbBytes = await LoadCodeBytesAsync("Hotfix.pdb.bytes");
+#endif
 
             Assembly hotfixAssembly = Assembly.Load(assBytes, pdbBytes);
 

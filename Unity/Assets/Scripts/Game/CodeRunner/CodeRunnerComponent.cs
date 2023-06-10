@@ -2,34 +2,23 @@ using System;
 using GameFramework;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityGameFramework.Runtime;
 
 namespace Game
 {
     public class CodeRunnerComponent : GameFrameworkComponent
     {
-        [Tooltip("编辑器模式下能否加载bytes方式运行代码")]
-        [SerializeField]
-        private bool m_EditorCodeBytesMode = false;
-
         [ShowInInspector, ReadOnly]
         public bool IsRunning { get; private set; } = false;
 
         [ShowInInspector, ReadOnly]
         private Component m_InitComponent;
 
-        public bool EditorCodeBytesMode => m_EditorCodeBytesMode;
-
         public void StartRun(string startMonoType)
         {
             if (IsRunning)
             {
                 throw new GameFrameworkException("CodeRunnerComponent StartRun duplicate!");
-            }
-            if (!Application.isEditor)
-            {
-                m_EditorCodeBytesMode = false;
             }
             Type initType = Utility.Assembly.GetType(startMonoType);
             if (initType == null)
