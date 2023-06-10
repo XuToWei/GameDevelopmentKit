@@ -51,5 +51,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/*.dat
 /[Aa]ssets/[Ss]treamingAssets/*.dat.meta
 /[Aa]ssets/.gitignore
-
-
+/[Aa]ssets/Res/ET/Code
+/[Aa]ssets/Res/Hot/Code
+/[Aa]ssets/Res/HybridCLR/*.dll.bytes
+/[Aa]ssets/Res/HybridCLR/*.dll.bytes.meta
