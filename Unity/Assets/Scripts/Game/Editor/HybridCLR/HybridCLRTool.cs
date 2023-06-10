@@ -11,6 +11,8 @@ namespace Game.Editor
 {
     public static class HybridCLRTool
     {
+        public static string ExternalHotUpdateAssemblyDir => "./Temp/HybridCLRBin";
+        
         public static void EnableHybridCLR()
         {
             HybridCLRSettings.Instance.enable = true;
@@ -76,7 +78,15 @@ namespace Game.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
-        public static void RefreshSettingsByLinkXML()
+        public static void RefreshSettings()
+        {
+            RefreshExternalHotUpdateDirs();
+            RefreshSettingsByLinkXML();
+            HybridCLRSettings.Save();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+        }
+
+        private static void RefreshSettingsByLinkXML()
         {
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(LinkXMLHelper.LinkXMLPath);
@@ -97,8 +107,21 @@ namespace Game.Editor
             }
 
             HybridCLRSettings.Instance.patchAOTAssemblies = assemblyNames.ToArray();
-            HybridCLRSettings.Save();
-            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+        }
+
+        private static void RefreshExternalHotUpdateDirs()
+        {
+            List<string> dirList = new List<string>();
+            string[] dirs = HybridCLRSettings.Instance.externalHotUpdateAssembliyDirs;
+            if (dirs != null)
+            {
+                dirList.AddRange(dirs);
+            }
+            if (!dirList.Contains(ExternalHotUpdateAssemblyDir))
+            {
+                dirList.Add(ExternalHotUpdateAssemblyDir);
+            }
+            HybridCLRSettings.Instance.externalHotUpdateAssembliyDirs = dirList.ToArray();
         }
     }
 }

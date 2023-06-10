@@ -10,7 +10,7 @@ namespace ET.Editor
         [UGFBuildOnPreprocessPlatform(1)]
         public static void CompileDll(Platform platform)
         {
-            BuildAssemblyTool.Build(CompileAssemblyHelper.GetBuildTarget(platform));
+            BuildAssemblyTool.Build(BuildAssemblyHelper.GetBuildTarget(platform));
         }
     }
 }

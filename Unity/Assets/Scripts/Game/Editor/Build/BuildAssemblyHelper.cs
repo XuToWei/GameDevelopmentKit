@@ -8,7 +8,7 @@ using UnityGameFramework.Editor.ResourceTools;
 
 namespace Game.Editor
 {
-    public static class CompileAssemblyHelper
+    public static class BuildAssemblyHelper
     {
         public static string BuildOutputDir => "./Temp/GameBin";
 
@@ -33,11 +33,11 @@ namespace Game.Editor
 
         public static void CopyHotUpdateDlls(BuildTarget target, string desDir, string[] dllNames)
         {
+            Directory.CreateDirectory(desDir);
+            Directory.CreateDirectory(HybridCLRTool.ExternalHotUpdateAssemblyDir);
             FileTool.CleanDirectory(desDir);
-            string hybridCLRHotUpdateDllsDir = HybridCLRSettings.Instance.externalHotUpdateAssembliyDirs[0];
-            FileTool.CleanDirectory(hybridCLRHotUpdateDllsDir);
+            FileTool.CleanDirectory(HybridCLRTool.ExternalHotUpdateAssemblyDir);
             string buildDir = GetBuildTargetDir(target);
-            Directory.CreateDirectory(hybridCLRHotUpdateDllsDir);
             foreach (var dllName in dllNames)
             {
                 string sourceDll = $"{buildDir}/{dllName}.dll";
@@ -45,9 +45,9 @@ namespace Game.Editor
                 File.Copy(sourceDll, $"{desDir}/{dllName}.dll.bytes", true);
                 File.Copy(sourcePdb, $"{desDir}/{dllName}.pdb.bytes", true);
                 //更新HybridCLR热更dlls
-                File.Copy(sourceDll, $"{hybridCLRHotUpdateDllsDir}/{dllName}.dll", true);
-                File.Copy(sourcePdb, $"{hybridCLRHotUpdateDllsDir}/{dllName}.pdb", true);
-                Debug.Log($"copy:{buildDir}/{dllName} => {desDir}/{dllName} , {hybridCLRHotUpdateDllsDir}/{dllName}");
+                File.Copy(sourceDll, $"{HybridCLRTool.ExternalHotUpdateAssemblyDir}/{dllName}.dll", true);
+                File.Copy(sourcePdb, $"{HybridCLRTool.ExternalHotUpdateAssemblyDir}/{dllName}.pdb", true);
+                Debug.Log($"copy:{buildDir}/{dllName} => {desDir}/{dllName} , {HybridCLRTool.ExternalHotUpdateAssemblyDir}/{dllName}");
             }
             Debug.Log("copy finish!!!");
         }

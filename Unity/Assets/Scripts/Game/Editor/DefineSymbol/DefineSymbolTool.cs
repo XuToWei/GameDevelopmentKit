@@ -50,8 +50,16 @@ namespace Game.Editor
 #endif
 #if UNITY_ET
             LinkXMLHelper.AddLinkXML("UNITY_ET");
+            HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.Model");
+            HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.ModelView");
+            HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.Hotfix");
+            HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.HotfixView");
 #else
             LinkXMLHelper.RemoveLinkXML("UNITY_ET");
+            HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.ET.Code.Model");
+            HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.ET.Code.ModelView");
+            HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.ET.Code.Hotfix");
+            HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.ET.Code.HotfixView");
 #endif
 #if UNITY_HOTFIX && UNITY_GAMEHOT
             LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_GAMEHOT");
@@ -65,10 +73,12 @@ namespace Game.Editor
 #endif
 #if UNITY_GAMEHOT
             LinkXMLHelper.AddLinkXML("UNITY_GAMEHOT");
+            HybridCLRTool.AddHotfixAssemblyDefinition("Game.Hot.Code");
 #else
             LinkXMLHelper.RemoveLinkXML("UNITY_GAMEHOT");
+            HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.Hot.Code");
 #endif
-            HybridCLRTool.RefreshSettingsByLinkXML();
+            HybridCLRTool.RefreshSettings();
             AssetDatabase.SaveAssets();
             Debug.Log("Refresh!");
         }
@@ -77,7 +87,7 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_HOTFIX")]
         private static void Remove_UNITY_HOTFIX()
         {
-            CompileAssemblyHelper.ClearBuildDir();
+            BuildAssemblyHelper.ClearBuildDir();
             HybridCLRTool.DisableHybridCLR();
             LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX");
             LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX");
@@ -97,7 +107,7 @@ namespace Game.Editor
 #if UNITY_GAMEHOT
             LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #endif
-            HybridCLRTool.RefreshSettingsByLinkXML();
+            HybridCLRTool.RefreshSettings();
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_HOTFIX");
             AssetDatabase.SaveAssets();
         }
@@ -135,7 +145,7 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Remove UNITY_ET")]
         private static void Remove_UNITY_ET()
         {
-            CompileAssemblyHelper.ClearBuildDir();
+            BuildAssemblyHelper.ClearBuildDir();
             LinkXMLHelper.RemoveLinkXML("UNITY_ET");
             LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET");
             LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET");
@@ -144,7 +154,12 @@ namespace Game.Editor
             LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
             LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
 
-            HybridCLRTool.RefreshSettingsByLinkXML();
+            HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.ET.Code.Model");
+            HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.ET.Code.ModelView");
+            HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.ET.Code.Hotfix");
+            HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.ET.Code.HotfixView");
+
+            HybridCLRTool.RefreshSettings();
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET");
             AssetDatabase.SaveAssets();
         }
@@ -179,6 +194,11 @@ namespace Game.Editor
 #else
             LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET");
 #endif
+            HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.Model");
+            HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.ModelView");
+            HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.Hotfix");
+            HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.HotfixView");
+
             HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET");
             AssetDatabase.SaveAssets();
@@ -194,6 +214,8 @@ namespace Game.Editor
             LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
             LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 
+            HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.Hot.Code");
+
             HybridCLRTool.RefreshSettingsByLinkXML();
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_GAMEHOT");
             AssetDatabase.SaveAssets();
@@ -202,7 +224,7 @@ namespace Game.Editor
         [MenuItem("Tools/Define Symbol/Add UNITY_GAMEHOT")]
         private static void Add_UNITY_GAMEHOT()
         {
-            CompileAssemblyHelper.ClearBuildDir();
+            BuildAssemblyHelper.ClearBuildDir();
             LinkXMLHelper.AddLinkXML("UNITY_GAMEHOT");
 #if UNITY_ET
             Remove_UNITY_ET();
@@ -212,7 +234,9 @@ namespace Game.Editor
 #else
             LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #endif
-            HybridCLRTool.RefreshSettingsByLinkXML();
+            HybridCLRTool.AddHotfixAssemblyDefinition("Game.Hot.Code");
+
+            HybridCLRTool.RefreshSettings();
             ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_GAMEHOT");
             AssetDatabase.SaveAssets();
         }
