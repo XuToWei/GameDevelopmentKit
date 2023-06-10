@@ -65,12 +65,12 @@ namespace ET
                 throw new GameFrameworkException("Client ET LoadHotfix only run when EnableHotfix!");
             }
 #if UNITY_EDITOR
-            string[] hotfixFiles = System.IO.Directory.GetFiles(Define.ReloadHotfixDir, "Hotfix_*.dll");
+            string[] hotfixFiles = System.IO.Directory.GetFiles(Define.ReloadHotfixDir, "Game.ET.Code.Hotfix_*.dll");
             if (hotfixFiles.Length != 1)
             {
                 throw new GameFrameworkException("Hotfix dll count != 1");
             }
-            string[] hotfixViewFiles = System.IO.Directory.GetFiles(Define.ReloadHotfixDir, "HotfixView_*.dll");
+            string[] hotfixViewFiles = System.IO.Directory.GetFiles(Define.ReloadHotfixDir, "Game.ET.Code.HotfixView_*.dll");
             if (hotfixViewFiles.Length != 1)
             {
                 throw new GameFrameworkException("HotfixView dll count != 1");
@@ -82,10 +82,10 @@ namespace ET
             byte[] assBytes_HotfixView = System.IO.File.ReadAllBytes($"{Define.ReloadHotfixDir}/{hotfixViewName}.dll");
             byte[] pdbBytes_HotfixView = System.IO.File.ReadAllBytes($"{Define.ReloadHotfixDir}/{hotfixViewName}.pdb");
 #else
-             byte[] assBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.dll.bytes");
-             byte[] pdbBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.pdb.bytes");
-             byte[] assBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.dll.bytes");
-             byte[] pdbBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.pdb.bytes");
+            byte[] assBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.dll.bytes");
+            byte[] pdbBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.pdb.bytes");
+            byte[] assBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.dll.bytes");
+            byte[] pdbBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.pdb.bytes");
 #endif
             Assembly hotfix = Assembly.Load(assBytes_Hotfix, pdbBytes_Hotfix);
             Assembly hotfixView = Assembly.Load(assBytes_HotfixView, pdbBytes_HotfixView);

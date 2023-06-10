@@ -6,11 +6,13 @@ namespace Game.Editor
 {
     public static class CodeRunnerUtility
     {
-        public static bool IsEditorCodeBytesMode()
+        public static bool IsEnableEditorCodeBytesMode()
         {
             CodeRunnerComponent codeRunnerComponent = EntryUtility.GetEntrySceneComponent<CodeRunnerComponent>();
+            if (codeRunnerComponent == null)
+                return false;
             Type type = typeof(CodeRunnerComponent);
-            FieldInfo fieldInfo = type.GetField("m_EditorCodeBytesMode", BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo fieldInfo = type.GetField("m_EnableEditorCodeBytesMode", BindingFlags.NonPublic | BindingFlags.Instance);
             return (bool)fieldInfo.GetValue(codeRunnerComponent);
         }
     }

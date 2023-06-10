@@ -46,7 +46,7 @@ namespace Game.Hot.Editor
             {
                 if (change == PlayModeStateChange.ExitingEditMode)
                 {
-                    if (CodeRunnerUtility.IsEditorCodeBytesMode())
+                    if (CodeRunnerUtility.IsEnableEditorCodeBytesMode())
                     {
                         foreach (var dll in DllNames)
                         {
