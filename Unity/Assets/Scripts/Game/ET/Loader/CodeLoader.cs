@@ -18,8 +18,8 @@ namespace ET
         {
             model = null;
             modelView = null;
-            
-            if (Define.EnableHotfix && GameEntry.CodeRunner.EditorCodeBytesMode)
+
+            if (Define.EnableHotfix && GameEntry.CodeRunner.EnableCodeBytesMode)
             {
                 byte[] assBytes_Model = await LoadCodeBytesAsync("Game.ET.Code.Model.dll.bytes");
                 byte[] pdbBytes_Model = await LoadCodeBytesAsync("Game.ET.Code.Model.pdb.bytes");
@@ -64,12 +64,29 @@ namespace ET
             {
                 throw new GameFrameworkException("Client ET LoadHotfix only run when EnableHotfix!");
             }
-            
-            byte[] assBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.dll.bytes");
-            byte[] pdbBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.pdb.bytes");
-            byte[] assBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.dll.bytes");
-            byte[] pdbBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.pdb.bytes");
-
+#if UNITY_EDITOR
+            string[] hotfixFiles = System.IO.Directory.GetFiles(Define.ReloadHotfixDir, "Hotfix_*.dll");
+            if (hotfixFiles.Length != 1)
+            {
+                throw new GameFrameworkException("Hotfix dll count != 1");
+            }
+            string[] hotfixViewFiles = System.IO.Directory.GetFiles(Define.ReloadHotfixDir, "HotfixView_*.dll");
+            if (hotfixViewFiles.Length != 1)
+            {
+                throw new GameFrameworkException("HotfixView dll count != 1");
+            }
+            string hotfixName = System.IO.Path.GetFileNameWithoutExtension(hotfixFiles[0]);
+            string hotfixViewName = System.IO.Path.GetFileNameWithoutExtension(hotfixViewFiles[0]);
+            byte[] assBytes_Hotfix = System.IO.File.ReadAllBytes($"{Define.ReloadHotfixDir}/{hotfixName}.dll");
+            byte[] pdbBytes_Hotfix = System.IO.File.ReadAllBytes($"{Define.ReloadHotfixDir}/{hotfixName}.pdb");
+            byte[] assBytes_HotfixView = System.IO.File.ReadAllBytes($"{Define.ReloadHotfixDir}/{hotfixViewName}.dll");
+            byte[] pdbBytes_HotfixView = System.IO.File.ReadAllBytes($"{Define.ReloadHotfixDir}/{hotfixViewName}.pdb");
+#else
+             byte[] assBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.dll.bytes");
+             byte[] pdbBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.pdb.bytes");
+             byte[] assBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.dll.bytes");
+             byte[] pdbBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.pdb.bytes");
+#endif
             Assembly hotfix = Assembly.Load(assBytes_Hotfix, pdbBytes_Hotfix);
             Assembly hotfixView = Assembly.Load(assBytes_HotfixView, pdbBytes_HotfixView);
 

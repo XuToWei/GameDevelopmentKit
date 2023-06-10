@@ -25,44 +25,83 @@
       <Resource Name="Res/UI/UIForm/LockStep/UILSRoom" LoadType="0" Packed="False" />
     </Resources>
     <Assets>
+      <Asset Guid="02bdccba85afd454194903f2df3477f0" ResourceName="ET" />
       <Asset Guid="064123f1e5067b249a9fd8967ddbde09" ResourceName="Res/Scene/Map2" />
       <Asset Guid="08b1969f82430784f915a659ed9d66d5" ResourceName="ET" />
       <Asset Guid="09e587528c6da27469a8017d23136a0f" ResourceName="Luban" />
       <Asset Guid="1053b0070685be347ab58587156842dc" ResourceName="Res/Localization/ChineseTraditional" />
+      <Asset Guid="13ebf73e3023f454abf4bed18626d307" ResourceName="ET" />
       <Asset Guid="14869ac0d4433f04db1704e39d03412e" ResourceName="Res/Localization/English" />
       <Asset Guid="172ab742804613d4f99fee07a3878843" ResourceName="Luban" />
+      <Asset Guid="18f0e0dbc37873749b45f8564fe765af" ResourceName="HybridCLR" />
+      <Asset Guid="1936a937283d49a49b6a7f02bb32e1c2" ResourceName="HybridCLR" />
       <Asset Guid="1abfbe65a6e3c034cb43df1cff7317cb" ResourceName="Luban" />
+      <Asset Guid="229e075736921624d81f701c2b8bcd54" ResourceName="HybridCLR" />
+      <Asset Guid="232539c1b33461947aed7ffcfd0ab014" ResourceName="HybridCLR" />
       <Asset Guid="25619d90ce6d6724db8154b48c144403" ResourceName="Res/Localization/ChineseTraditional" />
+      <Asset Guid="2843d3a02d68a4842a0a9cd0bcbb6e61" ResourceName="HybridCLR" />
+      <Asset Guid="2d0712dc5ef377f4cb3f698af59a65e2" ResourceName="HybridCLR" />
+      <Asset Guid="313df16d6f7fa254984b385354e0c0de" ResourceName="HybridCLR" />
+      <Asset Guid="37ff70b00cbee97469c9608f6b3605a5" ResourceName="HybridCLR" />
+      <Asset Guid="3cd2e90e16477454995094181f2fafa5" ResourceName="HybridCLR" />
       <Asset Guid="3ec74aa98d7b1ba4599726fc79459c3c" ResourceName="Luban" />
+      <Asset Guid="4319c8b10880a4643b68feef8ee09569" ResourceName="HybridCLR" />
       <Asset Guid="4b955aa39c16bcb4d9ea0d5245638cdf" ResourceName="ET" />
+      <Asset Guid="4bec57d9b73e29846bad35d83fbb0a0d" ResourceName="HybridCLR" />
       <Asset Guid="4eb028c2d41731848b73b8784a0ec0f1" ResourceName="ET" />
+      <Asset Guid="53f76a2a5a4e08048bd480735fb2d970" ResourceName="HybridCLR" />
+      <Asset Guid="57c0bbb0ecc33b4499d0a90d3dcfa452" ResourceName="HybridCLR" />
       <Asset Guid="595f7cae6f82a6146b20ca287fe7c859" ResourceName="Res/Prefab/Skeleton/SkeletonController" />
       <Asset Guid="5cb3b48a2d2a948d6b2564f64624607c" ResourceName="Res/UI/UIForm/LockStep/UILSLobby" />
       <Asset Guid="5dcd89912e222bf4c87f76db4044bc5e" ResourceName="Res/Localization/Korean" />
+      <Asset Guid="63dc10ebfd4125544acdafba01b5878a" ResourceName="HybridCLR" />
+      <Asset Guid="682442f5d8580ce40aa9f645cd617d8c" ResourceName="HybridCLR" />
       <Asset Guid="6887965437e6cdd4994b29405da0cf20" ResourceName="ET" />
+      <Asset Guid="696da7571a55a2b4ca9fd2abb3d4e5aa" ResourceName="ET" />
       <Asset Guid="6f4f01fb0f74a674196c817368818daf" ResourceName="ET" />
       <Asset Guid="7c257456f05a75841b93e90bdd63bbf9" ResourceName="Res/Localization/ChineseSimplified" />
+      <Asset Guid="84b43684f4939c64999be90dbf3cf549" ResourceName="HybridCLR" />
       <Asset Guid="84b7805ef4c5343ce920ff2c6e71c7f1" ResourceName="GameHot" />
+      <Asset Guid="85a73fb5babe6914eb9af04960bf5b29" ResourceName="HybridCLR" />
+      <Asset Guid="889068855cd3c6e4c9c694d140401195" ResourceName="HybridCLR" />
+      <Asset Guid="8dbe29e9b62a5cf44b120228fa3a7ec0" ResourceName="HybridCLR" />
       <Asset Guid="943f3c476130c4f4f8ae55ef3ccd38ba" ResourceName="Res/Prefab/Skeleton/Texture/Skeleton_D" />
       <Asset Guid="96d83c7380035564ba399a83d77e7f91" ResourceName="ET" />
+      <Asset Guid="9a15a42e15e24974b861719700a68103" ResourceName="ET" />
       <Asset Guid="9bc346173d3994e10a7f5e6c0a70aee3" ResourceName="ET" />
       <Asset Guid="9be2e1e45f4edd74c8764538ad306b78" ResourceName="Res/Localization/ChineseSimplified" />
       <Asset Guid="9e27b0bdab1ad7242a009899d15c0e67" ResourceName="Res/Prefab/Skeleton/Skeleton" />
       <Asset Guid="9f6d9adc6f537764fa0fea29671e77bf" ResourceName="Res/UI/UIForm/Demo/UILogin" />
+      <Asset Guid="a10aacc59a47c4847abba6a16020edee" ResourceName="HybridCLR" />
+      <Asset Guid="a44189268045af14d940c602f9f356a4" ResourceName="HybridCLR" />
       <Asset Guid="a5294483f20f40d449699101bb428cda" ResourceName="Res/Scene/Map1" />
       <Asset Guid="ab0e7d449081c5840b6ecbc53b9a60e4" ResourceName="ET" />
       <Asset Guid="ac8128978dc317248b81bea70128b967" ResourceName="HybridCLR" />
       <Asset Guid="b1494958bf9856a479bec1767c02878e" ResourceName="Res/Prefab/Skeleton/Ani/Materials/skeleton_D" />
+      <Asset Guid="b2dbd25a698bf184390f89bcb3f03468" ResourceName="HybridCLR" />
       <Asset Guid="b420ab0d7cecc4691b5ccbe3a60049de" ResourceName="ET" />
+      <Asset Guid="b829a594789618841847821344d8da1e" ResourceName="HybridCLR" />
+      <Asset Guid="bc09b57747a93864da9da624148a8d0e" ResourceName="HybridCLR" />
+      <Asset Guid="bc2b35f8ee2226d4b9eb520019fc4c8c" ResourceName="HybridCLR" />
+      <Asset Guid="be4ac89501a404a44b37834bdcdd4dea" ResourceName="ET" />
       <Asset Guid="c54e8d9624286b24fa23519e5df2ed0a" ResourceName="Res/UI/UIForm/Demo/UIHelp" />
+      <Asset Guid="c8e1047cd4d79ed46be23feb58bfe1d6" ResourceName="HybridCLR" />
+      <Asset Guid="cc5e4c8d736db1e48aeb4a5874962656" ResourceName="ET" />
       <Asset Guid="cd590f301d3662040841baada9b1dfb4" ResourceName="Luban" />
       <Asset Guid="d0b662c758c98944e96c1bede0345ce3" ResourceName="ET" />
       <Asset Guid="d21cca8dd0073ab4584cd5ff462371ee" ResourceName="Res/Localization/English" />
       <Asset Guid="d6d2a8e7150a19c4a9aec43c56f70ed1" ResourceName="ET" />
+      <Asset Guid="d8bd2743983bf664e864e7838847cf72" ResourceName="HybridCLR" />
       <Asset Guid="d8d87e53d93e234448658c9a801a9967" ResourceName="Res/UI/UIForm/Demo/UILobby" />
+      <Asset Guid="d9e2d7b610fe7e447af810b5990340b4" ResourceName="HybridCLR" />
+      <Asset Guid="da74c5251e3bd674284897997b62a7d8" ResourceName="HybridCLR" />
       <Asset Guid="dfc4233acbbd1c44fa552f08e23cd89c" ResourceName="Luban" />
+      <Asset Guid="e47c00ef32203cc4c9c9fdefbd72f91d" ResourceName="HybridCLR" />
+      <Asset Guid="e770cd30bc61d96499c9c5fc1e057228" ResourceName="ET" />
       <Asset Guid="ed14df0368fe53543907335c0e3902c6" ResourceName="Res/Prefab/Skeleton/Character/Materials/skeleton_D" />
+      <Asset Guid="f0cbcb452661d2d478048c1433b8fbb3" ResourceName="ET" />
       <Asset Guid="f1833b4cd407d8e408a62b46185431ff" ResourceName="Luban" />
+      <Asset Guid="f26511c1dbec9f247b8deae8f9b057c9" ResourceName="HybridCLR" />
       <Asset Guid="f29d435e196cd421aa7a7700402942f3" ResourceName="Res/UI/UIForm/LockStep/UILSLogin" />
       <Asset Guid="f526acef4c0a80948b572f523598c71a" ResourceName="ET" />
       <Asset Guid="fcad5af85f5a54eb3884cdfb6efc7d27" ResourceName="Res/UI/UIForm/LockStep/UILSRoom" />

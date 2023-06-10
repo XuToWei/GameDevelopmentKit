@@ -36,5 +36,12 @@ namespace Game.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             Debug.Log($"{HybridCLRHelper.ConfigAsset} 链接AotDlls！");
         }
+
+        [MenuItem("HybridCLR/Do All", false, int.MaxValue)]
+        public static void HybridCLRDoAll()
+        {
+            EditorApplication.ExecuteMenuItem("HybridCLR/Generate/All");
+            EditorApplication.ExecuteMenuItem("HybridCLR/CopyAotDlls");
+        }
     }
 }

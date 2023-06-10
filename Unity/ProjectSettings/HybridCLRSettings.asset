@@ -21,7 +21,7 @@ MonoBehaviour:
   preserveHotUpdateAssemblies: []
   hotUpdateDllCompileOutputRootDir: HybridCLRData/HotUpdateDlls
   externalHotUpdateAssembliyDirs:
-  - ./Temp/HybridCLRHotUpdateDlls
+  - Temp/HybridCLRHotUpdateDlls
   strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip
   patchAOTAssemblies:
   - mscorlib
@@ -47,13 +47,15 @@ MonoBehaviour:
   - UnityGameFramework.Runtime
   - UnityGameFramework.Extension
   - UniTask
+  - ZString
   - Game
+  - MemoryPack
   - MongoDB.Bson
   - CommandLine
   - ET
   - Game.ET.Loader
-  - System.Configuration
+  - MongoDB.Driver
   outputLinkFile: Res/Editor/HybridCLR/Generate/link.xml
   outputAOTGenericReferenceFile: Res/Editor/HybridCLR/Generate/AOTGenericReferences.cs
-  maxGenericReferenceIteration: 10
-  maxMethodBridgeGenericIteration: 10
+  maxGenericReferenceIteration: 20
+  maxMethodBridgeGenericIteration: 20

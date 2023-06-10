@@ -3,6 +3,10 @@
     public static class Define
     {
 #if UNITY_EDITOR
+        public static string ReloadHotfixDir => "./Temp/ETHotfixReloadBin";
+#endif
+
+#if UNITY_EDITOR
         public static bool IsEditor => true;
 #else
         public static bool IsEditor => false;

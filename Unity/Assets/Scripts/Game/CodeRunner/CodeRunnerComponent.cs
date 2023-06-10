@@ -10,13 +10,12 @@ namespace Game
     {
         [Tooltip("编辑器模式下能否加载bytes方式运行代码")]
         [SerializeField, ShowIf("IsHotFix")]
-        private bool m_EditorCodeBytesMode = false;
+        private bool m_EnableEditorCodeBytesMode = false;
 
-#if UNITY_HOTFIX
         [ShowInInspector, ReadOnly]
+#if UNITY_HOTFIX
         public bool IsHotFix => true;
 #else
-        [ShowInInspector, ReadOnly]
         public bool IsHotFix => false;
 #endif
 
@@ -26,17 +25,17 @@ namespace Game
         [ShowInInspector, ReadOnly]
         private Component m_InitComponent;
 
-        public bool EditorCodeBytesMode => m_EditorCodeBytesMode;
+#if UNITY_EDITOR
+        public bool EnableCodeBytesMode => m_EnableEditorCodeBytesMode;
+#else
+        public bool EnableCodeBytesMode => true;
+#endif
 
         public void StartRun(string startMonoType)
         {
             if (IsRunning)
             {
                 throw new GameFrameworkException("CodeRunnerComponent StartRun duplicate!");
-            }
-            if (!Application.isEditor)
-            {
-                m_EditorCodeBytesMode = false;
             }
             Type initType = Utility.Assembly.GetType(startMonoType);
             if (initType == null)

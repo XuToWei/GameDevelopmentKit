@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace ET
 {
@@ -55,6 +56,7 @@ namespace ET
             this.allEvents.Clear();
             foreach (Type type in types[typeof (EventAttribute)])
             {
+                Debug.Log($"EventAttribute:{type}  {type.Assembly}");
                 IEvent obj = Activator.CreateInstance(type) as IEvent;
                 if (obj == null)
                 {

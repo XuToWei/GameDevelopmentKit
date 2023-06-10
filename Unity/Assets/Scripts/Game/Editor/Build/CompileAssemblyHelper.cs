@@ -36,18 +36,18 @@ namespace Game.Editor
             FileTool.CleanDirectory(desDir);
             string hybridCLRHotUpdateDllsDir = HybridCLRSettings.Instance.externalHotUpdateAssembliyDirs[0];
             FileTool.CleanDirectory(hybridCLRHotUpdateDllsDir);
-            string targetDir = GetBuildTargetDir(target);
+            string buildDir = GetBuildTargetDir(target);
             Directory.CreateDirectory(hybridCLRHotUpdateDllsDir);
             foreach (var dllName in dllNames)
             {
-                string sourceDll = $"{targetDir}/{dllName}.dll";
-                string sourcePdb = $"{targetDir}/{dllName}.pdb";
+                string sourceDll = $"{buildDir}/{dllName}.dll";
+                string sourcePdb = $"{buildDir}/{dllName}.pdb";
                 File.Copy(sourceDll, $"{desDir}/{dllName}.dll.bytes", true);
                 File.Copy(sourcePdb, $"{desDir}/{dllName}.pdb.bytes", true);
                 //更新HybridCLR热更dlls
                 File.Copy(sourceDll, $"{hybridCLRHotUpdateDllsDir}/{dllName}.dll", true);
                 File.Copy(sourcePdb, $"{hybridCLRHotUpdateDllsDir}/{dllName}.pdb", true);
-                Debug.Log($"copy:{targetDir}/{dllName} => {desDir}/{dllName} , {hybridCLRHotUpdateDllsDir}/{dllName}");
+                Debug.Log($"copy:{buildDir}/{dllName} => {desDir}/{dllName} , {hybridCLRHotUpdateDllsDir}/{dllName}");
             }
             Debug.Log("copy finish!!!");
         }

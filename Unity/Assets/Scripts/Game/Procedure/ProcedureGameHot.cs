@@ -10,7 +10,7 @@ namespace Game
         {
             base.OnEnter(procedureOwner);
             GameEntry.CodeRunner.StartRun("Game.Hot.Init");
-            Log.Debug("Start run Game.Hot!");
+            Log.Info("Start run Game.Hot!");
         }
         
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)

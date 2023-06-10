@@ -28,6 +28,7 @@
     <assembly fullname="UnityGameFramework.Runtime" preserve="all" />
     <assembly fullname="UnityGameFramework.Extension" preserve="all" />
     <assembly fullname="UniTask" preserve="all" />
+    <assembly fullname="ZString" preserve="all" />
     
     <assembly fullname="Game" preserve="all" />
     <!--UNITY_HOTFIX_END-->
@@ -47,11 +48,11 @@
     -UNITY_!HOTFIX_ET-->
 
     <!--UNITY_HOTFIX_ET_FIRST-->
+    <assembly fullname="MemoryPack" preserve="all" />
     <assembly fullname="MongoDB.Bson" preserve="all" />
     <assembly fullname="CommandLine" preserve="all" />
     <assembly fullname="ET" preserve="all" />
     <assembly fullname="Game.ET.Loader" preserve="all" />
-    <assembly fullname="System.Configuration" preserve="all" />
     <!--UNITY_HOTFIX_ET_END-->
 
     <!--UNITY_!HOTFIX_ET_CLIENT-
@@ -63,9 +64,9 @@
     <!--UNITY_!HOTFIX_ET_SERVER-
     -UNITY_!HOTFIX_ET_SERVER-->
     
-    <!--UNITY_HOTFIX_ET_SERVER-
+    <!--UNITY_HOTFIX_ET_SERVER_FIRST-->
     <assembly fullname="MongoDB.Driver" preserve="all" />
-    -UNITY_HOTFIX_ET_SERVER-->
+    <!--UNITY_HOTFIX_ET_SERVER_END-->
 
     <!--UNITY_GAMEHOT-
     <assembly fullname="protobuf-net" preserve="all" />

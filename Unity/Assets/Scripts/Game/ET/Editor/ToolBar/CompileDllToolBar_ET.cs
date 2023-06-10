@@ -18,7 +18,7 @@ namespace ET.Editor
             {
                 if (GUILayout.Button(s_BuildReloadHotfixButtonGUIContent))
                 {
-                    BuildAssemblyTool.Build();
+                    BuildAssemblyTool.BuildHotfix();
                     ShowNotification("compile success!");
 
                     if (s_IsReloading)

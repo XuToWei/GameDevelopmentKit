@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using HybridCLR;
 using UnityEngine;
 using UnityGameFramework.Extension;
+using UnityGameFramework.Runtime;
 
 namespace Game
 {
@@ -16,6 +17,8 @@ namespace Game
             {
                 RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HomologousImageMode.SuperSet);
             }
+            GameEntry.Resource.UnloadAsset(aotGroup);
+            Log.Info("HybridCLR load metadata.");
         }
     }
 }

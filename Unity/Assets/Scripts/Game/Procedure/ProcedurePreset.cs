@@ -1,4 +1,3 @@
-using UnityEngine.UI;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
 namespace Game

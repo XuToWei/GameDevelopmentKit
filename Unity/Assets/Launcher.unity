@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe8745f67f35a2541a9658ad81750521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EditorCodeBytesMode: 1
+  m_EnableEditorCodeBytesMode: 0
 --- !u!1 &48654042
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,7 +838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_ResourceMode
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_LoadResourceAgentHelperCount

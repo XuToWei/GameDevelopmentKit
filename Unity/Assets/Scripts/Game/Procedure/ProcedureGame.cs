@@ -9,7 +9,7 @@ namespace Game
         {
             base.OnEnter(procedureOwner);
             
-            Log.Debug("Enter Game!");
+            Log.Info("Enter Game!");
         }
     }
 }
