@@ -2,7 +2,7 @@
 {
     public static class Define
     {
-        public static string BuildOutputDir => "./Temp/GameBin";
+        public static string ReloadHotfixDir => "./Temp/ETReloadHotfixBin";
 #if UNITY_EDITOR
         public static bool IsEditor => true;
 #else

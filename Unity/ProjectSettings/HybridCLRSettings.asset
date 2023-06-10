@@ -23,7 +23,7 @@ MonoBehaviour:
   preserveHotUpdateAssemblies: []
   hotUpdateDllCompileOutputRootDir: HybridCLRData/HotUpdateDlls
   externalHotUpdateAssembliyDirs:
-  - ./Temp/Bin/CustomBuild
+  - ../Temp/GameBin
   strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip
   patchAOTAssemblies:
   - Game.ET.Code.Hotfix

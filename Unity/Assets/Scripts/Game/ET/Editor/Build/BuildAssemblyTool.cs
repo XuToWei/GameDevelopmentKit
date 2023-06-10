@@ -70,12 +70,13 @@ namespace ET.Editor
 
         public static void BuildHotfix(CodeOptimization codeOptimization, CodeMode codeMode)
         {
-            string[] logicFiles = Directory.GetFiles(BuildAssemblyHelper.BuildOutputDir, "Hotfix_*");
+            Directory.CreateDirectory(Define.ReloadHotfixDir);
+            string[] logicFiles = Directory.GetFiles(Define.ReloadHotfixDir, "Hotfix_*");
             foreach (string file in logicFiles)
             {
                 File.Delete(file);
             }
-
+            
             int random = RandomGenerator.RandomNumber(100000000, 999999999);
             string logicFile = $"Hotfix_{random}";
             
@@ -114,8 +115,8 @@ namespace ET.Editor
             BuildAssemblyHelper.Build("Hotfix", codes,  new []{Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Model.dll")}, GetExcludeReferences(codeMode), codeOptimization);
             File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Hotfix.dll"), Path.Combine(CodeDir, "Hotfix.dll.bytes"), true);
             File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Hotfix.pdb"), Path.Combine(CodeDir, "Hotfix.pdb.bytes"), true);
-            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Hotfix.dll"), Path.Combine(BuildAssemblyHelper.BuildOutputDir, $"{logicFile}.dll"), true);
-            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Hotfix.pdb"), Path.Combine(BuildAssemblyHelper.BuildOutputDir, $"{logicFile}.pdb"), true);
+            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Hotfix.dll"), Path.Combine(Define.ReloadHotfixDir, $"{logicFile}.dll"), true);
+            File.Copy(Path.Combine(BuildAssemblyHelper.BuildOutputDir, "Hotfix.pdb"), Path.Combine(Define.ReloadHotfixDir, $"{logicFile}.pdb"), true);
             Debug.Log("copy Hotfix.dll to Res/ET/Code success!");
         }
         
