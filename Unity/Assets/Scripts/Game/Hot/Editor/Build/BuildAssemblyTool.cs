@@ -15,8 +15,8 @@ namespace Game.Hot.Editor
 
         public static void Build(BuildTarget target, ScriptCompilationOptions options)
         {
-            CompileAssemblyHelper.CompileDlls(target, ExtraScriptingDefines, options);
-            CompileAssemblyHelper.CopyHotUpdateDlls(target, CodeDir, DllNames);
+            BuildAssemblyHelper.CompileDlls(target, ExtraScriptingDefines, options);
+            BuildAssemblyHelper.CopyHotUpdateDlls(target, CodeDir, DllNames);
             AssetDatabase.Refresh();
         }
         

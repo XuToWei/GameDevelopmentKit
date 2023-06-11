@@ -121,7 +121,7 @@ namespace ET.Analyzer
             }
 
             // 判断是否含有 ObjectSystem Attribute 且继承了接口 ISystemType
-            if (accessFieldClassSymbol.BaseType.HasAttribute(Definition.ObjectSystemAttribute) && accessFieldClassSymbol.HasInterface(Definition.ISystemType))
+            if (accessFieldClassSymbol.BaseType.HasAttribute(Definition.EntitySystemAttribute) && accessFieldClassSymbol.HasInterface(Definition.ISystemType))
             {
                 // 获取 accessFieldClassSymbol 父类的实体类型参数
                 ITypeSymbol? entityTypeArgumentSymbol = accessFieldClassSymbol.BaseType.TypeArguments.FirstOrDefault();
@@ -142,25 +142,44 @@ namespace ET.Analyzer
 
         private bool CheckIsEntityFriendOf(INamedTypeSymbol accessFieldTypeSymbol, INamedTypeSymbol entityTypeSymbol)
         {
-            var attributes = accessFieldTypeSymbol.GetAttributes();
-            foreach (AttributeData? attributeData in attributes)
+            bool Check(INamedTypeSymbol containingType)
             {
-                if (attributeData.AttributeClass?.ToString() != Definition.FriendOfAttribute)
+                var attributes = containingType.GetAttributes();
+                foreach (AttributeData? attributeData in attributes)
                 {
-                    continue;
-                }
+                    if (attributeData.AttributeClass?.ToString() != Definition.FriendOfAttribute)
+                    {
+                        continue;
+                    }
 
-                if (!(attributeData.ConstructorArguments[0].Value is INamedTypeSymbol namedTypeSymbol))
-                {
-                    continue;
-                }
+                    if (!(attributeData.ConstructorArguments[0].Value is INamedTypeSymbol namedTypeSymbol))
+                    {
+                        continue;
+                    }
 
-                if (namedTypeSymbol.ToString() == entityTypeSymbol.ToString())
+                    if (namedTypeSymbol.ToString() == entityTypeSymbol.ToString())
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            if (Check(accessFieldTypeSymbol))
+            {
+                return true;
+            }
+
+            INamedTypeSymbol containingType = accessFieldTypeSymbol;
+            while (containingType.ContainingType != null && containingType.ToString() != containingType.ContainingType.ToString())
+            {
+                containingType = containingType.ContainingType;
+                if (Check(containingType))
                 {
                     return true;
                 }
             }
-
+            
             return false;
         }
     }
