@@ -19,17 +19,19 @@ MonoBehaviour:
     Override: "{\r\n    \"$id\": 0,\r\n    \"$type\": \"0|Sirenix.OdinValidator.Editor.Validators.DuplicateComponentsValidator,
       Sirenix.OdinValidator.Editor\",\r\n    \"Severity\": 1,\r\n    \"TypeExceptions\":
       {\r\n        \"$id\": 1,\r\n        \"$type\": \"1|System.Type[], mscorlib\",\r\n       
-      \"$rlength\": 0,\r\n        \"$rcontent\": [\r\n        ]\r\n    },\r\n   
-      \"PrefabExceptions\": {\r\n        \"$id\": 2,\r\n        \"$type\": \"2|System.Collections.Generic.List`1[[Sirenix.OdinValidator.Editor.Validators.DuplicateComponentsValidator+PrefabException,
+      \"$rlength\": 1,\r\n        \"$rcontent\": [\r\n            {\r\n               
+      \"$id\": 2,\r\n                \"$type\": \"2|System.RuntimeType, mscorlib\",\r\n               
+      \"DG.Tweening.DOTweenAnimation, Assembly-CSharp\"\r\n            }\r\n       
+      ]\r\n    },\r\n    \"PrefabExceptions\": {\r\n        \"$id\": 3,\r\n       
+      \"$type\": \"3|System.Collections.Generic.List`1[[Sirenix.OdinValidator.Editor.Validators.DuplicateComponentsValidator+PrefabException,
       Sirenix.OdinValidator.Editor]], mscorlib\",\r\n        \"$rlength\": 2,\r\n       
-      \"$rcontent\": [\r\n            {\r\n                \"$type\": \"3|Sirenix.OdinValidator.Editor.Validators.DuplicateComponentsValidator+PrefabException,
+      \"$rcontent\": [\r\n            {\r\n                \"$type\": \"4|Sirenix.OdinValidator.Editor.Validators.DuplicateComponentsValidator+PrefabException,
       Sirenix.OdinValidator.Editor\",\r\n                \"Go\": $fstrref:\"{\\\"guid\\\":\\\"bb4f9efb6ebc3b84cae1ddbccbd53c6f\\\",\\\"IsBroken\\\":false,\\\"Type\\\":2,\\\"AssetPath\\\":\\\"Assets/Scripts/Library/StompyRobot/SRDebugger/Resources/SRDebugger/UI/Prefabs/PinnedUI.prefab\\\",\\\"SubAsset\\\":{\\\"AssetType\\\":{\\\"TypeName\\\":\\\"\\\"},\\\"InstanceID\\\":0,\\\"Index\\\":0},\\\"Hierarchy\\\":{\\\"SubNames\\\":[],\\\"SubIndices\\\":[]},\\\"Component\\\":{\\\"ComponentIndex\\\":0,\\\"ComponentType\\\":{\\\"TypeName\\\":\\\"\\\"}},\\\"Name\\\":\\\"PinnedUI\\\",\\\"ObjectType\\\":{\\\"TypeName\\\":\\\"UnityEngine.GameObject,
       UnityEngine.CoreModule\\\"}}\",\r\n                \"Type\": {\r\n                   
-      \"$id\": 3,\r\n                    \"$type\": \"4|System.RuntimeType, mscorlib\",\r\n                   
-      \"SRF.UI.DragHandle, StompyRobot.SRF\"\r\n                }\r\n           
-      },\r\n            {\r\n                \"$type\": 3,\r\n                \"Go\":
-      $fstrref:\"{\\\"guid\\\":\\\"abd74791d32aafa4c9ca4f20145cd14c\\\",\\\"IsBroken\\\":false,\\\"Type\\\":2,\\\"AssetPath\\\":\\\"Assets/Scripts/Library/StompyRobot/SRDebugger/Resources/SRDebugger/UI/Prefabs/Tabs/Console.prefab\\\",\\\"SubAsset\\\":{\\\"AssetType\\\":{\\\"TypeName\\\":\\\"\\\"},\\\"InstanceID\\\":0,\\\"Index\\\":0},\\\"Hierarchy\\\":{\\\"SubNames\\\":[],\\\"SubIndices\\\":[]},\\\"Component\\\":{\\\"ComponentIndex\\\":0,\\\"ComponentType\\\":{\\\"TypeName\\\":\\\"\\\"}},\\\"Name\\\":\\\"Console\\\",\\\"ObjectType\\\":{\\\"TypeName\\\":\\\"UnityEngine.GameObject,
+      \"$id\": 4,\r\n                    \"$type\": 2,\r\n                    \"SRF.UI.DragHandle,
+      StompyRobot.SRF\"\r\n                }\r\n            },\r\n            {\r\n               
+      \"$type\": 4,\r\n                \"Go\": $fstrref:\"{\\\"guid\\\":\\\"abd74791d32aafa4c9ca4f20145cd14c\\\",\\\"IsBroken\\\":false,\\\"Type\\\":2,\\\"AssetPath\\\":\\\"Assets/Scripts/Library/StompyRobot/SRDebugger/Resources/SRDebugger/UI/Prefabs/Tabs/Console.prefab\\\",\\\"SubAsset\\\":{\\\"AssetType\\\":{\\\"TypeName\\\":\\\"\\\"},\\\"InstanceID\\\":0,\\\"Index\\\":0},\\\"Hierarchy\\\":{\\\"SubNames\\\":[],\\\"SubIndices\\\":[]},\\\"Component\\\":{\\\"ComponentIndex\\\":0,\\\"ComponentType\\\":{\\\"TypeName\\\":\\\"\\\"}},\\\"Name\\\":\\\"Console\\\",\\\"ObjectType\\\":{\\\"TypeName\\\":\\\"UnityEngine.GameObject,
       UnityEngine.CoreModule\\\"}}\",\r\n                \"Type\": {\r\n                   
-      \"$id\": 4,\r\n                    \"$type\": 4,\r\n                    \"UnityEngine.UI.LayoutElement,
+      \"$id\": 5,\r\n                    \"$type\": 2,\r\n                    \"UnityEngine.UI.LayoutElement,
       UnityEngine.UI\"\r\n                }\r\n            }\r\n        ]\r\n   
       }\r\n}"
