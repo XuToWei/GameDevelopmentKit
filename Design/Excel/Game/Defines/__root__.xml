@@ -17,6 +17,6 @@
 
 	<externalselector name="unity_cs"/>
 
-	<service name="client" manager="Tables" group="c"/>
-	<service name="all" manager="Tables" group="c,e"/>
+	<service name="client" manager="TablesComponent" group="c"/>
+	<service name="all" manager="TablesComponent" group="c,e"/>
 </root>

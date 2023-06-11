@@ -1,4 +1,6 @@
-﻿namespace Game
+﻿using UnityEngine;
+
+namespace Game
 {
     /// <summary>
     /// 游戏入口。
@@ -17,7 +19,7 @@
             private set;
         }
         
-        public static Tables Tables
+        public static TablesComponent Tables
         {
             get;
             private set;
@@ -27,7 +29,7 @@
         {
             CodeRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<CodeRunnerComponent>();
             Platform = UnityGameFramework.Runtime.GameEntry.GetComponent<PlatformComponent>();
-            Tables = UnityGameFramework.Runtime.GameEntry.GetComponent<Tables>();
+            Tables = UnityGameFramework.Runtime.GameEntry.GetComponent<TablesComponent>();
         }
     }
 }

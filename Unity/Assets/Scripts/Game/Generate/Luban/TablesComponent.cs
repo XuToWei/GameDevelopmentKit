@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Game
 {
 
-public partial class Tables
+public partial class TablesComponent
 {
     public DTUIForm DTUIForm { private set; get; }
     public DTEntity DTEntity { private set; get; }

@@ -18,7 +18,7 @@ namespace Game
         Json,
     }
     
-    public partial class Tables : GameFrameworkComponent
+    public partial class TablesComponent : GameFrameworkComponent
     {
         /// <summary>
         /// Luaban加载类型
