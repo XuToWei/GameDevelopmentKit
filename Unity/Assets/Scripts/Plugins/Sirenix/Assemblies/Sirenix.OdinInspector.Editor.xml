@@ -2622,31 +2622,6 @@
             Gets the strongly typed ValueEntry of the OdinValueStateUpdater's property.
             </summary>
         </member>
-        <member name="T:Sirenix.OdinInspector.Editor.EditableKeyValuePair`2">
-            <summary>
-            Not yet documented.
-            </summary>
-        </member>
-        <member name="F:Sirenix.OdinInspector.Editor.EditableKeyValuePair`2.Key">
-            <summary>
-            Not yet documented.
-            </summary>
-        </member>
-        <member name="F:Sirenix.OdinInspector.Editor.EditableKeyValuePair`2.Value">
-            <summary>
-            Not yet documented.
-            </summary>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.EditableKeyValuePair`2.#ctor(`0,`1,System.Boolean,System.Boolean)">
-            <summary>
-            Not yet documented.
-            </summary>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.EditableKeyValuePair`2.Equals(Sirenix.OdinInspector.Editor.EditableKeyValuePair{`0,`1})">
-            <summary>
-            Not yet documented.
-            </summary>
-        </member>
         <member name="T:Sirenix.OdinInspector.Editor.IPropertyValueCollection">
             <summary>
             Represents a weakly typed collection of values for a <see cref="T:Sirenix.OdinInspector.Editor.PropertyValueEntry"/> - one value per selected inspector target.
@@ -6338,11 +6313,6 @@
             Not yet documented.
             </summary>
         </member>
-        <member name="M:Sirenix.OdinInspector.Editor.TabSubGroupAttributeDrawer.DrawPropertyLayout(UnityEngine.GUIContent)">
-            <summary>
-            Draws the property.
-            </summary>
-        </member>
         <member name="T:Sirenix.OdinInspector.Editor.MethodDrawer">
             <summary>
             Base drawer to inherit from to draw methods.
@@ -8442,7 +8412,7 @@
                      OdinMenuTree tree = new OdinMenuTree(supportsMultiSelect: true)
                      {
                          { "Home",                           this,                           EditorIcons.House       }, // draws the someDataField in this case.
-                         { "Odin Settings",                  null,                           EditorIcons.SettingsCog },
+                         { "Odin Settings",                  null,                           SdfIconType.GearFill    },
                          { "Odin Settings/Color Palettes",   ColorPaletteManager.Instance,   EditorIcons.EyeDropper  },
                          { "Odin Settings/AOT Generation",   AOTGenerationConfig.Instance,   EditorIcons.SmartPhone  },
                          { "Camera current",                 Camera.current                                          },
@@ -8967,7 +8937,7 @@
             OdinMenuTree tree = new OdinMenuTree(supportsMultiSelect: true)
             {
                 { "Home",                           this,                           EditorIcons.House       },
-                { "Odin Settings",                  null,                           EditorIcons.SettingsCog },
+                { "Odin Settings",                  null,                           SdfIconType.GearFill    },
                 { "Odin Settings/Color Palettes",   ColorPaletteManager.Instance,   EditorIcons.EyeDropper  },
                 { "Odin Settings/AOT Generation",   AOTGenerationConfig.Instance,   EditorIcons.SmartPhone  },
                 { "Camera current",                 Camera.current                                          },
@@ -9031,6 +9001,11 @@
             </summary>
         </member>
         <member name="M:Sirenix.OdinInspector.Editor.OdinMenuTree.Add(System.String,System.Object,UnityEngine.Texture)">
+            <summary>
+            Adds a menu item with the specified object instance and icon at the the specified path.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.OdinMenuTree.Add(System.String,System.Object,Sirenix.OdinInspector.SdfIconType)">
             <summary>
             Adds a menu item with the specified object instance and icon at the the specified path.
             </summary>
@@ -9360,6 +9335,11 @@
             Assigns the specified icon to the last menu item in the collection.
             </summary>
         </member>
+        <member name="M:Sirenix.OdinInspector.Editor.OdinMenuTreeExtensions.AddIcon(Sirenix.OdinInspector.Editor.OdinMenuItem,Sirenix.OdinInspector.SdfIconType)">
+            <summary>
+            Assigns the specified icon to the last menu item in the collection.
+            </summary>
+        </member>
         <member name="M:Sirenix.OdinInspector.Editor.OdinMenuTreeExtensions.AddIcon(System.Collections.Generic.IEnumerable{Sirenix.OdinInspector.Editor.OdinMenuItem},Sirenix.Utilities.Editor.EditorIcon)">
             <summary>
             Assigns the specified icon to the last menu item in the collection.
@@ -9603,7 +9583,7 @@
             Selects an enum.
             </summary>
         </member>
-        <member name="M:Sirenix.OdinInspector.Editor.EnumSelector`1.DrawEnumField(UnityEngine.GUIContent,UnityEngine.GUIContent,`0,UnityEngine.GUIStyle)">
+        <member name="M:Sirenix.OdinInspector.Editor.EnumSelector`1.DrawEnumField(UnityEngine.GUIContent,UnityEngine.GUIContent,`0,UnityEngine.GUIStyle,Sirenix.OdinInspector.SdfIconType)">
             <summary>
             Draws an enum selector field using the enum selector.
             </summary>
@@ -9613,7 +9593,7 @@
             Draws an enum selector field using the enum selector.
             </summary>
         </member>
-        <member name="M:Sirenix.OdinInspector.Editor.EnumSelector`1.DrawEnumField(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.GUIContent,`0,UnityEngine.GUIStyle)">
+        <member name="M:Sirenix.OdinInspector.Editor.EnumSelector`1.DrawEnumField(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.GUIContent,`0,UnityEngine.GUIStyle,Sirenix.OdinInspector.SdfIconType)">
             <summary>
             Draws an enum selector field using the enum selector.
             </summary>
@@ -9967,7 +9947,7 @@
             Draws dropwdown field, that creates and binds the selector to the dropdown field.
             </summary>
         </member>
-        <member name="M:Sirenix.OdinInspector.Editor.OdinSelector`1.DrawSelectorDropdown(UnityEngine.Rect,UnityEngine.GUIContent,System.Func{UnityEngine.Rect,Sirenix.OdinInspector.Editor.OdinSelector{`0}},System.Boolean,UnityEngine.GUIStyle)">
+        <member name="M:Sirenix.OdinInspector.Editor.OdinSelector`1.DrawSelectorDropdown(UnityEngine.Rect,UnityEngine.GUIContent,System.Func{UnityEngine.Rect,Sirenix.OdinInspector.Editor.OdinSelector{`0}},System.Boolean,UnityEngine.GUIStyle,Sirenix.OdinInspector.SdfIconType)">
             <summary>
             Draws dropwdown field, that creates and binds the selector to the dropdown field.
             </summary>

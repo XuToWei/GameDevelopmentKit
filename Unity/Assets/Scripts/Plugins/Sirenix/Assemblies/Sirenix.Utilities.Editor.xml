@@ -1149,6 +1149,11 @@
             Draws the graphics for a DropZone.
             </summary>
         </member>
+        <member name="M:Sirenix.Utilities.Editor.DragAndDropUtilities.DrawDropZone(UnityEngine.Rect,UnityEngine.Texture,UnityEngine.GUIContent,System.Int32)">
+            <summary>
+            Draws the graphics for a DropZone.
+            </summary>
+        </member>
         <member name="M:Sirenix.Utilities.Editor.DragAndDropUtilities.DragAndDropZone(UnityEngine.Rect,System.Object,System.Type,System.Boolean,System.Boolean)">
             <summary>
             A draggable zone for both Unity and non-unity objects.
@@ -1753,12 +1758,23 @@
         </member>
         <member name="M:Sirenix.Utilities.Editor.GUIHelper.BeginLayoutMeasuring">
             <summary>
-            Begins the layout measuring. Remember to end with <see cref="M:Sirenix.Utilities.Editor.GUIHelper.EndLayoutMeasuring"/>.
+            Begins the layout measuring. Remember to end with <see cref="M:Sirenix.Utilities.Editor.GUIHelper.EndLayoutMeasuring(System.Int32)"/>.
             </summary>
+        </member>
+        <member name="M:Sirenix.Utilities.Editor.GUIHelper.BeginLayoutMeasuring(System.Int32@)">
+            <summary>
+            Begins the layout measuring. Remember to end with <see cref="M:Sirenix.Utilities.Editor.GUIHelper.EndLayoutMeasuring(System.Int32)"/>.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Utilities.Editor.GUIHelper.EndLayoutMeasuring(System.Int32)">
+            <summary>
+            Ends the layout measuring started by <see cref="M:Sirenix.Utilities.Editor.GUIHelper.EndLayoutMeasuring(System.Int32)"/>
+            </summary>
+            <returns>The measured rect.</returns>
         </member>
         <member name="M:Sirenix.Utilities.Editor.GUIHelper.EndLayoutMeasuring">
             <summary>
-            Ends the layout measuring started by <see cref="M:Sirenix.Utilities.Editor.GUIHelper.BeginLayoutMeasuring"/>
+            Ends the layout measuring started by <see cref="M:Sirenix.Utilities.Editor.GUIHelper.EndLayoutMeasuring(System.Int32)"/>
             </summary>
             <returns>The measured rect.</returns>
         </member>
@@ -2277,11 +2293,6 @@
              </example>
              <seealso cref="T:Sirenix.Utilities.Editor.SirenixEditorGUI"/>
         </member>
-        <member name="F:Sirenix.Utilities.Editor.GUITabGroup.t">
-            <summary>
-            The animation speed (1 / s)
-            </summary>
-        </member>
         <member name="F:Sirenix.Utilities.Editor.GUITabGroup.AnimationSpeed">
             <summary>
             The animation speed
@@ -2703,21 +2714,6 @@
             </summary>
             <seealso cref="T:Sirenix.Utilities.Editor.GUITabGroup"/>
         </member>
-        <member name="P:Sirenix.Utilities.Editor.GUITabPage.Name">
-            <summary>
-            Gets the title of the tab.
-            </summary>
-        </member>
-        <member name="P:Sirenix.Utilities.Editor.GUITabPage.Title">
-            <summary>
-            Gets the title of the tab.
-            </summary>
-        </member>
-        <member name="P:Sirenix.Utilities.Editor.GUITabPage.Rect">
-            <summary>
-            Gets the rect of the page.
-            </summary>
-        </member>
         <member name="M:Sirenix.Utilities.Editor.GUITabPage.BeginPage">
             <summary>
             Begins the page.
@@ -2916,6 +2912,13 @@
             If you hold down control while letting go it will replace the value, And you can control + click the object field to quickly delete the value it holds.
             </summary>
         </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorFields.UnityPreviewObjectField(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Object,UnityEngine.Texture,System.Type,Sirenix.Utilities.Editor.ObjectFieldAlignment,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Draws a square ObjectField which renders a preview for UnityEngine.Object types.
+            This object field also adds support for drag and drop, dragging an object to another square object field, swaps the values.
+            If you hold down control while letting go it will replace the value, And you can control + click the object field to quickly delete the value it holds.
+            </summary>
+        </member>
         <member name="M:Sirenix.Utilities.Editor.SirenixEditorFields.UnityPreviewObjectField(UnityEngine.Rect,UnityEngine.Object,System.Type,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             Draws a square ObjectField which renders a preview for UnityEngine.Object types.
@@ -2932,6 +2935,20 @@
             <param name="rect">Position and size of the field.</param>
             <param name="label">The label to use, or null if no label should be used.</param>
             <param name="value">The Unity object.</param>
+            <param name="objectType">The Unity object type. This supports inheritance.</param>
+            <param name="allowSceneObjects">Wheather or not to allow scene objects.</param>
+            <param name="alignment">How the square object field should be aligned.</param>
+        </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorFields.UnityPreviewObjectField(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Object,UnityEngine.Texture,System.Type,System.Boolean,Sirenix.Utilities.Editor.ObjectFieldAlignment)">
+            <summary>
+            Draws a square ObjectField which renders a preview for UnityEngine.Object types.
+            This object field also adds support for drag and drop, dragging an object to another square object field, swaps the values.
+            If you hold down control while letting go it will replace the value, And you can control + click the object field to quickly delete the value it holds.
+            </summary>
+            <param name="rect">Position and size of the field.</param>
+            <param name="label">The label to use, or null if no label should be used.</param>
+            <param name="value">The Unity object.</param>
+            <param name="preview">The Texture to be used as the preview.</param>
             <param name="objectType">The Unity object type. This supports inheritance.</param>
             <param name="allowSceneObjects">Wheather or not to allow scene objects.</param>
             <param name="alignment">How the square object field should be aligned.</param>
@@ -2974,6 +2991,20 @@
             <param name="height">The height or size of the square object field.</param>
             <param name="alignment">How the square object field should be aligned.</param>
         </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorFields.UnityPreviewObjectField(UnityEngine.GUIContent,UnityEngine.Object,UnityEngine.Texture,System.Type,System.Boolean,System.Single,Sirenix.Utilities.Editor.ObjectFieldAlignment)">
+            <summary>
+            Draws a square ObjectField which renders a preview for UnityEngine.Object types.
+            This object field also adds support for drag and drop, dragging an object to another square object field, swaps the values.
+            If you hold down control while letting go it will replace the value, And you can control + click the object field to quickly delete the value it holds.
+            </summary>
+            <param name="label">The label to use, or null if no label should be used.</param>
+            <param name="value">The Unity object.</param>
+            <param name="preview">The texture to be used as the preview.</param>
+            <param name="objectType">The Unity object type. This supports inheritance.</param>
+            <param name="allowSceneObjects">Wheather or not to allow scene objects.</param>
+            <param name="height">The height or size of the square object field.</param>
+            <param name="alignment">How the square object field should be aligned.</param>
+        </member>
         <member name="M:Sirenix.Utilities.Editor.SirenixEditorFields.UnityPreviewObjectField(System.String,UnityEngine.Object,System.Type,System.Boolean,System.Single,Sirenix.Utilities.Editor.ObjectFieldAlignment)">
             <summary>
             Draws a square ObjectField which renders a preview for UnityEngine.Object types.
@@ -3009,6 +3040,17 @@
             <param name="allowSceneObjects">Wheather or not to allow scene objects.</param>
             <param name="options">Layout options.</param>
         </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorFields.PolymorphicObjectField(UnityEngine.GUIContent,System.Object,System.Type,System.String,System.Boolean,UnityEngine.GUILayoutOption[])">
+            <summary>
+            Draws a polymorphic ObjectField.
+            </summary>
+            <param name="label">The label to use, or null if no label should be used.</param>
+            <param name="value">The value.</param>
+            <param name="type">The object type. This supports inheritance.</param>
+            <param name="title">The title to be shown in the object picker.</param>
+            <param name="allowSceneObjects">Wheather or not to allow scene objects.</param>
+            <param name="options">Layout options.</param>
+        </member>
         <member name="M:Sirenix.Utilities.Editor.SirenixEditorFields.PolymorphicObjectField(UnityEngine.Rect,UnityEngine.GUIContent,System.Object,System.Type,System.Boolean)">
             <summary>
             Draws a polymorphic ObjectField.
@@ -3035,6 +3077,16 @@
             </summary>
             <param name="value">The value.</param>
             <param name="type">The object type. This supports inheritance.</param>
+            <param name="allowSceneObjects">Wheather or not to allow scene objects.</param>
+            <param name="options">Layout options.</param>
+        </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorFields.PolymorphicObjectField(System.Object,System.Type,System.String,System.Boolean,UnityEngine.GUILayoutOption[])">
+            <summary>
+            Draws a polymorphic ObjectField.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="type">The object type. This supports inheritance.</param>
+            <param name="title">The title to be shown in the object picker.</param>
             <param name="allowSceneObjects">Wheather or not to allow scene objects.</param>
             <param name="options">Layout options.</param>
         </member>
@@ -5893,6 +5945,25 @@
             <param name="style">The button's style.</param>
             <returns></returns>
         </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.SDFIconButton(UnityEngine.Rect,Sirenix.OdinInspector.SdfIconType,Sirenix.OdinInspector.IconAlignment,UnityEngine.GUIStyle)">
+            <summary>
+            Draws a SDF icon button.
+            </summary>
+            <param name="rect">The button's rect.</param>
+            <param name="icon">The button's icon.</param>
+            <param name="iconAlignment">The button's icon alignment. ButtonIconAlignment.LeftOfText by default.</param>
+            <param name="style">The button's style.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.SDFIconButton(UnityEngine.Rect,Sirenix.OdinInspector.SdfIconType,UnityEngine.GUIStyle)">
+            <summary>
+            Draws a SDF icon button.
+            </summary>
+            <param name="rect">The button's rect.</param>
+            <param name="icon">The button's icon.</param>
+            <param name="style">The button's style.</param>
+            <returns></returns>
+        </member>
         <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.SDFIconButton(UnityEngine.Rect,System.String,UnityEngine.Texture,Sirenix.OdinInspector.IconAlignment,UnityEngine.GUIStyle)">
             <summary>
             Draws a SDF icon button.
@@ -5904,7 +5975,7 @@
             <param name="style">The button's style.</param>
             <returns></returns>
         </member>
-        <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.SDFIconButton(UnityEngine.Rect,UnityEngine.GUIContent,Sirenix.OdinInspector.SdfIconType,Sirenix.OdinInspector.IconAlignment,UnityEngine.GUIStyle)">
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.SDFIconButton(UnityEngine.Rect,UnityEngine.GUIContent,Sirenix.OdinInspector.SdfIconType,Sirenix.OdinInspector.IconAlignment,UnityEngine.GUIStyle,System.Boolean)">
             <summary>
             Draws a SDF icon button.
             </summary>
@@ -5926,7 +5997,7 @@
             <param name="style">The button's style.</param>
             <returns></returns>
         </member>
-        <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.CalculateMinimumSDFIconButtonWidth(UnityEngine.GUIContent,System.Single)">
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.CalculateMinimumSDFIconButtonWidth(System.String,UnityEngine.GUIStyle,System.Boolean,System.Single,System.Single@,System.Single@,System.Single@,System.Single@)">
             <summary>
             Calculates the minimum needed space for a SDF icon button where the label is still visible.
             </summary>
@@ -5935,6 +6006,16 @@
             <returns>The minimum width of the SDF icon button.</returns>
         </member>
         <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.ToolbarButton(Sirenix.Utilities.Editor.EditorIcon,System.Boolean)">
+            <summary>
+            Draws a toolbar icon button.
+            </summary>
+            <param name="icon">The icon for the button.</param>
+            <param name="ignoreGUIEnabled">If true, the button clickable while GUI.enabled == false.</param>
+            <returns>
+              <c>true</c> if the button was pressed. Otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.ToolbarButton(Sirenix.OdinInspector.SdfIconType,System.Boolean)">
             <summary>
             Draws a toolbar icon button.
             </summary>
@@ -6970,6 +7051,11 @@
         <member name="P:Sirenix.Utilities.Editor.SirenixGUIStyles.LabelCentered">
             <summary>
             Centered label style.
+            </summary>
+        </member>
+        <member name="P:Sirenix.Utilities.Editor.SirenixGUIStyles.WhiteLabelCentered">
+            <summary>
+            White centered label style.
             </summary>
         </member>
         <member name="P:Sirenix.Utilities.Editor.SirenixGUIStyles.MiniLabelCentered">

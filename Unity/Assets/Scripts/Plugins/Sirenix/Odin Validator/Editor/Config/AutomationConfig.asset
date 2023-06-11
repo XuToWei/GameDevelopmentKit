@@ -28,7 +28,7 @@ MonoBehaviour:
   OnBuildSetup:
     Profile: 0
     ProfileAsset: {fileID: 0}
-  OnProjectStartup: 0
+  OnProjectStartup: 1
   OnProjectStartupIfWarnings: 0
   OnProjectStartupIfErrors: 1
   OnProjectStartupAlwaysCompleteValidationFully: 0

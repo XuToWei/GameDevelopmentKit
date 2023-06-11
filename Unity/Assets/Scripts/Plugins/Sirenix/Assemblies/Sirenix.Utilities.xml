@@ -1355,6 +1355,11 @@
             <param name="str">The string to check.</param>
             <returns><c>true</c> if this string is null, empty, or contains only whitespace; otherwise, <c>false</c>.</returns>
         </member>
+        <member name="M:Sirenix.Utilities.StringExtensions.CalculateLevenshteinDistance(System.String,System.String)">
+            <summary>
+            O(n*m) - Use with care.
+            </summary>
+        </member>
         <member name="T:Sirenix.Utilities.TypeExtensions">
             <summary>
             Type method extensions.
@@ -1363,7 +1368,6 @@
         <member name="F:Sirenix.Utilities.TypeExtensions.TypeNameAlternatives">
             <summary>
             Type name alias lookup.
-            TypeNameAlternatives["Single"] will give you "float", "UInt16" will give you "ushort", "Boolean[]" will give you "bool[]" etc..
             </summary>
         </member>
         <member name="M:Sirenix.Utilities.TypeExtensions.IsValidIdentifier(System.String)">
@@ -1523,11 +1527,6 @@
         <member name="M:Sirenix.Utilities.TypeExtensions.GetBaseClasses(System.Type,System.Boolean)">
             <summary>
             Returns a lazy enumerable of all the base classes of this type
-            </summary>
-        </member>
-        <member name="M:Sirenix.Utilities.TypeExtensions.TypeNameGauntlet(System.Type)">
-            <summary>
-            Used to filter out unwanted type names. Ex "int" instead of "Int32"
             </summary>
         </member>
         <member name="M:Sirenix.Utilities.TypeExtensions.GetNiceName(System.Type)">

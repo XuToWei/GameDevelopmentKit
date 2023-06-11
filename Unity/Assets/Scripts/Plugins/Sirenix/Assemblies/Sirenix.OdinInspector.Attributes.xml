@@ -383,7 +383,7 @@
             Gets the height of the button. If it's zero or below then use default.
             </summary>
         </member>
-        <member name="P:Sirenix.OdinInspector.ButtonAttribute.Icon">
+        <member name="F:Sirenix.OdinInspector.ButtonAttribute.Icon">
             <summary>
             The icon to be displayed inside the button.
             </summary>
@@ -1539,9 +1539,7 @@
             </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.GUIColorAttribute.GetColor">
-            <summary>
-            The name of a local field, member or property that returns a Color. Both static and instance methods are supported.
-            </summary>
+            <summary>Supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor"). Here are the available named colors: black, blue, clear, cyan, gray, green, grey, magenta, orange, purple, red, transparent, transparentBlack, transparentWhite, white, yellow, lightblue, lightcyan, lightgray, lightgreen, lightgrey, lightmagenta, lightorange, lightpurple, lightred, lightyellow, darkblue, darkcyan, darkgray, darkgreen, darkgrey, darkmagenta, darkorange, darkpurple, darkred, darkyellow.</summary>
         </member>
         <member name="M:Sirenix.OdinInspector.GUIColorAttribute.#ctor(System.Single,System.Single,System.Single,System.Single)">
             <summary>
@@ -1556,7 +1554,7 @@
             <summary>
             Sets the GUI color for the property.
             </summary>
-            <param name="getColor">Specify the name of a local field, member or property that returns a Color.</param>
+            <param name="getColor">Supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor").</param>
         </member>
         <member name="T:Sirenix.OdinInspector.HideDuplicateReferenceBoxAttribute">
             <summary>
@@ -1962,9 +1960,19 @@
             The maximum Width. Values between 0 and 1 will be treated as percentage, 0 = ignore, otherwise pixels.
             </summary>
         </member>
+        <member name="F:Sirenix.OdinInspector.HorizontalGroupAttribute.Gap">
+            <summary>
+            The width between each column. Values between 0 and 1 will be treated as percentage, otherwise pixels.
+            </summary>
+        </member>
         <member name="F:Sirenix.OdinInspector.HorizontalGroupAttribute.Title">
             <summary>
             Adds a title above the horizontal group.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.HorizontalGroupAttribute.DisableAutomaticLabelWidth">
+            <summary>
+            Fallback to using the default label width, whatever that might be.
             </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.HorizontalGroupAttribute.LabelWidth">
@@ -2137,9 +2145,7 @@
             </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.InfoBoxAttribute.IconColor">
-            <summary>
-            The color of the icon.
-            </summary>
+            <summary>Supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor"). Here are the available named colors: black, blue, clear, cyan, gray, green, grey, magenta, orange, purple, red, transparent, transparentBlack, transparentWhite, white, yellow, lightblue, lightcyan, lightgray, lightgreen, lightgrey, lightmagenta, lightorange, lightpurple, lightred, lightyellow, darkblue, darkcyan, darkgray, darkgreen, darkgrey, darkmagenta, darkorange, darkpurple, darkred, darkyellow.</summary>
         </member>
         <member name="M:Sirenix.OdinInspector.InfoBoxAttribute.#ctor(System.String,Sirenix.OdinInspector.InfoMessageType,System.String)">
             <summary>
@@ -2215,6 +2221,12 @@
             Optional resolved string that specifies a condition for whether to show the inline button or not.
             </summary>
         </member>
+        <member name="F:Sirenix.OdinInspector.InlineButtonAttribute.ButtonColor">
+            <summary> Supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor"). Here are the available named colors: black, blue, clear, cyan, gray, green, grey, magenta, orange, purple, red, transparent, transparentBlack, transparentWhite, white, yellow, lightblue, lightcyan, lightgray, lightgreen, lightgrey, lightmagenta, lightorange, lightpurple, lightred, lightyellow, darkblue, darkcyan, darkgray, darkgreen, darkgrey, darkmagenta, darkorange, darkpurple, darkred, darkyellow. </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.InlineButtonAttribute.TextColor">
+            <summary> Supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor"). Here are the available named colors: black, blue, clear, cyan, gray, green, grey, magenta, orange, purple, red, transparent, transparentBlack, transparentWhite, white, yellow, lightblue, lightcyan, lightgray, lightgreen, lightgrey, lightmagenta, lightorange, lightpurple, lightred, lightyellow, darkblue, darkcyan, darkgray, darkgreen, darkgrey, darkmagenta, darkorange, darkpurple, darkred, darkyellow. </summary>
+        </member>
         <member name="M:Sirenix.OdinInspector.InlineButtonAttribute.#ctor(System.String,System.String)">
             <summary>
             Draws a button to the right of the property.
@@ -2231,41 +2243,41 @@
             <param name="label">Optional label of the button.</param>
         </member>
         <member name="T:Sirenix.OdinInspector.InlineEditorAttribute">
-            <summary>
-            <para>InlineAttribute is used on any property or field with a type that inherits from UnityEngine.Object. This includes components and assets etc.</para>
-            </summary>
-            <example>
-            <code>
-            public class InlineEditorExamples : MonoBehaviour
-            {
-                [DisableInInlineEditors]
-                public Vector3 DisabledInInlineEditors;
-               
-                [HideInInlineEditors]
-                public Vector3 HiddenInInlineEditors;
-               
-                [InlineEditor]
-                public Transform InlineComponent;
+             <summary>
+             <para>InlineAttribute is used on any property or field with a type that inherits from UnityEngine.Object. This includes components and assets etc.</para>
+             </summary>
+             <example>
+             <code>
+             public class InlineEditorExamples : MonoBehaviour
+             {
+                 [DisableInInlineEditors]
+                 public Vector3 DisabledInInlineEditors;
             
-                [InlineEditor(InlineEditorModes.FullEditor)]
-                public Material FullInlineEditor;
+                 [HideInInlineEditors]
+                 public Vector3 HiddenInInlineEditors;
             
-                [InlineEditor(InlineEditorModes.GUIAndHeader)]
-                public Material InlineMaterial;
+                 [InlineEditor]
+                 public Transform InlineComponent;
             
-                [InlineEditor(InlineEditorModes.SmallPreview)]
-                public Material[] InlineMaterialList;
+                 [InlineEditor(InlineEditorModes.FullEditor)]
+                 public Material FullInlineEditor;
             
-                [InlineEditor(InlineEditorModes.LargePreview)]
-                public GameObject InlineObjectPreview;
+                 [InlineEditor(InlineEditorModes.GUIAndHeader)]
+                 public Material InlineMaterial;
             
-                [InlineEditor(InlineEditorModes.LargePreview)]
-                public Mesh InlineMeshPreview;
-            }
-            </code>
-            </example>
-            <seealso cref="T:Sirenix.OdinInspector.DisableInInlineEditorsAttribute"/>
-            <seealso cref="T:Sirenix.OdinInspector.HideInInlineEditorsAttribute"/>
+                 [InlineEditor(InlineEditorModes.SmallPreview)]
+                 public Material[] InlineMaterialList;
+            
+                 [InlineEditor(InlineEditorModes.LargePreview)]
+                 public GameObject InlineObjectPreview;
+            
+                 [InlineEditor(InlineEditorModes.LargePreview)]
+                 public Mesh InlineMeshPreview;
+             }
+             </code>
+             </example>
+             <seealso cref="T:Sirenix.OdinInspector.DisableInInlineEditorsAttribute"/>
+             <seealso cref="T:Sirenix.OdinInspector.HideInInlineEditorsAttribute"/>
         </member>
         <member name="P:Sirenix.OdinInspector.InlineEditorAttribute.Expanded">
             <summary>
@@ -2290,7 +2302,7 @@
         <member name="F:Sirenix.OdinInspector.InlineEditorAttribute.MaxHeight">
             <summary>
             Maximum height of the inline editor. If the inline editor exceeds the specified height, a scrollbar will appear.
-            Values less or equals to zero will let the InlineEditor expand to its full size. 
+            Values less or equals to zero will let the InlineEditor expand to its full size.
             </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.InlineEditorAttribute.PreviewWidth">
@@ -2305,8 +2317,8 @@
         </member>
         <member name="F:Sirenix.OdinInspector.InlineEditorAttribute.IncrementInlineEditorDrawerDepth">
             <summary>
-            If false, this will prevent the InlineEditor attribute from incrementing the InlineEditorAttributeDrawer.CurrentInlineEditorDrawDepth. 
-            This is helpful in cases where you want to draw the entire editor, and disregard attributes 
+            If false, this will prevent the InlineEditor attribute from incrementing the InlineEditorAttributeDrawer.CurrentInlineEditorDrawDepth.
+            This is helpful in cases where you want to draw the entire editor, and disregard attributes
             such as [<see cref="T:Sirenix.OdinInspector.HideInInlineEditorsAttribute"/>] and [<see cref="T:Sirenix.OdinInspector.DisableInInlineEditorsAttribute"/>].
             </summary>
         </member>
@@ -2318,6 +2330,11 @@
         <member name="F:Sirenix.OdinInspector.InlineEditorAttribute.DisableGUIForVCSLockedAssets">
             <summary>
             Whether to set GUI.enabled = false when drawing an editor for an asset that is locked by source control. Defaults to true.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.InlineEditorAttribute.PreviewAlignment">
+            <summary>
+            Where to draw the preview.
             </summary>
         </member>
         <member name="M:Sirenix.OdinInspector.InlineEditorAttribute.#ctor(Sirenix.OdinInspector.InlineEditorModes,Sirenix.OdinInspector.InlineEditorObjectFieldModes)">
@@ -2417,21 +2434,25 @@
             of that member reference or expression will be nicified.
             </summary>
         </member>
-        <member name="P:Sirenix.OdinInspector.LabelTextAttribute.Icon">
+        <member name="F:Sirenix.OdinInspector.LabelTextAttribute.Icon">
             <summary>
             The icon to be displayed.
             </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.LabelTextAttribute.IconColor">
-            <summary>
-            The color of the icon.
-            </summary>
+            <summary> Supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor"). Here are the available named colors: black, blue, clear, cyan, gray, green, grey, magenta, orange, purple, red, transparent, transparentBlack, transparentWhite, white, yellow, lightblue, lightcyan, lightgray, lightgreen, lightgrey, lightmagenta, lightorange, lightpurple, lightred, lightyellow, darkblue, darkcyan, darkgray, darkgreen, darkgrey, darkmagenta, darkorange, darkpurple, darkred, darkyellow. </summary>
         </member>
         <member name="M:Sirenix.OdinInspector.LabelTextAttribute.#ctor(System.String)">
             <summary>
             Give a property a custom label.
             </summary>
             <param name="text">The new text of the label.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.LabelTextAttribute.#ctor(Sirenix.OdinInspector.SdfIconType)">
+            <summary>
+            Give a property a custom icon.
+            </summary>
+            <param name="icon">The icon to be shown next to the property.</param>
         </member>
         <member name="M:Sirenix.OdinInspector.LabelTextAttribute.#ctor(System.String,System.Boolean)">
             <summary>
@@ -2556,9 +2577,7 @@
             </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.ListDrawerSettingsAttribute.ElementColor">
-            <summary>
-            A resolved string with "int index" and "Color defaultColor" parameters that lets you control the color of individual elements.
-            </summary>
+            <summary> A resolved string with "int index" and "Color defaultColor" parameters that lets you control the color of individual elements. Supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor"). Here are the available named colors: black, blue, clear, cyan, gray, green, grey, magenta, orange, purple, red, transparent, transparentBlack, transparentWhite, white, yellow, lightblue, lightcyan, lightgray, lightgreen, lightgrey, lightmagenta, lightorange, lightpurple, lightred, lightyellow, darkblue, darkcyan, darkgray, darkgreen, darkgrey, darkmagenta, darkorange, darkpurple, darkred, darkyellow. </summary>
         </member>
         <member name="P:Sirenix.OdinInspector.ListDrawerSettingsAttribute.ShowPaging">
             <summary>
@@ -2586,9 +2605,25 @@
             Override the default setting specified in the Advanced Odin Preferences window and explicitly tell whether or not item count should be shown.
             </summary>
         </member>
+        <member name="F:Sirenix.OdinInspector.ListDrawerSettingsAttribute.ShowFoldout">
+            <summary>
+            Whether to show a foldout for the collection or not. If this is set to false, the collection will *always* be expanded.
+            </summary>
+        </member>
         <member name="P:Sirenix.OdinInspector.ListDrawerSettingsAttribute.Expanded">
             <summary>
-            Override the default setting specified in the Advanced Odin Preferences window and explicitly tell whether or not the list should be expanded or collapsed by default.
+            <para>Whether to show a foldout for the collection or not. If this is set to false, the collection will *always* be expanded.</para>
+            <para>
+            This documentation used to wrongly state that this value would override the default setting specified in the Advanced Odin Preferences 
+            window and explicitly tell whether or not the list should be expanded or collapsed by default. This value *would* do that, but it would
+            also simultaneously act as ShowFoldout, leading to weird and unintuitive behaviour.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.ListDrawerSettingsAttribute.DefaultExpandedState">
+            <summary>
+            Override the default setting specified in the Odin Preferences window and explicitly tell whether or not the list should be expanded or collapsed by default.
+            Note that this will override the persisted expand state, as this is set *every time* the collection drawer is initialized.
             </summary>
         </member>
         <member name="P:Sirenix.OdinInspector.ListDrawerSettingsAttribute.ShowIndexLabels">
@@ -2626,14 +2661,14 @@
             Whether the IsReadOnly property is set.
             </summary>
         </member>
-        <member name="P:Sirenix.OdinInspector.ListDrawerSettingsAttribute.ExpandedHasValue">
-            <summary>
-            Whether the Expanded property is set.
-            </summary>
-        </member>
         <member name="P:Sirenix.OdinInspector.ListDrawerSettingsAttribute.ShowIndexLabelsHasValue">
             <summary>
             Whether the ShowIndexLabels property is set.
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.ListDrawerSettingsAttribute.DefaultExpandedStateHasValue">
+            <summary>
+            Whether the DefaultExpandedState property is set.
             </summary>
         </member>
         <member name="T:Sirenix.OdinInspector.MaxValueAttribute">
@@ -3226,7 +3261,7 @@
              <summary>
              <para>
              Draws a square ObjectField which renders a preview for UnityEngine.Object types.
-             This object field also adds support for drag and drop, dragging an object to another square object field, swaps the values. 
+             This object field also adds support for drag and drop, dragging an object to another square object field, swaps the values.
              If you hold down control while letting go it will replace the value, And you can control + click the object field to quickly delete the value it holds.
              </para>
              <para>
@@ -3240,7 +3275,7 @@
              {
             		[PreviewField]
             		public UnityEngine.Object SomeObject;
-            		
+            
             		[PreviewField]
             		public Texture SomeTexture;
             
@@ -3256,6 +3291,11 @@
             The height of the object field
             </summary>
         </member>
+        <member name="F:Sirenix.OdinInspector.PreviewFieldAttribute.FilterMode">
+            <summary>
+            The FilterMode to be used for the preview. (Applies only to previews retrieved via the previewGetter parameter).
+            </summary>
+        </member>
         <member name="P:Sirenix.OdinInspector.PreviewFieldAttribute.Alignment">
             <summary>
             Left aligned.
@@ -3264,6 +3304,11 @@
         <member name="P:Sirenix.OdinInspector.PreviewFieldAttribute.AlignmentHasValue">
             <summary>
             Whether an alignment value is specified.
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.PreviewFieldAttribute.PreviewGetter">
+            <summary>
+            A resolved value that should resolve to the desired preview texture.
             </summary>
         </member>
         <member name="M:Sirenix.OdinInspector.PreviewFieldAttribute.#ctor">
@@ -3277,12 +3322,44 @@
             </summary>
             <param name="height">The height of the preview field.</param>
         </member>
+        <member name="M:Sirenix.OdinInspector.PreviewFieldAttribute.#ctor(System.String,UnityEngine.FilterMode)">
+            <summary>
+            Draws a square object field which renders a preview for UnityEngine.Object type objects.
+            </summary>
+            <param name="previewGetter">A resolved value that should resolve to the desired preview texture.</param>
+            <param name="filterMode">The filter mode to be used for the preview texture.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.PreviewFieldAttribute.#ctor(System.String,System.Single,UnityEngine.FilterMode)">
+            <summary>
+            Draws a square object field which renders a preview for UnityEngine.Object type objects.
+            </summary>
+            <param name="previewGetter">A resolved value that should resolve to the desired preview texture.</param>
+            <param name="height">The height of the preview field.</param>
+            <param name="filterMode">The filter mode to be used for the preview texture.</param>
+        </member>
         <member name="M:Sirenix.OdinInspector.PreviewFieldAttribute.#ctor(System.Single,Sirenix.OdinInspector.ObjectFieldAlignment)">
             <summary>
             Draws a square object field which renders a preview for UnityEngine.Object type objects.
             </summary>
             <param name="height">The height of the preview field.</param>
             <param name="alignment">The alignment of the preview field.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.PreviewFieldAttribute.#ctor(System.String,Sirenix.OdinInspector.ObjectFieldAlignment,UnityEngine.FilterMode)">
+            <summary>
+            Draws a square object field which renders a preview for UnityEngine.Object type objects.
+            </summary>
+            <param name="previewGetter">A resolved value that should resolve to the desired preview texture.</param>
+            <param name="alignment">The alignment of the preview field.</param>
+            <param name="filterMode">The filter mode to be used for the preview texture.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.PreviewFieldAttribute.#ctor(System.String,System.Single,Sirenix.OdinInspector.ObjectFieldAlignment,UnityEngine.FilterMode)">
+            <summary>
+            Draws a square object field which renders a preview for UnityEngine.Object type objects.
+            </summary>
+            <param name="previewGetter">A resolved value that should resolve to the desired preview texture.</param>
+            <param name="height">The height of the preview field.</param>
+            <param name="alignment">The alignment of the preview field.</param>
+            <param name="filterMode">The filter mode to be used for the preview texture.</param>
         </member>
         <member name="M:Sirenix.OdinInspector.PreviewFieldAttribute.#ctor(Sirenix.OdinInspector.ObjectFieldAlignment)">
             <summary>
@@ -3418,9 +3495,7 @@
             </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.ProgressBarAttribute.ColorGetter">
-            <summary>
-            Optional resolved string that should evaluate to a Color value, to dynamically change the color of the progress bar. 
-            </summary>
+            <summary> Supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor"). Here are the available named colors: black, blue, clear, cyan, gray, green, grey, magenta, orange, purple, red, transparent, transparentBlack, transparentWhite, white, yellow, lightblue, lightcyan, lightgray, lightgreen, lightgrey, lightmagenta, lightorange, lightpurple, lightred, lightyellow, darkblue, darkcyan, darkgray, darkgreen, darkgrey, darkmagenta, darkorange, darkpurple, darkred, darkyellow. </summary>
         </member>
         <member name="P:Sirenix.OdinInspector.ProgressBarAttribute.BackgroundColorMember">
             <summary>
@@ -3430,10 +3505,7 @@
             </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.ProgressBarAttribute.BackgroundColorGetter">
-            <summary>
-            Optional resolved string that should evaluate to a Color value, to dynamically change the background color of the progress bar.
-            Default background color is (0.16, 0.16, 0.16, 1).
-            </summary>
+            <summary> Optional resolved string that should evaluate to a Color value, to dynamically change the background color of the progress bar. Default background color is (0.16, 0.16, 0.16, 1). It supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor"). Here are the available named colors: black, blue, clear, cyan, gray, green, grey, magenta, orange, purple, red, transparent, transparentBlack, transparentWhite, white, yellow, lightblue, lightcyan, lightgray, lightgreen, lightgrey, lightmagenta, lightorange, lightpurple, lightred, lightyellow, darkblue, darkcyan, darkgray, darkgreen, darkgrey, darkmagenta, darkorange, darkpurple, darkred, darkyellow. </summary>
         </member>
         <member name="F:Sirenix.OdinInspector.ProgressBarAttribute.Segmented">
             <summary>
@@ -3871,7 +3943,7 @@
         </member>
         <member name="T:Sirenix.OdinInspector.ReadOnlyAttribute">
              <summary>
-             <para>ReadOnly is used on any property, and disabled the property from being changed in the inspector.</para>
+             <para>ReadOnly is used on any property, and prevents the property from being changed in the inspector.</para>
              <para>Use this for when you want to see the value of a property in the inspector, but don't want it to be changed.</para>
              </summary>
              <remarks>
@@ -4036,6 +4108,74 @@
             Adds an info box to the inspector, if the property is missing.
             </summary>
             <param name="messageType">The type of info box to draw.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Sirenix.OdinInspector.RequiredListLengthAttribute" -->
+        <member name="P:Sirenix.OdinInspector.RequiredListLengthAttribute.MinLength">
+            <summary>
+            The minimum length of the collection. If not set, there is no minimum length restriction.
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.RequiredListLengthAttribute.MaxLength">
+            <summary>
+            The maximum length of the collection. If not set, there is no maximum length restriction.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.RequiredListLengthAttribute.MinLengthGetter">
+            <summary>
+            A C# expression for getting the minimum length of the collection, for example "@this.otherList.Count".
+            If set, MinLength will be the fallback in case nothing in case MinLengthGetter returns null.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.RequiredListLengthAttribute.MaxLengthGetter">
+            <summary>
+            A C# expression for getting the maximum length of the collection, for example "@this.otherList.Count".
+            If set, MaxLength will be the fallback in case nothing in case MaxLengthGetter returns null.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.RequiredListLengthAttribute.#ctor">
+            <summary>
+            Limits the collection to be contain the specified number of elements.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.RequiredListLengthAttribute.#ctor(System.Int32)">
+            <summary>
+            Limits the collection to be contain the specified number of elements.
+            </summary>
+            <param name="fixedLength">The minimum and maximum length of the collection.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.RequiredListLengthAttribute.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Limits the collection to be contain the specified number of elements.
+            </summary>
+            <param name="minLength">The minimum length of the collection.</param>
+            <param name="maxLength">The maximum length of the collection.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.RequiredListLengthAttribute.#ctor(System.Int32,System.String)">
+            <summary>
+            Limits the collection to be contain the specified number of elements.
+            </summary>
+            <param name="minLength">The minimum length of the collection.</param>
+            <param name="maxLengthGetter">A C# expression for getting the maximum length of the collection, for example "@this.otherList.Count". If set, MaxLength will be the fallback in case nothing in case MaxLengthGetter returns null.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.RequiredListLengthAttribute.#ctor(System.String)">
+            <summary>
+            Limits the collection to be contain the specified number of elements.
+            </summary>
+            <param name="fixedLengthGetter">The minimum and maximum length of the collection.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.RequiredListLengthAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Limits the collection to be contain the specified number of elements.
+            </summary>
+            <param name="minLengthGetter">A C# expression for getting the minimum length of the collection, for example "@this.otherList.Count". If set, MinLength will be the fallback in case nothing in case MinLengthGetter returns null.</param>
+            <param name="maxLengthGetter">A C# expression for getting the maximum length of the collection, for example "@this.otherList.Count". If set, MaxLength will be the fallback in case nothing in case MaxLengthGetter returns null.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.RequiredListLengthAttribute.#ctor(System.String,System.Int32)">
+            <summary>
+            Limits the collection to be contain the specified number of elements.
+            </summary>
+            <param name="minLengthGetter">A C# expression for getting the minimum length of the collection, for example "@this.otherList.Count". If set, MinLength will be the fallback in case nothing in case MinLengthGetter returns null.</param>
+            <param name="maxLength">The maximum length of the collection.</param>
         </member>
         <member name="T:Sirenix.OdinInspector.ResponsiveButtonGroupAttribute">
             <summary>
@@ -4415,6 +4555,9 @@
             The icon to be displayed.
             </summary>
         </member>
+        <member name="F:Sirenix.OdinInspector.SuffixLabelAttribute.IconColor">
+            <summary> Supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor"). Here are the available named colors: black, blue, clear, cyan, gray, green, grey, magenta, orange, purple, red, transparent, transparentBlack, transparentWhite, white, yellow, lightblue, lightcyan, lightgray, lightgreen, lightgrey, lightmagenta, lightorange, lightpurple, lightred, lightyellow, darkblue, darkcyan, darkgray, darkgreen, darkgrey, darkmagenta, darkorange, darkpurple, darkred, darkyellow. </summary>
+        </member>
         <member name="M:Sirenix.OdinInspector.SuffixLabelAttribute.#ctor(System.String,System.Boolean)">
             <summary>
             Draws a label at the end of the property.
@@ -4552,6 +4695,14 @@
             If true, the tab group will be hidden if it only contains one tab.
             </summary>
         </member>
+        <member name="F:Sirenix.OdinInspector.TabGroupAttribute.TextColor">
+            <summary> Supports a variety of color formats, including named colors (e.g. "red", "orange", "green", "blue"), hex codes (e.g. "#FF0000" and "#FF0000FF"), and RGBA (e.g. "RGBA(1,1,1,1)") or RGB (e.g. "RGB(1,1,1)"), including Odin attribute expressions (e.g "@this.MyColor"). Here are the available named colors: black, blue, clear, cyan, gray, green, grey, magenta, orange, purple, red, transparent, transparentBlack, transparentWhite, white, yellow, lightblue, lightcyan, lightgray, lightgreen, lightgrey, lightmagenta, lightorange, lightpurple, lightred, lightyellow, darkblue, darkcyan, darkgray, darkgreen, darkgrey, darkmagenta, darkorange, darkpurple, darkred, darkyellow. </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.TabGroupAttribute.TabLayouting">
+            <summary>
+            Specify how tabs should be layouted.
+            </summary>
+        </member>
         <member name="M:Sirenix.OdinInspector.TabGroupAttribute.#ctor(System.String,System.Boolean,System.Single)">
             <summary>
             Organizes the property into the specified tab in the default group.
@@ -4570,28 +4721,19 @@
             <param name="useFixedHeight">Set to true to have a constant height across the entire tab group.</param>
             <param name="order">The order of the group.</param>
         </member>
-        <member name="P:Sirenix.OdinInspector.TabGroupAttribute.Tabs">
+        <member name="M:Sirenix.OdinInspector.TabGroupAttribute.#ctor(System.String,System.String,Sirenix.OdinInspector.SdfIconType,System.Boolean,System.Single)">
+            <summary>
+            Organizes the property into the specified tab in the specified group.
+            </summary>
+            <param name="group">The group to attach the tab to.</param>
+            <param name="tab">The name of the tab.</param>
+            <param name="useFixedHeight">Set to true to have a constant height across the entire tab group.</param>
+            <param name="order">The order of the group.</param>
+        </member>
+        <member name="F:Sirenix.OdinInspector.TabGroupAttribute.Tabs">
             <summary>
             Name of all tabs in this group.
             </summary>
-        </member>
-        <member name="M:Sirenix.OdinInspector.TabGroupAttribute.CombineValuesWith(Sirenix.OdinInspector.PropertyGroupAttribute)">
-            <summary>
-            Combines the tab group with another group.
-            </summary>
-            <param name="other">The other group.</param>
-        </member>
-        <member name="M:Sirenix.OdinInspector.TabGroupAttribute.Sirenix#OdinInspector#Internal#ISubGroupProviderAttribute#GetSubGroupAttributes">
-            <summary>
-            Not yet documented.
-            </summary>
-            <returns>Not yet documented.</returns>
-        </member>
-        <member name="M:Sirenix.OdinInspector.TabGroupAttribute.Sirenix#OdinInspector#Internal#ISubGroupProviderAttribute#RepathMemberAttribute(Sirenix.OdinInspector.PropertyGroupAttribute)">
-            <summary>
-            Not yet documented.
-            </summary>
-            <returns>Not yet documented.</returns>
         </member>
         <member name="T:Sirenix.OdinInspector.TableColumnWidthAttribute">
             <summary>
