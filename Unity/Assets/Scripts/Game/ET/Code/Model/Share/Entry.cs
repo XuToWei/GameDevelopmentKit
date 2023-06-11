@@ -51,15 +51,14 @@ namespace ET
         {
             WinPeriod.Init();
             
-            MongoHelper.RegisterStruct<LSInput>();
             MongoHelper.Register();
+            MongoHelper.RegisterStruct<LSInput>();
             
             Game.AddSingleton<EntitySystemSingleton>();
             Game.AddSingleton<LSEntitySystemSington>();
 
             Game.AddSingleton<NetServices>();
             Game.AddSingleton<Root>();
-
             
             await ConfigComponent.Instance.LoadAllAsync();
             Root.Instance.Scene.AddComponent<DynamicEventWatcherComponent>();

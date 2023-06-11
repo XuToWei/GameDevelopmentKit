@@ -119,7 +119,10 @@ namespace ET
 
         public static void RegisterStruct<T>() where T : struct
         {
-            BsonSerializer.RegisterSerializer(typeof (T), new StructBsonSerialize<T>());
+            if (BsonSerializer.LookupSerializer<T>() == null)
+            {
+                BsonSerializer.RegisterSerializer(new StructBsonSerialize<T>());
+            }
         }
 
         public static string ToJson(object obj)

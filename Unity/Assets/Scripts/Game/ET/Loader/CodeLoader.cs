@@ -65,6 +65,7 @@ namespace ET
                 throw new GameFrameworkException("Client ET LoadHotfix only run when EnableHotfix!");
             }
 #if UNITY_EDITOR
+            await UniTask.CompletedTask;
             string[] hotfixFiles = System.IO.Directory.GetFiles(Define.ReloadHotfixDir, "Game.ET.Code.Hotfix_*.dll");
             if (hotfixFiles.Length != 1)
             {
