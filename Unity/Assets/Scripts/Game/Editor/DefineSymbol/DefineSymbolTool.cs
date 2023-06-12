@@ -6,8 +6,8 @@ namespace Game.Editor
 {
     internal static class DefineSymbolTool
     {
-        [MenuItem("Tools/Define Symbol/Refresh")]
-        private static void Refresh()
+        [MenuItem("Game/Define Symbol/Refresh", false, 1)]
+        public static void Refresh()
         {
 #if UNITY_HOTFIX
             HybridCLRTool.EnableHybridCLR();
@@ -49,6 +49,7 @@ namespace Game.Editor
             LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET");
 #endif
 #if UNITY_ET
+            ResourceRuleTool.ActivateRule_ET();
             LinkXMLHelper.AddLinkXML("UNITY_ET");
             HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.Model");
             HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.ModelView");
@@ -72,6 +73,7 @@ namespace Game.Editor
             LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #endif
 #if UNITY_GAMEHOT
+            ResourceRuleTool.ActivateRule_GameHot();
             LinkXMLHelper.AddLinkXML("UNITY_GAMEHOT");
             HybridCLRTool.AddHotfixAssemblyDefinition("Game.Hot.Code");
 #else
@@ -84,7 +86,7 @@ namespace Game.Editor
         }
 
 #if UNITY_HOTFIX
-        [MenuItem("Tools/Define Symbol/Remove UNITY_HOTFIX")]
+        [MenuItem("Game/Define Symbol/Remove UNITY_HOTFIX", false, 2)]
         private static void Remove_UNITY_HOTFIX()
         {
             BuildAssemblyHelper.ClearBuildDir();
@@ -112,7 +114,7 @@ namespace Game.Editor
             AssetDatabase.SaveAssets();
         }
 #else
-        [MenuItem("Tools/Define Symbol/Add UNITY_HOTFIX")]
+        [MenuItem("Game/Define Symbol/Add UNITY_HOTFIX", false, 2)]
         private static void Add_UNITY_HOTFIX()
         {
             BuildAssemblyHelper.ClearBuildDir();
@@ -142,7 +144,7 @@ namespace Game.Editor
 #endif
 
 #if UNITY_ET
-        [MenuItem("Tools/Define Symbol/Remove UNITY_ET")]
+        [MenuItem("Game/Define Symbol/Remove UNITY_ET", false, 3)]
         private static void Remove_UNITY_ET()
         {
             BuildAssemblyHelper.ClearBuildDir();
@@ -164,10 +166,11 @@ namespace Game.Editor
             AssetDatabase.SaveAssets();
         }
 #else
-        [MenuItem("Tools/Define Symbol/Add UNITY_ET")]
+        [MenuItem("Game/Define Symbol/Add UNITY_ET", false, 3)]
         private static void Add_UNITY_ET()
         {
             BuildAssemblyHelper.ClearBuildDir();
+            ResourceRuleTool.ActivateRule_ET();
             LinkXMLHelper.AddLinkXML("UNITY_ET");
 #if UNITY_GAMEHOT
             Remove_UNITY_GAMEHOT();
@@ -206,7 +209,7 @@ namespace Game.Editor
 #endif
 
 #if UNITY_GAMEHOT
-        [MenuItem("Tools/Define Symbol/Remove UNITY_GAMEHOT")]
+        [MenuItem("Game/Define Symbol/Remove UNITY_GAMEHOT", false, 4)]
         private static void Remove_UNITY_GAMEHOT()
         {
             BuildAssemblyHelper.ClearBuildDir();
@@ -221,10 +224,11 @@ namespace Game.Editor
             AssetDatabase.SaveAssets();
         }
 #else
-        [MenuItem("Tools/Define Symbol/Add UNITY_GAMEHOT")]
+        [MenuItem("Game/Define Symbol/Add UNITY_GAMEHOT", false, 4)]
         private static void Add_UNITY_GAMEHOT()
         {
             BuildAssemblyHelper.ClearBuildDir();
+            ResourceRuleTool.ActivateRule_GameHot();
             LinkXMLHelper.AddLinkXML("UNITY_GAMEHOT");
 #if UNITY_ET
             Remove_UNITY_ET();

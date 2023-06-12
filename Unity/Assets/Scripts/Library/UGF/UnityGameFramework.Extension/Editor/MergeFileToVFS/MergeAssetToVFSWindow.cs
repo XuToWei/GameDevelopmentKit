@@ -10,7 +10,7 @@ namespace UnityGameFramework.Extension
 {
     public class MergeAssetToVFSWindow : EditorWindow
     {
-        [MenuItem("Tools/MergeAssetToVFS")]
+        [MenuItem("Game Framework/Merge Asset To VFS", false, 1)]
         private static void ShowWindow()
         {
             var window = GetWindow<MergeAssetToVFSWindow>();

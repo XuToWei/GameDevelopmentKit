@@ -32,7 +32,6 @@ namespace Game.Editor
         {
             HybridCLRSettings.Instance.enable = false;
             string linkFile = $"{Application.dataPath}/{HybridCLRSettings.Instance.outputLinkFile}";
-            Debug.Log(linkFile);
             string linkDisableFile = $"{linkFile}.DISABLED";
             if (File.Exists(linkFile))
             {

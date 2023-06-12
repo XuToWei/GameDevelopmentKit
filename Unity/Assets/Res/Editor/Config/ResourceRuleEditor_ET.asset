@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50ad2d721b5da424096e85539f9ff262, type: 3}
-  m_Name: ResourceRuleEditor
+  m_Name: ResourceRuleEditor_ET
   m_EditorClassIdentifier: 
+  isActivate: 1
   rules:
   - valid: 1
     name: Entity
@@ -74,16 +75,6 @@ MonoBehaviour:
     filterType: 2
     searchPatterns: '*.*'
   - valid: 1
-    name: ET
-    variant: 
-    fileSystem: GameData
-    groups: 
-    assetsDirectoryPath: Assets/Res/ET
-    loadType: 0
-    packed: 0
-    filterType: 0
-    searchPatterns: '*.*'
-  - valid: 1
     name: Scene
     variant: 
     fileSystem: 
@@ -132,4 +123,34 @@ MonoBehaviour:
     loadType: 0
     packed: 0
     filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: ET.Code
+    variant: 
+    fileSystem: GameData
+    groups: 
+    assetsDirectoryPath: Assets/Res/ET/Code
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: ET.ClientServer
+    variant: 
+    fileSystem: GameData
+    groups: 
+    assetsDirectoryPath: Assets/Res/ET/ClientServer
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 0
+    name: ET.Client
+    variant: 
+    fileSystem: GameData
+    groups: 
+    assetsDirectoryPath: Assets/Res/ET/Client
+    loadType: 0
+    packed: 0
+    filterType: 0
     searchPatterns: '*.*'

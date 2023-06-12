@@ -17,7 +17,7 @@ namespace UnityGameFramework.Extension.Editor
         private static Platform m_OriginalPlatform;
         public const string OutputDirectory = "../Temp/Bundle";
 
-        [MenuItem("Game Framework/Resource Tools/Resource Start Build", false, 51)]
+        [MenuItem("Game Framework/Resource Tools/Resource Start Build", false, 52)]
         public static void StartBuild()
         {
             StartBuild(Platform.Undefined);

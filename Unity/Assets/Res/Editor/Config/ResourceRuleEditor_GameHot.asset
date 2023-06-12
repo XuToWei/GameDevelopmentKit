@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50ad2d721b5da424096e85539f9ff262, type: 3}
+  m_Name: ResourceRuleEditor_GameHot
+  m_EditorClassIdentifier: 
+  isActivate: 0
+  rules:
+  - valid: 1
+    name: Entity
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Entity
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Luban
+    variant: 
+    fileSystem: GameData
+    groups: 
+    assetsDirectoryPath: Assets/Res/Luban
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: UI.UIForm
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UIForm
+    loadType: 0
+    packed: 0
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: UI.UIItem
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UIItem
+    loadType: 0
+    packed: 0
+    filterType: 2
+    searchPatterns: '*.*'
+  - valid: 1
+    name: UI.UISound
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UISound
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: UI.UISprite
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UISprite
+    loadType: 0
+    packed: 0
+    filterType: 2
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Scene
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Scene
+    loadType: 0
+    packed: 0
+    filterType: 1
+    searchPatterns: '*.unity'
+  - valid: 1
+    name: Localization
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Localization
+    loadType: 0
+    packed: 0
+    filterType: 2
+    searchPatterns: '*.*'
+  - valid: 1
+    name: HybridCLR
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/HybridCLR
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Prefab
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Prefab
+    loadType: 0
+    packed: 0
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: GameHot.Code
+    variant: 
+    fileSystem: GameData
+    groups: 
+    assetsDirectoryPath: Assets/Res/Hot/Code
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: GameHot.Luban
+    variant: 
+    fileSystem: GameData
+    groups: 
+    assetsDirectoryPath: Assets/Res/Hot/Luban
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'

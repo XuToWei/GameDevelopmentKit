@@ -27,11 +27,7 @@ namespace UnityGameFramework.Extension.Editor
                     methodInfos.RemoveAt(i);
                 }
             }
-
-            methodInfos.Sort((a, b) =>
-                a.GetCustomAttribute<T>().CallbackOrder
-                    .CompareTo(b.GetCustomAttribute<T>().CallbackOrder));
-
+            methodInfos.Sort((a, b) => a.GetCustomAttribute<T>().CallbackOrder.CompareTo(b.GetCustomAttribute<T>().CallbackOrder));
             foreach (var methodInfo in methodInfos)
             {
                 methodInfo.Invoke(null, new object[] { platform });
@@ -46,8 +42,9 @@ namespace UnityGameFramework.Extension.Editor
             bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath,
             bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
-            string streamingAssetsPath =
-                Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+            CallBuildEvent<UGFBuildOnPreprocessAllPlatformsAttribute>(platforms);
+            
+            string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
             string[] fileNames = Directory.GetFiles(streamingAssetsPath, "*", SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
             {
@@ -57,12 +54,8 @@ namespace UnityGameFramework.Extension.Editor
                 }
             }
             Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
-            
-            ResourceRuleEditor ruleEditor = ScriptableObject.CreateInstance<ResourceRuleEditor>();
-            ruleEditor.RefreshResourceCollection();
             SpriteCollectionUtility.RefreshSpriteCollection();
-
-            CallBuildEvent<UGFBuildOnPreprocessAllPlatformsAttribute>(platforms);
+            ResourceRuleEditor.RefreshActivateResourceCollection();
         }
 
         public void OnPreprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected,
@@ -82,6 +75,8 @@ namespace UnityGameFramework.Extension.Editor
         public void OnOutputUpdatableVersionListData(Platform platform, string versionListPath, int versionListLength,
             int versionListHashCode, int versionListZipLength, int versionListZipHashCode)
         {
+            CallBuildEvent<UGFBuildOnOutputUpdatableVersionListDataAttribute>(platform);
+            
             ResourceBuilderController builderController = new ResourceBuilderController();
             if (!builderController.Load())
             {
@@ -89,8 +84,7 @@ namespace UnityGameFramework.Extension.Editor
                 return;
             }
 
-            VersionInfoEditorData versionInfoEditorData =
-                AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(VersionInfoEditorData.DataAssetPath);
+            VersionInfoEditorData versionInfoEditorData = AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(VersionInfoEditorData.DataAssetPath);
             if (versionInfoEditorData == null)
             {
                 versionInfoEditorData = ScriptableObject.CreateInstance<VersionInfoEditorData>();
@@ -123,8 +117,6 @@ namespace UnityGameFramework.Extension.Editor
                     Debug.Log($"Generate version info : {filePath} .");
                 }
             }
-            
-            CallBuildEvent<UGFBuildOnOutputUpdatableVersionListDataAttribute>(platform);
         }
 
         public void OnPostprocessPlatform(Platform platform, string workingPath,
@@ -133,22 +125,21 @@ namespace UnityGameFramework.Extension.Editor
             bool outputPackedSelected, string outputPackedPath,
             bool isSuccess)
         {
+            CallBuildEvent<UGFBuildOnPostprocessPlatformAttribute>(platform);
+            
             //如果有一下多个平台，自行处理
             void CopyResource(string outputPath)
             {
-                string streamingAssetsPath =
-                    Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
+                string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
                 string[] fileNames = Directory.GetFiles(outputPath, "*", SearchOption.AllDirectories);
                 foreach (string fileName in fileNames)
                 {
-                    string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath,
-                        fileName.Substring(outputPath.Length)));
+                    string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName.Substring(outputPath.Length)));
                     FileInfo destFileInfo = new FileInfo(destFileName);
                     if (destFileInfo.Directory is { Exists: false })
                     {
                         destFileInfo.Directory.Create();
                     }
-
                     File.Copy(fileName, destFileName);
                 }
             }
@@ -161,8 +152,6 @@ namespace UnityGameFramework.Extension.Editor
             {
                 CopyResource(outputPackagePath);
             }
-            
-            CallBuildEvent<UGFBuildOnPostprocessPlatformAttribute>(platform);
         }
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier,

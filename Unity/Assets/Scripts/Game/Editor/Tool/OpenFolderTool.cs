@@ -7,19 +7,19 @@ namespace Game.Editor
 {
     public static class OpenFolderTool
     {
-        [MenuItem("Tools/Open Folder/打开Excel文件夹", false, -99)]
+        [MenuItem("Game/Open Folder/打开Excel文件夹", false, -99)]
         public static void OpenExcelPath()
         {
             SafeOpenFolder($"{Application.dataPath}/../../Design/Excel");
         }
         
-        [MenuItem("Tools/Open Folder/打开Proto文件夹", false, -98)]
+        [MenuItem("Game/Open Folder/打开Proto文件夹", false, -98)]
         public static void OpenProtoPath()
         {
             SafeOpenFolder($"{Application.dataPath}/../../Design/Proto");
         }
         
-        [MenuItem("Tools/Open Folder/打开Build文件夹", false, -97)]
+        [MenuItem("Game/Open Folder/打开Build文件夹", false, -97)]
         public static void OpenBuildPath()
         {
             SafeOpenFolder($"{Application.dataPath}/../../Temp");

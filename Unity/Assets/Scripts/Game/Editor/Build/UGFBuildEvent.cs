@@ -33,5 +33,11 @@ namespace Game.Editor
             }
             File.WriteAllText(localServerFilePath, Newtonsoft.Json.JsonConvert.SerializeObject(versionInfo));
         }
+        
+        [UGFBuildOnPreprocessAllPlatforms(1)]
+        public static void Refresh(Platform platform)
+        {
+            DefineSymbolTool.Refresh();
+        }
     }
 }

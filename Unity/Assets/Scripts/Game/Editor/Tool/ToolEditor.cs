@@ -8,7 +8,7 @@ namespace Game.Editor
 {
     public static class ToolEditor
     {
-        [MenuItem("Tools/Tool/ExcelExporter")]
+        [MenuItem("Game/Tool/ExcelExporter")]
         public static async void ExcelExporter()
         {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
@@ -28,7 +28,7 @@ namespace Game.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
         
-        [MenuItem("Tools/Tool/ExcelExporterForJson")]
+        [MenuItem("Game/Tool/ExcelExporterForJson")]
         public static async void ExcelExporterForJson()
         {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
@@ -48,7 +48,7 @@ namespace Game.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
         
-        [MenuItem("Tools/Tool/Proto2CS")]
+        [MenuItem("Game/Tool/Proto2CS")]
         public static void Proto2CS()
         {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
@@ -60,7 +60,7 @@ namespace Game.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
         
-        [MenuItem("Tools/Tool/StartFileServer")]
+        [MenuItem("Game/Tool/StartFileServer")]
         public static void StartFileServer()
         {
             string dotnet = "dotnet.exe";

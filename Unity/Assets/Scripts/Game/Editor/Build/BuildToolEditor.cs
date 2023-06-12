@@ -12,7 +12,7 @@ namespace Game.Editor
     {
         private Platform m_Platform;
         
-        [MenuItem("Tools/Build Tool Editor")]
+        [MenuItem("Game/Build Tool Editor")]
         public static void ShowWindow()
         {
             GetWindow<BuildToolEditor>("Build Tool");

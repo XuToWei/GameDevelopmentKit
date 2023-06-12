@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityGameFramework.Editor.ResourceTools;
 
 namespace UnityGameFramework.Extension.Editor
 {
+    [CreateAssetMenu(fileName = "ResourceRuleEditorData", menuName = "UGF/ResourceRuleEditorData")]
     public class ResourceRuleEditorData : ScriptableObject
     {
+        [ReadOnly]
+        public bool isActivate;
         public List<ResourceRule> rules = new List<ResourceRule>();
     }
 

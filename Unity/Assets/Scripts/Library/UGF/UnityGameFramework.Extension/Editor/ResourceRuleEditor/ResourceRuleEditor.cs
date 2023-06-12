@@ -35,6 +35,13 @@ namespace UnityGameFramework.Extension.Editor
             window.minSize = new Vector2(1471f, 420f);
             window.maxSize = new Vector2(1471f, 1000f);
         }
+        
+        [MenuItem("Game Framework/Resource Tools/Refresh Activate Resource Collection", false, 51)]
+        public static void RefreshActivateResourceCollection()
+        {
+            ResourceRuleEditor ruleEditor = ScriptableObject.CreateInstance<ResourceRuleEditor>();
+            ruleEditor.RefreshResourceCollection();
+        }
 
         [OnOpenAsset]
         public static bool OnOpenAsset (int instanceID, int line)
@@ -68,17 +75,17 @@ namespace UnityGameFramework.Extension.Editor
             {
                 Load();
             }
-
-            if (m_RuleList == null)
-            {
-                InitRuleListDrawer();
-            }
-
+            
             GUILayout.BeginHorizontal();
             {
                 OnListHeaderGUI();
             }
             GUILayout.EndHorizontal();
+            
+            if (m_RuleList == null)
+            {
+                InitRuleListDrawer();
+            }
 
             GUILayout.BeginHorizontal();
             {
@@ -106,13 +113,41 @@ namespace UnityGameFramework.Extension.Editor
         {
             m_AllConfigPaths = AssetDatabase.FindAssets("t:ResourceRuleEditorData").Select(AssetDatabase.GUIDToAssetPath).ToList();
             m_ConfigNames = m_AllConfigPaths.Select(Path.GetFileNameWithoutExtension).ToArray();
-            
             m_Configuration = LoadAssetAtPath<ResourceRuleEditorData>(m_CurrentConfigPath);
+            
+            bool hasActivate = false;
+            foreach (var configPath in m_AllConfigPaths)
+            {
+                ResourceRuleEditorData ruleEditorData = LoadAssetAtPath<ResourceRuleEditorData>(configPath);
+                if (hasActivate)
+                {
+                    if (ruleEditorData.isActivate)
+                    {
+                        ruleEditorData.isActivate = false;
+                        AssetDatabase.SaveAssets();
+                    }
+                }
+                else
+                {
+                    if (ruleEditorData.isActivate)
+                    {
+                        hasActivate = true;
+                        if (m_Configuration == null)
+                        {
+                            m_CurrentConfigPath = configPath;
+                            m_Configuration = ruleEditorData;
+                        }
+                    }
+                }
+            }
+            
             if (m_Configuration == null)
             {
+                m_CurrentConfigIndex = 0;
                 if (m_AllConfigPaths.Count == 0)
                 {
-                    m_Configuration = ScriptableObject.CreateInstance<ResourceRuleEditorData>();
+                    m_Configuration = CreateInstance<ResourceRuleEditorData>();
+                    m_Configuration.isActivate = true;
                     m_CurrentConfigPath = m_NormalConfigurationPath;
                     m_AllConfigPaths = new List<string>() { m_NormalConfigurationPath };
                     m_ConfigNames = new [] { Path.GetFileNameWithoutExtension(m_NormalConfigurationPath) };
@@ -120,8 +155,15 @@ namespace UnityGameFramework.Extension.Editor
                 else
                 {
                     m_Configuration = LoadAssetAtPath<ResourceRuleEditorData>(m_AllConfigPaths[m_CurrentConfigIndex]);
+                    if (!hasActivate)
+                    {
+                        if (!m_Configuration.isActivate)
+                        {
+                            m_Configuration.isActivate = true;
+                            AssetDatabase.SaveAssets();
+                        }
+                    }
                 }
-                m_CurrentConfigIndex = 0;
             }
             else
             {
@@ -253,7 +295,7 @@ namespace UnityGameFramework.Extension.Editor
         }
 
         private int m_CurrentConfigIndex;
-        [SerializeField] private string m_CurrentConfigPath;
+        private string m_CurrentConfigPath;
         private List<string> m_AllConfigPaths;
         private string[] m_ConfigNames;
 
@@ -272,17 +314,31 @@ namespace UnityGameFramework.Extension.Editor
                 m_RuleList = null;
             }
             
-            Rect reload = new Rect(configs.xMax + GAP, rect.y, 100, rect.height);
+            Rect isActivateLabel = new Rect(configs.xMax + GAP, rect.y, 60, rect.height);
+            EditorGUI.LabelField(isActivateLabel, "isActivate:");
+            
+            GUI.enabled = false;
+            Rect isActivate = new Rect(isActivateLabel.xMax + GAP, rect.y, 20, rect.height);
+            EditorGUI.Toggle(isActivate, m_Configuration.isActivate);
+            GUI.enabled = true;
+            
+            Rect activate = new Rect(isActivate.xMax + GAP, rect.y, 100, rect.height);
+            if (GUI.Button(activate, "Activate This"))
+            {
+                foreach (var configPath in m_AllConfigPaths)
+                {
+                    LoadAssetAtPath<ResourceRuleEditorData>(configPath).isActivate = false;
+                }
+                m_Configuration.isActivate = true;
+                AssetDatabase.SaveAssets();
+            }
+            
+            Rect reload = new Rect(activate.xMax + GAP, rect.y, 100, rect.height);
             if (GUI.Button(reload, "Reload"))
             {
                 Load();
             }
-            Rect add = new Rect(reload.xMax + GAP, rect.y, 100, rect.height);
-            if (GUI.Button(add, "Add"))
-            {
-                Add();
-            }
-            Rect save = new Rect(add.xMax + GAP, rect.y, 100, rect.height);
+            Rect save = new Rect(reload.xMax + GAP, rect.y, 100, rect.height);
             if (GUI.Button(save, "Save"))
             {
                 Save();

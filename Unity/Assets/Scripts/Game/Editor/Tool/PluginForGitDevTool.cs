@@ -21,7 +21,7 @@ namespace Game.Editor
         };
         
         
-        [MenuItem("Tools/For Git Dev/Export All Not Free Plugins", false, 999)]
+        [MenuItem("Game/For Git Dev/Export All Not Free Plugins", false, 999)]
         static void ExportAllNotFreePlugins()
         {
             PluginForGitDevTool tool = new PluginForGitDevTool();
@@ -29,7 +29,7 @@ namespace Game.Editor
             MakeGitIgnore(tool.plugins_include);
         }
 
-        [MenuItem("Tools/For Git Dev/Make .gitignore For Not Free Plugins", false, 998)]
+        [MenuItem("Game/For Git Dev/Make .gitignore For Not Free Plugins", false, 998)]
         static void MakeGitIgnoreForAllNotFreePlugins()
         {
             PluginForGitDevTool tool = new PluginForGitDevTool();
