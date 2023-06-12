@@ -41,10 +41,10 @@
     <!--UNITY_ET_END-->
 
     <!--UNITY_!HOTFIX_ET_FIRST-->
-    <assembly fullname="Game.ET.Code.Hotfix" preserve="all" />
-    <assembly fullname="Game.ET.Code.HotfixView" preserve="all" />
     <assembly fullname="Game.ET.Code.Model" preserve="all" />
     <assembly fullname="Game.ET.Code.ModelView" preserve="all" />
+    <assembly fullname="Game.ET.Code.Hotfix" preserve="all" />
+    <assembly fullname="Game.ET.Code.HotfixView" preserve="all" />
     <!--UNITY_!HOTFIX_ET_END-->
 
     <!--UNITY_HOTFIX_ET-
