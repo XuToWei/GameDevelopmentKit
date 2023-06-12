@@ -1,30 +1,16 @@
 using System.IO;
+using Game.Editor;
 using UnityEditor;
 using UnityGameFramework.Editor;
+using UnityGameFramework.Extension.Editor;
 
 namespace ET.Editor
 {
     internal static class CodeModeDefineSymbolTool
     {
 #if UNITY_ET_CODEMODE_CLIENT
-        [MenuItem("ET/Define Symbol/CodeMode(Client)/Enable UNITY_ET_CODEMODE_SERVER")]
-        public static void UNITY_ET_CODEMODE_SERVER()
-        {
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
-            ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
-        }
-        
-        [MenuItem("ET/Define Symbol/CodeMode(Client)/Enable UNITY_ET_CODEMODE_CLIENTSERVER")]
-        public static void UNITY_ET_CODEMODE_CLIENTSERVER()
-        {
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
-            ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
-        }
-        
-        [InitializeOnLoadMethod]
-        public static void UNITY_ET_CODEMODE_CLIENT()
+        [MenuItem("ET/Define Symbol/Refresh", false, -1)]
+        public static void Refresh()
         {
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
@@ -32,27 +18,13 @@ namespace ET.Editor
             EnableETClientViewCode();
             DisableETServerCode();
             EnableModelGenerateClientCode();
+            RefreshETResourceRule(true);
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            AssetDatabase.SaveAssets();
         }
 #elif UNITY_ET_CODEMODE_SERVER
-        [MenuItem("ET/Define Symbol/CodeMode(Server)/Enable UNITY_ET_CODEMODE_CLIENT")]
-        public static void UNITY_ET_CODEMODE_CLIENT()
-        {
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
-            ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
-        }
-
-        [MenuItem("ET/Define Symbol/CodeMode(Server)/Enable UNITY_ET_CODEMODE_CLIENTSERVER")]
-        public static void UNITY_ET_CODEMODE_CLIENTSERVER()
-        {
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
-            ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
-        }
-        
-        [InitializeOnLoadMethod]
-        public static void UNITY_ET_CODEMODE_SERVER()
+        [MenuItem("ET/Define Symbol/Refresh", false, -1)]
+        public static void Refresh()
         {
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
@@ -60,27 +32,13 @@ namespace ET.Editor
             DisableETClientViewCode();
             EnableETServerCode();
             EnableModelGenerateClientServerCode();
+            RefreshETResourceRule(false);
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            AssetDatabase.SaveAssets();
         }
 #elif UNITY_ET_CODEMODE_CLIENTSERVER
-        [MenuItem("ET/Define Symbol/CodeMode(ClientServer)/Enable UNITY_ET_CODEMODE_CLIENT")]
-        public static void UNITY_ET_CODEMODE_CLIENT()
-        {
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
-            ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
-        }
-
-        [MenuItem("ET/Define Symbol/CodeMode(ClientServer)/Enable UNITY_ET_CODEMODE_SERVER")]
-        public static void UNITY_ET_CODEMODE_SERVER()
-        {
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
-            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
-            ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
-        }
-
-        [InitializeOnLoadMethod]
-        public static void UNITY_ET_CODEMODE_CLIENTSERVER()
+        [MenuItem("ET/Define Symbol/Refresh", false, -1)]
+        public static void Refresh()
         {
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
@@ -88,7 +46,9 @@ namespace ET.Editor
             EnableETClientViewCode();
             EnableETServerCode();
             EnableModelGenerateClientServerCode();
+            RefreshETResourceRule(false);
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            AssetDatabase.SaveAssets();
         }
 #else
         [InitializeOnLoadMethod]
@@ -100,10 +60,62 @@ namespace ET.Editor
             EnableETClientCode();
             DisableETServerCode();
             EnableModelGenerateClientCode();
+            RefreshETResourceRule();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            AssetDatabase.SaveAssets();
         }
 #endif
-        
+
+#if UNITY_ET_CODEMODE_SERVER || UNITY_ET_CODEMODE_CLIENTSERVER
+        [MenuItem("ET/Define Symbol/CodeMode(Server)/Enable UNITY_ET_CODEMODE_CLIENT")]
+        public static void UNITY_ET_CODEMODE_CLIENT()
+        {
+            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
+            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
+            ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
+            EnableETClientCode();
+            EnableETClientViewCode();
+            DisableETServerCode();
+            EnableModelGenerateClientCode();
+            RefreshETResourceRule(true);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            AssetDatabase.SaveAssets();
+        }
+#endif
+
+#if UNITY_ET_CODEMODE_CLIENT || UNITY_ET_CODEMODE_CLIENTSERVER
+        [MenuItem("ET/Define Symbol/CodeMode(Client)/Enable UNITY_ET_CODEMODE_SERVER")]
+        public static void UNITY_ET_CODEMODE_SERVER()
+        {
+            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
+            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
+            ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
+            EnableETClientCode();
+            DisableETClientViewCode();
+            EnableETServerCode();
+            EnableModelGenerateClientServerCode();
+            RefreshETResourceRule(false);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            AssetDatabase.SaveAssets();
+        }
+#endif
+
+#if UNITY_ET_CODEMODE_CLIENT || UNITY_ET_CODEMODE_SERVER
+        [MenuItem("ET/Define Symbol/CodeMode(Client)/Enable UNITY_ET_CODEMODE_CLIENTSERVER")]
+        public static void UNITY_ET_CODEMODE_CLIENTSERVER()
+        {
+            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
+            ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
+            ScriptingDefineSymbols.AddScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENTSERVER");
+            EnableETClientCode();
+            EnableETClientViewCode();
+            EnableETServerCode();
+            EnableModelGenerateClientServerCode();
+            RefreshETResourceRule(false);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            AssetDatabase.SaveAssets();
+        }
+#endif
         static void EnableETClientCode()
         {
             string asmdefFile = "Assets/Scripts/Game/ET/Code/Hotfix/Client/Ignore.asmdef";
@@ -260,6 +272,22 @@ namespace ET.Editor
                 File.Move(asmdefDisableFile, asmdefFile);
                 File.Delete(asmdefDisableFile);
                 File.Delete($"{asmdefDisableFile}.meta");
+            }
+        }
+        
+        static void RefreshETResourceRule(bool isClient)
+        {
+            ResourceRuleEditorData ruleEditorData = AssetDatabase.LoadAssetAtPath<ResourceRuleEditorData>(ResourceRuleTool.ResourceRuleAsset_ET);
+            foreach (var rule in ruleEditorData.rules)
+            {
+                if (rule.name == "ET.Client")
+                {
+                    rule.valid = isClient;
+                }
+                else if(rule.name == "ET.ClientServer")
+                {
+                    rule.valid = !isClient;
+                }
             }
         }
     }

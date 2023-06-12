@@ -8,9 +8,9 @@ namespace Game.Editor
 {
     public static class ResourceRuleTool
     {
-        private readonly static string ResourceRuleAsset_ET = "Assets/Res/Editor/Config/ResourceRuleEditor_ET.asset";
+        public static readonly string ResourceRuleAsset_ET = "Assets/Res/Editor/Config/ResourceRuleEditor_ET.asset";
         
-        private readonly static string ResourceRuleAsset_GameHot = "Assets/Res/Editor/Config/ResourceRuleEditor_GameHot.asset";
+        public static readonly string ResourceRuleAsset_GameHot = "Assets/Res/Editor/Config/ResourceRuleEditor_GameHot.asset";
         
         public static void ActivateRule(string ruleDataAsset)
         {
@@ -35,7 +35,7 @@ namespace Game.Editor
         {
             ActivateRule(ResourceRuleAsset_ET);
         }
-        
+
         public static void ActivateRule_GameHot()
         {
             ActivateRule(ResourceRuleAsset_GameHot);
