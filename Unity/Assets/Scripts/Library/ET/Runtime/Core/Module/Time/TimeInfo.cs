@@ -12,6 +12,7 @@ namespace ET
             {
                 this.iTimeNow = value;
                 this.FrameTime = this.ClientNow();
+                this.RealFrameTime = this.RealClientNow();
             }
         }
         
@@ -35,7 +36,9 @@ namespace ET
         
         public long ServerMinusClientTime { private get; set; }
 
-        public long FrameTime;
+        public long FrameTime { get; private set; }
+
+        public long RealFrameTime { get; private set; }
 
         public TimeInfo()
         {
@@ -47,6 +50,7 @@ namespace ET
         {
             this.iTimeNow.Update();
             this.FrameTime = this.ClientNow();
+            this.RealFrameTime = this.RealClientNow();
         }
         
         /// <summary> 
@@ -61,6 +65,11 @@ namespace ET
         public long ClientNow()
         {
             return (this.iTimeNow.GetUtcNowTicks() - this.dt1970.Ticks) / 10000;
+        }
+        
+        public long RealClientNow()
+        {
+            return (DateTime.UtcNow.Ticks - this.dt1970.Ticks) / 10000;
         }
         
         public long ServerNow()

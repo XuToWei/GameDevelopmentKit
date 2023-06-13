@@ -16,6 +16,15 @@ namespace ET
         {
             return TimeInfo.Instance.ClientNow();
         }
+        
+        /// <summary>
+        /// 真实客户端时间，不随加速改变，针对生成唯一id这类不能时间回溯的功能
+        /// </summary>
+        /// <returns></returns>
+        public static long RealClientNow()
+        {
+            return TimeInfo.Instance.RealClientNow();
+        }
 
         public static long ClientNowSeconds()
         {
