@@ -9,7 +9,7 @@ namespace ET
 
         public void Awake()
         {
-            AppType = AppType.LockStep;
+            AppType = AppType.Demo;
         }
     }
 }

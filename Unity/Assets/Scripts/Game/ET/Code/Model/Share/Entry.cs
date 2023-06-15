@@ -50,10 +50,10 @@ namespace ET
         private static async UniTask StartAsync()
         {
             WinPeriod.Init();
-            
-            MongoHelper.Register();
+
             MongoHelper.RegisterStruct<LSInput>();
-            
+            MongoHelper.Register();
+
             Game.AddSingleton<EntitySystemSingleton>();
             Game.AddSingleton<LSEntitySystemSington>();
 

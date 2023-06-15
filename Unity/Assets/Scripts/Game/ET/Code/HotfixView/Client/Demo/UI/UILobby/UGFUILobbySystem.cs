@@ -25,7 +25,7 @@ namespace ET.Client
             }
         }
         
-        public static async UniTask EnterMap(this UGFUILobby self)
+        private static async UniTask EnterMap(this UGFUILobby self)
         {
             await EnterMapHelper.EnterMapAsync(self.ClientScene());
             self.DomainScene().GetComponent<UIComponent>().CloseUIForm(UGFUIFormId.UILobby);

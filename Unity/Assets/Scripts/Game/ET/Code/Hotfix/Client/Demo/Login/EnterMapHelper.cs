@@ -20,7 +20,7 @@ namespace ET.Client
             catch (Exception e)
             {
                 Log.Error(e);
-            }	
+            }
         }
         
         public static async UniTask Match(Scene clientScene)
@@ -32,7 +32,7 @@ namespace ET.Client
             catch (Exception e)
             {
                 Log.Error(e);
-            }	
+            }
         }
     }
 }

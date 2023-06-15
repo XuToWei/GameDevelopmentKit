@@ -82,6 +82,9 @@ namespace ET
         [StaticField]
         private static readonly JsonWriterSettings defaultSettings = new() { OutputMode = JsonOutputMode.RelaxedExtendedJson };
 
+        [StaticField]
+        private static readonly HashSet<Type> registeredStructTypes = new HashSet<Type>();
+
         public static void Register()
         {
             // 自动注册IgnoreExtraElements
@@ -119,10 +122,11 @@ namespace ET
 
         public static void RegisterStruct<T>() where T : struct
         {
-            if (BsonSerializer.LookupSerializer<T>() == null)
-            {
-                BsonSerializer.RegisterSerializer(new StructBsonSerialize<T>());
-            }
+            Type type = typeof(T);
+            if(registeredStructTypes.Contains(type))
+                return;
+            registeredStructTypes.Add(type);
+            BsonSerializer.RegisterSerializer(type, new StructBsonSerialize<T>());
         }
 
         public static string ToJson(object obj)

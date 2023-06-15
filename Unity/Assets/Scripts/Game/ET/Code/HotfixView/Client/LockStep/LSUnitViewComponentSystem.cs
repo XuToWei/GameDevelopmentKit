@@ -16,7 +16,7 @@ namespace ET.Client
                 foreach (long playerId in room.PlayerIds)
                 {
                     LSUnit lsUnit = lsUnitComponent.GetChild<LSUnit>(playerId);
-                
+                    
                     GameObject unitGo = GameEntry.DataNode.GetData<VarGameObject>("UnitGameObject");
                     
                     unitGo = UnityEngine.Object.Instantiate(unitGo);
