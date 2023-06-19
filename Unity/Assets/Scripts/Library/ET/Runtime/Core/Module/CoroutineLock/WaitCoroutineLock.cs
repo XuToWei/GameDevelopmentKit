@@ -21,8 +21,10 @@ namespace ET
     {
         public static WaitCoroutineLock Create()
         {
-            WaitCoroutineLock waitCoroutineLock = new WaitCoroutineLock();
-            waitCoroutineLock.tcs = AutoResetUniTaskCompletionSource<CoroutineLock>.Create();
+            WaitCoroutineLock waitCoroutineLock = new WaitCoroutineLock
+            {
+                tcs = AutoResetUniTaskCompletionSource<CoroutineLock>.Create()
+            };
             return waitCoroutineLock;
         }
 
