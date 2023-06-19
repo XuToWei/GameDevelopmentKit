@@ -76,8 +76,9 @@ namespace ET
 #endif
         }
 
-        public void Destroy()
+        public override void Dispose()
         {
+            base.Dispose();
 #if !SINGLE_THREAD
             this.isStop = true;
             this.thread.Join(1000);

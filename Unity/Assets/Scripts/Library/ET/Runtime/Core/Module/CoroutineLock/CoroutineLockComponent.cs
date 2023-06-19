@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
@@ -11,6 +10,7 @@ namespace ET
 
         public override void Dispose()
         {
+            base.Dispose();
             this.nextFrameRun.Clear();
         }
 
@@ -37,8 +37,7 @@ namespace ET
 
         public async UniTask<CoroutineLock> Wait(int coroutineLockType, long key, int time = 60000)
         {
-            CoroutineLockQueueType coroutineLockQueueType;
-            if (!this.dictionary.TryGetValue(coroutineLockType, out coroutineLockQueueType))
+            if (!this.dictionary.TryGetValue(coroutineLockType, out var coroutineLockQueueType))
             {
                 coroutineLockQueueType = new CoroutineLockQueueType(coroutineLockType);
                 this.dictionary.Add(coroutineLockType, coroutineLockQueueType);
@@ -48,8 +47,7 @@ namespace ET
 
         private void Notify(int coroutineLockType, long key, int level)
         {
-            CoroutineLockQueueType coroutineLockQueueType;
-            if (!this.dictionary.TryGetValue(coroutineLockType, out coroutineLockQueueType))
+            if (!this.dictionary.TryGetValue(coroutineLockType, out var coroutineLockQueueType))
             {
                 return;
             }

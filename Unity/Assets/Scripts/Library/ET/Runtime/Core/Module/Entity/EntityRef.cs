@@ -1,5 +1,3 @@
-using System;
-
 namespace ET
 {
     public readonly struct EntityRef<T> where T: Entity
@@ -9,7 +7,7 @@ namespace ET
 
         private EntityRef(T t)
         {
-            this.instanceId = t.InstanceId;
+            this.instanceId = t?.InstanceId ?? 0;
             this.entity = t;
         }
         

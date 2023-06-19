@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ET
+﻿namespace ET
 {
     // 管理根部的Scene
     public class Root: Singleton<Root>, ISingletonAwake
@@ -17,6 +12,7 @@ namespace ET
 
         public override void Dispose()
         {
+            base.Dispose();
             this.Scene.Dispose();
         }
     }
