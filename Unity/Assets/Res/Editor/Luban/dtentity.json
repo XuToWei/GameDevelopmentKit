@@ -5,7 +5,7 @@
     "Desc": "玩家战机",
     "AssetName": "PlayerShip",
     "EntityGroupName": "Aircraft",
-    "Priority": 0
+    "Priority": 90
   },
   {
     "Id": 10001,
@@ -13,7 +13,7 @@
     "Desc": "敌人战机",
     "AssetName": "EnemyShip",
     "EntityGroupName": "Aircraft",
-    "Priority": 0
+    "Priority": 80
   },
   {
     "Id": 20000,
@@ -21,7 +21,7 @@
     "Desc": "玩家推进器",
     "AssetName": "PlayerEngine",
     "EntityGroupName": "Aircraft",
-    "Priority": 0
+    "Priority": 90
   },
   {
     "Id": 20001,
@@ -29,7 +29,7 @@
     "Desc": "敌人推进器",
     "AssetName": "EnemyEngine",
     "EntityGroupName": "Aircraft",
-    "Priority": 0
+    "Priority": 80
   },
   {
     "Id": 30000,
@@ -37,7 +37,7 @@
     "Desc": "默认武器",
     "AssetName": "DefaultWeapon",
     "EntityGroupName": "Weapon",
-    "Priority": 0
+    "Priority": 30
   },
   {
     "Id": 40000,
@@ -45,7 +45,7 @@
     "Desc": "默认装甲",
     "AssetName": "DefaultArmor",
     "EntityGroupName": "Armor",
-    "Priority": 0
+    "Priority": 30
   },
   {
     "Id": 50000,
@@ -53,7 +53,7 @@
     "Desc": "玩家子弹",
     "AssetName": "PlayerBolt",
     "EntityGroupName": "Bullet",
-    "Priority": 0
+    "Priority": 80
   },
   {
     "Id": 50001,
@@ -61,7 +61,7 @@
     "Desc": "敌人子弹",
     "AssetName": "EnemyBolt",
     "EntityGroupName": "Bullet",
-    "Priority": 0
+    "Priority": 80
   },
   {
     "Id": 60000,
@@ -69,7 +69,7 @@
     "Desc": "小行星",
     "AssetName": "Asteroid01",
     "EntityGroupName": "Asteroid",
-    "Priority": 0
+    "Priority": 80
   },
   {
     "Id": 60001,
@@ -77,7 +77,7 @@
     "Desc": "小行星",
     "AssetName": "Asteroid02",
     "EntityGroupName": "Asteroid",
-    "Priority": 0
+    "Priority": 80
   },
   {
     "Id": 60002,
@@ -85,7 +85,7 @@
     "Desc": "小行星",
     "AssetName": "Asteroid03",
     "EntityGroupName": "Asteroid",
-    "Priority": 0
+    "Priority": 80
   },
   {
     "Id": 70000,
@@ -93,7 +93,7 @@
     "Desc": "玩家死亡特效",
     "AssetName": "PlayerExplosion",
     "EntityGroupName": "Effect",
-    "Priority": 0
+    "Priority": 80
   },
   {
     "Id": 70001,
@@ -101,7 +101,7 @@
     "Desc": "敌人死亡特效",
     "AssetName": "EnemyExplosion",
     "EntityGroupName": "Effect",
-    "Priority": 0
+    "Priority": 80
   },
   {
     "Id": 70002,
@@ -109,6 +109,6 @@
     "Desc": "小行星死亡特效",
     "AssetName": "AsteroidExplosion",
     "EntityGroupName": "Effect",
-    "Priority": 0
+    "Priority": 80
   }
 ]

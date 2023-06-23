@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Game.Hot
 {
-    public static partial class Constant
+    public static partial class HotConstant
     {
         /// <summary>
         /// 层。

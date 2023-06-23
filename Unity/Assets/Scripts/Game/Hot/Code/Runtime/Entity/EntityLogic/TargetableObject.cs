@@ -51,7 +51,7 @@ namespace Game.Hot
 #endif
         {
             base.OnInit(userData);
-            gameObject.SetLayerRecursively(Constant.Layer.TargetableObjectLayerId);
+            gameObject.SetLayerRecursively(HotConstant.Layer.TargetableObjectLayerId);
         }
 
 #if UNITY_2017_3_OR_NEWER
