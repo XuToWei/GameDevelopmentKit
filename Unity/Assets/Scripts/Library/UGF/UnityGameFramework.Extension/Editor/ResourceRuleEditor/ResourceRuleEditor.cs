@@ -302,7 +302,7 @@ namespace UnityGameFramework.Extension.Editor
         private void OnListHeaderGUI()
         {
             const float GAP = 5;
-            Rect rect = new Rect(GAP, 0, 40, 18);
+            Rect rect = new Rect(GAP, 3, 40, 18);
             Rect configLabel = new Rect(rect.x, rect.y, 75, rect.height);
             EditorGUI.LabelField(configLabel, "RulesConfig:");
             Rect configs = new Rect(configLabel.xMax + GAP, rect.y, 200, rect.height);

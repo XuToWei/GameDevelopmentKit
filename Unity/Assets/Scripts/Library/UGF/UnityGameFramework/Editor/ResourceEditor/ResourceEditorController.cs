@@ -23,6 +23,8 @@ namespace UnityGameFramework.Editor.ResourceTools
         private readonly ResourceCollection m_ResourceCollection;
         private readonly List<string> m_SourceAssetSearchPaths;
         private readonly List<string> m_SourceAssetSearchRelativePaths;
+        private readonly List<string> m_SourceAssetExceptPaths;
+        private readonly List<string> m_SourceAssetExceptRelativePaths;
         private readonly Dictionary<string, SourceAsset> m_SourceAssets;
         private SourceFolder m_SourceAssetRoot;
         private string m_SourceAssetRootPath;
@@ -62,6 +64,8 @@ namespace UnityGameFramework.Editor.ResourceTools
 
             m_SourceAssetSearchPaths = new List<string>();
             m_SourceAssetSearchRelativePaths = new List<string>();
+            m_SourceAssetExceptPaths = new List<string>();
+            m_SourceAssetExceptRelativePaths = new List<string>();
             m_SourceAssets = new Dictionary<string, SourceAsset>(StringComparer.Ordinal);
             m_SourceAssetRoot = null;
             m_SourceAssetRootPath = null;
@@ -114,6 +118,7 @@ namespace UnityGameFramework.Editor.ResourceTools
                 m_SourceAssetRootPath = value.Replace('\\', '/');
                 m_SourceAssetRoot = new SourceFolder(m_SourceAssetRootPath, null);
                 RefreshSourceAssetSearchPaths();
+                RefreshSourceAssetExceptPaths();
             }
         }
 
@@ -242,17 +247,33 @@ namespace UnityGameFramework.Editor.ResourceTools
 
                         case "SourceAssetSearchPaths":
                             m_SourceAssetSearchRelativePaths.Clear();
-                            XmlNodeList xmlNodeListInner = xmlNode.ChildNodes;
-                            XmlNode xmlNodeInner = null;
-                            for (int j = 0; j < xmlNodeListInner.Count; j++)
+                            XmlNodeList xmlSearchNodeListInner = xmlNode.ChildNodes;
+                            XmlNode xmlSearchNodeInner = null;
+                            for (int j = 0; j < xmlSearchNodeListInner.Count; j++)
                             {
-                                xmlNodeInner = xmlNodeListInner.Item(j);
-                                if (xmlNodeInner.Name != "SourceAssetSearchPath")
+                                xmlSearchNodeInner = xmlSearchNodeListInner.Item(j);
+                                if (xmlSearchNodeInner.Name != "SourceAssetSearchPath")
                                 {
                                     continue;
                                 }
 
-                                m_SourceAssetSearchRelativePaths.Add(xmlNodeInner.Attributes.GetNamedItem("RelativePath").Value);
+                                m_SourceAssetSearchRelativePaths.Add(xmlSearchNodeInner.Attributes.GetNamedItem("RelativePath").Value);
+                            }
+                            break;
+                        
+                        case "SourceAssetExceptPaths":
+                            m_SourceAssetExceptRelativePaths.Clear();
+                            XmlNodeList xmlExceptNodeListInner = xmlNode.ChildNodes;
+                            XmlNode xmlExceptNodeInner = null;
+                            for (int j = 0; j < xmlExceptNodeListInner.Count; j++)
+                            {
+                                xmlExceptNodeInner = xmlExceptNodeListInner.Item(j);
+                                if (xmlExceptNodeInner.Name != "SourceAssetExceptPath")
+                                {
+                                    continue;
+                                }
+
+                                m_SourceAssetExceptRelativePaths.Add(xmlExceptNodeInner.Attributes.GetNamedItem("RelativePath").Value);
                             }
                             break;
 
@@ -279,6 +300,7 @@ namespace UnityGameFramework.Editor.ResourceTools
                 }
 
                 RefreshSourceAssetSearchPaths();
+                RefreshSourceAssetExceptPaths();
             }
             catch
             {
@@ -324,6 +346,18 @@ namespace UnityGameFramework.Editor.ResourceTools
                     XmlElement xmlElementInner = xmlDocument.CreateElement("SourceAssetSearchPath");
                     xmlAttribute = xmlDocument.CreateAttribute("RelativePath");
                     xmlAttribute.Value = sourceAssetSearchRelativePath;
+                    xmlElementInner.Attributes.SetNamedItem(xmlAttribute);
+                    xmlElement.AppendChild(xmlElementInner);
+                }
+
+                xmlElement = xmlDocument.CreateElement("SourceAssetExceptPaths");
+                xmlSettings.AppendChild(xmlElement);
+
+                foreach (string sourceAssetExceptRelativePath in m_SourceAssetExceptRelativePaths)
+                {
+                    XmlElement xmlElementInner = xmlDocument.CreateElement("SourceAssetExceptPath");
+                    xmlAttribute = xmlDocument.CreateAttribute("RelativePath");
+                    xmlAttribute.Value = sourceAssetExceptRelativePath;
                     xmlElementInner.Attributes.SetNamedItem(xmlAttribute);
                     xmlElement.AppendChild(xmlElementInner);
                 }
@@ -550,6 +584,9 @@ namespace UnityGameFramework.Editor.ResourceTools
             tempGuids.UnionWith(AssetDatabase.FindAssets(SourceAssetUnionLabelFilter, sourceAssetSearchPaths));
             tempGuids.ExceptWith(AssetDatabase.FindAssets(SourceAssetExceptTypeFilter, sourceAssetSearchPaths));
             tempGuids.ExceptWith(AssetDatabase.FindAssets(SourceAssetExceptLabelFilter, sourceAssetSearchPaths));
+            string[] sourceAssetExceptPaths = m_SourceAssetExceptPaths.ToArray();
+            tempGuids.ExceptWith(AssetDatabase.FindAssets(SourceAssetUnionTypeFilter, sourceAssetExceptPaths));
+            tempGuids.ExceptWith(AssetDatabase.FindAssets(SourceAssetUnionLabelFilter, sourceAssetExceptPaths));
 
             string[] guids = new List<string>(tempGuids).ToArray();
             foreach (string guid in guids)
@@ -594,6 +631,24 @@ namespace UnityGameFramework.Editor.ResourceTools
             else
             {
                 m_SourceAssetSearchPaths.Add(m_SourceAssetRootPath);
+            }
+        }
+
+        private void RefreshSourceAssetExceptPaths()
+        {
+            m_SourceAssetExceptPaths.Clear();
+
+            if (string.IsNullOrEmpty(m_SourceAssetRootPath))
+            {
+                SourceAssetRootPath = DefaultSourceAssetRootPath;
+            }
+
+            if (m_SourceAssetExceptRelativePaths.Count > 0)
+            {
+                foreach (string sourceAssetExceptRelativePath in m_SourceAssetExceptRelativePaths)
+                {
+                    m_SourceAssetExceptPaths.Add(Utility.Path.GetRegularPath(Path.Combine(m_SourceAssetRootPath, sourceAssetExceptRelativePath)));
+                }
             }
         }
 

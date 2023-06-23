@@ -23,7 +23,7 @@ namespace UnityGameFramework.Extension.Editor
         public string groups = string.Empty;
         public string assetsDirectoryPath = string.Empty;
         public LoadType loadType = LoadType.LoadFromFile;
-        public bool packed = true;
+        public bool packed = false;
         public ResourceFilterType filterType = ResourceFilterType.Root;
         public string searchPatterns = "*.*";
     }

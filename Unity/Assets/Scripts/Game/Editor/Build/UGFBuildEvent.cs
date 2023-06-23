@@ -21,8 +21,7 @@ namespace Game.Editor
                 File.Delete(localServerFilePath);
             }
             
-            VersionInfoEditorData versionInfoEditorData =
-                AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(VersionInfoEditorData.DataAssetPath);
+            VersionInfoEditorData versionInfoEditorData = AssetDatabase.LoadAssetAtPath<VersionInfoEditorData>(VersionInfoEditorData.DataAssetPath);
             VersionInfoData versionInfoData = versionInfoEditorData.GetActiveVersionInfoData();
             
             VersionInfo versionInfo = versionInfoData.ToVersionInfo();
@@ -32,12 +31,6 @@ namespace Game.Editor
                 Debug.LogError($"{versionInfo.UpdatePrefixUri} is wrong, please check!");
             }
             File.WriteAllText(localServerFilePath, Newtonsoft.Json.JsonConvert.SerializeObject(versionInfo));
-        }
-        
-        [UGFBuildOnPreprocessAllPlatforms(1)]
-        public static void Refresh(Platform platform)
-        {
-            DefineSymbolTool.Refresh();
         }
     }
 }

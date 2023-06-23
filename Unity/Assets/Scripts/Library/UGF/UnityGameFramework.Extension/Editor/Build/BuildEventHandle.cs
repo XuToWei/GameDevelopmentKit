@@ -42,8 +42,6 @@ namespace UnityGameFramework.Extension.Editor
             bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath,
             bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
-            CallBuildEvent<UGFBuildOnPreprocessAllPlatformsAttribute>(platforms);
-            
             string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
             string[] fileNames = Directory.GetFiles(streamingAssetsPath, "*", SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
@@ -56,6 +54,8 @@ namespace UnityGameFramework.Extension.Editor
             Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
             SpriteCollectionUtility.RefreshSpriteCollection();
             ResourceRuleEditor.RefreshActivateResourceCollection();
+            
+            CallBuildEvent<UGFBuildOnPreprocessAllPlatformsAttribute>(platforms);
         }
 
         public void OnPreprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected,
@@ -75,8 +75,6 @@ namespace UnityGameFramework.Extension.Editor
         public void OnOutputUpdatableVersionListData(Platform platform, string versionListPath, int versionListLength,
             int versionListHashCode, int versionListZipLength, int versionListZipHashCode)
         {
-            CallBuildEvent<UGFBuildOnOutputUpdatableVersionListDataAttribute>(platform);
-            
             ResourceBuilderController builderController = new ResourceBuilderController();
             if (!builderController.Load())
             {
@@ -117,6 +115,8 @@ namespace UnityGameFramework.Extension.Editor
                     Debug.Log($"Generate version info : {filePath} .");
                 }
             }
+            
+            CallBuildEvent<UGFBuildOnOutputUpdatableVersionListDataAttribute>(platform);
         }
 
         public void OnPostprocessPlatform(Platform platform, string workingPath,
@@ -125,8 +125,6 @@ namespace UnityGameFramework.Extension.Editor
             bool outputPackedSelected, string outputPackedPath,
             bool isSuccess)
         {
-            CallBuildEvent<UGFBuildOnPostprocessPlatformAttribute>(platform);
-            
             //如果有一下多个平台，自行处理
             void CopyResource(string outputPath)
             {
@@ -152,6 +150,8 @@ namespace UnityGameFramework.Extension.Editor
             {
                 CopyResource(outputPackagePath);
             }
+            
+            CallBuildEvent<UGFBuildOnPostprocessPlatformAttribute>(platform);
         }
 
         public void OnPostprocessAllPlatforms(string productName, string companyName, string gameIdentifier,

@@ -17,6 +17,15 @@ namespace UnityGameFramework.Extension
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();
+#if UNITY_5_3_OR_NEWER
+            //https://docs.unity3d.com/ScriptReference/AssetBundle.LoadAssetAsync.html
+            //Prior to version 5.0, users could fetch individual components directly using LoadAsync.
+            //This is not supported anymore. Instead, please use LoadAssetAsync to load the game object first and then look up the component on the object.
+            if (typeof(T).IsSubclassOf(typeof(UnityEngine.Component)))
+            {
+                throw new GameFrameworkException("Can't fetch individual components directly. Please load the game object first and then look up the component on the object");
+            }
+#endif
 #endif
             if (cancellationToken.IsCancellationRequested)
             {

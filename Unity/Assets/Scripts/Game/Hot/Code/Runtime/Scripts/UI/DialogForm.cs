@@ -65,7 +65,7 @@ namespace Game.Hot
 
         public void OnConfirmButtonClick()
         {
-            Close();
+            FadeClose();
 
             if (m_OnClickConfirm != null)
             {
@@ -75,7 +75,7 @@ namespace Game.Hot
 
         public void OnCancelButtonClick()
         {
-            Close();
+            FadeClose();
 
             if (m_OnClickCancel != null)
             {
@@ -85,7 +85,7 @@ namespace Game.Hot
 
         public void OnOtherButtonClick()
         {
-            Close();
+            FadeClose();
 
             if (m_OnClickOther != null)
             {

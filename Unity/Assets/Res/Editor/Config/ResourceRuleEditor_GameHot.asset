@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ad2d721b5da424096e85539f9ff262, type: 3}
   m_Name: ResourceRuleEditor_GameHot
   m_EditorClassIdentifier: 
-  isActivate: 0
+  isActivate: 1
   rules:
   - valid: 1
     name: Entity
@@ -22,7 +22,7 @@ MonoBehaviour:
     assetsDirectoryPath: Assets/Res/Entity
     loadType: 0
     packed: 0
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: Luban
@@ -39,7 +39,7 @@ MonoBehaviour:
     variant: 
     fileSystem: 
     groups: 
-    assetsDirectoryPath: Assets/Res/UI/UIForm
+    assetsDirectoryPath: Assets/Res/UI/UIForm/Hot
     loadType: 0
     packed: 0
     filterType: 1
@@ -52,7 +52,7 @@ MonoBehaviour:
     assetsDirectoryPath: Assets/Res/UI/UIItem
     loadType: 0
     packed: 0
-    filterType: 2
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: UI.UISound
@@ -62,7 +62,7 @@ MonoBehaviour:
     assetsDirectoryPath: Assets/Res/UI/UISound
     loadType: 0
     packed: 0
-    filterType: 0
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: UI.UISprite
@@ -103,7 +103,7 @@ MonoBehaviour:
     loadType: 0
     packed: 0
     filterType: 0
-    searchPatterns: '*.*'
+    searchPatterns: '*.asset'
   - valid: 1
     name: Prefab
     variant: 
@@ -133,4 +133,54 @@ MonoBehaviour:
     loadType: 0
     packed: 0
     filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Material
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Material
+    loadType: 0
+    packed: 0
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Mesh
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Mesh
+    loadType: 0
+    packed: 0
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Music
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Music
+    loadType: 0
+    packed: 0
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Sound
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Sound
+    loadType: 0
+    packed: 0
+    filterType: 1
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Font
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/Font
+    loadType: 0
+    packed: 0
+    filterType: 1
     searchPatterns: '*.*'

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using GameFramework.Localization;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
 #if UNITY_EDITOR
-using GameFramework.Localization;
 using UnityEditor;
 #endif
 
@@ -39,7 +39,6 @@ namespace Game
                 {
                     foreach (var kv in dictionary.Dictionary)
                     {
-                        Debug.Log(kv.Key + " === " + kv.Value);
                         if (!GameEntry.Localization.AddRawString(kv.Key, kv.Value))
                         {
                             Log.Warning("Can not add raw string with key '{0}' which may be invalid or duplicate.", kv.Key);

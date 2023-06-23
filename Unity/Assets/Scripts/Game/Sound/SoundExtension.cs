@@ -67,7 +67,6 @@ namespace Game
 
         public static int? PlayUISound(this SoundComponent soundComponent, int uiSoundId, object userData = null)
         {
-            Log.Debug("uiSoundId:" + uiSoundId);
             DRUISound drUISound = GameEntry.Tables.DTUISound.GetOrDefault(uiSoundId);
             if (drUISound == null)
             {

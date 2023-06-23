@@ -26,11 +26,15 @@ namespace Game.Hot
         private List<HPBarItem> m_ActiveHPBarItems;
         private Canvas m_CachedCanvas;
 
+        private GameObject m_HPBarItemAssetObj;
+        private GameObject m_HPBarInstancesAssetObj;
+
         public async UniTask PreloadAsync()
         {
-            m_HPBarItemTemplate = await GameEntry.Resource.LoadAssetAsync<HPBarItem>(AssetUtility.GetUIItemAsset("HPBarItem"));
-            Transform instanceRoot = await GameEntry.Resource.LoadAssetAsync<Transform>(AssetUtility.GetUIItemAsset("HP Bar Instances"));
-            m_HPBarInstanceRoot = Object.Instantiate(instanceRoot, GameEntry.CodeRunner.transform);
+            m_HPBarItemAssetObj = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetUIItemAsset("HPBarItem"));
+            m_HPBarItemTemplate = m_HPBarItemAssetObj.GetComponent<HPBarItem>();
+            m_HPBarInstancesAssetObj = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetUIItemAsset("HP Bar Instances"));
+            m_HPBarInstanceRoot = Object.Instantiate(m_HPBarInstancesAssetObj.transform, GameEntry.CodeRunner.transform);
             m_CachedCanvas = m_HPBarInstanceRoot.GetComponent<Canvas>();
             m_InstancePoolCapacity = 16;
         }
@@ -43,6 +47,8 @@ namespace Game.Hot
 
         protected internal override void Shutdown()
         {
+            GameEntry.Resource.UnloadAsset(m_HPBarItemAssetObj);
+            GameEntry.Resource.UnloadAsset(m_HPBarInstancesAssetObj);
         }
 
         protected internal override void Update(float elapseSeconds, float realElapseSeconds)

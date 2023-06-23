@@ -12,24 +12,18 @@ namespace Game.Hot
         private static Font s_MainFont = null;
         private CanvasGroup m_CanvasGroup = null;
         
-        public void Close(bool ignoreFade)
+        public void FadeClose()
         {
             StopAllCoroutines();
-            if (ignoreFade)
+
+            IEnumerator CloseCo(float duration)
             {
+                yield return m_CanvasGroup.FadeToAlpha(0f, duration);
                 Close();
             }
-            else
-            {
-                IEnumerator CloseCo(float duration)
-                {
-                    yield return m_CanvasGroup.FadeToAlpha(0f, duration);
-                    Close();
-                }
 
-                StopAllCoroutines();
-                StartCoroutine(CloseCo(FadeTime));
-            }
+            StopAllCoroutines();
+            StartCoroutine(CloseCo(FadeTime));
         }
 
         public static void SetMainFont(Font mainFont)

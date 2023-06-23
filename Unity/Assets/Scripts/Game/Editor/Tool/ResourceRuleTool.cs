@@ -27,6 +27,7 @@ namespace Game.Editor
                 string configPath = Utility.Path.GetRegularPath(config);
                 ResourceRuleEditorData ruleEditorData = AssetDatabase.LoadAssetAtPath<ResourceRuleEditorData>(configPath);
                 ruleEditorData.isActivate = ruleDataAsset == configPath;
+                EditorUtility.SetDirty(ruleEditorData);
             }
             AssetDatabase.SaveAssets();
         }
