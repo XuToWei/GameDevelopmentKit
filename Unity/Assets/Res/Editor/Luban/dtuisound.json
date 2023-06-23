@@ -1,6 +1,14 @@
 [
   {
-    "Id": 1000,
+    "Id": 10000,
+    "CSName": "Select",
+    "Desc": "选择音效",
+    "AssetName": "select",
+    "Priority": 0,
+    "Volume": 1
+  },
+  {
+    "Id": 10001,
     "CSName": "Click",
     "Desc": "点击音效",
     "AssetName": "click",

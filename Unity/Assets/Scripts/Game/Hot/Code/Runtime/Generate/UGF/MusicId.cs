@@ -10,13 +10,18 @@ namespace Game.Hot
         public const int Undefined = 0;
 
         /// <summary>
-        /// 音乐。
+        /// 菜单音乐。
         /// </summary>
-        public const int BgMusic = 2000;
+        public const int Menu = 1;
 
         /// <summary>
         /// 战斗音乐。
         /// </summary>
-        public const int FightMusic = 2001;
+        public const int Background = 2;
+
+        /// <summary>
+        /// 关于音乐。
+        /// </summary>
+        public const int About = 3;
     }
 }

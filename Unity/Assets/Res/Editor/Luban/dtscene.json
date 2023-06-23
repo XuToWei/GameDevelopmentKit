@@ -1,12 +1,12 @@
 [
   {
-    "Id": 1001,
-    "AssetName": "Area_1001",
+    "Id": 1,
+    "AssetName": "Menu",
     "BackgroundMusicId": 1
   },
   {
-    "Id": 7000001,
-    "AssetName": "Area_7000001",
-    "BackgroundMusicId": 1
+    "Id": 2,
+    "AssetName": "Main",
+    "BackgroundMusicId": 2
   }
 ]

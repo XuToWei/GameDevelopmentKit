@@ -7,16 +7,14 @@ namespace Game.Hot
         public static void Start()
         {
             Log.Info("Game.Hot.Code Start!");
-            InitManagers();
+            
+            InitBuiltin();
+            InitCustom();
+            
             GameHot.UpdateEvent += Update;
             GameHot.OnShutdownEvent += Shutdown;
             
             Procedure.StartProcedure<ProcedureLaunch>();
-        }
-        
-        private static void InitManagers()
-        {
-            Procedure = CreateModule<ProcedureManager>();
         }
     }
 }

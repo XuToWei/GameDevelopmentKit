@@ -124,7 +124,7 @@ public sealed partial class DREntity :  Bright.Config.EditorBeanBase
     public int Id { get; set; }
 
     /// <summary>
-    /// 代码名（程序填）
+    /// 实体编号代码名（程序填）
     /// </summary>
     public string CSName { get; set; }
 

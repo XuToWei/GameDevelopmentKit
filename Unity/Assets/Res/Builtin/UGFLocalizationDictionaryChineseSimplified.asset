@@ -21,6 +21,9 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: m_Language
+      Entry: 3
+      Data: 8
     - Name: m_Dictionary
       Entry: 7
       Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String,
@@ -113,4 +116,3 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  m_Language: 8

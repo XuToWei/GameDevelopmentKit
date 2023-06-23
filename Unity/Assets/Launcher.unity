@@ -528,64 +528,68 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EntranceProcedureTypeName
       value: Game.ProcedureLaunch
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_AvailableProcedureTypeNames.Array.size
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_AvailableProcedureTypeNames.Array.data[0]
-      value: Game.ProcedureChangeScene
-      objectReference: {fileID: 0}
-    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[1]
       value: Game.ProcedureCheckResources
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[2]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[1]
       value: Game.ProcedureCheckVersion
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[3]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[2]
       value: Game.ProcedureET
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[4]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[3]
       value: Game.ProcedureGame
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[5]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[4]
       value: Game.ProcedureGameHot
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[6]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[5]
       value: Game.ProcedureInitResources
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[7]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[6]
       value: Game.ProcedureLaunch
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[8]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[7]
       value: Game.ProcedurePreload
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[9]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[8]
       value: Game.ProcedurePreset
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[10]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[9]
       value: Game.ProcedureSplash
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[11]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[10]
       value: Game.ProcedureUpdateResources
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_AvailableProcedureTypeNames.Array.data[12]
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[11]
       value: Game.ProcedureUpdateVersion
+      objectReference: {fileID: 0}
+    - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_AvailableProcedureTypeNames.Array.data[12]
+      value: Game.ProcedureVerifyResources
       objectReference: {fileID: 0}
     - target: {fileID: 11405216, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_AvailableProcedureTypeNames.Array.data[13]
@@ -630,11 +634,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[1].m_AgentHelperCount
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 11413340, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_SoundGroups.Array.data[2].m_AgentHelperCount
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 11431030, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_NetworkHelperTypeName
@@ -974,7 +978,7 @@ GameObject:
   - component: {fileID: 513208573}
   - component: {fileID: 513208574}
   m_Layer: 0
-  m_Name: Builtin
+  m_Name: Builtin Data
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1013,7 +1017,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4896147b713f9aa4abd840e4ca33bd47, type: 2}
   - {fileID: 11400000, guid: 99b23739d64635c4bbfba2da32b27e9f, type: 2}
   - {fileID: 11400000, guid: 369a8562a7b6662459e9134740a51846, type: 2}
-  - {fileID: 11400000, guid: a1a28b5e694e7f247ad3d05ae1f0cc19, type: 2}
+  - {fileID: 11400000, guid: 8f96a4a3135153c40a9a6bd8589f6c4c, type: 2}
   m_UpdateResourceFormTemplate: {fileID: 5642876425673278357, guid: a6c731de80e9d824d8f657301a357269,
     type: 3}
   m_DialogFormTemplate: {fileID: 0}

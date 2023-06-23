@@ -10,8 +10,13 @@ namespace ET.Client
         public const int Undefined = 0;
 
         /// <summary>
+        /// 选择音效。
+        /// </summary>
+        public const int Select = 10000;
+
+        /// <summary>
         /// 点击音效。
         /// </summary>
-        public const int Click = 1000;
+        public const int Click = 10001;
     }
 }

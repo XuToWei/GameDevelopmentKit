@@ -5,6 +5,5 @@ namespace Game.Hot
     /// </summary>
     public abstract class HotUIForm : UGuiForm
     {
-        
     }
 }

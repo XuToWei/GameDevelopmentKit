@@ -17,7 +17,7 @@ namespace Game.Hot
             m_ProcedureFsm = null;
         }
 
-        public override void Initialize()
+        protected internal override void Initialize()
         {
             var fsmManager = GameFrameworkEntry.GetModule<IFsmManager>();
             if (fsmManager == null)
@@ -43,7 +43,7 @@ namespace Game.Hot
             m_ProcedureFsm = m_FsmManager.CreateFsm(this, procedures.ToArray());
         }
 
-        public int Priority => -2;
+        protected internal override int Priority => -2;
 
         public ProcedureBase CurrentProcedure
         {
@@ -71,12 +71,12 @@ namespace Game.Hot
             }
         }
         
-        public override void Update(float elapseSeconds, float realElapseSeconds)
+        protected internal override void Update(float elapseSeconds, float realElapseSeconds)
         {
             
         }
         
-        public override void Shutdown()
+        protected internal override void Shutdown()
         {
             if (m_FsmManager != null)
             {

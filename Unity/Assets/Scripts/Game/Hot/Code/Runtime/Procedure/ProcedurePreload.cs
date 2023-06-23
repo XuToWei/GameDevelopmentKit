@@ -1,10 +1,12 @@
 using Cysharp.Threading.Tasks;
 using GameFramework.Fsm;
+using UnityEngine;
+using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
 
 namespace Game.Hot
 {
-    public sealed class ProcedurePreload : ProcedureBase
+    public class ProcedurePreload : ProcedureBase
     {
         protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
         {
@@ -17,7 +19,20 @@ namespace Game.Hot
             await Tables.Instance.LoadAllAsync();
             Log.Info("Game.Hot.Code Load Config!");
             
+            await HotEntry.HPBar.PreloadAsync();
+            await LoadFontAsync("MainFont");
+            
             ChangeState<ProcedureGame>(procedureOwner);
+        }
+
+        private async UniTask LoadFontAsync(string fontName)
+        {
+            Font font = await GameEntry.Resource.LoadAssetAsync<Font>(AssetUtility.GetFontAsset(fontName), Constant.AssetPriority.FontAsset);
+            if (font == null)
+            {
+                Log.Error("Can not load font '{0}'.", fontName);
+            }
+            StarForceUIForm.SetMainFont(font);
         }
     }
 }

@@ -18,24 +18,32 @@ public sealed partial class DROneConfig :  Bright.Config.EditorBeanBase
 {
     public DROneConfig()
     {
-            TestVector3 = new Vector3();
+            GameId = "";
     }
 
     public override void LoadJson(SimpleJSON.JSONObject _json)
     {
         { 
-            var _fieldJson = _json["Test"];
+            var _fieldJson = _json["GameId"];
             if (_fieldJson != null)
             {
-                if(!_fieldJson.IsNumber) { throw new SerializationException(); }  Test = _fieldJson;
+                if(!_fieldJson.IsString) { throw new SerializationException(); }  GameId = _fieldJson;
             }
         }
         
         { 
-            var _fieldJson = _json["TestVector3"];
+            var _fieldJson = _json["SceneMenu"];
             if (_fieldJson != null)
             {
-                if(!_fieldJson.IsObject) { throw new SerializationException(); }  TestVector3 = Vector3.LoadJsonVector3(_fieldJson);
+                if(!_fieldJson.IsNumber) { throw new SerializationException(); }  SceneMenu = _fieldJson;
+            }
+        }
+        
+        { 
+            var _fieldJson = _json["SceneMain"];
+            if (_fieldJson != null)
+            {
+                if(!_fieldJson.IsNumber) { throw new SerializationException(); }  SceneMain = _fieldJson;
             }
         }
         
@@ -44,12 +52,15 @@ public sealed partial class DROneConfig :  Bright.Config.EditorBeanBase
     public override void SaveJson(SimpleJSON.JSONObject _json)
     {
         {
-            _json["Test"] = new JSONNumber(Test);
+
+            if (GameId == null) { throw new System.ArgumentNullException(); }
+            _json["GameId"] = new JSONString(GameId);
         }
         {
-
-            if (TestVector3 == null) { throw new System.ArgumentNullException(); }
-            { var __bjson = new JSONObject();  Vector3.SaveJsonVector3(TestVector3, __bjson); _json["TestVector3"] = __bjson; }
+            _json["SceneMenu"] = new JSONNumber(SceneMenu);
+        }
+        {
+            _json["SceneMain"] = new JSONNumber(SceneMain);
         }
     }
 
@@ -65,12 +76,11 @@ public sealed partial class DROneConfig :  Bright.Config.EditorBeanBase
         _obj.SaveJson((SimpleJSON.JSONObject)_json);
     }
 
-    /// <summary>
-    /// 匹配最大时间
-    /// </summary>
-    public int Test { get; set; }
+    public string GameId { get; set; }
 
-    public Vector3 TestVector3 { get; set; }
+    public int SceneMenu { get; set; }
+
+    public int SceneMain { get; set; }
 
 }
 

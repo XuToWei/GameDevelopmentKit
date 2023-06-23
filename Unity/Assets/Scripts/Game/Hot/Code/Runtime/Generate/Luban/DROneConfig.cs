@@ -15,8 +15,9 @@ public sealed partial class DROneConfig :  Bright.Config.BeanBase
 {
     public DROneConfig(ByteBuf _buf) 
     {
-        Test = _buf.ReadInt();
-        TestVector3 = ExternalTypeUtility.NewFromVector3(Vector3.DeserializeVector3(_buf));
+        GameId = _buf.ReadString();
+        SceneMenu = _buf.ReadInt();
+        SceneMain = _buf.ReadInt();
         PostInit();
     }
 
@@ -25,11 +26,9 @@ public sealed partial class DROneConfig :  Bright.Config.BeanBase
         return new DROneConfig(_buf);
     }
 
-    /// <summary>
-    /// 匹配最大时间
-    /// </summary>
-    public int Test { get; private set; }
-    public UnityEngine.Vector3 TestVector3 { get; private set; }
+    public string GameId { get; private set; }
+    public int SceneMenu { get; private set; }
+    public int SceneMain { get; private set; }
 
     public const int __ID__ = -2019618726;
     public override int GetTypeId() => __ID__;
@@ -46,8 +45,9 @@ public sealed partial class DROneConfig :  Bright.Config.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "Test:" + Test + ","
-        + "TestVector3:" + TestVector3 + ","
+        + "GameId:" + GameId + ","
+        + "SceneMenu:" + SceneMenu + ","
+        + "SceneMain:" + SceneMain + ","
         + "}";
     }
     

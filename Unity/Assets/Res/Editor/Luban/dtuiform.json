@@ -1,6 +1,6 @@
 [
   {
-    "Id": 101,
+    "Id": 801,
     "CSName": "UIHelp",
     "Desc": "帮助界面",
     "AssetName": "Demo/UIHelp",
@@ -9,7 +9,7 @@
     "PauseCoveredUIForm": false
   },
   {
-    "Id": 102,
+    "Id": 802,
     "CSName": "UILobby",
     "Desc": "大厅面",
     "AssetName": "Demo/UILobby",
@@ -18,7 +18,7 @@
     "PauseCoveredUIForm": false
   },
   {
-    "Id": 103,
+    "Id": 803,
     "CSName": "UILogin",
     "Desc": "登录界面",
     "AssetName": "Demo/UILogin",
@@ -27,7 +27,7 @@
     "PauseCoveredUIForm": false
   },
   {
-    "Id": 201,
+    "Id": 901,
     "CSName": "UILSLogin",
     "Desc": "登录界面",
     "AssetName": "LockStep/UILSLogin",
@@ -36,7 +36,7 @@
     "PauseCoveredUIForm": false
   },
   {
-    "Id": 202,
+    "Id": 902,
     "CSName": "UILSLobby",
     "Desc": "大厅面",
     "AssetName": "LockStep/UILSLobby",
@@ -45,12 +45,48 @@
     "PauseCoveredUIForm": false
   },
   {
-    "Id": 203,
+    "Id": 903,
     "CSName": "UILSRoom",
     "Desc": "房间界面",
     "AssetName": "LockStep/UILSRoom",
     "UIGroupName": "Pop",
     "AllowMultiInstance": false,
     "PauseCoveredUIForm": false
+  },
+  {
+    "Id": 1,
+    "CSName": "DialogForm",
+    "Desc": "弹出框",
+    "AssetName": "Hot/DialogForm",
+    "UIGroupName": "Default",
+    "AllowMultiInstance": true,
+    "PauseCoveredUIForm": true
+  },
+  {
+    "Id": 100,
+    "CSName": "MenuForm",
+    "Desc": "主菜单",
+    "AssetName": "Hot/MenuForm",
+    "UIGroupName": "Default",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": true
+  },
+  {
+    "Id": 101,
+    "CSName": "SettingForm",
+    "Desc": "设置",
+    "AssetName": "Hot/SettingForm",
+    "UIGroupName": "Default",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": true
+  },
+  {
+    "Id": 102,
+    "CSName": "AboutForm",
+    "Desc": "关于",
+    "AssetName": "Hot/AboutForm",
+    "UIGroupName": "Default",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": true
   }
 ]

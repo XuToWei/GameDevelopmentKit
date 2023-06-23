@@ -33,7 +33,7 @@ namespace Game
             GameEntry.Event.Subscribe(WebRequestFailureEventArgs.EventId, OnWebRequestFailure);
 
             // 向服务器请求版本信息
-            GameEntry.WebRequest.AddWebRequest(Utility.Text.Format(GameEntry.Builtin.BuildInfo.CheckVersionUrl, GetPlatformPath()), this);
+            GameEntry.WebRequest.AddWebRequest(Utility.Text.Format(GameEntry.BuiltinData.BuildInfo.CheckVersionUrl, GetPlatformPath()), this);
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -71,7 +71,7 @@ namespace Game
         {
             string url = null;
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            url = GameEntry.Builtin.BuildInfo.WindowsAppUrl;
+            url = GameEntry.BuiltinData.BuildInfo.WindowsAppUrl;
 #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
             url = GameEntry.Builtin.BuildInfo.MacOSAppUrl;
 #elif UNITY_IOS
@@ -108,7 +108,7 @@ namespace Game
             if (m_VersionInfo.ForceUpdateGame)
             {
                 // 需要强制更新游戏应用
-                GameEntry.Builtin.OpenDialogForm(new BuiltinDialogParams
+                GameEntry.BuiltinData.OpenDialogForm(new BuiltinDialogParams
                 {
                     Mode = 2,
                     Title = GameEntry.Localization.GetString("ForceUpdate.Title"),

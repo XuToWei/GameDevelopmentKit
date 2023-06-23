@@ -11,7 +11,7 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    public static class SoundExtension
+    public static partial class SoundExtension
     {
         private const float FadeVolumeDuration = 1f;
         private static int? s_MusicSerialId = null;
@@ -67,6 +67,7 @@ namespace Game
 
         public static int? PlayUISound(this SoundComponent soundComponent, int uiSoundId, object userData = null)
         {
+            Log.Debug("uiSoundId:" + uiSoundId);
             DRUISound drUISound = GameEntry.Tables.DTUISound.GetOrDefault(uiSoundId);
             if (drUISound == null)
             {

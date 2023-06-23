@@ -1,10 +1,114 @@
 [
   {
-    "Id": 1000,
+    "Id": 10000,
     "CSName": "PlayerShip",
-    "Desc": "飞船",
+    "Desc": "玩家战机",
     "AssetName": "PlayerShip",
     "EntityGroupName": "Aircraft",
+    "Priority": 0
+  },
+  {
+    "Id": 10001,
+    "CSName": "EnemyShip",
+    "Desc": "敌人战机",
+    "AssetName": "EnemyShip",
+    "EntityGroupName": "Aircraft",
+    "Priority": 0
+  },
+  {
+    "Id": 20000,
+    "CSName": "PlayerEngine",
+    "Desc": "玩家推进器",
+    "AssetName": "PlayerEngine",
+    "EntityGroupName": "Aircraft",
+    "Priority": 0
+  },
+  {
+    "Id": 20001,
+    "CSName": "EnemyEngine",
+    "Desc": "敌人推进器",
+    "AssetName": "EnemyEngine",
+    "EntityGroupName": "Aircraft",
+    "Priority": 0
+  },
+  {
+    "Id": 30000,
+    "CSName": "DefaultWeapon",
+    "Desc": "默认武器",
+    "AssetName": "DefaultWeapon",
+    "EntityGroupName": "Weapon",
+    "Priority": 0
+  },
+  {
+    "Id": 40000,
+    "CSName": "DefaultArmor",
+    "Desc": "默认装甲",
+    "AssetName": "DefaultArmor",
+    "EntityGroupName": "Armor",
+    "Priority": 0
+  },
+  {
+    "Id": 50000,
+    "CSName": "PlayerBolt",
+    "Desc": "玩家子弹",
+    "AssetName": "PlayerBolt",
+    "EntityGroupName": "Bullet",
+    "Priority": 0
+  },
+  {
+    "Id": 50001,
+    "CSName": "EnemyBolt",
+    "Desc": "敌人子弹",
+    "AssetName": "EnemyBolt",
+    "EntityGroupName": "Bullet",
+    "Priority": 0
+  },
+  {
+    "Id": 60000,
+    "CSName": "Asteroid01",
+    "Desc": "小行星",
+    "AssetName": "Asteroid01",
+    "EntityGroupName": "Asteroid",
+    "Priority": 0
+  },
+  {
+    "Id": 60001,
+    "CSName": "Asteroid02",
+    "Desc": "小行星",
+    "AssetName": "Asteroid02",
+    "EntityGroupName": "Asteroid",
+    "Priority": 0
+  },
+  {
+    "Id": 60002,
+    "CSName": "Asteroid03",
+    "Desc": "小行星",
+    "AssetName": "Asteroid03",
+    "EntityGroupName": "Asteroid",
+    "Priority": 0
+  },
+  {
+    "Id": 70000,
+    "CSName": "PlayerExplosion",
+    "Desc": "玩家死亡特效",
+    "AssetName": "PlayerExplosion",
+    "EntityGroupName": "Effect",
+    "Priority": 0
+  },
+  {
+    "Id": 70001,
+    "CSName": "EnemyExplosion",
+    "Desc": "敌人死亡特效",
+    "AssetName": "EnemyExplosion",
+    "EntityGroupName": "Effect",
+    "Priority": 0
+  },
+  {
+    "Id": 70002,
+    "CSName": "AsteroidExplosion",
+    "Desc": "小行星死亡特效",
+    "AssetName": "AsteroidExplosion",
+    "EntityGroupName": "Effect",
     "Priority": 0
   }
 ]

@@ -15,6 +15,11 @@ namespace Game.Hot
 public partial class Tables
 {
     public DTOneConfig DTOneConfig { private set; get; }
+    public DTAircraft DTAircraft { private set; get; }
+    public DTArmor DTArmor { private set; get; }
+    public DTAsteroid DTAsteroid { private set; get; }
+    public DTThruster DTThruster { private set; get; }
+    public DTWeapon DTWeapon { private set; get; }
 
     private Dictionary<string, IDataTable> _tables;
 
@@ -29,17 +34,42 @@ public partial class Tables
         DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
         loadTasks.Add(DTOneConfig.LoadAsync());
         _tables.Add("DTOneConfig", DTOneConfig);
+        DTAircraft = new DTAircraft(() => loader("dtaircraft")); 
+        loadTasks.Add(DTAircraft.LoadAsync());
+        _tables.Add("DTAircraft", DTAircraft);
+        DTArmor = new DTArmor(() => loader("dtarmor")); 
+        loadTasks.Add(DTArmor.LoadAsync());
+        _tables.Add("DTArmor", DTArmor);
+        DTAsteroid = new DTAsteroid(() => loader("dtasteroid")); 
+        loadTasks.Add(DTAsteroid.LoadAsync());
+        _tables.Add("DTAsteroid", DTAsteroid);
+        DTThruster = new DTThruster(() => loader("dtthruster")); 
+        loadTasks.Add(DTThruster.LoadAsync());
+        _tables.Add("DTThruster", DTThruster);
+        DTWeapon = new DTWeapon(() => loader("dtweapon")); 
+        loadTasks.Add(DTWeapon.LoadAsync());
+        _tables.Add("DTWeapon", DTWeapon);
 
         await Task.WhenAll(loadTasks);
 
         PostInit();
         DTOneConfig.Resolve(_tables); 
+        DTAircraft.Resolve(_tables); 
+        DTArmor.Resolve(_tables); 
+        DTAsteroid.Resolve(_tables); 
+        DTThruster.Resolve(_tables); 
+        DTWeapon.Resolve(_tables); 
         PostResolve();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)
     {
         DTOneConfig.TranslateText(translator); 
+        DTAircraft.TranslateText(translator); 
+        DTArmor.TranslateText(translator); 
+        DTAsteroid.TranslateText(translator); 
+        DTThruster.TranslateText(translator); 
+        DTWeapon.TranslateText(translator); 
     }
     
     partial void PostInit();

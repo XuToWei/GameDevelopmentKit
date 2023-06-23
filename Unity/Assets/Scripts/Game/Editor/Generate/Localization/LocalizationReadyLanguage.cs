@@ -9,6 +9,7 @@ namespace Game.Editor
             Language.ChineseSimplified,
             Language.ChineseTraditional,
             Language.English,
+            Language.Korean,
         };
     }
 }

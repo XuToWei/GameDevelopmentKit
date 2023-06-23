@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
@@ -9,13 +8,10 @@ namespace Game
     public abstract class UGuiForm : UIFormLogic
     {
         public const int DepthFactor = 100;
-        private const float FadeTime = 0.3f;
-        
+
         private Canvas m_CachedCanvas = null;
         private readonly List<ParticleSystemRenderer> m_CachedParticleSystemRenderersContainer = new List<ParticleSystemRenderer>();
         private List<Canvas> m_CachedCanvasContainer = new List<Canvas>();
-        
-        private CanvasGroup m_CanvasGroup = null;
 
         public int OriginalDepth
         {
@@ -31,26 +27,12 @@ namespace Game
             }
         }
 
-        public void Close()
+        public virtual void Close()
         {
-            Close(false);
+            GameEntry.UI.CloseUIForm(this.UIForm);
         }
 
-        public void Close(bool ignoreFade)
-        {
-            StopAllCoroutines();
-
-            if (ignoreFade)
-            {
-                GameEntry.UI.CloseUIForm(this.UIForm);
-            }
-            else
-            {
-                StartCoroutine(CloseCo(FadeTime));
-            }
-        }
-
-        public void PlayUISound(int uiSoundId)
+        public virtual void PlayUISound(int uiSoundId)
         {
             GameEntry.Sound.PlayUISound(uiSoundId);
         }
@@ -66,8 +48,6 @@ namespace Game
             m_CachedCanvas = gameObject.GetOrAddComponent<Canvas>();
             m_CachedCanvas.overrideSorting = true;
             OriginalDepth = m_CachedCanvas.sortingOrder;
-
-            m_CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
 
             RectTransform rectTransform = GetComponent<RectTransform>();
             rectTransform.anchorMin = Vector2.zero;
@@ -94,10 +74,6 @@ namespace Game
 #endif
         {
             base.OnOpen(userData);
-
-            m_CanvasGroup.alpha = 0f;
-            StopAllCoroutines();
-            StartCoroutine(m_CanvasGroup.FadeToAlpha(1f, FadeTime));
         }
 
 #if UNITY_2017_3_OR_NEWER
@@ -125,10 +101,6 @@ namespace Game
 #endif
         {
             base.OnResume();
-
-            m_CanvasGroup.alpha = 0f;
-            StopAllCoroutines();
-            StartCoroutine(m_CanvasGroup.FadeToAlpha(1f, FadeTime));
         }
 
 #if UNITY_2017_3_OR_NEWER
@@ -189,12 +161,6 @@ namespace Game
                 t.sortingOrder += deltaDepth;
             }
             m_CachedParticleSystemRenderersContainer.Clear();
-        }
-
-        private IEnumerator CloseCo(float duration)
-        {
-            yield return m_CanvasGroup.FadeToAlpha(0f, duration);
-            GameEntry.UI.CloseUIForm(this.UIForm);
         }
     }
 }

@@ -10,8 +10,28 @@ namespace ET.Client
         public const int Undefined = 0;
 
         /// <summary>
-        /// 方块消除。
+        /// 玩家子弹。
         /// </summary>
-        public const int JellyDestroy = 3000;
+        public const int WeaponPlayer = 10000;
+
+        /// <summary>
+        /// 敌人子弹。
+        /// </summary>
+        public const int WeaponEnemy = 10001;
+
+        /// <summary>
+        /// 玩家爆炸。
+        /// </summary>
+        public const int ExplosionPlayer = 20000;
+
+        /// <summary>
+        /// 敌人爆炸。
+        /// </summary>
+        public const int ExplosionEnemy = 20001;
+
+        /// <summary>
+        /// 小行星爆炸。
+        /// </summary>
+        public const int ExplosionAsteroid = 20002;
     }
 }

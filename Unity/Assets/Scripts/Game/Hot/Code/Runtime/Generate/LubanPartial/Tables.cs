@@ -27,7 +27,7 @@ namespace Game.Hot
             {
                 async Task<ByteBuf> LoadByteBuf(string file)
                 {
-                    string lubanAssetFile = AssetUtility.GetGameHotAsset(Utility.Text.Format("Generate/Luban/{0}.bytes", file));
+                    string lubanAssetFile = AssetUtility.GetGameHotAsset(Utility.Text.Format("Luban/{0}.bytes", file));
                     TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(lubanAssetFile);
                     return new ByteBuf(textAsset.bytes);
                 }
@@ -39,7 +39,7 @@ namespace Game.Hot
             {
                 async Task<JSONNode> LoadJson(string file)
                 {
-                    string lubanAssetFile = AssetUtility.GetGameHotAsset(Utility.Text.Format("Generate/Luban/{0}.json", file));
+                    string lubanAssetFile = AssetUtility.GetGameHotAsset(Utility.Text.Format("Luban/{0}.json", file));
                     TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(lubanAssetFile);
                     return JSON.Parse(textAsset.text);
                 }

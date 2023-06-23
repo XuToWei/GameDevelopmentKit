@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Game
 {
-    public static class UGuiExtension
+    public static partial class UGuiExtension
     {
         public static IEnumerator FadeToAlpha(this CanvasGroup canvasGroup, float alpha, float duration)
         {

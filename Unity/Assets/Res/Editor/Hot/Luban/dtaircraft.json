@@ -1,0 +1,26 @@
+[
+  {
+    "Id": 10000,
+    "ThrusterId": 20000,
+    "WeaponIds": [
+      30000
+    ],
+    "ArmorIds": [
+      40000
+    ],
+    "DeadEffectId": 70000,
+    "DeadSoundId": 20000
+  },
+  {
+    "Id": 10002,
+    "ThrusterId": 20001,
+    "WeaponIds": [
+      30001
+    ],
+    "ArmorIds": [
+      40001
+    ],
+    "DeadEffectId": 70001,
+    "DeadSoundId": 20001
+  }
+]

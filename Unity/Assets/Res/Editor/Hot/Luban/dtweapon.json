@@ -1,0 +1,10 @@
+[
+  {
+    "Id": 30000,
+    "Attack": 100,
+    "AttackInterval": 0.2,
+    "BulletId": 50000,
+    "BulletSpeed": 20,
+    "BulletSoundId": 10000
+  }
+]

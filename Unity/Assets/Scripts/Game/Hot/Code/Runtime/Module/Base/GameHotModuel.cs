@@ -2,9 +2,12 @@ namespace Game.Hot
 {
     public abstract class GameHotModule
     {
-        public virtual int Priority => 0;
-        public abstract void Initialize();
-        public abstract void Update(float elapseSeconds, float realElapseSeconds);
-        public abstract void Shutdown();
+        /// <summary>
+        /// 运行优先级，越大运行越靠前
+        /// </summary>
+        protected internal virtual int Priority => 0;
+        protected internal abstract void Initialize();
+        protected internal abstract void Update(float elapseSeconds, float realElapseSeconds);
+        protected internal abstract void Shutdown();
     }
 }

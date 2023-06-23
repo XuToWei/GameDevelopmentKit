@@ -34,11 +34,9 @@ public sealed partial class DTOneConfig : IDataTable
     }
 
 
-    /// <summary>
-    /// 匹配最大时间
-    /// </summary>
-     public int Test => _data.Test;
-     public UnityEngine.Vector3 TestVector3 => _data.TestVector3;
+     public string GameId => _data.GameId;
+     public int SceneMenu => _data.SceneMenu;
+     public int SceneMain => _data.SceneMain;
 
     public void Resolve(Dictionary<string, IDataTable> _tables)
     {
