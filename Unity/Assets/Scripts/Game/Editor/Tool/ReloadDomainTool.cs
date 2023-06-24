@@ -20,7 +20,7 @@ namespace Game.Editor
 
         const string menuEnableManualReload = "Game/Reload Domain/开启手动Reload Domain";
         const string menuDisenableManualReload = "Game/Reload Domain/关闭手动Reload Domain";
-        const string menuRealodDomain = "Game/Reload Domain/Unlock And Reload";
+        const string menuRealodDomain = "Game/Reload Domain/Unlock And Reload %t";
 
         const string kManualReloadDomain = "ManualReloadDomain";
         const string kFirstEnterUnity = "FirstEnterUnity"; //是否首次进入unity 
