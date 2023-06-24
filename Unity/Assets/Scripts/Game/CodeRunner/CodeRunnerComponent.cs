@@ -8,9 +8,11 @@ namespace Game
 {
     public class CodeRunnerComponent : GameFrameworkComponent
     {
+#if UNITY_EDITOR
         [Tooltip("编辑器模式下能否加载bytes方式运行代码")]
         [SerializeField, ShowIf("IsHotFix")]
         private bool m_EnableEditorCodeBytesMode = false;
+#endif
 
         [ShowInInspector, ReadOnly]
 #if UNITY_HOTFIX
