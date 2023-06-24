@@ -2,7 +2,6 @@
 <UnityGameFramework>
   <ResourceCollection>
     <Resources>
-      <Resource Name="GameHot.Code" FileSystem="GameData" LoadType="0" Packed="False" />
       <Resource Name="GameHot.Luban" FileSystem="GameData" LoadType="0" Packed="False" />
       <Resource Name="HybridCLR" LoadType="0" Packed="False" />
       <Resource Name="Luban" FileSystem="GameData" LoadType="0" Packed="False" />
@@ -109,7 +108,6 @@
       <Asset Guid="25619d90ce6d6724db8154b48c144403" ResourceName="Res/Localization/ChineseTraditional" />
       <Asset Guid="2768a9a4c8d289840918dcb879705893" ResourceName="Res/Mesh/prop_asteroid_03" />
       <Asset Guid="3455fe69f7ddc4604b95bf9b0a1e88d7" ResourceName="Res/Entity/PlayerExplosion" />
-      <Asset Guid="37a74b8bd069a3545b805c65cd3235ac" ResourceName="GameHot.Code" />
       <Asset Guid="3aa539b1e46111d4299a83c73ebe762c" ResourceName="Res/UI/UIForm/Hot/AboutForm" />
       <Asset Guid="3be3fac3611f4584695662c4889f722d" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="3dc7455402dfa462b89a4bbd513955e9" ResourceName="Res/Sound/explosion_asteroid" />
@@ -190,7 +188,6 @@
       <Asset Guid="f36c72c738c55f741afcd674a0b1245f" ResourceName="Res/Material/vehicle_playerShip_glass_mat" />
       <Asset Guid="f438a72a91e1c3c4a9ced40888ffec96" ResourceName="Res/UI/UISprite/Icons" />
       <Asset Guid="f4ec271e525e14ca9927a07e6a2e153d" ResourceName="Res/Entity/PlayerBolt" />
-      <Asset Guid="fe6e3f6c1a77f1346852430dddd39982" ResourceName="GameHot.Code" />
       <Asset Guid="fedd25a3c60e7ae499fc6efab9ee180b" ResourceName="Res/Entity/EnemyEngine" />
     </Assets>
   </ResourceCollection>

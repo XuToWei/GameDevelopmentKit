@@ -8,6 +8,7 @@
       </SourceAssetSearchPaths>
       <SourceAssetExceptPaths>
         <SourceAssetExceptPath RelativePath="Editor" />
+        <SourceAssetExceptPath RelativePath="Resources" />
       </SourceAssetExceptPaths>
       <SourceAssetUnionTypeFilter>t:Scene t:Prefab t:Shader t:Model t:Material t:Texture t:AudioClip t:AnimationClip t:AnimatorController t:Font t:TextAsset t:ScriptableObject</SourceAssetUnionTypeFilter>
       <SourceAssetUnionLabelFilter>l:ResourceInclusive</SourceAssetUnionLabelFilter>
