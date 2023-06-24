@@ -25,7 +25,7 @@ namespace Game.Editor
         static void ExportAllNotFreePlugins()
         {
             PluginForGitDevTool tool = new PluginForGitDevTool();
-            AssetDatabase.ExportPackage(tool.plugins_include, "Assets/UsefulPlugins.unitypackage", ExportPackageOptions.Recurse);
+            AssetDatabase.ExportPackage(tool.plugins_include, "../Tools/UnityPlugins/Useful.unitypackage", ExportPackageOptions.Recurse);
             MakeGitIgnore(tool.plugins_include);
         }
 

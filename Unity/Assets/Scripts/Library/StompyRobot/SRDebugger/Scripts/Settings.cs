@@ -573,9 +573,9 @@ namespace SRDebugger
         #region Serialization
 
         [SerializeField] private bool _isEnabled = true;
-
+#if UNITY_EDITOR
         [SerializeField] private bool _disableWelcomePopup = false;
-
+#endif
         [SerializeField] private UIModes _uiInputMode = UIModes.NewInputSystem;
 
         [SerializeField] private DefaultTabs _defaultTab = DefaultTabs.SystemInformation;
