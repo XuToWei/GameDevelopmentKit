@@ -20,6 +20,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public long Id { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Id = default;
+        }
     }
 
     [Message(LockStepInner.Match2G_Match)]
@@ -39,6 +44,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(Map2Match_GetRoom))]
@@ -54,8 +65,13 @@ namespace ET
         public int RpcId { get; set; }
 
         [MemoryPackOrder(1)]
-        public List<long> PlayerIds { get; set; }
+        public List<long> PlayerIds { get; set; } = new List<long>();
 
+        public override void Reset()
+        {
+            RpcId = default;
+            PlayerIds.Clear();
+        }
     }
 
     [Message(LockStepInner.Map2Match_GetRoom)]
@@ -79,6 +95,13 @@ namespace ET
         [MemoryPackOrder(3)]
         public long InstanceId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            InstanceId = default;
+        }
     }
 
     [ResponseType(nameof(Room2G_Reconnect))]
@@ -96,6 +119,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public long PlayerId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            PlayerId = default;
+        }
     }
 
     [Message(LockStepInner.Room2G_Reconnect)]
@@ -119,11 +147,20 @@ namespace ET
         public long StartTime { get; set; }
 
         [MemoryPackOrder(4)]
-        public List<LockStepUnitInfo> UnitInfos { get; set; }
+        public List<LockStepUnitInfo> UnitInfos { get; set; } = new List<LockStepUnitInfo>();
 
         [MemoryPackOrder(5)]
         public int Frame { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            StartTime = default;
+            UnitInfos.Clear();
+            Frame = default;
+        }
     }
 
     public static class LockStepInner

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ET
@@ -10,6 +9,10 @@ namespace ET
         public bool IsFromPool;
 
         public virtual void Dispose()
+        {
+        }
+
+        public virtual void Reset()
         {
         }
     }

@@ -43,6 +43,7 @@ namespace ET
             {
                 return;
             }
+            obj.Reset();
             Type type = obj.GetType();
             
             lock (this.pool)

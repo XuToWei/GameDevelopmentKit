@@ -4,7 +4,6 @@ using MemoryPack;
 using System.Collections.Generic;
 namespace ET
 {
-// using
     [ResponseType(nameof(ObjectQueryResponse))]
     [Message(InnerMessage.ObjectQueryRequest)]
     [MemoryPackable]
@@ -23,6 +22,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public long InstanceId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Key = default;
+            InstanceId = default;
+        }
     }
 
     [ResponseType(nameof(A2M_Reload))]
@@ -37,6 +42,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+        }
     }
 
     [Message(InnerMessage.A2M_Reload)]
@@ -56,6 +65,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(G2G_LockResponse))]
@@ -76,6 +91,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Address { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Id = default;
+            Address = default;
+        }
     }
 
     [Message(InnerMessage.G2G_LockResponse)]
@@ -95,6 +116,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(G2G_LockReleaseResponse))]
@@ -115,6 +142,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Address { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Id = default;
+            Address = default;
+        }
     }
 
     [Message(InnerMessage.G2G_LockReleaseResponse)]
@@ -134,6 +167,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(ObjectAddResponse))]
@@ -157,6 +196,13 @@ namespace ET
         [MemoryPackOrder(3)]
         public long InstanceId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Type = default;
+            Key = default;
+            InstanceId = default;
+        }
     }
 
     [Message(InnerMessage.ObjectAddResponse)]
@@ -176,6 +222,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(ObjectLockResponse))]
@@ -202,6 +254,14 @@ namespace ET
         [MemoryPackOrder(4)]
         public int Time { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Type = default;
+            Key = default;
+            InstanceId = default;
+            Time = default;
+        }
     }
 
     [Message(InnerMessage.ObjectLockResponse)]
@@ -221,6 +281,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(ObjectUnLockResponse))]
@@ -247,6 +313,14 @@ namespace ET
         [MemoryPackOrder(4)]
         public long InstanceId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Type = default;
+            Key = default;
+            OldInstanceId = default;
+            InstanceId = default;
+        }
     }
 
     [Message(InnerMessage.ObjectUnLockResponse)]
@@ -266,6 +340,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(ObjectRemoveResponse))]
@@ -286,6 +366,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public long Key { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Type = default;
+            Key = default;
+        }
     }
 
     [Message(InnerMessage.ObjectRemoveResponse)]
@@ -305,6 +391,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(ObjectGetResponse))]
@@ -325,6 +417,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public long Key { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Type = default;
+            Key = default;
+        }
     }
 
     [Message(InnerMessage.ObjectGetResponse)]
@@ -350,6 +448,14 @@ namespace ET
         [MemoryPackOrder(4)]
         public long InstanceId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            Type = default;
+            InstanceId = default;
+        }
     }
 
     [ResponseType(nameof(G2R_GetLoginKey))]
@@ -367,6 +473,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public string Account { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Account = default;
+        }
     }
 
     [Message(InnerMessage.G2R_GetLoginKey)]
@@ -392,6 +503,14 @@ namespace ET
         [MemoryPackOrder(4)]
         public long GateId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            Key = default;
+            GateId = default;
+        }
     }
 
     [Message(InnerMessage.G2M_SessionDisconnect)]
@@ -405,6 +524,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+        }
     }
 
     [Message(InnerMessage.ObjectQueryResponse)]
@@ -427,6 +550,13 @@ namespace ET
         [MemoryPackOrder(3)]
         public byte[] Entity { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            Entity = default;
+        }
     }
 
     [ResponseType(nameof(M2M_UnitTransferResponse))]
@@ -448,8 +578,15 @@ namespace ET
         public byte[] Unit { get; set; }
 
         [MemoryPackOrder(3)]
-        public List<byte[]> Entitys { get; set; }
+        public List<byte[]> Entitys { get; set; } = new List<byte[]>();
 
+        public override void Reset()
+        {
+            RpcId = default;
+            OldInstanceId = default;
+            Unit = default;
+            Entitys.Clear();
+        }
     }
 
     [Message(InnerMessage.M2M_UnitTransferResponse)]
@@ -469,6 +606,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     public static class InnerMessage

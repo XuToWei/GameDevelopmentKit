@@ -742,7 +742,7 @@ includeSubdirectories - whether child directories should be watched as well
             "Show red / green bar in project window to indicate hot reload state for file", "IsVisualHotReloadIndicationShownInProjectWindow", true);
         
         public static readonly ToggleProjectEditorPreferenceDefinition IsForceLockAssembliesViaCode = new ToggleProjectEditorPreferenceDefinition(
-            "Force prevent assembly reload during playmode", "IsForceLockAssembliesViaCode", true);
+            "Force prevent assembly reload during playmode", "IsForceLockAssembliesViaCode", false);
         
         public static readonly JsonObjectListProjectEditorPreferenceDefinition<FileWatcherSetupEntry> FileWatcherSetupEntries = new JsonObjectListProjectEditorPreferenceDefinition<FileWatcherSetupEntry>(
             "File Watchers Setup", "FileWatcherSetupEntries", new List<string>

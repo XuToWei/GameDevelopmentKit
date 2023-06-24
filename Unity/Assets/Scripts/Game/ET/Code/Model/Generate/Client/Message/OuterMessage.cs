@@ -13,11 +13,16 @@ namespace ET
         public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
 
         [MemoryPackOrder(0)]
-        public List<string> Realms { get; set; }
+        public List<string> Realms { get; set; } = new List<string>();
 
         [MemoryPackOrder(1)]
-        public List<string> Routers { get; set; }
+        public List<string> Routers { get; set; } = new List<string>();
 
+        public override void Reset()
+        {
+            Realms.Clear();
+            Routers.Clear();
+        }
     }
 
     [Message(OuterMessage.RouterSync)]
@@ -34,6 +39,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public string Address { get; set; }
 
+        public override void Reset()
+        {
+            ConnectId = default;
+            Address = default;
+        }
     }
 
     [ResponseType(nameof(M2C_TestResponse))]
@@ -51,6 +61,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public string request { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            request = default;
+        }
     }
 
     [Message(OuterMessage.M2C_TestResponse)]
@@ -73,6 +88,13 @@ namespace ET
         [MemoryPackOrder(3)]
         public string response { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            response = default;
+        }
     }
 
     [ResponseType(nameof(Actor_TransferResponse))]
@@ -90,6 +112,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public int MapIndex { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            MapIndex = default;
+        }
     }
 
     [Message(OuterMessage.Actor_TransferResponse)]
@@ -109,6 +136,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(G2C_EnterMap))]
@@ -123,6 +156,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+        }
     }
 
     [Message(OuterMessage.G2C_EnterMap)]
@@ -146,6 +183,13 @@ namespace ET
         [MemoryPackOrder(3)]
         public long MyId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            MyId = default;
+        }
     }
 
     [Message(OuterMessage.MoveInfo)]
@@ -157,7 +201,7 @@ namespace ET
         public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
 
         [MemoryPackOrder(0)]
-        public List<Unity.Mathematics.float3> Points { get; set; }
+        public List<Unity.Mathematics.float3> Points { get; set; } = new List<Unity.Mathematics.float3>();
 
         [MemoryPackOrder(1)]
         public Unity.Mathematics.quaternion Rotation { get; set; }
@@ -165,6 +209,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public int TurnSpeed { get; set; }
 
+        public override void Reset()
+        {
+            Points.Clear();
+            Rotation = default;
+            TurnSpeed = default;
+        }
     }
 
     [Message(OuterMessage.UnitInfo)]
@@ -192,10 +242,20 @@ namespace ET
 
         [MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]
         [MemoryPackOrder(5)]
-        public Dictionary<int, long> KV { get; set; }
+        public Dictionary<int, long> KV { get; set; } = new Dictionary<int, long>();
         [MemoryPackOrder(6)]
         public MoveInfo MoveInfo { get; set; }
 
+        public override void Reset()
+        {
+            UnitId = default;
+            ConfigId = default;
+            Type = default;
+            Position = default;
+            Forward = default;
+            KV.Clear();
+            MoveInfo = default;
+        }
     }
 
     [Message(OuterMessage.M2C_CreateUnits)]
@@ -207,8 +267,12 @@ namespace ET
         public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
 
         [MemoryPackOrder(0)]
-        public List<UnitInfo> Units { get; set; }
+        public List<UnitInfo> Units { get; set; } = new List<UnitInfo>();
 
+        public override void Reset()
+        {
+            Units.Clear();
+        }
     }
 
     [Message(OuterMessage.M2C_CreateMyUnit)]
@@ -222,6 +286,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public UnitInfo Unit { get; set; }
 
+        public override void Reset()
+        {
+            Unit = default;
+        }
     }
 
     [Message(OuterMessage.M2C_StartSceneChange)]
@@ -238,6 +306,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public string SceneName { get; set; }
 
+        public override void Reset()
+        {
+            SceneInstanceId = default;
+            SceneName = default;
+        }
     }
 
     [Message(OuterMessage.M2C_RemoveUnits)]
@@ -249,8 +322,12 @@ namespace ET
         public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
 
         [MemoryPackOrder(0)]
-        public List<long> Units { get; set; }
+        public List<long> Units { get; set; } = new List<long>();
 
+        public override void Reset()
+        {
+            Units.Clear();
+        }
     }
 
     [Message(OuterMessage.C2M_PathfindingResult)]
@@ -267,6 +344,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public Unity.Mathematics.float3 Position { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Position = default;
+        }
     }
 
     [Message(OuterMessage.C2M_Stop)]
@@ -280,6 +362,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+        }
     }
 
     [Message(OuterMessage.M2C_PathfindingResult)]
@@ -297,8 +383,14 @@ namespace ET
         public Unity.Mathematics.float3 Position { get; set; }
 
         [MemoryPackOrder(2)]
-        public List<Unity.Mathematics.float3> Points { get; set; }
+        public List<Unity.Mathematics.float3> Points { get; set; } = new List<Unity.Mathematics.float3>();
 
+        public override void Reset()
+        {
+            Id = default;
+            Position = default;
+            Points.Clear();
+        }
     }
 
     [Message(OuterMessage.M2C_Stop)]
@@ -321,6 +413,13 @@ namespace ET
         [MemoryPackOrder(3)]
         public Unity.Mathematics.quaternion Rotation { get; set; }
 
+        public override void Reset()
+        {
+            Error = default;
+            Id = default;
+            Position = default;
+            Rotation = default;
+        }
     }
 
     [ResponseType(nameof(G2C_Ping))]
@@ -335,6 +434,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+        }
     }
 
     [Message(OuterMessage.G2C_Ping)]
@@ -357,6 +460,13 @@ namespace ET
         [MemoryPackOrder(3)]
         public long Time { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            Time = default;
+        }
     }
 
     [Message(OuterMessage.G2C_Test)]
@@ -367,6 +477,9 @@ namespace ET
 
         public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
 
+        public override void Reset()
+        {
+        }
     }
 
     [ResponseType(nameof(M2C_Reload))]
@@ -387,6 +500,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Password { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Account = default;
+            Password = default;
+        }
     }
 
     [Message(OuterMessage.M2C_Reload)]
@@ -406,6 +525,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(R2C_Login))]
@@ -426,6 +551,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Password { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Account = default;
+            Password = default;
+        }
     }
 
     [Message(OuterMessage.R2C_Login)]
@@ -454,6 +585,15 @@ namespace ET
         [MemoryPackOrder(5)]
         public long GateId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            Address = default;
+            Key = default;
+            GateId = default;
+        }
     }
 
     [ResponseType(nameof(G2C_LoginGate))]
@@ -474,6 +614,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public long GateId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Key = default;
+            GateId = default;
+        }
     }
 
     [Message(OuterMessage.G2C_LoginGate)]
@@ -496,6 +642,13 @@ namespace ET
         [MemoryPackOrder(3)]
         public long PlayerId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            PlayerId = default;
+        }
     }
 
     [Message(OuterMessage.G2C_TestHotfixMessage)]
@@ -509,6 +662,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public string Info { get; set; }
 
+        public override void Reset()
+        {
+            Info = default;
+        }
     }
 
     [ResponseType(nameof(M2C_TestRobotCase))]
@@ -526,6 +683,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public int N { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            N = default;
+        }
     }
 
     [Message(OuterMessage.M2C_TestRobotCase)]
@@ -548,6 +710,13 @@ namespace ET
         [MemoryPackOrder(3)]
         public int N { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+            N = default;
+        }
     }
 
     [Message(OuterMessage.C2M_TestRobotCase2)]
@@ -564,6 +733,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public int N { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            N = default;
+        }
     }
 
     [Message(OuterMessage.M2C_TestRobotCase2)]
@@ -580,6 +754,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public int N { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            N = default;
+        }
     }
 
     [ResponseType(nameof(M2C_TransferMap))]
@@ -594,6 +773,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+        }
     }
 
     [Message(OuterMessage.M2C_TransferMap)]
@@ -613,6 +796,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     [ResponseType(nameof(G2C_Benchmark))]
@@ -627,6 +816,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+        }
     }
 
     [Message(OuterMessage.G2C_Benchmark)]
@@ -646,6 +839,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
     public static class OuterMessage

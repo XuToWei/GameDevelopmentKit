@@ -1,6 +1,4 @@
 syntax = "proto3";
-// using 
-
 package ET;
 
 //ResponseType ObjectQueryResponse

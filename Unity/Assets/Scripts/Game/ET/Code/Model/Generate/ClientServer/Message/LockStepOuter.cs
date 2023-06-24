@@ -16,6 +16,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+        }
     }
 
     [Message(LockStepOuter.G2C_Match)]
@@ -35,6 +39,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            Error = default;
+            Message = default;
+        }
     }
 
 // 匹配成功，通知客户端切换场景
@@ -53,6 +63,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public long InstanceId { get; set; }
 
+        public override void Reset()
+        {
+            RpcId = default;
+            InstanceId = default;
+        }
     }
 
 // 客户端通知房间切换场景完成
@@ -67,6 +82,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public long PlayerId { get; set; }
 
+        public override void Reset()
+        {
+            PlayerId = default;
+        }
     }
 
     [Message(LockStepOuter.LockStepUnitInfo)]
@@ -86,6 +105,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public TrueSync.TSQuaternion Rotation { get; set; }
 
+        public override void Reset()
+        {
+            PlayerId = default;
+            Position = default;
+            Rotation = default;
+        }
     }
 
 // 房间通知客户端进入战斗
@@ -101,8 +126,13 @@ namespace ET
         public long StartTime { get; set; }
 
         [MemoryPackOrder(1)]
-        public List<LockStepUnitInfo> UnitInfo { get; set; }
+        public List<LockStepUnitInfo> UnitInfo { get; set; } = new List<LockStepUnitInfo>();
 
+        public override void Reset()
+        {
+            StartTime = default;
+            UnitInfo.Clear();
+        }
     }
 
     [Message(LockStepOuter.FrameMessage)]
@@ -122,6 +152,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public LSInput Input { get; set; }
 
+        public override void Reset()
+        {
+            Frame = default;
+            PlayerId = default;
+            Input = default;
+        }
     }
 
     [Message(LockStepOuter.OneFrameInputs)]
@@ -134,7 +170,11 @@ namespace ET
 
         [MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]
         [MemoryPackOrder(1)]
-        public Dictionary<long, LSInput> Inputs { get; set; }
+        public Dictionary<long, LSInput> Inputs { get; set; } = new Dictionary<long, LSInput>();
+        public override void Reset()
+        {
+            Inputs.Clear();
+        }
     }
 
     [Message(LockStepOuter.Room2C_AdjustUpdateTime)]
@@ -148,6 +188,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public int DiffTime { get; set; }
 
+        public override void Reset()
+        {
+            DiffTime = default;
+        }
     }
 
     [Message(LockStepOuter.C2Room_CheckHash)]
@@ -167,6 +211,12 @@ namespace ET
         [MemoryPackOrder(2)]
         public long Hash { get; set; }
 
+        public override void Reset()
+        {
+            PlayerId = default;
+            Frame = default;
+            Hash = default;
+        }
     }
 
     [Message(LockStepOuter.Room2C_CheckHashFail)]
@@ -183,6 +233,11 @@ namespace ET
         [MemoryPackOrder(1)]
         public byte[] LSWorldBytes { get; set; }
 
+        public override void Reset()
+        {
+            Frame = default;
+            LSWorldBytes = default;
+        }
     }
 
     [Message(LockStepOuter.G2C_Reconnect)]
@@ -197,11 +252,17 @@ namespace ET
         public long StartTime { get; set; }
 
         [MemoryPackOrder(1)]
-        public List<LockStepUnitInfo> UnitInfos { get; set; }
+        public List<LockStepUnitInfo> UnitInfos { get; set; } = new List<LockStepUnitInfo>();
 
         [MemoryPackOrder(2)]
         public int Frame { get; set; }
 
+        public override void Reset()
+        {
+            StartTime = default;
+            UnitInfos.Clear();
+            Frame = default;
+        }
     }
 
     public static class LockStepOuter

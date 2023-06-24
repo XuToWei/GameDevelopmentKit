@@ -26,6 +26,8 @@ namespace ET
                 sb.Append($"namespace {ns}\n");
                 sb.Append("{\n");
 
+                StringBuilder disposeSb = new StringBuilder();
+
                 bool isMsgStart = false;
                 string msgName = string.Empty;
                 foreach (string line in s.Split('\n'))
@@ -54,6 +56,10 @@ namespace ET
                     {
                         string parentClass = "";
                         isMsgStart = true;
+                        
+                        disposeSb.Clear();
+                        disposeSb.Append($"\t\tpublic override void Reset()\n");
+                        disposeSb.Append("\t\t{\n");
 
                         msgName = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries)[1];
                         string[] ss = newline.Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
@@ -98,6 +104,9 @@ namespace ET
                         if (newline == "}")
                         {
                             isMsgStart = false;
+                            disposeSb.Append("\t\t}\n");
+                            sb.Append(disposeSb.ToString());
+                            disposeSb.Clear();
                             sb.Append("\t}\n\n");
                             continue;
                         }
@@ -112,15 +121,15 @@ namespace ET
                         {
                             if (newline.StartsWith("map<"))
                             {
-                                Map(sb, newline);
+                                Map(sb, newline, disposeSb);
                             }
                             else if (newline.StartsWith("repeated"))
                             {
-                                Repeated(sb, newline);
+                                Repeated(sb, newline, disposeSb);
                             }
                             else
                             {
-                                Members(sb, newline);
+                                Members(sb, newline, disposeSb);
                             }
                         }
                     }
@@ -157,7 +166,7 @@ namespace ET
                 Console.WriteLine($"proto2cs file : {csPath}");
             }
 
-            private static void Map(StringBuilder sb, string newline)
+            private static void Map(StringBuilder sb, string newline, StringBuilder disposeSb)
             {
                 int start = newline.IndexOf("<") + 1;
                 int end = newline.IndexOf(">");
@@ -172,10 +181,12 @@ namespace ET
 
                 sb.Append("\t\t[MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]\n");
                 sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
-                sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }}\n");
+                sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }} = new Dictionary<{keyType}, {valueType}>();\n");
+
+                disposeSb.Append($"\t\t\t{v}.Clear();\n");
             }
 
-            private static void Repeated(StringBuilder sb, string newline)
+            private static void Repeated(StringBuilder sb, string newline, StringBuilder disposeSb)
             {
                 try
                 {
@@ -188,7 +199,9 @@ namespace ET
                     int n = int.Parse(ss[4]);
 
                     sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
-                    sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }}\n\n");
+                    sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }} = new List<{type}>();\n\n");
+
+                    disposeSb.Append($"\t\t\t{name}.Clear();\n");
                 }
                 catch (Exception e)
                 {
@@ -233,7 +246,7 @@ namespace ET
                 return typeCs;
             }
 
-            private static void Members(StringBuilder sb, string newline)
+            private static void Members(StringBuilder sb, string newline, StringBuilder disposeSb)
             {
                 try
                 {
@@ -247,6 +260,8 @@ namespace ET
 
                     sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
                     sb.Append($"\t\tpublic {typeCs} {name} {{ get; set; }}\n\n");
+
+                    disposeSb.Append($"\t\t\t{name} = default;\n");
                 }
                 catch (Exception e)
                 {
