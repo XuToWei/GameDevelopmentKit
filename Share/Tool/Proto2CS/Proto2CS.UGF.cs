@@ -11,7 +11,6 @@ namespace ET
         {
             public static void Proto2CS(string protofile, string csName, List<string> csOutDirs, int startOpcode)
             {
-                string ns = "Game";
                 string proto = Path.Combine(ProtoDir, protofile);
                 string s = File.ReadAllText(proto);
 
@@ -21,8 +20,6 @@ namespace ET
                 sb.Append("using ProtoBuf;\n");
                 sb.Append("using System;\n");
                 sb.Append("using System.Collections.Generic;\n");
-                sb.Append($"namespace {ns}\n");
-                sb.Append("{\n");
 
                 StringBuilder disposeSb = new StringBuilder();
 
@@ -30,6 +27,15 @@ namespace ET
                 foreach (string line in s.Split('\n'))
                 {
                     string newline = line.Trim();
+
+                    if (newline.StartsWith("package"))
+                    {
+                        var strs = line.Split(" ");
+                        string namespaceName = strs[^1].TrimEnd('\r', '\n', ';');
+                        sb.Append($"namespace {namespaceName}\n");
+                        sb.Append("{\n");
+                        continue;
+                    }
 
                     if (newline == "")
                     {

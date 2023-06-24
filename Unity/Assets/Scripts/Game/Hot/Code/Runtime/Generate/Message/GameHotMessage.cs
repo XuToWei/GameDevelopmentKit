@@ -3,7 +3,7 @@
 using ProtoBuf;
 using System;
 using System.Collections.Generic;
-namespace Game
+namespace Game.Hot
 {
     [Serializable, ProtoContract(Name = @"CSHeartBeatTest")]
     public partial class CSHeartBeatTest : CSPacketBase
