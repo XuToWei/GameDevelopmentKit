@@ -54,31 +54,35 @@ namespace UnityGameFramework.Extension.Editor
             }
             EditorGUILayout.PropertyField(m_VersionInfos, true);
             EditorGUILayout.PropertyField(m_IsGenerateToFullPath);
-            
-            string updatePrefixUri = m_VersionInfoEditorData.VersionInfos[m_ActiveIndex.intValue].Value.UpdatePrefixUri;
-            if (UriUtility.CheckUri(updatePrefixUri))
+
+            if (m_VersionInfoEditorData.VersionInfos.Count > 0)
             {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("文件生成地址:", m_OutPath.stringValue);
-                if (GUILayout.Button("选择路径"))
+                string updatePrefixUri = m_VersionInfoEditorData.VersionInfos[m_ActiveIndex.intValue].Value.UpdatePrefixUri;
+                if (UriUtility.CheckUri(updatePrefixUri))
                 {
-                    m_OutPath.stringValue = EditorUtility.SaveFilePanel("选择生成地址", String.Empty,
-                        $"{m_VersionInfoEditorData.VersionInfos[m_ActiveIndex.intValue].Value.Platform}Version", "txt");
-                }
-
-                EditorGUILayout.EndHorizontal();
-                if (string.IsNullOrEmpty(m_OutPath.stringValue))
-                {
-                    EditorGUILayout.HelpBox("OutPath is Not Valid!", MessageType.Error);
-                }
-
-                EditorGUILayout.Space();
-                EditorGUILayout.Space();
-                if (GUILayout.Button("生成"))
-                {
-                    if (m_VersionInfoEditorData.Generate(m_OutPath.stringValue))
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("文件生成地址:", m_OutPath.stringValue);
+                    if (GUILayout.Button("选择路径"))
                     {
-                        EditorUtility.RevealInFinder(m_OutPath.stringValue);
+                        m_OutPath.stringValue = EditorUtility.SaveFilePanel("选择生成地址", String.Empty,
+                            $"{m_VersionInfoEditorData.VersionInfos[m_ActiveIndex.intValue].Value.Platform}Version",
+                            "txt");
+                    }
+
+                    EditorGUILayout.EndHorizontal();
+                    if (string.IsNullOrEmpty(m_OutPath.stringValue))
+                    {
+                        EditorGUILayout.HelpBox("OutPath is Not Valid!", MessageType.Error);
+                    }
+
+                    EditorGUILayout.Space();
+                    EditorGUILayout.Space();
+                    if (GUILayout.Button("生成"))
+                    {
+                        if (m_VersionInfoEditorData.Generate(m_OutPath.stringValue))
+                        {
+                            EditorUtility.RevealInFinder(m_OutPath.stringValue);
+                        }
                     }
                 }
             }
