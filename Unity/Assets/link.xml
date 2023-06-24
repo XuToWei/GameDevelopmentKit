@@ -69,7 +69,6 @@
     -UNITY_HOTFIX_ET_SERVER-->
 
     <!--UNITY_GAMEHOT_FIRST-->
-    <assembly fullname="protobuf-net" preserve="all" />
     <!--UNITY_GAMEHOT_END-->
 
     <!--UNITY_!HOTFIX_GAMEHOT_FIRST-->
@@ -77,6 +76,7 @@
     <!--UNITY_!HOTFIX_GAMEHOT_END-->
 
     <!--UNITY_HOTFIX_GAMEHOT-
+    <assembly fullname="protobuf-net" preserve="all" />
     <assembly fullname="Game.Hot.Loader" preserve="all" />
     -UNITY_HOTFIX_GAMEHOT-->
 </linker>

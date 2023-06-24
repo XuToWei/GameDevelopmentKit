@@ -10,7 +10,7 @@ namespace Game.Editor
     /// <summary>
     /// ____DESC:   手动reload domain 工具 
     /// </summary>
-    public static class ScriptCompileReloadTool
+    public static class ReloadDomainTool
     {
         /* 说明
          * 关于域重载 https://docs.unity.cn/cn/2021.3/Manual/DomainReloading.html
@@ -18,9 +18,9 @@ namespace Game.Editor
          * 如果不小心LockReloadAssemblies3次 但是只UnlockReloadAssemblies了一次 那么还是不会重载 必须也要但是只UnlockReloadAssemblies3次
          */
 
-        const string menuEnableManualReload = "Game/Script Reload/开启手动Reload Domain";
-        const string menuDisenableManualReload = "Game/Script Reload/关闭手动Reload Domain";
-        const string menuRealodDomain = "Game/Script Reload/Unlock Reload %t";
+        const string menuEnableManualReload = "Game/Reload Domain/开启手动Reload Domain";
+        const string menuDisenableManualReload = "Game/Reload Domain/关闭手动Reload Domain";
+        const string menuRealodDomain = "Game/Reload Domain/Unlock Reload %t";
 
         const string kManualReloadDomain = "ManualReloadDomain";
         const string kFirstEnterUnity = "FirstEnterUnity"; //是否首次进入unity 

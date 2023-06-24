@@ -40,6 +40,12 @@ namespace Game.Editor
         [MenuItem("HybridCLR/Do All", false, int.MaxValue)]
         public static void HybridCLRDoAll()
         {
+#if UNITY_HOTFIX && UNITY_GAMEHOT
+            EditorApplication.ExecuteMenuItem("GameHot/Compile Dll");
+#endif
+#if UNITY_HOTFIX && UNITY_ET
+            EditorApplication.ExecuteMenuItem("ET/Compile Dll");
+#endif
             EditorApplication.ExecuteMenuItem("HybridCLR/Generate/All");
             EditorApplication.ExecuteMenuItem("HybridCLR/CopyAotDlls");
         }

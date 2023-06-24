@@ -12,4 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 639dfa1ee5feeea45b82581992a9e727, type: 3}
   m_Name: HybridCLRConfig
   m_EditorClassIdentifier: 
-  aotAssemblies: []
+  aotAssemblies:
+  - {fileID: 4900000, guid: f40cd3dac1486514aa6cd93a75e5890a, type: 3}
+  - {fileID: 4900000, guid: 50857059b168b754091abc188e4a9645, type: 3}
+  - {fileID: 4900000, guid: 28261cad39ab93e46adecbc9e85e6666, type: 3}
+  - {fileID: 4900000, guid: 80b740961cea9184c9aaabfc47cdd941, type: 3}
+  - {fileID: 4900000, guid: a6823dec62c63364ab281e979eb754f8, type: 3}
+  - {fileID: 4900000, guid: 963ded65c613a4844bf040495bfc157a, type: 3}
+  - {fileID: 4900000, guid: de6e016590bfe3644a897b5232e296ef, type: 3}
+  - {fileID: 4900000, guid: 59b8f62929008ff4f8f056be3a362197, type: 3}
+  - {fileID: 4900000, guid: e893b9c2ad8961e44b474c8cc88aac0e, type: 3}
+  - {fileID: 4900000, guid: 2913792cefc0c1b499c1df1f8b3c8c09, type: 3}
+  - {fileID: 4900000, guid: 6212e25c5b216874ba81a34fa88c651a, type: 3}
+  - {fileID: 4900000, guid: 540c5e601ff51264ca11d0c3ccbc291a, type: 3}
+  - {fileID: 4900000, guid: 71ff6dbe928bc41489dd7d38853a704f, type: 3}
+  - {fileID: 4900000, guid: 83bbaf2257e4e9a48ba5eb6ee109530b, type: 3}
+  - {fileID: 4900000, guid: 376b772fd7012b94c9c460706f7b4d79, type: 3}
+  - {fileID: 4900000, guid: 44057eed8fdb26445a30dc9387983a5e, type: 3}
+  - {fileID: 4900000, guid: dd90313f3db8fd14eacf058a538a02ae, type: 3}
+  - {fileID: 4900000, guid: fe1cd8b1cea12514dbdefcb1ccac0168, type: 3}
+  - {fileID: 4900000, guid: 2d4582b27eadfcc4c81bbe556a892c2e, type: 3}
+  - {fileID: 4900000, guid: 88d305ce342af314a804c4a4dd77621b, type: 3}
+  - {fileID: 4900000, guid: d0b1f293619329041ab7c29432e3e0e9, type: 3}
+  - {fileID: 4900000, guid: 5d2ac2f9878d2de40a2ea0d8c1d4e18e, type: 3}
+  - {fileID: 4900000, guid: 777e4ba07f2322248ba752e4ab503225, type: 3}
+  - {fileID: 4900000, guid: 1d94fd2e70d1fde48bbb5ed5f1869238, type: 3}
+  - {fileID: 4900000, guid: c4589c998c80dae449033b80a7177311, type: 3}
+  - {fileID: 4900000, guid: 7ccf1e0ba3812194bbd0c75d71698354, type: 3}
+  - {fileID: 4900000, guid: 8eebe64c1d7839848b6aea30b7cec544, type: 3}
