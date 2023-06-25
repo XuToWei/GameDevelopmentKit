@@ -14,7 +14,7 @@ using UnityGameFramework.Runtime;
 
 namespace Game.Hot
 {
-    public class HPBarComponent : GameHotModule
+    public class HPBarManager : GameHotModule
     {
         private HPBarItem m_HPBarItemTemplate;
         

@@ -6,7 +6,7 @@ namespace Game.Hot
         
         private static void InitBuiltin()
         {
-            Procedure = CreateModule<ProcedureManager>();
+            Procedure = ModuleHelper.CreateModule<ProcedureManager>();
         }
     }
 }
