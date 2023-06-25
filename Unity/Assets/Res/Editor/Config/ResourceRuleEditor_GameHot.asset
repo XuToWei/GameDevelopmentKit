@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ad2d721b5da424096e85539f9ff262, type: 3}
   m_Name: ResourceRuleEditor_GameHot
   m_EditorClassIdentifier: 
-  isActivate: 1
+  isActivate: 0
   rules:
   - valid: 1
     name: Entity

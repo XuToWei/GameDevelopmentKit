@@ -67,7 +67,12 @@ namespace ET.Editor
 #endif
 
 #if UNITY_ET_CODEMODE_SERVER || UNITY_ET_CODEMODE_CLIENTSERVER
+#if UNITY_ET_CODEMODE_SERVER
         [MenuItem("ET/Define Symbol/CodeMode(Server)/Enable UNITY_ET_CODEMODE_CLIENT")]
+#endif
+#if UNITY_ET_CODEMODE_CLIENTSERVER
+        [MenuItem("ET/Define Symbol/CodeMode(ClientServer)/Enable UNITY_ET_CODEMODE_CLIENT")]
+#endif
         public static void UNITY_ET_CODEMODE_CLIENT()
         {
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_SERVER");
@@ -84,7 +89,12 @@ namespace ET.Editor
 #endif
 
 #if UNITY_ET_CODEMODE_CLIENT || UNITY_ET_CODEMODE_CLIENTSERVER
+#if UNITY_ET_CODEMODE_CLIENT
         [MenuItem("ET/Define Symbol/CodeMode(Client)/Enable UNITY_ET_CODEMODE_SERVER")]
+#endif
+#if UNITY_ET_CODEMODE_CLIENTSERVER
+        [MenuItem("ET/Define Symbol/CodeMode(ClientServer)/Enable UNITY_ET_CODEMODE_SERVER")]
+#endif
         public static void UNITY_ET_CODEMODE_SERVER()
         {
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
@@ -101,7 +111,12 @@ namespace ET.Editor
 #endif
 
 #if UNITY_ET_CODEMODE_CLIENT || UNITY_ET_CODEMODE_SERVER
+#if UNITY_ET_CODEMODE_CLIENT
         [MenuItem("ET/Define Symbol/CodeMode(Client)/Enable UNITY_ET_CODEMODE_CLIENTSERVER")]
+#endif
+#if UNITY_ET_CODEMODE_SERVER
+        [MenuItem("ET/Define Symbol/CodeMode(Server)/Enable UNITY_ET_CODEMODE_CLIENTSERVER")]
+#endif
         public static void UNITY_ET_CODEMODE_CLIENTSERVER()
         {
             ScriptingDefineSymbols.RemoveScriptingDefineSymbol("UNITY_ET_CODEMODE_CLIENT");
