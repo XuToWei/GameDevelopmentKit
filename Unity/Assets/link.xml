@@ -1,5 +1,5 @@
 <linker>
-    <!--UNITY_HOTFIX_FIRST-->
+    <!--UNITY_HOTFIX-
     <assembly fullname="mscorlib" preserve="all" />
     <assembly fullname="System" preserve="all" />
     <assembly fullname="System.Core" preserve="all" />
@@ -31,42 +31,42 @@
     <assembly fullname="ZString" preserve="all" />
     
     <assembly fullname="Game" preserve="all" />
-    <!--UNITY_HOTFIX_END-->
+    -UNITY_HOTFIX-->
 
-    <!--UNITY_!HOTFIX-
-    -UNITY_!HOTFIX-->
+    <!--UNITY_!HOTFIX_FIRST-->
+    <!--UNITY_!HOTFIX_END-->
 
     <!--UNITY_ET_FIRST-->
     
     <!--UNITY_ET_END-->
 
-    <!--UNITY_!HOTFIX_ET-
+    <!--UNITY_!HOTFIX_ET_FIRST-->
     <assembly fullname="Game.ET.Code.Model" preserve="all" />
     <assembly fullname="Game.ET.Code.ModelView" preserve="all" />
     <assembly fullname="Game.ET.Code.Hotfix" preserve="all" />
     <assembly fullname="Game.ET.Code.HotfixView" preserve="all" />
-    -UNITY_!HOTFIX_ET-->
+    <!--UNITY_!HOTFIX_ET_END-->
 
-    <!--UNITY_HOTFIX_ET_FIRST-->
+    <!--UNITY_HOTFIX_ET-
     <assembly fullname="MemoryPack" preserve="all" />
     <assembly fullname="MongoDB.Bson" preserve="all" />
     <assembly fullname="CommandLine" preserve="all" />
     <assembly fullname="ET" preserve="all" />
     <assembly fullname="Game.ET.Loader" preserve="all" />
-    <!--UNITY_HOTFIX_ET_END-->
+    -UNITY_HOTFIX_ET-->
 
-    <!--UNITY_!HOTFIX_ET_CLIENT-
-    -UNITY_!HOTFIX_ET_CLIENT-->
+    <!--UNITY_!HOTFIX_ET_CLIENT_FIRST-->
+    <!--UNITY_!HOTFIX_ET_CLIENT_END-->
     
-    <!--UNITY_HOTFIX_ET_CLIENT_FIRST-->
-    <!--UNITY_HOTFIX_ET_CLIENT_END-->
+    <!--UNITY_HOTFIX_ET_CLIENT-
+    -UNITY_HOTFIX_ET_CLIENT-->
 
-    <!--UNITY_!HOTFIX_ET_SERVER-
-    -UNITY_!HOTFIX_ET_SERVER-->
+    <!--UNITY_!HOTFIX_ET_SERVER_FIRST-->
+    <!--UNITY_!HOTFIX_ET_SERVER_END-->
     
-    <!--UNITY_HOTFIX_ET_SERVER_FIRST-->
+    <!--UNITY_HOTFIX_ET_SERVER-
     <assembly fullname="MongoDB.Driver" preserve="all" />
-    <!--UNITY_HOTFIX_ET_SERVER_END-->
+    -UNITY_HOTFIX_ET_SERVER-->
 
     <!--UNITY_GAMEHOT-
     -UNITY_GAMEHOT-->

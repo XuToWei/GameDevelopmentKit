@@ -23,7 +23,7 @@ namespace UnityGameFramework.Editor.ResourceTools
     public sealed class ResourceCollection
     {
         private const string SceneExtension = ".unity";
-        private static readonly Regex ResourceNameRegex = new Regex(@"^([A-Za-z0-9\ ._-]+/)*[A-Za-z0-9\ ._-]+$");
+        private static readonly Regex ResourceNameRegex = new Regex(@"^([A-Za-z0-9\._-]+/)*[A-Za-z0-9\._-]+$");
         private static readonly Regex ResourceVariantRegex = new Regex(@"^[a-z0-9_-]+$");
 
         private readonly string m_ConfigurationPath;

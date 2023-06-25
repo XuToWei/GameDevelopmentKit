@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2089828645389053554}
   - component: {fileID: 8382814895151456186}
   m_Layer: 0
-  m_Name: HP Bar Instances
+  m_Name: HPBarInstances
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -33,7 +33,7 @@ namespace Game.Hot
         {
             m_HPBarItemAssetObj = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetUIItemAsset("HPBarItem"));
             m_HPBarItemTemplate = m_HPBarItemAssetObj.GetComponent<HPBarItem>();
-            m_HPBarInstancesAssetObj = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetUIItemAsset("HP Bar Instances"));
+            m_HPBarInstancesAssetObj = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetUIItemAsset("HPBarInstances"));
             m_HPBarInstanceRoot = Object.Instantiate(m_HPBarInstancesAssetObj.transform, GameEntry.CodeRunner.transform);
             m_CachedCanvas = m_HPBarInstanceRoot.GetComponent<Canvas>();
             m_InstancePoolCapacity = 16;

@@ -2,59 +2,16 @@
 <UnityGameFramework>
   <ResourceCollection>
     <Resources>
-      <Resource Name="GameHot.Luban" FileSystem="GameData" LoadType="0" Packed="False" />
+      <Resource Name="Entity" LoadType="0" Packed="False" />
+      <Resource Name="ET.ClientServer" FileSystem="GameData" LoadType="0" Packed="False" />
+      <Resource Name="ET.Code" FileSystem="GameData" LoadType="0" Packed="False" />
+      <Resource Name="GameHot" FileSystem="GameData" LoadType="0" Packed="False" />
       <Resource Name="HybridCLR" LoadType="0" Packed="False" />
       <Resource Name="Luban" FileSystem="GameData" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/Asteroid01" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/Asteroid02" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/Asteroid03" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/AsteroidExplosion" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/DefaultArmor" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/DefaultWeapon" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/EnemyBolt" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/EnemyEngine" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/EnemyExplosion" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/EnemyShip" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/PlayerBolt" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/PlayerEngine" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/PlayerExplosion" LoadType="0" Packed="False" />
-      <Resource Name="Res/Entity/PlayerShip" LoadType="0" Packed="False" />
-      <Resource Name="Res/Font/MainFont" LoadType="0" Packed="False" />
       <Resource Name="Res/Localization/ChineseSimplified" LoadType="0" Packed="False" />
       <Resource Name="Res/Localization/ChineseTraditional" LoadType="0" Packed="False" />
       <Resource Name="Res/Localization/English" LoadType="0" Packed="False" />
       <Resource Name="Res/Localization/Korean" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/done_fx_bolt_cyan_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/done_fx_bolt_orange_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/done_tile_nebula_green_dff" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/fx_enemyShip_engines_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/part_blast_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/part_glow_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/part_jet_core_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/part_jet_flare_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/part_shockwave_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/part_spark_blue_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/part_spark_large_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/part_spark_white_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/part_spark_yellow_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/part_star_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/prop_asteroid_01_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/prop_asteroid_02_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/prop_asteroid_03_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/Urp" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/vehicle_enemyShip_glow_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/vehicle_enemyShip_metal_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/vehicle_playerShip_glass_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Material/vehicle_playerShip_metal_mat" LoadType="0" Packed="False" />
-      <Resource Name="Res/Mesh/prop_asteroid_01" LoadType="0" Packed="False" />
-      <Resource Name="Res/Mesh/prop_asteroid_02" LoadType="0" Packed="False" />
-      <Resource Name="Res/Mesh/prop_asteroid_03" LoadType="0" Packed="False" />
-      <Resource Name="Res/Mesh/vehicle_enemyShip" LoadType="0" Packed="False" />
-      <Resource Name="Res/Mesh/vehicle_playerShip" LoadType="0" Packed="False" />
-      <Resource Name="Res/Mesh/vehicle_playerShip_collider" LoadType="0" Packed="False" />
-      <Resource Name="Res/Music/music_about" LoadType="0" Packed="False" />
-      <Resource Name="Res/Music/music_background" LoadType="0" Packed="False" />
-      <Resource Name="Res/Music/music_menu" LoadType="0" Packed="False" />
       <Resource Name="Res/Prefab/Skeleton/Ani/Materials/skeleton_D" LoadType="0" Packed="False" />
       <Resource Name="Res/Prefab/Skeleton/Character/Materials/skeleton_D" LoadType="0" Packed="False" />
       <Resource Name="Res/Prefab/Skeleton/Skeleton" LoadType="0" Packed="False" />
@@ -64,131 +21,112 @@
       <Resource Name="Res/Scene/Map1" LoadType="0" Packed="False" />
       <Resource Name="Res/Scene/Map2" LoadType="0" Packed="False" />
       <Resource Name="Res/Scene/Menu" LoadType="0" Packed="False" />
-      <Resource Name="Res/Sound/explosion_asteroid" LoadType="0" Packed="False" />
-      <Resource Name="Res/Sound/explosion_enemy" LoadType="0" Packed="False" />
-      <Resource Name="Res/Sound/explosion_player" LoadType="0" Packed="False" />
-      <Resource Name="Res/Sound/weapon_enemy" LoadType="0" Packed="False" />
-      <Resource Name="Res/Sound/weapon_player" LoadType="0" Packed="False" />
+      <Resource Name="Res/UI/UIForm/Demo/UIHelp" LoadType="0" Packed="False" />
+      <Resource Name="Res/UI/UIForm/Demo/UILobby" LoadType="0" Packed="False" />
+      <Resource Name="Res/UI/UIForm/Demo/UILogin" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UIForm/Hot/AboutForm" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UIForm/Hot/DialogForm" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UIForm/Hot/MenuForm" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UIForm/Hot/SettingForm" LoadType="0" Packed="False" />
-      <Resource Name="Res/UI/UIItem/HP Bar Instances" LoadType="0" Packed="False" />
-      <Resource Name="Res/UI/UIItem/HPBarItem" LoadType="0" Packed="False" />
-      <Resource Name="Res/UI/UISound/click" LoadType="0" Packed="False" />
-      <Resource Name="Res/UI/UISound/select" LoadType="0" Packed="False" />
+      <Resource Name="Res/UI/UIForm/LockStep/UILSLobby" LoadType="0" Packed="False" />
+      <Resource Name="Res/UI/UIForm/LockStep/UILSLogin" LoadType="0" Packed="False" />
+      <Resource Name="Res/UI/UIForm/LockStep/UILSRoom" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UISprite/Common" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UISprite/Icons" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UISprite/Logos" LoadType="0" Packed="False" />
+      <Resource Name="UI.UISound" LoadType="0" Packed="False" />
     </Resources>
     <Assets>
       <Asset Guid="0179316b5fc7c2946a67c5877c02fc30" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="04d7dde7615d71b4db1a0c8d67a62e95" ResourceName="Res/UI/UIForm/Hot/DialogForm" />
       <Asset Guid="064123f1e5067b249a9fd8967ddbde09" ResourceName="Res/Scene/Map2" />
-      <Asset Guid="093f8873cfe371d41b854ed9fb6bff69" ResourceName="Res/Music/music_about" />
-      <Asset Guid="0992f89f84d762f478fd32f8225168b0" ResourceName="Res/Entity/DefaultArmor" />
+      <Asset Guid="08b1969f82430784f915a659ed9d66d5" ResourceName="ET.ClientServer" />
+      <Asset Guid="0992f89f84d762f478fd32f8225168b0" ResourceName="Entity" />
       <Asset Guid="09966b19e546cc94aa84d0743cb2a83d" ResourceName="Res/UI/UIForm/Hot/MenuForm" />
       <Asset Guid="09e587528c6da27469a8017d23136a0f" ResourceName="Luban" />
       <Asset Guid="0a65a68c01a76ea4b8b574827a6467aa" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="0ed73dc47f4cb38489020d05e9f02c99" ResourceName="Res/Material/part_glow_mat" />
-      <Asset Guid="0f995b3145e0e7247a42da6cef1dbf23" ResourceName="Res/Material/part_spark_white_mat" />
-      <Asset Guid="11e27c26ac87b40f0a62ec40d7261989" ResourceName="Res/Entity/EnemyBolt" />
+      <Asset Guid="11e27c26ac87b40f0a62ec40d7261989" ResourceName="Entity" />
+      <Asset Guid="1561212b4a64dea4d92ea3eb404e213d" ResourceName="ET.Code" />
       <Asset Guid="156d241f796508c4da4fc354a7fbf5a8" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="160925a6fe2664f2a978566b819f0af0" ResourceName="Res/Entity/EnemyExplosion" />
+      <Asset Guid="160925a6fe2664f2a978566b819f0af0" ResourceName="Entity" />
       <Asset Guid="172ab742804613d4f99fee07a3878843" ResourceName="Luban" />
-      <Asset Guid="185f97f18bd603a478461ce9c08bd039" ResourceName="Res/Material/part_star_mat" />
       <Asset Guid="1abfbe65a6e3c034cb43df1cff7317cb" ResourceName="Luban" />
-      <Asset Guid="1b4bad6cea5a94611b21f9757fe41444" ResourceName="Res/Material/fx_enemyShip_engines_mat" />
-      <Asset Guid="1be4472894949437694aead55c6da60f" ResourceName="Res/Sound/weapon_enemy" />
-      <Asset Guid="1cfe02ffd0b74854ea5bcd1a3c63ac3c" ResourceName="Res/Material/part_blast_mat" />
-      <Asset Guid="1d46a17a95a444c08830612bc1146d1d" ResourceName="Res/Material/part_shockwave_mat" />
-      <Asset Guid="1e0350b97c61bfb4a91c62d756d01727" ResourceName="Res/Material/vehicle_enemyShip_glow_mat" />
       <Asset Guid="236433a27ce40a7429b87d14d8fa3035" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="24ca310f92a6796408f1db7647ec4e55" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="25619d90ce6d6724db8154b48c144403" ResourceName="Res/Localization/ChineseTraditional" />
-      <Asset Guid="2768a9a4c8d289840918dcb879705893" ResourceName="Res/Mesh/prop_asteroid_03" />
-      <Asset Guid="3455fe69f7ddc4604b95bf9b0a1e88d7" ResourceName="Res/Entity/PlayerExplosion" />
+      <Asset Guid="306a97ef4d120a24898d6e212ffa4ee0" ResourceName="ET.Code" />
+      <Asset Guid="3455fe69f7ddc4604b95bf9b0a1e88d7" ResourceName="Entity" />
       <Asset Guid="3aa539b1e46111d4299a83c73ebe762c" ResourceName="Res/UI/UIForm/Hot/AboutForm" />
       <Asset Guid="3be3fac3611f4584695662c4889f722d" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="3dc7455402dfa462b89a4bbd513955e9" ResourceName="Res/Sound/explosion_asteroid" />
       <Asset Guid="3ec74aa98d7b1ba4599726fc79459c3c" ResourceName="Luban" />
       <Asset Guid="3f54fcfdac53aec42ae18a6a1c6d8cb1" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="4473d81b14ddb0143addf0e6050d8491" ResourceName="Res/Scene/Main" />
-      <Asset Guid="4b2b53802b3d4f94d855ab26f2ff22af" ResourceName="GameHot.Luban" />
-      <Asset Guid="4c3865b2ac420cd46a9cde6ab468d016" ResourceName="Res/Material/prop_asteroid_03_mat" />
-      <Asset Guid="5282f20eba4d44213820e21af8481932" ResourceName="Res/Mesh/vehicle_playerShip_collider" />
+      <Asset Guid="4b2b53802b3d4f94d855ab26f2ff22af" ResourceName="GameHot" />
+      <Asset Guid="4eb028c2d41731848b73b8784a0ec0f1" ResourceName="ET.ClientServer" />
       <Asset Guid="56b8df63bbad60749a69e38bc687fadf" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="578af1667322bab45b652b79a40bb4fb" ResourceName="Res/Material/prop_asteroid_02_mat" />
-      <Asset Guid="583ff7026dac91849b7c7b2468ba456b" ResourceName="Res/Material/prop_asteroid_01_mat" />
       <Asset Guid="595f7cae6f82a6146b20ca287fe7c859" ResourceName="Res/Prefab/Skeleton/SkeletonController" />
-      <Asset Guid="5f95d0df2dbdbf94bbd07f691207616b" ResourceName="GameHot.Luban" />
+      <Asset Guid="5cb3b48a2d2a948d6b2564f64624607c" ResourceName="Res/UI/UIForm/LockStep/UILSLobby" />
+      <Asset Guid="5f95d0df2dbdbf94bbd07f691207616b" ResourceName="GameHot" />
       <Asset Guid="62af9e5c8f39cfa49af9e10ccf42f1da" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="638ff8ae4a0d15047839cd265d3bc296" ResourceName="Res/Music/music_background" />
-      <Asset Guid="63fe6ff9ab9e1433f8db4ebd940f2442" ResourceName="Res/Material/done_fx_bolt_cyan_mat" />
-      <Asset Guid="654c33b0a4496454481a16682b4046ac" ResourceName="Res/UI/UIItem/HP Bar Instances" />
+      <Asset Guid="6562f98dfe3c19649a61e715261acd76" ResourceName="ET.Code" />
       <Asset Guid="667ce59325f540a43bace79736e2287e" ResourceName="Res/Localization/Korean" />
+      <Asset Guid="6860728b492883a47bde87c3473262f8" ResourceName="ET.Code" />
+      <Asset Guid="6887965437e6cdd4994b29405da0cf20" ResourceName="ET.ClientServer" />
       <Asset Guid="6cbc2c323b77f804fb958fa4eca33998" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="6d5adfb995cb79c438d8b1e6b5e5de91" ResourceName="Res/Material/Urp" />
-      <Asset Guid="72e76810224064300b7d32e8322a5d12" ResourceName="Res/Sound/explosion_enemy" />
-      <Asset Guid="738bdf56857a65f479c367c7b62c4ad7" ResourceName="Res/Entity/PlayerShip" />
-      <Asset Guid="77cbb7c5404c10242ab59953e0746314" ResourceName="Res/Font/MainFont" />
+      <Asset Guid="6ce46a2bbb2eddd41886d6e049aadd00" ResourceName="ET.Code" />
+      <Asset Guid="6f4f01fb0f74a674196c817368818daf" ResourceName="ET.ClientServer" />
+      <Asset Guid="738bdf56857a65f479c367c7b62c4ad7" ResourceName="Entity" />
       <Asset Guid="7c257456f05a75841b93e90bdd63bbf9" ResourceName="Res/Localization/ChineseSimplified" />
-      <Asset Guid="7d5f7699d6d1d48e485ac71126e12061" ResourceName="Res/Entity/Asteroid01" />
+      <Asset Guid="7d5f7699d6d1d48e485ac71126e12061" ResourceName="Entity" />
       <Asset Guid="7f5aee8da226edf4991598327cb32ce0" ResourceName="Res/UI/UISprite/Logos" />
-      <Asset Guid="834bfaee90a9d4e04b1e8c1ca22cc88e" ResourceName="Res/Entity/Asteroid03" />
-      <Asset Guid="84b7805ef4c5343ce920ff2c6e71c7f1" ResourceName="GameHot.Luban" />
-      <Asset Guid="8522461e56b6b9747af8e1a33f3af608" ResourceName="GameHot.Luban" />
-      <Asset Guid="8940b037a9b441c4cbd3d2b446838424" ResourceName="Res/Material/vehicle_playerShip_metal_mat" />
-      <Asset Guid="8cf749fdfa5edc3478d16893efeaa0eb" ResourceName="Res/Entity/PlayerEngine" />
-      <Asset Guid="8e27380ee68aa4a219b4db9018e7da31" ResourceName="Res/Material/done_fx_bolt_orange_mat" />
-      <Asset Guid="9143e2b62ad50488482f9b73672fc331" ResourceName="Res/Entity/Asteroid02" />
+      <Asset Guid="834bfaee90a9d4e04b1e8c1ca22cc88e" ResourceName="Entity" />
+      <Asset Guid="84b7805ef4c5343ce920ff2c6e71c7f1" ResourceName="GameHot" />
+      <Asset Guid="8522461e56b6b9747af8e1a33f3af608" ResourceName="GameHot" />
+      <Asset Guid="8a77c6e6336d29f4fbd0cafbb16f1365" ResourceName="ET.Code" />
+      <Asset Guid="8cf749fdfa5edc3478d16893efeaa0eb" ResourceName="Entity" />
+      <Asset Guid="9143e2b62ad50488482f9b73672fc331" ResourceName="Entity" />
       <Asset Guid="943f3c476130c4f4f8ae55ef3ccd38ba" ResourceName="Res/Prefab/Skeleton/Texture/Skeleton_D" />
-      <Asset Guid="955000b4d1441470e8cbf94f483228b5" ResourceName="Res/Material/done_tile_nebula_green_dff" />
-      <Asset Guid="96d2e77dd9853514da336717bd5627c0" ResourceName="Res/UI/UIItem/HPBarItem" />
-      <Asset Guid="97b1f8b25cca2bc458cb9d6127c8d186" ResourceName="Res/Material/part_spark_large_mat" />
-      <Asset Guid="9afa958d6d8235941b9badb42aae4370" ResourceName="Res/Mesh/prop_asteroid_02" />
-      <Asset Guid="9ddab293e2a8af3499dac05f5fd6169c" ResourceName="Res/Mesh/vehicle_enemyShip" />
+      <Asset Guid="96d83c7380035564ba399a83d77e7f91" ResourceName="ET.ClientServer" />
       <Asset Guid="9e27b0bdab1ad7242a009899d15c0e67" ResourceName="Res/Prefab/Skeleton/Skeleton" />
+      <Asset Guid="9f6d9adc6f537764fa0fea29671e77bf" ResourceName="Res/UI/UIForm/Demo/UILogin" />
       <Asset Guid="9f847ec5e66e03e4ead1d3c5f7b510e8" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="a019ae3af8e864616b85773c509f5285" ResourceName="Res/Sound/explosion_player" />
-      <Asset Guid="a23eef5e20ff8cb46adf33491fc443fb" ResourceName="Res/Material/part_spark_yellow_mat" />
       <Asset Guid="a5294483f20f40d449699101bb428cda" ResourceName="Res/Scene/Map1" />
-      <Asset Guid="a6d58f54ce5934781962a4f887e834f3" ResourceName="Res/Entity/AsteroidExplosion" />
-      <Asset Guid="a7b030cffa2dc44478c14e49a22771c2" ResourceName="Res/Material/part_jet_flare_mat" />
+      <Asset Guid="a6d58f54ce5934781962a4f887e834f3" ResourceName="Entity" />
       <Asset Guid="a8c07bbe04fdaf04b80e27f651a8edd6" ResourceName="Res/UI/UISprite/Common" />
+      <Asset Guid="ab0e7d449081c5840b6ecbc53b9a60e4" ResourceName="ET.ClientServer" />
       <Asset Guid="ab45c3f613f388d43bbf43ec05eb92e2" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="abd1565e9e268f04cac3631d022b4ace" ResourceName="Res/Entity/DefaultWeapon" />
+      <Asset Guid="abd1565e9e268f04cac3631d022b4ace" ResourceName="Entity" />
       <Asset Guid="ac8128978dc317248b81bea70128b967" ResourceName="HybridCLR" />
-      <Asset Guid="afc18fc39ade3744397c0c993b57be53" ResourceName="Res/Entity/EnemyShip" />
+      <Asset Guid="afc18fc39ade3744397c0c993b57be53" ResourceName="Entity" />
       <Asset Guid="b031b4f2980561542a7f7ba41391edc3" ResourceName="Res/Scene/Menu" />
-      <Asset Guid="b0c7cf51d3fecb446ab93bf854419715" ResourceName="Res/Material/part_spark_blue_mat" />
-      <Asset Guid="b124cd64fafb18b4880a1461b91bf3c1" ResourceName="GameHot.Luban" />
+      <Asset Guid="b124cd64fafb18b4880a1461b91bf3c1" ResourceName="GameHot" />
       <Asset Guid="b1494958bf9856a479bec1767c02878e" ResourceName="Res/Prefab/Skeleton/Ani/Materials/skeleton_D" />
-      <Asset Guid="baedbbad82997f445a8cb4da210404e0" ResourceName="Res/Mesh/prop_asteroid_01" />
+      <Asset Guid="b420ab0d7cecc4691b5ccbe3a60049de" ResourceName="ET.ClientServer" />
+      <Asset Guid="bb89e65d5623768439de4598079848c6" ResourceName="ET.Code" />
+      <Asset Guid="bbc231940e1665845bf8c990ae1a49c3" ResourceName="ET.Code" />
       <Asset Guid="bbfd75fe6fe00e1448fe988173ede7f9" ResourceName="Res/UI/UIForm/Hot/SettingForm" />
-      <Asset Guid="bf75b984df8a84987bcf3a8bf6e2862d" ResourceName="Res/Sound/weapon_player" />
-      <Asset Guid="c547624e174de984882f0a14b4bb32e1" ResourceName="Res/Material/vehicle_enemyShip_metal_mat" />
-      <Asset Guid="c58c9afddbd36d14d837fa218d772996" ResourceName="Res/Material/part_jet_core_mat" />
-      <Asset Guid="c7d1e11dd37634b48a9dd4012b8e4306" ResourceName="Res/UI/UISound/click" />
-      <Asset Guid="ca9eca684ec84504a955194cb34433a7" ResourceName="GameHot.Luban" />
-      <Asset Guid="caa829ab2ffc71340a69253afdf58365" ResourceName="Res/Music/music_menu" />
+      <Asset Guid="c54e8d9624286b24fa23519e5df2ed0a" ResourceName="Res/UI/UIForm/Demo/UIHelp" />
+      <Asset Guid="c7d1e11dd37634b48a9dd4012b8e4306" ResourceName="UI.UISound" />
+      <Asset Guid="ca9eca684ec84504a955194cb34433a7" ResourceName="GameHot" />
       <Asset Guid="cadd0764941c8b646ae79b51d0ea8285" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="cd590f301d3662040841baada9b1dfb4" ResourceName="Luban" />
       <Asset Guid="d21cca8dd0073ab4584cd5ff462371ee" ResourceName="Res/Localization/English" />
-      <Asset Guid="d9808401c68af274a8edfbed3d1b53c7" ResourceName="Res/Mesh/vehicle_playerShip" />
+      <Asset Guid="d6d2a8e7150a19c4a9aec43c56f70ed1" ResourceName="ET.ClientServer" />
+      <Asset Guid="d8d87e53d93e234448658c9a801a9967" ResourceName="Res/UI/UIForm/Demo/UILobby" />
       <Asset Guid="db58965402f12ed47b4dad61a9e48c9d" ResourceName="Res/UI/UISprite/Icons" />
       <Asset Guid="dfc4233acbbd1c44fa552f08e23cd89c" ResourceName="Luban" />
       <Asset Guid="e5ca26c53b6ab8a46b52817008d7c7fa" ResourceName="Res/UI/UISprite/Icons" />
       <Asset Guid="e82837c9099f69a48b48fc44eb8d119d" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="e830964cdb85ff3429bca484c16bab44" ResourceName="Res/UI/UISound/select" />
+      <Asset Guid="e830964cdb85ff3429bca484c16bab44" ResourceName="UI.UISound" />
       <Asset Guid="e85864330b68dde498dcb6e8711815d3" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="ed14df0368fe53543907335c0e3902c6" ResourceName="Res/Prefab/Skeleton/Character/Materials/skeleton_D" />
       <Asset Guid="f1833b4cd407d8e408a62b46185431ff" ResourceName="Luban" />
+      <Asset Guid="f29d435e196cd421aa7a7700402942f3" ResourceName="Res/UI/UIForm/LockStep/UILSLogin" />
       <Asset Guid="f2f4df0b7211e4c42a5638273525d8ee" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="f36c72c738c55f741afcd674a0b1245f" ResourceName="Res/Material/vehicle_playerShip_glass_mat" />
       <Asset Guid="f438a72a91e1c3c4a9ced40888ffec96" ResourceName="Res/UI/UISprite/Icons" />
-      <Asset Guid="f4ec271e525e14ca9927a07e6a2e153d" ResourceName="Res/Entity/PlayerBolt" />
-      <Asset Guid="fedd25a3c60e7ae499fc6efab9ee180b" ResourceName="Res/Entity/EnemyEngine" />
+      <Asset Guid="f4ec271e525e14ca9927a07e6a2e153d" ResourceName="Entity" />
+      <Asset Guid="fcad5af85f5a54eb3884cdfb6efc7d27" ResourceName="Res/UI/UIForm/LockStep/UILSRoom" />
+      <Asset Guid="fedd25a3c60e7ae499fc6efab9ee180b" ResourceName="Entity" />
     </Assets>
   </ResourceCollection>
 </UnityGameFramework>
