@@ -4,7 +4,7 @@ using GameEntry = Game.GameEntry;
 
 namespace ET
 {
-    [EnableMethod]
+    [ChildOf]
     public sealed class UGFUIForm : Entity, IAwake<int, ETMonoUIForm>, IDestroy, ILoad
     {
         public UIForm uiForm { get; private set; }

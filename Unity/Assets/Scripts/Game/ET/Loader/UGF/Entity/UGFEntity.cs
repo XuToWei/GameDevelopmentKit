@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ET
 {
+    [ChildOf]
     public sealed class UGFEntity : Entity, IAwake<Type, ETMonoEntity>, IDestroy, ILoad
     {
         public UnityGameFramework.Runtime.Entity entity { get; private set; }
