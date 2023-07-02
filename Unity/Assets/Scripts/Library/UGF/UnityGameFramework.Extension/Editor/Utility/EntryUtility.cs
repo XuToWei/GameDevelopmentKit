@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using GameFramework.Resource;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityGameFramework.Runtime;
@@ -14,6 +15,7 @@ namespace UnityGameFramework.Extension.Editor
         
         public static Scene GetEntryScene()
         {
+            EditorSceneManager.OpenScene(EntrySceneName);
             return SceneManager.GetSceneByPath(EntrySceneName);
         }
 
