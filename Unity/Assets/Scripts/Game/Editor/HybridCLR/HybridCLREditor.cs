@@ -40,6 +40,7 @@ namespace Game.Editor
         [MenuItem("HybridCLR/Do All", false, int.MaxValue)]
         public static void HybridCLRDoAll()
         {
+            EditorApplication.ExecuteMenuItem("Game/Define Symbol/Refresh");
 #if UNITY_HOTFIX && UNITY_GAMEHOT
             EditorApplication.ExecuteMenuItem("GameHot/Compile Dll");
 #endif
