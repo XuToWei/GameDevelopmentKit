@@ -19,6 +19,17 @@ namespace ET.Editor
             DisableETServerCode();
             EnableModelGenerateClientCode();
             RefreshETResourceRule(true);
+#if UNITY_HOTFIX
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#endif
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             AssetDatabase.SaveAssets();
         }
@@ -33,6 +44,17 @@ namespace ET.Editor
             EnableETServerCode();
             EnableModelGenerateClientServerCode();
             RefreshETResourceRule(false);
+#if UNITY_HOTFIX
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#endif
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             AssetDatabase.SaveAssets();
         }
@@ -47,6 +69,17 @@ namespace ET.Editor
             EnableETServerCode();
             EnableModelGenerateClientServerCode();
             RefreshETResourceRule(false);
+#if UNITY_HOTFIX
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#endif
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             AssetDatabase.SaveAssets();
         }
@@ -61,6 +94,17 @@ namespace ET.Editor
             DisableETServerCode();
             EnableModelGenerateClientCode();
             RefreshETResourceRule();
+#if UNITY_HOTFIX
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#endif
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             AssetDatabase.SaveAssets();
         }
@@ -83,6 +127,17 @@ namespace ET.Editor
             DisableETServerCode();
             EnableModelGenerateClientCode();
             RefreshETResourceRule(true);
+#if UNITY_HOTFIX
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#endif
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             AssetDatabase.SaveAssets();
         }
@@ -105,6 +160,17 @@ namespace ET.Editor
             EnableETServerCode();
             EnableModelGenerateClientServerCode();
             RefreshETResourceRule(false);
+#if UNITY_HOTFIX
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#endif
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             AssetDatabase.SaveAssets();
         }
@@ -127,6 +193,17 @@ namespace ET.Editor
             EnableETServerCode();
             EnableModelGenerateClientServerCode();
             RefreshETResourceRule(false);
+#if UNITY_HOTFIX
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#else
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_CLIENT");
+            LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET_CLIENT");
+            LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_ET_SERVER");
+#endif
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             AssetDatabase.SaveAssets();
         }
