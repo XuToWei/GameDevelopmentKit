@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ET
 {
@@ -36,9 +37,10 @@ namespace ET
             this.EntityEvents.Clear();
             
             Dictionary<string, Type> types = EventSystem.Instance.GetTypes();
+            Type entityEventType = typeof(IUGFEntityEvent);
             foreach (Type type in types.Values)
             {
-                if (!type.IsSubclassOf(typeof (IUGFEntityEvent)) || type.IsGenericType || type.IsAbstract)
+                if (type.IsGenericType || type.IsAbstract || !entityEventType.IsAssignableFrom(type))
                 {
                     continue;
                 }

@@ -23,12 +23,16 @@ namespace ET.Client
         {
             protected override void Destroy(EntityComponent self)
             {
-                self.HideAllEntities();
+                self.AllShowEntities.Clear();
             }
         }
         
         public static async UniTask<UGFEntity> ShowEntityAsync<T>(this EntityComponent self, int entityTypeId, object userData = null) where T : AUGFEntityEvent
         {
+            if (self == null)
+            {
+                throw new Exception("EntityComponent is null!");
+            }
             ETMonoEntityData formData = ETMonoEntityData.Acquire(typeof (T), self, userData);
             UnityGameFramework.Runtime.Entity entity = await GameEntry.Entity.ShowEntityAsync<ETMonoEntity>(entityTypeId, formData);
             if (entity == null)

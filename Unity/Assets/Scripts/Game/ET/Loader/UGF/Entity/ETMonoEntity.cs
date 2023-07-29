@@ -41,7 +41,7 @@ namespace ET
             if (this.m_UGFEntity == default || this.m_EntityEventType != entityData.EntityEventType || entityData.ParentEntity != this.m_UGFEntity.Parent)
             {
                 UGFEntityDispose();
-                if(UGFEventComponent.Instance.TryGetEntityEvent(this.m_EntityEventType, out IUGFEntityEvent entityEvent))
+                if(UGFEventComponent.Instance.TryGetEntityEvent(entityData.EntityEventType, out IUGFEntityEvent entityEvent))
                 {
                     this.m_EntityEvent = entityEvent;
                 }
