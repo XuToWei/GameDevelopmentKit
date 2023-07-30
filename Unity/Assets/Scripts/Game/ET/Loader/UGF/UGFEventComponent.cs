@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ET
 {
@@ -10,19 +9,19 @@ namespace ET
     {
         [StaticField] public static UGFEventComponent Instance;
 
-        private readonly Dictionary<int, IUGFUIFormEvent> UIFormEvents = new Dictionary<int, IUGFUIFormEvent>();
+        private readonly Dictionary<int, IUGFUIFormEvent> m_UIFormEvents = new Dictionary<int, IUGFUIFormEvent>();
 
-        private readonly Dictionary<Type, IUGFEntityEvent> EntityEvents = new Dictionary<Type, IUGFEntityEvent>();
+        private readonly Dictionary<Type, IUGFEntityEvent> m_EntityEvents = new Dictionary<Type, IUGFEntityEvent>();
 
         internal void Clear()
         {
-            this.UIFormEvents.Clear();
-            this.EntityEvents.Clear();
+            this.m_UIFormEvents.Clear();
+            this.m_EntityEvents.Clear();
         }
         
         internal void Init()
         {
-            this.UIFormEvents.Clear();
+            this.m_UIFormEvents.Clear();
             HashSet<Type> uiEventAttributes = EventSystem.Instance.GetTypes(typeof (UGFUIFormEventAttribute));
             foreach (Type type in uiEventAttributes)
             {
@@ -31,10 +30,10 @@ namespace ET
                 IUGFUIFormEvent ugfUIFormEvent = Activator.CreateInstance(type) as IUGFUIFormEvent;
                 foreach (int uiFormId in ugfUIFormEventAttribute.uiFormIds)
                 {
-                    this.UIFormEvents.Add(uiFormId, ugfUIFormEvent);
+                    this.m_UIFormEvents.Add(uiFormId, ugfUIFormEvent);
                 }
             }
-            this.EntityEvents.Clear();
+            this.m_EntityEvents.Clear();
             
             Dictionary<string, Type> types = EventSystem.Instance.GetTypes();
             Type entityEventType = typeof(IUGFEntityEvent);
@@ -45,18 +44,18 @@ namespace ET
                     continue;
                 }
                 IUGFEntityEvent ugfEntityEvent = Activator.CreateInstance(type) as IUGFEntityEvent;
-                this.EntityEvents.Add(type, ugfEntityEvent);
+                this.m_EntityEvents.Add(type, ugfEntityEvent);
             }
         }
         
         public bool TryGetUIFormEvent(int uiFormId, out IUGFUIFormEvent uiFormEvent)
         {
-            return this.UIFormEvents.TryGetValue(uiFormId, out uiFormEvent);
+            return this.m_UIFormEvents.TryGetValue(uiFormId, out uiFormEvent);
         }
         
         public bool TryGetEntityEvent(Type entityType, out IUGFEntityEvent entityEvent)
         {
-            return this.EntityEvents.TryGetValue(entityType, out entityEvent);
+            return this.m_EntityEvents.TryGetValue(entityType, out entityEvent);
         }
     }
     
