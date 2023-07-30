@@ -1,6 +1,6 @@
 ﻿namespace ET#NAMESPACE#
 {
-    [FriendOf(typeof (#NAME#))]
+    [FriendOf(typeof(#NAME#))]
     public static class #NAME#System
     {
         [EntitySystem]

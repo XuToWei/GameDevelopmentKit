@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof (UGFUILogin))]
+    [FriendOf(typeof(UGFUILogin))]
     public static partial class UGFUILoginSystem
     {
         [UGFUIFormEvent(UGFUIFormId.UILogin)]
-        public class UGFUILoginEvent: AUGFUIFormEvent
+        public class UGFUILoginEvent : AUGFUIFormEvent
         {
             public override void OnInit(UGFUIForm uiForm, object userData)
             {

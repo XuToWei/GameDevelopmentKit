@@ -3,8 +3,8 @@
 namespace ET.Client
 {
     [EnableMethod]
-    [ComponentOf(typeof (UGFUIForm))]
-    public partial class UGFUI#NAME#: Entity, IAwake<Transform>, IDestroy
+    [ComponentOf(typeof(UGFUIForm))]
+    public partial class UGFUI#NAME# : Entity, IAwake<Transform>, IDestroy
     {
         
     }

@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof (UGFUILSRoom))]
+    [FriendOf(typeof(UGFUILSRoom))]
     public static partial class UGFUILSRoomSystem
     {
         [UGFUIFormEvent(UGFUIFormId.UILSRoom)]
-        private class UGFUILSRoomEvent: AUGFUIFormEvent
+        private class UGFUILSRoomEvent : AUGFUIFormEvent
         {
             public override void OnInit(UGFUIForm uiForm, object userData)
             {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof (UGFUI#NAME#))]
+    [FriendOf(typeof(UGFUI#NAME#))]
     public static partial class UGFUI#NAME#System
     {
         [EntitySystem]

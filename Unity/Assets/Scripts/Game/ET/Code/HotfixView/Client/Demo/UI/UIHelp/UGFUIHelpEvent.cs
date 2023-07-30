@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof (UGFUIHelp))]
+    [FriendOf(typeof(UGFUIHelp))]
     public static partial class UGFUIHelpSystem
     {
         [UGFUIFormEvent(UGFUIFormId.UIHelp)]
-        public class UGFUIHelpEvent: AUGFUIFormEvent
+        public class UGFUIHelpEvent : AUGFUIFormEvent
         {
             public override void OnInit(UGFUIForm uiForm, object userData)
             {

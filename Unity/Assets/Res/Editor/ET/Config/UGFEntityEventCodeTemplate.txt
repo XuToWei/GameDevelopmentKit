@@ -3,7 +3,8 @@
 namespace ET.Client
 {
     [EnableClass]
-    public class UGFEntity#NAME#Event: AUGFEntityEvent
+    [FriendOf(typeof(UGFEntity#NAME#))]
+    public class UGFEntity#NAME#Event : AUGFEntityEvent
     {
         public override void OnInit(UGFEntity entity, object userData)
         {

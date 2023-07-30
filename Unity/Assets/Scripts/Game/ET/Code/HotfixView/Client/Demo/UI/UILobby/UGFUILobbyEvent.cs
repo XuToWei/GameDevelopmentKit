@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof (UGFUILobby))]
+    [FriendOf(typeof(UGFUILobby))]
     public static partial class UGFUILobbySystem
     {
         [UGFUIFormEvent(UGFUIFormId.UILobby)]
-        private class UGFUILobbyEvent: AUGFUIFormEvent
+        private class UGFUILobbyEvent : AUGFUIFormEvent
         {
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
