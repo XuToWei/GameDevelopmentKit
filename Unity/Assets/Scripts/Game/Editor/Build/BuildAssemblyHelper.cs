@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading;
 using GameFramework;
 using UnityEngine;
 using UnityEditor;
@@ -10,6 +11,13 @@ namespace Game.Editor
     public static class BuildAssemblyHelper
     {
         public static string BuildOutputDir => "./Temp/GameBin";
+        private static SynchronizationContext s_UnitySynchronizationContext;
+
+        [InitializeOnLoadMethod]
+        private static void InitializeOnLoad()
+        {
+            s_UnitySynchronizationContext = SynchronizationContext.Current;
+        }
 
         public static string GetBuildTargetDir(BuildTarget target)
         {
@@ -26,7 +34,16 @@ namespace Game.Editor
             scriptCompilationSettings.target = target;
             scriptCompilationSettings.extraScriptingDefines = extraScriptingDefines;
             scriptCompilationSettings.options = options;
+            var context = SynchronizationContext.Current;
+            if (context != s_UnitySynchronizationContext)
+            {
+                SynchronizationContext.SetSynchronizationContext(s_UnitySynchronizationContext);
+            }
             PlayerBuildInterface.CompilePlayerScripts(scriptCompilationSettings, outDir);
+            if (context != s_UnitySynchronizationContext)
+            {
+                SynchronizationContext.SetSynchronizationContext(context);
+            }
             Debug.Log("compile finish!!!");
         }
 
