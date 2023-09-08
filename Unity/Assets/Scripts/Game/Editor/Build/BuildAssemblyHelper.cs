@@ -40,6 +40,9 @@ namespace Game.Editor
                 SynchronizationContext.SetSynchronizationContext(s_UnitySynchronizationContext);
             }
             PlayerBuildInterface.CompilePlayerScripts(scriptCompilationSettings, outDir);
+#if UNITY_2022
+            EditorUtility.ClearProgressBar();
+#endif
             if (context != s_UnitySynchronizationContext)
             {
                 SynchronizationContext.SetSynchronizationContext(context);
