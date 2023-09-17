@@ -82,6 +82,12 @@ namespace ET.Editor
             }
 #endif
             GUILayout.Label("Tool", titleGUIStyle);
+            
+            if (GUILayout.Button("ReGenerateProjectFiles"))
+            {
+                BuildHelper.ReGenerateProjectFiles();
+            }
+            
             if (GUILayout.Button("ExcelExporter"))
             {
                 ToolEditor.ExcelExporter();

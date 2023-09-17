@@ -49,6 +49,10 @@ namespace ET.Editor
 
             var rootNode = newDoc.GetElementsByTagName("Project")[0];
 
+            var target = newDoc.CreateElement("Target", newDoc.DocumentElement.NamespaceURI);
+            target.SetAttribute("Name", "AfterBuild");
+            rootNode.AppendChild(target);
+
             XmlElement itemGroup = newDoc.CreateElement("ItemGroup", newDoc.DocumentElement.NamespaceURI);
             foreach (var s in links)
             {
@@ -80,16 +84,12 @@ namespace ET.Editor
 
             rootNode.AppendChild(itemGroup);
 
-            using (StringWriter sw = new StringWriter())
-            {
-                using (XmlTextWriter tx = new XmlTextWriter(sw))
-                {
-                    tx.Formatting = Formatting.Indented;
-                    newDoc.WriteTo(tx);
-                    tx.Flush();
-                    return sw.GetStringBuilder().ToString();
-                }
-            }
+            using StringWriter sw = new();
+            using XmlTextWriter tx = new(sw);
+            tx.Formatting = Formatting.Indented;
+            newDoc.WriteTo(tx);
+            tx.Flush();
+            return sw.GetStringBuilder().ToString();
         }
     }
 }

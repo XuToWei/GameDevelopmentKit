@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using GameFramework;
 using UnityEditor;
 using UnityEditor.Build;
@@ -13,6 +14,23 @@ namespace Game.Editor
     {
         public static readonly string BuildPkgFolder = Path.GetFullPath("../Temp/Pkg");
 
+        [InitializeOnLoadMethod]
+        public static void ReGenerateProjectFiles()
+        {
+            if (Unity.CodeEditor.CodeEditor.CurrentEditor.GetType().Name== "RiderScriptEditor")
+            {
+                FieldInfo generator = Unity.CodeEditor.CodeEditor.CurrentEditor.GetType().GetField("m_ProjectGeneration", BindingFlags.Static | BindingFlags.NonPublic);
+                var syncMethod = generator.FieldType.GetMethod("Sync");
+                syncMethod.Invoke(generator.GetValue(Unity.CodeEditor.CodeEditor.CurrentEditor), null);
+            }
+            else
+            {
+                Unity.CodeEditor.CodeEditor.CurrentEditor.SyncAll();
+            }
+            
+            Debug.Log("ReGenerateProjectFiles finished.");
+        }
+        
         public static void BuildPkg(Platform platform)
         {
             BuildTarget buildTarget = BuildTarget.NoTarget;
