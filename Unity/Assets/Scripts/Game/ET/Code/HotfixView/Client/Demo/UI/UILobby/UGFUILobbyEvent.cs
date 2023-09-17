@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof(UGFUILobby))]
-    public static partial class UGFUILobbySystem
+    [FriendOf(typeof(UGFUILobbyComponent))]
+    public static partial class UGFUILobbyComponentSystem
     {
         [UGFUIFormEvent(UGFUIFormId.UILobby)]
         private class UGFUILobbyEvent : AUGFUIFormEvent
@@ -13,7 +13,7 @@ namespace ET.Client
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                UGFUILobby uiLobby = uiForm.AddComponent<UGFUILobby, Transform>(uiForm.transform);
+                var uiLobby = uiForm.AddComponent<UGFUILobbyComponent, Transform>(uiForm.transform);
                 uiLobby.enterMapButton.SetAsync(uiLobby.EnterMap);
             }
             

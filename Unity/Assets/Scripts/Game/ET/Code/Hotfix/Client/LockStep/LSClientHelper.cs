@@ -1,7 +1,6 @@
 using System.IO;
-using ET.Client;
 
-namespace ET
+namespace ET.Client
 {
     public static partial class LSClientHelper
     {
@@ -12,7 +11,7 @@ namespace ET
                 return;
             }
             
-            LSEntitySystemSington.Instance.LSRollback(entity);
+            LSEntitySystemSingleton.Instance.LSRollback(entity);
             
             if (entity.ComponentsCount() > 0)
             {
@@ -63,10 +62,10 @@ namespace ET
                 return;
             }
             long hash = self.FrameBuffer.GetHash(frame);
-            C2Room_CheckHash c2RoomCheckHash = C2Room_CheckHash.Create(true);
+            C2Room_CheckHash c2RoomCheckHash = C2Room_CheckHash.Create();
             c2RoomCheckHash.Frame = frame;
             c2RoomCheckHash.Hash = hash;
-            self.GetParent<Scene>().GetComponent<SessionComponent>().Session.Send(c2RoomCheckHash);
+            self.Root().GetComponent<ClientSenderCompnent>().Send(c2RoomCheckHash);
         }
         
         // 重新调整预测消息，只需要调整其他玩家的输入
@@ -89,7 +88,8 @@ namespace ET
             {
                 return;
             }
-            Log.Debug($"save replay: {path} frame: {room.Replay.FrameInputs.Count}");
+            
+            room.Fiber().Debug($"save replay: {path} frame: {room.Replay.FrameInputs.Count}");
             byte[] bytes = MemoryPackHelper.Serialize(room.Replay);
             File.WriteAllBytes(path, bytes);
         }
@@ -107,7 +107,7 @@ namespace ET
             }
             
             int snapshotIndex = frame / LSConstValue.SaveLSWorldFrameCount;
-            Log.Debug($"jump replay start {room.AuthorityFrame} {frame} {snapshotIndex}");
+            room.Fiber().Debug($"jump replay start {room.AuthorityFrame} {frame} {snapshotIndex}");
             if (snapshotIndex != room.AuthorityFrame / LSConstValue.SaveLSWorldFrameCount || frame < room.AuthorityFrame)
             {
                 room.LSWorld.Dispose();
@@ -119,9 +119,9 @@ namespace ET
                 RunLSRollbackSystem(room);
             }
             
-            room.FixedTimeCounter.Reset(TimeHelper.ServerFrameTime() - frame * LSConstValue.UpdateInterval, 0);
+            room.FixedTimeCounter.Reset(TimeInfo.Instance.ServerFrameTime() - frame * LSConstValue.UpdateInterval, 0);
 
-            Log.Debug($"jump replay finish {frame}");
+            room.Fiber().Debug($"jump replay finish {frame}");
         }
     }
 }

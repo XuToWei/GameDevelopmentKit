@@ -21,21 +21,25 @@ namespace ET.Analyzer
             }
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(this.AnalyzeMemberAccessExpression,SyntaxKind.SimpleMemberAccessExpression);
+            context.RegisterCompilationStartAction((analysisContext =>
+            {
+                if (AnalyzerHelper.IsAssemblyNeedAnalyze(analysisContext.Compilation.AssemblyName, AnalyzeAssembly.AllModelHotfix))
+                {
+                    analysisContext.RegisterSemanticModelAction((this.AnalyzeSemanticModel));
+                }
+            } ));
+        }
+        
+        private void AnalyzeSemanticModel(SemanticModelAnalysisContext analysisContext)
+        {
+            foreach (var memberAccessExpressionSyntax in analysisContext.SemanticModel.SyntaxTree.GetRoot().DescendantNodes<MemberAccessExpressionSyntax>())
+            {
+                AnalyzeMemberAccessExpression(analysisContext, memberAccessExpressionSyntax);
+            }
         }
 
-        private void AnalyzeMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeMemberAccessExpression(SemanticModelAnalysisContext context, MemberAccessExpressionSyntax memberAccessExpressionSyntax)
         {
-            if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, AnalyzeAssembly.AllModelHotfix))
-            {
-                return;
-            }
-            
-            if (!(context.Node is MemberAccessExpressionSyntax memberAccessExpressionSyntax))
-            {
-                return;
-            }
-            
             // 获取方法调用Syntax 对应的methodSymbol
             if (!(memberAccessExpressionSyntax?.Parent is InvocationExpressionSyntax invocationExpressionSyntax) ||
                 !(context.SemanticModel.GetSymbolInfo(invocationExpressionSyntax).Symbol is IMethodSymbol methodSymbol))

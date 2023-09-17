@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 
 namespace ET
 {
+    [EntitySystemOf(typeof(AIComponent))]
     [FriendOf(typeof(AIComponent))]
     [FriendOf(typeof(AIDispatcherComponent))]
     public static partial class AIComponentSystem
@@ -19,51 +20,46 @@ namespace ET
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"move timer error: {self.Id}\n{e}");
+                    self.Fiber().Error($"move timer error: {self.Id}\n{e}");
                 }
             }
         }
     
         [EntitySystem]
-        private class AIComponentAwakeSystem : AwakeSystem<AIComponent, int>
+        private static void Awake(this AIComponent self, int aiConfigId)
         {
-            protected override void Awake(AIComponent self, int aiConfigId)
-            {
-                self.AIConfigId = aiConfigId;
-                self.Timer = TimerComponent.Instance.NewRepeatedTimer(1000, TimerInvokeType.AITimer, self);
-            }
+            self.AIConfigId = aiConfigId;
+            self.Timer = self.Fiber().TimerComponent.NewRepeatedTimer(1000, TimerInvokeType.AITimer, self);
         }
 
         [EntitySystem]
-        private class AIComponentDestroySystem : DestroySystem<AIComponent>
+        private static void Destroy(this AIComponent self)
         {
-            protected override void Destroy(AIComponent self)
-            {
-                TimerComponent.Instance?.Remove(ref self.Timer);
-                self.CancellationToken?.Cancel();
-                self.CancellationToken = null;
-                self.Current = 0;
-            }
+            self.Fiber().TimerComponent?.Remove(ref self.Timer);
+            self.CancellationTokenSource?.Cancel();
+            self.CancellationTokenSource = null;
+            self.Current = 0;
         }
 
-        public static void Check(this AIComponent self)
+        private static void Check(this AIComponent self)
         {
+            Fiber fiber = self.Fiber();
             if (self.Parent == null)
             {
-                TimerComponent.Instance.Remove(ref self.Timer);
+                fiber.TimerComponent.Remove(ref self.Timer);
                 return;
             }
 
             var oneAI = Tables.Instance.DTAIConfig.AIConfigs[self.AIConfigId];
 
-            foreach (DRAIConfig aiConfig in oneAI.Values)
+            foreach (var aiConfig in oneAI.Values)
             {
 
-                AIDispatcherComponent.Instance.AIHandlers.TryGetValue(aiConfig.Name, out AAIHandler aaiHandler);
+                AAIHandler aaiHandler = AIDispatcherComponent.Instance.Get(aiConfig.Name);
 
                 if (aaiHandler == null)
                 {
-                    Log.Error($"not found aihandler: {aiConfig.Name}");
+                    fiber.Error($"not found aihandler: {aiConfig.Name}");
                     continue;
                 }
 
@@ -79,11 +75,11 @@ namespace ET
                 }
 
                 self.Cancel(); // 取消之前的行为
-                CancellationTokenSource cancellationToken = new CancellationTokenSource();
-                self.CancellationToken = cancellationToken;
+                CancellationTokenSource cts = new();
+                self.CancellationTokenSource = cts;
                 self.Current = aiConfig.Id;
 
-                aaiHandler.Execute(self, aiConfig, cancellationToken).Forget();
+                aaiHandler.Execute(self, aiConfig, cts).Forget();
                 return;
             }
             
@@ -91,9 +87,9 @@ namespace ET
 
         private static void Cancel(this AIComponent self)
         {
-            self.CancellationToken?.Cancel();
+            self.CancellationTokenSource?.Cancel();
             self.Current = 0;
-            self.CancellationToken = null;
+            self.CancellationTokenSource = null;
         }
     }
 } 

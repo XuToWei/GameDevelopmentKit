@@ -3,78 +3,108 @@
     "StartConfig": "Benchmark",
     "Id": 1,
     "MachineId": 1,
-    "InnerPort": 20101
+    "Port": 20001
   },
   {
     "StartConfig": "Benchmark",
     "Id": 2,
     "MachineId": 1,
-    "InnerPort": 20102
+    "Port": 20002
   },
   {
     "StartConfig": "Benchmark",
     "Id": 3,
     "MachineId": 1,
-    "InnerPort": 20103
+    "Port": 20003
+  },
+  {
+    "StartConfig": "Benchmark",
+    "Id": 4,
+    "MachineId": 1,
+    "Port": 20004
+  },
+  {
+    "StartConfig": "Benchmark",
+    "Id": 5,
+    "MachineId": 1,
+    "Port": 20005
+  },
+  {
+    "StartConfig": "Benchmark",
+    "Id": 6,
+    "MachineId": 1,
+    "Port": 20006
+  },
+  {
+    "StartConfig": "Benchmark",
+    "Id": 7,
+    "MachineId": 1,
+    "Port": 20007
   },
   {
     "StartConfig": "Localhost",
     "Id": 1,
     "MachineId": 1,
-    "InnerPort": 20101
+    "Port": 20001
   },
   {
     "StartConfig": "Release",
     "Id": 1,
     "MachineId": 1,
-    "InnerPort": 20001
+    "Port": 20001
   },
   {
     "StartConfig": "Release",
     "Id": 2,
     "MachineId": 1,
-    "InnerPort": 20002
+    "Port": 20002
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 3,
+    "MachineId": 1,
+    "Port": 0
   },
   {
     "StartConfig": "RouterTest",
     "Id": 1,
     "MachineId": 1,
-    "InnerPort": 20101
+    "Port": 20001
   },
   {
     "StartConfig": "RouterTest",
     "Id": 2,
     "MachineId": 1,
-    "InnerPort": 20102
+    "Port": 20002
   },
   {
     "StartConfig": "RouterTest",
     "Id": 3,
     "MachineId": 1,
-    "InnerPort": 20103
+    "Port": 20003
   },
   {
     "StartConfig": "RouterTest",
     "Id": 4,
     "MachineId": 1,
-    "InnerPort": 20104
+    "Port": 20004
   },
   {
     "StartConfig": "RouterTest",
     "Id": 5,
     "MachineId": 1,
-    "InnerPort": 20105
+    "Port": 20005
   },
   {
     "StartConfig": "RouterTest",
     "Id": 6,
     "MachineId": 1,
-    "InnerPort": 20106
+    "Port": 20006
   },
   {
     "StartConfig": "RouterTest",
     "Id": 7,
     "MachineId": 1,
-    "InnerPort": 20107
+    "Port": 20007
   }
 ]

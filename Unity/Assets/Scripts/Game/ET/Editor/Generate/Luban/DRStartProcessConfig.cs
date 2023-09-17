@@ -48,10 +48,10 @@ public sealed partial class DRStartProcessConfig :  Bright.Config.EditorBeanBase
         }
         
         { 
-            var _fieldJson = _json["InnerPort"];
+            var _fieldJson = _json["Port"];
             if (_fieldJson != null)
             {
-                if(!_fieldJson.IsNumber) { throw new SerializationException(); }  InnerPort = _fieldJson;
+                if(!_fieldJson.IsNumber) { throw new SerializationException(); }  Port = _fieldJson;
             }
         }
         
@@ -71,7 +71,7 @@ public sealed partial class DRStartProcessConfig :  Bright.Config.EditorBeanBase
             _json["MachineId"] = new JSONNumber(MachineId);
         }
         {
-            _json["InnerPort"] = new JSONNumber(InnerPort);
+            _json["Port"] = new JSONNumber(Port);
         }
     }
 
@@ -103,9 +103,9 @@ public sealed partial class DRStartProcessConfig :  Bright.Config.EditorBeanBase
     public int MachineId { get; set; }
 
     /// <summary>
-    /// 内网端口
+    /// 外网端口
     /// </summary>
-    public int InnerPort { get; set; }
+    public int Port { get; set; }
 
 }
 

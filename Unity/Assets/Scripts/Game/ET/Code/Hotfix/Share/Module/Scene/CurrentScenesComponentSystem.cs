@@ -4,9 +4,9 @@ namespace ET
 {
     public static partial class CurrentScenesComponentSystem
     {
-        public static Scene  CurrentScene(this Scene clientScene)
+        public static Scene CurrentScene(this Scene root)
         {
-            return clientScene.GetComponent<CurrentScenesComponent>()?.Scene;
+            return root.GetComponent<CurrentScenesComponent>()?.Scene;
         }
     }
 }

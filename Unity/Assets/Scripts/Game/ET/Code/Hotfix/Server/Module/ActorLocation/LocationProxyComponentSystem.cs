@@ -5,58 +5,44 @@ namespace ET.Server
 {
     public static partial class LocationProxyComponentSystem
     {
-        [EntitySystem]
-        private class LocationProxyComponentAwakeSystem : AwakeSystem<LocationProxyComponent>
+        private static ActorId GetLocationSceneId(long key)
         {
-            protected override void Awake(LocationProxyComponent self)
-            {
-                LocationProxyComponent.Instance = self;
-            }
+            return Tables.Instance.DTStartSceneConfig.LocationConfig.ActorId;
         }
 
-        [EntitySystem]
-        private class LocationProxyComponentDestroySystem : DestroySystem<LocationProxyComponent>
+        public static async UniTask Add(this LocationProxyComponent self, int type, long key, ActorId actorId)
         {
-            protected override void Destroy(LocationProxyComponent self)
-            {
-                LocationProxyComponent.Instance = null;
-            }
+            Fiber fiber = self.Fiber();
+            fiber.Info($"location proxy add {key}, {actorId} {TimeInfo.Instance.ServerNow()}");
+            await fiber.Root.GetComponent<MessageSender>().Call(GetLocationSceneId(key),
+                new ObjectAddRequest() { Type = type, Key = key, ActorId = actorId });
         }
 
-        private static long GetLocationSceneId(long key)
+        public static async UniTask Lock(this LocationProxyComponent self, int type, long key, ActorId actorId, int time = 60000)
         {
-            return Tables.Instance.DTStartSceneConfig.LocationConfig.InstanceId;
+            Fiber fiber = self.Fiber();
+            fiber.Info($"location proxy lock {key}, {actorId} {TimeInfo.Instance.ServerNow()}");
+            await fiber.Root.GetComponent<MessageSender>().Call(GetLocationSceneId(key),
+                new ObjectLockRequest() { Type = type, Key = key, ActorId = actorId, Time = time });
         }
 
-        public static async UniTask Add(this LocationProxyComponent self, int type, long key, long instanceId)
+        public static async UniTask UnLock(this LocationProxyComponent self, int type, long key, ActorId oldActorId, ActorId newActorId)
         {
-            Log.Info($"location proxy add {key}, {instanceId} {TimeHelper.ServerNow()}");
-            await ActorMessageSenderComponent.Instance.Call(GetLocationSceneId(key),
-                new ObjectAddRequest() { Type = type, Key = key, InstanceId = instanceId });
-        }
-
-        public static async UniTask Lock(this LocationProxyComponent self, int type, long key, long instanceId, int time = 60000)
-        {
-            Log.Info($"location proxy lock {key}, {instanceId} {TimeHelper.ServerNow()}");
-            await ActorMessageSenderComponent.Instance.Call(GetLocationSceneId(key),
-                new ObjectLockRequest() { Type = type, Key = key, InstanceId = instanceId, Time = time });
-        }
-
-        public static async UniTask UnLock(this LocationProxyComponent self, int type, long key, long oldInstanceId, long instanceId)
-        {
-            Log.Info($"location proxy unlock {key}, {instanceId} {TimeHelper.ServerNow()}");
-            await ActorMessageSenderComponent.Instance.Call(GetLocationSceneId(key),
-                new ObjectUnLockRequest() { Type = type, Key = key, OldInstanceId = oldInstanceId, InstanceId = instanceId });
+            Fiber fiber = self.Fiber();
+            fiber.Info($"location proxy unlock {key}, {newActorId} {TimeInfo.Instance.ServerNow()}");
+            await fiber.Root.GetComponent<MessageSender>().Call(GetLocationSceneId(key),
+                new ObjectUnLockRequest() { Type = type, Key = key, OldActorId = oldActorId, NewActorId = newActorId });
         }
 
         public static async UniTask Remove(this LocationProxyComponent self, int type, long key)
         {
-            Log.Info($"location proxy add {key}, {TimeHelper.ServerNow()}");
-            await ActorMessageSenderComponent.Instance.Call(GetLocationSceneId(key),
+            Fiber fiber = self.Fiber();
+            fiber.Info($"location proxy add {key}, {TimeInfo.Instance.ServerNow()}");
+            await fiber.Root.GetComponent<MessageSender>().Call(GetLocationSceneId(key),
                 new ObjectRemoveRequest() { Type = type, Key = key });
         }
 
-        public static async UniTask<long> Get(this LocationProxyComponent self, int type, long key)
+        public static async UniTask<ActorId> Get(this LocationProxyComponent self, int type, long key)
         {
             if (key == 0)
             {
@@ -65,19 +51,19 @@ namespace ET.Server
 
             // location server配置到共享区，一个大战区可以配置N多个location server,这里暂时为1
             ObjectGetResponse response =
-                    (ObjectGetResponse) await ActorMessageSenderComponent.Instance.Call(GetLocationSceneId(key),
+                    (ObjectGetResponse) await self.Root().GetComponent<MessageSender>().Call(GetLocationSceneId(key),
                         new ObjectGetRequest() { Type = type, Key = key });
-            return response.InstanceId;
+            return response.ActorId;
         }
 
         public static async UniTask AddLocation(this Entity self, int type)
         {
-            await LocationProxyComponent.Instance.Add(type, self.Id, self.InstanceId);
+            await self.Root().GetComponent<LocationProxyComponent>().Add(type, self.Id, self.GetActorId());
         }
 
         public static async UniTask RemoveLocation(this Entity self, int type)
         {
-            await LocationProxyComponent.Instance.Remove(type, self.Id);
+            await self.Root().GetComponent<LocationProxyComponent>().Remove(type, self.Id);
         }
     }
 }

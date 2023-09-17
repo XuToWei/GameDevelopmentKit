@@ -172,7 +172,7 @@ namespace ET
                 sb.Append($"\t\t[ProtoMember({n})]\n");
                 sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }} = new Dictionary<{keyType}, {valueType}>();\n");
 
-                disposeSb.Append($"\t\t\t{v}.Clear();\n");
+                disposeSb.Append($"\t\t\tthis.{v}.Clear();\n");
             }
 
             private static void Repeated(StringBuilder sb, string newline, StringBuilder disposeSb)
@@ -190,7 +190,7 @@ namespace ET
                     sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }} = new List<{type}>();\n\n");
 
-                    disposeSb.Append($"\t\t\t{name}.Clear();\n");
+                    disposeSb.Append($"\t\t\tthis.{name}.Clear();\n");
                 }
                 catch (Exception e)
                 {
@@ -250,7 +250,16 @@ namespace ET
                     sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\tpublic {typeCs} {name} {{ get; set; }}\n\n");
 
-                    disposeSb.Append($"\t\t\t{name} = default;\n");
+                    switch (typeCs)
+                    {
+                        case "bytes":
+                        {
+                            break;
+                        }
+                        default:
+                            disposeSb.Append($"\t\t\tthis.{name} = default;\n");
+                            break;
+                    }
                 }
                 catch (Exception e)
                 {

@@ -3,11 +3,11 @@ using Cysharp.Threading.Tasks;
 namespace ET.Client
 {
     [Event(SceneType.Current)]
-    public class AfterCreateCurrentScene_AddComponent: AEvent<Scene, EventType.AfterCreateCurrentScene>
+    public class AfterCreateCurrentScene_AddComponent: AEvent<Scene, AfterCreateCurrentScene>
     {
-        protected override async UniTask Run(Scene scene, EventType.AfterCreateCurrentScene args)
+        protected override async UniTask Run(Scene scene, AfterCreateCurrentScene args)
         {
-            scene.AddComponent<UIComponent>();
+            scene.AddComponent<UGFUIComponent>();
             scene.AddComponent<EntityComponent>();
             await UniTask.CompletedTask;
         }

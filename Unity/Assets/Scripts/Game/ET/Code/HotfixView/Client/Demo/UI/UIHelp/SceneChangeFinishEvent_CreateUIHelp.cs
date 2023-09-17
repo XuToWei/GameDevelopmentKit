@@ -3,11 +3,11 @@
 namespace ET.Client
 {
     [Event(SceneType.Current)]
-    public class SceneChangeFinishEvent_CreateUIHelp : AEvent<Scene, EventType.SceneChangeFinish>
+    public class SceneChangeFinishEvent_CreateUIHelp : AEvent<Scene, SceneChangeFinish>
     {
-        protected override async UniTask Run(Scene scene, EventType.SceneChangeFinish args)
+        protected override async UniTask Run(Scene scene, SceneChangeFinish args)
         {
-            await scene.GetComponent<UIComponent>().OpenUIFormAsync(UGFUIFormId.UIHelp);
+            await scene.GetComponent<UGFUIComponent>().OpenUIFormAsync(UGFUIFormId.UIHelp);
         }
     }
 }

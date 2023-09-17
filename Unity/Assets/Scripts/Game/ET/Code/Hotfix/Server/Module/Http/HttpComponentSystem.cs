@@ -5,93 +5,44 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
+    [EntitySystemOf(typeof(HttpComponent))]
     [FriendOf(typeof(HttpComponent))]
     public static partial class HttpComponentSystem
     {
         [EntitySystem]
-        private class HttpComponentAwakeSystem : AwakeSystem<HttpComponent, string>
+        private static void Awake(this HttpComponent self, string address)
         {
-            protected override void Awake(HttpComponent self, string address)
+            try
             {
-                try
-                {
-                    self.Load();
-                
-                    self.Listener = new HttpListener();
+                self.Listener = new HttpListener();
 
-                    foreach (string s in address.Split(';'))
+                foreach (string s in address.Split(';'))
+                {
+                    if (s.Trim() == "")
                     {
-                        if (s.Trim() == "")
-                        {
-                            continue;
-                        }
-                        self.Listener.Prefixes.Add(s);
+                        continue;
                     }
-
-                    self.Listener.Start();
-
-                    self.Accept().Forget();
+                    self.Listener.Prefixes.Add(s);
                 }
-                catch (HttpListenerException e)
-                {
-                    throw new Exception($"请先在cmd中运行: netsh http add urlacl url=http://*:你的address中的端口/ user=Everyone, address: {address}", e);
-                }
+
+                self.Listener.Start();
+
+                self.Accept().Forget();
             }
-        }
-
-        [EntitySystem]
-        private class HttpComponentDestroySystem : DestroySystem<HttpComponent>
-        {
-            protected override void Destroy(HttpComponent self)
+            catch (HttpListenerException e)
             {
-                self.Listener.Stop();
-                self.Listener.Close();
-            }
-        }
-
-        [EntitySystem]
-        private class HttpComponentLoadSystem : LoadSystem<HttpComponent>
-        {
-            protected override void Load(HttpComponent self)
-            {
-                self.Load();
-            }
-        }
-        private static void Load(this HttpComponent self)
-        {
-            self.dispatcher = new Dictionary<string, IHttpHandler>();
-
-            HashSet<Type> types = EventSystem.Instance.GetTypes(typeof (HttpHandlerAttribute));
-
-            SceneType sceneType = (self.Parent as IScene).SceneType;
-
-            foreach (Type type in types)
-            {
-                object[] attrs = type.GetCustomAttributes(typeof(HttpHandlerAttribute), false);
-                if (attrs.Length == 0)
-                {
-                    continue;
-                }
-
-                HttpHandlerAttribute httpHandlerAttribute = (HttpHandlerAttribute)attrs[0];
-
-                if (httpHandlerAttribute.SceneType != sceneType)
-                {
-                    continue;
-                }
-
-                object obj = Activator.CreateInstance(type);
-
-                IHttpHandler ihttpHandler = obj as IHttpHandler;
-                if (ihttpHandler == null)
-                {
-                    throw new Exception($"HttpHandler handler not inherit IHttpHandler class: {obj.GetType().FullName}");
-                }
-                self.dispatcher.Add(httpHandlerAttribute.Path, ihttpHandler);
+                throw new Exception($"请先在cmd中运行: netsh http add urlacl url=http://*:你的address中的端口/ user=Everyone, address: {address}", e);
             }
         }
         
-        public static async UniTaskVoid Accept(this HttpComponent self)
+        [EntitySystem]
+        private static void Destroy(this HttpComponent self)
+        {
+            self.Listener.Stop();
+            self.Listener.Close();
+        }
+
+        private static async UniTask Accept(this HttpComponent self)
         {
             long instanceId = self.InstanceId;
             while (self.InstanceId == instanceId)
@@ -106,24 +57,21 @@ namespace ET.Server
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e);
+                    self.Fiber().Error(e);
                 }
             }
         }
 
-        public static async UniTaskVoid Handle(this HttpComponent self, HttpListenerContext context)
+        private static async UniTask Handle(this HttpComponent self, HttpListenerContext context)
         {
             try
             {
-                IHttpHandler handler;
-                if (self.dispatcher.TryGetValue(context.Request.Url.AbsolutePath, out handler))
-                {
-                    await handler.Handle(self.DomainScene(), context);
-                }
+                IHttpHandler handler = HttpDispatcher.Instance.Get(self.IScene.SceneType, context.Request.Url.AbsolutePath);
+                await handler.Handle(self.Scene(), context);
             }
             catch (Exception e)
             {
-                Log.Error(e);
+                self.Fiber().Error(e);
             }
             context.Request.InputStream.Dispose();
             context.Response.OutputStream.Dispose();

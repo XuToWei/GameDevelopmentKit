@@ -1,14 +1,13 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    [ActorMessageHandler(SceneType.Location)]
-    public class ObjectUnLockRequestHandler: ActorMessageHandler<Scene, ObjectUnLockRequest, ObjectUnLockResponse>
+    [MessageHandler(SceneType.Location)]
+    public class ObjectUnLockRequestHandler: MessageHandler<Scene, ObjectUnLockRequest, ObjectUnLockResponse>
     {
         protected override async UniTask Run(Scene scene, ObjectUnLockRequest request, ObjectUnLockResponse response)
         {
-            scene.GetComponent<LocationManagerComponent>().Get(request.Type).UnLock(request.Key, request.OldInstanceId, request.InstanceId);
+            scene.GetComponent<LocationManagerComoponent>().Get(request.Type).UnLock(request.Key, request.OldActorId, request.NewActorId);
 
             await UniTask.CompletedTask;
         }

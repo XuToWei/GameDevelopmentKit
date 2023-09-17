@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
 namespace ET.Server
@@ -22,23 +21,28 @@ namespace ET.Server
             }
             
             // 申请一个房间
-            DRStartSceneConfig startSceneConfig = RandomGenerator.RandomArray(Tables.Instance.DTStartSceneConfig.Maps);
-            Match2Map_GetRoom match2MapGetRoom = new() {PlayerIds = new List<long>()};
+            var startSceneConfig = RandomGenerator.RandomArray(Tables.Instance.DTStartSceneConfig.Maps);
+            Match2Map_GetRoom match2MapGetRoom = new();
             foreach (long id in self.waitMatchPlayers)
             {
                 match2MapGetRoom.PlayerIds.Add(id);
             }
-            self.waitMatchPlayers.Clear();
             
-            Map2Match_GetRoom map2MatchGetRoom = await ActorMessageSenderComponent.Instance.Call(
-                startSceneConfig.InstanceId, match2MapGetRoom) as Map2Match_GetRoom;
+            self.waitMatchPlayers.Clear();
 
-            Match2G_NotifyMatchSuccess match2GNotifyMatchSuccess = new() { InstanceId = map2MatchGetRoom.InstanceId };
+            Scene root = self.Root();
+            Map2Match_GetRoom map2MatchGetRoom = await root.GetComponent<MessageSender>().Call(
+                startSceneConfig.ActorId, match2MapGetRoom) as Map2Match_GetRoom;
+
+            Match2G_NotifyMatchSuccess match2GNotifyMatchSuccess = new() { ActorId = map2MatchGetRoom.ActorId };
+            MessageLocationSenderComponent messageLocationSenderComponent = root.GetComponent<MessageLocationSenderComponent>();
+            
             foreach (long id in match2MapGetRoom.PlayerIds) // 这里发送消息线程不会修改PlayerInfo，所以可以直接使用
             {
-                ActorLocationSenderComponent.Instance.Get(LocationType.Player).Send(id, match2GNotifyMatchSuccess);
+                messageLocationSenderComponent.Get(LocationType.Player).Send(id, match2GNotifyMatchSuccess);
                 // 等待进入房间的确认消息，如果超时要通知所有玩家退出房间，重新匹配
             }
         }
     }
+
 }

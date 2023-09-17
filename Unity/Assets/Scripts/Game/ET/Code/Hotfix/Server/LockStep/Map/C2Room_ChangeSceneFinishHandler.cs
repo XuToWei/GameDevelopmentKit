@@ -1,15 +1,15 @@
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using TrueSync;
+using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    [ActorMessageHandler(SceneType.Room)]
+    [MessageHandler(SceneType.RoomRoot)]
     [FriendOf(typeof (RoomServerComponent))]
-    public class C2Room_ChangeSceneFinishHandler: ActorMessageHandler<Room, C2Room_ChangeSceneFinish>
+    public class C2Room_ChangeSceneFinishHandler: MessageHandler<Scene, C2Room_ChangeSceneFinish>
     {
-        protected override async UniTask Run(Room room, C2Room_ChangeSceneFinish message)
+        protected override async UniTask Run(Scene root, C2Room_ChangeSceneFinish message)
         {
+            Room room = root.GetComponent<Room>();
             RoomServerComponent roomServerComponent = room.GetComponent<RoomServerComponent>();
             RoomPlayer roomPlayer = room.GetComponent<RoomServerComponent>().GetChild<RoomPlayer>(message.PlayerId);
             roomPlayer.Progress = 100;
@@ -19,9 +19,9 @@ namespace ET.Server
                 return;
             }
             
-            await TimerComponent.Instance.WaitAsync(1000);
+            await room.Fiber.TimerComponent.WaitAsync(1000);
 
-            Room2C_Start room2CStart = new() { StartTime = TimeHelper.ServerFrameTime() };
+            Room2C_Start room2CStart = new() { StartTime = TimeInfo.Instance.ServerFrameTime() };
             foreach (RoomPlayer rp in roomServerComponent.Children.Values)
             {
                 room2CStart.UnitInfo.Add(new LockStepUnitInfo()

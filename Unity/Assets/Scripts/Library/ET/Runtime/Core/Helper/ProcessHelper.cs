@@ -1,14 +1,15 @@
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using Path = System.IO.Path;
 
 namespace ET
 {
     public static class ProcessHelper
     {
-        public static Process Run(string exe, string arguments, string workingDirectory = ".")
+        public static System.Diagnostics.Process Run(string exe, string arguments, string workingDirectory = ".", bool waitExit = false)
         {
             //Log.Debug($"Process Run exe:{exe} ,arguments:{arguments} ,workingDirectory:{workingDirectory}");
             try
@@ -22,7 +23,14 @@ namespace ET
                     redirectStandardError = false;
                     useShellExecute = true;
                 }
-
+                
+                if (waitExit)
+                {
+                    redirectStandardOutput = true;
+                    redirectStandardError = true;
+                    useShellExecute = false;
+                }
+                
                 ProcessStartInfo info = new ProcessStartInfo
                 {
                     FileName = exe,
@@ -33,8 +41,14 @@ namespace ET
                     RedirectStandardOutput = redirectStandardOutput,
                     RedirectStandardError = redirectStandardError,
                 };
-                
-                Process process = Process.Start(info);
+
+                System.Diagnostics.Process process = System.Diagnostics.Process.Start(info);
+
+                if (waitExit)
+                {
+                    WaitExitAsync(process).Forget();
+                }
+
                 return process;
             }
             catch (Exception e)
@@ -43,69 +57,54 @@ namespace ET
             }
         }
         
-        public static async UniTask<Process> RunAsync(string exe, string arguments, string workingDirectory = ".")
+        private static async UniTask WaitExitAsync(System.Diagnostics.Process process)
         {
-            //Log.Debug($"Process Run exe:{exe} ,arguments:{arguments} ,workingDirectory:{workingDirectory}");
+            await process.WaitForExitAsync();
+#if !DOTNET
+            Log.Info($"process exit, exitcode: {process.ExitCode} {process.StandardOutput.ReadToEnd()} {process.StandardError.ReadToEnd()}");
+#endif
+        }
+        
+#if !DOTNET
+        private static async Task WaitForExitAsync(this System.Diagnostics.Process self)
+        {
+            if (!self.HasExited)
+            {
+                return;
+            }
+
             try
             {
-                ProcessStartInfo info = new ProcessStartInfo
-                {
-                    FileName = exe,
-                    Arguments = arguments,
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    WorkingDirectory = workingDirectory,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                };
-                Process process = Process.Start(info);
-                if (process == null)
-                {
-                    return null;
-                }
-
-                if (!process.HasExited)
-                {
-                    return process;
-                }
-
-                try
-                {
-                    process.EnableRaisingEvents = true;
-                }
-                catch (InvalidOperationException)
-                {
-                    if (process.HasExited)
-                    {
-                        return process;
-                    }
-                    throw;
-                }
-
-                var tcs = AutoResetUniTaskCompletionSource<bool>.Create();
-
-                void Handler(object s, EventArgs e) => tcs.TrySetResult(true);
-            
-                process.Exited += Handler;
-
-                try
-                {
-                    if (process.HasExited)
-                    {
-                        return process;
-                    }
-                    await tcs.Task;
-                }
-                finally
-                {
-                    process.Exited -= Handler;
-                }
-                return process;
+                self.EnableRaisingEvents = true;
             }
-            catch (Exception e)
+            catch (InvalidOperationException)
             {
-                throw new Exception($"dir: {Path.GetFullPath(workingDirectory)}, command: {exe} {arguments}", e);
+                if (self.HasExited)
+                {
+                    return;
+                }
+                throw;
+            }
+
+            var tcs = new TaskCompletionSource<bool>();
+
+            void Handler(object s, EventArgs e) => tcs.TrySetResult(true);
+            
+            self.Exited += Handler;
+
+            try
+            {
+                if (self.HasExited)
+                {
+                    return;
+                }
+                await tcs.Task;
+            }
+            finally
+            {
+                self.Exited -= Handler;
             }
         }
+#endif
     }
 }

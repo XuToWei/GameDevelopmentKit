@@ -36,10 +36,6 @@
         <Compile Include="..\..\Unity\Assets\Scripts\Game\Editor\Generate\Luban\**\*.cs">
             <Link>ExcelExporter\Generate\Luban\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
-        
-        <Compile Include="..\..\DotNet\Loader\NLogger.cs">
-            <Link>Loader\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile>
         <Compile Include="..\..\DotNet\Loader\TimeNow.cs">
             <Link>Loader\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>

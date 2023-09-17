@@ -1,6 +1,14 @@
 ﻿<Config>
   <Gen>
     <Open Value="TRUE" />
+    <Proto_File Value="ClientMessage_C_1000.proto" />
+    <Start_Opcode Value="1000" />
+    <Code_Name Value="ClientMessage" />
+    <Code_Output_Dirs Value="../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/Client/Message,../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Message" />
+    <Code_Type Value="ET" />
+  </Gen>
+  <Gen>
+    <Open Value="TRUE" />
     <Proto_File Value="OuterMessage_C_10001.proto" />
     <Start_Opcode Value="10001" />
     <Code_Name Value="OuterMessage" />

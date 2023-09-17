@@ -8,7 +8,7 @@ namespace ET.Client
     {
         public override int Check(AIComponent aiComponent, DRAIConfig aiConfig)
         {
-            long sec = TimeHelper.ClientNow() / 1000 % 15;
+            long sec = TimeInfo.Instance.ClientNow() / 1000 % 15;
             if (sec < 10)
             {
                 return 0;
@@ -16,24 +16,24 @@ namespace ET.Client
             return 1;
         }
 
-        public override async UniTaskVoid Execute(AIComponent aiComponent, DRAIConfig aiConfig, CancellationTokenSource cancellationToken)
+        public override async UniTask Execute(AIComponent aiComponent, DRAIConfig aiConfig, CancellationTokenSource cts)
         {
-            Scene clientScene = aiComponent.DomainScene();
+            Scene root = aiComponent.Root();
 
-            Unit myUnit = UnitHelper.GetMyUnitFromClientScene(clientScene);
+            Unit myUnit = UnitHelper.GetMyUnitFromClientScene(root);
             if (myUnit == null)
             {
                 return;
             }
             
-            Log.Debug("开始巡逻");
+            root.Fiber().Debug("开始巡逻");
 
             while (true)
             {
                 XunLuoPathComponent xunLuoPathComponent = myUnit.GetComponent<XunLuoPathComponent>();
                 float3 nextTarget = xunLuoPathComponent.GetCurrent();
-                await myUnit.MoveToAsync(nextTarget, cancellationToken);
-                if (cancellationToken.IsCancellationRequested)
+                await myUnit.MoveToAsync(nextTarget, cts);
+                if (cts == null || cts.IsCancellationRequested)
                 {
                     return;
                 }

@@ -49,10 +49,15 @@ namespace ET
             return this.AddChildWithId<T, A, B, C>(this.GetId(), a, b, c, isFromPool);
         }
 
+        protected override long GetLongHashCode(Type type)
+        {
+            return LSEntitySystemSingleton.Instance.GetLongHashCode(type);
+        }
+
         protected override void RegisterSystem()
         {
-            LSWorld lsWorld = this.LSWorld();
-            TypeSystems.OneTypeSystems oneTypeSystems = LSEntitySystemSington.Instance.GetOneTypeSystems(this.GetType());
+            LSWorld lsWorld = (LSWorld)this.IScene;
+            TypeSystems.OneTypeSystems oneTypeSystems = LSEntitySystemSingleton.Instance.GetOneTypeSystems(this.GetType());
             if (oneTypeSystems == null)
             {
                 return;
@@ -60,7 +65,7 @@ namespace ET
 
             if (oneTypeSystems.QueueFlag[LSQueneUpdateIndex.LSUpdate])
             {
-                lsWorld.AddToUpdater(this);
+                lsWorld.RegisterSystem(this);
             }
         }
     }

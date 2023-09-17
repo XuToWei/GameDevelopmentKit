@@ -3,60 +3,55 @@ using System.IO;
 
 namespace ET.Client
 {
+    [EntitySystemOf(typeof(LSClientUpdater))]
     [FriendOf(typeof (LSClientUpdater))]
     public static partial class LSClientUpdaterSystem
     {
         [EntitySystem]
-        private class LSClientUpdaterAwakeSystem : AwakeSystem<LSClientUpdater>
+        private static void Awake(this LSClientUpdater self)
         {
-            protected override void Awake(LSClientUpdater self)
-            {
-                Room room = self.GetParent<Room>();
-                self.MyId = room.GetParent<Scene>().GetComponent<PlayerComponent>().MyId;
-            }
+            Room room = self.GetParent<Room>();
+            self.MyId = room.Root().GetComponent<PlayerComponent>().MyId;
         }
-
+        
         [EntitySystem]
-        private class LSClientUpdaterUpdateSystem : UpdateSystem<LSClientUpdater>
+        private static void Update(this LSClientUpdater self)
         {
-            protected override void Update(LSClientUpdater self)
+            Room room = self.GetParent<Room>();
+            long timeNow = TimeInfo.Instance.ServerNow();
+            Scene root = room.Root();
+
+            int i = 0;
+            while (true)
             {
-                Room room = self.GetParent<Room>();
-                long timeNow = TimeHelper.ServerNow();
-                Scene clientScene = room.GetParent<Scene>();
-
-                int i = 0;
-                while (true)
+                if (timeNow < room.FixedTimeCounter.FrameTime(room.PredictionFrame + 1))
                 {
-                    if (timeNow < room.FixedTimeCounter.FrameTime(room.PredictionFrame + 1))
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    // 最多只预测5帧
-                    if (room.PredictionFrame - room.AuthorityFrame > 5)
-                    {
-                        return;
-                    }
+                // 最多只预测5帧
+                if (room.PredictionFrame - room.AuthorityFrame > 5)
+                {
+                    return;
+                }
 
-                    ++room.PredictionFrame;
-                    OneFrameInputs oneFrameInputs = self.GetOneFrameMessages(room.PredictionFrame);
+                ++room.PredictionFrame;
+                OneFrameInputs oneFrameInputs = self.GetOneFrameMessages(room.PredictionFrame);
                 
-                    room.Update(oneFrameInputs);
-                    room.SendHash(room.PredictionFrame);
+                room.Update(oneFrameInputs);
+                room.SendHash(room.PredictionFrame);
                 
-                    room.SpeedMultiply = ++i;
+                room.SpeedMultiply = ++i;
 
-                    FrameMessage frameMessage = FrameMessage.Create(true);
-                    frameMessage.Frame = room.PredictionFrame;
-                    frameMessage.Input = self.Input;
-                    clientScene.GetComponent<SessionComponent>().Session.Send(frameMessage);
+                FrameMessage frameMessage = FrameMessage.Create();
+                frameMessage.Frame = room.PredictionFrame;
+                frameMessage.Input = self.Input;
+                root.GetComponent<ClientSenderCompnent>().Send(frameMessage);
                 
-                    long timeNow2 = TimeHelper.ServerNow();
-                    if (timeNow2 - timeNow > 5)
-                    {
-                        break;
-                    }
+                long timeNow2 = TimeInfo.Instance.ServerNow();
+                if (timeNow2 - timeNow > 5)
+                {
+                    break;
                 }
             }
         }

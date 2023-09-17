@@ -21,20 +21,26 @@ namespace ET.Analyzer
             }
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(this.AnalyzeMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+            
+            context.RegisterCompilationStartAction((analysisContext =>
+            {
+                if (AnalyzerHelper.IsAssemblyNeedAnalyze(analysisContext.Compilation.AssemblyName, AnalyzeAssembly.AllModelHotfix))
+                {
+                    analysisContext.RegisterSemanticModelAction((this.AnalyzeSemanticModel));
+                }
+            } ));
         }
 
-        private void AnalyzeMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeSemanticModel(SemanticModelAnalysisContext analysisContext)
         {
-            if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, AnalyzeAssembly.AllModelHotfix))
+            foreach (var memberAccessExpressionSyntax in analysisContext.SemanticModel.SyntaxTree.GetRoot().DescendantNodes<MemberAccessExpressionSyntax>())
             {
-                return;
+                AnalyzeMemberAccessExpression(analysisContext, memberAccessExpressionSyntax);
             }
+        }
 
-            if (!(context.Node is MemberAccessExpressionSyntax memberAccessExpressionSyntax))
-            {
-                return;
-            }
+        private void AnalyzeMemberAccessExpression(SemanticModelAnalysisContext context, MemberAccessExpressionSyntax memberAccessExpressionSyntax)
+        {
             
             // 筛选出 Component函数syntax
             string methodName = memberAccessExpressionSyntax.Name.Identifier.Text;
@@ -60,7 +66,7 @@ namespace ET.Analyzer
             // 对于Entity基类会报错 除非标记了EnableAccessEntiyChild
             if (parentTypeSymbol.ToString() is Definition.EntityType or Definition.LSEntityType)
             {
-                HandleAcessEntityChild(context);
+                HandleAcessEntityChild(context,memberAccessExpressionSyntax);
                 return;
             }
 
@@ -214,9 +220,8 @@ namespace ET.Analyzer
             }
         }
         
-        private void HandleAcessEntityChild(SyntaxNodeAnalysisContext context)
+        private void HandleAcessEntityChild(SemanticModelAnalysisContext context, MemberAccessExpressionSyntax memberAccessExpressionSyntax)
         {
-            var memberAccessExpressionSyntax = context.Node as MemberAccessExpressionSyntax;
             //在方法体内
             var methodDeclarationSyntax = memberAccessExpressionSyntax?.GetNeareastAncestor<MethodDeclarationSyntax>();
             if (methodDeclarationSyntax!=null)

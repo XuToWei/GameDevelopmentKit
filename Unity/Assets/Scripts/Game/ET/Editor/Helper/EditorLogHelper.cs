@@ -1,5 +1,4 @@
 ﻿using UnityEditor;
-using UnityEngine;
 
 namespace ET
 {
@@ -10,15 +9,15 @@ namespace ET
         {
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-            EditorApplication.update += CheckCompilingFinish;
+            EditorApplication.update += CheckCompolingFinish;
         }
 
-        private static void CheckCompilingFinish()
+        private static void CheckCompolingFinish()
         {
-            if (!EditorApplication.isCompiling && !Application.isPlaying)
+            if (!EditorApplication.isCompiling)
             {
                 CreateLog();
-                EditorApplication.update -= CheckCompilingFinish;
+                EditorApplication.update -= CheckCompolingFinish;
             }
         }
 
@@ -45,9 +44,7 @@ namespace ET
                 return;
             }
 
-            var log = new Logger();
-            ((ISingleton)log).Register();
-            log.ILog = new UnityLogger();
+            World.Instance.AddSingleton<Logger, ILog>(new UnityLogger());
         }
 
         private static void DestroyLog()
@@ -57,7 +54,7 @@ namespace ET
                 return;
             }
 
-            ((ISingleton)Logger.Instance).Destroy();
+            Logger.Instance.Dispose();
         }
     }
 }

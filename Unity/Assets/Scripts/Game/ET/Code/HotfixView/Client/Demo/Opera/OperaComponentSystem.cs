@@ -1,50 +1,44 @@
-using System;
-using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Game;
+using UnityEngine;
 
 namespace ET.Client
 {
+    [EntitySystemOf(typeof(OperaComponent))]
     [FriendOf(typeof(OperaComponent))]
     public static partial class OperaComponentSystem
     {
         [EntitySystem]
-        private class OperaComponentAwakeSystem : AwakeSystem<OperaComponent>
+        private static void Awake(this OperaComponent self)
         {
-            protected override void Awake(OperaComponent self)
-            {
-                self.mapMask = LayerMask.GetMask("Map");
-            }
+            self.mapMask = LayerMask.GetMask("Map");
         }
 
         [EntitySystem]
-        private class OperaComponentUpdateSystem : UpdateSystem<OperaComponent>
+        private static void Update(this OperaComponent self)
         {
-            protected override void Update(OperaComponent self)
+            if (Input.GetMouseButtonDown(1))
             {
-                if (Input.GetMouseButtonDown(1))
+                Ray ray = GameEntry.Camera.SceneCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 1000, self.mapMask))
                 {
-                    Ray ray = GameEntry.Camera.SceneCamera.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit, 1000, self.mapMask))
-                    {
-                        C2M_PathfindingResult c2MPathfindingResult = new C2M_PathfindingResult();
-                        c2MPathfindingResult.Position = hit.point;
-                        self.ClientScene().GetComponent<SessionComponent>().Session.Send(c2MPathfindingResult);
-                    }
+                    C2M_PathfindingResult c2MPathfindingResult = new C2M_PathfindingResult();
+                    c2MPathfindingResult.Position = hit.point;
+                    self.Root().GetComponent<ClientSenderCompnent>().Send(c2MPathfindingResult);
                 }
+            }
 
-                if (Input.GetKeyDown(KeyCode.R))
-                {
-                    Game.Load();
-                    Log.Debug("hot reload success!");
-                }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                CodeLoaderComponent.Instance.ReloadAsync().Forget();
+                return;
+            }
         
-                if (Input.GetKeyDown(KeyCode.T))
-                {
-                    C2M_TransferMap c2MTransferMap = new C2M_TransferMap();
-                    self.ClientScene().GetComponent<SessionComponent>().Session.Call(c2MTransferMap).Forget();
-                }
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                C2M_TransferMap c2MTransferMap = new();
+                self.Root().GetComponent<ClientSenderCompnent>().Call(c2MTransferMap).Forget();
             }
         }
     }

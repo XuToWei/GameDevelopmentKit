@@ -1,21 +1,16 @@
 ﻿using System;
-using MemoryPack;
+using System.ComponentModel;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ET
 {
-    public abstract class MessageObject: ProtoObject, IDisposable
+    public abstract class MessageObject: ProtoObject, IMessage, IDisposable
     {
-        [BsonIgnore]
-        [MemoryPackIgnore]
-        public bool IsFromPool;
-
         public virtual void Dispose()
         {
         }
 
-        public virtual void Reset()
-        {
-        }
+        [BsonIgnore]
+        public bool IsFromPool { get; set; }
     }
 }

@@ -29,8 +29,7 @@ namespace ET.Editor
                     {
                         try
                         {
-                            await CodeLoaderComponent.Instance.LoadHotfixAsync();
-                            Game.Load();
+                            await CodeLoaderComponent.Instance.ReloadAsync();
                             ShowNotification("reload hotfix success!");
                         }
                         finally

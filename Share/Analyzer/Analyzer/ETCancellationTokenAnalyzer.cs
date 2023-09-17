@@ -41,7 +41,7 @@ namespace ET.Analyzer
                 return;
             }
 
-            // 检查含有CancellationTokenSource参数的函数调用 是否传入null 或未赋值
+            // 检查含有ETCancelToken参数的函数调用 是否传入null 或未赋值
             foreach (InvocationExpressionSyntax? invocationExpressionSyntax in methodDeclarationSyntax.DescendantNodes<InvocationExpressionSyntax>())
             {
                 if (this.CancelTokenArguIsNullOrNotSet(invocationExpressionSyntax, context))
@@ -73,7 +73,7 @@ namespace ET.Analyzer
                 return;
             }
 
-            // 函数定义处 CancellationTokenSource参数 是否有默认值
+            // 函数定义处 ETcanceltoken参数 是否有默认值
             if (cancelTokenSymbol.HasExplicitDefaultValue)
             {
                 SyntaxNode? cancelTokenParamSyntax = cancelTokenSymbol.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
@@ -259,7 +259,7 @@ namespace ET.Analyzer
                 return false;
             }
 
-            // 忽略没有CancellationTokenSource参数的表达式
+            // 忽略没有ETCancellationToken参数的表达式
             if (!methodSymbol.HasParameterType(Definition.ETCancellationToken, out IParameterSymbol? cancelTokenSYmbol))
             {
                 return false;

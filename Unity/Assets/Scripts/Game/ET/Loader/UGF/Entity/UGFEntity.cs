@@ -4,49 +4,49 @@ using UnityEngine;
 namespace ET
 {
     [ChildOf]
-    public sealed class UGFEntity : Entity, IAwake<Type, ETMonoEntity>, IDestroy, ILoad
+    public sealed class UGFEntity : Entity, IAwake<string, ETMonoEntity>, IDestroy
     {
         public UnityGameFramework.Runtime.Entity entity { get; private set; }
 
-        public Type entityEventType { get; private set; }
+        public string entityEventTypeName { get; private set; }
 
         public Transform transform { get; private set; }
 
-        public bool isShow => this.m_ETMonoEntity.isShow;
+        public bool isShow => this.etMonoEntity.isShow;
 
-        private ETMonoEntity m_ETMonoEntity;
-
-        [EntitySystem]
-        private class UGFEntityAwakeSystem : AwakeSystem<UGFEntity, Type, ETMonoEntity>
+        public ETMonoEntity etMonoEntity;
+        
+        internal void OnAwake(string entityEventTypeName, ETMonoEntity etMonoEntity)
         {
-            protected override void Awake(UGFEntity self, Type entityEventType, ETMonoEntity etMonoEntity)
-            {
-                self.m_ETMonoEntity = etMonoEntity;
-                self.entityEventType = entityEventType;
-                self.transform = etMonoEntity.CachedTransform;
-                self.entity = etMonoEntity.Entity;
-            }
+            this.etMonoEntity = etMonoEntity;
+            this.entityEventTypeName = entityEventTypeName;
+            this.transform = etMonoEntity.CachedTransform;
+            this.entity = etMonoEntity.Entity;
+        }
+        
+        internal void OnDestroy()
+        {
+            this.etMonoEntity = default;
+            this.entityEventTypeName = default;
+            this.transform = default;
+            this.entity = default;
+        }
+    }
+
+    [EntitySystemOf(typeof(UGFEntity))]
+    [FriendOf(typeof(UGFEntity))]
+    public static partial class UGFEntitySystem
+    {
+        [EntitySystem]
+        private static void Awake(this UGFEntity self, string entityEventTypeName, ETMonoEntity etMonoEntity)
+        {
+            self.OnAwake(entityEventTypeName, etMonoEntity);
         }
 
         [EntitySystem]
-        private class UGFEntityDestroySystem : DestroySystem<UGFEntity>
+        private static void Destroy(this UGFEntity self)
         {
-            protected override void Destroy(UGFEntity self)
-            {
-                self.m_ETMonoEntity = default;
-                self.entityEventType = default;
-                self.transform = default;
-                self.entity = default;
-            }
-        }
-
-        [EntitySystem]
-        private class UGFEntityLoadSystem : LoadSystem<UGFEntity>
-        {
-            protected override void Load(UGFEntity self)
-            {
-                self.m_ETMonoEntity.OnLoad();
-            }
+            self.OnDestroy();
         }
     }
 }

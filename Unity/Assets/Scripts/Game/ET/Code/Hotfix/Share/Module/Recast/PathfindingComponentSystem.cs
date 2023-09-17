@@ -4,40 +4,38 @@ using Unity.Mathematics;
 
 namespace ET
 {
+    [EntitySystemOf(typeof(PathfindingComponent))]
     [FriendOf(typeof(PathfindingComponent))]
     public static partial class PathfindingComponentSystem
     {
         [EntitySystem]
-        private class PathfindingComponentAwakeSystem : AwakeSystem<PathfindingComponent, string>
+        private static void Awake(this PathfindingComponent self, string name)
         {
-            protected override void Awake(PathfindingComponent self, string name)
+            self.Name = name;
+            byte[] buffer = NavmeshComponent.Instance.Get(name);
+            self.navMesh = Recast.RecastLoad(buffer, buffer.Length);
+            if (self.navMesh == IntPtr.Zero)
             {
-                self.Name = name;
-                self.NavMesh = NavmeshComponent.Instance.Get(name);
-
-                if (self.NavMesh == 0)
-                {
-                    throw new Exception($"nav load fail: {name}");
-                }
+                throw new Exception($"nav load fail: {name}");
             }
         }
 
         [EntitySystem]
-        private class PathfindingComponentDestroySystem : DestroySystem<PathfindingComponent>
+        private static void Destroy(this PathfindingComponent self)
         {
-            protected override void Destroy(PathfindingComponent self)
-            {
-                self.Name = string.Empty;
-                self.NavMesh = 0;
-            }
+            self.Name = string.Empty;
+            
+            Recast.RecastClear(self.navMesh);
+            
+            self.navMesh = IntPtr.Zero;
         }
-
+        
         public static void Find(this PathfindingComponent self, float3 start, float3 target, List<float3> result)
         {
-            if (self.NavMesh == 0)
+            if (self.navMesh == IntPtr.Zero)
             {
-                Log.Debug("寻路| Find 失败 pathfinding ptr is zero");
-                throw new Exception($"pathfinding ptr is zero: {self.DomainScene().Name}");
+                self.Fiber().Debug("寻路| Find 失败 pathfinding ptr is zero");
+                throw new Exception($"pathfinding ptr is zero: {self.Scene().Name}");
             }
 
             self.StartPos[0] = -start.x;
@@ -48,7 +46,12 @@ namespace ET
             self.EndPos[1] = target.y;
             self.EndPos[2] = target.z;
             //Log.Debug($"start find path: {self.GetParent<Unit>().Id}");
-            int n = Recast.RecastFind(self.NavMesh, PathfindingComponent.extents, self.StartPos, self.EndPos, self.Result);
+            int n = Recast.RecastFind(self.navMesh, self.extents, self.StartPos, self.EndPos, self.Result);
+            if (n < 0)
+            {
+                throw new Exception($"find path error: {n}");
+            }
+            
             for (int i = 0; i < n; ++i)
             {
                 int index = i * 3;
@@ -69,9 +72,9 @@ namespace ET
         
         public static float3 FindRandomPointWithRaduis(this PathfindingComponent self, float3 pos, float raduis)
         {
-            if (self.NavMesh == 0)
+            if (self.navMesh == IntPtr.Zero)
             {
-                throw new Exception($"pathfinding ptr is zero: {self.DomainScene().Name}");
+                throw new Exception($"pathfinding ptr is zero: {self.Scene().Name}");
             }
 
             if (raduis > PathfindingComponent.FindRandomNavPosMaxRadius * 0.001f)
@@ -101,9 +104,9 @@ namespace ET
         /// <exception cref="Exception"></exception>
         public static float3 FindRandomPointWithRectangle(this PathfindingComponent self, float3 pos, int width, int height)
         {
-            if (self.NavMesh == 0)
+            if (self.navMesh == IntPtr.Zero)
             {
-                throw new Exception($"pathfinding ptr is zero: {self.DomainScene().Name}");
+                throw new Exception($"pathfinding ptr is zero: {self.Scene().Name}");
             }
 
             if (width > PathfindingComponent.FindRandomNavPosMaxRadius * 0.001f || height > PathfindingComponent.FindRandomNavPosMaxRadius * 0.001f)
@@ -121,9 +124,9 @@ namespace ET
         
         public static float3 FindRandomPointWithRaduis(this PathfindingComponent self, float3 pos, float minRadius, float maxRadius)
         {
-            if (self.NavMesh == 0)
+            if (self.navMesh == IntPtr.Zero)
             {
-                throw new Exception($"pathfinding ptr is zero: {self.DomainScene().Name}");
+                throw new Exception($"pathfinding ptr is zero: {self.Scene().Name}");
             }
 
             if (maxRadius > PathfindingComponent.FindRandomNavPosMaxRadius * 0.001f)
@@ -144,19 +147,19 @@ namespace ET
 
         public static float3 RecastFindNearestPoint(this PathfindingComponent self, float3 pos)
         {
-            if (self.NavMesh == 0)
+            if (self.navMesh == IntPtr.Zero)
             {
-                throw new Exception($"pathfinding ptr is zero: {self.DomainScene().Name}");
+                throw new Exception($"pathfinding ptr is zero: {self.Scene().Name}");
             }
 
             self.StartPos[0] = -pos.x;
             self.StartPos[1] = pos.y;
             self.StartPos[2] = pos.z;
 
-            int ret = Recast.RecastFindNearestPoint(self.NavMesh, PathfindingComponent.extents, self.StartPos, self.EndPos);
+            int ret = Recast.RecastFindNearestPoint(self.navMesh, self.extents, self.StartPos, self.EndPos);
             if (ret == 0)
             {
-                throw new Exception($"RecastFindNearestPoint fail, 可能是位置配置有问题: sceneName:{self.DomainScene().Name} {pos} {self.Name} {self.GetParent<Unit>().Id} {self.GetParent<Unit>().Config.Id} {self.EndPos.ArrayToString()}");
+                throw new Exception($"RecastFindNearestPoint fail, 可能是位置配置有问题: sceneName:{self.Scene().Name} {pos} {self.Name} {self.GetParent<Unit>().Id} {self.GetParent<Unit>().Config.Id} {self.EndPos.ArrayToString()}");
             }
             
             return new float3(-self.EndPos[0], self.EndPos[1], self.EndPos[2]);

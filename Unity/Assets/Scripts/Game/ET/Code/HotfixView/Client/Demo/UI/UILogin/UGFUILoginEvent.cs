@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof(UGFUILogin))]
+    [FriendOf(typeof(UGFUILoginComponent))]
     public static partial class UGFUILoginSystem
     {
         [UGFUIFormEvent(UGFUIFormId.UILogin)]
@@ -12,7 +12,7 @@ namespace ET.Client
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                UGFUILogin uiLogin = uiForm.AddComponent<UGFUILogin, Transform>(uiForm.transform);
+                var uiLogin = uiForm.AddComponent<UGFUILoginComponent, Transform>(uiForm.transform);
                 uiLogin.loginButton.SetAsync(uiLogin.OnLogin);
             }
             

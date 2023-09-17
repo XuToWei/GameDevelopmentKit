@@ -6,17 +6,15 @@ using MongoDB.Driver;
 
 namespace ET.Server
 {
+    [EntitySystemOf(typeof(DBComponent))]
     [FriendOf(typeof(DBComponent))]
     public static partial class DBComponentSystem
     {
         [EntitySystem]
-        private class DBComponentAwakeSystem : AwakeSystem<DBComponent, string, string, int>
+        private static void Awake(this DBComponent self, string dbConnection, string dbName, int zone)
         {
-            protected override void Awake(DBComponent self, string dbConnection, string dbName, int zone)
-            {
-                self.mongoClient = new MongoClient(dbConnection);
-                self.database = self.mongoClient.GetDatabase(dbName);
-            }
+            self.mongoClient = new MongoClient(dbConnection);
+            self.database = self.mongoClient.GetDatabase(dbName);
         }
 
         private static IMongoCollection<T> GetCollection<T>(this DBComponent self, string collection = null)
@@ -31,9 +29,10 @@ namespace ET.Server
 
         #region Query
 
-        public static async UniTask<T> Query<T>(this DBComponent self, long id, string collection = null) where T : Entity
+        public static async UniTask<T> Query<T>(this DBComponent self, long id, string collection = null)
+            where T : Entity
         {
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, id % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent.Wait(CoroutineLockType.DB, id % DBComponent.TaskCount))
             {
                 IAsyncCursor<T> cursor = await self.GetCollection<T>(collection).FindAsync(d => d.Id == id);
 
@@ -41,9 +40,12 @@ namespace ET.Server
             }
         }
 
-        public static async UniTask<List<T>> Query<T>(this DBComponent self, Expression<Func<T, bool>> filter, string collection = null) where T : Entity
+        public static async UniTask<List<T>> Query<T>(this DBComponent self, Expression<Func<T, bool>> filter,
+            string collection = null)
+            where T : Entity
         {
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, RandomGenerator.RandInt64() % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent
+                       .Wait(CoroutineLockType.DB, RandomGenerator.RandInt64() % DBComponent.TaskCount))
             {
                 IAsyncCursor<T> cursor = await self.GetCollection<T>(collection).FindAsync(filter);
 
@@ -51,9 +53,11 @@ namespace ET.Server
             }
         }
 
-        public static async UniTask<List<T>> Query<T>(this DBComponent self, long taskId, Expression<Func<T, bool>> filter, string collection = null) where T : Entity
+        public static async UniTask<List<T>> Query<T>(this DBComponent self, long taskId,
+            Expression<Func<T, bool>> filter, string collection = null)
+            where T : Entity
         {
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, taskId % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent.Wait(CoroutineLockType.DB, taskId % DBComponent.TaskCount))
             {
                 IAsyncCursor<T> cursor = await self.GetCollection<T>(collection).FindAsync(filter);
 
@@ -61,14 +65,15 @@ namespace ET.Server
             }
         }
 
-        public static async UniTask Query(this DBComponent self, long id, List<string> collectionNames, List<Entity> result)
+        public static async UniTask Query(this DBComponent self, long id, List<string> collectionNames,
+            List<Entity> result)
         {
             if (collectionNames == null || collectionNames.Count == 0)
             {
                 return;
             }
 
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, id % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent.Wait(CoroutineLockType.DB, id % DBComponent.TaskCount))
             {
                 foreach (string collectionName in collectionNames)
                 {
@@ -86,9 +91,11 @@ namespace ET.Server
             }
         }
 
-        public static async UniTask<List<T>> QueryJson<T>(this DBComponent self, string json, string collection = null) where T : Entity
+        public static async UniTask<List<T>> QueryJson<T>(this DBComponent self, string json, string collection = null)
+            where T : Entity
         {
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, RandomGenerator.RandInt64() % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent
+                       .Wait(CoroutineLockType.DB, RandomGenerator.RandInt64() % DBComponent.TaskCount))
             {
                 FilterDefinition<T> filterDefinition = new JsonFilterDefinition<T>(json);
                 IAsyncCursor<T> cursor = await self.GetCollection<T>(collection).FindAsync(filterDefinition);
@@ -96,9 +103,11 @@ namespace ET.Server
             }
         }
 
-        public static async UniTask<List<T>> QueryJson<T>(this DBComponent self, long taskId, string json, string collection = null) where T : Entity
+        public static async UniTask<List<T>> QueryJson<T>(this DBComponent self, long taskId, string json,
+            string collection = null) where T : Entity
         {
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, RandomGenerator.RandInt64() % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent
+                       .Wait(CoroutineLockType.DB, RandomGenerator.RandInt64() % DBComponent.TaskCount))
             {
                 FilterDefinition<T> filterDefinition = new JsonFilterDefinition<T>(json);
                 IAsyncCursor<T> cursor = await self.GetCollection<T>(collection).FindAsync(filterDefinition);
@@ -110,14 +119,16 @@ namespace ET.Server
 
         #region Insert
 
-        public static async UniTask InsertBatch<T>(this DBComponent self, IEnumerable<T> list, string collection = null) where T : Entity
+        public static async UniTask InsertBatch<T>(this DBComponent self, IEnumerable<T> list, string collection = null)
+            where T : Entity
         {
             if (collection == null)
             {
                 collection = typeof(T).FullName;
             }
 
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, RandomGenerator.RandInt64() % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent
+                       .Wait(CoroutineLockType.DB, RandomGenerator.RandInt64() % DBComponent.TaskCount))
             {
                 await self.GetCollection(collection).InsertManyAsync(list);
             }
@@ -129,9 +140,10 @@ namespace ET.Server
 
         public static async UniTask Save<T>(this DBComponent self, T entity, string collection = null) where T : Entity
         {
+            Fiber fiber = self.Fiber();
             if (entity == null)
             {
-                Log.Error($"save entity is null: {typeof(T).FullName}");
+                fiber.Error($"save entity is null: {typeof(T).FullName}");
 
                 return;
             }
@@ -141,17 +153,20 @@ namespace ET.Server
                 collection = entity.GetType().FullName;
             }
 
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, entity.Id % DBComponent.TaskCount))
+            using (await fiber.CoroutineLockComponent.Wait(CoroutineLockType.DB, entity.Id % DBComponent.TaskCount))
             {
-                await self.GetCollection(collection).ReplaceOneAsync(d => d.Id == entity.Id, entity, new ReplaceOptions { IsUpsert = true });
+                await self.GetCollection(collection).ReplaceOneAsync(d => d.Id == entity.Id, entity,
+                    new ReplaceOptions { IsUpsert = true });
             }
         }
 
-        public static async UniTask Save<T>(this DBComponent self, long taskId, T entity, string collection = null) where T : Entity
+        public static async UniTask Save<T>(this DBComponent self, long taskId, T entity, string collection = null)
+            where T : Entity
         {
+            Fiber fiber = self.Fiber();
             if (entity == null)
             {
-                Log.Error($"save entity is null: {typeof(T).FullName}");
+                fiber.Error($"save entity is null: {typeof(T).FullName}");
 
                 return;
             }
@@ -161,21 +176,23 @@ namespace ET.Server
                 collection = entity.GetType().FullName;
             }
 
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, taskId % DBComponent.TaskCount))
+            using (await fiber.CoroutineLockComponent.Wait(CoroutineLockType.DB, taskId % DBComponent.TaskCount))
             {
-                await self.GetCollection(collection).ReplaceOneAsync(d => d.Id == entity.Id, entity, new ReplaceOptions { IsUpsert = true });
+                await self.GetCollection(collection).ReplaceOneAsync(d => d.Id == entity.Id, entity,
+                    new ReplaceOptions { IsUpsert = true });
             }
         }
 
         public static async UniTask Save(this DBComponent self, long id, List<Entity> entities)
         {
+            Fiber fiber = self.Fiber();
             if (entities == null)
             {
-                Log.Error($"save entity is null");
+                fiber.Error($"save entity is null");
                 return;
             }
 
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, id % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent.Wait(CoroutineLockType.DB, id % DBComponent.TaskCount))
             {
                 foreach (Entity entity in entities)
                 {
@@ -184,12 +201,14 @@ namespace ET.Server
                         continue;
                     }
 
-                    await self.GetCollection(entity.GetType().FullName).ReplaceOneAsync(d => d.Id == entity.Id, entity, new ReplaceOptions { IsUpsert = true });
+                    await self.GetCollection(entity.GetType().FullName)
+                        .ReplaceOneAsync(d => d.Id == entity.Id, entity, new ReplaceOptions { IsUpsert = true });
                 }
             }
         }
 
-        public static async UniTask SaveNotWait<T>(this DBComponent self, T entity, long taskId = 0, string collection = null) where T : Entity
+        public static async UniTask SaveNotWait<T>(this DBComponent self, T entity, long taskId = 0,
+            string collection = null) where T : Entity
         {
             if (taskId == 0)
             {
@@ -205,9 +224,10 @@ namespace ET.Server
 
         #region Remove
 
-        public static async UniTask<long> Remove<T>(this DBComponent self, long id, string collection = null) where T : Entity
+        public static async UniTask<long> Remove<T>(this DBComponent self, long id, string collection = null)
+            where T : Entity
         {
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, id % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent.Wait(CoroutineLockType.DB, id % DBComponent.TaskCount))
             {
                 DeleteResult result = await self.GetCollection<T>(collection).DeleteOneAsync(d => d.Id == id);
 
@@ -215,9 +235,10 @@ namespace ET.Server
             }
         }
 
-        public static async UniTask<long> Remove<T>(this DBComponent self, long taskId, long id, string collection = null) where T : Entity
+        public static async UniTask<long> Remove<T>(this DBComponent self, long taskId, long id,
+            string collection = null) where T : Entity
         {
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, taskId % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent.Wait(CoroutineLockType.DB, taskId % DBComponent.TaskCount))
             {
                 DeleteResult result = await self.GetCollection<T>(collection).DeleteOneAsync(d => d.Id == id);
 
@@ -225,9 +246,11 @@ namespace ET.Server
             }
         }
 
-        public static async UniTask<long> Remove<T>(this DBComponent self, Expression<Func<T, bool>> filter, string collection = null) where T : Entity
+        public static async UniTask<long> Remove<T>(this DBComponent self, Expression<Func<T, bool>> filter,
+            string collection = null) where T : Entity
         {
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, RandomGenerator.RandInt64() % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent
+                       .Wait(CoroutineLockType.DB, RandomGenerator.RandInt64() % DBComponent.TaskCount))
             {
                 DeleteResult result = await self.GetCollection<T>(collection).DeleteManyAsync(filter);
 
@@ -235,9 +258,11 @@ namespace ET.Server
             }
         }
 
-        public static async UniTask<long> Remove<T>(this DBComponent self, long taskId, Expression<Func<T, bool>> filter, string collection = null) where T : Entity
+        public static async UniTask<long> Remove<T>(this DBComponent self, long taskId, Expression<Func<T, bool>> filter,
+            string collection = null)
+            where T : Entity
         {
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DB, taskId % DBComponent.TaskCount))
+            using (await self.Fiber().CoroutineLockComponent.Wait(CoroutineLockType.DB, taskId % DBComponent.TaskCount))
             {
                 DeleteResult result = await self.GetCollection<T>(collection).DeleteManyAsync(filter);
 

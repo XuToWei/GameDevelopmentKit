@@ -1,23 +1,15 @@
 using Cysharp.Threading.Tasks;
-using Game;
-using UnityEngine;
-using UnityGameFramework.Extension;
-using UnityGameFramework.Runtime;
-using GameEntry = Game.GameEntry;
 
 namespace ET.Client
 {
     [Event(SceneType.LockStep)]
-    public class LSSceneInitFinish_Finish: AEvent<Scene, EventType.LSSceneInitFinish>
+    public class LSSceneInitFinish_Finish: AEvent<Scene, LSSceneInitFinish>
     {
-        protected override async UniTask Run(Scene clientScene, EventType.LSSceneInitFinish args)
+        protected override async UniTask Run(Scene clientScene, LSSceneInitFinish args)
         {
             Room room = clientScene.GetComponent<Room>();
             
-            GameObject unitGo = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
-            GameEntry.DataNode.SetData<VarGameObject>("UnitGameObject", unitGo);
-            
-            room.AddComponent<LSUnitViewComponent>();
+            await room.AddComponent<LSUnitViewComponent>().InitAsync();
             
             room.AddComponent<LSCameraComponent>();
 
@@ -25,9 +17,8 @@ namespace ET.Client
             {
                 room.AddComponent<LSOperaComponent>();
             }
-
-            clientScene.GetComponent<UIComponent>().CloseUIForm(UGFUIFormId.UILSLobby);
-            await UniTask.CompletedTask;
+            
+            clientScene.GetComponent<UGFUIComponent>().CloseUIForm(UGFUIFormId.UILSLobby);
         }
     }
 }

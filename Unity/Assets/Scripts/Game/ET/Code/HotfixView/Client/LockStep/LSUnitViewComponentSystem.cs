@@ -1,30 +1,42 @@
-﻿using UnityEngine;
-using UnityGameFramework.Runtime;
+﻿using Cysharp.Threading.Tasks;
+using Game;
+using UnityEngine;
+using UnityGameFramework.Extension;
 using GameEntry = Game.GameEntry;
 
 namespace ET.Client
 {
+    [EntitySystemOf(typeof(LSUnitViewComponent))]
     public static partial class LSUnitViewComponentSystem
     {
         [EntitySystem]
-        private class LSUnitViewComponentAwakeSystem : AwakeSystem<LSUnitViewComponent>
+        private static void Awake(this LSUnitViewComponent self)
         {
-            protected override void Awake(LSUnitViewComponent self)
-            {
-                Room room = self.Room();
-                LSUnitComponent lsUnitComponent = room.LSWorld.GetComponent<LSUnitComponent>();
-                foreach (long playerId in room.PlayerIds)
-                {
-                    LSUnit lsUnit = lsUnitComponent.GetChild<LSUnit>(playerId);
-                    
-                    GameObject unitGo = GameEntry.DataNode.GetData<VarGameObject>("UnitGameObject");
-                    
-                    unitGo = UnityEngine.Object.Instantiate(unitGo);
-                    unitGo.transform.position = lsUnit.Position.ToVector();
 
-                    LSUnitView lsUnitView = self.AddChildWithId<LSUnitView, GameObject>(lsUnit.Id, unitGo);
-                    lsUnitView.AddComponent<LSAnimatorComponent>();
-                }
+        }
+        
+        [EntitySystem]
+        private static void Destroy(this LSUnitViewComponent self)
+        {
+
+        }
+
+        public static async UniTask InitAsync(this LSUnitViewComponent self)
+        {
+            Room room = self.Room();
+            LSUnitComponent lsUnitComponent = room.LSWorld.GetComponent<LSUnitComponent>();
+            Scene root = self.Root();
+            foreach (long playerId in room.PlayerIds)
+            {
+                LSUnit lsUnit = lsUnitComponent.GetChild<LSUnit>(playerId);
+                const string assetsName = "Assets/Bundles/Unit/Unit.prefab";
+                GameObject prefab = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
+
+                GameObject unitGo = UnityEngine.Object.Instantiate(prefab);
+                unitGo.transform.position = lsUnit.Position.ToVector();
+                
+                LSUnitView lsUnitView = self.AddChildWithId<LSUnitView, GameObject>(lsUnit.Id, unitGo);
+                lsUnitView.AddComponent<LSAnimatorComponent>();
             }
         }
     }

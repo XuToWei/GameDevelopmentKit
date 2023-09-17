@@ -93,7 +93,7 @@ namespace ET.Editor
             EnableETClientCode();
             DisableETServerCode();
             EnableModelGenerateClientCode();
-            RefreshETResourceRule();
+            RefreshETResourceRule(true);
 #if UNITY_HOTFIX
             LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_ET_CLIENT");
             LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET_SERVER");

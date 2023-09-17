@@ -2,7 +2,7 @@ using System;
 
 namespace ET
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class LSEntitySystemAttribute: BaseAttribute
     {
     }

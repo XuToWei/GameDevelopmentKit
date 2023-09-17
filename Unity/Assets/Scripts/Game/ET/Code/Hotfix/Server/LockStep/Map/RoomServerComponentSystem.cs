@@ -1,19 +1,18 @@
 using System;
+using System.Collections.Generic;
 
 namespace ET.Server
 {
+    [EntitySystemOf(typeof(RoomServerComponent))]
     [FriendOf(typeof(RoomServerComponent))]
     public static partial class RoomServerComponentSystem
     {
         [EntitySystem]
-        private class RoomServerComponentAwakeSystem : AwakeSystem<RoomServerComponent, Match2Map_GetRoom>
+        private static void Awake(this RoomServerComponent self, List<long> playerIds)
         {
-            protected override void Awake(RoomServerComponent self, Match2Map_GetRoom match2MapGetRoom)
+            foreach (long id in playerIds)
             {
-                foreach (long id in match2MapGetRoom.PlayerIds)
-                {
-                    RoomPlayer roomPlayer = self.AddChildWithId<RoomPlayer>(id);
-                }
+                RoomPlayer roomPlayer = self.AddChildWithId<RoomPlayer>(id);
             }
         }
 

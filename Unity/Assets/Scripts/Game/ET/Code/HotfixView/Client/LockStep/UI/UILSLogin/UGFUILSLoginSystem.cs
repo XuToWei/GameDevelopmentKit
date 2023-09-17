@@ -28,7 +28,7 @@ namespace ET.Client
         public static void OnLogin(this UGFUILSLogin self)
         {
             LoginHelper.Login(
-                self.DomainScene(), 
+                self.Root(), 
                 self.accountInputField.text, 
                 self.passwordInputField.text).Forget();
         }

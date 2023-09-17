@@ -1,35 +1,32 @@
 namespace ET
 {
-    namespace EventType
+    public struct OnApplicationPause
     {
-        public struct OnApplicationPause
+        public bool pauseStatus
         {
-            public bool pauseStatus
-            {
-                get;
-            }
-
-            public OnApplicationPause(bool pauseStatus)
-            {
-                this.pauseStatus = pauseStatus;
-            }
+            get;
         }
+
+        public OnApplicationPause(bool pauseStatus)
+        {
+            this.pauseStatus = pauseStatus;
+        }
+    }
         
-        public struct OnApplicationFocus
+    public struct OnApplicationFocus
+    {
+        public bool hasFocus
         {
-            public bool hasFocus
-            {
-                get;
-            }
-
-            public OnApplicationFocus(bool hasFocus)
-            {
-                this.hasFocus = hasFocus;
-            }
+            get;
         }
 
-        public struct OnShutdown
+        public OnApplicationFocus(bool hasFocus)
         {
+            this.hasFocus = hasFocus;
         }
+    }
+
+    public struct OnShutdown
+    {
     }
 }

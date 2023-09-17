@@ -12,7 +12,7 @@ namespace ET
     {
         public override async UniTask Handle(ConfigComponent.LoadAll arg)
         {
-            Game.AddSingleton<Tables>();
+            World.Instance.AddSingleton<Tables>();
             
             Type tablesType = typeof (Tables);
 

@@ -2,15 +2,14 @@
 using Game;
 using UnityEngine;
 using UnityGameFramework.Extension;
-using UnityGameFramework.Runtime;
 using GameEntry = Game.GameEntry;
 
 namespace ET.Client
 {
     [Event(SceneType.Current)]
-    public class AfterUnitCreate_CreateUnitView: AEvent<Scene, EventType.AfterUnitCreate>
+    public class AfterUnitCreate_CreateUnitView: AEvent<Scene, AfterUnitCreate>
     {
-        protected override async UniTask Run(Scene scene, EventType.AfterUnitCreate args)
+        protected override async UniTask Run(Scene scene, AfterUnitCreate args)
         {
             GameEntry.Camera.SceneCamera.transform.position = new Vector3(2, 35, -32);
             GameEntry.Camera.SceneCamera.transform.rotation = Quaternion.Euler(60, 0, 0);

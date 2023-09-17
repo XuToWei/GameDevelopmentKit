@@ -23,11 +23,9 @@ namespace ET
                 sb.Append("using MemoryPack;\n");
                 sb.Append("using System.Collections.Generic;\n");
                 
-
-                StringBuilder disposeSb = new StringBuilder();
-
                 bool isMsgStart = false;
                 string msgName = string.Empty;
+                StringBuilder sbDispose = new StringBuilder();
                 foreach (string line in s.Split('\n'))
                 {
                     string newline = line.Trim();
@@ -63,10 +61,6 @@ namespace ET
                     {
                         string parentClass = "";
                         isMsgStart = true;
-                        
-                        disposeSb.Clear();
-                        disposeSb.Append($"\t\tpublic override void Reset()\n");
-                        disposeSb.Append("\t\t{\n");
 
                         msgName = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries)[1];
                         string[] ss = newline.Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
@@ -99,21 +93,25 @@ namespace ET
 
                     if (isMsgStart)
                     {
-                        if (newline == "{")
+                        if (newline.StartsWith("{"))
                         {
+                            sbDispose.Clear();
                             sb.Append("\t{\n");
-                            
-                            sb.Append($"\t\tpublic static {msgName} Create(bool isFromPool = false) {{ return !isFromPool? new {msgName}() : NetServices.Instance.FetchMessage(typeof({msgName})) as {msgName}; }}\n\n");
-                            sb.Append($"\t\tpublic override void Dispose() {{ NetServices.Instance.RecycleMessage(this); }}\n\n");
+                            sb.Append($"\t\tpublic static {msgName} Create(bool isFromPool = true) \n\t\t{{ \n\t\t\treturn !isFromPool? new {msgName}() : ObjectPool.Instance.Fetch(typeof({msgName})) as {msgName}; \n\t\t}}\n\n");
                             continue;
                         }
 
-                        if (newline == "}")
+                        if (newline.StartsWith("}"))
                         {
                             isMsgStart = false;
-                            disposeSb.Append("\t\t}\n");
-                            sb.Append(disposeSb.ToString());
-                            disposeSb.Clear();
+                            
+                            // 加了no dispose则自己去定义dispose函数，不要自动生成
+                            if (!newline.Contains("// no dispose"))
+                            {
+                                sb.Append(
+                                    $"\t\tpublic override void Dispose() \n\t\t{{\n\t\t\tif (!this.IsFromPool) return;\n\t\t\t{sbDispose.ToString()}\n\t\t\tObjectPool.Instance.Recycle(this); \n\t\t}}\n\n");
+                            }
+
                             sb.Append("\t}\n\n");
                             continue;
                         }
@@ -128,15 +126,15 @@ namespace ET
                         {
                             if (newline.StartsWith("map<"))
                             {
-                                Map(sb, newline, disposeSb);
+                                Map(sb, newline, sbDispose);
                             }
                             else if (newline.StartsWith("repeated"))
                             {
-                                Repeated(sb, newline, disposeSb);
+                                Repeated(sb, newline, sbDispose);
                             }
                             else
                             {
-                                Members(sb, newline, disposeSb);
+                                Members(sb, newline, sbDispose);
                             }
                         }
                     }
@@ -173,7 +171,7 @@ namespace ET
                 Console.WriteLine($"proto2cs file : {csPath}");
             }
 
-            private static void Map(StringBuilder sb, string newline, StringBuilder disposeSb)
+            private static void Map(StringBuilder sb, string newline, StringBuilder sbDispose)
             {
                 int start = newline.IndexOf("<") + 1;
                 int end = newline.IndexOf(">");
@@ -188,12 +186,12 @@ namespace ET
 
                 sb.Append("\t\t[MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]\n");
                 sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
-                sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }} = new Dictionary<{keyType}, {valueType}>();\n");
+                sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }} = new();\n");
 
-                disposeSb.Append($"\t\t\t{v}.Clear();\n");
+                sbDispose.Append($"\t\t\tthis.{v}.Clear();\n");
             }
 
-            private static void Repeated(StringBuilder sb, string newline, StringBuilder disposeSb)
+            private static void Repeated(StringBuilder sb, string newline, StringBuilder sbDispose)
             {
                 try
                 {
@@ -208,7 +206,7 @@ namespace ET
                     sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
                     sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }} = new List<{type}>();\n\n");
 
-                    disposeSb.Append($"\t\t\t{name}.Clear();\n");
+                    sbDispose.Append($"\t\t\tthis.{name}.Clear();\n");
                 }
                 catch (Exception e)
                 {
@@ -253,7 +251,7 @@ namespace ET
                 return typeCs;
             }
 
-            private static void Members(StringBuilder sb, string newline, StringBuilder disposeSb)
+            private static void Members(StringBuilder sb, string newline, StringBuilder sbDispose)
             {
                 try
                 {
@@ -267,8 +265,17 @@ namespace ET
 
                     sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
                     sb.Append($"\t\tpublic {typeCs} {name} {{ get; set; }}\n\n");
-
-                    disposeSb.Append($"\t\t\t{name} = default;\n");
+                    
+                    switch (typeCs)
+                    {
+                        case "bytes":
+                        {
+                            break;
+                        }
+                        default:
+                            sbDispose.Append($"\t\t\tthis.{name} = default;\n");
+                            break;
+                    }
                 }
                 catch (Exception e)
                 {

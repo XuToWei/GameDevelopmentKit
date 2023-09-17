@@ -1,37 +1,30 @@
 ﻿using System;
-using System.Threading;
 using CommandLine;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
-    public static class Init
+    public class Init
     {
-        public static async void StartAsync()
+        public static async UniTaskVoid StartAsync()
         {
             try
             {
-                AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
-
-                // 异步方法全部会回掉到主线程
-                Game.AddSingleton<MainThreadSynchronizationContext>();
-
+                AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+                {
+                    Log.Error(e.ExceptionObject.ToString());
+                };
+                
                 // 命令行参数
                 Parser.Default.ParseArguments<Options>(System.Environment.GetCommandLineArgs())
                         .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
-                        .WithParsed(Game.AddSingleton);
-
-                Game.AddSingleton<TimeInfo>().ITimeNow = new TimeNow();
-                Game.AddSingleton<Logger>().ILog =
-                        new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, "../Config/NLog/NLog.config");
-                Game.AddSingleton<ObjectPool>();
-                Game.AddSingleton<IdGenerater>();
-                Game.AddSingleton<EventSystem>();
-                Game.AddSingleton<TimerComponent>();
-                Game.AddSingleton<CoroutineLockComponent>();
-                Game.AddSingleton<ConfigComponent>().IConfigReader = new ConfigReader();
-                Game.AddSingleton<CodeLoaderComponent>().ICodeLoader = new CodeLoader();
-                
-                Log.Console($"{Parser.Default.FormatCommandLine(Options.Instance)}");
+                        .WithParsed((o)=>World.Instance.AddSingleton(o));
+                var log = new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, 0, "../Config/NLog/NLog.config");
+                World.Instance.AddSingleton<Logger, ILog>(log);
+                World.Instance.AddSingleton<TimeInfo, ITimeNow>(new TimeNow());
+                World.Instance.AddSingleton<FiberManager>();
+                World.Instance.AddSingleton<ConfigComponent, IConfigReader>(new ConfigReader());
+                World.Instance.AddSingleton<CodeLoaderComponent, ICodeLoader>(new CodeLoader());
                 
                 await CodeLoaderComponent.Instance.StartAsync();
             }
@@ -39,21 +32,17 @@ namespace ET
             {
                 Log.Error(e);
             }
+        }
 
-            while (true)
-            {
-                Thread.Sleep(1);
-                try
-                {
-                    Game.Update();
-                    Game.LateUpdate();
-                    Game.FrameFinishUpdate();
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
+        public void Update()
+        {
+            TimeInfo.Instance.Update();
+            FiberManager.Instance.Update();
+        }
+
+        public void LateUpdate()
+        {
+            FiberManager.Instance.LateUpdate();
         }
     }
 }

@@ -7,28 +7,34 @@ namespace ET
     [ResponseType(nameof(G2C_Match))]
     [Message(LockStepOuter.C2G_Match)]
     [MemoryPackable]
-    public partial class C2G_Match: MessageObject, IRequest
+    public partial class C2G_Match: MessageObject, ISessionRequest
     {
-        public static C2G_Match Create(bool isFromPool = false) { return !isFromPool? new C2G_Match() : NetServices.Instance.FetchMessage(typeof(C2G_Match)) as C2G_Match; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static C2G_Match Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new C2G_Match() : ObjectPool.Instance.Fetch(typeof(C2G_Match)) as C2G_Match; 
+        }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            RpcId = default;
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
     [Message(LockStepOuter.G2C_Match)]
     [MemoryPackable]
-    public partial class G2C_Match: MessageObject, IResponse
+    public partial class G2C_Match: MessageObject, ISessionResponse
     {
-        public static G2C_Match Create(bool isFromPool = false) { return !isFromPool? new G2C_Match() : NetServices.Instance.FetchMessage(typeof(G2C_Match)) as G2C_Match; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static G2C_Match Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new G2C_Match() : ObjectPool.Instance.Fetch(typeof(G2C_Match)) as G2C_Match; 
+        }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
@@ -39,62 +45,77 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            RpcId = default;
-            Error = default;
-            Message = default;
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
 // 匹配成功，通知客户端切换场景
     [Message(LockStepOuter.Match2G_NotifyMatchSuccess)]
     [MemoryPackable]
-    public partial class Match2G_NotifyMatchSuccess: MessageObject, IActorMessage
+    public partial class Match2G_NotifyMatchSuccess: MessageObject, IMessage
     {
-        public static Match2G_NotifyMatchSuccess Create(bool isFromPool = false) { return !isFromPool? new Match2G_NotifyMatchSuccess() : NetServices.Instance.FetchMessage(typeof(Match2G_NotifyMatchSuccess)) as Match2G_NotifyMatchSuccess; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static Match2G_NotifyMatchSuccess Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new Match2G_NotifyMatchSuccess() : ObjectPool.Instance.Fetch(typeof(Match2G_NotifyMatchSuccess)) as Match2G_NotifyMatchSuccess; 
+        }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
-// 房间的instanceId
+// 房间的ActorId
         [MemoryPackOrder(1)]
-        public long InstanceId { get; set; }
+        public ActorId ActorId { get; set; }
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            RpcId = default;
-            InstanceId = default;
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+            this.ActorId = default;
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
 // 客户端通知房间切换场景完成
     [Message(LockStepOuter.C2Room_ChangeSceneFinish)]
     [MemoryPackable]
-    public partial class C2Room_ChangeSceneFinish: MessageObject, IActorRoom
+    public partial class C2Room_ChangeSceneFinish: MessageObject, IRoomMessage
     {
-        public static C2Room_ChangeSceneFinish Create(bool isFromPool = false) { return !isFromPool? new C2Room_ChangeSceneFinish() : NetServices.Instance.FetchMessage(typeof(C2Room_ChangeSceneFinish)) as C2Room_ChangeSceneFinish; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static C2Room_ChangeSceneFinish Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new C2Room_ChangeSceneFinish() : ObjectPool.Instance.Fetch(typeof(C2Room_ChangeSceneFinish)) as C2Room_ChangeSceneFinish; 
+        }
 
         [MemoryPackOrder(0)]
         public long PlayerId { get; set; }
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            PlayerId = default;
+            if (!this.IsFromPool) return;
+                        this.PlayerId = default;
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
     [Message(LockStepOuter.LockStepUnitInfo)]
     [MemoryPackable]
     public partial class LockStepUnitInfo: MessageObject
     {
-        public static LockStepUnitInfo Create(bool isFromPool = false) { return !isFromPool? new LockStepUnitInfo() : NetServices.Instance.FetchMessage(typeof(LockStepUnitInfo)) as LockStepUnitInfo; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static LockStepUnitInfo Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new LockStepUnitInfo() : ObjectPool.Instance.Fetch(typeof(LockStepUnitInfo)) as LockStepUnitInfo; 
+        }
 
         [MemoryPackOrder(0)]
         public long PlayerId { get; set; }
@@ -105,22 +126,27 @@ namespace ET
         [MemoryPackOrder(2)]
         public TrueSync.TSQuaternion Rotation { get; set; }
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            PlayerId = default;
-            Position = default;
-            Rotation = default;
+            if (!this.IsFromPool) return;
+                        this.PlayerId = default;
+            this.Position = default;
+            this.Rotation = default;
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
 // 房间通知客户端进入战斗
     [Message(LockStepOuter.Room2C_Start)]
     [MemoryPackable]
-    public partial class Room2C_Start: MessageObject, IActorMessage
+    public partial class Room2C_Start: MessageObject, IMessage
     {
-        public static Room2C_Start Create(bool isFromPool = false) { return !isFromPool? new Room2C_Start() : NetServices.Instance.FetchMessage(typeof(Room2C_Start)) as Room2C_Start; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static Room2C_Start Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new Room2C_Start() : ObjectPool.Instance.Fetch(typeof(Room2C_Start)) as Room2C_Start; 
+        }
 
         [MemoryPackOrder(0)]
         public long StartTime { get; set; }
@@ -128,20 +154,25 @@ namespace ET
         [MemoryPackOrder(1)]
         public List<LockStepUnitInfo> UnitInfo { get; set; } = new List<LockStepUnitInfo>();
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            StartTime = default;
-            UnitInfo.Clear();
+            if (!this.IsFromPool) return;
+                        this.StartTime = default;
+            this.UnitInfo.Clear();
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
     [Message(LockStepOuter.FrameMessage)]
     [MemoryPackable]
-    public partial class FrameMessage: MessageObject, IActorMessage
+    public partial class FrameMessage: MessageObject, IMessage
     {
-        public static FrameMessage Create(bool isFromPool = false) { return !isFromPool? new FrameMessage() : NetServices.Instance.FetchMessage(typeof(FrameMessage)) as FrameMessage; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static FrameMessage Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new FrameMessage() : ObjectPool.Instance.Fetch(typeof(FrameMessage)) as FrameMessage; 
+        }
 
         [MemoryPackOrder(0)]
         public int Frame { get; set; }
@@ -152,55 +183,70 @@ namespace ET
         [MemoryPackOrder(2)]
         public LSInput Input { get; set; }
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            Frame = default;
-            PlayerId = default;
-            Input = default;
+            if (!this.IsFromPool) return;
+                        this.Frame = default;
+            this.PlayerId = default;
+            this.Input = default;
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
     [Message(LockStepOuter.OneFrameInputs)]
     [MemoryPackable]
-    public partial class OneFrameInputs: MessageObject, IActorMessage
+    public partial class OneFrameInputs: MessageObject, IMessage
     {
-        public static OneFrameInputs Create(bool isFromPool = false) { return !isFromPool? new OneFrameInputs() : NetServices.Instance.FetchMessage(typeof(OneFrameInputs)) as OneFrameInputs; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static OneFrameInputs Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new OneFrameInputs() : ObjectPool.Instance.Fetch(typeof(OneFrameInputs)) as OneFrameInputs; 
+        }
 
         [MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]
         [MemoryPackOrder(1)]
-        public Dictionary<long, LSInput> Inputs { get; set; } = new Dictionary<long, LSInput>();
-        public override void Reset()
+        public Dictionary<long, LSInput> Inputs { get; set; } = new();
+        public override void Dispose() 
         {
-            Inputs.Clear();
+            if (!this.IsFromPool) return;
+                        this.Inputs.Clear();
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
     [Message(LockStepOuter.Room2C_AdjustUpdateTime)]
     [MemoryPackable]
-    public partial class Room2C_AdjustUpdateTime: MessageObject, IActorMessage
+    public partial class Room2C_AdjustUpdateTime: MessageObject, IMessage
     {
-        public static Room2C_AdjustUpdateTime Create(bool isFromPool = false) { return !isFromPool? new Room2C_AdjustUpdateTime() : NetServices.Instance.FetchMessage(typeof(Room2C_AdjustUpdateTime)) as Room2C_AdjustUpdateTime; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static Room2C_AdjustUpdateTime Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new Room2C_AdjustUpdateTime() : ObjectPool.Instance.Fetch(typeof(Room2C_AdjustUpdateTime)) as Room2C_AdjustUpdateTime; 
+        }
 
         [MemoryPackOrder(0)]
         public int DiffTime { get; set; }
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            DiffTime = default;
+            if (!this.IsFromPool) return;
+                        this.DiffTime = default;
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
     [Message(LockStepOuter.C2Room_CheckHash)]
     [MemoryPackable]
-    public partial class C2Room_CheckHash: MessageObject, IActorRoom
+    public partial class C2Room_CheckHash: MessageObject, IRoomMessage
     {
-        public static C2Room_CheckHash Create(bool isFromPool = false) { return !isFromPool? new C2Room_CheckHash() : NetServices.Instance.FetchMessage(typeof(C2Room_CheckHash)) as C2Room_CheckHash; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static C2Room_CheckHash Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new C2Room_CheckHash() : ObjectPool.Instance.Fetch(typeof(C2Room_CheckHash)) as C2Room_CheckHash; 
+        }
 
         [MemoryPackOrder(0)]
         public long PlayerId { get; set; }
@@ -211,21 +257,26 @@ namespace ET
         [MemoryPackOrder(2)]
         public long Hash { get; set; }
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            PlayerId = default;
-            Frame = default;
-            Hash = default;
+            if (!this.IsFromPool) return;
+                        this.PlayerId = default;
+            this.Frame = default;
+            this.Hash = default;
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
     [Message(LockStepOuter.Room2C_CheckHashFail)]
     [MemoryPackable]
-    public partial class Room2C_CheckHashFail: MessageObject, IActorMessage
+    public partial class Room2C_CheckHashFail: MessageObject, IMessage
     {
-        public static Room2C_CheckHashFail Create(bool isFromPool = false) { return !isFromPool? new Room2C_CheckHashFail() : NetServices.Instance.FetchMessage(typeof(Room2C_CheckHashFail)) as Room2C_CheckHashFail; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static Room2C_CheckHashFail Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new Room2C_CheckHashFail() : ObjectPool.Instance.Fetch(typeof(Room2C_CheckHashFail)) as Room2C_CheckHashFail; 
+        }
 
         [MemoryPackOrder(0)]
         public int Frame { get; set; }
@@ -233,20 +284,25 @@ namespace ET
         [MemoryPackOrder(1)]
         public byte[] LSWorldBytes { get; set; }
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            Frame = default;
-            LSWorldBytes = default;
+            if (!this.IsFromPool) return;
+                        this.Frame = default;
+            this.LSWorldBytes = default;
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
     [Message(LockStepOuter.G2C_Reconnect)]
     [MemoryPackable]
-    public partial class G2C_Reconnect: MessageObject, IActorMessage
+    public partial class G2C_Reconnect: MessageObject, IMessage
     {
-        public static G2C_Reconnect Create(bool isFromPool = false) { return !isFromPool? new G2C_Reconnect() : NetServices.Instance.FetchMessage(typeof(G2C_Reconnect)) as G2C_Reconnect; }
-
-        public override void Dispose() { NetServices.Instance.RecycleMessage(this); }
+        public static G2C_Reconnect Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new G2C_Reconnect() : ObjectPool.Instance.Fetch(typeof(G2C_Reconnect)) as G2C_Reconnect; 
+        }
 
         [MemoryPackOrder(0)]
         public long StartTime { get; set; }
@@ -257,12 +313,16 @@ namespace ET
         [MemoryPackOrder(2)]
         public int Frame { get; set; }
 
-        public override void Reset()
+        public override void Dispose() 
         {
-            StartTime = default;
-            UnitInfos.Clear();
-            Frame = default;
+            if (!this.IsFromPool) return;
+                        this.StartTime = default;
+            this.UnitInfos.Clear();
+            this.Frame = default;
+
+            ObjectPool.Instance.Recycle(this); 
         }
+
     }
 
     public static class LockStepOuter

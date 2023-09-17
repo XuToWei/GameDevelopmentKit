@@ -3,34 +3,38 @@ using System.Collections.Generic;
 
 namespace ET.Server
 {
+    [EntitySystemOf(typeof(LSServerUpdater))]
     [FriendOf(typeof(LSServerUpdater))]
     public static partial class LSServerUpdaterSystem
     {
         [EntitySystem]
-        public class LSServerUpdaterUpdateSystem : UpdateSystem<LSServerUpdater>
+        private static void Awake(this LSServerUpdater self)
         {
-            protected override void Update(LSServerUpdater self)
+
+        }
+        
+        [EntitySystem]
+        private static void Update(this LSServerUpdater self)
+        {
+            Room room = self.GetParent<Room>();
+            long timeNow = TimeInfo.Instance.ServerFrameTime();
+
+
+            int frame = room.AuthorityFrame + 1;
+            if (timeNow < room.FixedTimeCounter.FrameTime(frame))
             {
-                Room room = self.GetParent<Room>();
-                long timeNow = TimeHelper.ServerFrameTime();
-            
-            
-                int frame = room.AuthorityFrame + 1;
-                if (timeNow < room.FixedTimeCounter.FrameTime(frame))
-                {
-                    return;
-                }
-
-                OneFrameInputs oneFrameInputs = self.GetOneFrameMessage(frame);
-                ++room.AuthorityFrame;
-
-                OneFrameInputs sendInput = new();
-                oneFrameInputs.CopyTo(sendInput);
-
-                RoomMessageHelper.BroadCast(room, sendInput);
-            
-                room.Update(oneFrameInputs);
+                return;
             }
+
+            OneFrameInputs oneFrameInputs = self.GetOneFrameMessage(frame);
+            ++room.AuthorityFrame;
+
+            OneFrameInputs sendInput = new();
+            oneFrameInputs.CopyTo(sendInput);
+
+            RoomMessageHelper.BroadCast(room, sendInput);
+
+            room.Update(oneFrameInputs);
         }
 
         private static OneFrameInputs GetOneFrameMessage(this LSServerUpdater self, int frame)
@@ -39,7 +43,7 @@ namespace ET.Server
             FrameBuffer frameBuffer = room.FrameBuffer;
             OneFrameInputs oneFrameInputs = frameBuffer.FrameInputs(frame);
             frameBuffer.MoveForward(frame);
-            
+
             if (oneFrameInputs.Inputs.Count == LSConstValue.MatchCount)
             {
                 return oneFrameInputs;
@@ -48,7 +52,7 @@ namespace ET.Server
             OneFrameInputs preFrameInputs = null;
             if (frameBuffer.CheckFrame(frame - 1))
             {
-                preFrameInputs = frameBuffer.FrameInputs(frame - 1);    
+                preFrameInputs = frameBuffer.FrameInputs(frame - 1);
             }
 
             // 有人输入的消息没过来，给他使用上一帧的操作

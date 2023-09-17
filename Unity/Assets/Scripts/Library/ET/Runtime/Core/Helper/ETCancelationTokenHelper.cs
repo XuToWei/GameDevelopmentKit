@@ -5,14 +5,14 @@ namespace ET
 {
     public static class ETCancelationTokenHelper
     {
-        public static async UniTask CancelAfter(this CancellationTokenSource self, long afterTimeCancel)
+        public static async UniTask CancelAfter(this CancellationTokenSource self, Fiber fiber, long afterTimeCancel)
         {
             if (self.IsCancellationRequested)
             {
                 return;
             }
 
-            await TimerComponent.Instance.WaitAsync(afterTimeCancel);
+            await fiber.TimerComponent.WaitAsync(afterTimeCancel);
             
             if (self.IsCancellationRequested)
             {

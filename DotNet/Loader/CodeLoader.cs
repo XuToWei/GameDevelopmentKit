@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 
 namespace ET
@@ -16,6 +14,7 @@ namespace ET
 
         public async UniTask StartAsync()
         {
+            await UniTask.CompletedTask;
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly ass in assemblies)
             {
@@ -26,26 +25,34 @@ namespace ET
                 }
             }
 
-            await LoadHotfixAsync();
+            Assembly hotfixAssembly = this.LoadHotfix();
 
-            IStaticMethod start = new StaticMethod(model, "ET.Entry", "Start");
+            World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[] { typeof (World).Assembly, typeof(Init).Assembly, this.model, hotfixAssembly });
+
+            IStaticMethod start = new StaticMethod(this.model, "ET.Entry", "Start");
             start.Run();
         }
 
-        public async UniTask LoadHotfixAsync()
+        public async UniTask ReloadAsync()
         {
             await UniTask.CompletedTask;
-            byte[] dllBytes = File.ReadAllBytes("./Hotfix.dll");
-            byte[] pdbBytes = File.ReadAllBytes("./Hotfix.pdb");
+            Assembly hotfixAssembly = this.LoadHotfix();
 
+            CodeTypes codeTypes = World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[] { typeof (World).Assembly, typeof(Init).Assembly, this.model, hotfixAssembly });
+
+            codeTypes.CreateCode();
+            Log.Debug($"reload dll finish!");
+        }
+
+        private Assembly LoadHotfix()
+        {
             assemblyLoadContext?.Unload();
             GC.Collect();
             assemblyLoadContext = new AssemblyLoadContext("Hotfix", true);
-            Assembly hotfix = assemblyLoadContext.LoadFromStream(new MemoryStream(dllBytes), new MemoryStream(pdbBytes));
-
-            Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(Assembly.GetEntryAssembly(), typeof (Init).Assembly, typeof (Game).Assembly, model, hotfix);
-
-            EventSystem.Instance.Add(types);
+            byte[] dllBytes = File.ReadAllBytes("./Hotfix.dll");
+            byte[] pdbBytes = File.ReadAllBytes("./Hotfix.pdb");
+            Assembly hotfixAssembly = assemblyLoadContext.LoadFromStream(new MemoryStream(dllBytes), new MemoryStream(pdbBytes));
+            return hotfixAssembly;
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ET
 {
-    [FriendOf(typeof(UIComponent))]
+    [FriendOf(typeof(UGFUIComponent))]
     public abstract class AUGFUIFormEvent : IUGFUIFormEvent
     {
         public virtual void OnLoad(UGFUIForm uiForm)
@@ -16,12 +16,12 @@ namespace ET
 
         public virtual void OnOpen(UGFUIForm uiForm, object userData)
         {
-            uiForm.GetParent<UIComponent>().AllOpenUIForms.Add(uiForm);
+            uiForm.GetParent<UGFUIComponent>().AllOpenUIForms.Add(uiForm);
         }
 
         public virtual void OnClose(UGFUIForm uiForm, bool isShutdown, object userData)
         {
-            uiForm.GetParent<UIComponent>().AllOpenUIForms.Remove(uiForm);
+            uiForm.GetParent<UGFUIComponent>().AllOpenUIForms.Remove(uiForm);
         }
 
         public virtual void OnPause(UGFUIForm uiForm)

@@ -3,36 +3,40 @@ using System.Text;
 
 namespace ET.Server
 {
+    [EntitySystemOf(typeof(Cell))]
     [FriendOf(typeof(Cell))]
     public static partial class CellSystem
     {
         [EntitySystem]
-        private class CellDestroySystem : DestroySystem<Cell>
+        private static void Awake(this ET.Server.Cell self)
         {
-            protected override void Destroy(Cell self)
-            {
-                self.AOIUnits.Clear();
 
-                self.SubsEnterEntities.Clear();
+        }
+        
+        [EntitySystem]
+        private static void Destroy(this Cell self)
+        {
+            self.AOIUnits.Clear();
 
-                self.SubsLeaveEntities.Clear();
-            }
+            self.SubsEnterEntities.Clear();
+
+            self.SubsLeaveEntities.Clear();
         }
 
         public static void Add(this Cell self, AOIEntity aoiEntity)
         {
             self.AOIUnits.Add(aoiEntity.Id, aoiEntity);
         }
-        
+
         public static void Remove(this Cell self, AOIEntity aoiEntity)
         {
             self.AOIUnits.Remove(aoiEntity.Id);
         }
-        
+
         public static string CellIdToString(this long cellId)
         {
-            int y = (int) (cellId & 0xffffffff);
-            int x = (int) ((ulong) cellId >> 32);
+            int y = (int)(cellId & 0xffffffff);
+            int x = (int)((ulong)cellId >> 32);
             return $"{x}:{y}";
         }
 
@@ -47,5 +51,6 @@ namespace ET.Server
 
             return sb.ToString();
         }
+
     }
 }

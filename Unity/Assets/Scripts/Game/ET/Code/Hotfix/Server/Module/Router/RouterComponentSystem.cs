@@ -5,65 +5,56 @@ using System.Runtime.InteropServices;
 
 namespace ET.Server
 {
+    [EntitySystemOf(typeof(RouterComponent))]
     [FriendOf(typeof (RouterComponent))]
     [FriendOf(typeof (RouterNode))]
     public static partial class RouterComponentSystem
     {
         [EntitySystem]
-        private class RouterComponentAwakeSystem : AwakeSystem<RouterComponent, IPEndPoint, string>
+        private static void Awake(this RouterComponent self, IPEndPoint outerAddress, string innerIP)
         {
-            protected override void Awake(RouterComponent self, IPEndPoint outerAddress, string innerIP)
+            self.OuterSocket = new Socket(outerAddress.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
+            self.OuterSocket.Bind(outerAddress);
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                self.OuterSocket = new Socket(outerAddress.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
-                self.OuterSocket.Bind(outerAddress);
-                if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    self.OuterSocket.SendBufferSize = 16 * Kcp.OneM;
-                    self.OuterSocket.ReceiveBufferSize = 16 * Kcp.OneM;
-                }
+                self.OuterSocket.SendBufferSize = 16 * Kcp.OneM;
+                self.OuterSocket.ReceiveBufferSize = 16 * Kcp.OneM;
+            }
 
-                self.InnerSocket = new Socket(outerAddress.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
-                self.InnerSocket.Bind(new IPEndPoint(IPAddress.Parse(innerIP), 0));
+            self.InnerSocket = new Socket(outerAddress.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
+            self.InnerSocket.Bind(new IPEndPoint(IPAddress.Parse(innerIP), 0));
 
-                if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    self.InnerSocket.SendBufferSize = 16 * Kcp.OneM;
-                    self.InnerSocket.ReceiveBufferSize = 16 * Kcp.OneM;
-                }
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                self.InnerSocket.SendBufferSize = 16 * Kcp.OneM;
+                self.InnerSocket.ReceiveBufferSize = 16 * Kcp.OneM;
+            }
                 
-                NetworkHelper.SetSioUdpConnReset(self.OuterSocket);
-                NetworkHelper.SetSioUdpConnReset(self.InnerSocket);
-            }
+            NetworkHelper.SetSioUdpConnReset(self.OuterSocket);
+            NetworkHelper.SetSioUdpConnReset(self.InnerSocket);
+        }
+        
+        [EntitySystem]
+        private static void Destroy(this RouterComponent self)
+        {
+            self.OuterSocket.Dispose();
+            self.InnerSocket.Dispose();
+            self.OuterNodes.Clear();
+            self.IPEndPoint = null;
         }
 
         [EntitySystem]
-        private class RouterComponentDestroySystem : DestroySystem<RouterComponent>
+        private static void Update(this RouterComponent self)
         {
-            protected override void Destroy(RouterComponent self)
+            long timeNow = TimeInfo.Instance.ClientNow();
+            self.RecvOuter(timeNow);
+            self.RecvInner(timeNow);
+
+            // 每秒钟检查一次
+            if (timeNow - self.LastCheckTime > 1000)
             {
-                self.OuterSocket.Dispose();
-                self.InnerSocket.Dispose();
-                self.OuterNodes.Clear();
-                self.IPEndPoint = null;
-            }
-        }
-
-
-        [EntitySystem]
-        private class RouterComponentUpdateSystem : UpdateSystem<RouterComponent>
-        {
-            protected override void Update(RouterComponent self)
-            {
-                long timeNow = TimeHelper.ClientNow();
-                self.RecvOuter(timeNow);
-                self.RecvInner(timeNow);
-
-                // 每秒钟检查一次
-                if (timeNow - self.LastCheckTime > 1000)
-                {
-                    self.CheckConnectTimeout(timeNow);
-                    self.LastCheckTime = timeNow;
-                }
+                self.CheckConnectTimeout(timeNow);
+                self.LastCheckTime = timeNow;
             }
         }
 
@@ -85,7 +76,7 @@ namespace ET.Server
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e);
+                    self.Fiber().Error(e);
                 }
             }
         }
@@ -143,7 +134,7 @@ namespace ET.Server
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e);
+                    self.Fiber().Error(e);
                 }
             }
         }
@@ -156,6 +147,7 @@ namespace ET.Server
                 return;
             }
 
+            Fiber fiber = self.Fiber();
             // accept
             byte flag = self.Cache[0];
             switch (flag)
@@ -180,7 +172,7 @@ namespace ET.Server
                         self.ConnectIdNodes.TryGetValue(connectId, out routerNode);
                         if (routerNode == null)
                         {
-                            Log.Info($"router create reconnect: {self.IPEndPoint} {realAddress} {connectId} {outerConn} {innerConn}");
+                            fiber.Info($"router create reconnect: {self.IPEndPoint} {realAddress} {connectId} {outerConn} {innerConn}");
                             routerNode = self.New(realAddress, connectId, outerConn, innerConn, self.CloneAddress());
                             // self.OuterNodes 这里不能add，因为还没验证完成,要在RouterAck中加入
                         }
@@ -188,7 +180,7 @@ namespace ET.Server
 
                     if (routerNode.ConnectId != connectId)
                     {
-                        Log.Warning($"kcp router router reconnect connectId diff1: {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
+                        fiber.Warning($"kcp router router reconnect connectId diff1: {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
                         break;
                     }
                     
@@ -196,27 +188,27 @@ namespace ET.Server
                     // 这个路由连接不上，客户端会换个软路由，所以没关系
                     if (routerNode.InnerConn != innerConn)
                     {
-                        Log.Warning($"kcp router router reconnect inner conn diff1: {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
+                        fiber.Warning($"kcp router router reconnect inner conn diff1: {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
                         break;
                     }
                     
                     if (routerNode.OuterConn != outerConn)
                     {
-                        Log.Warning($"kcp router router reconnect outer conn diff1: {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
+                        fiber.Warning($"kcp router router reconnect outer conn diff1: {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
                         break;
                     }
 
                     // 校验ip，连接过程中ip不能变化
                     if (!Equals(routerNode.SyncIpEndPoint, self.IPEndPoint))
                     {
-                        Log.Warning($"kcp router syn ip is diff1: {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
+                        fiber.Warning($"kcp router syn ip is diff1: {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
                         break;
                     }
 
                     // 校验内网地址
                     if (routerNode.InnerAddress != realAddress)
                     {
-                        Log.Warning($"router sync error2: {routerNode.OuterConn} {routerNode.InnerAddress} {outerConn} {realAddress}");
+                        fiber.Warning($"router sync error2: {routerNode.OuterConn} {routerNode.InnerAddress} {outerConn} {realAddress}");
                         break;
                     }
                     
@@ -259,7 +251,7 @@ namespace ET.Server
                     {
                         outerConn = NetServices.Instance.CreateConnectChannelId();
                         routerNode = self.New(realAddress, connectId, outerConn, innerConn, self.CloneAddress());
-                        Log.Info($"router create: {realAddress} {connectId} {outerConn} {innerConn} {routerNode.SyncIpEndPoint}");
+                        fiber.Info($"router create: {realAddress} {connectId} {outerConn} {innerConn} {routerNode.SyncIpEndPoint}");
                         self.OuterNodes.Add(routerNode.OuterConn, routerNode);
                     }
 
@@ -272,14 +264,14 @@ namespace ET.Server
                     // 校验ip，连接过程中ip不能变化
                     if (!Equals(routerNode.SyncIpEndPoint, self.IPEndPoint))
                     {
-                        Log.Warning($"kcp router syn ip is diff1: {routerNode.SyncIpEndPoint} {self.IPEndPoint}");
+                        fiber.Warning($"kcp router syn ip is diff1: {routerNode.SyncIpEndPoint} {self.IPEndPoint}");
                         break;
                     }
 
                     // 校验内网地址
                     if (routerNode.InnerAddress != realAddress)
                     {
-                        Log.Warning($"router sync error2: {routerNode.OuterConn} {routerNode.InnerAddress} {outerConn} {realAddress}");
+                        fiber.Warning($"router sync error2: {routerNode.OuterConn} {routerNode.InnerAddress} {outerConn} {realAddress}");
                         break;
                     }
 
@@ -308,7 +300,7 @@ namespace ET.Server
 
                     if (!self.OuterNodes.TryGetValue(outerConn, out RouterNode kcpRouter))
                     {
-                        Log.Warning($"kcp router syn not found outer nodes: {outerConn} {innerConn}");
+                        fiber.Warning($"kcp router syn not found outer nodes: {outerConn} {innerConn}");
                         break;
                     }
 
@@ -322,7 +314,7 @@ namespace ET.Server
                     IPEndPoint ipEndPoint = (IPEndPoint) self.IPEndPoint;
                     if (!Equals(kcpRouter.SyncIpEndPoint.Address, ipEndPoint.Address))
                     {
-                        Log.Warning($"kcp router syn ip is diff3: {kcpRouter.SyncIpEndPoint.Address} {ipEndPoint.Address}");
+                        fiber.Warning($"kcp router syn ip is diff3: {kcpRouter.SyncIpEndPoint.Address} {ipEndPoint.Address}");
                         break;
                     }
                     
@@ -337,7 +329,7 @@ namespace ET.Server
                     self.Cache.WriteTo(5, innerConn);
                     byte[] addressBytes = ipEndPoint.ToString().ToByteArray();
                     Array.Copy(addressBytes, 0, self.Cache, 9, addressBytes.Length);
-                    Log.Info($"kcp router syn: {outerConn} {innerConn} {kcpRouter.InnerIpEndPoint} {kcpRouter.OuterIpEndPoint}");
+                    fiber.Info($"kcp router syn: {outerConn} {innerConn} {kcpRouter.InnerIpEndPoint} {kcpRouter.OuterIpEndPoint}");
                     self.InnerSocket.SendTo(self.Cache, 0, 9 + addressBytes.Length, SocketFlags.None, kcpRouter.InnerIpEndPoint);
 
                     if (!kcpRouter.CheckOuterCount(timeNow))
@@ -360,19 +352,19 @@ namespace ET.Server
 
                     if (!self.OuterNodes.TryGetValue(outerConn, out RouterNode kcpRouter))
                     {
-                        Log.Warning($"kcp router outer fin not found outer nodes: {outerConn} {innerConn}");
+                        fiber.Warning($"kcp router outer fin not found outer nodes: {outerConn} {innerConn}");
                         break;
                     }
 
                     // 比对innerConn
                     if (kcpRouter.InnerConn != innerConn)
                     {
-                        Log.Warning($"router node innerConn error: {innerConn} {outerConn} {kcpRouter.Status}");
+                        fiber.Warning($"router node innerConn error: {innerConn} {outerConn} {kcpRouter.Status}");
                         break;
                     }
 
                     kcpRouter.LastRecvOuterTime = timeNow;
-                    Log.Info($"kcp router outer fin: {outerConn} {innerConn} {kcpRouter.InnerIpEndPoint}");
+                    fiber.Info($"kcp router outer fin: {outerConn} {innerConn} {kcpRouter.InnerIpEndPoint}");
                     self.InnerSocket.SendTo(self.Cache, 0, messageLength, SocketFlags.None, kcpRouter.InnerIpEndPoint);
 
                     if (!kcpRouter.CheckOuterCount(timeNow))
@@ -396,20 +388,20 @@ namespace ET.Server
 
                     if (!self.OuterNodes.TryGetValue(outerConn, out RouterNode kcpRouter))
                     {
-                        Log.Warning($"kcp router msg not found outer nodes: {outerConn} {innerConn}");
+                        fiber.Warning($"kcp router msg not found outer nodes: {outerConn} {innerConn}");
                         break;
                     }
 
                     if (kcpRouter.Status != RouterStatus.Msg)
                     {
-                        Log.Warning($"router node status error: {innerConn} {outerConn} {kcpRouter.Status}");
+                        fiber.Warning($"router node status error: {innerConn} {outerConn} {kcpRouter.Status}");
                         break;
                     }
 
                     // 比对innerConn
                     if (kcpRouter.InnerConn != innerConn)
                     {
-                        Log.Warning($"router node innerConn error: {innerConn} {outerConn} {kcpRouter.Status}");
+                        fiber.Warning($"router node innerConn error: {innerConn} {outerConn} {kcpRouter.Status}");
                         break;
                     }
 
@@ -443,7 +435,7 @@ namespace ET.Server
 
             // accept
             byte flag = self.Cache[0];
-
+            Fiber fiber = self.Fiber();
             switch (flag)
             {
                 case KcpProtocalType.RouterReconnectACK:
@@ -453,14 +445,14 @@ namespace ET.Server
                     uint connectId = BitConverter.ToUInt32(self.Cache, 9);
                     if (!self.ConnectIdNodes.TryGetValue(connectId, out RouterNode kcpRouterNode))
                     {
-                        Log.Warning($"router node error: {innerConn} {connectId}");
+                        fiber.Warning($"router node error: {innerConn} {connectId}");
                         break;
                     }
 
                     // 必须校验innerConn，防止伪造
                     if (innerConn != kcpRouterNode.InnerConn)
                     {
-                        Log.Warning(
+                        fiber.Warning(
                             $"router node innerConn error: {innerConn} {kcpRouterNode.InnerConn} {outerConn} {kcpRouterNode.OuterConn} {kcpRouterNode.Status}");
                         break;
                     }
@@ -468,7 +460,7 @@ namespace ET.Server
                     // 必须校验outerConn，防止伪造
                     if (outerConn != kcpRouterNode.OuterConn)
                     {
-                        Log.Warning(
+                        fiber.Warning(
                             $"router node outerConn error: {innerConn} {kcpRouterNode.InnerConn} {outerConn} {kcpRouterNode.OuterConn} {kcpRouterNode.Status}");
                         break;
                     }
@@ -488,7 +480,7 @@ namespace ET.Server
                     self.Cache.WriteTo(0, KcpProtocalType.RouterReconnectACK);
                     self.Cache.WriteTo(1, kcpRouterNode.InnerConn);
                     self.Cache.WriteTo(5, kcpRouterNode.OuterConn);
-                    Log.Info($"kcp router RouterAck: {outerConn} {innerConn} {kcpRouterNode.SyncIpEndPoint}");
+                    fiber.Info($"kcp router RouterAck: {outerConn} {innerConn} {kcpRouterNode.SyncIpEndPoint}");
                     self.OuterSocket.SendTo(self.Cache, 0, 9, SocketFlags.None, kcpRouterNode.SyncIpEndPoint);
                     break;
                 }
@@ -500,7 +492,7 @@ namespace ET.Server
 
                     if (!self.OuterNodes.TryGetValue(outerConn, out RouterNode kcpRouterNode))
                     {
-                        Log.Warning($"kcp router ack not found outer nodes: {outerConn} {innerConn}");
+                        fiber.Warning($"kcp router ack not found outer nodes: {outerConn} {innerConn}");
                         break;
                     }
                     
@@ -510,7 +502,7 @@ namespace ET.Server
 
                     kcpRouterNode.LastRecvInnerTime = timeNow;
                     // 转发出去
-                    Log.Info($"kcp router ack: {outerConn} {innerConn} {kcpRouterNode.OuterIpEndPoint}");
+                    fiber.Info($"kcp router ack: {outerConn} {innerConn} {kcpRouterNode.OuterIpEndPoint}");
                     self.OuterSocket.SendTo(self.Cache, 0, messageLength, SocketFlags.None, kcpRouterNode.OuterIpEndPoint);
                     break;
                 }
@@ -527,14 +519,14 @@ namespace ET.Server
 
                     if (!self.OuterNodes.TryGetValue(outerConn, out RouterNode kcpRouterNode))
                     {
-                        Log.Warning($"kcp router inner fin not found outer nodes: {outerConn} {innerConn}");
+                        fiber.Warning($"kcp router inner fin not found outer nodes: {outerConn} {innerConn}");
                         break;
                     }
 
                     // 比对innerConn
                     if (kcpRouterNode.InnerConn != innerConn)
                     {
-                        Log.Warning($"router node innerConn error: {innerConn} {outerConn} {kcpRouterNode.Status}");
+                        fiber.Warning($"router node innerConn error: {innerConn} {outerConn} {kcpRouterNode.Status}");
                         break;
                     }
 
@@ -545,7 +537,7 @@ namespace ET.Server
                     }
 
                     kcpRouterNode.LastRecvInnerTime = timeNow;
-                    Log.Info($"kcp router inner fin: {outerConn} {innerConn} {kcpRouterNode.OuterIpEndPoint}");
+                    fiber.Info($"kcp router inner fin: {outerConn} {innerConn} {kcpRouterNode.OuterIpEndPoint}");
                     self.OuterSocket.SendTo(self.Cache, 0, messageLength, SocketFlags.None, kcpRouterNode.OuterIpEndPoint);
 
                     break;
@@ -564,14 +556,14 @@ namespace ET.Server
 
                     if (!self.OuterNodes.TryGetValue(outerConn, out RouterNode kcpRouterNode))
                     {
-                        Log.Warning($"kcp router inner msg not found outer nodes: {outerConn} {innerConn}");
+                        fiber.Warning($"kcp router inner msg not found outer nodes: {outerConn} {innerConn}");
                         break;
                     }
 
                     // 比对innerConn
                     if (kcpRouterNode.InnerConn != innerConn)
                     {
-                        Log.Warning($"router node innerConn error: {innerConn} {outerConn} {kcpRouterNode.Status}");
+                        fiber.Warning($"router node innerConn error: {innerConn} {outerConn} {kcpRouterNode.Status}");
                         break;
                     }
 
@@ -605,13 +597,13 @@ namespace ET.Server
             routerNode.InnerIpEndPoint = NetworkHelper.ToIPEndPoint(innerAddress);
             routerNode.SyncIpEndPoint = syncEndPoint;
             routerNode.InnerAddress = innerAddress;
-            routerNode.LastRecvInnerTime = TimeHelper.ClientNow();
+            routerNode.LastRecvInnerTime = TimeInfo.Instance.ClientNow();
 
             self.ConnectIdNodes.Add(connectId, routerNode);
 
             routerNode.Status = RouterStatus.Sync;
 
-            Log.Info($"router new: outerConn: {outerConn} innerConn: {innerConn} {syncEndPoint}");
+            self.Fiber().Info($"router new: outerConn: {outerConn} innerConn: {innerConn} {syncEndPoint}");
 
             return routerNode;
         }
@@ -624,7 +616,7 @@ namespace ET.Server
                 return;
             }
 
-            Log.Info($"router node remove: {routerNode.OuterConn} {routerNode.InnerConn} {error}");
+            self.Fiber().Info($"router node remove: {routerNode.OuterConn} {routerNode.InnerConn} {error}");
             self.Remove(id);
         }
 
@@ -647,7 +639,7 @@ namespace ET.Server
                 }
             }
 
-            Log.Info($"router remove: {routerNode.Id} outerConn: {routerNode.OuterConn} innerConn: {routerNode.InnerConn}");
+            self.Fiber().Info($"router remove: {routerNode.Id} outerConn: {routerNode.OuterConn} innerConn: {routerNode.InnerConn}");
 
             routerNode.Dispose();
         }

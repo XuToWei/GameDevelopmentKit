@@ -14,7 +14,7 @@ namespace Game.Hot
 
         public override void Clear()
         {
-            A.Clear();
+            this.A.Clear();
         }
     }
 
@@ -27,7 +27,7 @@ namespace Game.Hot
 
         public override void Clear()
         {
-            A.Clear();
+            this.A.Clear();
         }
     }
 

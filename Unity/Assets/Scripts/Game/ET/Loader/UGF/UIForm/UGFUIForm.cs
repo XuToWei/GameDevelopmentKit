@@ -5,7 +5,7 @@ using GameEntry = Game.GameEntry;
 namespace ET
 {
     [ChildOf]
-    public sealed class UGFUIForm : Entity, IAwake<int, ETMonoUIForm>, IDestroy, ILoad
+    public sealed class UGFUIForm : Entity, IAwake<int, ETMonoUIForm>, IDestroy
     {
         public UIForm uiForm { get; private set; }
         public int uiFormId { get; private set; }
@@ -17,42 +17,42 @@ namespace ET
         
         private ETMonoUIForm m_ETMonoUIForm;
 
-        [EntitySystem]
-        private class UGFUIFormAwakeSystem : AwakeSystem<UGFUIForm, int, ETMonoUIForm>
+        internal void OnAwake(int uiFormId, ETMonoUIForm ugfETUIForm)
         {
-            protected override void Awake(UGFUIForm self, int uiFormId, ETMonoUIForm ugfETUIForm)
+            this.uiFormId = uiFormId;
+            this.m_ETMonoUIForm = ugfETUIForm;
+            this.uiForm = ugfETUIForm.UIForm;
+            this.transform = ugfETUIForm.CachedTransform;
+        }
+
+        internal void OnDestroy()
+        {
+            ETMonoUIForm etMonoUIForm = this.m_ETMonoUIForm;
+            this.uiFormId = default;
+            this.m_ETMonoUIForm = default;
+            this.uiForm = default;
+            this.transform = default;
+            if (etMonoUIForm != default && etMonoUIForm.isOpen)
             {
-                self.uiFormId = uiFormId;
-                self.m_ETMonoUIForm = ugfETUIForm;
-                self.uiForm = ugfETUIForm.UIForm;
-                self.transform = ugfETUIForm.CachedTransform;
+                GameEntry.UI.CloseUIForm(etMonoUIForm.UIForm);
             }
+        }
+    }
+    
+    [EntitySystemOf(typeof(UGFUIForm))]
+    [FriendOf(typeof(UGFUIForm))]
+    public static partial class UGFUIFormSystem
+    {
+        [EntitySystem]
+        private static void Awake(this UGFUIForm self, int uiFormId, ETMonoUIForm ugfETUIForm)
+        {
+            self.OnAwake(uiFormId, ugfETUIForm);
         }
 
         [EntitySystem]
-        private class UGFUIFormDestroySystem : DestroySystem<UGFUIForm>
+        private static void Destroy(this UGFUIForm self)
         {
-            protected override void Destroy(UGFUIForm self)
-            {
-                ETMonoUIForm etMonoUIForm = self.m_ETMonoUIForm;
-                self.uiFormId = default;
-                self.m_ETMonoUIForm = default;
-                self.uiForm = default;
-                self.transform = default;
-                if (etMonoUIForm != default && etMonoUIForm.isOpen)
-                {
-                    GameEntry.UI.CloseUIForm(etMonoUIForm.UIForm);
-                }
-            }
-        }
-
-        [EntitySystem]
-        private class UGFUIFormLoadSystem : LoadSystem<UGFUIForm>
-        {
-            protected override void Load(UGFUIForm self)
-            {
-                self.m_ETMonoUIForm.OnLoad();
-            }
+            self.OnDestroy();
         }
     }
 }

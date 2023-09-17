@@ -2,6 +2,7 @@
 
 namespace ET
 {
+    [EntitySystemOf(typeof(SessionAcceptTimeoutComponent))]
     [FriendOf(typeof(SessionAcceptTimeoutComponent))]
     public static partial class SessionAcceptTimeoutComponentHelper
     {
@@ -16,27 +17,24 @@ namespace ET
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"move timer error: {self.Id}\n{e}");
+                    self.Fiber().Error($"move timer error: {self.Id}\n{e}");
                 }
             }
         }
         
         [EntitySystem]
-        private class SessionAcceptTimeoutComponentAwakeSystem : AwakeSystem<SessionAcceptTimeoutComponent>
+        private static void Awake(this SessionAcceptTimeoutComponent self)
         {
-            protected override void Awake(SessionAcceptTimeoutComponent self)
-            {
-                self.Timer = TimerComponent.Instance.NewOnceTimer(TimeHelper.ServerNow() + 5000, TimerInvokeType.SessionAcceptTimeout, self);
-            }
+            self.Timer = self.Fiber().TimerComponent.NewOnceTimer(TimeInfo.Instance.ServerNow() + 5000, TimerInvokeType.SessionAcceptTimeout, self);
         }
-
+        
         [EntitySystem]
-        private class SessionAcceptTimeoutComponentDestroySystem : DestroySystem<SessionAcceptTimeoutComponent>
+        private static void Destroy(this SessionAcceptTimeoutComponent self)
         {
-            protected override void Destroy(SessionAcceptTimeoutComponent self)
-            {
-                TimerComponent.Instance.Remove(ref self.Timer);
-            }
+            self.Fiber().TimerComponent?.Remove(ref self.Timer);
         }
+        
     }
+    
+    
 }

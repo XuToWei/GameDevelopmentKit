@@ -82,9 +82,6 @@ namespace ET
         [StaticField]
         private static readonly JsonWriterSettings defaultSettings = new() { OutputMode = JsonOutputMode.RelaxedExtendedJson };
 
-        [StaticField]
-        private static readonly HashSet<Type> registeredStructTypes = new HashSet<Type>();
-
         public static void Register()
         {
             // 自动注册IgnoreExtraElements
@@ -103,7 +100,7 @@ namespace ET
             RegisterStruct<TSVector4>();
             RegisterStruct<TSQuaternion>();
 
-            Dictionary<string, Type> types = EventSystem.Instance.GetTypes();
+            Dictionary<string, Type> types = CodeTypes.Instance.GetTypes();
             foreach (Type type in types.Values)
             {
                 if (!type.IsSubclassOf(typeof (Object)))
@@ -122,11 +119,7 @@ namespace ET
 
         public static void RegisterStruct<T>() where T : struct
         {
-            Type type = typeof(T);
-            if(registeredStructTypes.Contains(type))
-                return;
-            registeredStructTypes.Add(type);
-            BsonSerializer.RegisterSerializer(type, new StructBsonSerialize<T>());
+            BsonSerializer.RegisterSerializer(typeof (T), new StructBsonSerialize<T>());
         }
 
         public static string ToJson(object obj)

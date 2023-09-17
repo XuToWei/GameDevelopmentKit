@@ -74,10 +74,10 @@ public sealed partial class DRStartSceneConfig :  Bright.Config.EditorBeanBase
         }
         
         { 
-            var _fieldJson = _json["OuterPort"];
+            var _fieldJson = _json["Port"];
             if (_fieldJson != null)
             {
-                if(!_fieldJson.IsNumber) { throw new SerializationException(); }  OuterPort = _fieldJson;
+                if(!_fieldJson.IsNumber) { throw new SerializationException(); }  Port = _fieldJson;
             }
         }
         
@@ -110,7 +110,7 @@ public sealed partial class DRStartSceneConfig :  Bright.Config.EditorBeanBase
             _json["Name"] = new JSONString(Name);
         }
         {
-            _json["OuterPort"] = new JSONNumber(OuterPort);
+            _json["Port"] = new JSONNumber(Port);
         }
     }
 
@@ -159,7 +159,7 @@ public sealed partial class DRStartSceneConfig :  Bright.Config.EditorBeanBase
     /// <summary>
     /// 外网端口
     /// </summary>
-    public int OuterPort { get; set; }
+    public int Port { get; set; }
 
 }
 

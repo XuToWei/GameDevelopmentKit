@@ -23,27 +23,22 @@ namespace ET
         }
     }
 
+    [EntitySystemOf(typeof(ObjectWait))]
     [FriendOf(typeof(ObjectWait))]
     public static partial class ObjectWaitSystem
     {
         [EntitySystem]
-        private class ObjectWaitAwakeSystem : AwakeSystem<ObjectWait>
+        private static void Awake(this ObjectWait self)
         {
-            protected override void Awake(ObjectWait self)
-            {
-                self.tcss.Clear();
-            }
+            self.tcss.Clear();
         }
-
+        
         [EntitySystem]
-        private class ObjectWaitDestroySystem : DestroySystem<ObjectWait>
+        private static void Destroy(this ObjectWait self)
         {
-            protected override void Destroy(ObjectWait self)
+            foreach (object v in self.tcss.Values.ToArray())
             {
-                foreach (object v in self.tcss.Values.ToArray())
-                {
-                    ((IDestroyRun) v).SetResult();
-                }
+                ((IDestroyRun) v).SetResult();
             }
         }
 
@@ -116,8 +111,8 @@ namespace ET
             ResultCallback<T> tcs = new ResultCallback<T>();
             async UniTask WaitTimeout()
             {
-                await TimerComponent.Instance.WaitAsync(timeout, cts);
-                if (cts is { IsCancellationRequested: true })
+                await self.Fiber().TimerComponent.WaitAsync(timeout, cts);
+                if (cts == null || cts.IsCancellationRequested)
                 {
                     return;
                 }

@@ -8,39 +8,36 @@ namespace ET
     [DisallowMultipleComponent]
     public class Init : MonoBehaviour
     {
-        public static Init Instance
-        {
-            get;
-            private set;
-        }
+        public static Init Instance { get; private set; }
 
         private class Runner : MonoBehaviour
         {
             private void Update()
             {
-                Game.Update();
+                TimeInfo.Instance.Update();
+                FiberManager.Instance.Update();
             }
 
             private void LateUpdate()
             {
-                Game.LateUpdate();
-                Game.FrameFinishUpdate();
+                FiberManager.Instance.LateUpdate();
             }
 
             private void OnDestroy()
             {
-                EventSystem.Instance.Invoke(new EventType.OnShutdown());
-                Game.Close();
+                
+                EventSystem.Instance.Invoke(new OnShutdown());
+                World.Instance.Dispose();
             }
 
             private void OnApplicationPause(bool pauseStatus)
             {
-                EventSystem.Instance.Invoke(new EventType.OnApplicationPause(pauseStatus));
+                EventSystem.Instance.Invoke(new OnApplicationPause(pauseStatus));
             }
 
             private void OnApplicationFocus(bool hasFocus)
             {
-                EventSystem.Instance.Invoke(new EventType.OnApplicationFocus(hasFocus));
+                EventSystem.Instance.Invoke(new OnApplicationFocus(hasFocus));
             }
         }
 
@@ -71,27 +68,18 @@ namespace ET
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
 
-            Game.AddSingleton<MainThreadSynchronizationContext>();
-
-            Game.AddSingleton<GlobalComponent>();
-
             // 命令行参数
             string[] args = "".Split(" ");
             Parser.Default.ParseArguments<Options>(args)
-                    .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
-                    .WithParsed(Game.AddSingleton);
-
+                .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
+                .WithParsed((o) => World.Instance.AddSingleton(o));
             Options.Instance.StartConfig = "Localhost";
 
-            Game.AddSingleton<TimeInfo>().ITimeNow = new UnityTimeNow();
-            Game.AddSingleton<Logger>().ILog = new UnityLogger();
-            Game.AddSingleton<ObjectPool>();
-            Game.AddSingleton<IdGenerater>();
-            Game.AddSingleton<EventSystem>();
-            Game.AddSingleton<TimerComponent>();
-            Game.AddSingleton<CoroutineLockComponent>();
-            Game.AddSingleton<ConfigComponent>().IConfigReader = new ConfigReader();
-            Game.AddSingleton<CodeLoaderComponent>().ICodeLoader = new CodeLoader();
+            World.Instance.AddSingleton<Logger, ILog>(new UnityLogger());
+            World.Instance.AddSingleton<TimeInfo, ITimeNow>(new UnityTimeNow());
+            World.Instance.AddSingleton<FiberManager>();
+            World.Instance.AddSingleton<ConfigComponent, IConfigReader>(new ConfigReader());
+            World.Instance.AddSingleton<CodeLoaderComponent, ICodeLoader>(new CodeLoader());
 
             await CodeLoaderComponent.Instance.StartAsync();
             this.m_RunnerComponent = this.gameObject.AddComponent<Runner>();

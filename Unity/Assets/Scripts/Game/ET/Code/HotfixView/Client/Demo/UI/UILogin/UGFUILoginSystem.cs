@@ -4,31 +4,26 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof (UGFUILogin))]
-    public static partial class UGFUILoginSystem
+    [EntitySystemOf(typeof(UGFUILoginComponent))]
+    [FriendOf(typeof (UGFUILoginComponent))]
+    public static partial class UGFUILoginComponentSystem
     {
         [EntitySystem]
-        private class UGFUILoginAwakeSystem : AwakeSystem<UGFUILogin, Transform>
+        private static void Awake(this UGFUILoginComponent self, Transform uiTransform)
         {
-             protected override void Awake(UGFUILogin self, Transform uiTransform)
-             {
-                self.InitBind(uiTransform);
-             }
+            self.InitBind(uiTransform);
         }
         
         [EntitySystem]
-        private class UGFUILoginDestroySystem : DestroySystem<UGFUILogin>
+        private static void Destroy(this UGFUILoginComponent self)
         {
-            protected override void Destroy(UGFUILogin self)
-            {
-                self.ClearBind();
-            }
+            self.ClearBind();
         }
         
-        public static UniTask OnLogin(this UGFUILogin self)
+        public static UniTask OnLogin(this UGFUILoginComponent self)
         {
             return LoginHelper.Login(
-                self.DomainScene(),
+                self.Root(),
                 self.accountInputField.text,
                 self.passwordInputField.text);
         }

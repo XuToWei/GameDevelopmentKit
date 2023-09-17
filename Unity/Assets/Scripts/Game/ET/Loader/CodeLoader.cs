@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Game;
@@ -16,8 +14,8 @@ namespace ET
 
         public async UniTask StartAsync()
         {
-            model = null;
-            modelView = null;
+            this.model = null;
+            this.modelView = null;
 
             if (Define.EnableHotfix && GameEntry.CodeRunner.EnableCodeBytesMode)
             {
@@ -25,40 +23,50 @@ namespace ET
                 byte[] pdbBytes_Model = await LoadCodeBytesAsync("Game.ET.Code.Model.pdb.bytes");
                 byte[] assBytes_ModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.dll.bytes");
                 byte[] pdbBytes_ModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.pdb.bytes");
-                model = Assembly.Load(assBytes_Model, pdbBytes_Model);
-                modelView = Assembly.Load(assBytes_ModelView, pdbBytes_ModelView);
+                this.model = Assembly.Load(assBytes_Model, pdbBytes_Model);
+                this.modelView = Assembly.Load(assBytes_ModelView, pdbBytes_ModelView);
                 
-                await LoadHotfixAsync();
+                var hotfixAssemblies = await LoadHotfixAsync();
+                
+                World.Instance.AddSingleton<CodeTypes, Assembly[]>(new []
+                    {typeof (World).Assembly, typeof(Init).Assembly, this.model, this.modelView, hotfixAssemblies.Item1, hotfixAssemblies.Item2});
             }
             else
             {
                 Assembly[] assemblies = Utility.Assembly.GetAssemblies();
-                Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(assemblies);
-                EventSystem.Instance.Add(types);
                 foreach (Assembly ass in assemblies)
                 {
                     string name = ass.GetName().Name;
                     if (name == "Game.ET.Code.Model")
                     {
-                        model = ass;
+                        this.model = ass;
                     }
                     else if (name == "Game.ET.Code.ModelView")
                     {
-                        modelView = ass;
+                        this.modelView = ass;
                     }
 
-                    if (model != null && modelView != null)
+                    if (this.model != null && this.modelView != null)
                     {
                         break;
                     }
                 }
+                World.Instance.AddSingleton<CodeTypes, Assembly[]>(assemblies);
             }
             
-            IStaticMethod start = new StaticMethod(model, "ET.Entry", "Start");
+            IStaticMethod start = new StaticMethod(this.model, "ET.Entry", "Start");
             start.Run();
         }
 
-        public async UniTask LoadHotfixAsync()
+        public async UniTask ReloadAsync()
+        {
+            var hotfixAssemblies = await LoadHotfixAsync();
+            World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[]
+                { typeof(World).Assembly, typeof(Init).Assembly, this.model, this.modelView, hotfixAssemblies.Item1, hotfixAssemblies.Item2 });
+            CodeTypes.Instance.CreateCode();
+        }
+
+        private async UniTask<(Assembly, Assembly)> LoadHotfixAsync()
         {
             if (!Define.EnableHotfix)
             {
@@ -90,10 +98,7 @@ namespace ET
 #endif
             Assembly hotfix = Assembly.Load(assBytes_Hotfix, pdbBytes_Hotfix);
             Assembly hotfixView = Assembly.Load(assBytes_HotfixView, pdbBytes_HotfixView);
-
-            Dictionary<string, Type> types = AssemblyHelper.GetAssemblyTypes(typeof (Game).Assembly, typeof (Init).Assembly, model, modelView, hotfix, hotfixView);
-
-            EventSystem.Instance.Add(types);
+            return (hotfix, hotfixView);
         }
         
         private async UniTask<byte[]> LoadCodeBytesAsync(string fileName)

@@ -4,6 +4,6 @@ namespace ET
 {
     public interface IConsoleHandler
     {
-        UniTask Run(ModeContex contex, string content);
+        UniTask Run(Fiber fiber, ModeContex contex, string content);
     }
 }

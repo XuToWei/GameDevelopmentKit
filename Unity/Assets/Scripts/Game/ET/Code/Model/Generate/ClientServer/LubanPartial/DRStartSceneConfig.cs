@@ -4,7 +4,7 @@ namespace ET
 {
     public partial class DRStartSceneConfig
     {
-        public long InstanceId;
+        public ActorId ActorId;
         
         public SceneType Type;
 
@@ -12,7 +12,7 @@ namespace ET
         {
             get
             {
-                return Tables.Instance.DTStartProcessConfig.Get(this.StartConfig, this.Process);
+                return Tables.Instance.DTStartProcessConfig.Get(Options.Instance.StartConfig, this.Process);
             }
         }
         
@@ -20,23 +20,23 @@ namespace ET
         {
             get
             {
-                return Tables.Instance.DTStartZoneConfig.Get(this.StartConfig, this.Zone);
+                return Tables.Instance.DTStartZoneConfig.Get(Options.Instance.StartConfig, this.Zone);
             }
         }
 
         // 内网地址外网端口，通过防火墙映射端口过来
-        private IPEndPoint innerIPOutPort;
+        private IPEndPoint innerIPPort;
 
-        public IPEndPoint InnerIPOutPort
+        public IPEndPoint InnerIPPort
         {
             get
             {
-                if (innerIPOutPort == null)
+                if (innerIPPort == null)
                 {
-                    this.innerIPOutPort = NetworkHelper.ToIPEndPoint($"{this.StartProcessConfig.InnerIP}:{this.OuterPort}");
+                    this.innerIPPort = NetworkHelper.ToIPEndPoint($"{this.StartProcessConfig.InnerIP}:{this.Port}");
                 }
 
-                return this.innerIPOutPort;
+                return this.innerIPPort;
             }
         }
 
@@ -49,7 +49,7 @@ namespace ET
             {
                 if (this.outerIPPort == null)
                 {
-                    this.outerIPPort = NetworkHelper.ToIPEndPoint($"{this.StartProcessConfig.OuterIP}:{this.OuterPort}");
+                    this.outerIPPort = NetworkHelper.ToIPEndPoint($"{this.StartProcessConfig.OuterIP}:{this.Port}");
                 }
 
                 return this.outerIPPort;
@@ -58,9 +58,8 @@ namespace ET
 
         partial void PostInit()
         {
+            this.ActorId = new ActorId(this.Process, this.Id, 1);
             this.Type = EnumHelper.FromString<SceneType>(this.SceneType);
-            InstanceIdStruct instanceIdStruct = new InstanceIdStruct(this.Process, (uint) this.Id);
-            this.InstanceId = instanceIdStruct.ToLong();
         }
     }
 }

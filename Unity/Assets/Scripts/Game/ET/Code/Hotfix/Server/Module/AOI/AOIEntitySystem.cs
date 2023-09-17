@@ -3,33 +3,28 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
+    [EntitySystemOf(typeof(AOIEntity))]
     [FriendOf(typeof(AOIEntity))]
     public static partial class AOIEntitySystem2
     {
         [EntitySystem]
-        private class AOIEntityAwakeSystem : AwakeSystem<AOIEntity, int, float3>
+        private static void Awake(this AOIEntity self, int distance, float3 pos)
         {
-            protected override void Awake(AOIEntity self, int distance, float3 pos)
-            {
-                self.ViewDistance = distance;
-                self.DomainScene().GetComponent<AOIManagerComponent>().Add(self, pos.x, pos.z);
-            }
+            self.ViewDistance = distance;
+            self.Scene().GetComponent<AOIManagerComponent>().Add(self, pos.x, pos.z);
         }
-
+        
         [EntitySystem]
-        private class AOIEntityDestroySystem : DestroySystem<AOIEntity>
+        private static void Destroy(this AOIEntity self)
         {
-            protected override void Destroy(AOIEntity self)
-            {
-                self.DomainScene().GetComponent<AOIManagerComponent>()?.Remove(self);
-                self.ViewDistance = 0;
-                self.SeeUnits.Clear();
-                self.SeePlayers.Clear();
-                self.BeSeePlayers.Clear();
-                self.BeSeeUnits.Clear();
-                self.SubEnterCells.Clear();
-                self.SubLeaveCells.Clear();
-            }
+            self.Scene().GetComponent<AOIManagerComponent>()?.Remove(self);
+            self.ViewDistance = 0;
+            self.SeeUnits.Clear();
+            self.SeePlayers.Clear();
+            self.BeSeePlayers.Clear();
+            self.BeSeeUnits.Clear();
+            self.SubEnterCells.Clear();
+            self.SubLeaveCells.Clear();
         }
     }
     
@@ -139,7 +134,7 @@ namespace ET.Server
                     enter.BeSeeUnits.Add(self.Id, self);
                 }
             }
-            EventSystem.Instance.Publish(self.DomainScene(), new EventType.UnitEnterSightRange() { A = self, B = enter });
+            EventSystem.Instance.Publish(self.Scene(), new UnitEnterSightRange() { A = self, B = enter });
         }
 
         // leave离开self视野
@@ -167,7 +162,7 @@ namespace ET.Server
                 leave.BeSeePlayers.Remove(self.Id);
             }
 
-            EventSystem.Instance.Publish(self.DomainScene(), new EventType.UnitLeaveSightRange { A = self, B = leave });
+            EventSystem.Instance.Publish(self.Scene(), new UnitLeaveSightRange { A = self, B = leave });
         }
 
         /// <summary>

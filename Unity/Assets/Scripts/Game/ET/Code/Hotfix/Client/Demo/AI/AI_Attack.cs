@@ -7,7 +7,7 @@ namespace ET.Client
     {
         public override int Check(AIComponent aiComponent, DRAIConfig aiConfig)
         {
-            long sec = TimeHelper.ClientNow() / 1000 % 15;
+            long sec = TimeInfo.Instance.ClientNow() / 1000 % 15;
             if (sec >= 10)
             {
                 return 0;
@@ -15,28 +15,28 @@ namespace ET.Client
             return 1;
         }
 
-        public override async UniTaskVoid Execute(AIComponent aiComponent, DRAIConfig aiConfig, CancellationTokenSource cancellationToken)
+        public override async UniTask Execute(AIComponent aiComponent, DRAIConfig aiConfig, CancellationTokenSource cts)
         {
-            Scene clientScene = aiComponent.DomainScene();
+            Fiber fiber = aiComponent.Fiber();
 
-            Unit myUnit = UnitHelper.GetMyUnitFromClientScene(clientScene);
+            Unit myUnit = UnitHelper.GetMyUnitFromClientScene(fiber.Root);
             if (myUnit == null)
             {
                 return;
             }
 
             // 停在当前位置
-            clientScene.GetComponent<SessionComponent>().Session.Send(new C2M_Stop());
+            fiber.Root.GetComponent<ClientSenderCompnent>().Send(new C2M_Stop());
             
-            Log.Debug("开始攻击");
+            fiber.Debug("开始攻击");
 
             for (int i = 0; i < 100000; ++i)
             {
-                Log.Debug($"攻击: {i}次");
+                fiber.Debug($"攻击: {i}次");
 
                 // 因为协程可能被中断，任何协程都要传入cancellationToken，判断如果是中断则要返回
-                await TimerComponent.Instance.WaitAsync(1000, cancellationToken);
-                if (cancellationToken.IsCancellationRequested)
+                await fiber.TimerComponent.WaitAsync(1000, cts);
+                if (cts == null || cts.IsCancellationRequested)
                 {
                     return;
                 }

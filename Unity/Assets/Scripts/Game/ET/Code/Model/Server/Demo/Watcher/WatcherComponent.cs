@@ -4,10 +4,8 @@ using System.Diagnostics;
 namespace ET.Server
 {
     [ComponentOf(typeof(Scene))]
-    public class WatcherComponent: Entity, IAwake, IDestroy
+    public class WatcherComponent: Entity, IAwake
     {
-        public static WatcherComponent Instance { get; set; }
-
-        public readonly Dictionary<int, Process> Processes = new Dictionary<int, Process>();
+        public readonly Dictionary<int, System.Diagnostics.Process> Processes = new Dictionary<int, System.Diagnostics.Process>();
     }
 }

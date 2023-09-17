@@ -8,7 +8,7 @@ namespace ET
     {
         public int AIConfigId;
         
-        public CancellationTokenSource CancellationToken;
+        public CancellationTokenSource CancellationTokenSource;
 
         public long Timer;
 

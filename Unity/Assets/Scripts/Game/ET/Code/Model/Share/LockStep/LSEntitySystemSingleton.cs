@@ -11,19 +11,17 @@ namespace ET
         public const int Max = 1;
     }
     
-    public class LSEntitySystemSington: Singleton<LSEntitySystemSington>, ISingletonAwake, ISingletonLoad
+    [Code]
+    public class LSEntitySystemSingleton: Singleton<LSEntitySystemSingleton>, ISingletonAwake
     {
-        private TypeSystems typeSystems;
+        private TypeSystems TypeSystems { get; set; }
+        
+        private readonly DoubleMap<Type, long> lsEntityTypeLongHashCode = new();
         
         public void Awake()
         {
-            this.Load();
-        }
-        
-        public void Load()
-        {
-            this.typeSystems = new(LSQueneUpdateIndex.Max);
-            foreach (Type type in EventSystem.Instance.GetTypes(typeof (LSEntitySystemAttribute)))
+            this.TypeSystems = new(LSQueneUpdateIndex.Max);
+            foreach (Type type in CodeTypes.Instance.GetTypes(typeof (LSEntitySystemAttribute)))
             {
                 object obj = Activator.CreateInstance(type);
 
@@ -32,7 +30,7 @@ namespace ET
                     continue;
                 }
 
-                TypeSystems.OneTypeSystems oneTypeSystems = this.typeSystems.GetOrCreateOneTypeSystems(iSystemType.Type());
+                TypeSystems.OneTypeSystems oneTypeSystems = this.TypeSystems.GetOrCreateOneTypeSystems(iSystemType.Type());
                 oneTypeSystems.Map.Add(iSystemType.SystemType(), obj);
                 int index = iSystemType.GetInstanceQueueIndex();
                 if (index > LSQueneUpdateIndex.None && index < LSQueneUpdateIndex.Max)
@@ -40,11 +38,34 @@ namespace ET
                     oneTypeSystems.QueueFlag[index] = true;
                 }
             }
+            
+            foreach (var kv in CodeTypes.Instance.GetTypes())
+            {
+                Type type = kv.Value;
+                if (typeof(LSEntity).IsAssignableFrom(type))
+                {
+                    long hash = type.FullName.GetLongHashCode();
+                    try
+                    {
+                        this.lsEntityTypeLongHashCode.Add(type, type.FullName.GetLongHashCode());
+                    }
+                    catch (Exception e)
+                    {
+                        Type sameHashType = this.lsEntityTypeLongHashCode.GetKeyByValue(hash);
+                        throw new Exception($"long hash add fail: {type.FullName} {sameHashType.FullName}", e);
+                    }
+                }
+            }
+        }
+        
+        public long GetLongHashCode(Type type)
+        {
+            return this.lsEntityTypeLongHashCode.GetValueByKey(type);
         }
         
         public TypeSystems.OneTypeSystems GetOneTypeSystems(Type type)
         {
-            return this.typeSystems.GetOneTypeSystems(type);
+            return this.TypeSystems.GetOneTypeSystems(type);
         }
         
         public void LSRollback(Entity entity)
@@ -54,7 +75,7 @@ namespace ET
                 return;
             }
             
-            List<object> iLSRollbackSystems = this.typeSystems.GetSystems(entity.GetType(), typeof (ILSRollbackSystem));
+            List<object> iLSRollbackSystems = this.TypeSystems.GetSystems(entity.GetType(), typeof (ILSRollbackSystem));
             if (iLSRollbackSystems == null)
             {
                 return;
@@ -73,7 +94,7 @@ namespace ET
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e);
+                    entity.Fiber().Error(e);
                 }
             }
         }
@@ -85,7 +106,7 @@ namespace ET
                 return;
             }
             
-            List<object> iLSUpdateSystems = typeSystems.GetSystems(entity.GetType(), typeof (ILSUpdateSystem));
+            List<object> iLSUpdateSystems = TypeSystems.GetSystems(entity.GetType(), typeof (ILSUpdateSystem));
             if (iLSUpdateSystems == null)
             {
                 return;
@@ -99,7 +120,7 @@ namespace ET
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e);
+                    entity.Fiber().Error(e);
                 }
             }
         }

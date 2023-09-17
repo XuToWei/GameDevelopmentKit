@@ -3,81 +3,73 @@ using UnityEngine;
 
 namespace ET.Client
 {
+	[EntitySystemOf(typeof(AnimatorComponent))]
 	[FriendOf(typeof(AnimatorComponent))]
 	public static partial class AnimatorComponentSystem
 	{
 		[EntitySystem]
-		private class AnimatorComponentDestroySystem : DestroySystem<AnimatorComponent>
+		private static void Destroy(this AnimatorComponent self)
 		{
-			protected override void Destroy(AnimatorComponent self)
+			self.animationClips = null;
+			self.Parameter = null;
+			self.Animator = null;
+		}
+			
+		[EntitySystem]
+		private static void Awake(this AnimatorComponent self)
+		{
+			Animator animator = self.GetParent<Unit>().GetComponent<GameObjectComponent>().GameObject.GetComponent<Animator>();
+
+			if (animator == null)
 			{
-				self.animationClips = null;
-				self.Parameter = null;
-				self.Animator = null;
+				return;
+			}
+
+			if (animator.runtimeAnimatorController == null)
+			{
+				return;
+			}
+
+			if (animator.runtimeAnimatorController.animationClips == null)
+			{
+				return;
+			}
+			self.Animator = animator;
+			foreach (AnimationClip animationClip in animator.runtimeAnimatorController.animationClips)
+			{
+				self.animationClips[animationClip.name] = animationClip;
+			}
+			foreach (AnimatorControllerParameter animatorControllerParameter in animator.parameters)
+			{
+				self.Parameter.Add(animatorControllerParameter.name);
 			}
 		}
-
+		
 		[EntitySystem]
-		private class AnimatorComponentAwakeSystem : AwakeSystem<AnimatorComponent>
+		private static void Update(this AnimatorComponent self)
 		{
-			protected override void Awake(AnimatorComponent self)
+			if (self.isStop)
 			{
-				Animator animator = self.GetParent<Unit>().GetComponent<GameObjectComponent>().GameObject.GetComponent<Animator>();
-
-				if (animator == null)
-				{
-					return;
-				}
-
-				if (animator.runtimeAnimatorController == null)
-				{
-					return;
-				}
-
-				if (animator.runtimeAnimatorController.animationClips == null)
-				{
-					return;
-				}
-				self.Animator = animator;
-				foreach (AnimationClip animationClip in animator.runtimeAnimatorController.animationClips)
-				{
-					self.animationClips[animationClip.name] = animationClip;
-				}
-				foreach (AnimatorControllerParameter animatorControllerParameter in animator.parameters)
-				{
-					self.Parameter.Add(animatorControllerParameter.name);
-				}
+				return;
 			}
-		}
 
-		[EntitySystem]
-		private class AnimatorComponentUpdateSystem : UpdateSystem<AnimatorComponent>
-		{
-			protected override void Update(AnimatorComponent self)
+			if (self.MotionType == MotionType.None)
 			{
-				if (self.isStop)
-				{
-					return;
-				}
+				return;
+			}
 
-				if (self.MotionType == MotionType.None)
-				{
-					return;
-				}
+			try
+			{
+				self.Animator.SetFloat("MotionSpeed", self.MontionSpeed);
 
-				try
-				{
-					self.Animator.SetFloat("MotionSpeed", self.MontionSpeed);
+				self.Animator.SetTrigger(self.MotionType.ToString());
 
-					self.Animator.SetTrigger(self.MotionType.ToString());
-
-					self.MontionSpeed = 1;
-					self.MotionType = MotionType.None;
-				}
-				catch (Exception ex)
-				{
-					throw new Exception($"动作播放失败: {self.MotionType}", ex);
-				}
+				self.MontionSpeed = 1;
+				self.MotionType = MotionType.None;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception($"动作播放失败: {self.MotionType}", ex);
 			}
 		}
 
@@ -97,7 +89,7 @@ namespace ET.Client
 			float motionSpeed = animationClip.length / time;
 			if (motionSpeed < 0.01f || motionSpeed > 1000f)
 			{
-				Log.Error($"motionSpeed数值异常, {motionSpeed}, 此动作跳过");
+				self.Fiber().Error($"motionSpeed数值异常, {motionSpeed}, 此动作跳过");
 				return;
 			}
 			self.MotionType = motionType;

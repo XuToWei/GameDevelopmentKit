@@ -1,15 +1,14 @@
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    [ActorMessageHandler(SceneType.Room)]
-    public class G2Room_ReconnectHandler: ActorMessageHandler<Room, G2Room_Reconnect, Room2G_Reconnect>
+    [MessageHandler(SceneType.Room)]
+    public class G2Room_ReconnectHandler: MessageHandler<Scene, G2Room_Reconnect, Room2G_Reconnect>
     {
-        protected override async UniTask Run(Room room, G2Room_Reconnect request, Room2G_Reconnect response)
+        protected override async UniTask Run(Scene root, G2Room_Reconnect request, Room2G_Reconnect response)
         {
+            Room room = root.GetComponent<Room>();
             response.StartTime = room.StartTime;
-            response.UnitInfos = new List<LockStepUnitInfo>();
             LSUnitComponent lsUnitComponent = room.LSWorld.GetComponent<LSUnitComponent>();
             foreach (long playerId in room.PlayerIds)
             {

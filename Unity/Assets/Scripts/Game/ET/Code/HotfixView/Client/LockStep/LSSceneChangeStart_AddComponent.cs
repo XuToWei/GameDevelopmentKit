@@ -5,18 +5,21 @@ using UnityGameFramework.Extension;
 namespace ET.Client
 {
     [Event(SceneType.LockStep)]
-    public class LSSceneChangeStart_AddComponent: AEvent<Scene, EventType.LSSceneChangeStart>
+    public class LSSceneChangeStart_AddComponent: AEvent<Scene, LSSceneChangeStart>
     {
-        protected override async UniTask Run(Scene clientScene, EventType.LSSceneChangeStart args)
+        protected override async UniTask Run(Scene clientScene, LSSceneChangeStart args)
         {
-            Room room = args.Room;
-            room.AddComponent<UIComponent>();
+            Room room = clientScene.GetComponent<Room>();
+            room.AddComponent<UGFUIComponent>();
             room.AddComponent<EntityComponent>();
             
-            // 创建房间UI
-            await room.GetComponent<UIComponent>().OpenUIFormAsync(UGFUIFormId.UILSRoom);
+            // 创建loading界面
             
-            // 切换到map场景
+            
+            // 创建房间UI
+            await room.GetComponent<UGFUIComponent>().OpenUIFormAsync(UGFUIFormId.UILSRoom);
+            
+            // 加载场景资源
             await GameEntry.Scene.LoadSceneAsync(AssetUtility.GetSceneAsset(room.Name));
         }
     }

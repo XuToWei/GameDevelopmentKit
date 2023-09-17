@@ -60,8 +60,8 @@ namespace ET
 
             if (isPublicEvent)
             {
-                EventSystem.Instance.Publish(self.DomainScene(),
-                    new EventType.NumbericChange() { Unit = self.GetParent<Unit>(), New = value, Old = oldValue, NumericType = numericType });
+                EventSystem.Instance.Publish(self.Scene(),
+                    new NumbericChange() { Unit = self.GetParent<Unit>(), New = value, Old = oldValue, NumericType = numericType });
             }
         }
 
@@ -89,15 +89,12 @@ namespace ET
         }
     }
     
-    namespace EventType
+    public struct NumbericChange
     {
-        public struct NumbericChange
-        {
-            public Unit Unit;
-            public int NumericType;
-            public long Old;
-            public long New;
-        }
+        public Unit Unit;
+        public int NumericType;
+        public long Old;
+        public long New;
     }
 
     [ComponentOf(typeof (Unit))]

@@ -4,31 +4,27 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof (UGFUILobby))]
-    public static partial class UGFUILobbySystem
+    [EntitySystemOf(typeof(UGFUILobbyComponent))]
+    [FriendOf(typeof(UGFUILobbyComponent))]
+    public static partial class UGFUILobbyComponentSystem
     {
         [EntitySystem]
-        private class UGFUILobbyAwakeSystem : AwakeSystem<UGFUILobby, Transform>
+        private static void Awake(this UGFUILobbyComponent self, Transform uiTransform)
         {
-             protected override void Awake(UGFUILobby self, Transform uiTransform)
-             {
-                self.InitBind(uiTransform);
-             }
+            self.InitBind(uiTransform);
         }
         
         [EntitySystem]
-        private class UGFUILobbyDestroySystem : DestroySystem<UGFUILobby>
+        private static void Destroy(this UGFUILobbyComponent self)
         {
-            protected override void Destroy(UGFUILobby self)
-            {
-                self.ClearBind();
-            }
+            self.ClearBind();
         }
         
-        private static async UniTask EnterMap(this UGFUILobby self)
+        private static async UniTask EnterMap(this UGFUILobbyComponent self)
         {
-            await EnterMapHelper.EnterMapAsync(self.ClientScene());
-            self.DomainScene().GetComponent<UIComponent>().CloseUIForm(UGFUIFormId.UILobby);
+            Scene root = self.Root();
+            await EnterMapHelper.EnterMapAsync(root);
+            root.GetComponent<UGFUIComponent>().CloseUIForm(UGFUIFormId.UILobby);
         }
     }
 }

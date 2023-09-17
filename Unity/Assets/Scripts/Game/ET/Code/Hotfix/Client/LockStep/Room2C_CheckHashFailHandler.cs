@@ -3,21 +3,22 @@ using Cysharp.Threading.Tasks;
 namespace ET.Client
 {
     [MessageHandler(SceneType.LockStep)]
-    public class Room2C_CheckHashFailHandler: MessageHandler<Room2C_CheckHashFail>
+    public class Room2C_CheckHashFailHandler: MessageHandler<Scene, Room2C_CheckHashFail>
     {
-        protected override async UniTask Run(Session session, Room2C_CheckHashFail message)
+        protected override async UniTask Run(Scene root, Room2C_CheckHashFail message)
         {
+            Fiber fiber = root.Fiber();
             LSWorld serverWorld = MongoHelper.Deserialize(typeof(LSWorld), message.LSWorldBytes, 0, message.LSWorldBytes.Length) as LSWorld;
-            using (session.ClientScene().AddChild(serverWorld))
+            using (root.AddChild(serverWorld))
             {
-                Log.Debug($"check hash fail, server: {message.Frame} {serverWorld.ToJson()}");
+                fiber.Debug($"check hash fail, server: {message.Frame} {serverWorld.ToJson()}");
             }
 
-            Room room = session.ClientScene().GetComponent<Room>();
+            Room room = root.GetComponent<Room>();
             LSWorld clientWorld = room.GetLSWorld(SceneType.LockStepClient, message.Frame);
-            using (session.ClientScene().AddChild(clientWorld))
+            using (root.AddChild(clientWorld))
             {
-                Log.Debug($"check hash fail, client: {message.Frame} {clientWorld.ToJson()}");
+                fiber.Debug($"check hash fail, client: {message.Frame} {clientWorld.ToJson()}");
             }
             
             message.Dispose();

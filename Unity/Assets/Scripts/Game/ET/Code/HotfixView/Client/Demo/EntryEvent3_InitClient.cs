@@ -2,16 +2,23 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Client
 {
-    [Event(SceneType.Process)]
-    public class EntryEvent3_InitClient: AEvent<Scene, ET.EventType.EntryEvent3>
+    [Event(SceneType.Main)]
+    public class EntryEvent3_InitClient: AEvent<Scene, EntryEvent3>
     {
-        protected override async UniTask Run(Scene scene, ET.EventType.EntryEvent3 args)
+        protected override async UniTask Run(Scene root, EntryEvent3 args)
         {
-            Root.Instance.Scene.AddComponent<UGFEventComponent>();
+            World.Instance.AddSingleton<UGFEventComponent>();
             
-            SceneType sceneType = EnumHelper.FromString<SceneType>(GlobalComponent.Instance.AppType.ToString());
-            Scene clientScene = await SceneFactory.CreateClientScene(1, sceneType, sceneType.ToString());
-            await EventSystem.Instance.PublishAsync(clientScene, new EventType.AppStartInitFinish());
+            GlobalComponent globalComponent = root.AddComponent<GlobalComponent>();
+            root.AddComponent<UGFUIComponent>();
+            root.AddComponent<PlayerComponent>();
+            root.AddComponent<CurrentScenesComponent>();
+            
+            // 根据配置修改掉Main Fiber的SceneType
+            SceneType sceneType = EnumHelper.FromString<SceneType>(globalComponent.AppType.ToString());
+            root.SceneType = sceneType;
+            
+            await EventSystem.Instance.PublishAsync(root, new AppStartInitFinish());
         }
     }
 }

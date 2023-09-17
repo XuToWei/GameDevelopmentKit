@@ -1,109 +1,100 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
+    [EntitySystemOf(typeof(LockInfo))]
     [FriendOf(typeof(LockInfo))]
     public static partial class LockInfoSystem
     {
         [EntitySystem]
-        private class LockInfoAwakeSystem : AwakeSystem<LockInfo, long, CoroutineLock>
+        private static void Awake(this LockInfo self, ActorId lockActorId, CoroutineLock coroutineLock)
         {
-            protected override void Awake(LockInfo self, long lockInstanceId, CoroutineLock coroutineLock)
-            {
-                self.CoroutineLock = coroutineLock;
-                self.LockInstanceId = lockInstanceId;
-            }
+            self.CoroutineLock = coroutineLock;
+            self.LockActorId = lockActorId;
         }
-
+        
         [EntitySystem]
-        private class LockInfoDestroySystem : DestroySystem<LockInfo>
+        private static void Destroy(this LockInfo self)
         {
-            protected override void Destroy(LockInfo self)
-            {
-                self.CoroutineLock.Dispose();
-                self.LockInstanceId = 0;
-            }
+            self.CoroutineLock.Dispose();
+            self.LockActorId = default;
         }
     }
     
 
-    
+    [EntitySystemOf(typeof(LocationOneType))]
     [FriendOf(typeof(LocationOneType))]
     [FriendOf(typeof(LockInfo))]
     public static partial class LocationOneTypeSystem
     {
         [EntitySystem]
-        private class LocationOneTypeAwakeSystem : AwakeSystem<LocationOneType, int>
+        private static void Awake(this LocationOneType self, int locationType)
         {
-            protected override void Awake(LocationOneType self, int locationType)
-            {
-                self.LocationType = locationType;
-            }
+            self.LocationType = locationType;
         }
-
-        public static async UniTask Add(this LocationOneType self, long key, long instanceId)
+        
+        public static async UniTask Add(this LocationOneType self, long key, ActorId instanceId)
         {
             int coroutineLockType = (self.LocationType << 16) | CoroutineLockType.Location;
-            using (await CoroutineLockComponent.Instance.Wait(coroutineLockType, key))
+            using (await self.Fiber().CoroutineLockComponent.Wait(coroutineLockType, key))
             {
                 self.locations[key] = instanceId;
-                Log.Info($"location add key: {key} instanceId: {instanceId}");
+                self.Fiber().Info($"location add key: {key} instanceId: {instanceId}");
             }
         }
 
         public static async UniTask Remove(this LocationOneType self, long key)
         {
             int coroutineLockType = (self.LocationType << 16) | CoroutineLockType.Location;
-            using (await CoroutineLockComponent.Instance.Wait(coroutineLockType, key))
+            using (await self.Fiber().CoroutineLockComponent.Wait(coroutineLockType, key))
             {
                 self.locations.Remove(key);
-                Log.Info($"location remove key: {key}");
+                self.Fiber().Info($"location remove key: {key}");
             }
         }
 
-        public static async UniTask Lock(this LocationOneType self, long key, long instanceId, int time = 0)
+        public static async UniTask Lock(this LocationOneType self, long key, ActorId actorId, int time = 0)
         {
             int coroutineLockType = (self.LocationType << 16) | CoroutineLockType.Location;
-            CoroutineLock coroutineLock = await CoroutineLockComponent.Instance.Wait(coroutineLockType, key);
+            CoroutineLock coroutineLock = await self.Fiber().CoroutineLockComponent.Wait(coroutineLockType, key);
 
-            LockInfo lockInfo = self.AddChild<LockInfo, long, CoroutineLock>(instanceId, coroutineLock);
+            LockInfo lockInfo = self.AddChild<LockInfo, ActorId, CoroutineLock>(actorId, coroutineLock);
             self.lockInfos.Add(key, lockInfo);
 
-            Log.Info($"location lock key: {key} instanceId: {instanceId}");
+            self.Fiber().Info($"location lock key: {key} instanceId: {actorId}");
 
             if (time > 0)
             {
                 async UniTask TimeWaitAsync()
                 {
                     long lockInfoInstanceId = lockInfo.InstanceId;
-                    await TimerComponent.Instance.WaitAsync(time);
+                    await self.Fiber().TimerComponent.WaitAsync(time);
                     if (lockInfo.InstanceId != lockInfoInstanceId)
                     {
                         return;
                     }
-                    Log.Info($"location timeout unlock key: {key} instanceId: {instanceId} newInstanceId: {instanceId}");
-                    self.UnLock(key, instanceId, instanceId);
+                    self.Fiber().Info($"location timeout unlock key: {key} instanceId: {actorId} newInstanceId: {actorId}");
+                    self.UnLock(key, actorId, actorId);
                 }
                 TimeWaitAsync().Forget();
             }
         }
 
-        public static void UnLock(this LocationOneType self, long key, long oldInstanceId, long newInstanceId)
+        public static void UnLock(this LocationOneType self, long key, ActorId oldActorId, ActorId newInstanceId)
         {
             if (!self.lockInfos.TryGetValue(key, out LockInfo lockInfo))
             {
-                Log.Error($"location unlock not found key: {key} {oldInstanceId}");
+                self.Fiber().Error($"location unlock not found key: {key} {oldActorId}");
                 return;
             }
 
-            if (oldInstanceId != lockInfo.LockInstanceId)
+            if (oldActorId != lockInfo.LockActorId)
             {
-                Log.Error($"location unlock oldInstanceId is different: {key} {oldInstanceId}");
+                self.Fiber().Error($"location unlock oldInstanceId is different: {key} {oldActorId}");
                 return;
             }
 
-            Log.Info($"location unlock key: {key} instanceId: {oldInstanceId} newInstanceId: {newInstanceId}");
+            self.Fiber().Info($"location unlock key: {key} instanceId: {oldActorId} newInstanceId: {newInstanceId}");
 
             self.locations[key] = newInstanceId;
 
@@ -113,35 +104,32 @@ namespace ET.Server
             lockInfo.Dispose();
         }
 
-        public static async UniTask<long> Get(this LocationOneType self, long key)
+        public static async UniTask<ActorId> Get(this LocationOneType self, long key)
         {
             int coroutineLockType = (self.LocationType << 16) | CoroutineLockType.Location;
-            using (await CoroutineLockComponent.Instance.Wait(coroutineLockType, key))
+            using (await self.Fiber().CoroutineLockComponent.Wait(coroutineLockType, key))
             {
-                self.locations.TryGetValue(key, out long instanceId);
-                Log.Info($"location get key: {key} instanceId: {instanceId}");
-                return instanceId;
+                self.locations.TryGetValue(key, out ActorId actorId);
+                self.Fiber().Info($"location get key: {key} actorId: {actorId}");
+                return actorId;
             }
         }
     }
 
-
-    [FriendOf(typeof (LocationManagerComponent))]
-    public static partial class LocationComponentSystem
+    [EntitySystemOf(typeof(LocationManagerComoponent))]
+    [FriendOf(typeof (LocationManagerComoponent))]
+    public static partial class LocationComoponentSystem
     {
         [EntitySystem]
-        private class LocationManagerComponentAwakeSystem : AwakeSystem<LocationManagerComponent>
+        private static void Awake(this LocationManagerComoponent self)
         {
-            protected override void Awake(LocationManagerComponent self)
+            for (int i = 0; i < self.LocationOneTypes.Length; ++i)
             {
-                for (int i = 0; i < self.LocationOneTypes.Length; ++i)
-                {
-                    self.LocationOneTypes[i] = self.AddChild<LocationOneType, int>(i);
-                }
+                self.LocationOneTypes[i] = self.AddChild<LocationOneType, int>(i);
             }
         }
-
-        public static LocationOneType Get(this LocationManagerComponent self, int locationType)
+        
+        public static LocationOneType Get(this LocationManagerComoponent self, int locationType)
         {
             return self.LocationOneTypes[locationType];
         }

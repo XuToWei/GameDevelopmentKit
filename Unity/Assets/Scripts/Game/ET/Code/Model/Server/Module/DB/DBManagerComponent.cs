@@ -1,11 +1,10 @@
-﻿namespace ET.Server
+﻿using System;
+
+namespace ET.Server
 {
-    
-    public class DBManagerComponent: Entity, IAwake, IDestroy
+    [ComponentOf(typeof(Scene))]
+    public class DBManagerComponent: Entity, IAwake
     {
-        [StaticField]
-        public static DBManagerComponent Instance;
-        
         public DBComponent[] DBComponents = new DBComponent[IdGenerater.MaxZone];
     }
 }

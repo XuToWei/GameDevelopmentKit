@@ -6,7 +6,7 @@ namespace ET.Server
     [ChildOf(typeof(RobotCaseComponent))]
     public class RobotCase: Entity, IAwake, IDestroy
     {
-        public CancellationTokenSource CancellationToken;
+        public CancellationTokenSource CancellationTokenSource;
         public string CommandLine;
         public HashSet<long> Scenes { get; } = new HashSet<long>();
     }

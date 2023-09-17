@@ -18,7 +18,7 @@ public sealed partial class DRStartProcessConfig :  Bright.Config.BeanBase
         StartConfig = _buf.ReadString();
         Id = _buf.ReadInt();
         MachineId = _buf.ReadInt();
-        InnerPort = _buf.ReadInt();
+        Port = _buf.ReadInt();
         PostInit();
     }
 
@@ -40,9 +40,9 @@ public sealed partial class DRStartProcessConfig :  Bright.Config.BeanBase
     /// </summary>
     public int MachineId { get; private set; }
     /// <summary>
-    /// 内网端口
+    /// 外网端口
     /// </summary>
-    public int InnerPort { get; private set; }
+    public int Port { get; private set; }
 
     public const int __ID__ = -417016195;
     public override int GetTypeId() => __ID__;
@@ -62,7 +62,7 @@ public sealed partial class DRStartProcessConfig :  Bright.Config.BeanBase
         + "StartConfig:" + StartConfig + ","
         + "Id:" + Id + ","
         + "MachineId:" + MachineId + ","
-        + "InnerPort:" + InnerPort + ","
+        + "Port:" + Port + ","
         + "}";
     }
     

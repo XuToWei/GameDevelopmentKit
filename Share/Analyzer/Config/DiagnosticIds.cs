@@ -48,5 +48,11 @@
 
         public const string LSEntityFloatMemberAnalyzerRuleId = "ET0023";
 
+        public const string EntitySystemAnalyzerRuleId = "ET0024";
+
+        public const string EntitySystemMethodNeedSystemOfAttrAnalyzerRuleId = "ET0025";
+
+        public const string FiberLogAnalyzerRuleId = "ET0026";
+
     }
 }

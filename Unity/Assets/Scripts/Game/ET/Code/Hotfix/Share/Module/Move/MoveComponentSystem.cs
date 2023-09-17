@@ -5,6 +5,7 @@ using Unity.Mathematics;
 
 namespace ET
 {
+    [EntitySystemOf(typeof(MoveComponent))]
     [FriendOf(typeof(MoveComponent))]
     public static partial class MoveComponentSystem
     {
@@ -19,38 +20,32 @@ namespace ET
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"move timer error: {self.Id}\n{e}");
+                    self.Fiber().Error($"move timer error: {self.Id}\n{e}");
                 }
             }
         }
     
         
         [EntitySystem]
-        private class MoveComponentDestroySystem : DestroySystem<MoveComponent>
+        private static void Destroy(this MoveComponent self)
         {
-            protected override void Destroy(MoveComponent self)
-            {
-                self.MoveFinish(false);
-            }
+            self.MoveFinish(false);
         }
-
+        
         [EntitySystem]
-        private class MoveComponentAwakeSystem : AwakeSystem<MoveComponent>
+        private static void Awake(this MoveComponent self)
         {
-           protected override void Awake(MoveComponent self)
-            {
-                self.StartTime = 0;
-                self.StartPos = float3.zero;
-                self.NeedTime = 0;
-                self.MoveTimer = 0;
-                self.tcs = null;
-                self.Targets.Clear();
-                self.Speed = 0;
-                self.N = 0;
-                self.TurnTime = 0;
-            }
+            self.StartTime = 0;
+            self.StartPos = float3.zero;
+            self.NeedTime = 0;
+            self.MoveTimer = 0;
+            self.tcs = null;
+            self.Targets.Clear();
+            self.Speed = 0;
+            self.N = 0;
+            self.TurnTime = 0;
         }
-
+        
         public static bool IsArrived(this MoveComponent self)
         {
             return self.Targets.Count == 0;
@@ -98,7 +93,7 @@ namespace ET
             self.Speed = speed;
             self.tcs = AutoResetUniTaskCompletionSource<bool>.Create();
 
-            EventSystem.Instance.Publish(self.DomainScene(), new EventType.MoveStart() {Unit = self.GetParent<Unit>()});
+            EventSystem.Instance.Publish(self.Scene(), new MoveStart() {Unit = self.GetParent<Unit>()});
             
             self.StartMove();
             
@@ -106,7 +101,7 @@ namespace ET
 
             if (moveRet)
             {
-                EventSystem.Instance.Publish(self.DomainScene(), new EventType.MoveStop() {Unit = self.GetParent<Unit>()});
+                EventSystem.Instance.Publish(self.Scene(), new MoveStop() {Unit = self.GetParent<Unit>()});
             }
             return moveRet;
         }
@@ -116,7 +111,7 @@ namespace ET
         {
             Unit unit = self.GetParent<Unit>();
             
-            long timeNow = TimeHelper.ClientNow();
+            long timeNow = TimeInfo.Instance.ClientNow();
             long moveTime = timeNow - self.StartTime;
 
             while (true)
@@ -184,11 +179,11 @@ namespace ET
 
         private static void StartMove(this MoveComponent self)
         {
-            self.BeginTime = TimeHelper.ClientNow();
+            self.BeginTime = TimeInfo.Instance.ClientNow();
             self.StartTime = self.BeginTime;
             self.SetNextTarget();
 
-            self.MoveTimer = TimerComponent.Instance.NewFrameTimer(TimerInvokeType.MoveTimer, self);
+            self.MoveTimer = self.Fiber().TimerComponent.NewFrameTimer(TimerInvokeType.MoveTimer, self);
         }
 
         private static void SetNextTarget(this MoveComponent self)
@@ -282,12 +277,12 @@ namespace ET
             self.StartPos = float3.zero;
             self.BeginTime = 0;
             self.NeedTime = 0;
-            TimerComponent.Instance?.Remove(ref self.MoveTimer);
             self.Targets.Clear();
             self.Speed = 0;
             self.N = 0;
             self.TurnTime = 0;
             self.IsTurnHorizontal = false;
+            self.Fiber().TimerComponent?.Remove(ref self.MoveTimer);
 
             if (self.tcs != null)
             {

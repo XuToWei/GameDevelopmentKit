@@ -4,11 +4,11 @@ namespace ET.Analyzer
 {
     public static class ETTaskInSyncMethodAnalyzerRule
     {
-        private const string Title = "UniTask方法调用在非异步方法体内使用错误";
+        private const string Title = "ETTask方法调用在非异步方法体内使用错误";
 
-        private const string MessageFormat = "方法: {0} 在非异步方法体内使用时需要添加.Forget()后缀";
+        private const string MessageFormat = "方法: {0} 在非异步方法体内使用时需要添加.Coroutine()后缀";
 
-        private const string Description = "UniTask方法调用在非异步方法体内使用错误.";
+        private const string Description = "ETTask方法调用在非异步方法体内使用错误.";
 
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.ETTaskInSyncMethodAnalyzerRuleId,
@@ -22,11 +22,11 @@ namespace ET.Analyzer
 
     public static class ETTaskInAsyncMethodAnalyzerRule
     {
-        private const string Title = "UniTask方法调用在异步方法体内使用错误";
+        private const string Title = "ETTask方法调用在异步方法体内使用错误";
 
-        private const string MessageFormat = "方法: {0} 在异步方法体内使用时需要添加await前缀 或 .Forget()后缀";
+        private const string MessageFormat = "方法: {0} 在异步方法体内使用时需要添加await前缀 或 .Coroutine()后缀";
 
-        private const string Description = "UniTask方法调用在异步方法体内使用错误.";
+        private const string Description = "ETTask方法调用在异步方法体内使用错误.";
 
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.ETTaskInAsyncMethodAnalyzerRuleId,
@@ -148,11 +148,11 @@ namespace ET.Analyzer
     
     public static class CheckETCancellTokenAfterAwaitAnalyzerRule
     {
-        private const string Title = "含有CancellationTokenSource参数的异步函数内调用await表达式后必须判断CancelToken.IsCancellationRequested";
+        private const string Title = "含有ETCancelToken参数的异步函数内调用await表达式后必须判断CancelToken.IsCancel";
 
-        private const string MessageFormat = "含有CancellationTokenSource参数的异步函数内调用await表达式后必须判断CancelToken.IsCancellationRequested";
+        private const string MessageFormat = "含有ETCancelToken参数的异步函数内调用await表达式后必须判断CancelToken.IsCancel";
 
-        private const string Description = "含有CancellationTokenSource参数的异步函数内调用await表达式后必须判断CancelToken.IsCancellationRequested.";
+        private const string Description = "含有ETCancelToken参数的异步函数内调用await表达式后必须判断CancelToken.IsCancel.";
 
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.ETCancellationTokenAnalyzerRuleId,
@@ -166,11 +166,11 @@ namespace ET.Analyzer
     
     public static class AwaitExpressionCancelTokenParamAnalyzerRule
     {
-        private const string Title = "含有CancellationTokenSource参数的异步函数内调用await表达式必须传入同一个CancelToken";
+        private const string Title = "含有ETCancelToken参数的异步函数内调用await表达式必须传入同一个CancelToken";
     
-        private const string MessageFormat = "含有CancellationTokenSource参数的异步函数内调用await表达式必须传入同一个CancelToken";
+        private const string MessageFormat = "含有ETCancelToken参数的异步函数内调用await表达式必须传入同一个CancelToken";
     
-        private const string Description = "含有CancellationTokenSource参数的异步函数内调用await表达式必须传入同一个CancelToken.";
+        private const string Description = "含有ETCancelToken参数的异步函数内调用await表达式必须传入同一个CancelToken.";
     
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.AwaitExpressionCancelTokenParamAnalyzerRuleId,
@@ -184,11 +184,11 @@ namespace ET.Analyzer
     
     public static class AsyncMethodWithCancelTokenParamAnalyzerRule
     {
-        private const string Title = "异步函数声明处的CancellationTokenSource参数禁止声明默认值";
+        private const string Title = "异步函数声明处的ETCancelToken参数禁止声明默认值";
     
-        private const string MessageFormat = "异步函数声明处的CancellationTokenSource参数禁止声明默认值";
+        private const string MessageFormat = "异步函数声明处的ETCancelToken参数禁止声明默认值";
     
-        private const string Description = "异步函数声明处的CancellationTokenSource参数禁止声明默认值.";
+        private const string Description = "异步函数声明处的ETCancelToken参数禁止声明默认值.";
     
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.AsyncMethodWithCancelTokenParamAnalyzerRuleId,
@@ -203,11 +203,11 @@ namespace ET.Analyzer
     
     public static class ExpressionWithCancelTokenParamAnalyzerRule
     {
-        private const string Title = "函数调用处的CancellationTokenSource参数禁止传入null";
+        private const string Title = "函数调用处的ETCancelToken参数禁止传入null";
     
-        private const string MessageFormat = "函数调用处的CancellationTokenSource参数禁止传入null";
+        private const string MessageFormat = "函数调用处的ETCancelToken参数禁止传入null";
     
-        private const string Description = "函数调用处的CancellationTokenSource参数禁止传入null.";
+        private const string Description = "函数调用处的ETCancelToken参数禁止传入null.";
     
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.ExpressionWithCancelTokenParamAnalyzerRuleId,
@@ -223,7 +223,7 @@ namespace ET.Analyzer
     {
         private const string Title = "实体类限制多层继承";
 
-        private const string MessageFormat = "类: {0} 不能继承Entiy的子类 请直接继承Entity";
+        private const string MessageFormat = "类: {0} 不能继承{1}的子类 请直接继承{1}";
 
         private const string Description = "实体类限制多层继承.";
 
@@ -319,6 +319,60 @@ namespace ET.Analyzer
                     Title,
                     MessageFormat,
                     DiagnosticCategories.Model,
+                    DiagnosticSeverity.Error,
+                    true,
+                    Description);
+    }
+
+    public static class EntitySystemAnalyzerRule
+    {
+        private const string Title = "Entity类存在未生成的生命周期函数";
+
+        private const string MessageFormat = "Entity类: {0} 存在未生成的生命周期函数111";
+
+        private const string Description = "Entity类存在未生成的生命周期函数.";
+
+        public static readonly DiagnosticDescriptor Rule =
+                new DiagnosticDescriptor(DiagnosticIds.EntitySystemAnalyzerRuleId,
+                    Title,
+                    MessageFormat,
+                    DiagnosticCategories.Model,
+                    DiagnosticSeverity.Error,
+                    true,
+                    Description);
+    }
+
+    public static class EntitySystemMethodNeedSystemOfAttrAnalyzerRule
+    {
+        private const string Title = "EntitySystem标签只能添加在含有EntitySystemOf标签的静态类中";
+
+        private const string MessageFormat = "方法:{0}的{1}标签只能添加在含有{2}标签的静态类中";
+
+        private const string Description = "EntitySystem标签只能添加在含有EntitySystemOf标签的静态类中.";
+
+        public static readonly DiagnosticDescriptor Rule =
+                new DiagnosticDescriptor(DiagnosticIds.EntitySystemMethodNeedSystemOfAttrAnalyzerRuleId,
+                    Title,
+                    MessageFormat,
+                    DiagnosticCategories.Model,
+                    DiagnosticSeverity.Error,
+                    true,
+                    Description);
+    }
+
+    public static class FiberLogAnalyzerRule
+    {
+        private const string Title = "实体类内部或含有实体类参数的函数内部必须使用Fiber输出日志";
+
+        private const string MessageFormat = "实体类内部或含有实体类参数的函数内部必须使用Fiber输出日志";
+
+        private const string Description = "实体类内部或含有实体类参数的函数内部必须使用Fiber输出日志.";
+
+        public static readonly DiagnosticDescriptor Rule =
+                new DiagnosticDescriptor(DiagnosticIds.FiberLogAnalyzerRuleId,
+                    Title,
+                    MessageFormat,
+                    DiagnosticCategories.All,
                     DiagnosticSeverity.Error,
                     true,
                     Description);
