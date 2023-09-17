@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StompyRobot.SRF", "Unity\St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StompyRobot.SRDebugger", "Unity\StompyRobot.SRDebugger.csproj", "{4B2DB0C7-E293-1C35-965D-EE8D7C808E14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.SourceGenerator", "Share\Share.SourceGenerator\Share.SourceGenerator.csproj", "{EE473828-55A5-4134-8515-D805CD576CF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -329,6 +331,18 @@ Global
 		{4B2DB0C7-E293-1C35-965D-EE8D7C808E14}.Release|x64.Build.0 = Debug|Any CPU
 		{4B2DB0C7-E293-1C35-965D-EE8D7C808E14}.Release|x86.ActiveCfg = Debug|Any CPU
 		{4B2DB0C7-E293-1C35-965D-EE8D7C808E14}.Release|x86.Build.0 = Debug|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Debug|x64.Build.0 = Debug|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Debug|x86.Build.0 = Debug|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Release|x64.ActiveCfg = Release|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Release|x64.Build.0 = Release|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Release|x86.ActiveCfg = Release|Any CPU
+		{EE473828-55A5-4134-8515-D805CD576CF0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -357,6 +371,7 @@ Global
 		{52EA1C1B-17D1-6089-9DD0-586D46778A43} = {3E8E1F5B-CAF3-43C1-BD34-3674D4CB13B4}
 		{331A0B3C-AFED-09B9-EDC3-7677B39A2DA2} = {3E8E1F5B-CAF3-43C1-BD34-3674D4CB13B4}
 		{E4617FA4-77C1-8DCF-3AEB-A2A133A794E8} = {3E8E1F5B-CAF3-43C1-BD34-3674D4CB13B4}
+		{EE473828-55A5-4134-8515-D805CD576CF0} = {1272AF7B-A962-4BA4-8A9C-FFA7E131A0AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EABC01E3-3EB5-47EF-B46E-AAD8BB3585F1}

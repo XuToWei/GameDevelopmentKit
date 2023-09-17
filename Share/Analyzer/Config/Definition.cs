@@ -6,9 +6,9 @@
 
         public const string LSEntityType = "ET.LSEntity";
         
-        public const string ETTask = "ETTask";
+        public const string ETTask = "UniTask";
 
-        public const string ETTaskFullName = "ET.ETTask";
+        public const string ETTaskFullName = "Cysharp.Threading.Tasks.UniTask";
 
         public static readonly string[] AddChildMethods = { "AddChild", "AddChildWithId" };
 
@@ -39,8 +39,6 @@
         public const string ETTaskCompleteTask = "ETTask.CompletedTask";
 
         public const string ETClientNameSpace = "ET.Client";
-
-        public const string ClientDirInServer = @"Unity\Assets\Scripts\Codes\Hotfix\Client\";
 
         public const string EntitySystemAttribute = "EntitySystem";
         public const string EntitySystemAttributeMetaName = "ET.EntitySystemAttribute";

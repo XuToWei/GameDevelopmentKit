@@ -28,7 +28,7 @@ namespace ET.Analyzer
             var usingDirective = (UsingDirectiveSyntax)context.Node;
             var namespaceName = usingDirective.Name.ToString();
 
-            if (namespaceName.StartsWith(Definition.ETClientNameSpace) && !context.Node.SyntaxTree.FilePath.Contains(Definition.ClientDirInServer))
+            if (namespaceName.StartsWith(Definition.ETClientNameSpace))
             {
                 var diagnostic = Diagnostic.Create(ClientClassInServerAnalyzerRule.Rule, usingDirective.GetLocation());
                 context.ReportDiagnostic(diagnostic);
