@@ -7,7 +7,7 @@
 ***
 
 ## 使用
-1.  打开Kit.sln项目后，编辑整个项目
+1.  打开Kit.sln项目后，编译整个项目
 2.  运行Design/Excel/gen all.bat或Tools/Tool/ExcelExport即可
 
 ***
