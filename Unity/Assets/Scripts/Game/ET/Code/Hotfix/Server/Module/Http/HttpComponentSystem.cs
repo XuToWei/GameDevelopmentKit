@@ -57,7 +57,7 @@ namespace ET.Server
                 }
                 catch (Exception e)
                 {
-                    self.Fiber().Error(e);
+                    Log.Error(e);
                 }
             }
         }
@@ -71,7 +71,7 @@ namespace ET.Server
             }
             catch (Exception e)
             {
-                self.Fiber().Error(e);
+                Log.Error(e);
             }
             context.Request.InputStream.Dispose();
             context.Response.OutputStream.Dispose();

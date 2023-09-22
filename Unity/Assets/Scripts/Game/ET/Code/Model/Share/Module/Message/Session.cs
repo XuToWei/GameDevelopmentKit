@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace ET
 
             self.requestCallbacks.Clear();
             
-            self.Fiber().Info($"session create: zone: {self.Zone()} id: {self.Id} {timeNow} ");
+            Log.Info($"session create: zone: {self.Zone()} id: {self.Id} {timeNow} ");
         }
         
         [EntitySystem]
@@ -45,7 +46,7 @@ namespace ET
                 responseCallback.Tcs.TrySetException(new RpcException(self.Error, $"session dispose: {self.Id} {self.RemoteAddress}"));
             }
 
-            self.Fiber().Info($"session dispose: {self.RemoteAddress} id: {self.Id} ErrorCode: {self.Error}, please see ErrorCode.cs! {TimeInfo.Instance.ClientNow()}");
+            Log.Info($"session dispose: {self.RemoteAddress} id: {self.Id} ErrorCode: {self.Error}, please see ErrorCode.cs! {TimeInfo.Instance.ClientNow()}");
             
             self.requestCallbacks.Clear();
         }
@@ -106,7 +107,7 @@ namespace ET
 
             if (time > 0)
             {
-                async UniTask Timeout()
+                async UniTaskVoid Timeout()
                 {
                     await self.Fiber().TimerComponent.WaitAsync(time);
                     if (!self.requestCallbacks.TryGetValue(rpcId, out RpcInfo action))
@@ -137,7 +138,10 @@ namespace ET
         {
             self.LastSendTime = TimeInfo.Instance.ClientNow();
             LogMsg.Instance.Debug(self.Fiber(), message);
-            self.AService.Send(self.Id, actorId, message as MessageObject);
+
+            (ushort opcode, MemoryBuffer memoryBuffer) = MessageSerializeHelper.ToMemoryBuffer(self.AService, actorId, message);
+            
+            self.AService.Send(self.Id, memoryBuffer);
         }
     }
 

@@ -18,8 +18,13 @@ namespace ET.Client
             }
             catch (Exception e)
             {
+<<<<<<< HEAD
                 root.Fiber.Error(e);
             }
+=======
+                Log.Error(e);
+            }	
+>>>>>>> 7d37d33dfbf69d664e224d4387156fcf2fda4f70
         }
 
         public static async UniTask Match(Fiber fiber)

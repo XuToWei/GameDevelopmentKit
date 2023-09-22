@@ -17,7 +17,7 @@ namespace ET
 
         public ThreadSynchronizationContext ThreadSynchronizationContext;
 
-        public WService(ThreadSynchronizationContext threadSynchronizationContext, IEnumerable<string> prefixs, ILog log): base(log)
+        public WService(ThreadSynchronizationContext threadSynchronizationContext, IEnumerable<string> prefixs)
         {
             this.ThreadSynchronizationContext = threadSynchronizationContext;
             
@@ -26,7 +26,7 @@ namespace ET
             StartAccept(prefixs).Forget();
         }
         
-        public WService(ThreadSynchronizationContext threadSynchronizationContext, ILog log): base(log)
+        public WService(ThreadSynchronizationContext threadSynchronizationContext)
         {
             this.ThreadSynchronizationContext = threadSynchronizationContext;
         }
@@ -132,14 +132,14 @@ namespace ET
             }
         }
 
-        public override void Send(long channelId, ActorId actorId, MessageObject message)
+        public override void Send(long channelId, MemoryBuffer memoryBuffer)
         {
             this.channels.TryGetValue(channelId, out WChannel channel);
             if (channel == null)
             {
                 return;
             }
-            channel.Send(message);
+            channel.Send(memoryBuffer);
         }
     }
 }

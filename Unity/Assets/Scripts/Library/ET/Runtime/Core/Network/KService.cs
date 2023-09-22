@@ -45,7 +45,7 @@ namespace ET
 
         public Socket Socket;
 
-        public KService(IPEndPoint ipEndPoint, ServiceType serviceType, ILog log): base(log)
+        public KService(IPEndPoint ipEndPoint, ServiceType serviceType)
         {
             this.ServiceType = serviceType;
             this.startTime = DateTime.UtcNow.Ticks;
@@ -69,7 +69,7 @@ namespace ET
             NetworkHelper.SetSioUdpConnReset(this.Socket);
         }
 
-        public KService(AddressFamily addressFamily, ServiceType serviceType, ILog log): base(log)
+        public KService(AddressFamily addressFamily, ServiceType serviceType)
         {
             this.ServiceType = serviceType;
             this.startTime = DateTime.UtcNow.Ticks;
@@ -467,7 +467,7 @@ namespace ET
             Log.Info($"channel send fin: {localConn} {remoteConn} {address} {error}");
         }
         
-        public override void Send(long channelId, ActorId actorId, MessageObject message)
+        public override void Send(long channelId, MemoryBuffer memoryBuffer)
         {
             KChannel channel = this.Get(channelId);
             if (channel == null)
@@ -475,7 +475,7 @@ namespace ET
                 return;
             }
             
-            channel.Send(actorId, message);
+            channel.Send(memoryBuffer);
         }
 
         public override void Update()

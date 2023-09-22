@@ -15,12 +15,12 @@ namespace ET.Server
             {
                 case NetworkProtocol.TCP:
                 {
-                    self.AService = new TService(address, ServiceType.Inner, self.Fiber().Log);
+                    self.AService = new TService(address, ServiceType.Inner);
                     break;
                 }
                 case NetworkProtocol.KCP:
                 {
-                    self.AService = new KService(address, ServiceType.Inner, self.Fiber().Log);
+                    self.AService = new KService(address, ServiceType.Inner);
                     break;
                 }
             }
@@ -43,7 +43,7 @@ namespace ET.Server
             self.AService.Dispose();
         }
 
-        private static void OnRead(this ProcessOuterSender self, long channelId, ActorId actorId, object message)
+        private static void OnRead(this ProcessOuterSender self, long channelId, MemoryBuffer memoryBuffer)
         {
             Session session = self.GetChild<Session>(channelId);
             if (session == null)
@@ -52,6 +52,8 @@ namespace ET.Server
             }
             
             session.LastRecvTime = TimeInfo.Instance.ClientFrameTime();
+
+            (ActorId actorId, object message) = MessageSerializeHelper.ToMessage(self.AService, memoryBuffer);
             
             if (message is IResponse response)
             {
@@ -236,7 +238,7 @@ namespace ET.Server
             long costTime = endTime - beginTime;
             if (costTime > 200)
             {
-                fiber.Warning($"actor rpc time > 200: {costTime} {iRequest}");
+                Log.Warning($"actor rpc time > 200: {costTime} {iRequest}");
             }
 
             return response;

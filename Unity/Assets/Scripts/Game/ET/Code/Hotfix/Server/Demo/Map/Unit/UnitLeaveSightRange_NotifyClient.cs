@@ -11,7 +11,7 @@ namespace ET.Server
             await UniTask.CompletedTask;
             AOIEntity a = args.A;
             AOIEntity b = args.B;
-            if (a.Unit.Type != UnitType.Player)
+            if (a.Unit.Type() != UnitType.Player)
             {
                 return;
             }

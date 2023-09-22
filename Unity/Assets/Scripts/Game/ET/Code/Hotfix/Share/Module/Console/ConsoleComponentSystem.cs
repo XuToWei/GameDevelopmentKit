@@ -58,7 +58,7 @@ namespace ET
                 }
                 catch (Exception e)
                 {
-                    self.Fiber().Console(e.ToString());
+                    Log.Console(e.ToString());
                 }
             }
         }

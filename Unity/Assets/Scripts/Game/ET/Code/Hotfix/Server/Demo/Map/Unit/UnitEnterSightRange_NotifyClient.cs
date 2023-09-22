@@ -16,7 +16,7 @@ namespace ET.Server
             }
 
             Unit ua = a.GetParent<Unit>();
-            if (ua.Type != UnitType.Player)
+            if (ua.Type() != UnitType.Player)
             {
                 return;
             }

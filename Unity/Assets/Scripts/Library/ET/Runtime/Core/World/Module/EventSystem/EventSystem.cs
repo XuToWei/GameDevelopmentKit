@@ -22,7 +22,7 @@ namespace ET
         
         private readonly Dictionary<Type, List<EventInfo>> allEvents = new();
         
-        private Dictionary<Type, Dictionary<long, object>> allInvokes = new(); 
+        private readonly Dictionary<Type, Dictionary<long, object>> allInvokers = new(); 
         
         public void Awake()
         {
@@ -64,10 +64,10 @@ namespace ET
                 object[] attrs = type.GetCustomAttributes(typeof(InvokeAttribute), false);
                 foreach (object attr in attrs)
                 {
-                    if (!this.allInvokes.TryGetValue(iInvoke.Type, out var dict))
+                    if (!this.allInvokers.TryGetValue(iInvoke.Type, out var dict))
                     {
                         dict = new Dictionary<long, object>();
-                        this.allInvokes.Add(iInvoke.Type, dict);
+                        this.allInvokers.Add(iInvoke.Type, dict);
                     }
                     
                     InvokeAttribute invokeAttribute = attr as InvokeAttribute;
@@ -154,7 +154,7 @@ namespace ET
         // publish是事件，抛出去可以没人订阅，调用者跟被调用者属于两个模块，比如任务系统需要知道道具使用的信息，则订阅道具使用事件
         public void Invoke<A>(long type, A args) where A: struct
         {
-            if (!this.allInvokes.TryGetValue(typeof(A), out var invokeHandlers))
+            if (!this.allInvokers.TryGetValue(typeof(A), out var invokeHandlers))
             {
                 throw new Exception($"Invoke error1: {type} {typeof(A).FullName}");
             }
@@ -174,7 +174,7 @@ namespace ET
         
         public T Invoke<A, T>(long type, A args) where A: struct
         {
-            if (!this.allInvokes.TryGetValue(typeof(A), out var invokeHandlers))
+            if (!this.allInvokers.TryGetValue(typeof(A), out var invokeHandlers))
             {
                 throw new Exception($"Invoke error4: {type} {typeof(A).FullName}");
             }

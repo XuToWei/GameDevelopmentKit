@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-namespace ET
+namespace ET.Editor
 {
     [InitializeOnLoad]
     public class EditorLogHelper
@@ -39,22 +39,20 @@ namespace ET
 
         private static void CreateLog()
         {
-            if (Logger.Instance != null)
+            if (Logger.Instance == null)
             {
-                return;
+                World.Instance.AddSingleton<Logger, ILog>(new UnityLogger());
             }
 
-            World.Instance.AddSingleton<Logger, ILog>(new UnityLogger());
+            if (Options.Instance == null)
+            {
+                World.Instance.AddSingleton(new Options());
+            }
         }
 
         private static void DestroyLog()
         {
-            if (Logger.Instance == null)
-            {
-                return;
-            }
-
-            Logger.Instance.Dispose();
+            World.Instance.Dispose();
         }
     }
 }

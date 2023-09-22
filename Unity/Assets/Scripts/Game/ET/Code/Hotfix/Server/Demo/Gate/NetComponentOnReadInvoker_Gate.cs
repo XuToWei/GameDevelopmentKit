@@ -4,14 +4,14 @@ using Cysharp.Threading.Tasks;
 namespace ET.Server
 {
     [Invoke((long)SceneType.Gate)]
-    public class NetComponentOnReadInvoker_Gate: AInvokeHandler<NetOuterComponentOnRead>
+    public class NetComponentOnReadInvoker_Gate: AInvokeHandler<NetComponentOnRead>
     {
-        public override void Handle(NetOuterComponentOnRead args)
+        public override void Handle(NetComponentOnRead args)
         {
             HandleAsync(args).Forget();
         }
 
-        private async UniTask HandleAsync(NetOuterComponentOnRead args)
+        private async UniTaskVoid HandleAsync(NetComponentOnRead args)
         {
             Session session = args.Session;
             object message = args.Message;

@@ -10,11 +10,6 @@ namespace ET
     {
         public int ConfigId { get; set; } //配置表id
 
-        [BsonIgnore]
-        public DRUnitConfig Config => Tables.Instance.DTUnitConfig.Get(this.ConfigId);
-
-        public UnitType Type => (UnitType)Config.Type;
-
         [BsonElement]
         private float3 position; //坐标
 

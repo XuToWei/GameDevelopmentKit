@@ -109,7 +109,7 @@ namespace ET
         public static async UniTask<T> Wait<T>(this ObjectWait self, int timeout, CancellationTokenSource cts = null) where T : struct, IWaitType
         {
             ResultCallback<T> tcs = new ResultCallback<T>();
-            async UniTask WaitTimeout()
+            async UniTaskVoid WaitTimeout()
             {
                 await self.Fiber().TimerComponent.WaitAsync(timeout, cts);
                 if (cts == null || cts.IsCancellationRequested)

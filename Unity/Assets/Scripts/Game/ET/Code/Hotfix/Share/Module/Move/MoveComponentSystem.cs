@@ -20,7 +20,7 @@ namespace ET
                 }
                 catch (Exception e)
                 {
-                    self.Fiber().Error($"move timer error: {self.Id}\n{e}");
+                    Log.Error($"move timer error: {self.Id}\n{e}");
                 }
             }
         }

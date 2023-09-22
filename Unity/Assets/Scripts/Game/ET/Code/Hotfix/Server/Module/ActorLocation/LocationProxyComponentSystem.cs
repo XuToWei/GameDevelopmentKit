@@ -13,7 +13,7 @@ namespace ET.Server
         public static async UniTask Add(this LocationProxyComponent self, int type, long key, ActorId actorId)
         {
             Fiber fiber = self.Fiber();
-            fiber.Info($"location proxy add {key}, {actorId} {TimeInfo.Instance.ServerNow()}");
+            Log.Info($"location proxy add {key}, {actorId} {TimeInfo.Instance.ServerNow()}");
             await fiber.Root.GetComponent<MessageSender>().Call(GetLocationSceneId(key),
                 new ObjectAddRequest() { Type = type, Key = key, ActorId = actorId });
         }
@@ -21,7 +21,7 @@ namespace ET.Server
         public static async UniTask Lock(this LocationProxyComponent self, int type, long key, ActorId actorId, int time = 60000)
         {
             Fiber fiber = self.Fiber();
-            fiber.Info($"location proxy lock {key}, {actorId} {TimeInfo.Instance.ServerNow()}");
+            Log.Info($"location proxy lock {key}, {actorId} {TimeInfo.Instance.ServerNow()}");
             await fiber.Root.GetComponent<MessageSender>().Call(GetLocationSceneId(key),
                 new ObjectLockRequest() { Type = type, Key = key, ActorId = actorId, Time = time });
         }
@@ -29,7 +29,7 @@ namespace ET.Server
         public static async UniTask UnLock(this LocationProxyComponent self, int type, long key, ActorId oldActorId, ActorId newActorId)
         {
             Fiber fiber = self.Fiber();
-            fiber.Info($"location proxy unlock {key}, {newActorId} {TimeInfo.Instance.ServerNow()}");
+            Log.Info($"location proxy unlock {key}, {newActorId} {TimeInfo.Instance.ServerNow()}");
             await fiber.Root.GetComponent<MessageSender>().Call(GetLocationSceneId(key),
                 new ObjectUnLockRequest() { Type = type, Key = key, OldActorId = oldActorId, NewActorId = newActorId });
         }
@@ -37,7 +37,7 @@ namespace ET.Server
         public static async UniTask Remove(this LocationProxyComponent self, int type, long key)
         {
             Fiber fiber = self.Fiber();
-            fiber.Info($"location proxy add {key}, {TimeInfo.Instance.ServerNow()}");
+            Log.Info($"location proxy add {key}, {TimeInfo.Instance.ServerNow()}");
             await fiber.Root.GetComponent<MessageSender>().Call(GetLocationSceneId(key),
                 new ObjectRemoveRequest() { Type = type, Key = key });
         }

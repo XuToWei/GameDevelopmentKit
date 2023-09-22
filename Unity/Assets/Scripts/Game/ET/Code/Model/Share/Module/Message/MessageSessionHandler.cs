@@ -17,13 +17,13 @@ namespace ET
             using Message msg = message as Message;
             if (message == null)
             {
-                session.Fiber().Error($"消息类型转换错误: {msg.GetType().FullName} to {typeof (Message).Name}");
+                Log.Error($"消息类型转换错误: {msg.GetType().FullName} to {typeof (Message).Name}");
                 return;
             }
 
             if (session.IsDisposed)
             {
-                session.Fiber().Error($"session disconnect {msg}");
+                Log.Error($"session disconnect {msg}");
                 return;
             }
 
@@ -65,7 +65,6 @@ namespace ET
                 long instanceId = session.InstanceId;
 
                 Response response = ObjectPool.Instance.Fetch<Response>();
-                Fiber fiber = session.Fiber();
                 try
                 {
                     await this.Run(session, request, response);
@@ -73,13 +72,13 @@ namespace ET
                 catch (RpcException exception)
                 {
                     // 这里不能返回堆栈给客户端
-                    fiber.Error(exception.ToString());
+                    Log.Error(exception.ToString());
                     response.Error = exception.Error;
                 }
                 catch (Exception exception)
                 {
                     // 这里不能返回堆栈给客户端
-                    fiber.Error(exception.ToString());
+                    Log.Error(exception.ToString());
                     response.Error = ErrorCore.ERR_RpcFail;
                 }
                 

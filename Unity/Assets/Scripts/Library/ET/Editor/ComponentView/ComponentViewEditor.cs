@@ -1,4 +1,4 @@
-#if UNITY_ET_VIEW && UNITY_EDITOR
+#if UNITY_ET_VIEW
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -78,7 +78,16 @@ namespace ET.Editor
                         {
                             fieldName = fieldName.Substring(1, fieldName.Length - 17);
                         }
-                        value = typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
+
+                        try
+                        {
+                            value = typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError(e);
+                        }
+                        
                         fieldInfo.SetValue(entity, value);
                         break;
                     }
