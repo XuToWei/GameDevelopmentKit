@@ -8,12 +8,10 @@ namespace Game.Editor
     {
         public static bool IsEnableEditorCodeBytesMode()
         {
-            CodeRunnerComponent codeRunnerComponent = EntryUtility.GetEntrySceneComponent<CodeRunnerComponent>();
-            if (codeRunnerComponent == null)
-                return false;
-            Type type = typeof(CodeRunnerComponent);
-            FieldInfo fieldInfo = type.GetField("m_EnableEditorCodeBytesMode", BindingFlags.NonPublic | BindingFlags.Instance);
-            return (bool)fieldInfo.GetValue(codeRunnerComponent);
+            var content = System.IO.File.ReadAllText(EntryUtility.EntryScenePath);
+            string targetString = @"  m_EnableEditorCodeBytesMode: ";
+            int index = content.IndexOf(targetString, StringComparison.Ordinal) + targetString.Length;
+            return int.Parse(content.Substring(index, 1)) == 1;
         }
     }
 }

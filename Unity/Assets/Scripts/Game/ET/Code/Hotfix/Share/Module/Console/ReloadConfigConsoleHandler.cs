@@ -24,13 +24,9 @@ namespace ET
                         Log.Console($"reload config but not find {category}");
                         return;
                     }
-<<<<<<< HEAD
+
                     await CodeLoaderComponent.Instance.ReloadAsync();
-                    fiber.Console($"reload config {configName} finish!");
-=======
-                    await ConfigLoader.Instance.Reload(type);
                     Log.Console($"reload config {configName} finish!");
->>>>>>> 7d37d33dfbf69d664e224d4387156fcf2fda4f70
                     break;
             }
         }

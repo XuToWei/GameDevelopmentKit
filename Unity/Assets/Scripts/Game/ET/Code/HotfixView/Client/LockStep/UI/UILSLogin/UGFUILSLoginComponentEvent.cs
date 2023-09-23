@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof(UGFUILSLogin))]
-    public static partial class UGFUILSLoginSystem
+    [FriendOf(typeof(UGFUILSLoginComponent))]
+    public static partial class UGFUILSLoginComponentSystem
     {
         [UGFUIFormEvent(UGFUIFormId.UILSLogin)]
-        private class UGFUILSLoginEvent : AUGFUIFormEvent
+        private class UGFUILSLoginComponentEvent : AUGFUIFormEvent
         {
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                UGFUILSLogin uiLSLogin = uiForm.AddComponent<UGFUILSLogin, Transform>(uiForm.transform);
+                UGFUILSLoginComponent uiLSLogin = uiForm.AddComponent<UGFUILSLoginComponent, Transform>(uiForm.transform);
                 uiLSLogin.loginButton.Set(uiLSLogin.OnLogin);
             }
             

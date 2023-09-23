@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof(UGFUILSRoom))]
-    public static partial class UGFUILSRoomSystem
+    [FriendOf(typeof(UGFUILSRoomComponent))]
+    public static partial class UGFUILSRoomComponentSystem
     {
         [UGFUIFormEvent(UGFUIFormId.UILSRoom)]
         private class UGFUILSRoomEvent : AUGFUIFormEvent
@@ -12,7 +12,7 @@ namespace ET.Client
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                UGFUILSRoom uiLSRoom = uiForm.AddComponent<UGFUILSRoom, Transform>(uiForm.transform);
+                UGFUILSRoomComponent uiLSRoom = uiForm.AddComponent<UGFUILSRoomComponent, Transform>(uiForm.transform);
                 Room room = uiLSRoom.Room();
                 if (room.IsReplay)
                 {
@@ -39,7 +39,7 @@ namespace ET.Client
             public override void OnUpdate(UGFUIForm uiForm, float elapseSeconds, float realElapseSeconds)
             {
                 base.OnUpdate(uiForm, elapseSeconds, realElapseSeconds);
-                UGFUILSRoom uiLSRoom = uiForm.GetComponent<UGFUILSRoom>();
+                UGFUILSRoomComponent uiLSRoom = uiForm.GetComponent<UGFUILSRoomComponent>();
                 Room room = uiLSRoom.Room();
                 if (uiLSRoom.frame != room.AuthorityFrame)
                 {

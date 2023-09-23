@@ -2,7 +2,8 @@
     "name": "ET.Editor",
     "rootNamespace": "ET",
     "references": [
-        "ET"
+        "ET",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [
         "Editor"

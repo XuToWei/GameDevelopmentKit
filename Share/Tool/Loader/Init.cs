@@ -8,21 +8,25 @@ namespace ET.Server
     {
         private static int Main(string[] args)
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
-
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                Log.Error(e.ExceptionObject.ToString());
+            };
+            
             try
             {
                 // 命令行参数
                 Parser.Default.ParseArguments<Options>(args)
                         .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
-                        .WithParsed((o)=>World.Instance.AddSingleton(o));
+                        .WithParsed((o) => World.Instance.AddSingleton(o));
                 var nLog = new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, 0, "../Config/NLog/NLog.config");
                 World.Instance.AddSingleton<Logger, ILog>(nLog);
                 
                 World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[] { typeof (Init).Assembly });
                 World.Instance.AddSingleton<EventSystem>();
                 
-                MongoHelper.Register();
+                // 强制调用一下mongo，避免mongo库被裁剪
+                MongoHelper.ToJson(1);
                 
                 Log.Info($"server start........................ ");
                 

@@ -1,22 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using GameFramework.Resource;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityGameFramework.Runtime;
 
 namespace UnityGameFramework.Extension.Editor
 {
     public static class EntryUtility
     {
-        public static readonly string EntrySceneName = "Assets/Launcher.unity";
+        public static readonly string EntryScenePath = "Assets/Launcher.unity";
         
         public static Scene GetEntryScene()
         {
-            EditorSceneManager.OpenScene(EntrySceneName);
-            return SceneManager.GetSceneByPath(EntrySceneName);
+            EditorSceneManager.OpenScene(EntryScenePath);
+            return SceneManager.GetSceneByPath(EntryScenePath);
         }
 
         public static T GetEntrySceneComponent<T>() where T : Component
@@ -46,10 +44,11 @@ namespace UnityGameFramework.Extension.Editor
 
         public static ResourceMode GetEntryResourceMode()
         {
-            ResourceComponent resourceComponent = GetEntrySceneComponent<ResourceComponent>();
-            Type type = typeof(ResourceComponent);
-            FieldInfo fieldInfo = type.GetField("m_ResourceMode", BindingFlags.NonPublic | BindingFlags.Instance);
-            ResourceMode resourceMode = (ResourceMode)fieldInfo.GetValue(resourceComponent);
+            var content = System.IO.File.ReadAllText(EntryScenePath);
+            string targetString = @"      propertyPath: m_ResourceMode
+      value: ";
+            int index = content.IndexOf(targetString, StringComparison.Ordinal) + targetString.Length;
+            ResourceMode resourceMode = Enum.Parse<ResourceMode>(content.Substring(index, 1));
             return resourceMode;
         }
     }

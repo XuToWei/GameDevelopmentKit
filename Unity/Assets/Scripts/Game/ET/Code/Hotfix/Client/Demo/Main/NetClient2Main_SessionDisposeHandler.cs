@@ -7,13 +7,8 @@ namespace ET.Client
     {
         protected override async UniTask Run(Scene entity, NetClient2Main_SessionDispose message)
         {
-<<<<<<< HEAD
-            entity.Fiber.Error($"session dispose, error: {message.Error}");
-            await UniTask.CompletedTask;
-=======
             Log.Error($"session dispose, error: {message.Error}");
-            await ETTask.CompletedTask;
->>>>>>> 7d37d33dfbf69d664e224d4387156fcf2fda4f70
+            await UniTask.CompletedTask;
         }
     }
 }

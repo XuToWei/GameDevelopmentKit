@@ -3,25 +3,20 @@ using UnityEngine;
 
 namespace ET.Client
 {
+    [EntitySystemOf(typeof(UGFUI#NAME#))]
     [FriendOf(typeof(UGFUI#NAME#))]
     public static partial class UGFUI#NAME#System
     {
         [EntitySystem]
-        private class UGFUI#NAME#AwakeSystem : AwakeSystem<UGFUI#NAME#, Transform>
+        private static void Awake(this UGFUI#NAME# self, Transform uiTransform)
         {
-             protected override void Awake(UGFUI#NAME# self, Transform uiTransform)
-             {
-                //self.InitBind(uiTransform);
-             }
+            //self.InitBind(uiTransform);
         }
         
         [EntitySystem]
-        private class UGFUI#NAME#DestroySystem : DestroySystem<UGFUI#NAME#>
+        private static void Destroy(this UGFUI#NAME# self)
         {
-            protected override void Destroy(UGFUI#NAME# self)
-            {
-                //self.ClearBind();
-            }
+            //self.ClearBind();
         }
     }
 }

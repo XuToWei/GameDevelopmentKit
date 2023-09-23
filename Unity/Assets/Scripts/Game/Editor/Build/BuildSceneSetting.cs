@@ -15,7 +15,7 @@ namespace Game.Editor
         public static void AllScenes()
         {
             List<EditorBuildSettingsScene> scenes = new List<EditorBuildSettingsScene>();
-            scenes.Add(new EditorBuildSettingsScene(EntryUtility.EntrySceneName, true));
+            scenes.Add(new EditorBuildSettingsScene(EntryUtility.EntryScenePath, true));
 
             string[] sceneGuids = AssetDatabase.FindAssets("t:Scene", s_SearchScenePaths);
             foreach (string sceneGuid in sceneGuids)

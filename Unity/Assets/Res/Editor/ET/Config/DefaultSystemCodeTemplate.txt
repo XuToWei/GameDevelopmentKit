@@ -1,15 +1,13 @@
 ﻿namespace ET#NAMESPACE#
 {
+    [EntitySystemOf(typeof(#NAME#))]
     [FriendOf(typeof(#NAME#))]
-    public static class #NAME#System
+    public static partial class #NAME#System
     {
         [EntitySystem]
-        private class #NAME#AwakeSystem : AwakeSystem<#NAME#>
+        private static void Awake(this #NAME# self)
         {
-             protected override void Awake(#NAME# self)
-             {
-                
-             }
+            
         }
     }
 }

@@ -28,7 +28,7 @@ namespace ET
         
         private static async UniTaskVoid StartAsync()
         {
-            WinPeriod.Init();
+            //WinPeriod.Init();
 
             // 注册Mongo type
             MongoRegister.Init();
@@ -40,7 +40,9 @@ namespace ET
             World.Instance.AddSingleton<NetServices>();
             World.Instance.AddSingleton<NavmeshComponent>();
             World.Instance.AddSingleton<LogMsg>();
-            
+            int i = 0;
+            i = 9 + 8;
+            Log.Debug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"+i);
             // 创建需要reload的code singleton
             CodeTypes.Instance.CreateCode();
 

@@ -1,20 +1,19 @@
-using Cysharp.Threading.Tasks;
 using Game;
 using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof(UGFUILobbyComponent))]
-    public static partial class UGFUILobbyComponentSystem
+    [FriendOf(typeof(UGFUILoginComponent))]
+    public static partial class UGFUILoginComponentSystem
     {
-        [UGFUIFormEvent(UGFUIFormId.UILobby)]
-        private class UGFUILobbyEvent : AUGFUIFormEvent
+        [UGFUIFormEvent(UGFUIFormId.UILogin)]
+        public class UGFUILoginComponentEvent : AUGFUIFormEvent
         {
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                var uiLobby = uiForm.AddComponent<UGFUILobbyComponent, Transform>(uiForm.transform);
-                uiLobby.enterMapButton.SetAsync(uiLobby.EnterMap);
+                var uiLogin = uiForm.AddComponent<UGFUILoginComponent, Transform>(uiForm.transform);
+                uiLogin.loginButton.SetAsync(uiLogin.OnLogin);
             }
             
             public override void OnOpen(UGFUIForm uiForm, object userData)

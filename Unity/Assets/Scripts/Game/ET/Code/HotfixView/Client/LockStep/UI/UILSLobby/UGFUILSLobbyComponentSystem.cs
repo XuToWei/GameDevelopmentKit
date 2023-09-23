@@ -5,33 +5,28 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof (UGFUILSLobby))]
-    public static partial class UGFUIUILSLobbySystem
+    [EntitySystemOf(typeof(UGFUILSLobbyComponent))]
+    [FriendOf(typeof(UGFUILSLobbyComponent))]
+    public static partial class UGFUILSLobbyComponentSystem
     {
         [EntitySystem]
-        private class UGFUIUILSLobbyAwakeSystem : AwakeSystem<UGFUILSLobby, Transform>
+        private static void Awake(this UGFUILSLobbyComponent self, Transform uiTransform)
         {
-             protected override void Awake(UGFUILSLobby self, Transform uiTransform)
-             {
-                self.InitBind(uiTransform);
-             }
+            self.InitBind(uiTransform);
         }
         
         [EntitySystem]
-        private class UGFUIUILSLobbyDestroySystem : DestroySystem<UGFUILSLobby>
+        private static void Destroy(this UGFUILSLobbyComponent self)
         {
-            protected override void Destroy(UGFUILSLobby self)
-            {
-                self.ClearBind();
-            }
+            self.ClearBind();
         }
         
-        public static async UniTask EnterMap(this UGFUILSLobby self)
+        public static async UniTask EnterMap(this UGFUILSLobbyComponent self)
         {
             await EnterMapHelper.Match(self.Fiber());
         }
         
-        public static void Replay(this UGFUILSLobby self)
+        public static void Replay(this UGFUILSLobbyComponent self)
         {
             byte[] bytes = File.ReadAllBytes(self.replayPathInputField.text);
             

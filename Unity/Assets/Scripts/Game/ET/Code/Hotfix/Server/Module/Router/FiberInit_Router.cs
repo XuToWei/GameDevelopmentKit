@@ -13,13 +13,8 @@ namespace ET.Server
             
             // 开发期间使用OuterIPPort，云服务器因为本机没有OuterIP，所以要改成InnerIPPort，然后在云防火墙中端口映射到InnerIPPort
             root.AddComponent<RouterComponent, IPEndPoint, string>(startSceneConfig.OuterIPPort, startSceneConfig.StartProcessConfig.InnerIP);
-<<<<<<< HEAD
-            root.Fiber.Console($"Router create: {root.Fiber.Id}");
-            await UniTask.CompletedTask;
-=======
             Log.Console($"Router create: {root.Fiber.Id}");
-            await ETTask.CompletedTask;
->>>>>>> 7d37d33dfbf69d664e224d4387156fcf2fda4f70
+            await UniTask.CompletedTask;
         }
     }
 }

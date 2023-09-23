@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityGameFramework.Extension.Editor;
 
 namespace Game.Editor
@@ -16,44 +17,45 @@ namespace Game.Editor
             if (GUILayout.Button(m_ButtonGUIContent))
             {
                 BuildSceneSetting.AllScenes();
-                SceneHelper.StartScene(EntryUtility.EntrySceneName);
+                SceneHelper.StartScene(EntryUtility.EntryScenePath);
             }
         }
     }
 
     internal static class SceneHelper
     {
-        static string s_SceneToOpen;
+        private const string UnityEditorSceneToOpenKey = "UnityEditorSceneToOpen";
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void OnBeforeSceneLoad()
+        {
+            if (PlayerPrefs.HasKey(UnityEditorSceneToOpenKey))
+            {
+                string scenePath = PlayerPrefs.GetString(UnityEditorSceneToOpenKey);
+                if (!SceneManager.GetActiveScene().path.Equals(scenePath))
+                {
+                    SceneManager.LoadScene(scenePath);
+                }
+            }
+        }
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void OnAfterSceneLoad()
+        {
+            if (PlayerPrefs.HasKey(UnityEditorSceneToOpenKey))
+            {
+                PlayerPrefs.DeleteKey(UnityEditorSceneToOpenKey);
+            }
+        }
 
-        public static void StartScene(string sceneAssetName)
+        public static void StartScene(string scenePathName)
         {
             if (EditorApplication.isPlaying)
             {
-                EditorApplication.isPlaying = false;
-            }
-
-            s_SceneToOpen = sceneAssetName;
-            EditorApplication.update += OnUpdate;
-        }
-
-        static void OnUpdate()
-        {
-            if (s_SceneToOpen == null ||
-                EditorApplication.isPlaying || EditorApplication.isPaused ||
-                EditorApplication.isCompiling || EditorApplication.isPlayingOrWillChangePlaymode)
-            {
                 return;
             }
-
-            EditorApplication.update -= OnUpdate;
-
-            if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
-            {
-                EditorSceneManager.OpenScene(s_SceneToOpen);
-                EditorApplication.isPlaying = true;
-            }
-
-            s_SceneToOpen = null;
+            PlayerPrefs.SetString(UnityEditorSceneToOpenKey, scenePathName);
+            EditorApplication.isPlaying = true;
         }
     }
 }

@@ -7,6 +7,9 @@ namespace ET.Client
     {
         protected override async UniTask Run(Scene root, EntryEvent3 args)
         {
+            //Test
+            root.AddComponent<TestComponent>();
+            
             World.Instance.AddSingleton<UGFEventComponent>();
             
             GlobalComponent globalComponent = root.AddComponent<GlobalComponent>();

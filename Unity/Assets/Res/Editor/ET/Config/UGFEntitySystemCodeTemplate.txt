@@ -7,21 +7,15 @@ namespace ET.Client
     public static partial class UGFEntity#NAME#System
     {
         [EntitySystem]
-        private class UGFEntity#NAME#AwakeSystem : AwakeSystem<UGFEntity#NAME#, Transform>
+        private static void Awake(this UGFEntity#NAME# self, Transform transform)
         {
-             protected override void Awake(UGFEntity#NAME# self, Transform transform)
-             {
-                //self.InitBind(transform);
-             }
+           //self.InitBind(transform);
         }
         
         [EntitySystem]
-        private class UGFEntity#NAME#DestroySystem : DestroySystem<UGFEntity#NAME#>
+        private static void Destroy(this UGFEntity#NAME# self)
         {
-            protected override void Destroy(UGFEntity#NAME# self)
-            {
-                //self.ClearBind();
-            }
+            //self.ClearBind();
         }
     }
 }

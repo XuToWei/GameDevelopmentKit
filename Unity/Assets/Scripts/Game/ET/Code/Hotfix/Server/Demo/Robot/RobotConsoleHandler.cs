@@ -21,15 +21,9 @@ namespace ET.Server
 
                     try
                     {
-<<<<<<< HEAD
-                        fiber.Debug($"run case start: {caseType}");
-                        await EventSystem.Instance.Invoke<RobotInvokeArgs, UniTask>(caseType, new RobotInvokeArgs() { Fiber = fiber, Content = content });
-                        fiber.Debug($"run case finish: {caseType}");
-=======
                         Log.Debug($"run case start: {caseType}");
-                        await EventSystem.Instance.Invoke<RobotInvokeArgs, ETTask>(caseType, new RobotInvokeArgs() { Fiber = fiber, Content = content });
+                        await EventSystem.Instance.Invoke<RobotInvokeArgs, UniTask>(caseType, new RobotInvokeArgs() { Fiber = fiber, Content = content });
                         Log.Debug($"run case finish: {caseType}");
->>>>>>> 7d37d33dfbf69d664e224d4387156fcf2fda4f70
                     }
                     catch (Exception e)
                     {
@@ -50,15 +44,9 @@ namespace ET.Server
                         }
                         try
                         {
-<<<<<<< HEAD
-                            fiber.Debug($"run case start: {caseType}");
-                            await EventSystem.Instance.Invoke<RobotInvokeArgs, UniTask>(caseType, new RobotInvokeArgs() { Fiber = fiber, Content = content});
-                            fiber.Debug($"---------run case finish: {caseType}");
-=======
                             Log.Debug($"run case start: {caseType}");
-                            await EventSystem.Instance.Invoke<RobotInvokeArgs, ETTask>(caseType, new RobotInvokeArgs() { Fiber = fiber, Content = content});
+                            await EventSystem.Instance.Invoke<RobotInvokeArgs, UniTask>(caseType, new RobotInvokeArgs() { Fiber = fiber, Content = content});
                             Log.Debug($"---------run case finish: {caseType}");
->>>>>>> 7d37d33dfbf69d664e224d4387156fcf2fda4f70
                         }
                         catch (Exception e)
                         {

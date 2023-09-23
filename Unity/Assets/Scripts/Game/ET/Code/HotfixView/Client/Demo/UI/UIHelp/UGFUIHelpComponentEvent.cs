@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [FriendOf(typeof(UGFUIHelp))]
-    public static partial class UGFUIHelpSystem
+    [FriendOf(typeof(UGFUIHelpComponent))]
+    public static partial class UGFUIHelpComponentSystem
     {
         [UGFUIFormEvent(UGFUIFormId.UIHelp)]
         public class UGFUIHelpEvent : AUGFUIFormEvent
@@ -11,7 +11,7 @@ namespace ET.Client
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                UGFUIHelp uiHelp = uiForm.AddComponent<UGFUIHelp, Transform>(uiForm.transform);
+                UGFUIHelpComponent uiHelp = uiForm.AddComponent<UGFUIHelpComponent, Transform>(uiForm.transform);
             }
             
             public override void OnOpen(UGFUIForm uiForm, object userData)

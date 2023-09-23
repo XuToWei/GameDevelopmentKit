@@ -4,14 +4,13 @@ using Game.Editor;
 using UnityEditor;
 using UnityEditor.Build.Player;
 using UnityEngine;
-using UnityGameFramework.Extension.Editor;
 
 namespace ET.Editor
 {
     public static class BuildAssemblyTool
     {
         public static readonly string CodeDir = "Assets/Res/ET/Code";
-        public static readonly string[] ExtraScriptingDefines = new[] { "UNITY_COMPILE", "UNITY_ET" };
+        public static readonly string[] ExtraScriptingDefines = new[] { "UNITY_COMPILE", "UNITY_ET", "DEBUG" };
         public static readonly string[] DllNames = new[] { "Game.ET.Code.Model", "Game.ET.Code.ModelView", "Game.ET.Code.Hotfix", "Game.ET.Code.HotfixView" };
 
         public static void Build(BuildTarget target, ScriptCompilationOptions options)

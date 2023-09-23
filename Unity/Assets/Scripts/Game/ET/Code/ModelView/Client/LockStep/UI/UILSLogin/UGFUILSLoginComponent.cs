@@ -4,7 +4,7 @@ namespace ET.Client
 {
     [EnableMethod]
     [ComponentOf(typeof(UGFUIForm))]
-    public partial class UGFUILSLogin : Entity, IAwake<Transform>, IDestroy
+    public partial class UGFUILSLoginComponent : Entity, IAwake<Transform>, IDestroy
     {
         
     }

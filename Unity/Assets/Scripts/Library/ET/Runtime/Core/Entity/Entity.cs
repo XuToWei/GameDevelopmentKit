@@ -26,6 +26,8 @@ namespace ET
         [StaticField]
         private static UnityEngine.Transform rootViewTransform;
 
+        public UnityEngine.GameObject ViewGO => viewGO;
+
         public static void SetRootView(UnityEngine.Transform root)
         {
             rootViewTransform = root;

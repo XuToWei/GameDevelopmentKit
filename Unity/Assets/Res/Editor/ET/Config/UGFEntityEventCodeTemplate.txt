@@ -2,20 +2,22 @@
 
 namespace ET.Client
 {
-    [EnableClass]
     [FriendOf(typeof(UGFEntity#NAME#))]
-    public class UGFEntity#NAME#Event : AUGFEntityEvent
+    public static partial class UGFEntity#NAME#System
     {
-        public override void OnInit(UGFEntity entity, object userData)
+        public partial class UGFEntity#NAME#Event : AUGFEntityEvent
         {
-            base.OnInit(entity, userData);
-            UGFEntity#NAME# entity#NAME# = entity.AddComponent<UGFEntity#NAME#, Transform>(entity.transform);
-        }
-        
-        public override void OnShow(UGFEntity entity, object userData)
-        {
-            base.OnShow(entity, userData);
+            public override void OnInit(UGFEntity entity, object userData)
+            {
+                base.OnInit(entity, userData);
+                UGFEntity#NAME# entity#NAME# = entity.AddComponent<UGFEntity#NAME#, Transform>(entity.transform);
+            }
             
+            public override void OnShow(UGFEntity entity, object userData)
+            {
+                base.OnShow(entity, userData);
+                
+            }
         }
     }
 }

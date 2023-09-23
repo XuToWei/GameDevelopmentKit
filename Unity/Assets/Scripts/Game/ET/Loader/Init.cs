@@ -66,7 +66,10 @@ namespace ET
 
         private async UniTaskVoid StartAsync()
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                Log.Error(e.ExceptionObject.ToString());
+            };
 
             // 命令行参数
             string[] args = "".Split(" ");

@@ -53,10 +53,14 @@ namespace ET
                 }
 
                 Fiber.Instance = fiber;
+#if !UNITY_EDITOR
                 SynchronizationContext.SetSynchronizationContext(fiber.ThreadSynchronizationContext);
+#endif
                 fiber.Update();
                 fiber.LateUpdate();
+#if !UNITY_EDITOR
                 SynchronizationContext.SetSynchronizationContext(null);
+#endif
                 Fiber.Instance = null;
 
                 this.idQueue.Enqueue(id);

@@ -2,7 +2,7 @@
 
 namespace ET.Client
 {
-    public partial class UGFUILSLobby : CodeBind.ICSCodeBind
+    public partial class UGFUILSLobbyComponent : CodeBind.ICSCodeBind
     {
         public CodeBind.CSCodeBindMono mono { get; private set; }
 

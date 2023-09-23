@@ -46,7 +46,6 @@
       <Asset Guid="09e587528c6da27469a8017d23136a0f" ResourceName="Luban" />
       <Asset Guid="0a65a68c01a76ea4b8b574827a6467aa" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="11e27c26ac87b40f0a62ec40d7261989" ResourceName="Entity" />
-      <Asset Guid="1561212b4a64dea4d92ea3eb404e213d" ResourceName="ET.Code" />
       <Asset Guid="156d241f796508c4da4fc354a7fbf5a8" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="160925a6fe2664f2a978566b819f0af0" ResourceName="Entity" />
       <Asset Guid="172ab742804613d4f99fee07a3878843" ResourceName="Luban" />
@@ -54,26 +53,25 @@
       <Asset Guid="236433a27ce40a7429b87d14d8fa3035" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="24ca310f92a6796408f1db7647ec4e55" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="25619d90ce6d6724db8154b48c144403" ResourceName="Res/Localization/ChineseTraditional" />
-      <Asset Guid="306a97ef4d120a24898d6e212ffa4ee0" ResourceName="ET.Code" />
       <Asset Guid="3455fe69f7ddc4604b95bf9b0a1e88d7" ResourceName="Entity" />
       <Asset Guid="3aa539b1e46111d4299a83c73ebe762c" ResourceName="Res/UI/UIForm/Hot/AboutForm" />
       <Asset Guid="3be3fac3611f4584695662c4889f722d" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="3ec74aa98d7b1ba4599726fc79459c3c" ResourceName="Luban" />
       <Asset Guid="3f54fcfdac53aec42ae18a6a1c6d8cb1" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="4473d81b14ddb0143addf0e6050d8491" ResourceName="Res/Scene/Main" />
+      <Asset Guid="489599ee08fb48744a8b6ddac7ad4739" ResourceName="ET.Code" />
       <Asset Guid="4b2b53802b3d4f94d855ab26f2ff22af" ResourceName="GameHot" />
       <Asset Guid="4eb028c2d41731848b73b8784a0ec0f1" ResourceName="ET.ClientServer" />
+      <Asset Guid="5118e26f3c73b3b4aac5ea4ff15481ad" ResourceName="ET.Code" />
+      <Asset Guid="557543f154a3fa2439c2a284503ecc9f" ResourceName="ET.Code" />
       <Asset Guid="56b8df63bbad60749a69e38bc687fadf" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="595f7cae6f82a6146b20ca287fe7c859" ResourceName="Res/Prefab/Skeleton/SkeletonController" />
       <Asset Guid="5cb3b48a2d2a948d6b2564f64624607c" ResourceName="Res/UI/UIForm/LockStep/UILSLobby" />
       <Asset Guid="5f95d0df2dbdbf94bbd07f691207616b" ResourceName="GameHot" />
       <Asset Guid="62af9e5c8f39cfa49af9e10ccf42f1da" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="6562f98dfe3c19649a61e715261acd76" ResourceName="ET.Code" />
       <Asset Guid="667ce59325f540a43bace79736e2287e" ResourceName="Res/Localization/Korean" />
-      <Asset Guid="6860728b492883a47bde87c3473262f8" ResourceName="ET.Code" />
       <Asset Guid="6887965437e6cdd4994b29405da0cf20" ResourceName="ET.ClientServer" />
       <Asset Guid="6cbc2c323b77f804fb958fa4eca33998" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="6ce46a2bbb2eddd41886d6e049aadd00" ResourceName="ET.Code" />
       <Asset Guid="6f4f01fb0f74a674196c817368818daf" ResourceName="ET.ClientServer" />
       <Asset Guid="738bdf56857a65f479c367c7b62c4ad7" ResourceName="Entity" />
       <Asset Guid="7c257456f05a75841b93e90bdd63bbf9" ResourceName="Res/Localization/ChineseSimplified" />
@@ -82,8 +80,8 @@
       <Asset Guid="834bfaee90a9d4e04b1e8c1ca22cc88e" ResourceName="Entity" />
       <Asset Guid="84b7805ef4c5343ce920ff2c6e71c7f1" ResourceName="GameHot" />
       <Asset Guid="8522461e56b6b9747af8e1a33f3af608" ResourceName="GameHot" />
-      <Asset Guid="8a77c6e6336d29f4fbd0cafbb16f1365" ResourceName="ET.Code" />
       <Asset Guid="8cf749fdfa5edc3478d16893efeaa0eb" ResourceName="Entity" />
+      <Asset Guid="8f13967bff41e0e4ebc46756f5071989" ResourceName="ET.Code" />
       <Asset Guid="9143e2b62ad50488482f9b73672fc331" ResourceName="Entity" />
       <Asset Guid="943f3c476130c4f4f8ae55ef3ccd38ba" ResourceName="Res/Prefab/Skeleton/Texture/Skeleton_D" />
       <Asset Guid="96d83c7380035564ba399a83d77e7f91" ResourceName="ET.ClientServer" />
@@ -91,6 +89,7 @@
       <Asset Guid="9f6d9adc6f537764fa0fea29671e77bf" ResourceName="Res/UI/UIForm/Demo/UILogin" />
       <Asset Guid="9f847ec5e66e03e4ead1d3c5f7b510e8" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="a5294483f20f40d449699101bb428cda" ResourceName="Res/Scene/Map1" />
+      <Asset Guid="a5e894d1a56c32f42895f20535f7b62d" ResourceName="ET.Code" />
       <Asset Guid="a6d58f54ce5934781962a4f887e834f3" ResourceName="Entity" />
       <Asset Guid="a8c07bbe04fdaf04b80e27f651a8edd6" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="ab0e7d449081c5840b6ecbc53b9a60e4" ResourceName="ET.ClientServer" />
@@ -102,8 +101,8 @@
       <Asset Guid="b124cd64fafb18b4880a1461b91bf3c1" ResourceName="GameHot" />
       <Asset Guid="b1494958bf9856a479bec1767c02878e" ResourceName="Res/Prefab/Skeleton/Ani/Materials/skeleton_D" />
       <Asset Guid="b420ab0d7cecc4691b5ccbe3a60049de" ResourceName="ET.ClientServer" />
-      <Asset Guid="bb89e65d5623768439de4598079848c6" ResourceName="ET.Code" />
-      <Asset Guid="bbc231940e1665845bf8c990ae1a49c3" ResourceName="ET.Code" />
+      <Asset Guid="b55be9d019d1976438decc4bf2ccd7d6" ResourceName="ET.Code" />
+      <Asset Guid="b82f288b03b20e34b9b2bb2575299d0c" ResourceName="ET.Code" />
       <Asset Guid="bbfd75fe6fe00e1448fe988173ede7f9" ResourceName="Res/UI/UIForm/Hot/SettingForm" />
       <Asset Guid="c54e8d9624286b24fa23519e5df2ed0a" ResourceName="Res/UI/UIForm/Demo/UIHelp" />
       <Asset Guid="c7d1e11dd37634b48a9dd4012b8e4306" ResourceName="UI.UISound" />
@@ -113,6 +112,7 @@
       <Asset Guid="d21cca8dd0073ab4584cd5ff462371ee" ResourceName="Res/Localization/English" />
       <Asset Guid="d6d2a8e7150a19c4a9aec43c56f70ed1" ResourceName="ET.ClientServer" />
       <Asset Guid="d8d87e53d93e234448658c9a801a9967" ResourceName="Res/UI/UIForm/Demo/UILobby" />
+      <Asset Guid="db289bd96c5899e40a997c75e994f72f" ResourceName="ET.Code" />
       <Asset Guid="db58965402f12ed47b4dad61a9e48c9d" ResourceName="Res/UI/UISprite/Icons" />
       <Asset Guid="dfc4233acbbd1c44fa552f08e23cd89c" ResourceName="Luban" />
       <Asset Guid="e5ca26c53b6ab8a46b52817008d7c7fa" ResourceName="Res/UI/UISprite/Icons" />
