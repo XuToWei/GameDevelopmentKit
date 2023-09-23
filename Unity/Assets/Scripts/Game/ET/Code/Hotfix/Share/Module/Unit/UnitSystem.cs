@@ -8,12 +8,6 @@ namespace ET
         {
             self.ConfigId = configId;
         }
-        
-        [EntitySystem]
-        private static void Update(this Unit self)
-        {
-            Log.Debug("XXX222");
-        }
 
         public static DRUnitConfig Config(this Unit self)
         {
