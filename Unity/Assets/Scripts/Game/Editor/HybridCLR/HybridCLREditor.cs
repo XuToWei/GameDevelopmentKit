@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using HybridCLR.Editor.Settings;
 using UnityEditor;
@@ -18,19 +19,25 @@ namespace Game.Editor
             FileTool.CleanDirectoryFiles(ResDir, "*.dll.bytes.meta");
             foreach (string aotDll in HybridCLRSettings.Instance.patchAOTAssemblies)
             {
-                File.Copy(Path.Combine(fromDir, $"{aotDll}.dll"), Path.Combine(ResDir, $"{aotDll}.dll.bytes"), true);
+                string file = Path.Combine(fromDir, $"{aotDll}.dll");
+                if(!File.Exists(file))
+                    continue;
+                File.Copy(file, Path.Combine(ResDir, $"{aotDll}.dll.bytes"), true);
             }
             AssetDatabase.ImportAsset(ResDir, ImportAssetOptions.ForceUpdate);
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 
             // 设置aot dlls
-            HybridCLRConfig hybridCLRConfig = AssetDatabase.LoadAssetAtPath<HybridCLRConfig>(HybridCLRHelper.ConfigAsset);
-            hybridCLRConfig.aotAssemblies = new TextAsset[HybridCLRSettings.Instance.patchAOTAssemblies.Length];
+            List<TextAsset> aotAssemblyList = new List<TextAsset>();
             for (int i = 0; i < HybridCLRSettings.Instance.patchAOTAssemblies.Length; i++)
             {
-                hybridCLRConfig.aotAssemblies[i] = AssetDatabase.LoadAssetAtPath<TextAsset>(
-                    Path.Combine(ResDir, $"{HybridCLRSettings.Instance.patchAOTAssemblies[i]}.dll.bytes"));
+                string file = Path.Combine(ResDir, $"{HybridCLRSettings.Instance.patchAOTAssemblies[i]}.dll.bytes");
+                if(!File.Exists(file))
+                    continue;
+                aotAssemblyList.Add(AssetDatabase.LoadAssetAtPath<TextAsset>(file));
             }
+            HybridCLRConfig hybridCLRConfig = AssetDatabase.LoadAssetAtPath<HybridCLRConfig>(HybridCLRHelper.ConfigAsset);
+            hybridCLRConfig.aotAssemblies = aotAssemblyList.ToArray();
             EditorUtility.SetDirty(hybridCLRConfig);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
