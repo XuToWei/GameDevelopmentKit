@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR || UNITY_STANDALONE || DOTNET
+using System;
 
 namespace ET.Server
 {
@@ -25,3 +26,4 @@ namespace ET.Server
         }
     }
 }
+#endif

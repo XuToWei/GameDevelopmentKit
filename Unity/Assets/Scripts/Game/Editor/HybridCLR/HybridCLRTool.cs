@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using HybridCLR.Editor;
+using HybridCLR.Editor.Settings;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR || UNITY_STANDALONE || DOTNET
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Cysharp.Threading.Tasks;
@@ -253,3 +254,4 @@ namespace ET.Server
         #endregion
     }
 }
+#endif

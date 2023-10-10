@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿#if UNITY_EDITOR || UNITY_STANDALONE || DOTNET
 namespace ET.Server
 {
     [ComponentOf(typeof(Scene))]
@@ -8,3 +7,4 @@ namespace ET.Server
         public DBComponent[] DBComponents = new DBComponent[IdGenerater.MaxZone];
     }
 }
+#endif
