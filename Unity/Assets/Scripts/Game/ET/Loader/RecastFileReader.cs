@@ -12,8 +12,7 @@ namespace ET
             {
                 return File.ReadAllBytes(Path.Combine("../Config/Recast", args.Name));
             }
-
-            throw new Exception("not load");
+            throw new Exception("Recast not load");
         }
     }
 }

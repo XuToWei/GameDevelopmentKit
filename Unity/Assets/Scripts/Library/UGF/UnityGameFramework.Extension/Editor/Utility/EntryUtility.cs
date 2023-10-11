@@ -45,9 +45,10 @@ namespace UnityGameFramework.Extension.Editor
         public static ResourceMode GetEntryResourceMode()
         {
             var content = System.IO.File.ReadAllText(EntryScenePath);
-            string targetString = @"      propertyPath: m_ResourceMode
-      value: ";
-            int index = content.IndexOf(targetString, StringComparison.Ordinal) + targetString.Length;
+            string targetString = "      propertyPath: m_ResourceMode\n      value: ";
+            int index = content.IndexOf(targetString, StringComparison.Ordinal);
+            Debug.Assert(index >= 0);
+            index += targetString.Length;
             ResourceMode resourceMode = Enum.Parse<ResourceMode>(content.Substring(index, 1));
             return resourceMode;
         }
