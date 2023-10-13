@@ -12,7 +12,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4aba5c2a5eda016ddca7ddd6cfc2c53ccc7a4b17"
+      "hash": "216d09f7b65fadc5d8fcd0bba82e5ac50ca58f06"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
@@ -50,18 +50,18 @@
       "hash": "9aa51ce1e8da24e27053bf2448c127c4263c2096"
     },
     "com.cysharp.unitask": {
-      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.4.1",
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.3.3",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "cfe509a55602ba5be6df7fa0468b10298b8a053d"
+      "hash": "b992a061fbf68ff1eb475d0837065b0549ed31ba"
     },
     "com.cysharp.zstring": {
-      "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString#2.5.1",
+      "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString#2.4.4",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "7629cf7ca8801fb25104b641fc0ac0457849d7c9"
+      "hash": "634ed94bdd67aac0cf044a0375e5c88cd48478a3"
     },
     "com.singularitygroup.hotreload": {
       "version": "git+https://gitlab.hotreload.net/root/hot-reload-releases.git",
