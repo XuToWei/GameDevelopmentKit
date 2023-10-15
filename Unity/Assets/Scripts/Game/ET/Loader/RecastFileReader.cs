@@ -10,7 +10,7 @@ namespace ET
     {
         public override async UniTask<byte[]> Handle(NavmeshComponent.RecastFileLoader args)
         {
-            TextAsset recastAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetETAsset($"ClientServer/Recast/{args.Name}"));
+            TextAsset recastAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetETAsset($"ClientServer/Recast/{args.Name}.bytes"));
             return recastAsset.bytes;
         }
     }

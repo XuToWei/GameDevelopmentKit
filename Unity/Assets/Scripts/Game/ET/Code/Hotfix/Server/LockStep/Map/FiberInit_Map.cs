@@ -13,6 +13,7 @@ namespace ET.Server
             root.AddComponent<CoroutineLockComponent>();
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<MessageSender>();
+            await NavmeshComponent.Instance.LoadAsync(root.Name);
             root.AddComponent<UnitComponent>();
             root.AddComponent<AOIManagerComponent>();
             root.AddComponent<RoomManagerComponent>();
