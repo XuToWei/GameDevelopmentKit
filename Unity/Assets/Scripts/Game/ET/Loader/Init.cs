@@ -76,8 +76,11 @@ namespace ET
             Parser.Default.ParseArguments<Options>(args)
                 .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
                 .WithParsed((o) => World.Instance.AddSingleton(o));
+#if UNITY_EDITOR
             Options.Instance.StartConfig = "Localhost";
-
+#else
+            Options.Instance.StartConfig = "Release";
+#endif
             World.Instance.AddSingleton<Logger, ILog>(new UnityLogger());
             World.Instance.AddSingleton<TimeInfo, ITimeNow>(new UnityTimeNow());
             World.Instance.AddSingleton<FiberManager>();
