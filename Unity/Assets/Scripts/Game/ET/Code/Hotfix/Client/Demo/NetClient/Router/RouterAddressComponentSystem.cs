@@ -25,6 +25,7 @@ namespace ET.Client
 
         private static async UniTask GetAllRouter(this RouterAddressComponent self)
         {
+#if (UNITY_ET_CODEMODE_CLIENTSERVER || UNITY_ET_CODEMODE_SERVER) && (UNITY_ANDROID || UNITY_IOS)
             string url = $"http://{self.RouterManagerHost}:{self.RouterManagerPort}/get_router?v={RandomGenerator.RandUInt32()}";
             Log.Debug($"start get router info: {url}");
             string routerInfo = await HttpClientHelper.Get(url);
@@ -32,10 +33,19 @@ namespace ET.Client
             HttpGetRouterResponse httpGetRouterResponse = MongoHelper.FromJson<HttpGetRouterResponse>(routerInfo);
             self.Info = httpGetRouterResponse;
             Log.Debug($"start get router info finish: {MongoHelper.ToJson(httpGetRouterResponse)}");
-            
+#else
+            self.Info = new HttpGetRouterResponse();
+            foreach (var startSceneConfig in Tables.Instance.DTStartSceneConfig.Realms)
+            {
+                self.Info.Realms.Add(startSceneConfig.InnerIPPort.ToString());
+            }
+            foreach (var startSceneConfig in Tables.Instance.DTStartSceneConfig.Routers)
+            {
+                self.Info.Routers.Add($"{startSceneConfig.StartProcessConfig.OuterIP}:{startSceneConfig.Port}");
+            }
+#endif
             // 打乱顺序
             RandomGenerator.BreakRank(self.Info.Routers);
-            
             self.WaitTenMinGetAllRouter().Forget();
         }
         

@@ -95,7 +95,7 @@ namespace ET.Editor
             // 导出Recast可用的*.Obj文件
             WriteRecastObjFile();
             // 拷贝Obj和Bytes文件到服务器目录下 TODO 暂不需要
-            //CopyObjFiles();
+            CopyObjFiles();
 
             Debug.Log($"NavMesh Output Info - Vertices:[{vertList.Count}] - Faces:[{faceList.Count}]");
         }
@@ -502,7 +502,7 @@ namespace ET.Editor
             }
 
             var filename = SceneManager.GetActiveScene().name;
-            var path = outputClientFolder + filename + ".obj";
+            var path = outputClientFolder + filename + ".bytes";
             StreamWriter sw = new StreamWriter(path);
 
             Dictionary<string, ObjMaterial> materialList = PrepareFileWrite();
@@ -729,10 +729,10 @@ namespace ET.Editor
                 }
                 foreach (string file in files)
                 {
-                    string name = System.IO.Path.GetFileName(file);
+                    string name = System.IO.Path.GetFileNameWithoutExtension(file) + ".obj";
                     // 仅拷贝bytes文件和obj文件，但是不包括文件名里包含“internal”字样的obj文件。
                     var ext = Path.GetExtension(file);
-                    if (ext == ".obj" && !file.Contains("_internal."))
+                    if (ext == ".bytes" && !file.Contains("_internal."))
                     {
                         string dest = System.IO.Path.Combine(outputServerFolder, name);
                         System.IO.File.Copy(file, dest, true); //复制文件

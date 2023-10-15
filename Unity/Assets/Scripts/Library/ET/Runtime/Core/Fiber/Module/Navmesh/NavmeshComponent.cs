@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 namespace ET
 {
@@ -16,6 +17,16 @@ namespace ET
         {
         }
         
+        public async UniTask LoadAsync(string name)
+        {
+            byte[] buffer = await EventSystem.Instance.Invoke<NavmeshComponent.RecastFileLoader,
+                UniTask<byte[]>>(new NavmeshComponent.RecastFileLoader() { Name = name });
+            lock (this)
+            {
+                this.navmeshs[name] = buffer;
+            }
+        }
+        
         public byte[] Get(string name)
         {
             lock (this)
@@ -24,17 +35,8 @@ namespace ET
                 {
                     return bytes;
                 }
-
-                byte[] buffer =
-                        EventSystem.Instance.Invoke<NavmeshComponent.RecastFileLoader, byte[]>(
-                            new NavmeshComponent.RecastFileLoader() { Name = name });
-                if (buffer.Length == 0)
-                {
-                    throw new Exception($"no nav data: {name}");
-                }
-
-                this.navmeshs[name] = buffer;
-                return buffer;
+                
+                throw new Exception($"no nav data: {name}");
             }
         }
     }

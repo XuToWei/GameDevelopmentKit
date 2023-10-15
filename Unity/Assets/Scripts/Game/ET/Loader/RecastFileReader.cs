@@ -1,18 +1,17 @@
-﻿using System;
-using System.IO;
+﻿using Cysharp.Threading.Tasks;
+using Game;
+using UnityEngine;
+using UnityGameFramework.Extension;
 
 namespace ET
 {
     [Invoke]
-    public class RecastFileReader: AInvokeHandler<NavmeshComponent.RecastFileLoader, byte[]>
+    public class RecastFileReader: AInvokeHandler<NavmeshComponent.RecastFileLoader, UniTask<byte[]>>
     {
-        public override byte[] Handle(NavmeshComponent.RecastFileLoader args)
+        public override async UniTask<byte[]> Handle(NavmeshComponent.RecastFileLoader args)
         {
-            if (Define.IsEditor)
-            {
-                return File.ReadAllBytes(Path.Combine("../Config/Recast", args.Name));
-            }
-            throw new Exception("Recast not load");
+            TextAsset recastAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(AssetUtility.GetETAsset($"ClientServer/Recast/{args.Name}"));
+            return recastAsset.bytes;
         }
     }
 }

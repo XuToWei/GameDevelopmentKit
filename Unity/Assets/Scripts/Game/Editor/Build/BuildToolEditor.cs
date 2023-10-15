@@ -44,33 +44,30 @@ namespace Game.Editor
 
                 if (GUILayout.Button("Build Pkg (Contains Rebuild Resource)"))
                 {
-                    if (!SwitchActiveBuildTarget(m_Platform))
+                    if (SwitchActiveBuildTarget(m_Platform))
                     {
-                        return;
+                        BuildHelper.BuildPkg(m_Platform);
+                        ShowNotification($"Build {m_Platform} Pkg Success!");
                     }
-                    BuildHelper.BuildPkg(m_Platform);
-                    ShowNotification($"Build {m_Platform} Pkg Success!");
                 }
                 
                 if (GUILayout.Button("Build Resource"))
                 {
-                    if (!SwitchActiveBuildTarget(m_Platform))
+                    if (SwitchActiveBuildTarget(m_Platform))
                     {
-                        return;
+                        ResourceBuildHelper.StartBuild(m_Platform);
+                        ShowNotification($"Build {m_Platform} Resource Success!");
                     }
-                    ResourceBuildHelper.StartBuild(m_Platform);
-                    ShowNotification($"Build {m_Platform} Resource Success!");
                 }
                 
                 GUILayout.Space(20);
                 if (GUILayout.Button("Build And Refresh Windows64 Pkg Resource"))
                 {
-                    if (!SwitchActiveBuildTarget(Platform.Windows64))
+                    if (SwitchActiveBuildTarget(Platform.Windows64))
                     {
-                        return;
+                        BuildHelper.RefreshWindows64PkgResource();
+                        ShowNotification("Build Model Success!");
                     }
-                    BuildHelper.RefreshWindows64PkgResource();
-                    ShowNotification("Build Model Success!");
                 }
 
                 if (GUILayout.Button("Open Pkg Folder"))
