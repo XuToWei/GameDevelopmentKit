@@ -17,7 +17,7 @@ namespace ET.Server
             //root.AddComponent<GateSessionKeyComponent>();
             //root.AddComponent<LocationProxyComponent>();
             //root.AddComponent<ActorLocationSenderComponent>();
-            root.AddComponent<NetComponent, AddressFamily>(AddressFamily.InterNetwork);
+            root.AddComponent<NetComponent, AddressFamily, NetworkProtocol>(AddressFamily.InterNetwork, NetworkProtocol.UDP);
             root.AddComponent<BenchmarkClientComponent>();
             await UniTask.CompletedTask;
         }
