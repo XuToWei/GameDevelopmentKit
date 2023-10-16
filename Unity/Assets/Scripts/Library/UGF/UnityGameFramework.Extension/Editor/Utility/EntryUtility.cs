@@ -47,6 +47,11 @@ namespace UnityGameFramework.Extension.Editor
             var content = System.IO.File.ReadAllText(EntryScenePath);
             string targetString = "      propertyPath: m_ResourceMode\r\n      value: ";
             int index = content.IndexOf(targetString, StringComparison.Ordinal);
+            if (index < 0)
+            {
+                targetString = "      propertyPath: m_ResourceMode\n      value: ";
+                index = content.IndexOf(targetString, StringComparison.Ordinal);
+            }
             Debug.Assert(index >= 0);
             index += targetString.Length;
             ResourceMode resourceMode = Enum.Parse<ResourceMode>(content.Substring(index, 1));
