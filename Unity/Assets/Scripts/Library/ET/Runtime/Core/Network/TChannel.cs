@@ -24,7 +24,19 @@ namespace ET
 
 		private readonly PacketParser parser;
 		
-		public IPEndPoint RemoteAddress { get; set; }
+		private IPEndPoint remoteAddress;
+
+		public IPEndPoint RemoteAddress
+		{
+			get
+			{
+				return this.remoteAddress;
+			}
+			set
+			{
+				this.remoteAddress = value;
+			}
+		}
 
 		private readonly byte[] sendCache = new byte[Packet.OpcodeLength + Packet.ActorIdLength];
 		
@@ -99,11 +111,32 @@ namespace ET
 				throw new Exception("TChannel已经被Dispose, 不能发送消息");
 			}
 			
-			this.sendBuffer.Write(stream.GetBuffer(), (int)stream.Position, (int)(stream.Length - stream.Position));
+			switch (this.Service.ServiceType)
+			{
+				case ServiceType.Inner:
+				{
+					int messageSize = (int) (stream.Length - stream.Position);
+					if (messageSize > ushort.MaxValue * 16)
+					{
+						throw new Exception($"send packet too large: {stream.Length} {stream.Position}");
+					}
+
+					this.sendCache.WriteTo(0, messageSize);
+					this.sendBuffer.Write(this.sendCache, 0, PacketParser.InnerPacketSizeLength);
+					break;
+				}
+				case ServiceType.Outer:
+				{
+					ushort messageSize = (ushort) (stream.Length - stream.Position);
+					this.sendCache.WriteTo(0, messageSize);
+					this.sendBuffer.Write(this.sendCache, 0, PacketParser.OuterPacketSizeLength);
+					break;
+				}
+			}
 			
+			this.sendBuffer.Write(stream.GetBuffer(), (int)stream.Position, (int)(stream.Length - stream.Position));
 			if (!this.isSending)
 			{
-				//this.StartSend();
 				this.Service.Queue.Enqueue(new TArgs() { Op = TcpOp.StartSend, ChannelId = this.Id});
 			}
 			
@@ -221,6 +254,10 @@ namespace ET
 				}
 				try
 				{
+					if (this.recvBuffer.Length == 0)
+					{
+						break;
+					}
 					bool ret = this.parser.Parse(out MemoryBuffer memoryBuffer);
 					if (!ret)
 					{
@@ -228,8 +265,6 @@ namespace ET
 					}
 					
 					this.OnRead(memoryBuffer);
-					
-					this.Service.Recycle(memoryBuffer);
 				}
 				catch (Exception ee)
 				{
@@ -276,7 +311,6 @@ namespace ET
 					{
 						sendSize = (int)this.sendBuffer.Length;
 					}
-					
 					this.outArgs.SetBuffer(this.sendBuffer.First, this.sendBuffer.FirstIndex, sendSize);
 					
 					if (this.socket.SendAsync(this.outArgs))
