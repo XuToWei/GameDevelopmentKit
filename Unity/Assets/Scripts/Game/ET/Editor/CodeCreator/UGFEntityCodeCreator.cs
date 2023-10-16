@@ -56,7 +56,7 @@ namespace ET.Editor
             GenerateCS(UGFEntityComponentCodeTemplateFile,     $"{UGFEntityModelViewCodePath}/{entityName}/UGFEntity{entityName}.cs");
             GenerateCS(UGFEntitySystemCodeTemplateFile,        $"{UGFEntityHotfixViewCodePath}/{entityName}/UGFEntity{entityName}System.cs");
             GenerateCS(UGFEntityEventCodeTemplateFile,         $"{UGFEntityHotfixViewCodePath}/{entityName}/UGFEntity{entityName}Event.cs");
-            CodeCreatorEditor.ShowNotification("生成完毕！");
+            Debug.Log("生成完毕！");
         }
     }
 }

@@ -39,8 +39,7 @@ namespace UnityGameFramework.Extension.Editor
         [MenuItem("Game Framework/Resource Tools/Refresh Activate Resource Collection", false, 51)]
         public static void RefreshActivateResourceCollection()
         {
-            ResourceRuleEditor ruleEditor = ScriptableObject.CreateInstance<ResourceRuleEditor>();
-            ruleEditor.RefreshResourceCollection();
+            ResourceRuleEditorUtility.RefreshResourceCollection();
         }
 
         [OnOpenAsset]

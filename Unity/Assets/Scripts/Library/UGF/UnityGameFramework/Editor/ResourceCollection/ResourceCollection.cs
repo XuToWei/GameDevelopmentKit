@@ -255,7 +255,7 @@ namespace UnityGameFramework.Editor.ResourceTools
                 }
 
                 xmlDocument.Save(m_ConfigurationPath);
-                AssetDatabase.Refresh();
+                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                 return true;
             }
             catch

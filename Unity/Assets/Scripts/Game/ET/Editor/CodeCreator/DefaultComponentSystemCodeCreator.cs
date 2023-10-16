@@ -71,7 +71,7 @@ namespace ET.Editor
             
             GenerateCS(ComponentCodeTemplateFile,          $"{GetModelPath()}/{componentName}.cs");
             GenerateCS(ComponentSystemCodeTemplateFile,    $"{GetHotfixPath()}/{componentName}System.cs");
-            CodeCreatorEditor.ShowNotification("生成完毕！");
+            Debug.Log("生成完毕！");
         }
 
         private string GetModelPath()

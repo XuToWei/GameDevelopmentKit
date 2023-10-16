@@ -18,12 +18,6 @@ namespace ET.Editor
         {
             GetWindow<CodeCreatorEditor>("ET Code Creator", DockDefine.Types);
         }
-        
-        public static void ShowNotification(string tips)
-        {
-            EditorWindow game = GetWindow(typeof(CodeCreatorEditor));
-            if (game != null) game.ShowNotification(new GUIContent($"{tips}"));
-        }
 
         private void OnEnable()
         {

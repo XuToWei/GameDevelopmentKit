@@ -78,7 +78,7 @@ namespace ET.Editor
 
                 AfterCompiling();
 
-                ShowNotification("Build Hotfix Success!");
+                Debug.Log("Build Hotfix Success!");
             }
 #endif
             GUILayout.Label("Tool", titleGUIStyle);
@@ -106,12 +106,6 @@ namespace ET.Editor
             AssetDatabase.Refresh();
 
             Debug.Log("build success!");
-        }
-
-        private static void ShowNotification(string tips)
-        {
-            EditorWindow game = GetWindow(typeof (EditorWindow).Assembly.GetType("UnityEditor.GameView"));
-            if (game != null) game.ShowNotification(new GUIContent($"{tips}"));
         }
     }
 }

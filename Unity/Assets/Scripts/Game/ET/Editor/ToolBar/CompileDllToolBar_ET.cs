@@ -20,7 +20,7 @@ namespace ET.Editor
                 if (GUILayout.Button(s_BuildReloadHotfixButtonGUIContent))
                 {
                     BuildAssemblyTool.Build();
-                    ShowNotification("compile success!");
+                    Debug.Log("compile success!");
 
                     if (s_IsReloading)
                         return;
@@ -31,7 +31,7 @@ namespace ET.Editor
                         try
                         {
                             await CodeLoaderComponent.Instance.ReloadAsync();
-                            ShowNotification("reload hotfix success!");
+                            Debug.Log("reload hotfix success!");
                         }
                         finally
                         {
@@ -47,14 +47,8 @@ namespace ET.Editor
             if (GUILayout.Button(s_BuildHotfixModelButtonGUIContent))
             {
                 BuildAssemblyTool.Build();
-                ShowNotification("compile success!");
+                Debug.Log("compile success!");
             }
-        }
-
-        private static void ShowNotification(string msg)
-        {
-            EditorWindow game = EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));
-            if (game != null) game.ShowNotification(new GUIContent(msg));
         }
     }
 }

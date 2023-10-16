@@ -77,10 +77,8 @@ namespace Game.Editor
             {
                 Directory.CreateDirectory(fold);
             }
-
-            Debug.Log("start build resource");
-            ResourceBuildHelper.StartBuild(platform);
-            Debug.Log("finish build resource");
+            
+            BuildResource(platform);
 
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             
@@ -108,6 +106,17 @@ namespace Game.Editor
             Debug.Log($"finish build pkg at {locationPathName}");
         }
 
+        public static void BuildResource(Platform platform)
+        {
+            Debug.Log("start refresh resource collection");
+            ResourceRuleEditorUtility.RefreshResourceCollection();
+            Debug.Log("finish refresh resource collection");
+            
+            Debug.Log("start build resource");
+            ResourceBuildHelper.StartBuild(platform);
+            Debug.Log("finish build resource");
+        }
+
         public static void RefreshWindowsPkgResource()
         {
             string targetPath = $"{BuildPkgFolder}/{Platform.Windows}/{Application.productName}_Data/StreamingAssets/";
@@ -116,9 +125,7 @@ namespace Game.Editor
                 throw new GameFrameworkException($"RefreshExePkgResource fail! {targetPath} not exist!");
             }
             
-            Debug.Log("start build resource");
-            ResourceBuildHelper.StartBuild(Platform.Windows);
-            Debug.Log("finish build resource");
+            BuildResource(Platform.Windows);
             
             FileTool.CleanDirectory(targetPath);
             string bundleFold = Path.Combine(ResourceBuildHelper.GetNewestBundlePath(), Platform.Windows.ToString());
@@ -135,9 +142,7 @@ namespace Game.Editor
                 throw new GameFrameworkException($"RefreshExePkgResource fail! {targetPath} not exist!");
             }
             
-            Debug.Log("start build resource");
-            ResourceBuildHelper.StartBuild(Platform.Windows64);
-            Debug.Log("finish build resource");
+            BuildResource(Platform.Windows64);
             
             FileTool.CleanDirectory(targetPath);
             string bundleFold = Path.Combine(ResourceBuildHelper.GetNewestBundlePath(), Platform.Windows64.ToString());

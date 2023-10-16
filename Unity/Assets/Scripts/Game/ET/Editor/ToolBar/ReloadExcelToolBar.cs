@@ -25,7 +25,7 @@ namespace ET.Editor
                         try
                         {
                             await ConfigComponent.Instance.ReloadAllAsync();
-                            ShowNotification("Export And Reload All Excel!");
+                            Debug.Log("Export And Reload All Excel!");
                         }
                         finally
                         {
@@ -37,12 +37,6 @@ namespace ET.Editor
                 }
             }
             EditorGUI.EndDisabledGroup();
-        }
-
-        private static void ShowNotification(string msg)
-        {
-            EditorWindow game = EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView"));
-            if (game != null) game.ShowNotification(new GUIContent(msg));
         }
     }
 }

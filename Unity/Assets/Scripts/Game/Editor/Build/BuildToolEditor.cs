@@ -47,7 +47,7 @@ namespace Game.Editor
                     if (SwitchActiveBuildTarget(m_Platform))
                     {
                         BuildHelper.BuildPkg(m_Platform);
-                        ShowNotification($"Build {m_Platform} Pkg Success!");
+                        Debug.Log($"Build {m_Platform} Pkg Success!");
                     }
                 }
                 
@@ -55,8 +55,8 @@ namespace Game.Editor
                 {
                     if (SwitchActiveBuildTarget(m_Platform))
                     {
-                        ResourceBuildHelper.StartBuild(m_Platform);
-                        ShowNotification($"Build {m_Platform} Resource Success!");
+                        BuildHelper.BuildResource(m_Platform);
+                        Debug.Log($"Build {m_Platform} Resource Success!");
                     }
                 }
                 
@@ -66,7 +66,7 @@ namespace Game.Editor
                     if (SwitchActiveBuildTarget(Platform.Windows64))
                     {
                         BuildHelper.RefreshWindows64PkgResource();
-                        ShowNotification("Build Model Success!");
+                        Debug.Log("Build Model Success!");
                     }
                 }
 
@@ -90,13 +90,7 @@ namespace Game.Editor
             }
             EditorGUI.EndDisabledGroup();
         }
-        
-        private static void ShowNotification(string tips)
-        {
-            EditorWindow game = GetWindow(typeof (EditorWindow).Assembly.GetType("UnityEditor.GameView"));
-            if (game != null) game.ShowNotification(new GUIContent($"{tips}"));
-        }
-        
+
         private bool SwitchActiveBuildTarget(Platform platform)
         {
             if (platform != GetCurPlatform())

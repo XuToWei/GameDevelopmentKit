@@ -19,10 +19,10 @@ namespace ET.Server
 			response.Key = g2RGetLoginKey.Key;
 			response.GateId = g2RGetLoginKey.GateId;
 			
-			CloseSession(session).Coroutine();
+			CloseSession(session).Forget();
 		}
 
-		private async ETTask CloseSession(Session session)
+		private async UniTask CloseSession(Session session)
 		{
 			await session.Fiber().TimerComponent.WaitAsync(1000);
 			session.Dispose();
