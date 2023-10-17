@@ -12,7 +12,6 @@ namespace Game.Editor
     public class BuildToolEditor: EditorWindow
     {
         private Platform m_Platform;
-        private Action m_Action;
         
         [MenuItem("Game/Build Tool Editor")]
         public static void ShowWindow()
@@ -38,20 +37,6 @@ namespace Game.Editor
             m_Platform = GetCurPlatform();
         }
 
-        private void DoAction(Action action)
-        {
-            m_Action = action;
-        }
-
-        private void Update()
-        {
-            if (m_Action == null)
-                return;
-            Action action = m_Action;
-            m_Action = null;
-            action.Invoke();
-        }
-
         private void OnGUI()
         {
             EditorGUI.BeginDisabledGroup(Application.isPlaying);
@@ -60,39 +45,30 @@ namespace Game.Editor
 
                 if (GUILayout.Button("Build Pkg (Contains Rebuild Resource)"))
                 {
-                    DoAction(() =>
+                    if (SwitchActiveBuildTarget(m_Platform))
                     {
-                        if (SwitchActiveBuildTarget(m_Platform))
-                        {
-                            BuildHelper.BuildPkg(m_Platform);
-                            Debug.Log($"Build {m_Platform} Pkg Success!");
-                        }
-                    });
+                        BuildHelper.BuildPkg(m_Platform);
+                        Debug.Log($"Build {m_Platform} Pkg Success!");
+                    }
                 }
                 
                 if (GUILayout.Button("Build Resource"))
                 {
-                    DoAction(() =>
+                    if (SwitchActiveBuildTarget(m_Platform))
                     {
-                        if (SwitchActiveBuildTarget(m_Platform))
-                        {
-                            BuildHelper.BuildResource(m_Platform);
-                            Debug.Log($"Build {m_Platform} Resource Success!");
-                        }
-                    });
+                        BuildHelper.BuildResource(m_Platform);
+                        Debug.Log($"Build {m_Platform} Resource Success!");
+                    }
                 }
                 
                 GUILayout.Space(20);
                 if (GUILayout.Button("Build And Refresh Windows64 Pkg Resource"))
                 {
-                    DoAction(() =>
+                    if (SwitchActiveBuildTarget(Platform.Windows64))
                     {
-                        if (SwitchActiveBuildTarget(Platform.Windows64))
-                        {
-                            BuildHelper.RefreshWindows64PkgResource();
-                            Debug.Log("Build Model Success!");
-                        }
-                    });
+                        BuildHelper.RefreshWindows64PkgResource();
+                        Debug.Log("Build Model Success!");
+                    }
                 }
 
                 if (GUILayout.Button("Open Pkg Folder"))
