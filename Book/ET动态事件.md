@@ -36,7 +36,7 @@ testEntity.AddComponent<DynamicEventComponent>();
 ```
 或
 ```csharp
-DynamicEventSystem.Instance.Register(testEntity);
+DynamicEventSystem.Instance.RegisterEntity(testEntity);
 ```
 
 - 2反注册实体
@@ -45,7 +45,7 @@ testEntity.RemoveComponent<DynamicEventComponent>();
 ```
 或
 ```csharp
-DynamicEventSystem.Instance.UnRegister(testEntity);
+DynamicEventSystem.Instance.UnRegisterEntity(testEntity);
 ```
 
 5.通知事件
