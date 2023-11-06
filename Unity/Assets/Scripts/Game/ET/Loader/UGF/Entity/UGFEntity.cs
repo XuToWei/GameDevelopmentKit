@@ -1,4 +1,4 @@
-using System;
+using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 
 namespace ET
@@ -6,14 +6,13 @@ namespace ET
     [ChildOf]
     public sealed class UGFEntity : Entity, IAwake<string, ETMonoEntity>, IDestroy
     {
+        [BsonIgnore]
         public UnityGameFramework.Runtime.Entity entity { get; private set; }
-
         public string entityEventTypeName { get; private set; }
-
+        [BsonIgnore]
         public Transform transform { get; private set; }
-
         public bool isShow => this.etMonoEntity.isShow;
-
+        [BsonIgnore]
         public ETMonoEntity etMonoEntity;
         
         internal void OnAwake(string entityEventTypeName, ETMonoEntity etMonoEntity)

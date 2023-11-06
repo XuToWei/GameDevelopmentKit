@@ -1,3 +1,4 @@
+using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 using GameEntry = Game.GameEntry;
@@ -7,14 +8,16 @@ namespace ET
     [ChildOf]
     public sealed class UGFUIForm : Entity, IAwake<int, ETMonoUIForm>, IDestroy
     {
+        [BsonIgnore]
         public UIForm uiForm { get; private set; }
         public int uiFormId { get; private set; }
+        [BsonIgnore]
         public Transform transform { get; private set; }
         /// <summary>
         /// 界面是否开启
         /// </summary>
         public bool isOpen => this.m_ETMonoUIForm.isOpen;
-        
+        [BsonIgnore]
         private ETMonoUIForm m_ETMonoUIForm;
 
         internal void OnAwake(int uiFormId, ETMonoUIForm ugfETUIForm)

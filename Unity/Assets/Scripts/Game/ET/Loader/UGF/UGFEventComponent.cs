@@ -34,7 +34,7 @@ namespace ET
         public void Awake()
         {
             this.m_UIFormEvents.Clear();
-            HashSet<Type> uiEventAttributes = CodeTypes.Instance.GetTypes(typeof (UGFUIFormEventAttribute));
+            HashSet<Type> uiEventAttributes = CodeTypes.Instance.GetTypes(typeof(UGFUIFormEventAttribute));
             foreach (Type type in uiEventAttributes)
             {
                 object[] attrs = type.GetCustomAttributes(typeof(UGFUIFormEventAttribute), false);
