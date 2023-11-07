@@ -4,49 +4,38 @@ using Cysharp.Threading.Tasks;
 
 namespace ET
 {
-    public sealed class DynamicEventSystem : Singleton<DynamicEventSystem>, ISingletonAwake
+    public sealed partial class DynamicEventSystem : Singleton<DynamicEventSystem>, ISingletonAwake
     {
-        private readonly Queue<EntityRef<Entity>> queue = new ();
+        private readonly HashSet<EntityRef<Entity>> registeredEntities = new HashSet<EntityRef<Entity>>();
+        private readonly HashSet<EntityRef<Entity>> needRemoveEntities = new HashSet<EntityRef<Entity>>();
 
         public void Awake()
         {
             
         }
 
+        public void Update()
+        {
+            Log.Debug("XXXXXXXXXXXX");
+            if (this.needRemoveEntities.Count < 1)
+            {
+                return;
+            }
+            foreach (var id in this.needRemoveEntities)
+            {
+                this.registeredEntities.Remove(id);
+            }
+            this.needRemoveEntities.Clear();
+        }
+
         public void RegisterEntity(Entity entity)
         {
-            if (entity == null)
-            {
-                return;
-            }
-            if (entity.IsDisposed)
-            {
-                return;
-            }
-            this.queue.Enqueue(entity);
+            this.registeredEntities.Add(entity);
         }
 
         public void UnRegisterEntity(Entity entity)
         {
-            Queue<EntityRef<Entity>> tempQueue = this.queue;
-            int count = tempQueue.Count;
-            while (count-- > 0)
-            {
-                Entity tempEntity = tempQueue.Dequeue();
-                if (tempEntity == null)
-                {
-                    continue;
-                }
-                if (tempEntity.IsDisposed)
-                {
-                    continue;
-                }
-                if (tempEntity == entity)
-                {
-                    continue;
-                }
-                tempQueue.Enqueue(entity);
-            }
+            this.needRemoveEntities.Add(entity);
         }
 
         public void Publish<A>(Scene scene, A arg) where A : struct
@@ -62,21 +51,9 @@ namespace ET
                         continue;
                     }
                     IDynamicEvent<A> dynamicEvent = (IDynamicEvent<A>)dynamicEventInfo.DynamicEvent;
-                    Queue<EntityRef<Entity>> tempQueue = this.queue;
-                    int count = tempQueue.Count;
-                    while (count-- > 0)
+                    foreach (Entity entity in this.registeredEntities)
                     {
-                        Entity entity = tempQueue.Dequeue();
-                        if (entity == null)
-                        {
-                            continue;
-                        }
-                        if (entity.IsDisposed)
-                        {
-                            continue;
-                        }
-                        tempQueue.Enqueue(entity);
-                        if (dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
+                        if (entity is { IsDisposed: false } && dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
                         {
                             dynamicEvent.Handle(scene, entity, arg).Forget();
                         }
@@ -99,21 +76,9 @@ namespace ET
                         continue;
                     }
                     IDynamicEvent<A> dynamicEvent = (IDynamicEvent<A>)dynamicEventInfo.DynamicEvent;
-                    Queue<EntityRef<Entity>> tempQueue = this.queue;
-                    int count = tempQueue.Count;
-                    while (count-- > 0)
+                    foreach (Entity entity in this.registeredEntities)
                     {
-                        Entity entity = tempQueue.Dequeue();
-                        if (entity == null)
-                        {
-                            continue;
-                        }
-                        if (entity.IsDisposed)
-                        {
-                            continue;
-                        }
-                        tempQueue.Enqueue(entity);
-                        if (dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
+                        if (entity is { IsDisposed: false } && dynamicEventInfo.DynamicEvent.EntityType == entity.GetType())
                         {
                             taskList.Add(dynamicEvent.Handle(scene, entity, arg));
                         }

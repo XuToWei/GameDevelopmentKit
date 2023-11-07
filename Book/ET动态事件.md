@@ -21,7 +21,7 @@ World.Instance.AddSingleton<DynamicEventSystem>();
 [DynamicEvent(SceneType.Client)]
 public class Test_DynamicEvent:ADynamicEvent<TestEntity,DynamicEventType.Test>
 {
-    protected override async ETTask Run(Scene scene, TestEntity self,DynamicEventType.Test arg)
+    protected override async UniTask Run(Scene scene, TestEntity self,DynamicEventType.Test arg)
     {
         //to do something
     }
