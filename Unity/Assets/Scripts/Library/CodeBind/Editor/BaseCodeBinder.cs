@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ namespace CodeBind.Editor
         private readonly Transform m_RootTransform;
 
         protected readonly List<CodeBindData> m_BindDatas;
+        protected readonly SortedDictionary<string, List<CodeBindData>> m_BindArrayDatas;
         
         protected BaseCodeBinder(MonoScript script, Transform rootTransform, char separatorChar)
         {
@@ -30,6 +32,7 @@ namespace CodeBind.Editor
             
             this.m_RootTransform = rootTransform;
             this.m_BindDatas = new List<CodeBindData>();
+            this.m_BindArrayDatas = new SortedDictionary<string, List<CodeBindData>>();
             string scriptFullPath = AssetDatabase.GetAssetPath(script);
             this.m_BindScriptFullPath = scriptFullPath.Insert(scriptFullPath.LastIndexOf('.'), ".Bind");
             this.m_ScriptNameSpace = script.GetClass().Namespace;
@@ -77,23 +80,41 @@ namespace CodeBind.Editor
                 for (int i = 1; i < strArray.Length; i++)
                 {
                     string typeStr = strArray[i];
-                    if (CodeBindNameTypeCollection.BindNameTypeDict.TryGetValue(typeStr, out Type type))
+                    if (string.Equals(typeStr, "*", StringComparison.OrdinalIgnoreCase))
+                    {
+                        //自动补齐所有存在的脚本
+                        foreach (var kv in CodeBindNameTypeCollection.BindNameTypeDict)
+                        {
+                            if (child.GetComponent(kv.Value) != null)
+                            {
+                                if (CodeBindNameTypeCollection.BindNameTypeDict.TryGetValue(typeStr, out Type type))
+                                {
+                                    CodeBindData bindData = new CodeBindData(bindName, type, typeStr, child);
+                                    bindDatas.Add(bindData);
+                                }
+                            }
+                        }
+                    }
+                    else if (CodeBindNameTypeCollection.BindNameTypeDict.TryGetValue(typeStr, out Type type))
                     {
                         CodeBindData bindData = new CodeBindData(bindName, type, typeStr, child);
                         bindDatas.Add(bindData);
-                        continue;
                     }
-                    throw new Exception($"{child.name}的命名中{typeStr}不存在对应的组件类型，绑定失败");
+                    else
+                    {
+                        throw new Exception($"{child.name}的命名中{typeStr}不存在对应的组件类型，绑定失败");
+                    }
                 }
 
                 if (bindDatas.Count <= 0)
                 {
-                    throw new Exception($"获取的Bind对象个数为0，绑定失败！");
+                    throw new Exception("获取的Bind对象个数为0，绑定失败！");
                 }
                 return true;
             }
             
             this.m_BindDatas.Clear();
+            this.m_BindArrayDatas.Clear();
             foreach (Transform child in this.m_RootTransform.GetComponentsInChildren<Transform>(true))
             {
                 if(child == this.m_RootTransform)
@@ -115,6 +136,34 @@ namespace CodeBind.Editor
             {
                 throw new Exception($"绑定数量为0，生成失败。");
             }
+            this.m_BindDatas.Sort((a, b) => String.CompareOrdinal(a.BindName + a.BindPrefix, b.BindName + b.BindPrefix));
+            //处理数组
+            for (int i = 0; i < this.m_BindDatas.Count - 1; i++)
+            {
+                CodeBindData bindData1 = this.m_BindDatas[i];
+                string result = Regex.Replace(bindData1.BindName, "[0-9]+$", "");
+                if (!string.IsNullOrEmpty(result))
+                {
+                    string arrayName = bindData1.BindName.Substring(0, bindData1.BindName.Length - result.Length) + bindData1.BindPrefix;
+                    if (!this.m_BindArrayDatas.ContainsKey(arrayName))
+                    {
+                        for (int j = i + 1; j < this.m_BindDatas.Count; j++)
+                        {
+                            CodeBindData bindData2 = this.m_BindDatas[j];
+                            if (bindData2.BindName.StartsWith(arrayName))
+                            {
+                                if (!this.m_BindArrayDatas.TryGetValue(arrayName, out List<CodeBindData> bindDatas))
+                                {
+                                    bindDatas = new List<CodeBindData>();
+                                    this.m_BindArrayDatas.Add(arrayName, bindDatas);
+                                    bindDatas.Add(bindData1);
+                                }
+                                bindDatas.Add(bindData2);
+                            }
+                        }
+                    }
+                }
+            }
             return true;
         }
 
@@ -132,28 +181,28 @@ namespace CodeBind.Editor
                         throw new Exception($"变量名为空：{child.name}");
                     }
 
-                    if (strList.Count == 2 && (string.IsNullOrEmpty(strList[1]) || string.Equals(strList[1], "*", StringComparison.OrdinalIgnoreCase)))
+                    bool hasAll = false;
+                    for (int i = 1; i < strList.Count; i++)
                     {
-                        strList.RemoveAt(1);
-                        //自动补齐所有存在的脚本
-                        foreach (var kv in CodeBindNameTypeCollection.BindNameTypeDict)
+                        if (string.IsNullOrEmpty(strList[i]))
                         {
-                            if (child.GetComponent(kv.Value) != null)
-                            {
-                                strList.Add(kv.Key);
-                            }
+                            throw new Exception($"不支持自动补齐名字为空的脚本：{child.name}");
                         }
+                        if (string.Equals(strList[1], "*", StringComparison.OrdinalIgnoreCase))
+                        {
+                            hasAll = true;
+                        }
+                    }
+
+                    if (hasAll)
+                    {
+                        List<string> newStrList = new List<string>();
+                        newStrList.Add(strList[0]);
+                        newStrList.Add("*");
+                        strList = newStrList;
                     }
                     else
                     {
-                        for (int i = 1; i < strList.Count; i++)
-                        {
-                            if (string.IsNullOrEmpty(strList[i]))
-                            {
-                                throw new Exception($"不支持自动补齐名字为空的脚本：{child.name}");
-                            }
-                        }
-                        
                         //自动补齐名字残缺的
                         for (int i = 1; i < strList.Count; i++)
                         {

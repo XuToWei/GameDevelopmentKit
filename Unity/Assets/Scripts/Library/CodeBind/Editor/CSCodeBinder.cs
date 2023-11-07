@@ -46,6 +46,11 @@ namespace CodeBind.Editor
                 stringBuilder.AppendLine($"{indentation}{indentation}public {bindData.BindType.FullName} {bindData.BindName}{bindData.BindPrefix} {{ get; private set; }}");
                 stringBuilder.AppendLine("");
             }
+            foreach (KeyValuePair<string, List<CodeBindData>> kv in this.m_BindArrayDatas)
+            {
+                stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{kv.Key}Array = new {kv.Value[0].BindType.FullName}[{kv.Value.Count}]");
+                stringBuilder.AppendLine("");
+            }
             //InitBind方法
             stringBuilder.AppendLine($"{indentation}{indentation}public void InitBind(CodeBind.CSCodeBindMono mono)");
             stringBuilder.AppendLine($"{indentation}{indentation}{{");
@@ -55,6 +60,14 @@ namespace CodeBind.Editor
             {
                 CodeBindData bindData = this.m_BindDatas[i];
                 stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{bindData.BindName}{bindData.BindPrefix} = this.mono.bindComponents[{i}] as {bindData.BindType.FullName};");
+            }
+            foreach (KeyValuePair<string, List<CodeBindData>> kv in this.m_BindArrayDatas)
+            {
+                for (int i = 0; i < kv.Value.Count; i++)
+                {
+                    CodeBindData bindData = kv.Value[i];
+                    stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{kv.Key}Array[{i}] = this.mono.bindComponents[{this.m_BindDatas.IndexOf(bindData)}] as {bindData.BindType.FullName}");
+                }
             }
             stringBuilder.AppendLine($"{indentation}{indentation}}}");
             //Clear方法
