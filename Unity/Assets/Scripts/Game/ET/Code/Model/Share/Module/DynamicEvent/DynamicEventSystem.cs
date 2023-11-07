@@ -16,7 +16,6 @@ namespace ET
 
         public void Update()
         {
-            Log.Debug("XXXXXXXXXXXX");
             if (this.needRemoveEntities.Count < 1)
             {
                 return;
