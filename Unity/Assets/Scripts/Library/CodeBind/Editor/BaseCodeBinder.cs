@@ -21,7 +21,11 @@ namespace CodeBind.Editor
         private readonly Transform m_RootTransform;
 
         protected readonly List<CodeBindData> m_BindDatas;
-        protected readonly SortedDictionary<string, List<CodeBindData>> m_BindArrayDatas;
+        protected readonly List<CodeBindData> m_BindArrayDatas;
+        protected readonly SortedDictionary<string, List<CodeBindData>> m_BindArrayDataDict;
+
+        private readonly Regex m_ArrayIndexRegex;
+        private readonly Regex m_VariableNameRegex;
         
         protected BaseCodeBinder(MonoScript script, Transform rootTransform, char separatorChar)
         {
@@ -32,12 +36,15 @@ namespace CodeBind.Editor
             
             this.m_RootTransform = rootTransform;
             this.m_BindDatas = new List<CodeBindData>();
-            this.m_BindArrayDatas = new SortedDictionary<string, List<CodeBindData>>();
+            this.m_BindArrayDatas = new List<CodeBindData>();
+            this.m_BindArrayDataDict = new SortedDictionary<string, List<CodeBindData>>();
             string scriptFullPath = AssetDatabase.GetAssetPath(script);
             this.m_BindScriptFullPath = scriptFullPath.Insert(scriptFullPath.LastIndexOf('.'), ".Bind");
             this.m_ScriptNameSpace = script.GetClass().Namespace;
             this.m_ScriptClassName = script.GetClass().Name;
             this.m_SeparatorChar = separatorChar;
+            this.m_ArrayIndexRegex = new Regex(@"(\d+)");
+            this.m_VariableNameRegex = new Regex(@"^([A-Za-z0-9\._-]+/)*[A-Za-z0-9\._-]+$");
         }
 
         private bool TryGenerateNameMapTypeData()
@@ -49,8 +56,17 @@ namespace CodeBind.Editor
                 {
                     return false;
                 }
+                string[] strArray = child.name.Split(this.m_SeparatorChar);
+                string bindName = strArray[0];
+                
+                string lastStr = strArray[^1];
+                MatchCollection matchCollection = this.m_ArrayIndexRegex.Matches(lastStr);
+                if (matchCollection.Count > 0)
+                {
+                    return false;
+                }
+                
                 Transform parent = child.parent;
-               
                 while (parent != null)
                 {
                     bool canNext = false;
@@ -74,9 +90,7 @@ namespace CodeBind.Editor
                     }
                     parent = parent.parent;
                 }
-
-                string[] strArray = child.name.Split(this.m_SeparatorChar);
-                string bindName = strArray[0];
+                
                 for (int i = 1; i < strArray.Length; i++)
                 {
                     string typeStr = strArray[i];
@@ -87,15 +101,89 @@ namespace CodeBind.Editor
                         {
                             if (child.GetComponent(kv.Value) != null)
                             {
-                                if (CodeBindNameTypeCollection.BindNameTypeDict.TryGetValue(typeStr, out Type type))
-                                {
-                                    CodeBindData bindData = new CodeBindData(bindName, type, typeStr, child);
-                                    bindDatas.Add(bindData);
-                                }
+                                CodeBindData bindData = new CodeBindData(bindName, kv.Value, kv.Key, child);
+                                bindDatas.Add(bindData);
                             }
                         }
                     }
-                    else if (CodeBindNameTypeCollection.BindNameTypeDict.TryGetValue(typeStr, out Type type))
+                    else if (CodeBindNameTypeCollection.BindNameTypeDict.TryGetValue(typeStr, out Type type) &&
+                             child.GetComponent(type) != null)
+                    {
+                        CodeBindData bindData = new CodeBindData(bindName, type, typeStr, child);
+                        bindDatas.Add(bindData);
+                    }
+                    else
+                    {
+                        throw new Exception($"{child.name}的命名中{typeStr}不存在对应的组件类型，绑定失败");
+                    }
+                }
+
+                if (bindDatas.Count <= 0)
+                {
+                    throw new Exception("获取的Bind对象个数为0，绑定失败！");
+                }
+                return true;
+            }
+            
+            bool TryGetBindArrayComponents(Transform child, out List<CodeBindData> bindDatas)
+            {
+                bindDatas = new List<CodeBindData>();
+                if (!child.name.Contains(m_SeparatorChar))
+                {
+                    return false;
+                }
+                string[] strArray = child.name.Split(this.m_SeparatorChar);
+                string bindName = strArray[0];
+                
+                string lastStr = strArray[^1];
+                MatchCollection matchCollection = this.m_ArrayIndexRegex.Matches(lastStr);
+                if (matchCollection.Count < 1)
+                {
+                    return false;
+                }
+                strArray[^1] = lastStr.Substring(0, lastStr.IndexOf(" (", StringComparison.Ordinal));
+                
+                Transform parent = child.parent;
+                while (parent != null)
+                {
+                    bool canNext = false;
+                    MonoBehaviour[] components = parent.GetComponents<MonoBehaviour>();
+                    foreach (MonoBehaviour component in components)
+                    {
+                        //检查父节点有没有bind，支持bind嵌套
+                        if (component.GetType().GetCustomAttributes(typeof (BaseCodeBindAttribute), true).Length > 0 && parent != this.m_RootTransform)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            canNext = true;
+                            break;
+                        }
+                    }
+                    if (canNext)
+                    {
+                        break;
+                    }
+                    parent = parent.parent;
+                }
+                
+                for (int i = 1; i < strArray.Length; i++)
+                {
+                    string typeStr = strArray[i];
+                    if (string.Equals(typeStr, "*", StringComparison.OrdinalIgnoreCase))
+                    {
+                        //自动补齐所有存在的脚本
+                        foreach (var kv in CodeBindNameTypeCollection.BindNameTypeDict)
+                        {
+                            if (child.GetComponent(kv.Value) != null)
+                            {
+                                CodeBindData bindData = new CodeBindData(bindName, kv.Value, kv.Key, child);
+                                bindDatas.Add(bindData);
+                            }
+                        }
+                    }
+                    else if (CodeBindNameTypeCollection.BindNameTypeDict.TryGetValue(typeStr, out Type type) && child.GetComponent(type) != null)
                     {
                         CodeBindData bindData = new CodeBindData(bindName, type, typeStr, child);
                         bindDatas.Add(bindData);
@@ -115,6 +203,7 @@ namespace CodeBind.Editor
             
             this.m_BindDatas.Clear();
             this.m_BindArrayDatas.Clear();
+            this.m_BindArrayDataDict.Clear();
             foreach (Transform child in this.m_RootTransform.GetComponentsInChildren<Transform>(true))
             {
                 if(child == this.m_RootTransform)
@@ -126,42 +215,48 @@ namespace CodeBind.Editor
                         if (this.m_BindDatas.Find(data => data.BindName == bindData.BindName && data.BindPrefix == bindData.BindPrefix) != null)
                         {
                             this.m_BindDatas.Clear();
-                            throw new Exception($"绑定对象中存在同名{bindData.BindName}-{bindData.BindPrefix},请修改后重新生成。");
+                            throw new Exception($"绑定对象中存在同名{bindData.BindName}-{bindData.BindPrefix}-{bindData.BindTransform},请修改后重新生成。");
                         }
                         this.m_BindDatas.Add(bindData);
                     }
                 }
+                if (TryGetBindArrayComponents(child, out List<CodeBindData> bindArrayDatas))
+                {
+                    foreach (CodeBindData bindData in bindArrayDatas)
+                    {
+                        if (this.m_BindArrayDatas.Find(data => data.BindName == bindData.BindName && data.BindPrefix == bindData.BindPrefix && data.BindTransform == bindData.BindTransform) != null)
+                        {
+                            this.m_BindArrayDatas.Clear();
+                            throw new Exception($"绑定数组对象中存在重复{bindData.BindName}-{bindData.BindPrefix}-{bindData.BindTransform},请修改后重新生成。");
+                        }
+                        this.m_BindArrayDatas.Add(bindData);
+                    }
+                }
             }
-            if (this.m_BindDatas.Count < 1)
+            if (this.m_BindDatas.Count < 1 && this.m_BindArrayDatas.Count < 1)
             {
-                throw new Exception($"绑定数量为0，生成失败。");
+                throw new Exception("绑定数量为0，生成失败。");
             }
             this.m_BindDatas.Sort((a, b) => String.CompareOrdinal(a.BindName + a.BindPrefix, b.BindName + b.BindPrefix));
-            //处理数组
-            for (int i = 0; i < this.m_BindDatas.Count - 1; i++)
+            this.m_BindArrayDatas.Sort((a, b) => String.CompareOrdinal(a.BindName + a.BindPrefix, b.BindName + b.BindPrefix));
+            for (int i = 0; i < this.m_BindArrayDatas.Count - 1; i++)
             {
-                CodeBindData bindData1 = this.m_BindDatas[i];
-                string result = Regex.Replace(bindData1.BindName, "[0-9]+$", "");
-                if (!string.IsNullOrEmpty(result))
+                CodeBindData firstBindData = this.m_BindArrayDatas[i];
+                string arrayName = firstBindData.BindName + firstBindData.BindPrefix;
+                if (this.m_BindArrayDataDict.TryGetValue(arrayName, out List<CodeBindData> bindDatas))
                 {
-                    string arrayName = bindData1.BindName.Substring(0, bindData1.BindName.Length - result.Length) + bindData1.BindPrefix;
-                    if (!this.m_BindArrayDatas.ContainsKey(arrayName))
+                    continue;
+                }
+                bindDatas = new List<CodeBindData>() { firstBindData };
+                this.m_BindArrayDataDict.Add(arrayName, bindDatas);
+                for (int j = i + 1; j < this.m_BindArrayDatas.Count; j++)
+                {
+                    CodeBindData bindData = this.m_BindArrayDatas[j];
+                    if (!string.Equals(bindData.BindName + bindData.BindPrefix, arrayName, StringComparison.Ordinal))
                     {
-                        for (int j = i + 1; j < this.m_BindDatas.Count; j++)
-                        {
-                            CodeBindData bindData2 = this.m_BindDatas[j];
-                            if (bindData2.BindName.StartsWith(arrayName))
-                            {
-                                if (!this.m_BindArrayDatas.TryGetValue(arrayName, out List<CodeBindData> bindDatas))
-                                {
-                                    bindDatas = new List<CodeBindData>();
-                                    this.m_BindArrayDatas.Add(arrayName, bindDatas);
-                                    bindDatas.Add(bindData1);
-                                }
-                                bindDatas.Add(bindData2);
-                            }
-                        }
+                        continue;
                     }
+                    bindDatas.Add(bindData);
                 }
             }
             return true;
@@ -169,6 +264,8 @@ namespace CodeBind.Editor
 
         private void AutoFixChildBindName()
         {
+            Dictionary<Transform, string> transformNameDict = new Dictionary<Transform, string>();
+            Dictionary<string, List<Transform>> arrayTransformDict = new Dictionary<string, List<Transform>>();
             foreach (Transform child in this.m_RootTransform.GetComponentsInChildren<Transform>(true))
             {
                 if(child == this.m_RootTransform)
@@ -180,7 +277,31 @@ namespace CodeBind.Editor
                     {
                         throw new Exception($"变量名为空：{child.name}");
                     }
-
+                    if (!this.m_VariableNameRegex.IsMatch(strList[0]))
+                    {
+                        throw new Exception($"{child.name}的变量名格式不对：{strList[0]}");
+                    }
+                    
+                    //(xxx)结尾的识别为数组，方便复制
+                    string lastStr = strList[^1];
+                    MatchCollection matchCollection = this.m_ArrayIndexRegex.Matches(lastStr);
+                    if (matchCollection.Count > 0)
+                    {
+                        if (arrayTransformDict.TryGetValue(strList[0], out List<Transform> transforms))
+                        {
+                            transforms.Add(child);
+                        }
+                        else
+                        {
+                            arrayTransformDict[strList[0]] = new List<Transform>() { child };
+                        }
+                        for (int i = 0; i < matchCollection.Count; i++)
+                        {
+                            lastStr = lastStr.Replace($"({matchCollection[i].Value})", string.Empty);
+                        }
+                        strList[^1] = lastStr.Replace(" ", string.Empty);
+                    }
+                    
                     bool hasAll = false;
                     for (int i = 1; i < strList.Count; i++)
                     {
@@ -230,8 +351,36 @@ namespace CodeBind.Editor
                         }
                     }
                     
-                    child.name = string.Join(m_SeparatorChar, strList);
+                    transformNameDict.Add(child, string.Join(m_SeparatorChar, strList));
                 }
+            }
+            //处理Array
+            foreach (KeyValuePair<string, List<Transform>> kv in arrayTransformDict)
+            {
+                if (kv.Value.Count < 2)
+                {
+                    continue;
+                }
+                Transform first = kv.Value[0];
+                string firstName = transformNameDict[first];
+                for (int i = 1; i < kv.Value.Count; i++)
+                {
+                    if (transformNameDict[kv.Value[i]] != firstName)
+                    {
+                        throw new Exception($"Child:{kv.Value[i]} has different component in array!");
+                    }
+                }
+                transformNameDict[first] = $"{firstName} ({0})";
+                for (int i = 1; i < kv.Value.Count; i++)
+                {
+                    string name = transformNameDict[kv.Value[i]];
+                    transformNameDict[kv.Value[i]] = $"{name} ({i})";
+                }
+            }
+
+            foreach (KeyValuePair<Transform, string> kv in transformNameDict)
+            {
+                kv.Key.name = kv.Value;
             }
         }
 

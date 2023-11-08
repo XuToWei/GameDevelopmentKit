@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 
@@ -46,9 +47,9 @@ namespace CodeBind.Editor
                 stringBuilder.AppendLine($"{indentation}{indentation}public {bindData.BindType.FullName} {bindData.BindName}{bindData.BindPrefix} {{ get; private set; }}");
                 stringBuilder.AppendLine("");
             }
-            foreach (KeyValuePair<string, List<CodeBindData>> kv in this.m_BindArrayDatas)
+            foreach (KeyValuePair<string, List<CodeBindData>> kv in this.m_BindArrayDataDict)
             {
-                stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{kv.Key}Array = new {kv.Value[0].BindType.FullName}[{kv.Value.Count}]");
+                stringBuilder.AppendLine($"{indentation}{indentation}public {kv.Value[0].BindType.FullName}[] {kv.Key}Array {{ get; private set; }}");
                 stringBuilder.AppendLine("");
             }
             //InitBind方法
@@ -61,13 +62,16 @@ namespace CodeBind.Editor
                 CodeBindData bindData = this.m_BindDatas[i];
                 stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{bindData.BindName}{bindData.BindPrefix} = this.mono.bindComponents[{i}] as {bindData.BindType.FullName};");
             }
-            foreach (KeyValuePair<string, List<CodeBindData>> kv in this.m_BindArrayDatas)
+            foreach (KeyValuePair<string, List<CodeBindData>> kv in this.m_BindArrayDataDict)
             {
+                stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{kv.Key}Array = new {kv.Value[0].BindType.FullName}[{kv.Value.Count}]");
+                stringBuilder.AppendLine($"{indentation}{indentation}{indentation}{{");
                 for (int i = 0; i < kv.Value.Count; i++)
                 {
                     CodeBindData bindData = kv.Value[i];
-                    stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{kv.Key}Array[{i}] = this.mono.bindComponents[{this.m_BindDatas.IndexOf(bindData)}] as {bindData.BindType.FullName}");
+                    stringBuilder.AppendLine($"{indentation}{indentation}{indentation}{indentation}this.mono.bindComponents[{this.m_BindArrayDatas.IndexOf(bindData) + this.m_BindDatas.Count}] as {bindData.BindType.FullName},");
                 }
+                stringBuilder.AppendLine($"{indentation}{indentation}{indentation}}};");
             }
             stringBuilder.AppendLine($"{indentation}{indentation}}}");
             //Clear方法
@@ -80,6 +84,10 @@ namespace CodeBind.Editor
             {
                 CodeBindData bindData = this.m_BindDatas[i];
                 stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{bindData.BindName}{bindData.BindPrefix} = null;");
+            }
+            foreach (KeyValuePair<string, List<CodeBindData>> kv in this.m_BindArrayDataDict)
+            {
+                stringBuilder.AppendLine($"{indentation}{indentation}{indentation}this.{kv.Key}Array = null;");
             }
             stringBuilder.AppendLine($"{indentation}{indentation}}}");
             
@@ -95,9 +103,14 @@ namespace CodeBind.Editor
         {
             List<string> bindNames = new List<string>();
             List<Component> bindComponents = new List<Component>();
-            foreach (CodeBindData bindData in m_BindDatas)
+            foreach (CodeBindData bindData in this.m_BindDatas)
             {
-                bindNames.Add(bindData.BindName);
+                bindNames.Add(bindData.BindName + bindData.BindPrefix);
+                bindComponents.Add(bindData.BindTransform.GetComponent(bindData.BindType));
+            }
+            foreach (CodeBindData bindData in this.m_BindArrayDatas)
+            {
+                bindNames.Add($"{bindData.BindName}{bindData.BindPrefix}Array");
                 bindComponents.Add(bindData.BindTransform.GetComponent(bindData.BindType));
             }
             this.m_CsCodeBindMono.SetBindComponents(bindNames.ToArray(), bindComponents.ToArray());
