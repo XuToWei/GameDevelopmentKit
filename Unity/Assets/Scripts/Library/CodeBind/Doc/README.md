@@ -1,14 +1,20 @@
 # 代码绑定工具
 
-只需要添加简单的特性或脚本就能自动生成绑定的脚本的代码，方便快捷易用
+只需要添加简单的特性或脚本就能自动生成绑定的脚本的代码，方便快捷易用，对原来的脚本没有任何入侵性，适用范围更广，同时支持Mono和CS两种模式，基于节点命名规则自动生成，支持子节点嵌套和数组，自定义命名规则，支持模糊匹配，取名更省事
 
-基于节点命名规则自动生成，支持子节点嵌套（列表使用），自定义命名规则（使用CodeBindNameTypeAttribute（引擎不能修改的代码）和CodeBindNameAttribute（经常修改的代码）来实现规则注入）
+## 说明：
 
-说明：
+1.节点名字识别支持模糊匹配，比如需要绑定一个变量名为Self的Transform组件，节点名字Self_Tr就可以识别Tr为Transform
 
-节点名字识别支持模糊匹配，比如需要绑定一个变量名为Self的Transform组件，节点名字Self_Tr就可以识别Tr为Transform
+2.节点名字支持绑定多个不同组件，用分隔符连接起来即可，例如：Self_Transform_Button，Self_Tr_But等
 
-节点名字支持绑定多个不同组件，用分隔符连接起来即可，例如：Self_Transform_Button，Self_Tr_But等
+3.节点全匹配，该节点所有脚本都进行绑定，把变量名和\*用分隔符连接起来即可，例如Self_*
+
+4.支持数组生成，末尾用括号括上数字即可，Unity编辑器自带的复制粘贴生成的即可，例如(1)，(23)
+
+5.支持嵌套，对于带有MonoCodeBindAttribute和CodeBindAttribute脚本的节点的子节点不会识别，方便列表使用
+
+6.自定义命名规则，CodeBindNameTypeAttribute来注入不能修改的代码，CodeBindNameAttribute方便处理业务代码中平凡修改的类型
 
 ## 1.MonoBehaviour类型：
 
