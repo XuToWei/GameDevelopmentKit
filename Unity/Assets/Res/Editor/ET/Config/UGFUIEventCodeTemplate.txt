@@ -2,8 +2,8 @@
 
 namespace ET.Client
 {
-    [FriendOf(typeof(UGFEntity#NAME#))]
-    public static partial class UGFEntity#NAME#System
+    [FriendOf(typeof(UGFUI#NAME#))]
+    public static partial class UGFUI#NAME#System
     {
         [UGFUIFormEvent(UGFUIFormId.Undefined)]
         private class UGFUI#NAME#Event : AUGFUIFormEvent
