@@ -43,7 +43,7 @@ namespace CodeBind.Editor
             this.m_ScriptNameSpace = script.GetClass().Namespace;
             this.m_ScriptClassName = script.GetClass().Name;
             this.m_SeparatorChar = separatorChar;
-            this.m_ArrayIndexRegex = new Regex(@"(\d+)");
+            this.m_ArrayIndexRegex = new Regex(@"\(\d*\)$");
             this.m_VariableNameRegex = new Regex(@"^([A-Za-z0-9\._-]+/)*[A-Za-z0-9\._-]+$");
         }
 
@@ -141,7 +141,7 @@ namespace CodeBind.Editor
                 {
                     return false;
                 }
-                strArray[^1] = lastStr.Substring(0, lastStr.IndexOf(" (", StringComparison.Ordinal));
+                strArray[^1] = lastStr.Replace(matchCollection[0].Value, string.Empty).Replace(" ", string.Empty);
                 
                 Transform parent = child.parent;
                 while (parent != null)
@@ -297,7 +297,7 @@ namespace CodeBind.Editor
                         }
                         for (int i = 0; i < matchCollection.Count; i++)
                         {
-                            lastStr = lastStr.Replace($"({matchCollection[i].Value})", string.Empty);
+                            lastStr = lastStr.Replace($"{matchCollection[i].Value}", string.Empty);
                         }
                         strList[^1] = lastStr.Replace(" ", string.Empty);
                     }
