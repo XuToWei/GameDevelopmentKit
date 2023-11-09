@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace CodeBind
 {
-    [CSCodeBind]
+    [CodeBind]
+    [CodeBindName("ReferenceBindMono")]
     [DisallowMultipleComponent]
     public sealed class ReferenceBindMono : MonoBehaviour
     {

@@ -3,9 +3,12 @@ using System.Diagnostics;
 
 namespace CodeBind
 {
+    /// <summary>
+    /// 绑定库识别，添加了支持嵌套，不会识别子物体
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     [Conditional("UNITY_EDITOR")]
-    public abstract class BaseCodeBindAttribute : Attribute
+    public class CodeBindAttribute : Attribute
     {
         
     }

@@ -5,11 +5,9 @@ namespace CodeBind.Demo
     public partial class TestCS : CodeBind.ICSCodeBind
     {
         public CodeBind.CSCodeBindMono mono { get; private set; }
-
         public UnityEngine.Transform transform { get; private set; }
 
         public UnityEngine.Animation otherAnimation { get; private set; }
-
         public UnityEngine.Transform selfTransform { get; private set; }
 
         public UnityEngine.Animation[] listAnimationArray { get; private set; }
@@ -18,6 +16,7 @@ namespace CodeBind.Demo
         {
             this.mono = mono;
             this.transform = mono.transform;
+
             this.otherAnimation = this.mono.bindComponents[0] as UnityEngine.Animation;
             this.selfTransform = this.mono.bindComponents[1] as UnityEngine.Transform;
             this.listAnimationArray = new UnityEngine.Animation[4]

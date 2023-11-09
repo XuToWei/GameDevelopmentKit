@@ -39,19 +39,18 @@ namespace CodeBind.Editor
             stringBuilder.AppendLine($"{indentation}{{");
             //组件字段
             stringBuilder.AppendLine($"{indentation}{indentation}public CodeBind.CSCodeBindMono mono {{ get; private set; }}");
-            stringBuilder.AppendLine("");
             stringBuilder.AppendLine($"{indentation}{indentation}public UnityEngine.Transform transform {{ get; private set; }}");
             stringBuilder.AppendLine("");
             foreach (CodeBindData bindData in this.m_BindDatas)
             {
                 stringBuilder.AppendLine($"{indentation}{indentation}public {bindData.BindType.FullName} {bindData.BindName}{bindData.BindPrefix} {{ get; private set; }}");
-                stringBuilder.AppendLine("");
             }
+            stringBuilder.AppendLine("");
             foreach (KeyValuePair<string, List<CodeBindData>> kv in this.m_BindArrayDataDict)
             {
                 stringBuilder.AppendLine($"{indentation}{indentation}public {kv.Value[0].BindType.FullName}[] {kv.Key}Array {{ get; private set; }}");
-                stringBuilder.AppendLine("");
             }
+            stringBuilder.AppendLine("");
             //InitBind方法
             stringBuilder.AppendLine($"{indentation}{indentation}public void InitBind(CodeBind.CSCodeBindMono mono)");
             stringBuilder.AppendLine($"{indentation}{indentation}{{");

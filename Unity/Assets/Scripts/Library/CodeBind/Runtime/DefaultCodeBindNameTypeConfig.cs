@@ -30,8 +30,6 @@ namespace CodeBind
             { "Scrollbar", typeof (UnityEngine.UI.Scrollbar) },
             { "ScrollRect", typeof (UnityEngine.UI.ScrollRect) },
             { "Dropdown", typeof (UnityEngine.UI.Dropdown) },
-
-            { "CSCodeBindMono", typeof (CSCodeBindMono) },
         };
     }
 }

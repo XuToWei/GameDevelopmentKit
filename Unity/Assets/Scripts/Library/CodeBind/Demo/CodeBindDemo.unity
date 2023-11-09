@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 253148095}
   - component: {fileID: 253148096}
   m_Layer: 0
-  m_Name: TestCS
+  m_Name: test_CSCodeBindMono_ReferenceBindMono
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 459711676}
   - component: {fileID: 459711677}
   m_Layer: 0
-  m_Name: test2_*   (333)  (2)
+  m_Name: test2_* (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -436,20 +436,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370e3ec0ab1088c469b00346ba8881c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _test2Animator: {fileID: 285049431}
+  _test2Transform: {fileID: 285049430}
   _testAnimator: {fileID: 1664885869}
+  _testCSCodeBindMono: {fileID: 253148095}
+  _testReferenceBindMono: {fileID: 253148096}
   _testTransform: {fileID: 1664885868}
+  _test2AnimatorArray:
+  - {fileID: 955000992}
+  - {fileID: 1829786443}
+  - {fileID: 1351314023}
+  - {fileID: 459711677}
+  - {fileID: 2132282598}
+  _test2TransformArray:
+  - {fileID: 1829786442}
+  - {fileID: 1351314022}
+  - {fileID: 459711676}
+  - {fileID: 2132282597}
+  - {fileID: 955000991}
   _testAnimatorArray:
-  - {fileID: 798915803}
-  - {fileID: 44103784}
-  - {fileID: 1793382482}
-  - {fileID: 819198770}
   - {fileID: 1319921646}
+  - {fileID: 819198770}
+  - {fileID: 1793382482}
+  - {fileID: 44103784}
+  - {fileID: 798915803}
   _testTransformArray:
-  - {fileID: 798915802}
-  - {fileID: 44103783}
-  - {fileID: 1793382481}
   - {fileID: 819198769}
+  - {fileID: 1793382481}
+  - {fileID: 44103783}
   - {fileID: 1319921645}
+  - {fileID: 798915802}
 --- !u!4 &727083143
 Transform:
   m_ObjectHideFlags: 0
@@ -642,7 +658,7 @@ GameObject:
   - component: {fileID: 955000991}
   - component: {fileID: 955000992}
   m_Layer: 0
-  m_Name: test2_* (5)
+  m_Name: test2_* (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -878,7 +894,7 @@ GameObject:
   - component: {fileID: 1351314022}
   - component: {fileID: 1351314023}
   m_Layer: 0
-  m_Name: test2_* (3)
+  m_Name: test2_* (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1084,7 +1100,7 @@ GameObject:
   - component: {fileID: 1829786442}
   - component: {fileID: 1829786443}
   m_Layer: 0
-  m_Name: test2_* (4)
+  m_Name: test2_* (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1137,7 +1153,7 @@ GameObject:
   - component: {fileID: 2132282597}
   - component: {fileID: 2132282598}
   m_Layer: 0
-  m_Name: test2_* (1)
+  m_Name: test2_* (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

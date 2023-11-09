@@ -74,7 +74,7 @@ namespace CodeBind.Editor
                     foreach (MonoBehaviour component in components)
                     {
                         //检查父节点有没有bind，支持bind嵌套
-                        if (component.GetType().GetCustomAttributes(typeof (BaseCodeBindAttribute), true).Length > 0 && parent != this.m_RootTransform)
+                        if (component.GetType().GetCustomAttributes(typeof (CodeBindAttribute), true).Length > 0 && parent != this.m_RootTransform)
                         {
                             return false;
                         }
@@ -151,7 +151,7 @@ namespace CodeBind.Editor
                     foreach (MonoBehaviour component in components)
                     {
                         //检查父节点有没有bind，支持bind嵌套
-                        if (component.GetType().GetCustomAttributes(typeof (BaseCodeBindAttribute), true).Length > 0 && parent != this.m_RootTransform)
+                        if (component.GetType().GetCustomAttributes(typeof (CodeBindAttribute), true).Length > 0 && parent != this.m_RootTransform)
                         {
                             return false;
                         }
@@ -367,7 +367,7 @@ namespace CodeBind.Editor
                 {
                     if (transformNameDict[kv.Value[i]] != firstName)
                     {
-                        throw new Exception($"Child:{kv.Value[i]} has different component in array!");
+                        throw new Exception($"Child:{kv.Value[i]} has different component ({transformNameDict[kv.Value[i]]}:{firstName}) in array!");
                     }
                 }
                 transformNameDict[first] = $"{firstName} ({0})";

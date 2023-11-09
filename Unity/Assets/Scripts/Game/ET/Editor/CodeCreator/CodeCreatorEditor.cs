@@ -16,7 +16,8 @@ namespace ET.Editor
         [MenuItem("ET/Code Creator")]
         public static void ShowWindow()
         {
-            GetWindow<CodeCreatorEditor>("ET Code Creator", DockDefine.Types);
+            CodeCreatorEditor window = GetWindow<CodeCreatorEditor>("ET Code Creator", DockDefine.Types);
+            window.minSize = new Vector2(600f, 400f);
         }
 
         private void OnEnable()

@@ -41,24 +41,23 @@ namespace CodeBind.Editor
             foreach (CodeBindData bindData in this.m_BindDatas)
             {
                 stringBuilder.AppendLine($"{indentation}\t[UnityEngine.SerializeField] private {bindData.BindType.FullName} _{bindData.BindName}{bindData.BindPrefix};");
-                stringBuilder.AppendLine("");
             }
+            stringBuilder.AppendLine("");
             foreach (KeyValuePair<string, List<CodeBindData>> kv in this.m_BindArrayDataDict)
             {
                 stringBuilder.AppendLine($"{indentation}\t[UnityEngine.SerializeField] private {kv.Value[0].BindType.FullName}[] _{kv.Key}Array;");
-                stringBuilder.AppendLine("");
             }
-            
+            stringBuilder.AppendLine("");
             foreach (CodeBindData bindData in this.m_BindDatas)
             {
                 stringBuilder.AppendLine($"{indentation}\tpublic {bindData.BindType.FullName} {bindData.BindName}{bindData.BindPrefix} => _{bindData.BindName}{bindData.BindPrefix};");
-                stringBuilder.AppendLine("");
             }
+            stringBuilder.AppendLine("");
             foreach (KeyValuePair<string, List<CodeBindData>> kv in this.m_BindArrayDataDict)
             {
                 stringBuilder.AppendLine($"{indentation}\tpublic {kv.Value[0].BindType.FullName}[] {kv.Key}Array => _{kv.Key}Array;");
-                stringBuilder.AppendLine("");
             }
+            
             stringBuilder.AppendLine($"{indentation}}}");
             if (needNameSpace)
             {

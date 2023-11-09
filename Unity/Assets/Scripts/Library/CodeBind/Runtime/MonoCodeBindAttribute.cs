@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace CodeBind
 {
     [Conditional("UNITY_EDITOR")]
-    public sealed class MonoCodeBindAttribute : BaseCodeBindAttribute
+    public sealed class MonoCodeBindAttribute : CodeBindAttribute
     {
         public readonly char separatorChar;
 
