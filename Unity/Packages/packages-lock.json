@@ -63,6 +63,13 @@
       "dependencies": {},
       "hash": "634ed94bdd67aac0cf044a0375e5c88cd48478a3"
     },
+    "com.github-glitchenzo.nugetforunity": {
+      "version": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c8205ffcd945cd176f4493a8ab25db093efef779"
+    },
     "com.singularitygroup.hotreload": {
       "version": "git+https://gitlab.hotreload.net/root/hot-reload-releases.git",
       "depth": 0,
