@@ -17,7 +17,7 @@
 
 2.以[GFEntity](Unity/Assets/Scripts/Game/ET/Loader/UGF/UIForm)为基础的[ETEntity](Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Module/Entity)
 
-3.使用极其灵活方便的[代码绑定工具](Unity/Assets/Scripts/Library/CodeBind/Doc/README.md)，解决代码与资源映射的最后一公里
+3.使用极其灵活方便的[代码绑定工具](https://github.com/XuToWei/CodeBind)，解决代码与资源映射的最后一公里，极力推荐！
 
 4.[模块切换](Book/Project%E7%BB%93%E6%9E%84.md)方便，ET逻辑或GF逻辑，热更或非热更选择随心所欲，当然也可以只用GF
 

@@ -331,6 +331,13 @@
       },
       "hash": "1943d80ac916c5898a0f030db1d92f4fa81c531c"
     },
+    "me.xw.codebind": {
+      "version": "https://github.com/XuToWei/CodeBind.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c2250545c68aec75893027da32ecb1cb4670dedd"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
