@@ -5,10 +5,10 @@ namespace ET.Client
     public partial class UGFUILobbyComponent : CodeBind.ICSCodeBind
     {
         public CodeBind.CSCodeBindMono mono { get; private set; }
-
         public UnityEngine.Transform transform { get; private set; }
 
         public UnityEngine.UI.Button enterMapButton { get; private set; }
+
 
         public void InitBind(CodeBind.CSCodeBindMono mono)
         {

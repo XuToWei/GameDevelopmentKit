@@ -14,7 +14,7 @@ namespace Game.Editor
     {
         public static readonly string BuildPkgFolder = Path.GetFullPath("../Temp/Pkg");
 
-        [InitializeOnLoadMethod]
+        //[InitializeOnLoadMethod]
         public static void ReGenerateProjectFiles()
         {
             if (Unity.CodeEditor.CodeEditor.CurrentEditor.GetType().Name== "RiderScriptEditor")
@@ -27,7 +27,6 @@ namespace Game.Editor
             {
                 Unity.CodeEditor.CodeEditor.CurrentEditor.SyncAll();
             }
-            
             Debug.Log("ReGenerateProjectFiles finished.");
         }
         

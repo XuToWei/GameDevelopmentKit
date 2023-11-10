@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 224922312697997914}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -91,8 +90,8 @@ GameObject:
   - component: {fileID: 224438795553994780}
   - component: {fileID: 3539700472237229061}
   - component: {fileID: 3539700472237229083}
-  - component: {fileID: 8509559855961258801}
   - component: {fileID: 7000139577207080798}
+  - component: {fileID: 7040096392785719028}
   m_Layer: 5
   m_Name: UILogin
   m_TagString: Untagged
@@ -114,7 +113,6 @@ RectTransform:
   m_Children:
   - {fileID: 587485265287676898}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -138,7 +136,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -159,28 +159,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 823
---- !u!114 &8509559855961258801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386170326414932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35484dcc77f5cfa4682f0453f330c54b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindComponents:
-  - {fileID: 114341495829030012}
-  - {fileID: 114663064108016614}
-  - {fileID: 114630311973242952}
-  m_SeparatorChar: 95
-  m_BindScript: {fileID: 11500000, guid: 3b70aeffd4109a94981d0460bf28dae9, type: 3}
-  m_BindComponentNames:
-  - account
-  - password
-  - login
 --- !u!114 &7000139577207080798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +171,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2cab69204e6aa44bcabf89d590162c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7040096392785719028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386170326414932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5452a0c3619826c4f889a047605eef79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BindComponents:
+  - {fileID: 114341495829030012}
+  - {fileID: 114630311973242952}
+  - {fileID: 114663064108016614}
+  m_SeparatorChar: 95
+  m_BindScript: {fileID: 11500000, guid: 3b70aeffd4109a94981d0460bf28dae9, type: 3}
+  m_BindComponentNames:
+  - accountInputField
+  - loginButton
+  - passwordInputField
 --- !u!1 &1568484768885604
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +227,6 @@ RectTransform:
   - {fileID: 5867963764642355349}
   - {fileID: 4976724473026745500}
   m_Father: {fileID: 587485265287676898}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -374,7 +373,6 @@ RectTransform:
   - {fileID: 224608071536574582}
   - {fileID: 224073640819989714}
   m_Father: {fileID: 587485265287676898}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -518,7 +516,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 224922312697997914}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -600,7 +597,6 @@ RectTransform:
   m_Children:
   - {fileID: 9179437439726352980}
   m_Father: {fileID: 587485265287676898}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -720,7 +716,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 224944102343361862}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -800,7 +795,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 224944102343361862}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -883,7 +877,6 @@ RectTransform:
   - {fileID: 224944102343361862}
   - {fileID: 224532636050568724}
   m_Father: {fileID: 224438795553994780}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -959,7 +952,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 224532636050568724}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

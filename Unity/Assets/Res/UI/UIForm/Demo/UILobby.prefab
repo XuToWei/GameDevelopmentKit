@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 224438795553994780}
   - component: {fileID: 1431576037130298801}
   - component: {fileID: 1431576037130298803}
-  - component: {fileID: 161193313548892231}
   - component: {fileID: -3970582739654965883}
+  - component: {fileID: 1692804090655075691}
   m_Layer: 5
   m_Name: UILobby
   m_TagString: Untagged
@@ -34,7 +34,6 @@ RectTransform:
   m_Children:
   - {fileID: 4771239781044397799}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -58,7 +57,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -79,24 +80,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 823
---- !u!114 &161193313548892231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386170326414932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35484dcc77f5cfa4682f0453f330c54b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindComponents:
-  - {fileID: 1003626380862230063}
-  m_SeparatorChar: 95
-  m_BindScript: {fileID: 11500000, guid: bdd13edeb1a192d488c493427453ddb8, type: 3}
-  m_BindComponentNames:
-  - enterMap
 --- !u!114 &-3970582739654965883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,6 +92,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2cab69204e6aa44bcabf89d590162c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1692804090655075691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386170326414932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5452a0c3619826c4f889a047605eef79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BindComponents:
+  - {fileID: 1003626380862230063}
+  m_SeparatorChar: 95
+  m_BindScript: {fileID: 11500000, guid: bdd13edeb1a192d488c493427453ddb8, type: 3}
+  m_BindComponentNames:
+  - enterMapButton
 --- !u!1 &899722670427233733
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,7 +143,6 @@ RectTransform:
   m_Children:
   - {fileID: 6091551359588390577}
   m_Father: {fileID: 4771239781044397799}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -263,7 +263,6 @@ RectTransform:
   m_Children:
   - {fileID: 1109878335635189875}
   m_Father: {fileID: 224438795553994780}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -339,7 +338,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1109878335635189875}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
