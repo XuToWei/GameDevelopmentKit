@@ -1,5 +1,3 @@
-using Cysharp.Threading.Tasks;
-
 namespace ET
 {
     [ComponentOf(typeof(Scene))]
@@ -22,16 +20,6 @@ namespace ET
         private static void Update(this DynamicEventSystemUpdateComponent self)
         {
             DynamicEventSystem.Instance.Update();
-        }
-    }
-    
-    [Event(SceneType.Main)]
-    public class DynamicEventSystemUpdate_InitShare : AEvent<Scene, EntryEvent1>
-    {
-        protected override async UniTask Run(Scene scene, EntryEvent1 a)
-        {
-            scene.AddComponent<DynamicEventSystemUpdateComponent>();
-            await UniTask.CompletedTask;
         }
     }
 }

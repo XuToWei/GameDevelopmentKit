@@ -22,8 +22,7 @@ namespace ET
             }
             foreach (Entity entity in this.needRemoveEntities)
             {
-                Type entityType = entity.GetType();
-                if (this.registeredEntityDict.TryGetValue(entityType, out var entityRefs))
+                if (this.registeredEntityDict.TryGetValue(entity.GetType(), out var entityRefs))
                 {
                     entityRefs.Remove(entity);
                     break;
