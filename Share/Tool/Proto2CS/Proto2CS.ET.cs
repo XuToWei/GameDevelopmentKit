@@ -23,18 +23,18 @@ namespace ET
                 
                 msgOpcode.Clear();
                 sb = new StringBuilder();
-                sb.AppendLine("// This is an automatically generated class by Share.Tool. Please do not modify it.");
-                sb.AppendLine("");
+                sb.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
+                sb.Append("\n");
                 sb.Append("using MemoryPack;\n");
                 sb.Append("using System.Collections.Generic;\n");
-                sb.AppendLine("");
+                sb.Append("\n");
                 sb.Append($"namespace {nameSpace}\n");
                 sb.Append("{\n");
             }
 
             public static void Stop()
             {
-                sb.Append("\tpublic static class " + csName + "\n\t{\n");
+                sb.Append("\tpublic static partial class " + csName + "\n\t{\n");
                 foreach (OpcodeInfo info in msgOpcode)
                 {
                     sb.Append($"\t\t public const ushort {info.Name} = {info.Opcode};\n");

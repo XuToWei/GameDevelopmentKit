@@ -22,12 +22,12 @@ namespace ET
                 startOpcode = opcode;
                 
                 sb = new StringBuilder();
-                sb.AppendLine("// This is an automatically generated class by Share.Tool. Please do not modify it.");
-                sb.AppendLine("");
+                sb.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
+                sb.Append("\n");
                 sb.Append("using ProtoBuf;\n");
                 sb.Append("using System;\n");
                 sb.Append("using System.Collections.Generic;\n");
-                sb.AppendLine("");
+                sb.Append("\n");
                 sb.Append($"namespace {nameSpace}\n");
                 sb.Append("{\n");
             }

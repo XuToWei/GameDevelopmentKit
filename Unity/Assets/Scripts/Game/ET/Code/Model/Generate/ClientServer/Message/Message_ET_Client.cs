@@ -1362,7 +1362,7 @@ namespace ET
 
     }
 
-    public static class Message_ET_Client
+    public static partial class Message_ET_Client
     {
          public const ushort Main2NetClient_Login = 10001;
          public const ushort NetClient2Main_Login = 10002;

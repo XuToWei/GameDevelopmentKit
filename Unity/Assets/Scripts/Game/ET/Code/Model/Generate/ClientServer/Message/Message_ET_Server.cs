@@ -976,7 +976,7 @@ namespace ET
 
     }
 
-    public static class Message_ET_Server
+    public static partial class Message_ET_Server
     {
          public const ushort ObjectQueryRequest = 20001;
          public const ushort M2A_Reload = 20002;
