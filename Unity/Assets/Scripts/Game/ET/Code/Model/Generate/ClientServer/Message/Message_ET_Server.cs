@@ -2,11 +2,11 @@
 
 using MemoryPack;
 using System.Collections.Generic;
-// using
+
 namespace ET
 {
     [ResponseType(nameof(ObjectQueryResponse))]
-    [Message(InnerMessage.ObjectQueryRequest)]
+    [Message(Message_ET_Server.ObjectQueryRequest)]
     [MemoryPackable]
     public partial class ObjectQueryRequest: MessageObject, IRequest
     {
@@ -37,7 +37,7 @@ namespace ET
     }
 
     [ResponseType(nameof(A2M_Reload))]
-    [Message(InnerMessage.M2A_Reload)]
+    [Message(Message_ET_Server.M2A_Reload)]
     [MemoryPackable]
     public partial class M2A_Reload: MessageObject, IRequest
     {
@@ -59,7 +59,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.A2M_Reload)]
+    [Message(Message_ET_Server.A2M_Reload)]
     [MemoryPackable]
     public partial class A2M_Reload: MessageObject, IResponse
     {
@@ -90,7 +90,7 @@ namespace ET
     }
 
     [ResponseType(nameof(G2G_LockResponse))]
-    [Message(InnerMessage.G2G_LockRequest)]
+    [Message(Message_ET_Server.G2G_LockRequest)]
     [MemoryPackable]
     public partial class G2G_LockRequest: MessageObject, IRequest
     {
@@ -120,7 +120,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.G2G_LockResponse)]
+    [Message(Message_ET_Server.G2G_LockResponse)]
     [MemoryPackable]
     public partial class G2G_LockResponse: MessageObject, IResponse
     {
@@ -151,7 +151,7 @@ namespace ET
     }
 
     [ResponseType(nameof(G2G_LockReleaseResponse))]
-    [Message(InnerMessage.G2G_LockReleaseRequest)]
+    [Message(Message_ET_Server.G2G_LockReleaseRequest)]
     [MemoryPackable]
     public partial class G2G_LockReleaseRequest: MessageObject, IRequest
     {
@@ -181,7 +181,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.G2G_LockReleaseResponse)]
+    [Message(Message_ET_Server.G2G_LockReleaseResponse)]
     [MemoryPackable]
     public partial class G2G_LockReleaseResponse: MessageObject, IResponse
     {
@@ -212,7 +212,7 @@ namespace ET
     }
 
     [ResponseType(nameof(ObjectAddResponse))]
-    [Message(InnerMessage.ObjectAddRequest)]
+    [Message(Message_ET_Server.ObjectAddRequest)]
     [MemoryPackable]
     public partial class ObjectAddRequest: MessageObject, IRequest
     {
@@ -246,7 +246,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.ObjectAddResponse)]
+    [Message(Message_ET_Server.ObjectAddResponse)]
     [MemoryPackable]
     public partial class ObjectAddResponse: MessageObject, IResponse
     {
@@ -277,7 +277,7 @@ namespace ET
     }
 
     [ResponseType(nameof(ObjectLockResponse))]
-    [Message(InnerMessage.ObjectLockRequest)]
+    [Message(Message_ET_Server.ObjectLockRequest)]
     [MemoryPackable]
     public partial class ObjectLockRequest: MessageObject, IRequest
     {
@@ -315,7 +315,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.ObjectLockResponse)]
+    [Message(Message_ET_Server.ObjectLockResponse)]
     [MemoryPackable]
     public partial class ObjectLockResponse: MessageObject, IResponse
     {
@@ -346,7 +346,7 @@ namespace ET
     }
 
     [ResponseType(nameof(ObjectUnLockResponse))]
-    [Message(InnerMessage.ObjectUnLockRequest)]
+    [Message(Message_ET_Server.ObjectUnLockRequest)]
     [MemoryPackable]
     public partial class ObjectUnLockRequest: MessageObject, IRequest
     {
@@ -384,7 +384,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.ObjectUnLockResponse)]
+    [Message(Message_ET_Server.ObjectUnLockResponse)]
     [MemoryPackable]
     public partial class ObjectUnLockResponse: MessageObject, IResponse
     {
@@ -415,7 +415,7 @@ namespace ET
     }
 
     [ResponseType(nameof(ObjectRemoveResponse))]
-    [Message(InnerMessage.ObjectRemoveRequest)]
+    [Message(Message_ET_Server.ObjectRemoveRequest)]
     [MemoryPackable]
     public partial class ObjectRemoveRequest: MessageObject, IRequest
     {
@@ -445,7 +445,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.ObjectRemoveResponse)]
+    [Message(Message_ET_Server.ObjectRemoveResponse)]
     [MemoryPackable]
     public partial class ObjectRemoveResponse: MessageObject, IResponse
     {
@@ -476,7 +476,7 @@ namespace ET
     }
 
     [ResponseType(nameof(ObjectGetResponse))]
-    [Message(InnerMessage.ObjectGetRequest)]
+    [Message(Message_ET_Server.ObjectGetRequest)]
     [MemoryPackable]
     public partial class ObjectGetRequest: MessageObject, IRequest
     {
@@ -506,7 +506,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.ObjectGetResponse)]
+    [Message(Message_ET_Server.ObjectGetResponse)]
     [MemoryPackable]
     public partial class ObjectGetResponse: MessageObject, IResponse
     {
@@ -545,7 +545,7 @@ namespace ET
     }
 
     [ResponseType(nameof(G2R_GetLoginKey))]
-    [Message(InnerMessage.R2G_GetLoginKey)]
+    [Message(Message_ET_Server.R2G_GetLoginKey)]
     [MemoryPackable]
     public partial class R2G_GetLoginKey: MessageObject, IRequest
     {
@@ -571,7 +571,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.G2R_GetLoginKey)]
+    [Message(Message_ET_Server.G2R_GetLoginKey)]
     [MemoryPackable]
     public partial class G2R_GetLoginKey: MessageObject, IResponse
     {
@@ -609,7 +609,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.G2M_SessionDisconnect)]
+    [Message(Message_ET_Server.G2M_SessionDisconnect)]
     [MemoryPackable]
     public partial class G2M_SessionDisconnect: MessageObject, ILocationMessage
     {
@@ -631,7 +631,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.ObjectQueryResponse)]
+    [Message(Message_ET_Server.ObjectQueryResponse)]
     [MemoryPackable]
     public partial class ObjectQueryResponse: MessageObject, IResponse
     {
@@ -666,7 +666,7 @@ namespace ET
     }
 
     [ResponseType(nameof(M2M_UnitTransferResponse))]
-    [Message(InnerMessage.M2M_UnitTransferRequest)]
+    [Message(Message_ET_Server.M2M_UnitTransferRequest)]
     [MemoryPackable]
     public partial class M2M_UnitTransferRequest: MessageObject, IRequest
     {
@@ -700,7 +700,7 @@ namespace ET
 
     }
 
-    [Message(InnerMessage.M2M_UnitTransferResponse)]
+    [Message(Message_ET_Server.M2M_UnitTransferResponse)]
     [MemoryPackable]
     public partial class M2M_UnitTransferResponse: MessageObject, IResponse
     {
@@ -730,30 +730,284 @@ namespace ET
 
     }
 
-    public static class InnerMessage
+// 请求匹配
+    [ResponseType(nameof(Match2G_Match))]
+    [Message(Message_ET_Server.G2Match_Match)]
+    [MemoryPackable]
+    public partial class G2Match_Match: MessageObject, IRequest
     {
-         public const ushort ObjectQueryRequest = 20002;
-         public const ushort M2A_Reload = 20003;
-         public const ushort A2M_Reload = 20004;
-         public const ushort G2G_LockRequest = 20005;
-         public const ushort G2G_LockResponse = 20006;
-         public const ushort G2G_LockReleaseRequest = 20007;
-         public const ushort G2G_LockReleaseResponse = 20008;
-         public const ushort ObjectAddRequest = 20009;
-         public const ushort ObjectAddResponse = 20010;
-         public const ushort ObjectLockRequest = 20011;
-         public const ushort ObjectLockResponse = 20012;
-         public const ushort ObjectUnLockRequest = 20013;
-         public const ushort ObjectUnLockResponse = 20014;
-         public const ushort ObjectRemoveRequest = 20015;
-         public const ushort ObjectRemoveResponse = 20016;
-         public const ushort ObjectGetRequest = 20017;
-         public const ushort ObjectGetResponse = 20018;
-         public const ushort R2G_GetLoginKey = 20019;
-         public const ushort G2R_GetLoginKey = 20020;
-         public const ushort G2M_SessionDisconnect = 20021;
-         public const ushort ObjectQueryResponse = 20022;
-         public const ushort M2M_UnitTransferRequest = 20023;
-         public const ushort M2M_UnitTransferResponse = 20024;
+        public static G2Match_Match Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new G2Match_Match() : ObjectPool.Instance.Fetch(typeof(G2Match_Match)) as G2Match_Match; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public long Id { get; set; }
+
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+            this.Id = default;
+
+            ObjectPool.Instance.Recycle(this); 
+        }
+
+    }
+
+    [Message(Message_ET_Server.Match2G_Match)]
+    [MemoryPackable]
+    public partial class Match2G_Match: MessageObject, IResponse
+    {
+        public static Match2G_Match Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new Match2G_Match() : ObjectPool.Instance.Fetch(typeof(Match2G_Match)) as Match2G_Match; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Instance.Recycle(this); 
+        }
+
+    }
+
+    [ResponseType(nameof(Map2Match_GetRoom))]
+    [Message(Message_ET_Server.Match2Map_GetRoom)]
+    [MemoryPackable]
+    public partial class Match2Map_GetRoom: MessageObject, IRequest
+    {
+        public static Match2Map_GetRoom Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new Match2Map_GetRoom() : ObjectPool.Instance.Fetch(typeof(Match2Map_GetRoom)) as Match2Map_GetRoom; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public List<long> PlayerIds { get; set; } = new List<long>();
+
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+            this.PlayerIds.Clear();
+
+            ObjectPool.Instance.Recycle(this); 
+        }
+
+    }
+
+    [Message(Message_ET_Server.Map2Match_GetRoom)]
+    [MemoryPackable]
+    public partial class Map2Match_GetRoom: MessageObject, IResponse
+    {
+        public static Map2Match_GetRoom Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new Map2Match_GetRoom() : ObjectPool.Instance.Fetch(typeof(Map2Match_GetRoom)) as Map2Match_GetRoom; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+
+// 房间的ActorId
+        [MemoryPackOrder(3)]
+        public ActorId ActorId { get; set; }
+
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.ActorId = default;
+
+            ObjectPool.Instance.Recycle(this); 
+        }
+
+    }
+
+    [ResponseType(nameof(Room2G_Reconnect))]
+    [Message(Message_ET_Server.G2Room_Reconnect)]
+    [MemoryPackable]
+    public partial class G2Room_Reconnect: MessageObject, IRequest
+    {
+        public static G2Room_Reconnect Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new G2Room_Reconnect() : ObjectPool.Instance.Fetch(typeof(G2Room_Reconnect)) as G2Room_Reconnect; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public long PlayerId { get; set; }
+
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+            this.PlayerId = default;
+
+            ObjectPool.Instance.Recycle(this); 
+        }
+
+    }
+
+    [Message(Message_ET_Server.Room2G_Reconnect)]
+    [MemoryPackable]
+    public partial class Room2G_Reconnect: MessageObject, IResponse
+    {
+        public static Room2G_Reconnect Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new Room2G_Reconnect() : ObjectPool.Instance.Fetch(typeof(Room2G_Reconnect)) as Room2G_Reconnect; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(3)]
+        public long StartTime { get; set; }
+
+        [MemoryPackOrder(4)]
+        public List<LockStepUnitInfo> UnitInfos { get; set; } = new List<LockStepUnitInfo>();
+
+        [MemoryPackOrder(5)]
+        public int Frame { get; set; }
+
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.StartTime = default;
+            this.UnitInfos.Clear();
+            this.Frame = default;
+
+            ObjectPool.Instance.Recycle(this); 
+        }
+
+    }
+
+    [ResponseType(nameof(Room2RoomManager_Init))]
+    [Message(Message_ET_Server.RoomManager2Room_Init)]
+    [MemoryPackable]
+    public partial class RoomManager2Room_Init: MessageObject, IRequest
+    {
+        public static RoomManager2Room_Init Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new RoomManager2Room_Init() : ObjectPool.Instance.Fetch(typeof(RoomManager2Room_Init)) as RoomManager2Room_Init; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public List<long> PlayerIds { get; set; } = new List<long>();
+
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+            this.PlayerIds.Clear();
+
+            ObjectPool.Instance.Recycle(this); 
+        }
+
+    }
+
+    [Message(Message_ET_Server.Room2RoomManager_Init)]
+    [MemoryPackable]
+    public partial class Room2RoomManager_Init: MessageObject, IResponse
+    {
+        public static Room2RoomManager_Init Create(bool isFromPool = true) 
+        { 
+            return !isFromPool? new Room2RoomManager_Init() : ObjectPool.Instance.Fetch(typeof(Room2RoomManager_Init)) as Room2RoomManager_Init; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) return;
+                        this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Instance.Recycle(this); 
+        }
+
+    }
+
+    public static class Message_ET_Server
+    {
+         public const ushort ObjectQueryRequest = 20001;
+         public const ushort M2A_Reload = 20002;
+         public const ushort A2M_Reload = 20003;
+         public const ushort G2G_LockRequest = 20004;
+         public const ushort G2G_LockResponse = 20005;
+         public const ushort G2G_LockReleaseRequest = 20006;
+         public const ushort G2G_LockReleaseResponse = 20007;
+         public const ushort ObjectAddRequest = 20008;
+         public const ushort ObjectAddResponse = 20009;
+         public const ushort ObjectLockRequest = 20010;
+         public const ushort ObjectLockResponse = 20011;
+         public const ushort ObjectUnLockRequest = 20012;
+         public const ushort ObjectUnLockResponse = 20013;
+         public const ushort ObjectRemoveRequest = 20014;
+         public const ushort ObjectRemoveResponse = 20015;
+         public const ushort ObjectGetRequest = 20016;
+         public const ushort ObjectGetResponse = 20017;
+         public const ushort R2G_GetLoginKey = 20018;
+         public const ushort G2R_GetLoginKey = 20019;
+         public const ushort G2M_SessionDisconnect = 20020;
+         public const ushort ObjectQueryResponse = 20021;
+         public const ushort M2M_UnitTransferRequest = 20022;
+         public const ushort M2M_UnitTransferResponse = 20023;
+         public const ushort G2Match_Match = 20024;
+         public const ushort Match2G_Match = 20025;
+         public const ushort Match2Map_GetRoom = 20026;
+         public const ushort Map2Match_GetRoom = 20027;
+         public const ushort G2Room_Reconnect = 20028;
+         public const ushort Room2G_Reconnect = 20029;
+         public const ushort RoomManager2Room_Init = 20030;
+         public const ushort Room2RoomManager_Init = 20031;
     }
 }

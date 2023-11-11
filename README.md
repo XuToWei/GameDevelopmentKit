@@ -11,6 +11,10 @@
 
 ***
 
+## 交流QQ群：949482664
+
+***
+
 # 细节
 
 1.以[GFUI](Unity/Assets/Scripts/Game/ET/Loader/UGF/UIForm)为基础的[ETUI](Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Module/UI)

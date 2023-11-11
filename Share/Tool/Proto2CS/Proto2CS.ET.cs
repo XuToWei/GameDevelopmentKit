@@ -10,18 +10,46 @@ namespace ET
         public static class Proto2CS_ET
         {
             private static readonly List<OpcodeInfo> msgOpcode = new List<OpcodeInfo>();
-
-            public static void Proto2CS(string protofile, string csName, List<string> csOutDirs, int startOpcode)
+            private static string csName;
+            private static List<string> csOutDirs;
+            private static int startOpcode;
+            private static StringBuilder sb;
+            
+            public static void Start(string codeName, List<string> outDirs, int opcode, string nameSpace)
             {
+                csName = codeName;
+                csOutDirs = outDirs;
+                startOpcode = opcode;
+                
                 msgOpcode.Clear();
-                string proto = Path.Combine(ProtoDir, protofile);
-                string s = File.ReadAllText(proto);
-
-                StringBuilder sb = new StringBuilder();
+                sb = new StringBuilder();
                 sb.AppendLine("// This is an automatically generated class by Share.Tool. Please do not modify it.");
                 sb.AppendLine("");
                 sb.Append("using MemoryPack;\n");
                 sb.Append("using System.Collections.Generic;\n");
+                sb.AppendLine("");
+                sb.Append($"namespace {nameSpace}\n");
+                sb.Append("{\n");
+            }
+
+            public static void Stop()
+            {
+                sb.Append("\tpublic static class " + csName + "\n\t{\n");
+                foreach (OpcodeInfo info in msgOpcode)
+                {
+                    sb.Append($"\t\t public const ushort {info.Name} = {info.Opcode};\n");
+                }
+                sb.Append("\t}\n");
+                sb.Append("}\n");
+                foreach (var csOutDir in csOutDirs)
+                {
+                    GenerateCS(sb, csOutDir, csName);
+                }
+            }
+
+            public static void Proto2CS(string protoFile)
+            {
+                string s = File.ReadAllText(protoFile);
                 
                 bool isMsgStart = false;
                 string msgName = string.Empty;
@@ -29,13 +57,9 @@ namespace ET
                 foreach (string line in s.Split('\n'))
                 {
                     string newline = line.Trim();
-
                     if (newline.StartsWith("package"))
                     {
-                        var strs = line.Split(" ");
-                        string namespaceName = strs[^1].TrimEnd('\r', '\n', ';');
-                        sb.Append($"namespace {namespaceName}\n");
-                        sb.Append("{\n");
+                        
                         continue;
                     }
 
@@ -138,21 +162,6 @@ namespace ET
                             }
                         }
                     }
-                }
-
-                sb.Append("\tpublic static class " + csName + "\n\t{\n");
-                foreach (OpcodeInfo info in msgOpcode)
-                {
-                    sb.Append($"\t\t public const ushort {info.Name} = {info.Opcode};\n");
-                }
-
-                sb.Append("\t}\n");
-
-                sb.Append("}\n");
-
-                foreach (var csOutDir in csOutDirs)
-                {
-                    GenerateCS(sb, csOutDir, csName);
                 }
             }
 

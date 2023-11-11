@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message CSHeartBeatTest
+{
+	repeated int32 A = 1;
+}
+
+message SCHeartBeatTest
+{
+	repeated int32 A = 1;
+}

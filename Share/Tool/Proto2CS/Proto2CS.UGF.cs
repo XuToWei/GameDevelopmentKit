@@ -9,34 +9,48 @@ namespace ET
     {
         public static class Proto2CS_UGF
         {
-            public static void Proto2CS(string protofile, string csName, List<string> csOutDirs, int startOpcode)
-            {
-                string proto = Path.Combine(ProtoDir, protofile);
-                string s = File.ReadAllText(proto);
+            private static readonly List<OpcodeInfo> msgOpcode = new List<OpcodeInfo>();
+            private static string csName;
+            private static List<string> csOutDirs;
+            private static int startOpcode;
+            private static StringBuilder sb;
 
-                StringBuilder sb = new StringBuilder();
+            public static void Start(string codeName, List<string> outDirs, int opcode, string nameSpace)
+            {
+                csName = codeName;
+                csOutDirs = outDirs;
+                startOpcode = opcode;
+                
+                sb = new StringBuilder();
                 sb.AppendLine("// This is an automatically generated class by Share.Tool. Please do not modify it.");
                 sb.AppendLine("");
                 sb.Append("using ProtoBuf;\n");
                 sb.Append("using System;\n");
                 sb.Append("using System.Collections.Generic;\n");
+                sb.AppendLine("");
+                sb.Append($"namespace {nameSpace}\n");
+                sb.Append("{\n");
+            }
 
-                StringBuilder disposeSb = new StringBuilder();
+            public static void Stop()
+            {
+                sb.Append("}\n");
+                foreach (var csOutDir in csOutDirs)
+                {
+                    GenerateCS(sb, csOutDir, csName);
+                }
+            }
 
+            public static void Proto2CS(string protofile)
+            {
+                string s = File.ReadAllText(protofile);
+                
                 bool isMsgStart = false;
+                StringBuilder disposeSb = new StringBuilder();
                 foreach (string line in s.Split('\n'))
                 {
                     string newline = line.Trim();
-
-                    if (newline.StartsWith("package"))
-                    {
-                        var strs = line.Split(" ");
-                        string namespaceName = strs[^1].TrimEnd('\r', '\n', ';');
-                        sb.Append($"namespace {namespaceName}\n");
-                        sb.Append("{\n");
-                        continue;
-                    }
-
+                    
                     if (newline == "")
                     {
                         continue;
@@ -131,13 +145,6 @@ namespace ET
                             }
                         }
                     }
-                }
-                
-                sb.Append("}\n");
-                
-                foreach (var csOutDir in csOutDirs)
-                {
-                    GenerateCS(sb, csOutDir, csName);
                 }
             }
 

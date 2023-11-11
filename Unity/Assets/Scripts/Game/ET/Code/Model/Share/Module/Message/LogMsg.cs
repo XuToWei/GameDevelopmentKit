@@ -6,10 +6,10 @@ namespace ET
     {
         private readonly HashSet<ushort> ignore = new()
         {
-            OuterMessage.C2G_Ping, 
-            OuterMessage.G2C_Ping, 
-            OuterMessage.C2G_Benchmark, 
-            OuterMessage.G2C_Benchmark,
+            Message_ET_Client.C2G_Ping, 
+            Message_ET_Client.G2C_Ping, 
+            Message_ET_Client.C2G_Benchmark, 
+            Message_ET_Client.G2C_Benchmark,
         };
 
         public void Awake()

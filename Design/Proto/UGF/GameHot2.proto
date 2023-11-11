@@ -1,12 +1,11 @@
 syntax = "proto3";
-package Game.Hot;
 
-message CSHeartBeatTest
+message CSHeartBeatTest22
 {
 	repeated int32 A = 1;
 }
 
-message SCHeartBeatTest
+message SCHeartBeatTest22
 {
 	repeated int32 A = 1;
 }
