@@ -59,7 +59,6 @@ namespace ET
                     string newline = line.Trim();
                     if (newline.StartsWith("package"))
                     {
-                        
                         continue;
                     }
 
@@ -95,9 +94,10 @@ namespace ET
                         }
 
                         msgOpcode.Add(new OpcodeInfo() { Name = msgName, Opcode = ++startOpcode });
-
+                        
                         sb.Append($"\t[Message({csName}.{msgName})]\n");
                         sb.Append($"\t[MemoryPackable]\n");
+                        sb.Append($"\t//protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
                         sb.Append($"\tpublic partial class {msgName}: MessageObject");
                         if (parentClass == "IActorMessage" || parentClass == "IActorRequest" || parentClass == "IActorResponse")
                         {
@@ -121,7 +121,7 @@ namespace ET
                         {
                             sbDispose.Clear();
                             sb.Append("\t{\n");
-                            sb.Append($"\t\tpublic static {msgName} Create(bool isFromPool = true) \n\t\t{{ \n\t\t\treturn !isFromPool? new {msgName}() : ObjectPool.Instance.Fetch(typeof({msgName})) as {msgName}; \n\t\t}}\n\n");
+                            sb.Append($"\t\tpublic static {msgName} Create(bool isFromPool = true) \n\t\t{{ \n\t\t\treturn !isFromPool? new {msgName}() : ObjectPool.Instance.Fetch(typeof({msgName})) as {msgName}; \n\t\t}}\n");
                             continue;
                         }
 
@@ -133,7 +133,7 @@ namespace ET
                             if (!newline.Contains("// no dispose"))
                             {
                                 sb.Append(
-                                    $"\t\tpublic override void Dispose() \n\t\t{{\n\t\t\tif (!this.IsFromPool) return;\n\t\t\t{sbDispose.ToString()}\n\t\t\tObjectPool.Instance.Recycle(this); \n\t\t}}\n\n");
+                                    $"\t\tpublic override void Dispose() \n\t\t{{\n\t\t\tif (!this.IsFromPool) return;\n{sbDispose.ToString()}\t\t\tObjectPool.Instance.Recycle(this); \n\t\t}}\n");
                             }
 
                             sb.Append("\t}\n\n");
@@ -182,22 +182,31 @@ namespace ET
 
             private static void Map(StringBuilder sb, string newline, StringBuilder sbDispose)
             {
-                int start = newline.IndexOf("<") + 1;
-                int end = newline.IndexOf(">");
-                string types = newline.Substring(start, end - start);
-                string[] ss = types.Split(",");
-                string keyType = ConvertType(ss[0].Trim());
-                string valueType = ConvertType(ss[1].Trim());
-                string tail = newline.Substring(end + 1);
-                ss = tail.Trim().Replace(";", "").Split(" ");
-                string v = ss[0];
-                int n = int.Parse(ss[2]);
+                try
+                {
+                    int start = newline.IndexOf("<") + 1;
+                    int end = newline.IndexOf(">");
+                    string types = newline.Substring(start, end - start);
+                    string[] ss = types.Split(",");
+                    string keyType = ConvertType(ss[0].Trim());
+                    string valueType = ConvertType(ss[1].Trim());
+                    string tail = newline.Substring(end + 1);
+                    ss = tail.Trim().Replace(";", "").Split(" ");
+                    string v = ss[0];
+                    int n = int.Parse(ss[2]);
 
-                sb.Append("\t\t[MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]\n");
-                sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
-                sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }} = new();\n");
+                    sb.Append(
+                        "\t\t[MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]\n");
+                    sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
+                    sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }} = new();\n");
 
-                sbDispose.Append($"\t\t\tthis.{v}.Clear();\n");
+                    sbDispose.Append($"\t\t\tthis.{v}.Clear();\n");
+                }
+                catch (Exception)
+                {
+                    ConsoleHelper.WriteErrorLine($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    throw;
+                }
             }
 
             private static void Repeated(StringBuilder sb, string newline, StringBuilder sbDispose)
@@ -213,13 +222,14 @@ namespace ET
                     int n = int.Parse(ss[4]);
 
                     sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
-                    sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }} = new List<{type}>();\n\n");
+                    sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }} = new List<{type}>();\n");
 
                     sbDispose.Append($"\t\t\tthis.{name}.Clear();\n");
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    ConsoleHelper.WriteErrorLine($"{newline}\n {e}");
+                    ConsoleHelper.WriteErrorLine($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    throw;
                 }
             }
 
@@ -273,7 +283,7 @@ namespace ET
                     string typeCs = ConvertType(type);
 
                     sb.Append($"\t\t[MemoryPackOrder({n - 1})]\n");
-                    sb.Append($"\t\tpublic {typeCs} {name} {{ get; set; }}\n\n");
+                    sb.Append($"\t\tpublic {typeCs} {name} {{ get; set; }}\n");
                     
                     switch (typeCs)
                     {
@@ -286,9 +296,10 @@ namespace ET
                             break;
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    ConsoleHelper.WriteErrorLine($"{newline}\n {e}");
+                    ConsoleHelper.WriteErrorLine($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    throw;
                 }
             }
         }

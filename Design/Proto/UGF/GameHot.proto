@@ -3,6 +3,8 @@ syntax = "proto3";
 message CSHeartBeatTest
 {
 	repeated int32 A = 1;
+	string B = 2;
+	map<int32, int64> C = 3;
 }
 
 message SCHeartBeatTest
