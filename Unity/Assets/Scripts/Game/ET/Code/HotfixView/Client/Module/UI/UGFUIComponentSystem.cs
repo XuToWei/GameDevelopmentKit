@@ -7,8 +7,8 @@ using GameEntry = Game.GameEntry;
 
 namespace ET.Client
 {
-    [EntitySystemOf(typeof (UGFUIComponent))]
-    [FriendOf(typeof (UGFUIComponent))]
+    [EntitySystemOf(typeof(UGFUIComponent))]
+    [FriendOf(typeof(UGFUIComponent))]
     public static partial class UGFUIComponentSystem
     {
         [EntitySystem]

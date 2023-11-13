@@ -2,15 +2,13 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>ET</RootNamespace>
-        <LangVersion>11</LangVersion>
+        <LangVersion>10</LangVersion>
         <AssemblyName>Library</AssemblyName>
     </PropertyGroup>
-
     <PropertyGroup>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     </PropertyGroup>
-
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DefineConstants>DOTNET;UNITY_DOTSPLAYER</DefineConstants>
         <OutputPath>..\..\Bin\</OutputPath>
@@ -18,7 +16,6 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <Optimize>true</Optimize>
     </PropertyGroup>
-
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <DefineConstants>DOTNET;UNITY_DOTSPLAYER</DefineConstants>
         <OutputPath>..\..\Bin\</OutputPath>
@@ -39,7 +36,6 @@
             <Link>Unity.Mathematics/$([System.String]::new(%(RecursiveDir)).Substring($([System.String]::new(%(RecursiveDir)).Indexof("Unity.Mathematics"))).Replace("Unity.Mathematics", ""))/%(FileName)%(Extension)</Link>
         </Compile>
     </ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.8.0" />
         <PackageReference Include="MongoDB.Driver" Version="2.17.1" />

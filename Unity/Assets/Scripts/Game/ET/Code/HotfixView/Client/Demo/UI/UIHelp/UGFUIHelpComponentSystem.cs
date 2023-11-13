@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ET.Client
 {
     [EntitySystemOf(typeof(UGFUIHelpComponent))]
-    [FriendOf(typeof (UGFUIHelpComponent))]
+    [FriendOf(typeof(UGFUIHelpComponent))]
     public static partial class UGFUIHelpComponentSystem
     {
         [EntitySystem]

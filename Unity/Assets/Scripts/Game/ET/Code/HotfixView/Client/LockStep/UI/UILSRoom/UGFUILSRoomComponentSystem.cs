@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [EntitySystemOf(typeof (UGFUILSRoomComponent))]
-    [FriendOf(typeof (UGFUILSRoomComponent))]
+    [EntitySystemOf(typeof(UGFUILSRoomComponent))]
+    [FriendOf(typeof(UGFUILSRoomComponent))]
     public static partial class UGFUILSRoomComponentSystem
     {
         [EntitySystem]

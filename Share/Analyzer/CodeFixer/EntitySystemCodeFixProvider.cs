@@ -103,7 +103,7 @@ public class EntitySystemCodeFixProvider:CodeFixProvider
                 args += $", {methodArgsArr[i]} args{i}";
             }
         }
-        string code = $$"""
+        string code = @"""
         [{{systemAttr}}]
         private static void {{methodNameArr[0]}}(this {{methodArgsArr[0]}} self{{args}})
         {

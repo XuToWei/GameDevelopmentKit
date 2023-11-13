@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <OutputType>Exe</OutputType>
-        <LangVersion>11</LangVersion>
+        <LangVersion>10</LangVersion>
         <AssemblyName>FileServer</AssemblyName>
     </PropertyGroup>
     <PropertyGroup>

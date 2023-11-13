@@ -40,7 +40,7 @@ public class ETGetComponentGenerator : ISourceGenerator
         }
 
         string? assemblyName = context.Compilation.AssemblyName?.Replace(".", "_");
-        string code = $$"""
+        string code = @"""
 namespace {{nameSpace}}
 {
     public static class {{assemblyName}}ETGetComponentExtension
@@ -56,7 +56,7 @@ namespace {{nameSpace}}
     {
         string getComponentName = componentOfData.ComponentName;
         string parentEntityName = componentOfData.ParentEntityName;
-        contenSb.AppendLine($$"""
+        contenSb.AppendLine(@"""
 
         public static {{getComponentName}} Get{{getComponentName}} (this {{parentEntityName}} self)
         {

@@ -145,7 +145,7 @@ public class ETSystemGenerator: ISourceGenerator
                     
                 string template = this.templates.Get(attributeType);
                     
-                string code = $$"""
+                string code = @"""
 namespace {{namespaceName}}
 {
     public static partial class {{className}}

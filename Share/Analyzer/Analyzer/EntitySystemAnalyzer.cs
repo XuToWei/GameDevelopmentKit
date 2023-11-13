@@ -168,7 +168,7 @@ public class EntitySystemAnalyzer: DiagnosticAnalyzer
                     {
                         if (interfacetypeSymbol.IsInterface(Definition.IGetComponentInterface))
                         {
-                            if (!namedTypeSymbol.HasMethodWithParams(systemMethodData.MethodName, entityTypeSymbol.ToString(),"System.Type"))
+                            if (!namedTypeSymbol.HasMethodWithParams(systemMethodData.MethodName, entityTypeSymbol.ToString(), "System.Type"))
                             {
                                 AddProperty(ref builder, systemMethodData.MethodName, $"{entityTypeSymbol}/{etSystemData.SystemAttributeShowName}/System.Type");
                             }

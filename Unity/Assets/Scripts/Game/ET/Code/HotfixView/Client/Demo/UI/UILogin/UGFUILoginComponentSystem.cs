@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ET.Client
 {
     [EntitySystemOf(typeof(UGFUILoginComponent))]
-    [FriendOf(typeof (UGFUILoginComponent))]
+    [FriendOf(typeof(UGFUILoginComponent))]
     public static partial class UGFUILoginComponentSystem
     {
         [EntitySystem]

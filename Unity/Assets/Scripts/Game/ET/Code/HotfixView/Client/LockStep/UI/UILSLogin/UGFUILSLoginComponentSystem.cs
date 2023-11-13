@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [EntitySystemOf(typeof (UGFUILSLoginComponent))]
-    [FriendOf(typeof (UGFUILSLoginComponent))]
+    [EntitySystemOf(typeof(UGFUILSLoginComponent))]
+    [FriendOf(typeof(UGFUILSLoginComponent))]
     public static partial class UGFUILSLoginComponentSystem
     {
         [EntitySystem]
