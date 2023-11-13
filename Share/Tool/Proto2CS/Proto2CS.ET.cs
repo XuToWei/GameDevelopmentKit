@@ -93,6 +93,10 @@ namespace ET
                             parentClass = ss[1].Trim();
                         }
 
+                        if (startOpcode - 1 >= OpcodeRangeDefine.MaxOpcode)
+                        {
+                            throw new Exception($"Proto_ET error : {protoFile}'s opcode is larger then max opcode:{OpcodeRangeDefine.MaxOpcode}!");
+                        }
                         msgOpcode.Add(new OpcodeInfo() { Name = msgName, Opcode = ++startOpcode });
                         
                         sb.Append($"\t[Message({csName}.{msgName})]\n");
