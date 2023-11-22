@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using GameFramework;
 using UnityEditor;
@@ -26,6 +27,8 @@ namespace UnityGameFramework.Extension.Editor
         private readonly Dictionary<string, List<Asset>> m_ScatteredAssets;
         private readonly HashSet<Stamp> m_AnalyzedStamps;
         private readonly Dictionary<string, List<string>> m_CombineBundles;
+        private readonly MethodInfo m_GetStorageMemorySizeLongMethod;
+        private readonly object[] m_ParamCache;
 
         public ResourceOptimize()
         {
@@ -34,6 +37,8 @@ namespace UnityGameFramework.Extension.Editor
             m_ScatteredAssets = new Dictionary<string, List<Asset>>();
             m_AnalyzedStamps = new HashSet<Stamp>();
             m_CombineBundles = new Dictionary<string, List<string>>();
+            m_GetStorageMemorySizeLongMethod = typeof(EditorWindow).Assembly.GetType("UnityEditor.TextureUtil").GetMethod("GetStorageMemorySizeLong", BindingFlags.Static | BindingFlags.Public);
+            m_ParamCache = new object[1];
         }
 
         public void Optimize(ResourceCollection resourceCollection = null)
@@ -75,7 +80,7 @@ namespace UnityGameFramework.Extension.Editor
                     Debug.LogError(Utility.Text.Format("File do not exist :{0}", assetPath));
                     continue;
                 }
-                long byteSize = new FileInfo(assetPath).Length;
+                long byteSize = GetAssetSize(assetPath);
                 if (byteSize < MAX_COMBINE_SHARE_AB_ITEM_SIZE)
                 {
                     allCombines.Add(assetPath, new ABInfo()
@@ -120,20 +125,21 @@ namespace UnityGameFramework.Extension.Editor
                 currentCombineBundleSize += size;
                 if (currentCombineBundleSize > MAX_COMBINE_SHARE_AB_SIZE)
                 {
-                    var newCombine = string.Join("@@", currentCombineBundle);
-                    newCombine = $"Share/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
-                    m_CombineBundles[newCombine] = currentCombineBundle;
+                    m_CombineBundles[GetNewCombineName(currentCombineBundle)] = currentCombineBundle;
                     currentCombineBundle = null;
                     currentCombineBundleSize = 0;
                 }
             }
             if (currentCombineBundle != null && currentCombineBundle.Count > 0)
             {
-                var newCombine = string.Join("@@", currentCombineBundle);
-                newCombine = $"Share/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
-                m_CombineBundles[newCombine] = currentCombineBundle;
+                m_CombineBundles[GetNewCombineName(currentCombineBundle)] = currentCombineBundle;
             }
-            Debug.Log($"总共有share ab的数量{allShareCount}，大小合格的数量{allShareCanCombine}，因为ab太小，引用计数太少而被取消包名的数量{allShareRemoveByNoName}，因为引用过少被移除合并的数量{allShareRemoveByReferenceCountTooFew}，最终{allFinalCombine}个share ab，合并成{m_CombineBundles.Count}个share_combine，因为这次合并操作，总共减少了{allShareRemoveByNoName + allFinalCombine - m_CombineBundles.Count}个share bundle");
+            Debug.Log($"总共有share ab的数量{allShareCount}，大小合格的数量{allShareCanCombine}，" +
+                      $"因为ab太小和引用计数太少而被取消包名的数量{allShareRemoveByNoName}，" +
+                      $"因为引用过少被移除合并的数量{allShareRemoveByReferenceCountTooFew}，" +
+                      $"最终{allFinalCombine}个share ab，" +
+                      $"合并成{m_CombineBundles.Count}个share_combine，" +
+                      $"因为这次合并操作，总共减少了{(m_CombineBundles.Count > 0 ? allShareRemoveByNoName + allFinalCombine - m_CombineBundles.Count : 0)}个share bundle");
         }
 
         private void Analyze(ResourceCollection resourceCollection)
@@ -245,6 +251,31 @@ namespace UnityGameFramework.Extension.Editor
             }
 
             return filterAssetNames;
+        }
+
+        private long GetAssetSize(string assetPath)
+        {
+            Type type = AssetDatabase.GetMainAssetTypeAtPath(assetPath);
+            if (type == typeof(Texture2D))
+            {
+                //记录精准的贴图大小
+                Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(assetPath);
+                m_ParamCache[0] = texture2D;
+                long size = (long)m_GetStorageMemorySizeLongMethod.Invoke(null, m_ParamCache);
+                Resources.UnloadAsset(texture2D);
+                return size;
+            }
+            else
+            {
+                //直接使用文件长度
+                return new FileInfo(assetPath).Length;
+            }
+        }
+
+        private string GetNewCombineName(List<string> currentCombineBundle)
+        {
+            var newCombine = string.Join("@@", currentCombineBundle);
+            return $"Share/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
         }
     }
 }
