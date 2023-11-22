@@ -13,13 +13,13 @@ namespace UnityGameFramework.Extension.Editor
 {
     public sealed partial class ResourceOptimize
     {
-        private const long MAX_COMBINE_SHARE_AB_ITEM_SIZE = 500 * 1024 * 8; // 500K 文件体积小于这个数量才能合并
-        private const long MAX_COMBINE_SHARE_AB_SIZE = 1024 * 1024 * 8; // 1M 最终合并的目标大小
-        private const long MIN_NO_NAME_COMBINE_SIZE = 32 * 1024 * 8; // 32K 最终合并的目标大小
+        private readonly long MAX_COMBINE_SHARE_AB_ITEM_SIZE = 500 * 1024 * 8; // 500K 文件体积小于这个数量才能合并
+        private readonly long MAX_COMBINE_SHARE_AB_SIZE = 1024 * 1024 * 8; // 1M 最终合并的目标大小
+        private readonly long MIN_NO_NAME_COMBINE_SIZE = 32 * 1024 * 8; // 32K 最终合并的目标大小
         // public const long MAX_COMBINE_SHARE_NO_NAME = 60 * 1024 * 8; // 60K 没有包名的最大体积 
         // public const int MAX_COMBINE_SHARE_NO_NAME_REFERENCE_COUNT = 7; // 没有包名的最多的引用计数
         //  public const int MIN_COMBINE_AB_SIZE_2 = 100 * 1024 * 8;//  100K 没有包名的最大体积 
-        private const int MAX_COMBINE_SHARE_MIN_REFERENCE_COUNT = 3; //最大的引用计数
+        private readonly int MAX_COMBINE_SHARE_MIN_REFERENCE_COUNT = 3; //最大的引用计数
 
         private ResourceCollection m_ResourceCollection;
 
@@ -272,10 +272,11 @@ namespace UnityGameFramework.Extension.Editor
             }
         }
 
+        //有需要改名，修改这里
         private string GetNewCombineName(List<string> currentCombineBundle)
         {
             var newCombine = string.Join("@@", currentCombineBundle);
-            return $"Share/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
+            return $"Auto/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
         }
     }
 }

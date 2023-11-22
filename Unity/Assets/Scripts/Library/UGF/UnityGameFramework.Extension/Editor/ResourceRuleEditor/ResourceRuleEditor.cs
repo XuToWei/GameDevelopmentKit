@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GameFramework;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -247,9 +248,9 @@ namespace UnityGameFramework.Extension.Editor
             }
 
             r.xMin = r.xMax + GAP;
-            r.width = assetBundleNameLength - 15;
+            r.width = assetBundleNameLength + 65;
             GUI.enabled = false;
-            rule.assetsDirectoryPath = EditorGUI.TextField(r, rule.assetsDirectoryPath);
+            EditorGUI.TextField(r, rule.assetsDirectoryPath.Replace("Assets/Res/", ""));
             GUI.enabled = true;
 
             r.xMin = r.xMax + GAP;
@@ -257,7 +258,7 @@ namespace UnityGameFramework.Extension.Editor
             if (GUI.Button(r, "Select"))
             {
                 var path = SelectFolder();
-                if (path != null)
+                if (!string.IsNullOrEmpty(path))
                     rule.assetsDirectoryPath = path;
             }
 
@@ -272,20 +273,20 @@ namespace UnityGameFramework.Extension.Editor
 
         private string SelectFolder()
         {
-            string dataPath = Application.dataPath;
-            string selectedPath = EditorUtility.OpenFolderPanel("Path", $"{dataPath}/Res/", "");
+            string dataPath = $"{Application.dataPath}/Res/";
+            string selectedPath = EditorUtility.OpenFolderPanel("Path", dataPath, "");
             if (!string.IsNullOrEmpty(selectedPath))
             {
                 if (selectedPath.StartsWith(dataPath))
                 {
-                    return "Assets/" + selectedPath.Substring(dataPath.Length + 1);
+                    return Utility.Path.GetRegularPath("Assets/Res/" + selectedPath.Substring(dataPath.Length));
                 }
                 else
                 {
 #if UNITY_2019_1_OR_NEWER
-                    ShowNotification(new GUIContent("Can not be outside of 'Assets/'!"), 2);
+                    ShowNotification(new GUIContent("Can not be outside of 'Assets/Res/'!"), 2);
 #else
-                    ShowNotification(new GUIContent("Can not be outside of 'Assets/'!"));
+                    ShowNotification(new GUIContent("Can not be outside of 'Assets/Res/'!"));
 #endif
                 }
             }
@@ -386,7 +387,7 @@ namespace UnityGameFramework.Extension.Editor
             EditorGUI.TextField(r, "Variant");
 
             r.xMin = r.xMax + GAP;
-            r.width = assetBundleNameLength + 39;
+            r.width = assetBundleNameLength + 119;
             EditorGUI.TextField(r, "AssetDirectory");
 
             r.xMin = r.xMax + GAP;
@@ -433,8 +434,11 @@ namespace UnityGameFramework.Extension.Editor
                 Debug.Log("Refresh ResourceCollection.xml fail");
             }
 
-            var optimize = new ResourceOptimize();
+            ResourceOptimize optimize = new ResourceOptimize();
             optimize.Optimize(m_ResourceCollection);
+            
+            ResourceListGenerator generator = new ResourceListGenerator();
+            generator.GenerateList(m_ResourceCollection);
         }
 
         public void RefreshResourceCollection(string configPath)

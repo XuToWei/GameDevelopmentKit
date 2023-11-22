@@ -85,11 +85,11 @@ MonoBehaviour:
     filterType: 1
     searchPatterns: '*.unity'
   - valid: 1
-    name: Localization
+    name: Localization.ChineseSimplified
     variant: 
     fileSystem: 
     groups: 
-    assetsDirectoryPath: Assets/Res/Localization
+    assetsDirectoryPath: Assets/Res/Localization/ChineseSimplified
     loadType: 0
     packed: 0
     filterType: 2
@@ -150,6 +150,16 @@ MonoBehaviour:
     fileSystem: GameData
     groups: 
     assetsDirectoryPath: Assets/Res/ET/Client
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: Config
+    variant: 
+    fileSystem: GameData
+    groups: 
+    assetsDirectoryPath: Assets/Res/Config
     loadType: 0
     packed: 0
     filterType: 0

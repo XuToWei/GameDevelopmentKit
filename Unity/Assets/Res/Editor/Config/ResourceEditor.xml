@@ -7,6 +7,7 @@
         <SourceAssetSearchPath RelativePath="" />
       </SourceAssetSearchPaths>
       <SourceAssetExceptPaths>
+        <SourceAssetExceptPath RelativePath="Builtin" />
         <SourceAssetExceptPath RelativePath="Editor" />
         <SourceAssetExceptPath RelativePath="Resources" />
         <SourceAssetExceptPath RelativePath="TextMesh Pro/Resources" />
