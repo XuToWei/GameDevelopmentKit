@@ -20,7 +20,6 @@ namespace UnityGameFramework.Extension.Editor
         //  public const int MIN_COMBINE_AB_SIZE_2 = 100 * 1024 * 8;//  100K 没有包名的最大体积 
         private const int MAX_COMBINE_SHARE_MIN_REFERENCE_COUNT = 3; //最大的引用计数
 
-
         private ResourceCollection m_ResourceCollection;
 
         private readonly Dictionary<string, DependencyData> m_DependencyDatas;
@@ -51,7 +50,6 @@ namespace UnityGameFramework.Extension.Editor
                 m_ResourceCollection.AddResource(kv.Key, null, null, LoadType.LoadFromFile, true);
                 foreach (var name in kv.Value)
                 {
-                    Debug.Log($"{name}-{kv.Key}");
                     m_ResourceCollection.AssignAsset(AssetDatabase.AssetPathToGUID(name), kv.Key, null);
                 }
             }
@@ -65,7 +63,7 @@ namespace UnityGameFramework.Extension.Editor
             int allShareCount = 0; //所有的share ab 的数量
             int allShareCanCombine = 0; // 所有size 合格的ab
             int allShareRemoveByNoName = 0; // 因为 size 太小，ref count 太少 放弃合并，放弃包名
-            int allShareRmoveByRefrenceCountTooFew = 0; // 因为 ref count 太少 放弃合并
+            int allShareRemoveByReferenceCountTooFew = 0; // 因为 ref count 太少 放弃合并
             int allFinalCombine = 0; // 最终合并的数量
 
             foreach (var kv in m_ScatteredAssets)
@@ -102,7 +100,7 @@ namespace UnityGameFramework.Extension.Editor
                 {
                     if (abInfo.referenceCount < MAX_COMBINE_SHARE_MIN_REFERENCE_COUNT)
                     {
-                        allShareRmoveByRefrenceCountTooFew++;
+                        allShareRemoveByReferenceCountTooFew++;
                         allCombines.Remove(bundleName);
                     }
                 }
@@ -129,7 +127,13 @@ namespace UnityGameFramework.Extension.Editor
                     currentCombineBundleSize = 0;
                 }
             }
-            Debug.Log($"总共有share ab的数量{allShareCount}，大小合格的数量{allShareCanCombine}，因为ab太小，引用计数太少而被取消包名的数量{allShareRemoveByNoName}，因为引用过少被移除合并的数量{allShareRmoveByRefrenceCountTooFew}，最终{allFinalCombine}个share ab，合并成{m_CombineBundles.Count}个share_combine，因为这次合并操作，总共减少了{allShareRemoveByNoName + allFinalCombine - m_CombineBundles.Count}个share bundle");
+            if (currentCombineBundle != null && currentCombineBundle.Count > 0)
+            {
+                var newCombine = string.Join("@@", currentCombineBundle);
+                newCombine = $"Share/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
+                m_CombineBundles[newCombine] = currentCombineBundle;
+            }
+            Debug.Log($"总共有share ab的数量{allShareCount}，大小合格的数量{allShareCanCombine}，因为ab太小，引用计数太少而被取消包名的数量{allShareRemoveByNoName}，因为引用过少被移除合并的数量{allShareRemoveByReferenceCountTooFew}，最终{allFinalCombine}个share ab，合并成{m_CombineBundles.Count}个share_combine，因为这次合并操作，总共减少了{allShareRemoveByNoName + allFinalCombine - m_CombineBundles.Count}个share bundle");
         }
 
         private void Analyze(ResourceCollection resourceCollection)

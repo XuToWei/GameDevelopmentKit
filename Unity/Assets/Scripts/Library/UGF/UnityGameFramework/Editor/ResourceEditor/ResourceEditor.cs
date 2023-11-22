@@ -418,6 +418,17 @@ namespace UnityGameFramework.Editor.ResourceTools
                     {
                         SourceAsset sourceAsset = m_Controller.GetSourceAsset(asset.Guid);
                         string assetName = sourceAsset != null ? (m_Controller.AssetSorter == AssetSorterType.Path ? sourceAsset.Path : (m_Controller.AssetSorter == AssetSorterType.Name ? sourceAsset.Name : sourceAsset.Guid)) : asset.Guid;
+                        Texture assetIcon = sourceAsset != null ? sourceAsset.Icon : m_MissingSourceAssetIcon;
+                        //可能会存在Packages目录下的资源，这里显示出来
+                        if (sourceAsset == null)
+                        {
+                            string fullPath = AssetDatabase.GUIDToAssetPath(asset.Guid);
+                            if (!AssetDatabase.IsValidFolder(fullPath) && !string.IsNullOrEmpty(fullPath) && fullPath.StartsWith("Packages"))
+                            {
+                                assetName = fullPath;
+                                assetIcon = AssetDatabase.GetCachedIcon(fullPath);
+                            }
+                        }
                         EditorGUILayout.BeginHorizontal();
                         {
                             float emptySpace = position.width;
@@ -430,10 +441,10 @@ namespace UnityGameFramework.Editor.ResourceTools
 
                             GUILayout.Space(-emptySpace + 24f);
 #if UNITY_2019_3_OR_NEWER
-                            GUI.DrawTexture(new Rect(20f, 20f * index++ + 3f, 16f, 16f), sourceAsset != null ? sourceAsset.Icon : m_MissingSourceAssetIcon);
+                            GUI.DrawTexture(new Rect(20f, 20f * index++ + 3f, 16f, 16f), assetIcon);
                             EditorGUILayout.LabelField(string.Empty, GUILayout.Width(16f), GUILayout.Height(18f));
 #else
-                            GUI.DrawTexture(new Rect(20f, 20f * index++ + 1f, 16f, 16f), sourceAsset != null ? sourceAsset.Icon : m_MissingSourceAssetIcon);
+                            GUI.DrawTexture(new Rect(20f, 20f * index++ + 1f, 16f, 16f), assetIcon);
                             EditorGUILayout.LabelField(string.Empty, GUILayout.Width(14f), GUILayout.Height(18f));
 #endif
                             EditorGUILayout.LabelField(assetName);
