@@ -13,6 +13,7 @@ namespace UnityGameFramework.Extension
 
         public async UniTask LoadAsync(string listDataAssetPath)
         {
+            m_ResourceNamePathDict.Clear();
             ResourceComponent resourceComponent = GameEntry.GetComponent<ResourceComponent>();
             TextAsset textAsset = await resourceComponent.LoadAssetAsync<TextAsset>(listDataAssetPath);
             using (MemoryStream memoryStream = new MemoryStream(textAsset.bytes))
@@ -26,11 +27,6 @@ namespace UnityGameFramework.Extension
                     }
                 }
             }
-        }
-
-        public void Clear()
-        {
-            m_ResourceNamePathDict.Clear();
         }
 
         /// <summary>
