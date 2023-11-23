@@ -11,7 +11,7 @@ using Sirenix.OdinInspector;
 
 namespace UnityGameFramework.Extension
 {
-    public partial class TextureSetComponent : GameFrameworkComponent
+    public sealed partial class TextureSetComponent : GameFrameworkComponent
     {
         /// <summary>
         /// 检查是否可以释放间隔

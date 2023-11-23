@@ -73,5 +73,10 @@ namespace Game
         {
             return Utility.Text.Format("Assets/Res/Hot/{0}", assetName);
         }
+        
+        public static string GetConfigAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/Res/Config/{0}", assetName);
+        }
     }
 }

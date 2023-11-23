@@ -7,7 +7,7 @@ using UnityGameFramework.Runtime;
 
 namespace UnityGameFramework.Extension
 {
-    public class TimingWheelComponent : GameFrameworkComponent
+    public sealed class TimingWheelComponent : GameFrameworkComponent
     {
         [SerializeField] [Tooltip("时间槽大小")] private int m_TickSpan = 100;
         [SerializeField] [Tooltip("时间槽数量")] private int m_SlotCount = 100;

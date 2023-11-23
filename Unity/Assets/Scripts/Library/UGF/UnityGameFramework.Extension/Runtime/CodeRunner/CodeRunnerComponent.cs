@@ -4,9 +4,9 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace Game
+namespace UnityGameFramework.Extension
 {
-    public class CodeRunnerComponent : GameFrameworkComponent
+    public sealed class CodeRunnerComponent : GameFrameworkComponent
     {
 #if UNITY_EDITOR
         [Tooltip("编辑器模式下能否加载bytes方式运行代码")]

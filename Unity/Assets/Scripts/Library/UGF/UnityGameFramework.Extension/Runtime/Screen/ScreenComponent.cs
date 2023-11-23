@@ -8,7 +8,7 @@ using UnityGameFramework.Runtime;
 namespace UnityGameFramework.Extension
 {
     [InfoBox("目前只针对于UGui")]
-    public class ScreenComponent : GameFrameworkComponent
+    public sealed class ScreenComponent : GameFrameworkComponent
     {
         [SerializeField]
         private CanvasScaler m_UIRootCanvasScaler;

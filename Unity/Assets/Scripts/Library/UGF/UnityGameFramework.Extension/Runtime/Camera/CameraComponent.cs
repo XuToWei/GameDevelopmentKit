@@ -3,7 +3,7 @@ using UnityGameFramework.Runtime;
 
 namespace UnityGameFramework.Extension
 {
-    public class CameraComponent : GameFrameworkComponent
+    public sealed class CameraComponent : GameFrameworkComponent
     {
         [SerializeField] private Camera m_UICamera;
         [SerializeField] private Camera m_SceneCamera;

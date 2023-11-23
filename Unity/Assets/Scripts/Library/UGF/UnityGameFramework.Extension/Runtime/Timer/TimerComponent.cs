@@ -7,7 +7,7 @@ using UnityGameFramework.Runtime;
 
 namespace UnityGameFramework.Extension
 {
-    public class TimerComponent : GameFrameworkComponent
+    public sealed class TimerComponent : GameFrameworkComponent
     {
         /// <summary>
         /// timer 类型

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using UnityGameFramework.Extension;
 
 namespace Game
 {
@@ -18,6 +18,12 @@ namespace Game
             get;
             private set;
         }
+
+        public static ResourceListComponent ResourceList
+        {
+            get;
+            private set;
+        }
         
         public static TablesComponent Tables
         {
@@ -29,6 +35,7 @@ namespace Game
         {
             CodeRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<CodeRunnerComponent>();
             Platform = UnityGameFramework.Runtime.GameEntry.GetComponent<PlatformComponent>();
+            ResourceList = UnityGameFramework.Runtime.GameEntry.GetComponent<ResourceListComponent>();
             Tables = UnityGameFramework.Runtime.GameEntry.GetComponent<TablesComponent>();
         }
     }

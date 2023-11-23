@@ -10,7 +10,7 @@ using UnityGameFramework.Runtime;
 
 namespace UnityGameFramework.Extension
 {
-    public partial class SpriteCollectionComponent : GameFrameworkComponent
+    public sealed partial class SpriteCollectionComponent : GameFrameworkComponent
     {
         /// <summary>
         /// 散图集合对象池

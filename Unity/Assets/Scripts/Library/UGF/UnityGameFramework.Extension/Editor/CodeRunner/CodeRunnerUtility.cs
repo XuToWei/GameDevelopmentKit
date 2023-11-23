@@ -1,9 +1,7 @@
 using System;
 using System.Diagnostics;
-using System.Reflection;
-using UnityGameFramework.Extension.Editor;
 
-namespace Game.Editor
+namespace UnityGameFramework.Extension.Editor
 {
     public static class CodeRunnerUtility
     {

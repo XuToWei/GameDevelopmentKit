@@ -10,7 +10,7 @@ using UnityEditor;
 
 namespace Game
 {
-    public class BuiltinDataComponent : GameFrameworkComponent
+    public sealed class BuiltinDataComponent : GameFrameworkComponent
     {
         [SerializeField]
         private BuiltinBuildInfo m_BuildInfoRelease;
