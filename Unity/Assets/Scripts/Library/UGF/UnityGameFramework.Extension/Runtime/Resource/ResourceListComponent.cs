@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Cysharp.Threading.Tasks;
+using GameFramework;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -9,23 +12,31 @@ namespace UnityGameFramework.Extension
 {
     public class ResourceListComponent : GameFrameworkComponent
     {
+        public const string BytesDataFilePath = "Assets/Res/Config/ResourceList.bytes";
         private readonly Dictionary<string, string> m_ResourceNamePathDict = new Dictionary<string, string>();
 
-        public async UniTask LoadAsync(string listDataAssetPath)
+        public async UniTask LoadAsync()
         {
             m_ResourceNamePathDict.Clear();
-            ResourceComponent resourceComponent = GameEntry.GetComponent<ResourceComponent>();
-            TextAsset textAsset = await resourceComponent.LoadAssetAsync<TextAsset>(listDataAssetPath);
-            using (MemoryStream memoryStream = new MemoryStream(textAsset.bytes))
+#if UNITY_EDITOR
+            BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
+            if (baseComponent.EditorResourceMode)//编辑器模式下，也能正常运行，避免需要频繁生成配置文件
             {
-                using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))
-                {
-                    int resourceCount = binaryReader.Read7BitEncodedInt32();
-                    for (int i = 0; i < resourceCount; i++)
-                    {
-                        m_ResourceNamePathDict.Add(binaryReader.ReadString(), binaryReader.ReadString());
-                    }
-                }
+                Type type = Utility.Assembly.GetType("UnityGameFramework.Extension.Editor.ResourceListEditorRuntime");
+                object obj = Activator.CreateInstance(type);
+                MethodInfo method = type.GetMethod("GenerateList");
+                method.Invoke(obj, new object[] { m_ResourceNamePathDict });
+                return;
+            }
+#endif
+            ResourceComponent resourceComponent = GameEntry.GetComponent<ResourceComponent>();
+            TextAsset textAsset = await resourceComponent.LoadAssetAsync<TextAsset>(BytesDataFilePath);
+            using MemoryStream memoryStream = new MemoryStream(textAsset.bytes);
+            using BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8);
+            int resourceCount = binaryReader.Read7BitEncodedInt32();
+            for (int i = 0; i < resourceCount; i++)
+            {
+                m_ResourceNamePathDict.Add(binaryReader.ReadString(), binaryReader.ReadString());
             }
         }
 

@@ -12,11 +12,18 @@ namespace UnityGameFramework.Extension.Editor
     public sealed class ResourceListGenerator
     {
         private readonly string ExceptName = "Auto/";
-        private readonly string BytesDataFilePath = "Assets/Res/Config/ResourceList.bytes";
         private readonly string XmlDataFilePath = "Assets/Res/Editor/Config/ResourceList.xml";
+        
+        //有需要改名，修改这里
+        public static string GetNewName(string fullPath)
+        {
+            string parentDir = fullPath.Split("/")[2];
+            string fileName = Path.GetFileNameWithoutExtension(fullPath);
+            return Utility.Text.Format("{0}_{1}", parentDir, fileName);
+        }
 
         private Asset[] m_Assets;
-        private SortedDictionary<string, string> m_ResourceListInfoDict;
+        private readonly SortedDictionary<string, string> m_ResourceListInfoDict;
 
         public ResourceListGenerator()
         {
@@ -62,7 +69,7 @@ namespace UnityGameFramework.Extension.Editor
 
         private void SaveBytesData()
         {
-            using (FileStream fileStream = new FileStream(BytesDataFilePath, FileMode.Create, FileAccess.Write))
+            using (FileStream fileStream = new FileStream(ResourceListComponent.BytesDataFilePath, FileMode.Create, FileAccess.Write))
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(fileStream, Encoding.UTF8))
                 {
@@ -75,7 +82,7 @@ namespace UnityGameFramework.Extension.Editor
                 }
             }
             AssetDatabase.Refresh();
-            Debug.Log(Utility.Text.Format("生成资源列表文件：{0}！", BytesDataFilePath));
+            Debug.Log(Utility.Text.Format("生成资源列表文件：{0}！", ResourceListComponent.BytesDataFilePath));
         }
 
         private void SaveXmlData()
@@ -99,14 +106,6 @@ namespace UnityGameFramework.Extension.Editor
             xmlDocument.Save(XmlDataFilePath);
             AssetDatabase.Refresh();
             Debug.Log(Utility.Text.Format("生成资源列表文件：{0}！", XmlDataFilePath));
-        }
-        
-        //有需要改名，修改这里
-        private string GetNewName(string fullPath)
-        {
-            string parentDir = fullPath.Split("/")[2];
-            string fileName = Path.GetFileNameWithoutExtension(fullPath);
-            return Utility.Text.Format("{0}_{1}", parentDir, fileName);
         }
     }
 }

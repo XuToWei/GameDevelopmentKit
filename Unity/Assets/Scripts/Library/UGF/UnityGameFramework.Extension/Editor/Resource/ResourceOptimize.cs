@@ -20,7 +20,14 @@ namespace UnityGameFramework.Extension.Editor
         // public const int MAX_COMBINE_SHARE_NO_NAME_REFERENCE_COUNT = 7; // 没有包名的最多的引用计数
         //  public const int MIN_COMBINE_AB_SIZE_2 = 100 * 1024 * 8;//  100K 没有包名的最大体积 
         private readonly int MAX_COMBINE_SHARE_MIN_REFERENCE_COUNT = 3; //最大的引用计数
-
+        
+        //有需要改名，修改这里
+        public static string GetNewCombineName(List<string> currentCombineBundle)
+        {
+            var newCombine = string.Join("@@", currentCombineBundle);
+            return $"Auto/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
+        }
+        
         private ResourceCollection m_ResourceCollection;
 
         private readonly Dictionary<string, DependencyData> m_DependencyDatas;
@@ -270,13 +277,6 @@ namespace UnityGameFramework.Extension.Editor
                 //直接使用文件长度
                 return new FileInfo(assetPath).Length;
             }
-        }
-
-        //有需要改名，修改这里
-        private string GetNewCombineName(List<string> currentCombineBundle)
-        {
-            var newCombine = string.Join("@@", currentCombineBundle);
-            return $"Auto/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
         }
     }
 }
