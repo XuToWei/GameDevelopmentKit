@@ -21,7 +21,7 @@ namespace Game
     public partial class TablesComponent : GameFrameworkComponent
     {
         /// <summary>
-        /// Luaban加载类型
+        /// Luban加载类型
         /// </summary>
         [ShowInInspector, ReadOnly]
         public TablesLoadType LoadType { get; private set; }

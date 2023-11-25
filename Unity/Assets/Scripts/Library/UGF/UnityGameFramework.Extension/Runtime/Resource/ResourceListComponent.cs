@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using Cysharp.Threading.Tasks;
 using GameFramework;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -14,6 +15,10 @@ namespace UnityGameFramework.Extension
     {
         public const string BytesDataFilePath = "Assets/Res/Config/ResourceList.bytes";
         private readonly Dictionary<string, string> m_ResourceNamePathDict = new Dictionary<string, string>();
+        public Dictionary<string,string> ResourceNamePathDict => m_ResourceNamePathDict;
+
+        [ShowInInspector]
+        public int ResourceCount => m_ResourceNamePathDict.Count;
 
         public async UniTask LoadAsync()
         {
