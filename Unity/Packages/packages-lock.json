@@ -94,12 +94,12 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.editoriterationprofiler": {
-      "version": "https://github.com/Unity-Technologies/com.unity.editoriterationprofiler.git",
-      "depth": 0,
-      "source": "git",
+    "com.unity.editorcoroutines": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
       "dependencies": {},
-      "hash": "02a50237af74cc628b971f02987eba048076b902"
+      "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
@@ -147,6 +147,15 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.memoryprofiler": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.editorcoroutines": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {

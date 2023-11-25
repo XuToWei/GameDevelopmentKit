@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace ET
 {
 public sealed partial class DRDemo :  Bright.Config.BeanBase 
@@ -33,7 +32,6 @@ public sealed partial class DRDemo :  Bright.Config.BeanBase
     public string Name { get; private set; }
     public string Name_l10n_key { get; }
     public System.Collections.Generic.Dictionary<string, string> TestMap { get; private set; }
-
     public const int __ID__ = 2024637329;
     public override int GetTypeId() => __ID__;
 
@@ -55,9 +53,8 @@ public sealed partial class DRDemo :  Bright.Config.BeanBase
         + "TestMap:" + Bright.Common.StringUtil.CollectionToString(TestMap) + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
     tables = x.tables
 }}
 {{cs_start_name_space_grace x.namespace}}
-public sealed partial class {{name}}
+public sealed partial class {{name}} : ITables
 {
     {{~for table in tables ~}}
     {{~if table.comment != '' ~}}
@@ -24,6 +24,8 @@ public sealed partial class {{name}}
 
     public async Task LoadAsync(System.Func<string, Task<JSONNode>> loader)
     {
+        TablesMemory.BeginRecord();
+
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
         {{~for table in tables ~}}
@@ -39,6 +41,8 @@ public sealed partial class {{name}}
         {{table.name}}.Resolve(_tables); 
         {{~end~}}
         PostResolve();
+
+        TablesMemory.EndRecord();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)

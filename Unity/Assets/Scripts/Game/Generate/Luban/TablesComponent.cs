@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-public partial class TablesComponent
+public partial class TablesComponent : ITables
 {
     public DTUIForm DTUIForm { private set; get; }
     public DTEntity DTEntity { private set; get; }
@@ -26,6 +26,8 @@ public partial class TablesComponent
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
+        TablesMemory.BeginRecord();
+
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
         DTUIForm = new DTUIForm(() => loader("dtuiform")); 
@@ -61,6 +63,8 @@ public partial class TablesComponent
         DTMusic.Resolve(_tables); 
         DTOneConfig.Resolve(_tables); 
         PostResolve();
+
+        TablesMemory.EndRecord();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)

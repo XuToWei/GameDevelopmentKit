@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Game.Hot
 {
-public partial class Tables
+public partial class Tables : ITables
 {
     public DTOneConfig DTOneConfig { private set; get; }
     public DTAircraft DTAircraft { private set; get; }
@@ -25,6 +25,8 @@ public partial class Tables
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
+        TablesMemory.BeginRecord();
+
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
         DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
@@ -56,6 +58,8 @@ public partial class Tables
         DTThruster.Resolve(_tables); 
         DTWeapon.Resolve(_tables); 
         PostResolve();
+
+        TablesMemory.EndRecord();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)

@@ -11,22 +11,20 @@ using System.Threading.Tasks;
 
 namespace ET
 {
-
-public partial class Tables
+public partial class Tables : ITables
 {
     public DTOneConfig DTOneConfig { private set; get; }
     public DTAIConfig DTAIConfig { private set; get; }
     public DTUnitConfig DTUnitConfig { private set; get; }
     public DTDemo DTDemo { private set; get; }
-
     private Dictionary<string, IDataTable> _tables;
-
     public IEnumerable<IDataTable> DataTables => _tables.Values;
-
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
+        TablesMemory.BeginRecord();
+
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
         DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
@@ -50,6 +48,8 @@ public partial class Tables
         DTUnitConfig.Resolve(_tables); 
         DTDemo.Resolve(_tables); 
         PostResolve();
+
+        TablesMemory.EndRecord();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)
@@ -59,9 +59,8 @@ public partial class Tables
         DTUnitConfig.TranslateText(translator); 
         DTDemo.TranslateText(translator); 
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace Game
 {
 public sealed partial class DRScene :  Bright.Config.BeanBase 
@@ -38,7 +37,6 @@ public sealed partial class DRScene :  Bright.Config.BeanBase
     /// 背景音乐编号
     /// </summary>
     public int BackgroundMusicId { get; private set; }
-
     public const int __ID__ = -1646966626;
     public override int GetTypeId() => __ID__;
 
@@ -59,9 +57,8 @@ public sealed partial class DRScene :  Bright.Config.BeanBase
         + "BackgroundMusicId:" + BackgroundMusicId + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

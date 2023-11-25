@@ -7,7 +7,7 @@ using System.Threading.Tasks;
     tables = x.tables
 }}
 {{cs_start_name_space_grace x.namespace}}
-public partial class {{name}}
+public partial class {{name}} : ITables
 {
     {{~for table in tables ~}}
     {{~if table.comment != '' ~}}
@@ -23,6 +23,8 @@ public partial class {{name}}
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
+        TablesMemory.BeginRecord();
+
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
         {{~for table in tables ~}}
@@ -38,6 +40,8 @@ public partial class {{name}}
         {{table.name}}.Resolve(_tables); 
         {{~end~}}
         PostResolve();
+
+        TablesMemory.EndRecord();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ET
 {
-public partial class Tables
+public partial class Tables : ITables
 {
     public DTStartMachineConfig DTStartMachineConfig { private set; get; }
     public DTStartProcessConfig DTStartProcessConfig { private set; get; }
@@ -27,6 +27,8 @@ public partial class Tables
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
     {
+        TablesMemory.BeginRecord();
+
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
         DTStartMachineConfig = new DTStartMachineConfig(() => loader("dtstartmachineconfig")); 
@@ -66,6 +68,8 @@ public partial class Tables
         DTUnitConfig.Resolve(_tables); 
         DTDemo.Resolve(_tables); 
         PostResolve();
+
+        TablesMemory.EndRecord();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)
