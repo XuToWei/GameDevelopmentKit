@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace Game.Hot
 {
-   
+
 public sealed partial class DTAircraft : IDataTable
 {
     private readonly Dictionary<int, DRAircraft> _dataMap;
     private readonly List<DRAircraft> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTAircraft(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTAircraft : IDataTable
 
     public Dictionary<int, DRAircraft> DataMap => _dataMap;
     public List<DRAircraft> DataList => _dataList;
-
     public DRAircraft GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRAircraft Get(int key) => _dataMap[key];
     public DRAircraft this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTAircraft : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

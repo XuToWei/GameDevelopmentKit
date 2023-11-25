@@ -8,16 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace ET
 {
-   
+
 public sealed partial class DTStartZoneConfig : IDataTable
 {
     private readonly List<DRStartZoneConfig> _dataList;
-
     private readonly Dictionary<(string, int), DRStartZoneConfig> _dataMapUnion;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTStartZoneConfig(System.Func<Task<ByteBuf>> loadFunc)
@@ -45,9 +42,7 @@ public sealed partial class DTStartZoneConfig : IDataTable
         PostInit();
     }
 
-
     public List<DRStartZoneConfig> DataList => _dataList;
-
     public DRStartZoneConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartZoneConfig __v) ? __v : null;
 
     public void Resolve(Dictionary<string, IDataTable> _tables)
@@ -66,9 +61,8 @@ public sealed partial class DTStartZoneConfig : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

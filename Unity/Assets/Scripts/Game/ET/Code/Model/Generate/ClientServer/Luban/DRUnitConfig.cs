@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace ET
 {
 public sealed partial class DRUnitConfig :  Bright.Config.BeanBase 
@@ -58,7 +57,6 @@ public sealed partial class DRUnitConfig :  Bright.Config.BeanBase
     /// 体重
     /// </summary>
     public int Weight { get; private set; }
-
     public const int __ID__ = -1701961452;
     public override int GetTypeId() => __ID__;
 
@@ -83,9 +81,8 @@ public sealed partial class DRUnitConfig :  Bright.Config.BeanBase
         + "Weight:" + Weight + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

@@ -1,7 +1,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using SimpleJSON;
-
 {{
     name = x.name
     parent_def_type = x.parent_def_type
@@ -9,9 +8,7 @@ using SimpleJSON;
     export_fields = x.export_fields
     hierarchy_export_fields = x.hierarchy_export_fields
 }}
-
 {{cs_start_name_space_grace x.namespace_with_top_module}} 
-
 {{~if x.comment != '' ~}}
 /// <summary>
 /// {{x.escape_comment}}
@@ -43,26 +40,26 @@ public {{x.cs_class_modifier}} partial class {{name}} : {{if parent_def_type}} {
 
     public static {{name}} Deserialize{{name}}(JSONNode _json)
     {
-    {{~if x.is_abstract_type~}}
+        {{~if x.is_abstract_type~}}
         string type = _json["{{x.json_type_name_key}}"];
         switch (type)
         {
-        {{~for child in x.hierarchy_not_abstract_children~}}
+            {{~for child in x.hierarchy_not_abstract_children~}}
             case "{{cs_impl_data_type child x}}": return new {{child.full_name}}(_json);
-        {{~end~}}
+            {{~end~}}
             default: throw new SerializationException();
         }
-    {{~else~}}
+        {{~else~}}
         return new {{x.full_name}}(_json);
-    {{~end~}}
+        {{~end~}}
     }
 
     {{~ for field in export_fields ~}}
-{{~if field.comment != '' ~}}
+    {{~if field.comment != '' ~}}
     /// <summary>
     /// {{field.escape_comment}}
     /// </summary>
-{{~end~}}
+    {{~end~}}
     public {{cs_define_type field.ctype}} {{field.convention_name}} { get; private set; }
     {{~if field.index_field~}} 
     public readonly Dictionary<{{cs_define_type field.index_field.ctype}}, {{cs_define_type field.ctype.element_type}}> {{field.convention_name}}_Index = new Dictionary<{{cs_define_type field.index_field.ctype}}, {{cs_define_type field.ctype.element_type}}>();
@@ -77,11 +74,10 @@ public {{x.cs_class_modifier}} partial class {{name}} : {{if parent_def_type}} {
     public {{cs_define_text_key_field field}} { get; }
     {{~end~}}
     {{~end~}}
-
-{{~if !x.is_abstract_type~}}
+    {{~if !x.is_abstract_type~}}
     public const int __ID__ = {{x.id}};
     public override int GetTypeId() => __ID__;
-{{~end~}}
+    {{~end~}}
 
     public {{x.cs_method_modifier}} void Resolve(Dictionary<string, IDataTable> _tables)
     {
@@ -115,12 +111,12 @@ public {{x.cs_class_modifier}} partial class {{name}} : {{if parent_def_type}} {
     public override string ToString()
     {
         return "{{full_name}}{ "
-    {{~ for field in hierarchy_export_fields ~}}
+        {{~ for field in hierarchy_export_fields ~}}
         + "{{field.convention_name}}:" + {{cs_to_string field.convention_name field.ctype}} + ","
-    {{~end~}}
+        {{~end~}}
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }

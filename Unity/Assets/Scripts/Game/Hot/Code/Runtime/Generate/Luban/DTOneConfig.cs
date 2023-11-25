@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace Game.Hot
 {
-   
+
 public sealed partial class DTOneConfig : IDataTable
 {
 
     private DROneConfig _data;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTOneConfig(System.Func<Task<ByteBuf>> loadFunc)
@@ -33,7 +31,6 @@ public sealed partial class DTOneConfig : IDataTable
         PostInit();
     }
 
-
      public string GameId => _data.GameId;
      public int SceneMenu => _data.SceneMenu;
      public int SceneMain => _data.SceneMain;
@@ -48,10 +45,8 @@ public sealed partial class DTOneConfig : IDataTable
     {
         _data.TranslateText(translator);
     }
-
-    
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

@@ -4,6 +4,7 @@ using Game.Editor;
 using UnityEditor;
 using UnityEditor.Build.Player;
 using UnityEngine;
+using UnityGameFramework.Extension.Editor;
 
 namespace Game.Hot.Editor
 {

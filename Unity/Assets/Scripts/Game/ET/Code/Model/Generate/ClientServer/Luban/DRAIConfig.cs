@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace ET
 {
 public sealed partial class DRAIConfig :  Bright.Config.BeanBase 
@@ -53,7 +52,6 @@ public sealed partial class DRAIConfig :  Bright.Config.BeanBase
     /// 节点参数
     /// </summary>
     public System.Collections.Generic.List<int> NodeParams { get; private set; }
-
     public const int __ID__ = 1340429336;
     public override int GetTypeId() => __ID__;
 
@@ -77,9 +75,8 @@ public sealed partial class DRAIConfig :  Bright.Config.BeanBase
         + "NodeParams:" + Bright.Common.StringUtil.CollectionToString(NodeParams) + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

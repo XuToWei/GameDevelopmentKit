@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace Game
 {
-   
+
 public sealed partial class DTSound : IDataTable
 {
     private readonly Dictionary<int, DRSound> _dataMap;
     private readonly List<DRSound> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTSound(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTSound : IDataTable
 
     public Dictionary<int, DRSound> DataMap => _dataMap;
     public List<DRSound> DataList => _dataList;
-
     public DRSound GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRSound Get(int key) => _dataMap[key];
     public DRSound this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTSound : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

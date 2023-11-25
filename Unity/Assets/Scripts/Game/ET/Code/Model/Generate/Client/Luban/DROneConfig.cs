@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace ET
 {
 public sealed partial class DROneConfig :  Bright.Config.BeanBase 
@@ -28,7 +27,6 @@ public sealed partial class DROneConfig :  Bright.Config.BeanBase
     /// 匹配最大时间
     /// </summary>
     public int Test { get; private set; }
-
     public const int __ID__ = -2019618726;
     public override int GetTypeId() => __ID__;
 
@@ -47,9 +45,8 @@ public sealed partial class DROneConfig :  Bright.Config.BeanBase
         + "Test:" + Test + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace Game.Hot
 {
-   
+
 public sealed partial class DTArmor : IDataTable
 {
     private readonly Dictionary<int, DRArmor> _dataMap;
     private readonly List<DRArmor> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTArmor(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTArmor : IDataTable
 
     public Dictionary<int, DRArmor> DataMap => _dataMap;
     public List<DRArmor> DataList => _dataList;
-
     public DRArmor GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRArmor Get(int key) => _dataMap[key];
     public DRArmor this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTArmor : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

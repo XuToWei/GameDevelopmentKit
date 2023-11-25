@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace Game.Hot
 {
-   
+
 public sealed partial class DTWeapon : IDataTable
 {
     private readonly Dictionary<int, DRWeapon> _dataMap;
     private readonly List<DRWeapon> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTWeapon(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTWeapon : IDataTable
 
     public Dictionary<int, DRWeapon> DataMap => _dataMap;
     public List<DRWeapon> DataList => _dataList;
-
     public DRWeapon GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRWeapon Get(int key) => _dataMap[key];
     public DRWeapon this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTWeapon : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

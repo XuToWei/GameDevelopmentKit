@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace Game.Hot
 {
 public sealed partial class DRArmor :  Bright.Config.BeanBase 
@@ -38,7 +37,6 @@ public sealed partial class DRArmor :  Bright.Config.BeanBase
     /// 防御力
     /// </summary>
     public int Defense { get; private set; }
-
     public const int __ID__ = -1663135407;
     public override int GetTypeId() => __ID__;
 
@@ -59,9 +57,8 @@ public sealed partial class DRArmor :  Bright.Config.BeanBase
         + "Defense:" + Defense + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

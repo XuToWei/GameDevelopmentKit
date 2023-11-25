@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace Game.Hot
 {
-   
+
 public sealed partial class DTAsteroid : IDataTable
 {
     private readonly Dictionary<int, DRAsteroid> _dataMap;
     private readonly List<DRAsteroid> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTAsteroid(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTAsteroid : IDataTable
 
     public Dictionary<int, DRAsteroid> DataMap => _dataMap;
     public List<DRAsteroid> DataList => _dataList;
-
     public DRAsteroid GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRAsteroid Get(int key) => _dataMap[key];
     public DRAsteroid this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTAsteroid : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

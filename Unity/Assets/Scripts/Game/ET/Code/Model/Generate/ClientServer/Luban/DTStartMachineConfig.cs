@@ -8,16 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace ET
 {
-   
+
 public sealed partial class DTStartMachineConfig : IDataTable
 {
     private readonly List<DRStartMachineConfig> _dataList;
-
     private readonly Dictionary<(string, int), DRStartMachineConfig> _dataMapUnion;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTStartMachineConfig(System.Func<Task<ByteBuf>> loadFunc)
@@ -45,9 +42,7 @@ public sealed partial class DTStartMachineConfig : IDataTable
         PostInit();
     }
 
-
     public List<DRStartMachineConfig> DataList => _dataList;
-
     public DRStartMachineConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartMachineConfig __v) ? __v : null;
 
     public void Resolve(Dictionary<string, IDataTable> _tables)
@@ -66,9 +61,8 @@ public sealed partial class DTStartMachineConfig : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

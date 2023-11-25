@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace Game.Hot
 {
 public sealed partial class DRThruster :  Bright.Config.BeanBase 
@@ -33,7 +32,6 @@ public sealed partial class DRThruster :  Bright.Config.BeanBase
     /// 速度
     /// </summary>
     public float Speed { get; private set; }
-
     public const int __ID__ = -1106796109;
     public override int GetTypeId() => __ID__;
 
@@ -53,9 +51,8 @@ public sealed partial class DRThruster :  Bright.Config.BeanBase
         + "Speed:" + Speed + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

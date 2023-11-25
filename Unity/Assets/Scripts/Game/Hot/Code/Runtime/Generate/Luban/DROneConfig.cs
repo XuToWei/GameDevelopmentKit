@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace Game.Hot
 {
 public sealed partial class DROneConfig :  Bright.Config.BeanBase 
@@ -29,7 +28,6 @@ public sealed partial class DROneConfig :  Bright.Config.BeanBase
     public string GameId { get; private set; }
     public int SceneMenu { get; private set; }
     public int SceneMain { get; private set; }
-
     public const int __ID__ = -2019618726;
     public override int GetTypeId() => __ID__;
 
@@ -50,9 +48,8 @@ public sealed partial class DROneConfig :  Bright.Config.BeanBase
         + "SceneMain:" + SceneMain + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace ET
 {
-   
+
 public sealed partial class DTUnitConfig : IDataTable
 {
     private readonly Dictionary<int, DRUnitConfig> _dataMap;
     private readonly List<DRUnitConfig> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTUnitConfig(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTUnitConfig : IDataTable
 
     public Dictionary<int, DRUnitConfig> DataMap => _dataMap;
     public List<DRUnitConfig> DataList => _dataList;
-
     public DRUnitConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRUnitConfig Get(int key) => _dataMap[key];
     public DRUnitConfig this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTUnitConfig : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

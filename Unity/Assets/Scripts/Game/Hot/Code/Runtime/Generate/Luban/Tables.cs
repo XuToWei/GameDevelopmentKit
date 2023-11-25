@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace Game.Hot
 {
-
 public partial class Tables
 {
     public DTOneConfig DTOneConfig { private set; get; }
@@ -20,11 +19,8 @@ public partial class Tables
     public DTAsteroid DTAsteroid { private set; get; }
     public DTThruster DTThruster { private set; get; }
     public DTWeapon DTWeapon { private set; get; }
-
     private Dictionary<string, IDataTable> _tables;
-
     public IEnumerable<IDataTable> DataTables => _tables.Values;
-
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
@@ -71,9 +67,8 @@ public partial class Tables
         DTThruster.TranslateText(translator); 
         DTWeapon.TranslateText(translator); 
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace ET
 {
-
 public partial class Tables
 {
     public DTStartMachineConfig DTStartMachineConfig { private set; get; }
@@ -22,11 +21,8 @@ public partial class Tables
     public DTAIConfig DTAIConfig { private set; get; }
     public DTUnitConfig DTUnitConfig { private set; get; }
     public DTDemo DTDemo { private set; get; }
-
     private Dictionary<string, IDataTable> _tables;
-
     public IEnumerable<IDataTable> DataTables => _tables.Values;
-
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
     public async Task LoadAsync(System.Func<string, Task<ByteBuf>> loader)
@@ -83,9 +79,8 @@ public partial class Tables
         DTUnitConfig.TranslateText(translator); 
         DTDemo.TranslateText(translator); 
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

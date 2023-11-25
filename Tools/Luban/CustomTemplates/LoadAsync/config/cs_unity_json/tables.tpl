@@ -8,22 +8,18 @@ using System.Threading.Tasks;
     tables = x.tables
 }}
 {{cs_start_name_space_grace x.namespace}}
-
 public sealed partial class {{name}}
 {
     {{~for table in tables ~}}
-{{~if table.comment != '' ~}}
+    {{~if table.comment != '' ~}}
     /// <summary>
     /// {{table.escape_comment}}
     /// </summary>
-{{~end~}}
+    {{~end~}}
     public {{table.full_name}} {{table.name}} { private set; get; }
     {{~end~}}
-
     private Dictionary<string, IDataTable> _tables;
-
     public IEnumerable<IDataTable> DataTables => _tables.Values;
-
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
     public async Task LoadAsync(System.Func<string, Task<JSONNode>> loader)
@@ -51,9 +47,8 @@ public sealed partial class {{name}}
         {{table.name}}.TranslateText(translator); 
         {{~end~}}
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 {{cs_end_name_space_grace x.namespace}}

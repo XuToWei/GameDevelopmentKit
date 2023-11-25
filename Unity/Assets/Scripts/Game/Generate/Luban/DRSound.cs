@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace Game
 {
 public sealed partial class DRSound :  Bright.Config.BeanBase 
@@ -63,7 +62,6 @@ public sealed partial class DRSound :  Bright.Config.BeanBase
     /// 声音最大距离
     /// </summary>
     public float MaxDistance { get; private set; }
-
     public const int __ID__ = -1646593759;
     public override int GetTypeId() => __ID__;
 
@@ -89,9 +87,8 @@ public sealed partial class DRSound :  Bright.Config.BeanBase
         + "MaxDistance:" + MaxDistance + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

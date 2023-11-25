@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace ET
 {
-   
+
 public sealed partial class DTAIConfig : IDataTable
 {
     private readonly Dictionary<int, DRAIConfig> _dataMap;
     private readonly List<DRAIConfig> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTAIConfig(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTAIConfig : IDataTable
 
     public Dictionary<int, DRAIConfig> DataMap => _dataMap;
     public List<DRAIConfig> DataList => _dataList;
-
     public DRAIConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRAIConfig Get(int key) => _dataMap[key];
     public DRAIConfig this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTAIConfig : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

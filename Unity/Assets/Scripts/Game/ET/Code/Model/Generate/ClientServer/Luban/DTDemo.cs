@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace ET
 {
-   
+
 public sealed partial class DTDemo : IDataTable
 {
     private readonly Dictionary<int, DRDemo> _dataMap;
     private readonly List<DRDemo> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTDemo(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTDemo : IDataTable
 
     public Dictionary<int, DRDemo> DataMap => _dataMap;
     public List<DRDemo> DataList => _dataList;
-
     public DRDemo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRDemo Get(int key) => _dataMap[key];
     public DRDemo this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTDemo : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace Game.Hot
 {
 public sealed partial class DRAircraft :  Bright.Config.BeanBase 
@@ -53,7 +52,6 @@ public sealed partial class DRAircraft :  Bright.Config.BeanBase
     /// 死亡声音编号
     /// </summary>
     public int DeadSoundId { get; private set; }
-
     public const int __ID__ = 1010378180;
     public override int GetTypeId() => __ID__;
 
@@ -77,9 +75,8 @@ public sealed partial class DRAircraft :  Bright.Config.BeanBase
         + "DeadSoundId:" + DeadSoundId + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

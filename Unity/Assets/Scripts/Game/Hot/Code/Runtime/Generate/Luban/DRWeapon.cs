@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace Game.Hot
 {
 public sealed partial class DRWeapon :  Bright.Config.BeanBase 
@@ -53,7 +52,6 @@ public sealed partial class DRWeapon :  Bright.Config.BeanBase
     /// 子弹声音编号
     /// </summary>
     public int BulletSoundId { get; private set; }
-
     public const int __ID__ = 599888970;
     public override int GetTypeId() => __ID__;
 
@@ -77,9 +75,8 @@ public sealed partial class DRWeapon :  Bright.Config.BeanBase
         + "BulletSoundId:" + BulletSoundId + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace Game
 {
-   
+
 public sealed partial class DTUIForm : IDataTable
 {
     private readonly Dictionary<int, DRUIForm> _dataMap;
     private readonly List<DRUIForm> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTUIForm(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTUIForm : IDataTable
 
     public Dictionary<int, DRUIForm> DataMap => _dataMap;
     public List<DRUIForm> DataList => _dataList;
-
     public DRUIForm GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRUIForm Get(int key) => _dataMap[key];
     public DRUIForm this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTUIForm : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

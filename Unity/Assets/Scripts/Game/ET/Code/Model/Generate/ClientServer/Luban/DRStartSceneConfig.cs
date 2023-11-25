@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace ET
 {
 public sealed partial class DRStartSceneConfig :  Bright.Config.BeanBase 
@@ -58,7 +57,6 @@ public sealed partial class DRStartSceneConfig :  Bright.Config.BeanBase
     /// 外网端口
     /// </summary>
     public int Port { get; private set; }
-
     public const int __ID__ = 1720259034;
     public override int GetTypeId() => __ID__;
 
@@ -83,9 +81,8 @@ public sealed partial class DRStartSceneConfig :  Bright.Config.BeanBase
         + "Port:" + Port + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace Game.Hot
 {
-   
+
 public sealed partial class DTThruster : IDataTable
 {
     private readonly Dictionary<int, DRThruster> _dataMap;
     private readonly List<DRThruster> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTThruster(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTThruster : IDataTable
 
     public Dictionary<int, DRThruster> DataMap => _dataMap;
     public List<DRThruster> DataList => _dataList;
-
     public DRThruster GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRThruster Get(int key) => _dataMap[key];
     public DRThruster this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTThruster : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

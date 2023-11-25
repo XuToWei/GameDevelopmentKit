@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace Game
 {
 public sealed partial class DRUIForm :  Bright.Config.BeanBase 
@@ -48,7 +47,6 @@ public sealed partial class DRUIForm :  Bright.Config.BeanBase
     /// 是否暂停被其覆盖的界面
     /// </summary>
     public bool PauseCoveredUIForm { get; private set; }
-
     public const int __ID__ = 515966854;
     public override int GetTypeId() => __ID__;
 
@@ -71,9 +69,8 @@ public sealed partial class DRUIForm :  Bright.Config.BeanBase
         + "PauseCoveredUIForm:" + PauseCoveredUIForm + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

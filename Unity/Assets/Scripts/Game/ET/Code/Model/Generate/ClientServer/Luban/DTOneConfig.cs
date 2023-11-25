@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace ET
 {
-   
+
 public sealed partial class DTOneConfig : IDataTable
 {
 
     private DROneConfig _data;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTOneConfig(System.Func<Task<ByteBuf>> loadFunc)
@@ -32,7 +30,6 @@ public sealed partial class DTOneConfig : IDataTable
         _data = DROneConfig.DeserializeDROneConfig(_buf);
         PostInit();
     }
-
 
     /// <summary>
     /// 匹配最大时间
@@ -53,10 +50,8 @@ public sealed partial class DTOneConfig : IDataTable
     {
         _data.TranslateText(translator);
     }
-
-    
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

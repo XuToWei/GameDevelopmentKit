@@ -8,15 +8,13 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace Game
 {
-   
+
 public sealed partial class DTScene : IDataTable
 {
     private readonly Dictionary<int, DRScene> _dataMap;
     private readonly List<DRScene> _dataList;
-
     private readonly System.Func<Task<ByteBuf>> _loadFunc;
 
     public DTScene(System.Func<Task<ByteBuf>> loadFunc)
@@ -43,7 +41,6 @@ public sealed partial class DTScene : IDataTable
 
     public Dictionary<int, DRScene> DataMap => _dataMap;
     public List<DRScene> DataList => _dataList;
-
     public DRScene GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRScene Get(int key) => _dataMap[key];
     public DRScene this[int key] => _dataMap[key];
@@ -64,9 +61,9 @@ public sealed partial class DTScene : IDataTable
             v.TranslateText(translator);
         }
     }
-    
+
+ 
     partial void PostInit();
     partial void PostResolve();
 }
-
 }

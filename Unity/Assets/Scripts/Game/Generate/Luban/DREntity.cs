@@ -8,7 +8,6 @@
 using Bright.Serialization;
 using System.Collections.Generic;
 
-
 namespace Game
 {
 public sealed partial class DREntity :  Bright.Config.BeanBase 
@@ -43,7 +42,6 @@ public sealed partial class DREntity :  Bright.Config.BeanBase
     /// 加载优先级
     /// </summary>
     public int Priority { get; private set; }
-
     public const int __ID__ = 93435409;
     public override int GetTypeId() => __ID__;
 
@@ -65,9 +63,8 @@ public sealed partial class DREntity :  Bright.Config.BeanBase
         + "Priority:" + Priority + ","
         + "}";
     }
-    
+
     partial void PostInit();
     partial void PostResolve();
 }
-
 }
