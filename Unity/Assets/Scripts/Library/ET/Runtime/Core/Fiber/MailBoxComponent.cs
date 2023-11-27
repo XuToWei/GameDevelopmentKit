@@ -4,7 +4,7 @@
     [FriendOf(typeof(MailBoxComponent))]
     public static partial class MailBoxComponentSystem
     {
-        [EntitySystem]       
+        [EntitySystem]
         private static void Awake(this MailBoxComponent self, MailBoxType mailBoxType)
         {
             Fiber fiber = self.Fiber();

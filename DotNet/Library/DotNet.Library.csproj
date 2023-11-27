@@ -37,6 +37,8 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\..\Share\Analyzer\Share.Analyzer.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\..\Share\Share.SourceGenerator\Share.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <PackageReference Include="CommandLineParser" Version="2.8.0" />
         <PackageReference Include="MongoDB.Driver" Version="2.17.1" />
         <PackageReference Include="NLog" Version="4.7.15" />
