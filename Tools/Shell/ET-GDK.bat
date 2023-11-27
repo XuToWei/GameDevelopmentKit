@@ -45,12 +45,6 @@ copy %SOURCE%\Unity\Assets\Scripts\Editor\Helper\EditorResHelper.cs %DESTINATION
 
 rd/s /q %DESTINATION%\Unity\Assets\Plugins\MongoDB
 
-del %DESTINATION%\Unity\Assets\Plugins\Share.SourceGenerator.dll
-del %DESTINATION%\Unity\Assets\Plugins\Share.SourceGenerator.dll.meta
-
 xcopy %SOURCE%\Unity\Assets\Plugins\MongoDB %DESTINATION%\Unity\Assets\Plugins\MongoDB /s /e /i
-
-copy %SOURCE%\Unity\Assets\Plugins\Share.SourceGenerator.dll %DESTINATION%\Unity\Assets\Plugins\Share.SourceGenerator.dll
-copy %SOURCE%\Unity\Assets\Plugins\Share.SourceGenerator.dll.meta %DESTINATION%\Unity\Assets\Plugins\Share.SourceGenerator.dll.meta
 
 pause
