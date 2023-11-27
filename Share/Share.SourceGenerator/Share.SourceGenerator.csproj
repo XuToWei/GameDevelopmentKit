@@ -17,6 +17,8 @@
             <Link>Extension\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         <Compile Include="../Analyzer/Config/Definition.cs" />
+        <Compile Include="../../Unity/Assets/Scripts/Library/ET/Runtime/Core/Helper/StringHashHelper.cs" />
+        <Compile Include="../Analyzer/Config/AnalyzeAssembly.cs" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" PrivateAssets="all" />

@@ -110,6 +110,10 @@ public class EntitySystemCodeFixProvider:CodeFixProvider
             
         }
 """;
+        code = code.Replace("{systemAttr}", systemAttr);
+        code = code.Replace("{methodNameArr[0]}", methodNameArr[0]);
+        code = code.Replace("{methodArgsArr[0]}", methodArgsArr[0]);
+        code = code.Replace("{args}", args);
         return SyntaxFactory.ParseMemberDeclaration(code) as MethodDeclarationSyntax;
     }
     

@@ -117,8 +117,6 @@ public class ETSystemGenerator: ISourceGenerator
                 }
                 string name = $"{methodSymbol.Parameters[i].Name}";
                 
-
-                
                 argsTypesList.Add(type);
                 argsVarsList.Add(name);
                 string typeName = $"{type} {name}";
@@ -154,6 +152,9 @@ namespace {{namespaceName}}
     }
 }
 """;
+                code = code.Replace("{namespaceName}", namespaceName);
+                code = code.Replace("{className}", className);
+                code = code.Replace("{template}", template);
 
                 string argsVars = string.Join(", ", argsVarsList);
                 string argsTypes = string.Join(", ", argsTypesList);

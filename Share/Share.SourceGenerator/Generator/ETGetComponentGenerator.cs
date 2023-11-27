@@ -49,6 +49,9 @@ namespace {{nameSpace}}
     }
 }
 """;
+        code = code.Replace("{nameSpace}", nameSpace);
+        code = code.Replace("{assemblyName}", assemblyName);
+        code = code.Replace("{contenSb}", contenSb.ToString());
         context.AddSource($"ETGetComponentGenerator.{nameSpace}.g.cs", code);
     }
 
@@ -56,14 +59,17 @@ namespace {{nameSpace}}
     {
         string getComponentName = componentOfData.ComponentName;
         string parentEntityName = componentOfData.ParentEntityName;
-        contenSb.AppendLine(@"""
+        string code = @"""
 
         public static {{getComponentName}} Get{{getComponentName}} (this {{parentEntityName}} self)
         {
             return self.GetComponent<{{getComponentName}}>();
         }
 
-""");
+""";
+        code = code.Replace("{getComponentName}", getComponentName);
+        code = code.Replace("{parentEntityName}", parentEntityName);
+        contenSb.AppendLine(code);
     }
 
     struct ComponentOfData

@@ -40,6 +40,8 @@
 
         public const string ETClientNameSpace = "ET.Client";
 
+        public const string ClientDirInServer = @"Unity\Assets\Scripts\Game\ET\Code\Hotfix\Client\";
+
         public const string EntitySystemAttribute = "EntitySystem";
         public const string EntitySystemAttributeMetaName = "ET.EntitySystemAttribute";
 
