@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MemoryPack;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ET
@@ -15,17 +16,22 @@ namespace ET
         IsNew = 1 << 4,
     }
 
-    public partial class Entity: DisposeObject
+    [MemoryPackable(GenerateType.NoGenerate)]
+    public abstract partial class Entity: DisposeObject, IPool
     {
 #if UNITY_ET_VIEW && UNITY_EDITOR
         [BsonIgnore]
+        [MemoryPackIgnore]
         [UnityEngine.HideInInspector]
         private UnityEngine.GameObject viewGO;
-        
+
         [BsonIgnore]
+        [MemoryPackIgnore]
         [StaticField]
         private static UnityEngine.Transform rootViewTransform;
 
+        [BsonIgnore]
+        [MemoryPackIgnore]
         public UnityEngine.GameObject ViewGO => viewGO;
 
         public static void SetRootView(UnityEngine.Transform root)
@@ -34,6 +40,7 @@ namespace ET
         }
 #endif
 
+        [MemoryPackIgnore]
         [BsonIgnore]
         public long InstanceId { get; protected set; }
 
@@ -44,6 +51,7 @@ namespace ET
         [BsonIgnore]
         private EntityStatus status = EntityStatus.None;
 
+        [MemoryPackIgnore]
         [BsonIgnore]
         public bool IsFromPool
         {
@@ -174,6 +182,7 @@ namespace ET
             }
         }
 
+        [MemoryPackIgnore]
         [BsonIgnore]
         public bool IsDisposed => this.InstanceId == 0;
         
@@ -181,6 +190,7 @@ namespace ET
         private Entity parent;
 
         // 可以改变parent，但是不能设置为null
+        [MemoryPackIgnore]
         [BsonIgnore]
         public Entity Parent
         {
@@ -309,6 +319,7 @@ namespace ET
         [BsonIgnore]
         protected IScene iScene;
 
+        [MemoryPackIgnore]
         [BsonIgnore]
         public IScene IScene
         {
@@ -387,13 +398,15 @@ namespace ET
             }
         }
 
+        [MemoryPackInclude]
         [BsonElement("Children")]
         [BsonIgnoreIfNull]
-        private List<Entity> childrenDB;
+        protected List<Entity> childrenDB;
 
         [BsonIgnore]
         private SortedDictionary<long, Entity> children;
 
+        [MemoryPackIgnore]
         [BsonIgnore]
         public SortedDictionary<long, Entity> Children
         {
@@ -424,13 +437,15 @@ namespace ET
             }
         }
 
+        [MemoryPackInclude]
         [BsonElement("C")]
         [BsonIgnoreIfNull]
-        private List<Entity> componentsDB;
+        protected List<Entity> componentsDB;
 
         [BsonIgnore]
         private SortedDictionary<long, Entity> components;
 
+        [MemoryPackIgnore]
         [BsonIgnore]
         public SortedDictionary<long, Entity> Components
         {

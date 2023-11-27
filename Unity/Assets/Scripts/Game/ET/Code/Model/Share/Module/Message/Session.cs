@@ -109,7 +109,7 @@ namespace ET
             {
                 async UniTaskVoid Timeout()
                 {
-                    await self.Fiber().TimerComponent.WaitAsync(time);
+                    await self.Root().GetComponent<TimerComponent>().WaitAsync(time);
                     if (!self.requestCallbacks.TryGetValue(rpcId, out RpcInfo action))
                     {
                         return;
@@ -175,7 +175,7 @@ namespace ET
             set;
         }
 
-        public string RemoteAddress
+        public IPEndPoint RemoteAddress
         {
             get;
             set;

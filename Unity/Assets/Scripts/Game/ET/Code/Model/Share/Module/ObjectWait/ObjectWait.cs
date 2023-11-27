@@ -111,7 +111,7 @@ namespace ET
             ResultCallback<T> tcs = new ResultCallback<T>();
             async UniTaskVoid WaitTimeout()
             {
-                await self.Fiber().TimerComponent.WaitAsync(timeout, cts);
+                await self.Root().GetComponent<TimerComponent>().WaitAsync(timeout, cts);
                 if (cts == null || cts.IsCancellationRequested)
                 {
                     return;

@@ -23,8 +23,6 @@ namespace ET
 
         private bool isConnected;
         
-        public IPEndPoint RemoteAddress { get; set; }
-
         private CancellationTokenSource cancellationTokenSource = new();
         
         public WChannel(long id, HttpListenerWebSocketContext webSocketContext, WService service)
@@ -44,7 +42,7 @@ namespace ET
             });
         }
 
-        public WChannel(long id, WebSocket webSocket, string connectUrl, WService service)
+        public WChannel(long id, WebSocket webSocket, IPEndPoint ipEndPoint, WService service)
         {
             this.Service = service;
             this.Id = id;
@@ -53,7 +51,7 @@ namespace ET
 
             isConnected = false;
             
-            this.Service.ThreadSynchronizationContext.Post(()=>this.ConnectAsync(connectUrl).Forget());
+            this.Service.ThreadSynchronizationContext.Post(()=>this.ConnectAsync($"ws://{ipEndPoint}").Forget());
         }
 
         public override void Dispose()

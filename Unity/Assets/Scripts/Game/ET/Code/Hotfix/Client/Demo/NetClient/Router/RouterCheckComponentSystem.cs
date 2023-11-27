@@ -20,7 +20,7 @@ namespace ET.Client
             Fiber fiber = self.Fiber();
             Scene root = fiber.Root;
             
-            IPEndPoint realAddress = NetworkHelper.ToIPEndPoint(session.RemoteAddress);
+            IPEndPoint realAddress = session.RemoteAddress;
             NetComponent netComponent = root.GetComponent<NetComponent>();
             
             while (true)
@@ -30,7 +30,7 @@ namespace ET.Client
                     return;
                 }
 
-                await fiber.TimerComponent.WaitAsync(1000);
+                await fiber.Root.GetComponent<TimerComponent>().WaitAsync(1000);
                 
                 if (self.InstanceId != instanceId)
                 {

@@ -48,45 +48,6 @@ namespace ET
         public Mailboxes Mailboxes { get; private set; }
         public ThreadSynchronizationContext ThreadSynchronizationContext { get; }
         public ILog Log { get; }
-        
-        private EntityRef<TimerComponent> timerCompnent;
-        public TimerComponent TimerComponent
-        {
-            get
-            {
-                return this.timerCompnent;
-            }
-            set
-            {
-                this.timerCompnent = value;
-            }
-        }
-        
-        private EntityRef<CoroutineLockComponent> coroutineLockComponent;
-        public CoroutineLockComponent CoroutineLockComponent
-        {
-            get
-            {
-                return this.coroutineLockComponent;
-            }
-            set
-            {
-                this.coroutineLockComponent = value;
-            }
-        }
-        
-        private EntityRef<ProcessInnerSender> processInnerSender;
-        public ProcessInnerSender ProcessInnerSender
-        {
-            get
-            {
-                return this.processInnerSender;
-            }
-            set
-            {
-                this.processInnerSender = value;
-            }
-        }
 
         private readonly Queue<AutoResetUniTaskCompletionSource> frameFinishTasks = new();
         
@@ -98,7 +59,7 @@ namespace ET
             this.Mailboxes = new Mailboxes();
             this.ThreadSynchronizationContext = new ThreadSynchronizationContext();
 #if DOTNET
-            this.Log = new NLogger(sceneType.ToString(), this.Process, this.Id, "../Config/NLog/NLog.config");
+            this.Log = new NLogger(sceneType.ToString(), this.Process, this.Id);
 #else
             this.Log = Logger.Instance.Log;
 #endif

@@ -26,11 +26,11 @@ xcopy %SOURCE%\Unity\Assets\Scripts\ModelView %DESTINATION%\Unity\Assets\Scripts
 xcopy %SOURCE%\Unity\Assets\Scripts\Model %DESTINATION%\Unity\Assets\Scripts\Game\ET\Code\Model /s /e /i
 xcopy %SOURCE%\Unity\Assets\Scripts\HotfixView %DESTINATION%\Unity\Assets\Scripts\Game\ET\Code\HotfixView /s /e /i
 xcopy %SOURCE%\Unity\Assets\Scripts\Hotfix %DESTINATION%\Unity\Assets\Scripts\Game\ET\Code\Hotfix /s /e /i
-xcopy %SOURCE%\Unity\Assets\Scripts\Editor\AssetPostProcessor %DESTINATION%\Unity\Assets\Scripts\Game\ET\Editor\PostProcessor /s /e /i
 xcopy %SOURCE%\Unity\Assets\Scripts\Core %DESTINATION%\Unity\Assets\Scripts\Library\ET\Runtime\Core /s /e /i
 xcopy %SOURCE%\Unity\Assets\Scripts\ThirdParty %DESTINATION%\Unity\Assets\Scripts\Library\ET\Runtime\ThirdParty /s /e /i
 xcopy %SOURCE%\Unity\Assets\Scripts\Editor\ComponentViewEditor %DESTINATION%\Unity\Assets\Scripts\Library\ET\Editor\ComponentView /s /e /i
 xcopy %SOURCE%\Unity\Assets\Scripts\Editor\RecastNavDataExporter %DESTINATION%\Unity\Assets\Scripts\Library\ET\Editor\RecastNavDataExporter /s /e /i
+xcopy %SOURCE%\Unity\Assets\Scripts\Editor\AssetPostProcessor %DESTINATION%\Unity\Assets\Scripts\Game\ET\Editor\PostProcessor /s /e /i
 xcopy %SOURCE%\DotNet %DESTINATION%\DotNet /s /e /i
 xcopy %SOURCE%\Share %DESTINATION%\Share /s /e /i
 xcopy %SOURCE%\Config %DESTINATION%\Design /s /e /i

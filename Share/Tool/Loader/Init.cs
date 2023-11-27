@@ -19,7 +19,7 @@ namespace ET.Server
                 Parser.Default.ParseArguments<Options>(args)
                         .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
                         .WithParsed((o) => World.Instance.AddSingleton(o));
-                var nLog = new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, 0, "../Config/NLog/NLog.config");
+                var nLog = new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, 0);
                 World.Instance.AddSingleton<Logger, ILog>(nLog);
                 
                 World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[] { typeof (Init).Assembly });

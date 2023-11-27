@@ -183,7 +183,7 @@ namespace ET
             self.StartTime = self.BeginTime;
             self.SetNextTarget();
 
-            self.MoveTimer = self.Fiber().TimerComponent.NewFrameTimer(TimerInvokeType.MoveTimer, self);
+            self.MoveTimer = self.Root().GetComponent<TimerComponent>().NewFrameTimer(TimerInvokeType.MoveTimer, self);
         }
 
         private static void SetNextTarget(this MoveComponent self)
@@ -282,7 +282,7 @@ namespace ET
             self.N = 0;
             self.TurnTime = 0;
             self.IsTurnHorizontal = false;
-            self.Fiber().TimerComponent?.Remove(ref self.MoveTimer);
+            self.Root().GetComponent<TimerComponent>()?.Remove(ref self.MoveTimer);
 
             if (self.tcs != null)
             {

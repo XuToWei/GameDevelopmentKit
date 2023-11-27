@@ -10,7 +10,6 @@ namespace ET
         [EntitySystem]
         public static void Awake(this CoroutineLockComponent self)
         {
-            self.Fiber.CoroutineLockComponent = self;
         }
         
         [EntitySystem]
