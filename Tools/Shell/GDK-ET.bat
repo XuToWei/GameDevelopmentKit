@@ -33,7 +33,7 @@ xcopy %SOURCE%\Unity\Assets\Scripts\Library\ET\Editor\ComponentView %DESTINATION
 xcopy %SOURCE%\Unity\Assets\Scripts\Library\ET\Editor\RecastNavDataExporter %DESTINATION%\Unity\Assets\Scripts\Editor\RecastNavDataExporter /s /e /i
 xcopy %SOURCE%\DotNet %DESTINATION%\DotNet /s /e /i
 xcopy %SOURCE%\Share %DESTINATION%\Share /s /e /i
-xcopy %SOURCE%\Design %DESTINATION%\Config /s /e /i
+xcopy %SOURCE%\Config %DESTINATION%\Config /s /e /i
 xcopy %SOURCE%\Tools\Config %DESTINATION%\Tools\Config /s /e /i
 xcopy %SOURCE%\Tools\cwRsync %DESTINATION%\Tools\cwRsync /s /e /i
 xcopy %SOURCE%\Tools\RecastNavExportor %DESTINATION%\Tools\RecastNavExportor /s /e /i
