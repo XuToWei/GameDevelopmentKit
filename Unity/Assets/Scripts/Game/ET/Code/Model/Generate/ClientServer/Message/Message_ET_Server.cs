@@ -13,8 +13,9 @@ namespace ET
     {
         public static ObjectQueryRequest Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectQueryRequest() : ObjectPool.Instance.Fetch(typeof(ObjectQueryRequest)) as ObjectQueryRequest; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectQueryRequest), isFromPool) as ObjectQueryRequest; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -39,8 +40,9 @@ namespace ET
     {
         public static M2A_Reload Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2A_Reload() : ObjectPool.Instance.Fetch(typeof(M2A_Reload)) as M2A_Reload; 
+            return ObjectPool.Instance.Fetch(typeof(M2A_Reload), isFromPool) as M2A_Reload; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         public override void Dispose() 
@@ -58,8 +60,9 @@ namespace ET
     {
         public static A2M_Reload Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new A2M_Reload() : ObjectPool.Instance.Fetch(typeof(A2M_Reload)) as A2M_Reload; 
+            return ObjectPool.Instance.Fetch(typeof(A2M_Reload), isFromPool) as A2M_Reload; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -84,8 +87,9 @@ namespace ET
     {
         public static G2G_LockRequest Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2G_LockRequest() : ObjectPool.Instance.Fetch(typeof(G2G_LockRequest)) as G2G_LockRequest; 
+            return ObjectPool.Instance.Fetch(typeof(G2G_LockRequest), isFromPool) as G2G_LockRequest; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -109,8 +113,9 @@ namespace ET
     {
         public static G2G_LockResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2G_LockResponse() : ObjectPool.Instance.Fetch(typeof(G2G_LockResponse)) as G2G_LockResponse; 
+            return ObjectPool.Instance.Fetch(typeof(G2G_LockResponse), isFromPool) as G2G_LockResponse; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -135,8 +140,9 @@ namespace ET
     {
         public static G2G_LockReleaseRequest Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2G_LockReleaseRequest() : ObjectPool.Instance.Fetch(typeof(G2G_LockReleaseRequest)) as G2G_LockReleaseRequest; 
+            return ObjectPool.Instance.Fetch(typeof(G2G_LockReleaseRequest), isFromPool) as G2G_LockReleaseRequest; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -160,8 +166,9 @@ namespace ET
     {
         public static G2G_LockReleaseResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2G_LockReleaseResponse() : ObjectPool.Instance.Fetch(typeof(G2G_LockReleaseResponse)) as G2G_LockReleaseResponse; 
+            return ObjectPool.Instance.Fetch(typeof(G2G_LockReleaseResponse), isFromPool) as G2G_LockReleaseResponse; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -186,8 +193,9 @@ namespace ET
     {
         public static ObjectAddRequest Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectAddRequest() : ObjectPool.Instance.Fetch(typeof(ObjectAddRequest)) as ObjectAddRequest; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectAddRequest), isFromPool) as ObjectAddRequest; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -214,8 +222,9 @@ namespace ET
     {
         public static ObjectAddResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectAddResponse() : ObjectPool.Instance.Fetch(typeof(ObjectAddResponse)) as ObjectAddResponse; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectAddResponse), isFromPool) as ObjectAddResponse; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -240,8 +249,9 @@ namespace ET
     {
         public static ObjectLockRequest Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectLockRequest() : ObjectPool.Instance.Fetch(typeof(ObjectLockRequest)) as ObjectLockRequest; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectLockRequest), isFromPool) as ObjectLockRequest; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -271,8 +281,9 @@ namespace ET
     {
         public static ObjectLockResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectLockResponse() : ObjectPool.Instance.Fetch(typeof(ObjectLockResponse)) as ObjectLockResponse; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectLockResponse), isFromPool) as ObjectLockResponse; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -297,8 +308,9 @@ namespace ET
     {
         public static ObjectUnLockRequest Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectUnLockRequest() : ObjectPool.Instance.Fetch(typeof(ObjectUnLockRequest)) as ObjectUnLockRequest; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectUnLockRequest), isFromPool) as ObjectUnLockRequest; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -328,8 +340,9 @@ namespace ET
     {
         public static ObjectUnLockResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectUnLockResponse() : ObjectPool.Instance.Fetch(typeof(ObjectUnLockResponse)) as ObjectUnLockResponse; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectUnLockResponse), isFromPool) as ObjectUnLockResponse; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -354,8 +367,9 @@ namespace ET
     {
         public static ObjectRemoveRequest Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectRemoveRequest() : ObjectPool.Instance.Fetch(typeof(ObjectRemoveRequest)) as ObjectRemoveRequest; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectRemoveRequest), isFromPool) as ObjectRemoveRequest; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -379,8 +393,9 @@ namespace ET
     {
         public static ObjectRemoveResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectRemoveResponse() : ObjectPool.Instance.Fetch(typeof(ObjectRemoveResponse)) as ObjectRemoveResponse; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectRemoveResponse), isFromPool) as ObjectRemoveResponse; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -405,8 +420,9 @@ namespace ET
     {
         public static ObjectGetRequest Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectGetRequest() : ObjectPool.Instance.Fetch(typeof(ObjectGetRequest)) as ObjectGetRequest; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectGetRequest), isFromPool) as ObjectGetRequest; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -430,8 +446,9 @@ namespace ET
     {
         public static ObjectGetResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectGetResponse() : ObjectPool.Instance.Fetch(typeof(ObjectGetResponse)) as ObjectGetResponse; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectGetResponse), isFromPool) as ObjectGetResponse; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -462,8 +479,9 @@ namespace ET
     {
         public static R2G_GetLoginKey Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new R2G_GetLoginKey() : ObjectPool.Instance.Fetch(typeof(R2G_GetLoginKey)) as R2G_GetLoginKey; 
+            return ObjectPool.Instance.Fetch(typeof(R2G_GetLoginKey), isFromPool) as R2G_GetLoginKey; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -484,8 +502,9 @@ namespace ET
     {
         public static G2R_GetLoginKey Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2R_GetLoginKey() : ObjectPool.Instance.Fetch(typeof(G2R_GetLoginKey)) as G2R_GetLoginKey; 
+            return ObjectPool.Instance.Fetch(typeof(G2R_GetLoginKey), isFromPool) as G2R_GetLoginKey; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -515,8 +534,9 @@ namespace ET
     {
         public static G2M_SessionDisconnect Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2M_SessionDisconnect() : ObjectPool.Instance.Fetch(typeof(G2M_SessionDisconnect)) as G2M_SessionDisconnect; 
+            return ObjectPool.Instance.Fetch(typeof(G2M_SessionDisconnect), isFromPool) as G2M_SessionDisconnect; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         public override void Dispose() 
@@ -534,8 +554,9 @@ namespace ET
     {
         public static ObjectQueryResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new ObjectQueryResponse() : ObjectPool.Instance.Fetch(typeof(ObjectQueryResponse)) as ObjectQueryResponse; 
+            return ObjectPool.Instance.Fetch(typeof(ObjectQueryResponse), isFromPool) as ObjectQueryResponse; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -563,8 +584,9 @@ namespace ET
     {
         public static M2M_UnitTransferRequest Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2M_UnitTransferRequest() : ObjectPool.Instance.Fetch(typeof(M2M_UnitTransferRequest)) as M2M_UnitTransferRequest; 
+            return ObjectPool.Instance.Fetch(typeof(M2M_UnitTransferRequest), isFromPool) as M2M_UnitTransferRequest; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -591,8 +613,9 @@ namespace ET
     {
         public static M2M_UnitTransferResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2M_UnitTransferResponse() : ObjectPool.Instance.Fetch(typeof(M2M_UnitTransferResponse)) as M2M_UnitTransferResponse; 
+            return ObjectPool.Instance.Fetch(typeof(M2M_UnitTransferResponse), isFromPool) as M2M_UnitTransferResponse; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -618,8 +641,9 @@ namespace ET
     {
         public static G2Match_Match Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2Match_Match() : ObjectPool.Instance.Fetch(typeof(G2Match_Match)) as G2Match_Match; 
+            return ObjectPool.Instance.Fetch(typeof(G2Match_Match), isFromPool) as G2Match_Match; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -640,8 +664,9 @@ namespace ET
     {
         public static Match2G_Match Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new Match2G_Match() : ObjectPool.Instance.Fetch(typeof(Match2G_Match)) as Match2G_Match; 
+            return ObjectPool.Instance.Fetch(typeof(Match2G_Match), isFromPool) as Match2G_Match; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -666,8 +691,9 @@ namespace ET
     {
         public static Match2Map_GetRoom Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new Match2Map_GetRoom() : ObjectPool.Instance.Fetch(typeof(Match2Map_GetRoom)) as Match2Map_GetRoom; 
+            return ObjectPool.Instance.Fetch(typeof(Match2Map_GetRoom), isFromPool) as Match2Map_GetRoom; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -688,8 +714,9 @@ namespace ET
     {
         public static Map2Match_GetRoom Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new Map2Match_GetRoom() : ObjectPool.Instance.Fetch(typeof(Map2Match_GetRoom)) as Map2Match_GetRoom; 
+            return ObjectPool.Instance.Fetch(typeof(Map2Match_GetRoom), isFromPool) as Map2Match_GetRoom; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -718,8 +745,9 @@ namespace ET
     {
         public static G2Room_Reconnect Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2Room_Reconnect() : ObjectPool.Instance.Fetch(typeof(G2Room_Reconnect)) as G2Room_Reconnect; 
+            return ObjectPool.Instance.Fetch(typeof(G2Room_Reconnect), isFromPool) as G2Room_Reconnect; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -740,8 +768,9 @@ namespace ET
     {
         public static Room2G_Reconnect Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new Room2G_Reconnect() : ObjectPool.Instance.Fetch(typeof(Room2G_Reconnect)) as Room2G_Reconnect; 
+            return ObjectPool.Instance.Fetch(typeof(Room2G_Reconnect), isFromPool) as Room2G_Reconnect; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -775,8 +804,9 @@ namespace ET
     {
         public static RoomManager2Room_Init Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new RoomManager2Room_Init() : ObjectPool.Instance.Fetch(typeof(RoomManager2Room_Init)) as RoomManager2Room_Init; 
+            return ObjectPool.Instance.Fetch(typeof(RoomManager2Room_Init), isFromPool) as RoomManager2Room_Init; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -797,8 +827,9 @@ namespace ET
     {
         public static Room2RoomManager_Init Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new Room2RoomManager_Init() : ObjectPool.Instance.Fetch(typeof(Room2RoomManager_Init)) as Room2RoomManager_Init; 
+            return ObjectPool.Instance.Fetch(typeof(Room2RoomManager_Init), isFromPool) as Room2RoomManager_Init; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]

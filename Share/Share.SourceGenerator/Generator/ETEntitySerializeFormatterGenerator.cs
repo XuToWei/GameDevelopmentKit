@@ -27,7 +27,11 @@ public class ETEntitySerializeFormatterGenerator : ISourceGenerator
         string serializeContent = GenerateSerializeContent(receiver);
         string deserializeContent = GenerateDeserializeContent(receiver);
         string genericTypeParam = context.Compilation.AssemblyName == AnalyzeAssembly.DotNet_Model? "<TBufferWriter>" : "";
+#if NET7_0_OR_GREATER
         string scopedCode = context.Compilation.AssemblyName == AnalyzeAssembly.DotNet_Model? "scoped" : "";
+#else
+        string scopedCode = "";
+#endif
         string code = @"
 #nullable enable
 #pragma warning disable CS0108 // hides inherited member
@@ -125,6 +129,7 @@ namespace ET
         code = code.Replace("{{deserializeContent}}", deserializeContent);
         code = code.Replace("{{genericTypeParam}}", genericTypeParam);
         code = code.Replace("{{scopedCode}}", scopedCode);
+        code = code.Replace("{{Definition.EntityType}}", Definition.EntityType);
         context.AddSource($"ETEntitySerializeFormatterGenerator.g.cs",code);
     }
 

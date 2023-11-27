@@ -9,13 +9,14 @@ namespace ET
     [ResponseType(nameof(NetClient2Main_Login))]
     [Message(Message_ET_Client.Main2NetClient_Login)]
     [MemoryPackable]
-    //protofile : ET-Client/ClientMessage.proto
+    //protofile : ET-ClientServer/ClientMessage.proto
     public partial class Main2NetClient_Login: MessageObject, IRequest
     {
         public static Main2NetClient_Login Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new Main2NetClient_Login() : ObjectPool.Instance.Fetch(typeof(Main2NetClient_Login)) as Main2NetClient_Login; 
+            return ObjectPool.Instance.Fetch(typeof(Main2NetClient_Login), isFromPool) as Main2NetClient_Login; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -37,13 +38,14 @@ namespace ET
 
     [Message(Message_ET_Client.NetClient2Main_Login)]
     [MemoryPackable]
-    //protofile : ET-Client/ClientMessage.proto
+    //protofile : ET-ClientServer/ClientMessage.proto
     public partial class NetClient2Main_Login: MessageObject, IResponse
     {
         public static NetClient2Main_Login Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new NetClient2Main_Login() : ObjectPool.Instance.Fetch(typeof(NetClient2Main_Login)) as NetClient2Main_Login; 
+            return ObjectPool.Instance.Fetch(typeof(NetClient2Main_Login), isFromPool) as NetClient2Main_Login; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -66,13 +68,14 @@ namespace ET
     [ResponseType(nameof(G2C_Match))]
     [Message(Message_ET_Client.C2G_Match)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class C2G_Match: MessageObject, ISessionRequest
     {
         public static C2G_Match Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2G_Match() : ObjectPool.Instance.Fetch(typeof(C2G_Match)) as C2G_Match; 
+            return ObjectPool.Instance.Fetch(typeof(C2G_Match), isFromPool) as C2G_Match; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         public override void Dispose() 
@@ -85,13 +88,14 @@ namespace ET
 
     [Message(Message_ET_Client.G2C_Match)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class G2C_Match: MessageObject, ISessionResponse
     {
         public static G2C_Match Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2C_Match() : ObjectPool.Instance.Fetch(typeof(G2C_Match)) as G2C_Match; 
+            return ObjectPool.Instance.Fetch(typeof(G2C_Match), isFromPool) as G2C_Match; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -111,13 +115,14 @@ namespace ET
 // 匹配成功，通知客户端切换场景
     [Message(Message_ET_Client.Match2G_NotifyMatchSuccess)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class Match2G_NotifyMatchSuccess: MessageObject, IMessage
     {
         public static Match2G_NotifyMatchSuccess Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new Match2G_NotifyMatchSuccess() : ObjectPool.Instance.Fetch(typeof(Match2G_NotifyMatchSuccess)) as Match2G_NotifyMatchSuccess; 
+            return ObjectPool.Instance.Fetch(typeof(Match2G_NotifyMatchSuccess), isFromPool) as Match2G_NotifyMatchSuccess; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 // 房间的ActorId
@@ -135,13 +140,14 @@ namespace ET
 // 客户端通知房间切换场景完成
     [Message(Message_ET_Client.C2Room_ChangeSceneFinish)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class C2Room_ChangeSceneFinish: MessageObject, IRoomMessage
     {
         public static C2Room_ChangeSceneFinish Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2Room_ChangeSceneFinish() : ObjectPool.Instance.Fetch(typeof(C2Room_ChangeSceneFinish)) as C2Room_ChangeSceneFinish; 
+            return ObjectPool.Instance.Fetch(typeof(C2Room_ChangeSceneFinish), isFromPool) as C2Room_ChangeSceneFinish; 
         }
+
         [MemoryPackOrder(0)]
         public long PlayerId { get; set; }
         public override void Dispose() 
@@ -154,13 +160,14 @@ namespace ET
 
     [Message(Message_ET_Client.LockStepUnitInfo)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class LockStepUnitInfo: MessageObject
     {
         public static LockStepUnitInfo Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new LockStepUnitInfo() : ObjectPool.Instance.Fetch(typeof(LockStepUnitInfo)) as LockStepUnitInfo; 
+            return ObjectPool.Instance.Fetch(typeof(LockStepUnitInfo), isFromPool) as LockStepUnitInfo; 
         }
+
         [MemoryPackOrder(0)]
         public long PlayerId { get; set; }
         [MemoryPackOrder(1)]
@@ -180,13 +187,14 @@ namespace ET
 // 房间通知客户端进入战斗
     [Message(Message_ET_Client.Room2C_Start)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class Room2C_Start: MessageObject, IMessage
     {
         public static Room2C_Start Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new Room2C_Start() : ObjectPool.Instance.Fetch(typeof(Room2C_Start)) as Room2C_Start; 
+            return ObjectPool.Instance.Fetch(typeof(Room2C_Start), isFromPool) as Room2C_Start; 
         }
+
         [MemoryPackOrder(0)]
         public long StartTime { get; set; }
         [MemoryPackOrder(1)]
@@ -202,13 +210,14 @@ namespace ET
 
     [Message(Message_ET_Client.FrameMessage)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class FrameMessage: MessageObject, IMessage
     {
         public static FrameMessage Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new FrameMessage() : ObjectPool.Instance.Fetch(typeof(FrameMessage)) as FrameMessage; 
+            return ObjectPool.Instance.Fetch(typeof(FrameMessage), isFromPool) as FrameMessage; 
         }
+
         [MemoryPackOrder(0)]
         public int Frame { get; set; }
         [MemoryPackOrder(1)]
@@ -227,13 +236,14 @@ namespace ET
 
     [Message(Message_ET_Client.OneFrameInputs)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class OneFrameInputs: MessageObject, IMessage
     {
         public static OneFrameInputs Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new OneFrameInputs() : ObjectPool.Instance.Fetch(typeof(OneFrameInputs)) as OneFrameInputs; 
+            return ObjectPool.Instance.Fetch(typeof(OneFrameInputs), isFromPool) as OneFrameInputs; 
         }
+
         [MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]
         [MemoryPackOrder(1)]
         public Dictionary<long, LSInput> Inputs { get; set; } = new();
@@ -247,13 +257,14 @@ namespace ET
 
     [Message(Message_ET_Client.Room2C_AdjustUpdateTime)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class Room2C_AdjustUpdateTime: MessageObject, IMessage
     {
         public static Room2C_AdjustUpdateTime Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new Room2C_AdjustUpdateTime() : ObjectPool.Instance.Fetch(typeof(Room2C_AdjustUpdateTime)) as Room2C_AdjustUpdateTime; 
+            return ObjectPool.Instance.Fetch(typeof(Room2C_AdjustUpdateTime), isFromPool) as Room2C_AdjustUpdateTime; 
         }
+
         [MemoryPackOrder(0)]
         public int DiffTime { get; set; }
         public override void Dispose() 
@@ -266,13 +277,14 @@ namespace ET
 
     [Message(Message_ET_Client.C2Room_CheckHash)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class C2Room_CheckHash: MessageObject, IRoomMessage
     {
         public static C2Room_CheckHash Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2Room_CheckHash() : ObjectPool.Instance.Fetch(typeof(C2Room_CheckHash)) as C2Room_CheckHash; 
+            return ObjectPool.Instance.Fetch(typeof(C2Room_CheckHash), isFromPool) as C2Room_CheckHash; 
         }
+
         [MemoryPackOrder(0)]
         public long PlayerId { get; set; }
         [MemoryPackOrder(1)]
@@ -291,13 +303,14 @@ namespace ET
 
     [Message(Message_ET_Client.Room2C_CheckHashFail)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class Room2C_CheckHashFail: MessageObject, IMessage
     {
         public static Room2C_CheckHashFail Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new Room2C_CheckHashFail() : ObjectPool.Instance.Fetch(typeof(Room2C_CheckHashFail)) as Room2C_CheckHashFail; 
+            return ObjectPool.Instance.Fetch(typeof(Room2C_CheckHashFail), isFromPool) as Room2C_CheckHashFail; 
         }
+
         [MemoryPackOrder(0)]
         public int Frame { get; set; }
         [MemoryPackOrder(1)]
@@ -313,13 +326,14 @@ namespace ET
 
     [Message(Message_ET_Client.G2C_Reconnect)]
     [MemoryPackable]
-    //protofile : ET-Client/LockStepOuter.proto
+    //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class G2C_Reconnect: MessageObject, IMessage
     {
         public static G2C_Reconnect Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2C_Reconnect() : ObjectPool.Instance.Fetch(typeof(G2C_Reconnect)) as G2C_Reconnect; 
+            return ObjectPool.Instance.Fetch(typeof(G2C_Reconnect), isFromPool) as G2C_Reconnect; 
         }
+
         [MemoryPackOrder(0)]
         public long StartTime { get; set; }
         [MemoryPackOrder(1)]
@@ -338,13 +352,14 @@ namespace ET
 
     [Message(Message_ET_Client.HttpGetRouterResponse)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class HttpGetRouterResponse: MessageObject
     {
         public static HttpGetRouterResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new HttpGetRouterResponse() : ObjectPool.Instance.Fetch(typeof(HttpGetRouterResponse)) as HttpGetRouterResponse; 
+            return ObjectPool.Instance.Fetch(typeof(HttpGetRouterResponse), isFromPool) as HttpGetRouterResponse; 
         }
+
         [MemoryPackOrder(0)]
         public List<string> Realms { get; set; } = new List<string>();
         [MemoryPackOrder(1)]
@@ -360,13 +375,14 @@ namespace ET
 
     [Message(Message_ET_Client.RouterSync)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class RouterSync: MessageObject
     {
         public static RouterSync Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new RouterSync() : ObjectPool.Instance.Fetch(typeof(RouterSync)) as RouterSync; 
+            return ObjectPool.Instance.Fetch(typeof(RouterSync), isFromPool) as RouterSync; 
         }
+
         [MemoryPackOrder(0)]
         public uint ConnectId { get; set; }
         [MemoryPackOrder(1)]
@@ -383,13 +399,14 @@ namespace ET
     [ResponseType(nameof(M2C_TestResponse))]
     [Message(Message_ET_Client.C2M_TestRequest)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_TestRequest: MessageObject, ILocationRequest
     {
         public static C2M_TestRequest Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2M_TestRequest() : ObjectPool.Instance.Fetch(typeof(C2M_TestRequest)) as C2M_TestRequest; 
+            return ObjectPool.Instance.Fetch(typeof(C2M_TestRequest), isFromPool) as C2M_TestRequest; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -405,13 +422,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_TestResponse)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_TestResponse: MessageObject, IResponse
     {
         public static M2C_TestResponse Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_TestResponse() : ObjectPool.Instance.Fetch(typeof(M2C_TestResponse)) as M2C_TestResponse; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_TestResponse), isFromPool) as M2C_TestResponse; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -434,13 +452,14 @@ namespace ET
     [ResponseType(nameof(G2C_EnterMap))]
     [Message(Message_ET_Client.C2G_EnterMap)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2G_EnterMap: MessageObject, ISessionRequest
     {
         public static C2G_EnterMap Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2G_EnterMap() : ObjectPool.Instance.Fetch(typeof(C2G_EnterMap)) as C2G_EnterMap; 
+            return ObjectPool.Instance.Fetch(typeof(C2G_EnterMap), isFromPool) as C2G_EnterMap; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         public override void Dispose() 
@@ -453,13 +472,14 @@ namespace ET
 
     [Message(Message_ET_Client.G2C_EnterMap)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_EnterMap: MessageObject, ISessionResponse
     {
         public static G2C_EnterMap Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2C_EnterMap() : ObjectPool.Instance.Fetch(typeof(G2C_EnterMap)) as G2C_EnterMap; 
+            return ObjectPool.Instance.Fetch(typeof(G2C_EnterMap), isFromPool) as G2C_EnterMap; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -482,13 +502,14 @@ namespace ET
 
     [Message(Message_ET_Client.MoveInfo)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class MoveInfo: MessageObject
     {
         public static MoveInfo Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new MoveInfo() : ObjectPool.Instance.Fetch(typeof(MoveInfo)) as MoveInfo; 
+            return ObjectPool.Instance.Fetch(typeof(MoveInfo), isFromPool) as MoveInfo; 
         }
+
         [MemoryPackOrder(0)]
         public List<Unity.Mathematics.float3> Points { get; set; } = new List<Unity.Mathematics.float3>();
         [MemoryPackOrder(1)]
@@ -507,13 +528,14 @@ namespace ET
 
     [Message(Message_ET_Client.UnitInfo)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class UnitInfo: MessageObject
     {
         public static UnitInfo Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new UnitInfo() : ObjectPool.Instance.Fetch(typeof(UnitInfo)) as UnitInfo; 
+            return ObjectPool.Instance.Fetch(typeof(UnitInfo), isFromPool) as UnitInfo; 
         }
+
         [MemoryPackOrder(0)]
         public long UnitId { get; set; }
         [MemoryPackOrder(1)]
@@ -545,13 +567,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_CreateUnits)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_CreateUnits: MessageObject, IMessage
     {
         public static M2C_CreateUnits Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_CreateUnits() : ObjectPool.Instance.Fetch(typeof(M2C_CreateUnits)) as M2C_CreateUnits; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_CreateUnits), isFromPool) as M2C_CreateUnits; 
         }
+
         [MemoryPackOrder(0)]
         public List<UnitInfo> Units { get; set; } = new List<UnitInfo>();
         public override void Dispose() 
@@ -564,13 +587,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_CreateMyUnit)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_CreateMyUnit: MessageObject, IMessage
     {
         public static M2C_CreateMyUnit Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_CreateMyUnit() : ObjectPool.Instance.Fetch(typeof(M2C_CreateMyUnit)) as M2C_CreateMyUnit; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_CreateMyUnit), isFromPool) as M2C_CreateMyUnit; 
         }
+
         [MemoryPackOrder(0)]
         public UnitInfo Unit { get; set; }
         public override void Dispose() 
@@ -583,13 +607,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_StartSceneChange)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_StartSceneChange: MessageObject, IMessage
     {
         public static M2C_StartSceneChange Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_StartSceneChange() : ObjectPool.Instance.Fetch(typeof(M2C_StartSceneChange)) as M2C_StartSceneChange; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_StartSceneChange), isFromPool) as M2C_StartSceneChange; 
         }
+
         [MemoryPackOrder(0)]
         public long SceneInstanceId { get; set; }
         [MemoryPackOrder(1)]
@@ -605,13 +630,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_RemoveUnits)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_RemoveUnits: MessageObject, IMessage
     {
         public static M2C_RemoveUnits Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_RemoveUnits() : ObjectPool.Instance.Fetch(typeof(M2C_RemoveUnits)) as M2C_RemoveUnits; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_RemoveUnits), isFromPool) as M2C_RemoveUnits; 
         }
+
         [MemoryPackOrder(0)]
         public List<long> Units { get; set; } = new List<long>();
         public override void Dispose() 
@@ -624,13 +650,14 @@ namespace ET
 
     [Message(Message_ET_Client.C2M_PathfindingResult)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_PathfindingResult: MessageObject, ILocationMessage
     {
         public static C2M_PathfindingResult Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2M_PathfindingResult() : ObjectPool.Instance.Fetch(typeof(C2M_PathfindingResult)) as C2M_PathfindingResult; 
+            return ObjectPool.Instance.Fetch(typeof(C2M_PathfindingResult), isFromPool) as C2M_PathfindingResult; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -646,13 +673,14 @@ namespace ET
 
     [Message(Message_ET_Client.C2M_Stop)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_Stop: MessageObject, ILocationMessage
     {
         public static C2M_Stop Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2M_Stop() : ObjectPool.Instance.Fetch(typeof(C2M_Stop)) as C2M_Stop; 
+            return ObjectPool.Instance.Fetch(typeof(C2M_Stop), isFromPool) as C2M_Stop; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         public override void Dispose() 
@@ -665,13 +693,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_PathfindingResult)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_PathfindingResult: MessageObject, IMessage
     {
         public static M2C_PathfindingResult Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_PathfindingResult() : ObjectPool.Instance.Fetch(typeof(M2C_PathfindingResult)) as M2C_PathfindingResult; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_PathfindingResult), isFromPool) as M2C_PathfindingResult; 
         }
+
         [MemoryPackOrder(0)]
         public long Id { get; set; }
         [MemoryPackOrder(1)]
@@ -690,13 +719,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_Stop)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_Stop: MessageObject, IMessage
     {
         public static M2C_Stop Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_Stop() : ObjectPool.Instance.Fetch(typeof(M2C_Stop)) as M2C_Stop; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_Stop), isFromPool) as M2C_Stop; 
         }
+
         [MemoryPackOrder(0)]
         public int Error { get; set; }
         [MemoryPackOrder(1)]
@@ -719,13 +749,14 @@ namespace ET
     [ResponseType(nameof(G2C_Ping))]
     [Message(Message_ET_Client.C2G_Ping)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2G_Ping: MessageObject, ISessionRequest
     {
         public static C2G_Ping Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2G_Ping() : ObjectPool.Instance.Fetch(typeof(C2G_Ping)) as C2G_Ping; 
+            return ObjectPool.Instance.Fetch(typeof(C2G_Ping), isFromPool) as C2G_Ping; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         public override void Dispose() 
@@ -738,13 +769,14 @@ namespace ET
 
     [Message(Message_ET_Client.G2C_Ping)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_Ping: MessageObject, ISessionResponse
     {
         public static G2C_Ping Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2C_Ping() : ObjectPool.Instance.Fetch(typeof(G2C_Ping)) as G2C_Ping; 
+            return ObjectPool.Instance.Fetch(typeof(G2C_Ping), isFromPool) as G2C_Ping; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -766,13 +798,14 @@ namespace ET
 
     [Message(Message_ET_Client.G2C_Test)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_Test: MessageObject, ISessionMessage
     {
         public static G2C_Test Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2C_Test() : ObjectPool.Instance.Fetch(typeof(G2C_Test)) as G2C_Test; 
+            return ObjectPool.Instance.Fetch(typeof(G2C_Test), isFromPool) as G2C_Test; 
         }
+
         public override void Dispose() 
         {
             if (!this.IsFromPool) return;
@@ -783,13 +816,14 @@ namespace ET
     [ResponseType(nameof(M2C_Reload))]
     [Message(Message_ET_Client.C2M_Reload)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_Reload: MessageObject, ISessionRequest
     {
         public static C2M_Reload Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2M_Reload() : ObjectPool.Instance.Fetch(typeof(C2M_Reload)) as C2M_Reload; 
+            return ObjectPool.Instance.Fetch(typeof(C2M_Reload), isFromPool) as C2M_Reload; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -808,13 +842,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_Reload)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_Reload: MessageObject, ISessionResponse
     {
         public static M2C_Reload Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_Reload() : ObjectPool.Instance.Fetch(typeof(M2C_Reload)) as M2C_Reload; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_Reload), isFromPool) as M2C_Reload; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -834,13 +869,14 @@ namespace ET
     [ResponseType(nameof(R2C_Login))]
     [Message(Message_ET_Client.C2R_Login)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2R_Login: MessageObject, ISessionRequest
     {
         public static C2R_Login Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2R_Login() : ObjectPool.Instance.Fetch(typeof(C2R_Login)) as C2R_Login; 
+            return ObjectPool.Instance.Fetch(typeof(C2R_Login), isFromPool) as C2R_Login; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -859,13 +895,14 @@ namespace ET
 
     [Message(Message_ET_Client.R2C_Login)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class R2C_Login: MessageObject, ISessionResponse
     {
         public static R2C_Login Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new R2C_Login() : ObjectPool.Instance.Fetch(typeof(R2C_Login)) as R2C_Login; 
+            return ObjectPool.Instance.Fetch(typeof(R2C_Login), isFromPool) as R2C_Login; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -894,13 +931,14 @@ namespace ET
     [ResponseType(nameof(G2C_LoginGate))]
     [Message(Message_ET_Client.C2G_LoginGate)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2G_LoginGate: MessageObject, ISessionRequest
     {
         public static C2G_LoginGate Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2G_LoginGate() : ObjectPool.Instance.Fetch(typeof(C2G_LoginGate)) as C2G_LoginGate; 
+            return ObjectPool.Instance.Fetch(typeof(C2G_LoginGate), isFromPool) as C2G_LoginGate; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -919,13 +957,14 @@ namespace ET
 
     [Message(Message_ET_Client.G2C_LoginGate)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_LoginGate: MessageObject, ISessionResponse
     {
         public static G2C_LoginGate Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2C_LoginGate() : ObjectPool.Instance.Fetch(typeof(G2C_LoginGate)) as G2C_LoginGate; 
+            return ObjectPool.Instance.Fetch(typeof(G2C_LoginGate), isFromPool) as G2C_LoginGate; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -947,13 +986,14 @@ namespace ET
 
     [Message(Message_ET_Client.G2C_TestHotfixMessage)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_TestHotfixMessage: MessageObject, ISessionMessage
     {
         public static G2C_TestHotfixMessage Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2C_TestHotfixMessage() : ObjectPool.Instance.Fetch(typeof(G2C_TestHotfixMessage)) as G2C_TestHotfixMessage; 
+            return ObjectPool.Instance.Fetch(typeof(G2C_TestHotfixMessage), isFromPool) as G2C_TestHotfixMessage; 
         }
+
         [MemoryPackOrder(0)]
         public string Info { get; set; }
         public override void Dispose() 
@@ -967,13 +1007,14 @@ namespace ET
     [ResponseType(nameof(M2C_TestRobotCase))]
     [Message(Message_ET_Client.C2M_TestRobotCase)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_TestRobotCase: MessageObject, ILocationRequest
     {
         public static C2M_TestRobotCase Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2M_TestRobotCase() : ObjectPool.Instance.Fetch(typeof(C2M_TestRobotCase)) as C2M_TestRobotCase; 
+            return ObjectPool.Instance.Fetch(typeof(C2M_TestRobotCase), isFromPool) as C2M_TestRobotCase; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -989,13 +1030,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_TestRobotCase)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_TestRobotCase: MessageObject, ILocationResponse
     {
         public static M2C_TestRobotCase Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_TestRobotCase() : ObjectPool.Instance.Fetch(typeof(M2C_TestRobotCase)) as M2C_TestRobotCase; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_TestRobotCase), isFromPool) as M2C_TestRobotCase; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -1017,13 +1059,14 @@ namespace ET
 
     [Message(Message_ET_Client.C2M_TestRobotCase2)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_TestRobotCase2: MessageObject, ILocationMessage
     {
         public static C2M_TestRobotCase2 Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2M_TestRobotCase2() : ObjectPool.Instance.Fetch(typeof(C2M_TestRobotCase2)) as C2M_TestRobotCase2; 
+            return ObjectPool.Instance.Fetch(typeof(C2M_TestRobotCase2), isFromPool) as C2M_TestRobotCase2; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -1039,13 +1082,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_TestRobotCase2)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_TestRobotCase2: MessageObject, ILocationMessage
     {
         public static M2C_TestRobotCase2 Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_TestRobotCase2() : ObjectPool.Instance.Fetch(typeof(M2C_TestRobotCase2)) as M2C_TestRobotCase2; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_TestRobotCase2), isFromPool) as M2C_TestRobotCase2; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -1062,13 +1106,14 @@ namespace ET
     [ResponseType(nameof(M2C_TransferMap))]
     [Message(Message_ET_Client.C2M_TransferMap)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_TransferMap: MessageObject, ILocationRequest
     {
         public static C2M_TransferMap Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2M_TransferMap() : ObjectPool.Instance.Fetch(typeof(C2M_TransferMap)) as C2M_TransferMap; 
+            return ObjectPool.Instance.Fetch(typeof(C2M_TransferMap), isFromPool) as C2M_TransferMap; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         public override void Dispose() 
@@ -1081,13 +1126,14 @@ namespace ET
 
     [Message(Message_ET_Client.M2C_TransferMap)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_TransferMap: MessageObject, ILocationResponse
     {
         public static M2C_TransferMap Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new M2C_TransferMap() : ObjectPool.Instance.Fetch(typeof(M2C_TransferMap)) as M2C_TransferMap; 
+            return ObjectPool.Instance.Fetch(typeof(M2C_TransferMap), isFromPool) as M2C_TransferMap; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
@@ -1107,13 +1153,14 @@ namespace ET
     [ResponseType(nameof(G2C_Benchmark))]
     [Message(Message_ET_Client.C2G_Benchmark)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2G_Benchmark: MessageObject, ISessionRequest
     {
         public static C2G_Benchmark Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new C2G_Benchmark() : ObjectPool.Instance.Fetch(typeof(C2G_Benchmark)) as C2G_Benchmark; 
+            return ObjectPool.Instance.Fetch(typeof(C2G_Benchmark), isFromPool) as C2G_Benchmark; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         public override void Dispose() 
@@ -1126,13 +1173,14 @@ namespace ET
 
     [Message(Message_ET_Client.G2C_Benchmark)]
     [MemoryPackable]
-    //protofile : ET-Client/OuterMessage.proto
+    //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_Benchmark: MessageObject, ISessionResponse
     {
         public static G2C_Benchmark Create(bool isFromPool = true) 
         { 
-            return !isFromPool? new G2C_Benchmark() : ObjectPool.Instance.Fetch(typeof(G2C_Benchmark)) as G2C_Benchmark; 
+            return ObjectPool.Instance.Fetch(typeof(G2C_Benchmark), isFromPool) as G2C_Benchmark; 
         }
+
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]

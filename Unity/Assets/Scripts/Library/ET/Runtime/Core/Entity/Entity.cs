@@ -22,7 +22,6 @@ namespace ET
 #if UNITY_ET_VIEW && UNITY_EDITOR
         [BsonIgnore]
         [MemoryPackIgnore]
-        [UnityEngine.HideInInspector]
         private UnityEngine.GameObject viewGO;
 
         [BsonIgnore]
