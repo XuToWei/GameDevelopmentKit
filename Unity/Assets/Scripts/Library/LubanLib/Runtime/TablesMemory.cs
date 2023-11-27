@@ -1,15 +1,12 @@
 using System;
 using System.Diagnostics;
-using ET;
 
 namespace Bright.Serialization
 {
     public static class TablesMemory
     {
-        [StaticField]
         public static long MemorySize { get; private set; } = 0;
 
-        [StaticField]
         private static long s_TotalMemorySize;
 
         [Conditional("UNITY_EDITOR")]

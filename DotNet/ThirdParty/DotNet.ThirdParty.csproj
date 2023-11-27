@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>ET</RootNamespace>
+        <Nullable>disable</Nullable>
         <LangVersion>10</LangVersion>
-        <AssemblyName>Library</AssemblyName>
+        <RootNamespace>ET</RootNamespace>
+        <AssemblyName>ThirdParty</AssemblyName>
     </PropertyGroup>
     <PropertyGroup>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -24,21 +25,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="..\..\Unity\Assets\Scripts\Library\ET\Runtime\**\*.cs">
+        <Compile Include="..\..\Unity\Assets\Scripts\Library\ET\Runtime\ThirdParty\**\*.cs">
             <Link>ET/%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
-
         <Compile Include="..\..\Unity\Assets\Scripts\Library\LubanLib\Runtime\**\*.cs">
             <Link>LubanLib/%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
-
         <Compile Include="..\..\Unity\Library\PackageCache\com.unity.mathematics*\Unity.Mathematics\**\*.cs">
             <Link>Unity.Mathematics/$([System.String]::new(%(RecursiveDir)).Substring($([System.String]::new(%(RecursiveDir)).Indexof("Unity.Mathematics"))).Replace("Unity.Mathematics", ""))/%(FileName)%(Extension)</Link>
         </Compile>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Share\Analyzer\Share.Analyzer.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="..\..\Share\Share.SourceGenerator\Share.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <PackageReference Include="CommandLineParser" Version="2.8.0" />
         <PackageReference Include="MongoDB.Driver" Version="2.17.1" />
         <PackageReference Include="NLog" Version="4.7.15" />

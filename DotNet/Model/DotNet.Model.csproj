@@ -28,15 +28,12 @@
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Server\**\*.cs"> 
             <Link>Server\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
-
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Client\**\*.cs"> 
             <Link>Client\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
-        
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Share\**\*.cs">
             <Link>Share\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
-
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Generate\ClientServer\**\*.cs"> 
             <Link>Generate\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
@@ -44,7 +41,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\Share\Analyzer\Share.Analyzer.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <ProjectReference Include="..\..\Share\Share.SourceGenerator\Share.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="..\Loader\DotNet.Loader.csproj" />
-        <ProjectReference Include="..\Library\DotNet.Library.csproj" />
+        <ProjectReference Include="..\Core\DotNet.Core.csproj" />
+        <ProjectReference Include="..\ThirdParty\DotNet.ThirdParty.csproj" />
     </ItemGroup>
 </Project>

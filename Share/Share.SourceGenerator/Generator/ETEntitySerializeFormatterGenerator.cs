@@ -28,7 +28,7 @@ public class ETEntitySerializeFormatterGenerator : ISourceGenerator
         string deserializeContent = GenerateDeserializeContent(receiver);
         string genericTypeParam = context.Compilation.AssemblyName == AnalyzeAssembly.DotNet_Model? "<TBufferWriter>" : "";
         string scopedCode = context.Compilation.AssemblyName == AnalyzeAssembly.DotNet_Model? "scoped" : "";
-        string code = @"""
+        string code = @"
 #nullable enable
 #pragma warning disable CS0108 // hides inherited member
 #pragma warning disable CS0162 // Unreachable code
@@ -118,13 +118,13 @@ namespace ET
         }
     }
 }
-""";
-        code = code.Replace("{count}", count.ToString());
-        code = code.Replace("{typeHashCodeMapDeclaration}", typeHashCodeMapDeclaration);
-        code = code.Replace("{serializeContent}", serializeContent);
-        code = code.Replace("{deserializeContent}", deserializeContent);
-        code = code.Replace("{genericTypeParam}", genericTypeParam);
-        code = code.Replace("{scopedCode}", scopedCode);
+";
+        code = code.Replace("{{count}}", count.ToString());
+        code = code.Replace("{{typeHashCodeMapDeclaration}}", typeHashCodeMapDeclaration);
+        code = code.Replace("{{serializeContent}}", serializeContent);
+        code = code.Replace("{{deserializeContent}}", deserializeContent);
+        code = code.Replace("{{genericTypeParam}}", genericTypeParam);
+        code = code.Replace("{{scopedCode}}", scopedCode);
         context.AddSource($"ETEntitySerializeFormatterGenerator.g.cs",code);
     }
 
@@ -134,8 +134,8 @@ namespace ET
         foreach (var entityName in receiver.entities)
         {
             string str = "        { typeof(global::{{entityName}}), {{entityName.GetLongHashCode()}} },";
-            str = str.Replace("{entityName}", entityName);
-            str = str.Replace("{entityName.GetLongHashCode()}", entityName.GetLongHashCode().ToString());
+            str = str.Replace("{{entityName}}", entityName);
+            str = str.Replace("{{entityName.GetLongHashCode()}}", entityName.GetLongHashCode().ToString());
             sb.AppendLine(str);
         }
         return sb.ToString();
@@ -147,9 +147,9 @@ namespace ET
         foreach (var entityName in receiver.entities)
         {
             string str = "                case {{entityName.GetLongHashCode()}}: writer.WritePackable(System.Runtime.CompilerServices.Unsafe.As<global::{{Definition.EntityType}}?, global::{{entityName}}>(ref value)); break;";
-            str = str.Replace("{entityName.GetLongHashCode()}", entityName.GetLongHashCode().ToString());
-            str = str.Replace("{Definition.EntityType}", Definition.EntityType);
-            str = str.Replace("{entityName}", entityName);
+            str = str.Replace("{{entityName.GetLongHashCode()}}", entityName.GetLongHashCode().ToString());
+            str = str.Replace("{{Definition.EntityType}}", Definition.EntityType);
+            str = str.Replace("{{entityName}}", entityName);
             sb.AppendLine(str);
         }
         return sb.ToString();
@@ -160,7 +160,7 @@ namespace ET
         StringBuilder sb = new StringBuilder();
         foreach (var entityName in receiver.entities)
         {
-            string str = @"""
+            string str = @"
             case {{entityName.GetLongHashCode()}}:
                     if(value is global::{{entityName}})
                     {
@@ -169,10 +169,10 @@ namespace ET
                         value = (global::{{entityName}})reader.ReadPackable<global::{{entityName}}>();
                     }
                     break;
-""";
-            str = str.Replace("{entityName.GetLongHashCode()}", entityName.GetLongHashCode().ToString());
-            str = str.Replace("{entityName}", entityName);
-            str = str.Replace("{Definition.EntityType}", Definition.EntityType);
+";
+            str = str.Replace("{{entityName.GetLongHashCode()}}", entityName.GetLongHashCode().ToString());
+            str = str.Replace("{{entityName}}", entityName);
+            str = str.Replace("{{Definition.EntityType}}", Definition.EntityType);
             sb.AppendLine(str);
         }
         return sb.ToString();

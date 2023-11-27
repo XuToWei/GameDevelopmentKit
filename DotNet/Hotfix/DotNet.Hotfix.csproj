@@ -25,12 +25,10 @@
     <ItemGroup>
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Client\**\*.cs"> 
             <Link>Client\%(RecursiveDir)%(FileName)%(Extension)</Link>
-        </Compile> 
-
+        </Compile>
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Server\**\*.cs">
             <Link>Server\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
-
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Hotfix\Share\**\*.cs">
             <Link>Share\%(RecursiveDir)%(FileName)%(Extension)</Link> 
         </Compile> 
@@ -41,5 +39,4 @@
         <ProjectReference Include="..\Loader\DotNet.Loader.csproj" />
         <ProjectReference Include="..\Model\DotNet.Model.csproj" />
     </ItemGroup>
-
 </Project>

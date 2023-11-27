@@ -143,7 +143,7 @@ public class ETSystemGenerator: ISourceGenerator
                     
                 string template = this.templates.Get(attributeType);
                     
-                string code = @"""
+                string code = @"
 namespace {{namespaceName}}
 {
     public static partial class {{className}}
@@ -151,10 +151,10 @@ namespace {{namespaceName}}
         {{template}}
     }
 }
-""";
-                code = code.Replace("{namespaceName}", namespaceName);
-                code = code.Replace("{className}", className);
-                code = code.Replace("{template}", template);
+";
+                code = code.Replace("{{namespaceName}}", namespaceName);
+                code = code.Replace("{{className}}", className);
+                code = code.Replace("{{template}}", template);
 
                 string argsVars = string.Join(", ", argsVarsList);
                 string argsTypes = string.Join(", ", argsTypesList);
