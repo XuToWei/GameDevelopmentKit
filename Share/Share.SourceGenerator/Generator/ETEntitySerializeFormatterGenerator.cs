@@ -12,13 +12,12 @@ public class ETEntitySerializeFormatterGenerator : ISourceGenerator
 {
     public void Initialize(GeneratorInitializationContext context)
     {
-        context.RegisterForSyntaxNotifications((() => ETEntitySerializeFormatterSyntaxContextReceiver.Create()));
+        context.RegisterForSyntaxNotifications(() => ETEntitySerializeFormatterSyntaxContextReceiver.Create());
     }
 
     public void Execute(GeneratorExecutionContext context)
     {
-        
-        if (context.SyntaxContextReceiver is not ETEntitySerializeFormatterSyntaxContextReceiver receiver || receiver.entities.Count==0)
+        if (context.SyntaxContextReceiver is not ETEntitySerializeFormatterSyntaxContextReceiver receiver || receiver.entities.Count == 0)
         {
             return;
         }
@@ -130,7 +129,7 @@ namespace ET
         code = code.Replace("{{genericTypeParam}}", genericTypeParam);
         code = code.Replace("{{scopedCode}}", scopedCode);
         code = code.Replace("{{Definition.EntityType}}", Definition.EntityType);
-        context.AddSource($"ETEntitySerializeFormatterGenerator.g.cs",code);
+        context.AddSource($"ETEntitySerializeFormatterGenerator.g.cs", code);
     }
 
     private string GenerateTypeHashCodeMapDeclaration(ETEntitySerializeFormatterSyntaxContextReceiver receiver)

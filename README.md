@@ -77,7 +77,7 @@
 # 引用库 致谢
 [UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
 
-[ET](https://github.com/egametang/ET)（版本：[8.0](https://github.com/egametang/ET/commit/4b2a86baf51fab61676b6888def2ff44c56f5382)）
+[ET](https://github.com/egametang/ET)（版本：[8.0](https://github.com/egametang/ET/commit/28e8136880eb1b4bf9306e35ab945a68d5dd8632)）
 
 [Luban](https://github.com/focus-creative-games/luban)
 
