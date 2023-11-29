@@ -7,7 +7,7 @@ namespace ET
     {
         public static async UniTask CancelAfter(this CancellationTokenSource self, Fiber fiber, long afterTimeCancel)
         {
-            if (self.IsCancellationRequested)
+            if (self.IsCancel())
             {
                 return;
             }
@@ -20,6 +20,15 @@ namespace ET
             }
             
             self.Cancel();
+        }
+        
+        public static bool IsCancel(this CancellationTokenSource self)
+        {
+            if (self == null)
+            {
+                return false;
+            }
+            return self.IsCancellationRequested;
         }
     }
 }

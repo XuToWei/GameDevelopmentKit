@@ -21,7 +21,7 @@ namespace ET.Client
             
             // 一直等到unit发送stop
             Wait_UnitStop waitUnitStop = await objectWait.Wait<Wait_UnitStop>(cts);
-            if (cts == null || cts.IsCancellationRequested)
+            if (cts.IsCancel())
             {
                 return WaitTypeError.Cancel;
             }

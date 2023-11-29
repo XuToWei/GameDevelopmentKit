@@ -8,11 +8,9 @@ namespace UnityGameFramework.Extension
     {
         public delegate bool MoveNextFunc<T>(ref UniTaskCompletionSourceCore<T> core);
         
-        public static UniTask<T> NewUniTask<T>(MoveNextFunc<T> moveNext, 
-            CancellationToken cancellationToken = default, Action returnAction = null)
+        public static UniTask<T> NewUniTask<T>(MoveNextFunc<T> moveNext, CancellationToken cancellationToken = default, Action returnAction = null)
         {
-            return new UniTask<T>(UniTaskConfiguredSource<T>.Create
-                (moveNext, PlayerLoopTiming.LastUpdate, cancellationToken, returnAction, out short token), token);
+            return new UniTask<T>(UniTaskConfiguredSource<T>.Create(moveNext, PlayerLoopTiming.LastUpdate, cancellationToken, returnAction, out short token), token);
         }
 
         sealed class UniTaskConfiguredSource<T> : IUniTaskSource<T>, IPlayerLoopItem, ITaskPoolNode<UniTaskConfiguredSource<T>>
@@ -37,8 +35,7 @@ namespace UnityGameFramework.Extension
 
             }
 
-            public static IUniTaskSource<T> Create(MoveNextFunc<T> moveNext, PlayerLoopTiming timing, 
-                CancellationToken cancellationToken, Action returnAction, out short token)
+            public static IUniTaskSource<T> Create(MoveNextFunc<T> moveNext, PlayerLoopTiming timing, CancellationToken cancellationToken, Action returnAction, out short token)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {

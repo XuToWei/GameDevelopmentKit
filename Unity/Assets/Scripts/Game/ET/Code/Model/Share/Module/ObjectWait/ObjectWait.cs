@@ -112,7 +112,7 @@ namespace ET
             async UniTaskVoid WaitTimeout()
             {
                 await self.Root().GetComponent<TimerComponent>().WaitAsync(timeout, cts);
-                if (cts == null || cts.IsCancellationRequested)
+                if (cts.IsCancel())
                 {
                     return;
                 }

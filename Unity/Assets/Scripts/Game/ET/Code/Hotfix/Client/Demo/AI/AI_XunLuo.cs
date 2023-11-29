@@ -33,7 +33,7 @@ namespace ET.Client
                 XunLuoPathComponent xunLuoPathComponent = myUnit.GetComponent<XunLuoPathComponent>();
                 float3 nextTarget = xunLuoPathComponent.GetCurrent();
                 await myUnit.MoveToAsync(nextTarget, cts);
-                if (cts == null || cts.IsCancellationRequested)
+                if (cts.IsCancel())
                 {
                     return;
                 }
