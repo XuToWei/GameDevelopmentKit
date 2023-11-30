@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Game;
+using UnityEngine;
 
 namespace ET.Client
 {
@@ -9,7 +10,7 @@ namespace ET.Client
 		[EntitySystem]
 		private static void Awake(this LSCameraComponent self)
 		{
-			self.Camera = Camera.main;
+			self.Camera = GameEntry.Camera.SceneCamera;
 			self.Camera.transform.rotation = Quaternion.Euler(new Vector3(20, 0, 0));
 		}
 		
