@@ -14,7 +14,7 @@ namespace UnityGameFramework.Extension
     public class ResourceListComponent : GameFrameworkComponent
     {
         public const string BytesDataFilePath = "Assets/Res/Config/ResourceList.bytes";
-        [ShowInInspector]
+        [ShowInInspector][ReadOnly]
         private readonly Dictionary<string, string> m_ResourceNamePathDict = new Dictionary<string, string>();
         public Dictionary<string,string> ResourceNamePathDict => m_ResourceNamePathDict;
 
