@@ -5,8 +5,8 @@ rd/s /q %DESTINATION%\Unity\Assets\Scripts\Game\ET\Code\ModelView
 rd/s /q %DESTINATION%\Unity\Assets\Scripts\Game\ET\Code\Model
 rd/s /q %DESTINATION%\Unity\Assets\Scripts\Game\ET\Code\HotfixView
 rd/s /q %DESTINATION%\Unity\Assets\Scripts\Game\ET\Code\Hotfix
-rd/s /q %DESTINATION%\Unity\Assets\Scripts\Game\Library\ET\Runtime\Core
-rd/s /q %DESTINATION%\Unity\Assets\Scripts\Game\Library\ET\Runtime\ThirdParty
+rd/s /q %DESTINATION%\Unity\Assets\Scripts\Library\ET\Runtime\Core
+rd/s /q %DESTINATION%\Unity\Assets\Scripts\Library\ET\Runtime\ThirdParty
 rd/s /q %DESTINATION%\Unity\Assets\Scripts\Library\ET\Editor\ComponentView
 rd/s /q %DESTINATION%\Unity\Assets\Scripts\Library\ET\Editor\RecastNavDataExporter
 rd/s /q %DESTINATION%\Unity\Assets\Scripts\Game\ET\Editor\PostProcessor
@@ -33,7 +33,7 @@ xcopy %SOURCE%\Unity\Assets\Scripts\Editor\RecastNavDataExporter %DESTINATION%\U
 xcopy %SOURCE%\Unity\Assets\Scripts\Editor\AssetPostProcessor %DESTINATION%\Unity\Assets\Scripts\Game\ET\Editor\PostProcessor /s /e /i
 xcopy %SOURCE%\DotNet %DESTINATION%\DotNet /s /e /i
 xcopy %SOURCE%\Share %DESTINATION%\Share /s /e /i
-xcopy %SOURCE%\Config %DESTINATION%\Design /s /e /i
+xcopy %SOURCE%\Unity\Assets\Config %DESTINATION%\Design /s /e /i
 xcopy %SOURCE%\Tools\Config %DESTINATION%\Tools\Config /s /e /i
 xcopy %SOURCE%\Tools\cwRsync %DESTINATION%\Tools\cwRsync /s /e /i
 xcopy %SOURCE%\Tools\RecastNavExportor %DESTINATION%\Tools\RecastNavExportor /s /e /i

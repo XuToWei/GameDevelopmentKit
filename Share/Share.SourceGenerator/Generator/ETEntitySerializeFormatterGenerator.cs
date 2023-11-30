@@ -193,7 +193,8 @@ namespace ET
         
         public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
         {
-            if (!AnalyzerHelper.IsSemanticModelNeedAnalyze(context.SemanticModel, UnityCodesPath.Unity_ET_Code_Model))
+            if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.SemanticModel.Compilation.AssemblyName,AnalyzeAssembly.Unity_ET_Code_Model) 
+                && !AnalyzerHelper.IsSemanticModelNeedAnalyze(context.SemanticModel, UnityCodesPath.Unity_ET_Code_Model))
             {
                 return;
             }

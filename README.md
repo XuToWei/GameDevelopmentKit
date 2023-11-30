@@ -49,7 +49,7 @@
 
 ### Unity Editor
 
-- 1.安装 [.net6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)，服务器功能需要安装[MonogoDB](https://www.mongodb.com/)
+- 1.安装 [.net6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)，服务器功能需要安装[MongoDB](https://www.mongodb.com/)
 
 - 2.打开Unity项目，等待Unity编译完成
 
@@ -64,7 +64,7 @@
 
 - 1.[代码热更处理](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)
 
-- 2.[一键打包](../Book/%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85.md)，运行程序即可
+- 2.[一键打包](Book/%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85.md)，运行程序即可
 
 ***
 
@@ -77,7 +77,7 @@
 # 引用库 致谢
 [UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
 
-[ET](https://github.com/egametang/ET)（版本：[8.0](https://github.com/egametang/ET/commit/28e8136880eb1b4bf9306e35ab945a68d5dd8632)）
+[ET](https://github.com/egametang/ET)（版本：[8.0](https://github.com/egametang/ET/commit/fc19a2d5df23187d9937ec96f6fe35c8cc628d66)）
 
 [Luban](https://github.com/focus-creative-games/luban)
 

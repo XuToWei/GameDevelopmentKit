@@ -12,6 +12,7 @@ rd/s /q %DESTINATION%\Unity\Assets\Scripts\Editor\RecastNavDataExporter
 rd/s /q %DESTINATION%\Unity\Assets\Scripts\Editor\AssetPostProcessor
 rd/s /q %DESTINATION%\DotNet
 rd/s /q %DESTINATION%\Share
+rd/s /q %DESTINATION%\Unity\Assets\Config
 rd/s /q %DESTINATION%\Config
 rd/s /q %DESTINATION%\Tools\Config
 rd/s /q %DESTINATION%\Tools\cwRsync
@@ -33,6 +34,7 @@ xcopy %SOURCE%\Unity\Assets\Scripts\Library\ET\Editor\ComponentView %DESTINATION
 xcopy %SOURCE%\Unity\Assets\Scripts\Library\ET\Editor\RecastNavDataExporter %DESTINATION%\Unity\Assets\Scripts\Editor\RecastNavDataExporter /s /e /i
 xcopy %SOURCE%\DotNet %DESTINATION%\DotNet /s /e /i
 xcopy %SOURCE%\Share %DESTINATION%\Share /s /e /i
+xcopy %SOURCE%\Design %DESTINATION%\Unity\Assets\Config /s /e /i
 xcopy %SOURCE%\Config %DESTINATION%\Config /s /e /i
 xcopy %SOURCE%\Tools\Config %DESTINATION%\Tools\Config /s /e /i
 xcopy %SOURCE%\Tools\cwRsync %DESTINATION%\Tools\cwRsync /s /e /i

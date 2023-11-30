@@ -9,7 +9,7 @@ namespace ET.Server
         protected override async UniTask Run(Scene root, RoomManager2Room_Init request, Room2RoomManager_Init response)
         {
             Room room = root.AddComponent<Room>();
-            
+            room.Name = "Server";
             room.AddComponent<RoomServerComponent, List<long>>(request.PlayerIds);
 
             room.LSWorld = new LSWorld(SceneType.LockStepServer);
