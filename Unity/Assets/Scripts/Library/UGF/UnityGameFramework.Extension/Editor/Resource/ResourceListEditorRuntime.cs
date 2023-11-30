@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityGameFramework.Editor.ResourceTools;
 
 namespace UnityGameFramework.Extension.Editor
@@ -7,15 +9,27 @@ namespace UnityGameFramework.Extension.Editor
     {
         public void GenerateList(ref Dictionary<string, string> namePathDict)
         {
-            ResourceEditorController controller = new ResourceEditorController();
-            controller.Load();
-            controller.ScanSourceAssets();
-            Resource[] resources = controller.GetResources();
-            foreach (var resource in resources)
+            List<string> allConfigPaths = AssetDatabase.FindAssets("t:ResourceRuleEditorData").Select(AssetDatabase.GUIDToAssetPath).ToList();
+            foreach (var configPath in allConfigPaths)
             {
-                foreach (Asset asset in resource.GetAssets())
+                ResourceRuleEditorData ruleEditorData = AssetDatabase.LoadAssetAtPath<ResourceRuleEditorData>(configPath);
+                if (ruleEditorData.isActivate)
                 {
-                    namePathDict.Add(ResourceListGenerator.GetNewName(asset.Name), asset.Name);
+                    List<string> coveredAssetSearchPaths = new List<string>();
+                    foreach (ResourceRule rule in ruleEditorData.rules)
+                    {
+                        if (rule.valid)
+                        {
+                            coveredAssetSearchPaths.Add(rule.assetsDirectoryPath.Replace("Assets/Res/", ""));
+                        }
+                    }
+                    ResourceEditorController controller = new ResourceEditorController();
+                    controller.Load(coveredAssetSearchPaths);
+                    SourceAsset[] assets = controller.GetSourceAssets();
+                    foreach (SourceAsset asset in assets)
+                    {
+                        namePathDict.Add(ResourceListGenerator.GetNewName(asset.Path), asset.Path);
+                    }
                 }
             }
         }

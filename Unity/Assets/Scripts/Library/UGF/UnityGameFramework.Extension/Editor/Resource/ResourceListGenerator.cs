@@ -23,12 +23,7 @@ namespace UnityGameFramework.Extension.Editor
         }
 
         private Asset[] m_Assets;
-        private readonly SortedDictionary<string, string> m_ResourceListInfoDict;
-
-        public ResourceListGenerator()
-        {
-            m_ResourceListInfoDict = new SortedDictionary<string, string>();
-        }
+        private readonly SortedDictionary<string, string> m_ResourceListInfoDict = new();
 
         public void GenerateList(ResourceCollection resourceCollection = null)
         {

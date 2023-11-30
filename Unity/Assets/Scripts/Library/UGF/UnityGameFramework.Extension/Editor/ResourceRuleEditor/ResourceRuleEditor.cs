@@ -44,7 +44,7 @@ namespace UnityGameFramework.Extension.Editor
         }
 
         [OnOpenAsset]
-        public static bool OnOpenAsset (int instanceID, int line)
+        public static bool OnOpenAsset(int instanceID, int line)
         {
             var config = EditorUtility.InstanceIDToObject (instanceID) as ResourceRuleEditorData;
             if (config != null)
@@ -58,7 +58,7 @@ namespace UnityGameFramework.Extension.Editor
             }
             return false; // we did not handle the open
         }
-        void OnSelectionChange ()
+        void OnSelectionChange()
         {
             var config = Selection.activeObject as ResourceRuleEditorData;
             if (config != null && config != m_Configuration)
@@ -290,7 +290,6 @@ namespace UnityGameFramework.Extension.Editor
 #endif
                 }
             }
-
             return null;
         }
 
