@@ -217,12 +217,7 @@ namespace UnityGameFramework.Editor.ResourceTools
 
         public event GameFrameworkAction<SourceAsset[]> OnAssetUnassigned = null;
 
-        /// <summary>
-        /// 加载配置
-        /// </summary>
-        /// <param name="coveredAssetSearchPaths">指定的资源搜索目录，为空使用配置文件设置</param>
-        /// <returns>加载是否成功</returns>
-        public bool Load(List<string> coveredAssetSearchPaths = null)
+        public bool Load()
         {
             if (!File.Exists(m_ConfigurationPath))
             {
@@ -304,11 +299,6 @@ namespace UnityGameFramework.Editor.ResourceTools
                     }
                 }
 
-                if (coveredAssetSearchPaths != null)
-                {
-                    m_SourceAssetSearchRelativePaths.Clear();
-                    m_SourceAssetSearchRelativePaths.AddRange(coveredAssetSearchPaths);
-                }
                 RefreshSourceAssetSearchPaths();
                 RefreshSourceAssetExceptPaths();
             }

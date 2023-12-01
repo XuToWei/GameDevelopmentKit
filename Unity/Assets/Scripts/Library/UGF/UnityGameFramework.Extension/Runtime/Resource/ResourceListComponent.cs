@@ -26,13 +26,12 @@ namespace UnityGameFramework.Extension
             m_ResourceNamePathDict.Clear();
 #if UNITY_EDITOR
             BaseComponent baseComponent = GameEntry.GetComponent<BaseComponent>();
-            if (baseComponent.EditorResourceMode)//编辑器模式下，也能正常运行，避免需要频繁生成配置文件
+            if (baseComponent.EditorResourceMode)//编辑器模式下，重新刷新列表数据
             {
-                Type type = Utility.Assembly.GetType("UnityGameFramework.Extension.Editor.ResourceListEditorRuntime");
-                object obj = Activator.CreateInstance(type);
-                MethodInfo method = type.GetMethod("GenerateList");
-                method.Invoke(obj, new object[] { m_ResourceNamePathDict });
-                return;
+                Type type = Utility.Assembly.GetType("UnityGameFramework.Extension.Editor.ResourceRuleEditor");
+                MethodInfo method = type.GetMethod("RefreshActivateResourceCollection");
+                method.Invoke(null, null);
+                UnityEditor.AssetDatabase.Refresh(UnityEditor.ImportAssetOptions.ForceUpdate);
             }
 #endif
             ResourceComponent resourceComponent = GameEntry.GetComponent<ResourceComponent>();
