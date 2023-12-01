@@ -18,7 +18,7 @@ namespace UnityGameFramework.Extension.Editor
         public static string GetNewName(string fullPath)
         {
             string parentDir = fullPath.Split("/")[2];
-            string fileName = Path.GetFileNameWithoutExtension(fullPath);
+            string fileName = Path.GetFileName(fullPath);
             return Utility.Text.Format("{0}_{1}", parentDir, fileName);
         }
 
