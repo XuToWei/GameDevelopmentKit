@@ -30,6 +30,7 @@ namespace UnityGameFramework.Extension.Editor
                     {
                         namePathDict.Add(ResourceListGenerator.GetNewName(asset.Path), asset.Path);
                     }
+                    break;
                 }
             }
         }
