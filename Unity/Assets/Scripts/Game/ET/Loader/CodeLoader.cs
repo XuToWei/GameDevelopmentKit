@@ -64,6 +64,7 @@ namespace ET
             World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[]
                 { typeof(World).Assembly, typeof(Init).Assembly, this.model, this.modelView, hotfixAssemblies.Item1, hotfixAssemblies.Item2 });
             CodeTypes.Instance.CreateCode();
+            EventSystem.Instance.Invoke(new OnCodeReload());
         }
 
         private async UniTask<(Assembly, Assembly)> LoadHotfixAsync()

@@ -6,7 +6,7 @@ namespace ET.Client
     [FriendOf(typeof(EntityComponent))]
     public abstract class AUGFEntityEvent : IUGFEntityEvent
     {
-        public virtual void OnLoad(UGFEntity entity)
+        public virtual void OnReload(UGFEntity entity)
         {
         }
 

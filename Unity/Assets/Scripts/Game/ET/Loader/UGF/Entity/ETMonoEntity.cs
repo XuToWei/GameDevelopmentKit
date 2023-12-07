@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 using Game;
@@ -11,9 +10,14 @@ namespace ET
     {
         private UGFEntity m_UGFEntity;
         private string m_EntityEventTypeName;
-
+        private IUGFEntityEvent ugfEntityEvent => UGFEventComponent.Instance.GetEntityEvent(this.m_EntityEventTypeName);
         public bool isShow { get; private set; }
         public UGFEntity ugfEntity => this.m_UGFEntity;
+
+        public void OnReload()
+        {
+            ugfEntityEvent.OnReload(this.m_UGFEntity);
+        }
 
         protected override void OnShow(object userData)
         {
@@ -28,10 +32,10 @@ namespace ET
                 UGFEntityDispose();
                 this.m_EntityEventTypeName = entityData.EntityEventTypeName;
                 this.m_UGFEntity = entityData.ParentEntity.AddChild<UGFEntity, string, ETMonoEntity>(this.m_EntityEventTypeName, this);
-                UGFEventComponent.Instance.GetEntityEvent(this.m_EntityEventTypeName).OnInit(this.m_UGFEntity, entityData.UserData);
+                this.ugfEntityEvent.OnInit(this.m_UGFEntity, entityData.UserData);
             }
             this.isShow = true;
-            UGFEventComponent.Instance.GetEntityEvent(this.m_EntityEventTypeName).OnShow(this.m_UGFEntity, entityData.UserData);
+            this.ugfEntityEvent.OnShow(this.m_UGFEntity, entityData.UserData);
             entityData.Release();
         }
 
@@ -52,7 +56,7 @@ namespace ET
 
         protected override void OnHide(bool isShutdown, object userData)
         {
-            UGFEventComponent.Instance.GetEntityEvent(this.m_EntityEventTypeName).OnHide(this.m_UGFEntity, isShutdown, userData);
+            this.ugfEntityEvent.OnHide(this.m_UGFEntity, isShutdown, userData);
             this.isShow = false;
             if (isShutdown)
             {
@@ -64,37 +68,37 @@ namespace ET
         protected override void OnAttached(EntityLogic childEntity, Transform parentTransform, object userData)
         {
             base.OnAttached(childEntity, parentTransform, userData);
-            UGFEventComponent.Instance.GetEntityEvent(this.m_EntityEventTypeName).OnAttached(this.m_UGFEntity, childEntity, parentTransform, userData);
+            this.ugfEntityEvent.OnAttached(this.m_UGFEntity, childEntity, parentTransform, userData);
         }
 
         protected override void OnDetached(EntityLogic childEntity, object userData)
         {
             base.OnDetached(childEntity, userData);
-            UGFEventComponent.Instance.GetEntityEvent(this.m_EntityEventTypeName).OnDetached(this.m_UGFEntity, childEntity, userData);
+            this.ugfEntityEvent.OnDetached(this.m_UGFEntity, childEntity, userData);
         }
 
         protected override void OnAttachTo(EntityLogic parentEntity, Transform parentTransform, object userData)
         {
             base.OnAttachTo(parentEntity, parentTransform, userData);
-            UGFEventComponent.Instance.GetEntityEvent(this.m_EntityEventTypeName).OnAttachTo(this.m_UGFEntity, parentEntity, parentTransform, userData);
+            this.ugfEntityEvent.OnAttachTo(this.m_UGFEntity, parentEntity, parentTransform, userData);
         }
 
         protected override void OnDetachFrom(EntityLogic parentEntity, object userData)
         {
             base.OnDetachFrom(parentEntity, userData);
-            UGFEventComponent.Instance.GetEntityEvent(this.m_EntityEventTypeName).OnDetachFrom(this.m_UGFEntity, parentEntity, userData);
+            this.ugfEntityEvent.OnDetachFrom(this.m_UGFEntity, parentEntity, userData);
         }
 
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
-            UGFEventComponent.Instance.GetEntityEvent(this.m_EntityEventTypeName).OnUpdate(this.m_UGFEntity, elapseSeconds, realElapseSeconds);
+            this.ugfEntityEvent.OnUpdate(this.m_UGFEntity, elapseSeconds, realElapseSeconds);
         }
 
         protected override void OnRecycle()
         {
             base.OnRecycle();
-            UGFEventComponent.Instance.GetEntityEvent(this.m_EntityEventTypeName).OnRecycle(this.m_UGFEntity);
+            this.ugfEntityEvent.OnRecycle(this.m_UGFEntity);
         }
     }
 }

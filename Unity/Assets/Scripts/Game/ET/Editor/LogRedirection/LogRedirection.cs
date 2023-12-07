@@ -1,11 +1,11 @@
-using System;
+using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditorInternal;
 
-namespace ET.Editor
+namespace ET
 {
     /// <summary>
     /// 日志重定向相关的实用函数。
@@ -19,42 +19,64 @@ namespace ET.Editor
             {
                 return false;
             }
-            var stackTrace = GetStackTrace();
-            if (!string.IsNullOrEmpty(stackTrace))
+            string stackTrace = GetStackTrace();
+            if (string.IsNullOrEmpty(stackTrace))
             {
-                // 使用正则表达式匹配at的哪个脚本的哪一行
-                var matches = Regex.Match(stackTrace, @"\(at (.+)\)",
-                    RegexOptions.IgnoreCase);
-                while (matches.Success)
+                return false;
+            }
+
+            // 编译错误不重定向
+            Match compileErrorMatch = Regex.Match(stackTrace, @"(.*?)\(([0-9]+),([0-9]+)\): error");
+            if (compileErrorMatch.Success)
+            {
+                return false;
+            }
+
+            Regex logFileRegex = new(@"((Log\.cs)|(UnityLogger\.cs)|(YooLogger\.cs))");
+            Match stackLineMatch = Regex.Match(stackTrace, $@"\(at (.+):{line}\)");
+            if (!stackLineMatch.Success)
+            {
+                // 没堆栈 不重定向
+                return false;
+            }
+            if (stackLineMatch.Success)
+            {
+                string codePath = stackLineMatch.Groups[1].Value;
+                if (!logFileRegex.IsMatch(codePath))
                 {
-                    var pathLine = matches.Groups[1].Value;
-
-                    if (!pathLine.Contains("Log.cs") && 
-                        !pathLine.Contains("UnityLogger.cs") &&
-                        !pathLine.Contains("YooLogger.cs:"))
-                    {
-                        var splitIndex = pathLine.LastIndexOf(":", StringComparison.Ordinal);
-                        // 脚本路径
-                        var path = pathLine.Substring(0, splitIndex);
-                        // 行号
-                        line = Convert.ToInt32(pathLine.Substring(splitIndex + 1));
-                        var fullPath = UnityEngine.Application.dataPath.Substring(0, UnityEngine.Application.dataPath.LastIndexOf("Assets", StringComparison.Ordinal));
-                        fullPath = $"{fullPath}{path}";
-#if UNITY_STANDALONE_WIN
-                        fullPath = fullPath.Replace('/', '\\');
-#endif
-                        // 跳转到目标代码的特定行
-                        InternalEditorUtility.OpenFileAtLineExternal(fullPath, line);
-                        break;
-                    }
-
-                    matches = matches.NextMatch();
+                    // 不是相关文件不重定向
+                    return false;
                 }
+            }
 
-                return true;
+            // 重定向
+            stackLineMatch = Regex.Match(stackTrace, @"\(at (.+):([0-9]+)\)");
+            while (stackLineMatch.Success)
+            {
+                string codePath = stackLineMatch.Groups[1].Value;
+                if (!logFileRegex.IsMatch(codePath))
+                {
+                    int matchLine = int.Parse(stackLineMatch.Groups[2].Value);
+                    OpenIDE(codePath, matchLine);
+                    return true;
+                }
+                stackLineMatch = stackLineMatch.NextMatch();
             }
 
             return false;
+        }
+
+        private static void OpenIDE(string path, int line, int column = 0)
+        {
+            if (!Path.IsPathFullyQualified(path))
+            {
+                path = Path.GetFullPath(path);
+            }
+#if UNITY_STANDALONE_WIN
+                path = path.Replace('/', '\\');
+#endif
+            // 跳转到目标代码的特定行
+            InternalEditorUtility.OpenFileAtLineExternal(path, line, column);
         }
 
         /// <summary>
@@ -73,6 +95,7 @@ namespace ET.Editor
             {
                 var consoleInstance = fieldInfo.GetValue(null);
                 if (consoleInstance != null)
+                {
                     if (EditorWindow.focusedWindow == (EditorWindow)consoleInstance)
                     {
                         // 获取m_ActiveText成员
@@ -86,8 +109,8 @@ namespace ET.Editor
                             return activeText;
                         }
                     }
+                }
             }
-
             return null;
         }
     }

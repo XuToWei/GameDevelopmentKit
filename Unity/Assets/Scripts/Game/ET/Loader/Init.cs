@@ -25,7 +25,6 @@ namespace ET
 
             private void OnDestroy()
             {
-                
                 EventSystem.Instance.Invoke(new OnShutdown());
                 World.Instance.Dispose();
             }

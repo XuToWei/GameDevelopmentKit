@@ -29,4 +29,8 @@ namespace ET
     public struct OnShutdown
     {
     }
+
+    public struct OnCodeReload
+    {
+    }
 }

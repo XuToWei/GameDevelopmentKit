@@ -11,7 +11,7 @@ namespace ET
     
     public interface IDynamicEvent<in T> : IDynamicEvent where T: struct
     {
-        public UniTask Handle(Scene scene, Entity entity, T arg);
+        public UniTask Handle(Entity entity, T arg);
     }
 
     public abstract class ADynamicEvent<A, B> : IDynamicEvent<B> where A : Entity where B : struct
@@ -19,13 +19,13 @@ namespace ET
         public Type ArgType => typeof(B);
         public Type EntityType => typeof(A);
         
-        protected abstract UniTask Run(Scene scene, A self, B arg);
+        protected abstract UniTask Run(A self, B arg);
         
-        public async UniTask Handle(Scene scene, Entity self, B arg)
+        public async UniTask Handle(Entity self, B arg)
         {
             try
             {
-                await Run(scene, (A)self, arg);
+                await Run((A)self, arg);
             }
             catch (Exception e)
             {

@@ -53,7 +53,7 @@ namespace ET
         
         public void CreateCode()
         {
-            var hashSet = this.GetTypes(typeof (CodeAttribute));
+            var hashSet = this.GetTypes(typeof(CodeAttribute));
             foreach (Type type in hashSet)
             {
                 object obj = Activator.CreateInstance(type);

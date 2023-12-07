@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace ET
 {
+    [Code]
     [EnableMethod]
     [ComponentOf]
     public sealed class UGFEventComponent : Singleton<UGFEventComponent>, ISingletonAwake
     {
         private readonly Dictionary<int, IUGFUIFormEvent> m_UIFormEvents = new ();
-
         private readonly Dictionary<string, IUGFEntityEvent> m_EntityEvents = new ();
 
         public bool TryGetUIFormEvent(int uiFormId, out IUGFUIFormEvent uiFormEvent)

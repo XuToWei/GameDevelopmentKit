@@ -47,15 +47,34 @@ namespace ET
             this.needRemoveEntities.Add(entity);
         }
 
+        public void Publish<A>(A arg) where A : struct
+        {
+            Publish(SceneType.All, arg);
+        }
+
+        public UniTask PublishAsync<A>(A arg) where A : struct
+        {
+            return PublishAsync(SceneType.All, arg);
+        }
+
         public void Publish<A>(Scene scene, A arg) where A : struct
         {
-            SceneType domainSceneType = scene.SceneType;
+            Publish(scene.SceneType, arg);
+        }
+
+        public UniTask PublishAsync<A>(Scene scene, A arg) where A : struct
+        {
+            return PublishAsync(scene.SceneType, arg);
+        }
+
+        public void Publish<A>(SceneType sceneType, A arg) where A : struct
+        {
             Type argType = typeof(A);
             if (DynamicEventTypeSystem.Instance.AllEventInfos.TryGetValue(argType, out List<DynamicEventInfo> dynamicEventInfos))
             {
                 foreach (DynamicEventInfo dynamicEventInfo in dynamicEventInfos)
                 {
-                    if (!domainSceneType.HasSameFlag(dynamicEventInfo.SceneType))
+                    if (!sceneType.HasSameFlag(dynamicEventInfo.SceneType))
                     {
                         continue;
                     }
@@ -66,7 +85,7 @@ namespace ET
                         {
                             if (entity is { IsDisposed: false })
                             {
-                                dynamicEvent.Handle(scene, entity, arg).Forget();
+                                dynamicEvent.Handle(entity, arg).Forget();
                             }
                         }
                     }
@@ -74,16 +93,15 @@ namespace ET
             }
         }
 
-        public async UniTask PublishAsync<A>(Scene scene, A arg) where A : struct
+        public async UniTask PublishAsync<A>(SceneType sceneType, A arg) where A : struct
         {
             using ListComponent<UniTask> taskList = ListComponent<UniTask>.Create();
-            SceneType domainSceneType = scene.SceneType;
             Type argType = typeof(A);
             if (DynamicEventTypeSystem.Instance.AllEventInfos.TryGetValue(argType, out List<DynamicEventInfo> dynamicEventInfos))
             {
                 foreach (DynamicEventInfo dynamicEventInfo in dynamicEventInfos)
                 {
-                    if (!domainSceneType.HasSameFlag(dynamicEventInfo.SceneType))
+                    if (!sceneType.HasSameFlag(dynamicEventInfo.SceneType))
                     {
                         continue;
                     }
@@ -94,7 +112,7 @@ namespace ET
                         {
                             if (entity is { IsDisposed: false })
                             {
-                                taskList.Add(dynamicEvent.Handle(scene, entity, arg));
+                                taskList.Add(dynamicEvent.Handle(entity, arg));
                             }
                         }
                     }

@@ -6,7 +6,7 @@ namespace ET
     [FriendOf(typeof(UGFUIComponent))]
     public abstract class AUGFUIFormEvent : IUGFUIFormEvent
     {
-        public virtual void OnLoad(UGFUIForm uiForm)
+        public virtual void OnReload(UGFUIForm uiForm)
         {
         }
 

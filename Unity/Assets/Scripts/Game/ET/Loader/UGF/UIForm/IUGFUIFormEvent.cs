@@ -2,7 +2,7 @@ namespace ET
 {
     public interface IUGFUIFormEvent
     {
-        void OnLoad(UGFUIForm uiForm);
+        void OnReload(UGFUIForm uiForm);
 
         void OnInit(UGFUIForm uiForm, object userData);
 
