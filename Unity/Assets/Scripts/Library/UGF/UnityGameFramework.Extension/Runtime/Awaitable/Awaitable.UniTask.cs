@@ -97,7 +97,7 @@ namespace UnityGameFramework.Extension
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        core.TrySetCanceled();
+                        core.TrySetCanceled(cancellationToken);
                         return false;
                     }
                     return true;
