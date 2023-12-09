@@ -14,12 +14,30 @@
             Encodes to PNG using reflection to use correct method depending if editor is version 2017 or earlier
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.FindObjectOfType``1(System.Boolean)">
+            <summary>
+            Warning: some versions of this method don't have the includeInactive parameter so it won't be taken into account
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.FindObjectOfType(System.Type,System.Boolean)">
+            <summary>
+            Warning: some versions of this method don't have the includeInactive parameter so it won't be taken into account
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.FindObjectsOfType``1(System.Boolean)">
+            <summary>
+            Warning: some versions of this method don't have the includeInactive parameter so it won't be taken into account
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.FindObjectsOfType(System.Type,System.Boolean)">
+            <summary>
+            Warning: some versions of this method don't have the includeInactive parameter so it won't be taken into account
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.GetPrefabParent(UnityEngine.GameObject)">
             <summary>
             Returns the prefab parent by using different code on Unity 2018 or later
             </summary>
-            <param name="instance"></param>
-            <returns></returns>
         </member>
         <member name="M:DG.DemiEditor.DeEditorCoroutines.StartCoroutine(System.Collections.IEnumerator)">
             <summary>
@@ -443,10 +461,10 @@
             <summary>Dragging</summary>
         </member>
         <member name="F:DG.DemiEditor.DeDragResultType.Accepted">
-            <summary>Dragging concluced and accepted</summary>
+            <summary>Dragging concluded and accepted</summary>
         </member>
         <member name="F:DG.DemiEditor.DeDragResultType.Ineffective">
-            <summary>Dragging concluced but item position didn't change</summary>
+            <summary>Dragging concluded but item position didn't change</summary>
         </member>
         <member name="F:DG.DemiEditor.DeDragResultType.Canceled">
             <summary>Dragging canceled</summary>
@@ -532,7 +550,7 @@
             <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
             <param name="optionalData">Optional data that can be retrieved via the <see cref="P:DG.DemiEditor.DeGUIDrag.optionalDragData"/> static property</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Int32,System.Collections.IList,System.Int32,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection)">
+        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Int32,System.Collections.IList,System.Int32,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection,System.Boolean)">
             <summary>
             Call this after each draggable GUI block, to calculate and draw the current drag state
             (or complete it if the mouse was released).
@@ -544,8 +562,12 @@
             Pass this if you're creating a drag between elements that don't use GUILayout</param>
             <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
             unless you want to skip eventual layout calculations</param>
+            <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
+            to reflect successful drag results.
+            Note that <see cref="F:DG.DemiEditor.DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+            (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Collections.IList,System.Int32,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection)">
+        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Collections.IList,System.Int32,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection,System.Boolean)">
             <summary>
             Call this after each draggable GUI block, to calculate and draw the current drag state
             (or complete it if the mouse was released).
@@ -556,8 +578,12 @@
             Pass this if you're creating a drag between elements that don't use GUILayout</param>
             <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
             unless you want to skip eventual layout calculations</param>
+            <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
+            to reflect successful drag results.
+            Note that <see cref="F:DG.DemiEditor.DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+            (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Int32,System.Collections.IList,System.Int32,UnityEngine.Color,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection)">
+        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Int32,System.Collections.IList,System.Int32,UnityEngine.Color,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection,System.Boolean)">
             <summary>
             Call this after each draggable GUI block, to calculate and draw the current drag state
             (or complete it if the mouse was released).
@@ -570,8 +596,12 @@
             Pass this if you're creating a drag between elements that don't use GUILayout</param>
             <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
             unless you want to skip eventual layout calculations</param>
+            <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
+            to reflect successful drag results.
+            Note that <see cref="F:DG.DemiEditor.DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+            (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Collections.IList,System.Int32,UnityEngine.Color,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection)">
+        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Collections.IList,System.Int32,UnityEngine.Color,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection,System.Boolean)">
             <summary>
             Call this after each draggable GUI block, to calculate and draw the current drag state
             (or complete it if the mouse was released).
@@ -583,14 +613,19 @@
             Pass this if you're creating a drag between elements that don't use GUILayout</param>
             <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
             unless you want to skip eventual layout calculations</param>
+            <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
+            to reflect successful drag results.
+            Note that <see cref="F:DG.DemiEditor.DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+            (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUIDrag.EndDrag(System.Boolean)">
+        <member name="M:DG.DemiEditor.DeGUIDrag.EndDrag(System.Boolean,System.Boolean)">
             <summary>
             Ends the drag operations, and eventually applies the drag outcome.
             Returns TRUE if the position of the dragged item actually changed.
             Called automatically by Drag method. Use it only if you want to force the end of a drag operation.
             </summary>
-            <param name="applyDrag">If TRUE applies the drag results, otherwise simply cancels the drag</param>
+            <param name="applyDrag">If TRUE marks the drag as successful and applied it if set so, otherwise simply cancels the drag</param>
+            <param name="applyDragToListContents">If TRUE changes the list contents to reflect the drag result</param>
         </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode">
             <summary>
@@ -790,6 +825,21 @@
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.SetAreaShift(UnityEngine.Vector2)">
             <summary>
             Shifts the visible are to the given coordinates and repaints on end
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ResetScale">
+            <summary>
+            Resets the node process scale to 1
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ScaleUp">
+            <summary>
+            Scales up the node process area (if not already at max scale)
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ScaleDown">
+            <summary>
+            Scales down the node process area (if not already at min scale)
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.RepaintOnEnd">

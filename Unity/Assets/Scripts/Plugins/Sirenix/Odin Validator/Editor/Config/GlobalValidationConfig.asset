@@ -51,6 +51,9 @@ MonoBehaviour:
   FrameSelection:
     serializedValue: 0
     changedFromDefault: 0
+  SelectNextIssueOnFix:
+    serializedValue: 0
+    changedFromDefault: 0
   SkipFirstSample:
     serializedValue: 0
     changedFromDefault: 0
@@ -81,4 +84,4 @@ MonoBehaviour:
   KeepMainValidationSessionAliveInBackground:
     serializedValue: 0
     changedFromDefault: 0
-  HasShownValidationConfig: 1
+  HasShownValidationConfig: 0

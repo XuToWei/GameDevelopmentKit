@@ -36,6 +36,18 @@
             <param name="fromHere">If TRUE, re-evaluates the tween's start and end values from its current position.
             Set it to TRUE when spawning the same DOTweenPath in different positions (like when using a pooling system)</param>
         </member>
+        <member name="M:DG.Tweening.DOTweenPath.DOGotoAndPause(System.Single)">
+            <summary>
+            Sends the tween to the given time then pauses it
+            </summary>
+            <param name="time">Time to send the tween to</param>
+        </member>
+        <member name="M:DG.Tweening.DOTweenPath.DOGotoAndPlay(System.Single)">
+            <summary>
+            Sends the tween to the given time then plays it
+            </summary>
+            <param name="time">Time to send the tween to</param>
+        </member>
         <member name="M:DG.Tweening.DOTweenPath.DOKillAllById(System.String)">
             <summary>
             Kills all tweens (path/animations/etc.) with the given ID (regardless of their target gameObject)
@@ -43,7 +55,8 @@
         </member>
         <member name="M:DG.Tweening.DOTweenPath.GetDrawPoints">
             <summary>
-            Returns a list of points that are used to draw the path inside the editor.
+            Returns a list of points that are used to draw the path inside the editor,
+            or NULL if the path hasn't been initialized yet or if its tween has been killed
             </summary>
         </member>
         <member name="T:DG.Tweening.Plugins.SpiralPlugin">
