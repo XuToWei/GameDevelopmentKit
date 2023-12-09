@@ -9,7 +9,7 @@ namespace ET.Client
     public static partial class MoveHelper
     {
         // 可以多次调用，多次调用的话会取消上一次的协程
-        public static async UniTask<int> MoveToAsync(this Unit unit, float3 targetPos, CancellationTokenSource cts = null)
+        public static async UniTask<int> MoveToAsync(this Unit unit, float3 targetPos, CancellationToken token = default)
         {
             C2M_PathfindingResult msg = new C2M_PathfindingResult() { Position = targetPos };
             unit.Root().GetComponent<ClientSenderComponent>().Send(msg);
@@ -20,8 +20,8 @@ namespace ET.Client
             objectWait.Notify(new Wait_UnitStop() { Error = WaitTypeError.Cancel });
             
             // 一直等到unit发送stop
-            Wait_UnitStop waitUnitStop = await objectWait.Wait<Wait_UnitStop>(cts);
-            if (cts.IsCancel())
+            (bool canceled, Wait_UnitStop waitUnitStop) = await objectWait.Wait<Wait_UnitStop>(token).SuppressCancellationThrow();
+            if (canceled)
             {
                 return WaitTypeError.Cancel;
             }

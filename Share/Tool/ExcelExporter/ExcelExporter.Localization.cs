@@ -33,7 +33,7 @@ namespace ET
 
             public static void Export()
             {
-                Console.WriteLine("Start Export Localization Excel ...");
+                Log.Info("Start Export Localization Excel ...");
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 SortedDictionary<Language, SortedDictionary<string, string>> resultDict = new SortedDictionary<Language, SortedDictionary<string, string>>();
                 using (FileStream stream = new FileStream(LocalizationExcelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -184,12 +184,12 @@ namespace ET
                             File.Delete(jsonFileFullPath);
                         }
                     }
-                    Console.WriteLine($"Gen {language} Success!");
+                    Log.Info($"Gen {language} Success!");
                 }
 
                 GenerateAssetUtilityCode(useJson? "json" : "bytes");
                 GenerateReadyLanguageCode(resultDict.Keys.ToArray());
-                Console.WriteLine("Export Localization Excel Success!");
+                Log.Info("Export Localization Excel Success!");
             }
 
             private static void GenerateAssetUtilityCode(string extensionName)
@@ -214,7 +214,7 @@ namespace ET
                 if (!File.Exists(AssetUtilityCodeFile) || !string.Equals(codeContent, File.ReadAllText(AssetUtilityCodeFile)))
                 {
                     File.WriteAllText(AssetUtilityCodeFile, codeContent);
-                    Console.WriteLine($"Generate code : {AssetUtilityCodeFile}!");
+                    Log.Info($"Generate code : {AssetUtilityCodeFile}!");
                 }
             }
             
@@ -240,7 +240,7 @@ namespace ET
                 if (!File.Exists(LocalizationReadyLanguageCodeFile) || !string.Equals(codeContent, File.ReadAllText(LocalizationReadyLanguageCodeFile)))
                 {
                     File.WriteAllText(LocalizationReadyLanguageCodeFile, codeContent);
-                    Console.WriteLine($"Generate code : {LocalizationReadyLanguageCodeFile}!");
+                    Log.Info($"Generate code : {LocalizationReadyLanguageCodeFile}!");
                 }
             }
 

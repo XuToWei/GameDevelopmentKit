@@ -19,8 +19,8 @@ namespace ET.Server
                 Parser.Default.ParseArguments<Options>(args)
                         .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
                         .WithParsed((o) => World.Instance.AddSingleton(o));
-                var nLog = new NLogger(Options.Instance.AppType.ToString(), Options.Instance.Process, 0);
-                World.Instance.AddSingleton<Logger, ILog>(nLog);
+                var log = new ConsoleLog();
+                World.Instance.AddSingleton<Logger, ILog>(log);
                 
                 World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[] { typeof (Init).Assembly });
                 World.Instance.AddSingleton<EventSystem>();
@@ -51,7 +51,7 @@ namespace ET.Server
             }
             catch (Exception e)
             {
-                ConsoleHelper.WriteErrorLine(e.ToString());
+                Log.Error(e.ToString());
             }
 
             return 1;

@@ -60,7 +60,7 @@ namespace ET
             action.Tcs.TrySetResult(response);
         }
         
-        public static async UniTask<IResponse> Call(this Session self, IRequest request, CancellationTokenSource cts)
+        public static UniTask<IResponse> Call(this Session self, IRequest request, CancellationToken token)
         {
             int rpcId = ++self.RpcId;
             RpcInfo rpcInfo = new RpcInfo(request);
@@ -80,21 +80,9 @@ namespace ET
                 Type responseType = OpcodeType.Instance.GetResponseType(action.Request.GetType());
                 IResponse response = (IResponse) Activator.CreateInstance(responseType);
                 response.Error = ErrorCore.ERR_Cancel;
-                action.Tcs.TrySetResult(response);
             }
-
-            IResponse ret;
-            CancellationTokenRegistration? ctr = null;
-            try
-            {
-                ctr = cts?.Token.Register(CancelAction);
-                ret = await rpcInfo.Tcs.Task;
-            }
-            finally
-            {
-                ctr?.Dispose();
-            }
-            return ret;
+            
+            return rpcInfo.Tcs.Task.AttachCancellation(token, CancelAction);
         }
 
         public static async UniTask<IResponse> Call(this Session self, IRequest request, int time = 0)

@@ -64,7 +64,7 @@ namespace ET
                 }
             }
 
-            public UniTask<K> Task => this.tcs.Task;
+            public AutoResetUniTaskCompletionSource<K> Task => this.tcs;
 
             public void SetResult(K k)
             {
@@ -81,41 +81,31 @@ namespace ET
             }
         }
         
-        public static async UniTask<T> Wait<T>(this ObjectWait self, CancellationTokenSource cts = null) where T : struct, IWaitType
+        public static UniTask<T> Wait<T>(this ObjectWait self, CancellationToken token = default) where T : struct, IWaitType
         {
             ResultCallback<T> tcs = new ResultCallback<T>();
             Type type = typeof (T);
             self.tcss.Add(type, tcs);
-
+            
             void CancelAction()
             {
                 self.Notify(new T() { Error = WaitTypeError.Cancel });
             }
-
-            T ret;
-            CancellationTokenRegistration? ctr = null;
-            try
-            {
-                ctr = cts?.Token.Register(CancelAction);
-                ret = await tcs.Task;
-            }
-            finally
-            {
-                ctr?.Dispose();
-            }
-            return ret;
+            
+            return tcs.Task.Task.AttachCancellation(token, CancelAction);
         }
 
-        public static async UniTask<T> Wait<T>(this ObjectWait self, int timeout, CancellationTokenSource cts = null) where T : struct, IWaitType
+        public static UniTask<T> Wait<T>(this ObjectWait self, int timeout, CancellationToken token = default) where T : struct, IWaitType
         {
+            if (token.IsCancellationRequested)
+            {
+                return UniTask.FromCanceled<T>(token);
+            }
+            
             ResultCallback<T> tcs = new ResultCallback<T>();
             async UniTaskVoid WaitTimeout()
             {
-                await self.Root().GetComponent<TimerComponent>().WaitAsync(timeout, cts);
-                if (cts.IsCancel())
-                {
-                    return;
-                }
+                await self.Root().GetComponent<TimerComponent>().WaitAsync(timeout, token);
                 if (tcs.IsDisposed)
                 {
                     return;
@@ -132,18 +122,7 @@ namespace ET
                 self.Notify(new T() { Error = WaitTypeError.Cancel });
             }
             
-            T ret;
-            CancellationTokenRegistration? ctr = null;
-            try
-            {
-                ctr = cts?.Token.Register(CancelAction);
-                ret = await tcs.Task;
-            }
-            finally
-            {
-                ctr?.Dispose();
-            }
-            return ret;
+            return tcs.Task.Task.AttachCancellation(token, CancelAction);
         }
 
         public static void Notify<T>(this ObjectWait self, T obj) where T : struct, IWaitType

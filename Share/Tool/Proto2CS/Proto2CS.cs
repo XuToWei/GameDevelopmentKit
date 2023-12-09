@@ -35,11 +35,11 @@ namespace ET
         
         public static void Export()
         {
-            Console.WriteLine("proto2cs start!");
+            Log.Info("proto2cs start!");
             string[] childDirs = Directory.GetDirectories(ProtoDir);
             if (childDirs.Length < 1)
             {
-                ConsoleHelper.WriteErrorLine($"{ProtoDir} doesn't exist child directory!");
+                Log.Error($"{ProtoDir} doesn't exist child directory!");
                 return;
             }
             List<Gen_Info> genInfos = new List<Gen_Info>();
@@ -76,7 +76,7 @@ namespace ET
 
             if (genInfos.Count < 1)
             {
-                ConsoleHelper.WriteErrorLine($"{ProtoDir} doesn't exist Open GenConfig.xml!");
+                Log.Error($"{ProtoDir} doesn't exist Open GenConfig.xml!");
                 return;
             }
 
@@ -127,7 +127,7 @@ namespace ET
                 }
             }
             
-            Console.WriteLine("proto2cs succeed!");
+            Log.Info("proto2cs succeed!");
         }
     }
 }

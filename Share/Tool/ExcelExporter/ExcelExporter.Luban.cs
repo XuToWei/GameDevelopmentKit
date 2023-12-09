@@ -52,7 +52,7 @@ namespace ET
 
             public static void Export()
             {
-                Console.WriteLine("Start Export Luban Excel ...");
+                Log.Info("Start Export Luban Excel ...");
                 if (Options.Instance.Customs.Contains("GB2312", StringComparison.OrdinalIgnoreCase))
                 {
                     //luban在windows上编码为GB2312
@@ -132,7 +132,7 @@ namespace ET
                     }
                 }
 
-                Console.WriteLine($"Export Luban Excel Parallel {genInfos.Count} ForEachAsync!");
+                Log.Info($"Export Luban Excel Parallel {genInfos.Count} ForEachAsync!");
                 bool isSuccess = true;
                 int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
                 int processCount = 0;
@@ -166,7 +166,7 @@ namespace ET
                                 FileHelper.CopyDirectory(info.Output_Data_Dirs[0], info.Output_Data_Dirs[k]);
                             }
                         }
-                        Console.WriteLine($"Export Luban Process : {Interlocked.Add(ref processCount, 1)}/{genInfos.Count} ");
+                        Log.Info($"Export Luban Process : {Interlocked.Add(ref processCount, 1)}/{genInfos.Count} ");
                     }).Wait();
 
                 if (!isSuccess)
@@ -181,7 +181,7 @@ namespace ET
                     {
                         if (File.ReadAllText(file).Length > 0)
                         {
-                            ConsoleHelper.WriteErrorLine($"Please check {file} to solve not translated text!");
+                            Log.Error($"Please check {file} to solve not translated text!");
                         }
                     }
                 }
@@ -189,7 +189,7 @@ namespace ET
                 GenerateUGFEntityId.GenerateCode();
                 GenerateUGFUIFormId.GenerateCode();
                 GenerateUGFAllSoundId.GenerateCode();
-                Console.WriteLine("Export Luban Excel Success!");
+                Log.Info("Export Luban Excel Success!");
             }
 
             private static string GetCommand(Input_Output_Gen_Info info)
@@ -266,14 +266,14 @@ namespace ET
                             {
                                 isSuccess = false;
                                 inError = !inError;
-                                ConsoleHelper.WriteErrorLine(args.Data);
+                                Log.Error(args.Data);
                             }
                             else if (inError)
                             {
                                 isSuccess = false;
                                 if (!string.IsNullOrEmpty(args.Data))
                                 {
-                                    ConsoleHelper.WriteErrorLine(args.Data);
+                                    Log.Error(args.Data);
                                 }
                             }
                         }
@@ -283,7 +283,7 @@ namespace ET
                         if (!string.IsNullOrEmpty(args.Data))
                         {
                             isSuccess = false;
-                            ConsoleHelper.WriteErrorLine(args.Data);
+                            Log.Error(args.Data);
                         }
                     };
 
@@ -295,7 +295,7 @@ namespace ET
                 catch (Exception e)
                 {
                     isSuccess = false;
-                    ConsoleHelper.WriteErrorLine(e.ToString());
+                    Log.Error(e.ToString());
                 }
                 finally
                 {

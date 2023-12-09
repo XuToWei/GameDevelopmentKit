@@ -1,5 +1,4 @@
 ﻿#if DOTNET
-using System;
 using NLog;
 
 namespace ET

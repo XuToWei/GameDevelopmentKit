@@ -89,7 +89,7 @@ namespace ET
             if (!File.Exists(codeFile) || !string.Equals(codeContent, File.ReadAllText(codeFile)))
             {
                 File.WriteAllText(codeFile, codeContent);
-                Console.WriteLine($"Generate code : {codeFile}!");
+                Log.Info($"Generate code : {codeFile}!");
             }
         }
         
@@ -151,7 +151,7 @@ namespace ET
             if (!File.Exists(codeFile) || !string.Equals(codeContent, File.ReadAllText(codeFile)))
             {
                 File.WriteAllText(codeFile, codeContent);
-                Console.WriteLine($"Generate code : {codeFile}!");
+                Log.Info($"Generate code : {codeFile}!");
             }
         }
         
@@ -213,7 +213,7 @@ namespace ET
             if (!File.Exists(codeFile) || !string.Equals(codeContent, File.ReadAllText(codeFile)))
             {
                 File.WriteAllText(codeFile, codeContent);
-                Console.WriteLine($"Generate code : {codeFile}!");
+                Log.Info($"Generate code : {codeFile}!");
             }
         }
     }

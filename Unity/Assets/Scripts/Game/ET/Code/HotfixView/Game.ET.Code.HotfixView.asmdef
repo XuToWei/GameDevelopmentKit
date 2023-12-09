@@ -24,7 +24,8 @@
         "Coffee.UnmaskForUGUI",
         "LoopScrollRect.Runtime",
         "ZString",
-        "MemoryPack"
+        "MemoryPack",
+        "UniTaskExtension"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

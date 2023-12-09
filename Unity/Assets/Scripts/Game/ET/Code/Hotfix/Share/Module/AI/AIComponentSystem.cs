@@ -79,7 +79,7 @@ namespace ET
                 self.CancellationTokenSource = cts;
                 self.Current = aiConfig.Id;
 
-                aaiHandler.Execute(self, aiConfig, cts).Forget();
+                aaiHandler.Execute(self, aiConfig, cts.Token).Forget();
                 return;
             }
             

@@ -16,7 +16,7 @@ namespace ET.Client
             return 1;
         }
 
-        public override async UniTask Execute(AIComponent aiComponent, DRAIConfig aiConfig, CancellationTokenSource cts)
+        public override async UniTask Execute(AIComponent aiComponent, DRAIConfig aiConfig, CancellationToken token)
         {
             Scene root = aiComponent.Root();
 
@@ -32,11 +32,7 @@ namespace ET.Client
             {
                 XunLuoPathComponent xunLuoPathComponent = myUnit.GetComponent<XunLuoPathComponent>();
                 float3 nextTarget = xunLuoPathComponent.GetCurrent();
-                await myUnit.MoveToAsync(nextTarget, cts);
-                if (cts.IsCancel())
-                {
-                    return;
-                }
+                await myUnit.MoveToAsync(nextTarget, token);
                 xunLuoPathComponent.MoveNext();
             }
         }

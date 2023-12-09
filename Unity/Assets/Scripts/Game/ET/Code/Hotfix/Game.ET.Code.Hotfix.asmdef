@@ -8,7 +8,8 @@
         "UniTask",
         "LubanLib",
         "ZString",
-        "MemoryPack"
+        "MemoryPack",
+        "UniTaskExtension"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

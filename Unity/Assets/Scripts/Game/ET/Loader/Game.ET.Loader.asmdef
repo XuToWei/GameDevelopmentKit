@@ -13,7 +13,8 @@
         "Coffee.UIParticle",
         "FancyScrollView",
         "LoopScrollRect.Runtime",
-        "ZString"
+        "ZString",
+        "UniTaskExtension"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

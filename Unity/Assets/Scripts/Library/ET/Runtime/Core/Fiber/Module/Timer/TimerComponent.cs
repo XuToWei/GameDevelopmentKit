@@ -173,12 +173,16 @@ namespace ET
             return true;
         }
 
-        public static async UniTask WaitTillAsync(this TimerComponent self, long tillTime, CancellationTokenSource cancellationToken = null)
+        public static UniTask WaitTillAsync(this TimerComponent self, long tillTime, CancellationToken token = default)
         {
+            if (token.IsCancellationRequested)
+            {
+                return UniTask.FromCanceled(token);
+            }
             long timeNow = self.GetNow();
             if (timeNow >= tillTime)
             {
-                return;
+                return UniTask.CompletedTask;
             }
 
             var tcs = AutoResetUniTaskCompletionSource.Create();
@@ -188,34 +192,26 @@ namespace ET
 
             void CancelAction()
             {
-                if (self.Remove(timerId))
-                {
-                    tcs.TrySetResult();
-                }
+                self.Remove(timerId);
             }
 
-            CancellationTokenRegistration? ctr = null;
-            try
-            {
-                ctr = cancellationToken?.Token.Register(CancelAction);
-                await tcs.Task;
-            }
-            finally
-            {
-                ctr?.Dispose();
-            }
+            return tcs.Task.AttachCancellation(token, CancelAction);
         }
 
-        public static async UniTask WaitFrameAsync(this TimerComponent self, CancellationTokenSource cancellationToken = null)
+        public static UniTask WaitFrameAsync(this TimerComponent self, CancellationToken token = default)
         {
-            await self.WaitAsync(1, cancellationToken);
+            return self.WaitAsync(1, token);
         }
 
-        public static async UniTask WaitAsync(this TimerComponent self, long time, CancellationTokenSource cancellationToken = null)
+        public static UniTask WaitAsync(this TimerComponent self, long time, CancellationToken token = default)
         {
+            if (token.IsCancellationRequested)
+            {
+                return UniTask.FromCanceled(token);
+            }
             if (time == 0)
             {
-                return;
+                return UniTask.CompletedTask;
             }
 
             long timeNow = self.GetNow();
@@ -227,22 +223,10 @@ namespace ET
 
             void CancelAction()
             {
-                if (self.Remove(timerId))
-                {
-                    tcs.TrySetResult();
-                }
+                self.Remove(timerId);
             }
-
-            CancellationTokenRegistration? ctr = null;
-            try
-            {
-                ctr = cancellationToken?.Token.Register(CancelAction);
-                await tcs.Task;
-            }
-            finally
-            {
-                ctr?.Dispose();
-            }
+            
+            return tcs.Task.AttachCancellation(token, CancelAction);
         }
 
         // 用这个优点是可以热更，缺点是回调式的写法，逻辑不连贯。WaitTillAsync不能热更，优点是逻辑连贯。

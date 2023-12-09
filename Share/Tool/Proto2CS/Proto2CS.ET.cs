@@ -181,7 +181,7 @@ namespace ET
                 using StreamWriter sw = new StreamWriter(txt);
                 sw.Write(sb.ToString().Replace("\t", "    "));
 
-                Console.WriteLine($"proto2cs file : {csPath}");
+                Log.Info($"proto2cs file : {csPath}");
             }
 
             private static void Map(StringBuilder sb, string newline, StringBuilder sbDispose)
@@ -207,7 +207,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    ConsoleHelper.WriteErrorLine($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Error($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
@@ -231,7 +231,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    ConsoleHelper.WriteErrorLine($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Error($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
@@ -301,7 +301,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    ConsoleHelper.WriteErrorLine($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Error($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
                     throw;
                 }
             }

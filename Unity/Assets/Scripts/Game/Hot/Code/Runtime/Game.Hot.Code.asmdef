@@ -18,7 +18,8 @@
         "Coffee.UnmaskForUGUI",
         "LoopScrollRect.Runtime",
         "ZString",
-        "protobuf-net"
+        "protobuf-net",
+        "UniTaskExtension"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

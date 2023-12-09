@@ -15,7 +15,7 @@ namespace ET.Client
             return 1;
         }
 
-        public override async UniTask Execute(AIComponent aiComponent, DRAIConfig aiConfig, CancellationTokenSource cts)
+        public override async UniTask Execute(AIComponent aiComponent, DRAIConfig aiConfig, CancellationToken token)
         {
             Fiber fiber = aiComponent.Fiber();
 
@@ -35,11 +35,7 @@ namespace ET.Client
                 Log.Debug($"攻击: {i}次");
 
                 // 因为协程可能被中断，任何协程都要传入cancellationToken，判断如果是中断则要返回
-                await fiber.Root.GetComponent<TimerComponent>().WaitAsync(1000, cts);
-                if (cts.IsCancel())
-                {
-                    return;
-                }
+                await fiber.Root.GetComponent<TimerComponent>().WaitAsync(1000, token);
             }
         }
     }
