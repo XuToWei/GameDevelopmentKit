@@ -26,11 +26,8 @@ namespace Cysharp.Threading.Tasks
                     var ctr = token.RegisterWithoutCaptureExecutionContext(CancelAction);
                     try
                     {
-                        bool cancel = await task.SuppressCancellationThrow();
-                        if (!cancel)
-                        {
-                            tcs.TrySetResult();
-                        }
+                        await task;
+                        tcs.TrySetResult();
                     }
                     catch (Exception ex)
                     {
@@ -69,11 +66,8 @@ namespace Cysharp.Threading.Tasks
                     var ctr = token.RegisterWithoutCaptureExecutionContext(CancelAction);
                     try
                     {
-                        (bool cancel, T result) = await task.SuppressCancellationThrow();
-                        if (!cancel)
-                        {
-                            tcs.TrySetResult(result);
-                        }
+                        T result = await task;
+                        tcs.TrySetResult(result);
                     }
                     catch (Exception ex)
                     {
