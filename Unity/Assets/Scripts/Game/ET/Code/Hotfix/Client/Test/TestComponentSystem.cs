@@ -22,7 +22,6 @@ namespace ET.Client
         private static async UniTaskVoid RunTestCancel(TestComponent self)
         {
             await UniTask.CompletedTask;
-            
             CancellationTokenSource cts = new CancellationTokenSource();
             cts.CancelAfter(self.Fiber(), 500).Forget();
             Log.Info($"test time:{TimeInfo.Instance.ClientNow()}");
@@ -33,7 +32,6 @@ namespace ET.Client
                 Log.Info($"test time1-2:{TimeInfo.Instance.ClientNow()}");
                 Log.Info("test state1");
             }
-            
             async UniTaskVoid Run2()
             {
                 Log.Info($"test time2-1:{TimeInfo.Instance.ClientNow()}");
@@ -41,7 +39,6 @@ namespace ET.Client
                 Log.Info($"test time2-2:{TimeInfo.Instance.ClientNow()}");
                 Log.Info($"test state2-{canceled}");
             }
-            
             Run1().Forget();
             Run2().Forget();
         }

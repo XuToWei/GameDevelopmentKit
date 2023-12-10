@@ -11,9 +11,11 @@ namespace ET
             {
                 return;
             }
-
-            await fiber.Root.GetComponent<TimerComponent>().WaitAsync(afterTimeCancel, self.Token);
-
+            await fiber.Root.GetComponent<TimerComponent>().WaitAsync(afterTimeCancel);
+            if (self.IsCancel())
+            {
+                return;
+            }
             self.Cancel();
         }
         
