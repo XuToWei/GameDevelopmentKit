@@ -126,7 +126,7 @@ namespace ET
                 }
                 case TimerClass.OnceWaitTimer:
                 {
-                    var tcs = timerAction.Object as AutoResetUniTaskCompletionSource;
+                    var tcs = timerAction.Object as AutoResetUniTaskCompletionSourcePlus;
                     tcs.TrySetResult();
                     break;
                 }
@@ -185,7 +185,7 @@ namespace ET
                 return UniTask.CompletedTask;
             }
 
-            var tcs = AutoResetUniTaskCompletionSource.Create();
+            var tcs = AutoResetUniTaskCompletionSourcePlus.Create();
             long timerId = self.GetId();
             TimerAction timer = new(TimerClass.OnceWaitTimer, timeNow, tillTime - timeNow, 0, tcs);
             self.AddTimer(timerId, ref timer);
@@ -195,7 +195,9 @@ namespace ET
                 self.Remove(timerId);
             }
 
-            return tcs.Task.AttachCancellation(token, CancelAction);
+            tcs.AddSetCancelAction(CancelAction);
+            tcs.AttachCancellation(token);
+            return tcs.Task;
         }
 
         public static UniTask WaitFrameAsync(this TimerComponent self, CancellationToken token = default)
@@ -216,7 +218,7 @@ namespace ET
 
             long timeNow = self.GetNow();
 
-            var tcs = AutoResetUniTaskCompletionSource.Create();
+            var tcs = AutoResetUniTaskCompletionSourcePlus.Create();
             long timerId = self.GetId();
             TimerAction timer = new (TimerClass.OnceWaitTimer, timeNow, time, 0, tcs);
             self.AddTimer(timerId, ref timer);
@@ -225,8 +227,33 @@ namespace ET
             {
                 self.Remove(timerId);
             }
-            
-            return tcs.Task.AttachCancellation(token, CancelAction);
+
+            tcs.AddSetCancelAction(CancelAction);
+            tcs.AttachCancellation(token);
+            return tcs.Task;
+        }
+        
+        public static AutoResetUniTaskCompletionSourcePlus GetWaitUniTaskCompletionSource(this TimerComponent self, long time)
+        {
+            if (time == 0)
+            {
+                return AutoResetUniTaskCompletionSourcePlus.CreateCompleted(out _);
+            }
+
+            long timeNow = self.GetNow();
+
+            var tcs = AutoResetUniTaskCompletionSourcePlus.Create();
+            long timerId = self.GetId();
+            TimerAction timer = new (TimerClass.OnceWaitTimer, timeNow, time, 0, tcs);
+            self.AddTimer(timerId, ref timer);
+
+            void CancelAction()
+            {
+                self.Remove(timerId);
+            }
+
+            tcs.AddSetCancelAction(CancelAction);
+            return tcs;
         }
 
         // 用这个优点是可以热更，缺点是回调式的写法，逻辑不连贯。WaitTillAsync不能热更，优点是逻辑连贯。

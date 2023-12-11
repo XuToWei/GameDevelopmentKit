@@ -10,12 +10,12 @@ namespace ET
     public readonly struct RpcInfo
     {
         public readonly IRequest Request;
-        public readonly AutoResetUniTaskCompletionSource<IResponse> Tcs;
+        public readonly AutoResetUniTaskCompletionSourcePlus<IResponse> Tcs;
 
         public RpcInfo(IRequest request)
         {
             this.Request = request;
-            this.Tcs = AutoResetUniTaskCompletionSource<IResponse>.Create();
+            this.Tcs = AutoResetUniTaskCompletionSourcePlus<IResponse>.Create();
         }
     }
     
@@ -82,7 +82,9 @@ namespace ET
                 response.Error = ErrorCore.ERR_Cancel;
             }
             
-            return rpcInfo.Tcs.Task.AttachCancellation(token, CancelAction);
+            rpcInfo.Tcs.AddSetCancelAction(CancelAction);
+            rpcInfo.Tcs.AttachCancellation(token);
+            return rpcInfo.Tcs.Task;
         }
 
         public static async UniTask<IResponse> Call(this Session self, IRequest request, int time = 0)

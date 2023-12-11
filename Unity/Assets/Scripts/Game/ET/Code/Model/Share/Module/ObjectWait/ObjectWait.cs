@@ -49,11 +49,11 @@ namespace ET
 
         private class ResultCallback<K>: IDestroyRun where K : struct, IWaitType
         {
-            private AutoResetUniTaskCompletionSource<K> tcs;
+            private AutoResetUniTaskCompletionSourcePlus<K> tcs;
 
             public ResultCallback()
             {
-                this.tcs = AutoResetUniTaskCompletionSource<K>.Create();
+                this.tcs = AutoResetUniTaskCompletionSourcePlus<K>.Create();
             }
 
             public bool IsDisposed
@@ -64,7 +64,7 @@ namespace ET
                 }
             }
 
-            public AutoResetUniTaskCompletionSource<K> Task => this.tcs;
+            public AutoResetUniTaskCompletionSourcePlus<K> Task => this.tcs;
 
             public void SetResult(K k)
             {
@@ -92,7 +92,9 @@ namespace ET
                 self.Notify(new T() { Error = WaitTypeError.Cancel });
             }
             
-            return tcs.Task.Task.AttachCancellation(token, CancelAction);
+            tcs.Task.AddSetCancelAction(CancelAction);
+            tcs.Task.AttachCancellation(token);
+            return tcs.Task.Task;
         }
 
         public static UniTask<T> Wait<T>(this ObjectWait self, int timeout, CancellationToken token = default) where T : struct, IWaitType
@@ -122,7 +124,9 @@ namespace ET
                 self.Notify(new T() { Error = WaitTypeError.Cancel });
             }
             
-            return tcs.Task.Task.AttachCancellation(token, CancelAction);
+            tcs.Task.AddSetCancelAction(CancelAction);
+            tcs.Task.AttachCancellation(token);
+            return tcs.Task.Task;
         }
 
         public static void Notify<T>(this ObjectWait self, T obj) where T : struct, IWaitType

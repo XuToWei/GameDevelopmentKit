@@ -5,6 +5,50 @@ namespace Cysharp.Threading.Tasks
 {
     public static partial class UniTaskExtension
     {
+        public static void AttachCancellation(this AutoResetUniTaskCompletionSourcePlus tcs, CancellationToken token)
+        {
+            if (!token.CanBeCanceled)
+                return;
+
+            void TrySetCanceled()
+            {
+                tcs.TrySetCanceled(token);
+            }
+
+            CancellationTokenRegistration ctr = token.RegisterWithoutCaptureExecutionContext(TrySetCanceled);
+
+            void Dispose()
+            {
+                ctr.Dispose();
+            }
+
+            tcs.AddSetCancelAction(Dispose);
+            tcs.AddSetExceptionAction(Dispose);
+            tcs.AddSetResultAction(Dispose);
+        }
+
+        public static void AttachCancellation<T>(this AutoResetUniTaskCompletionSourcePlus<T> tcs, CancellationToken token)
+        {
+            if (!token.CanBeCanceled)
+                return;
+
+            void TrySetCanceled()
+            {
+                tcs.TrySetCanceled(token);
+            }
+
+            CancellationTokenRegistration ctr = token.RegisterWithoutCaptureExecutionContext(TrySetCanceled);
+
+            void Dispose()
+            {
+                ctr.Dispose();
+            }
+
+            tcs.AddSetCancelAction(Dispose);
+            tcs.AddSetExceptionAction(Dispose);
+            tcs.AddSetResultAction(Dispose);
+        }
+
         public static UniTask AttachCancellation(this UniTask task, CancellationToken token, Action cancelAction = null)
         {
             if (token.IsCancellationRequested)
