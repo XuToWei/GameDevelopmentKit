@@ -92,7 +92,7 @@ namespace ET
                 self.Notify(new T() { Error = WaitTypeError.Cancel });
             }
             
-            tcs.Task.AddSetCancelAction(CancelAction);
+            tcs.Task.AddOnCancelAction(CancelAction);
             tcs.Task.AttachCancellation(token);
             return tcs.Task.Task;
         }
@@ -124,7 +124,7 @@ namespace ET
                 self.Notify(new T() { Error = WaitTypeError.Cancel });
             }
             
-            tcs.Task.AddSetCancelAction(CancelAction);
+            tcs.Task.AddOnCancelAction(CancelAction);
             tcs.Task.AttachCancellation(token);
             return tcs.Task.Task;
         }

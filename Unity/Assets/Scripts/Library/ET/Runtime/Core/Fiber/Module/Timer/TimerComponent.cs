@@ -195,7 +195,7 @@ namespace ET
                 self.Remove(timerId);
             }
 
-            tcs.AddSetCancelAction(CancelAction);
+            tcs.AddOnCancelAction(CancelAction);
             tcs.AttachCancellation(token);
             return tcs.Task;
         }
@@ -228,7 +228,7 @@ namespace ET
                 self.Remove(timerId);
             }
 
-            tcs.AddSetCancelAction(CancelAction);
+            tcs.AddOnCancelAction(CancelAction);
             tcs.AttachCancellation(token);
             return tcs.Task;
         }
@@ -252,7 +252,7 @@ namespace ET
                 self.Remove(timerId);
             }
 
-            tcs.AddSetCancelAction(CancelAction);
+            tcs.AddOnCancelAction(CancelAction);
             return tcs;
         }
 

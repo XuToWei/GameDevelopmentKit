@@ -62,32 +62,32 @@ namespace Cysharp.Threading.Tasks
             return source;
         }
 
-        public void AddSetCancelAction(Action action)
+        public void AddOnCancelAction(Action action)
         {
             onCancelAction += action;
         }
 
-        public void AddSetExceptionAction(Action action)
+        public void AddOnExceptionAction(Action action)
         {
             onExceptionAction += action;
         }
 
-        public void AddSetResultAction(Action action)
+        public void AddOnResultAction(Action action)
         {
             onResultAction += action;
         }
 
-        public void RemoveSetCancelAction(Action action)
+        public void RemoveOnCancelAction(Action action)
         {
             onCancelAction -= action;
         }
 
-        public void RemoveSetExceptionAction(Action action)
+        public void RemoveOnExceptionAction(Action action)
         {
             onExceptionAction -= action;
         }
 
-        public void RemoveSetResultAction(Action action)
+        public void RemoveOnResultAction(Action action)
         {
             onResultAction -= action;
         }
@@ -226,32 +226,32 @@ namespace Cysharp.Threading.Tasks
             return source;
         }
 
-        public void AddSetCancelAction(Action action)
+        public void AddOnCancelAction(Action action)
         {
             onCancelAction += action;
         }
 
-        public void AddSetExceptionAction(Action action)
+        public void AddOnExceptionAction(Action action)
         {
             onExceptionAction += action;
         }
 
-        public void AddSetResultAction(Action action)
+        public void AddOnResultAction(Action action)
         {
             onResultAction += action;
         }
         
-        public void RemoveSetCancelAction(Action action)
+        public void RemoveOnCancelAction(Action action)
         {
             onCancelAction -= action;
         }
 
-        public void RemoveSetExceptionAction(Action action)
+        public void RemoveOnExceptionAction(Action action)
         {
             onExceptionAction -= action;
         }
 
-        public void RemoveSetResultAction(Action action)
+        public void RemoveOnResultAction(Action action)
         {
             onResultAction -= action;
         }

@@ -22,9 +22,9 @@ namespace Cysharp.Threading.Tasks
                 ctr.Dispose();
             }
 
-            tcs.AddSetCancelAction(Dispose);
-            tcs.AddSetExceptionAction(Dispose);
-            tcs.AddSetResultAction(Dispose);
+            tcs.AddOnCancelAction(Dispose);
+            tcs.AddOnExceptionAction(Dispose);
+            tcs.AddOnResultAction(Dispose);
         }
 
         public static void AttachCancellation<T>(this AutoResetUniTaskCompletionSourcePlus<T> tcs, CancellationToken token)
@@ -44,9 +44,9 @@ namespace Cysharp.Threading.Tasks
                 ctr.Dispose();
             }
 
-            tcs.AddSetCancelAction(Dispose);
-            tcs.AddSetExceptionAction(Dispose);
-            tcs.AddSetResultAction(Dispose);
+            tcs.AddOnCancelAction(Dispose);
+            tcs.AddOnExceptionAction(Dispose);
+            tcs.AddOnResultAction(Dispose);
         }
 
         public static UniTask AttachCancellation(this UniTask task, CancellationToken token, Action cancelAction = null)

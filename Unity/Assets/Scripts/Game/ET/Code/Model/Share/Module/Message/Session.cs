@@ -82,7 +82,7 @@ namespace ET
                 response.Error = ErrorCore.ERR_Cancel;
             }
             
-            rpcInfo.Tcs.AddSetCancelAction(CancelAction);
+            rpcInfo.Tcs.AddOnCancelAction(CancelAction);
             rpcInfo.Tcs.AttachCancellation(token);
             return rpcInfo.Tcs.Task;
         }
