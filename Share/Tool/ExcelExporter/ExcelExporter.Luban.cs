@@ -134,7 +134,7 @@ namespace ET
 
                 Log.Info($"Export Luban Excel Parallel {genInfos.Count} ForEachAsync!");
                 bool isSuccess = true;
-                int maxParallelism = Math.Max(1, Environment.ProcessorCount / 2 - 1);
+                int maxParallelism = Math.Max(1, (int)Math.Sqrt(Environment.ProcessorCount));
                 int processCount = 0;
                 Parallel.ForEachAsync(genInfos,
                     new ParallelOptions() { MaxDegreeOfParallelism = maxParallelism },
