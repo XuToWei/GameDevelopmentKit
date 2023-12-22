@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ET
 {
-public partial class Tables : ITables
+public partial class Tables
 {
     public DTStartMachineConfig DTStartMachineConfig { private set; get; }
     public DTStartProcessConfig DTStartProcessConfig { private set; get; }

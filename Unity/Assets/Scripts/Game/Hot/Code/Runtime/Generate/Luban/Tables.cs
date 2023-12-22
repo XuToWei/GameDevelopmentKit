@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Game.Hot
 {
-public partial class Tables : ITables
+public partial class Tables
 {
     public DTOneConfig DTOneConfig { private set; get; }
     public DTAircraft DTAircraft { private set; get; }

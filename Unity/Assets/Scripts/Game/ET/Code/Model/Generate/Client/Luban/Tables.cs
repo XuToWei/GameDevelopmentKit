@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ET
 {
-public partial class Tables : ITables
+public partial class Tables
 {
     public DTOneConfig DTOneConfig { private set; get; }
     public DTAIConfig DTAIConfig { private set; get; }

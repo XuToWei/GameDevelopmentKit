@@ -8,7 +8,7 @@ using System.Threading.Tasks;
     tables = x.tables
 }}
 {{cs_start_name_space_grace x.namespace}}
-public sealed partial class {{name}} : ITables
+public sealed partial class {{name}}
 {
     {{~for table in tables ~}}
     {{~if table.comment != '' ~}}
