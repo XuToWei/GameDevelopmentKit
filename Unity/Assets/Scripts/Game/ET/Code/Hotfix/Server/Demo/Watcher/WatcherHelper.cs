@@ -12,6 +12,10 @@ namespace ET.Server
             DRStartMachineConfig startMachineConfig = null;
             foreach (var config in Tables.Instance.DTStartMachineConfig.DataList)
             {
+                if (config.StartConfig != Options.Instance.StartConfig)
+                {
+                    continue;
+                }
                 if (!WatcherHelper.IsThisMachine(config.InnerIP, localIP))
                 {
                     continue;
