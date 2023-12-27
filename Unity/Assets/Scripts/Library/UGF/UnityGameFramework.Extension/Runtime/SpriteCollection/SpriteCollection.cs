@@ -33,6 +33,7 @@ namespace UnityGameFramework.Extension
             return sprite;
         }
 #if UNITY_EDITOR
+        [InfoBox("Can drag to 'Objects'")]
         [OdinSerialize]
         [OnValueChanged("OnListChange", includeChildren: true)]
         [ListDrawerSettings(DraggableItems = false, IsReadOnly = false, HideAddButton = true)]
