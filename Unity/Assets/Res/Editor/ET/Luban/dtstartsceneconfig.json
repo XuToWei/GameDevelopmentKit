@@ -182,7 +182,7 @@
   {
     "StartConfig": "Release",
     "Id": 2,
-    "Process": 1,
+    "Process": 2,
     "Zone": 1,
     "SceneType": "Gate",
     "Name": "Gate1",
@@ -191,7 +191,7 @@
   {
     "StartConfig": "Release",
     "Id": 3,
-    "Process": 1,
+    "Process": 2,
     "Zone": 1,
     "SceneType": "Gate",
     "Name": "Gate2",

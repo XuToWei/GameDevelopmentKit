@@ -75,8 +75,10 @@ namespace ET.Server
                         IRequest request = (IRequest)message;
                         // 注意这里都不能抛异常，因为这里只是中转消息
                         IResponse response = await fiber.Root.GetComponent<ProcessInnerSender>().Call(actorId, request, false);
+                        // 注意这里的response会在该协程执行完之后由ProcessInnerSender dispose。
                         actorId.Process = fromProcess;
                         self.Send(actorId, response);
+                        ((MessageObject)response).Dispose();
                     }
                     Call().Forget();
                     break;
@@ -159,7 +161,6 @@ namespace ET.Server
             }
 
             self.Tcs.TrySetResult(response);
-            ((MessageObject)response).Dispose();
         }
 
         public static void Send(this ProcessOuterSender self, ActorId actorId, IMessage message)

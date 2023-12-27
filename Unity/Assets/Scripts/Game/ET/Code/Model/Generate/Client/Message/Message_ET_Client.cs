@@ -12,7 +12,7 @@ namespace ET
     //protofile : ET-ClientServer/ClientMessage.proto
     public partial class Main2NetClient_Login: MessageObject, IRequest
     {
-        public static Main2NetClient_Login Create(bool isFromPool = true) 
+        public static Main2NetClient_Login Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(Main2NetClient_Login), isFromPool) as Main2NetClient_Login; 
         }
@@ -41,7 +41,7 @@ namespace ET
     //protofile : ET-ClientServer/ClientMessage.proto
     public partial class NetClient2Main_Login: MessageObject, IResponse
     {
-        public static NetClient2Main_Login Create(bool isFromPool = true) 
+        public static NetClient2Main_Login Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(NetClient2Main_Login), isFromPool) as NetClient2Main_Login; 
         }
@@ -71,7 +71,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class C2G_Match: MessageObject, ISessionRequest
     {
-        public static C2G_Match Create(bool isFromPool = true) 
+        public static C2G_Match Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2G_Match), isFromPool) as C2G_Match; 
         }
@@ -91,7 +91,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class G2C_Match: MessageObject, ISessionResponse
     {
-        public static G2C_Match Create(bool isFromPool = true) 
+        public static G2C_Match Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(G2C_Match), isFromPool) as G2C_Match; 
         }
@@ -118,7 +118,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class Match2G_NotifyMatchSuccess: MessageObject, IMessage
     {
-        public static Match2G_NotifyMatchSuccess Create(bool isFromPool = true) 
+        public static Match2G_NotifyMatchSuccess Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(Match2G_NotifyMatchSuccess), isFromPool) as Match2G_NotifyMatchSuccess; 
         }
@@ -143,7 +143,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class C2Room_ChangeSceneFinish: MessageObject, IRoomMessage
     {
-        public static C2Room_ChangeSceneFinish Create(bool isFromPool = true) 
+        public static C2Room_ChangeSceneFinish Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2Room_ChangeSceneFinish), isFromPool) as C2Room_ChangeSceneFinish; 
         }
@@ -163,7 +163,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class LockStepUnitInfo: MessageObject
     {
-        public static LockStepUnitInfo Create(bool isFromPool = true) 
+        public static LockStepUnitInfo Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(LockStepUnitInfo), isFromPool) as LockStepUnitInfo; 
         }
@@ -190,7 +190,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class Room2C_Start: MessageObject, IMessage
     {
-        public static Room2C_Start Create(bool isFromPool = true) 
+        public static Room2C_Start Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(Room2C_Start), isFromPool) as Room2C_Start; 
         }
@@ -213,7 +213,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class FrameMessage: MessageObject, IMessage
     {
-        public static FrameMessage Create(bool isFromPool = true) 
+        public static FrameMessage Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(FrameMessage), isFromPool) as FrameMessage; 
         }
@@ -239,7 +239,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class OneFrameInputs: MessageObject, IMessage
     {
-        public static OneFrameInputs Create(bool isFromPool = true) 
+        public static OneFrameInputs Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(OneFrameInputs), isFromPool) as OneFrameInputs; 
         }
@@ -260,7 +260,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class Room2C_AdjustUpdateTime: MessageObject, IMessage
     {
-        public static Room2C_AdjustUpdateTime Create(bool isFromPool = true) 
+        public static Room2C_AdjustUpdateTime Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(Room2C_AdjustUpdateTime), isFromPool) as Room2C_AdjustUpdateTime; 
         }
@@ -280,7 +280,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class C2Room_CheckHash: MessageObject, IRoomMessage
     {
-        public static C2Room_CheckHash Create(bool isFromPool = true) 
+        public static C2Room_CheckHash Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2Room_CheckHash), isFromPool) as C2Room_CheckHash; 
         }
@@ -306,7 +306,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class Room2C_CheckHashFail: MessageObject, IMessage
     {
-        public static Room2C_CheckHashFail Create(bool isFromPool = true) 
+        public static Room2C_CheckHashFail Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(Room2C_CheckHashFail), isFromPool) as Room2C_CheckHashFail; 
         }
@@ -329,7 +329,7 @@ namespace ET
     //protofile : ET-ClientServer/LockStepOuter.proto
     public partial class G2C_Reconnect: MessageObject, IMessage
     {
-        public static G2C_Reconnect Create(bool isFromPool = true) 
+        public static G2C_Reconnect Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(G2C_Reconnect), isFromPool) as G2C_Reconnect; 
         }
@@ -355,7 +355,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class HttpGetRouterResponse: MessageObject
     {
-        public static HttpGetRouterResponse Create(bool isFromPool = true) 
+        public static HttpGetRouterResponse Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(HttpGetRouterResponse), isFromPool) as HttpGetRouterResponse; 
         }
@@ -378,7 +378,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class RouterSync: MessageObject
     {
-        public static RouterSync Create(bool isFromPool = true) 
+        public static RouterSync Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(RouterSync), isFromPool) as RouterSync; 
         }
@@ -402,7 +402,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_TestRequest: MessageObject, ILocationRequest
     {
-        public static C2M_TestRequest Create(bool isFromPool = true) 
+        public static C2M_TestRequest Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2M_TestRequest), isFromPool) as C2M_TestRequest; 
         }
@@ -425,7 +425,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_TestResponse: MessageObject, IResponse
     {
-        public static M2C_TestResponse Create(bool isFromPool = true) 
+        public static M2C_TestResponse Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_TestResponse), isFromPool) as M2C_TestResponse; 
         }
@@ -455,7 +455,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2G_EnterMap: MessageObject, ISessionRequest
     {
-        public static C2G_EnterMap Create(bool isFromPool = true) 
+        public static C2G_EnterMap Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2G_EnterMap), isFromPool) as C2G_EnterMap; 
         }
@@ -475,7 +475,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_EnterMap: MessageObject, ISessionResponse
     {
-        public static G2C_EnterMap Create(bool isFromPool = true) 
+        public static G2C_EnterMap Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(G2C_EnterMap), isFromPool) as G2C_EnterMap; 
         }
@@ -505,7 +505,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class MoveInfo: MessageObject
     {
-        public static MoveInfo Create(bool isFromPool = true) 
+        public static MoveInfo Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(MoveInfo), isFromPool) as MoveInfo; 
         }
@@ -531,7 +531,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class UnitInfo: MessageObject
     {
-        public static UnitInfo Create(bool isFromPool = true) 
+        public static UnitInfo Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(UnitInfo), isFromPool) as UnitInfo; 
         }
@@ -570,7 +570,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_CreateUnits: MessageObject, IMessage
     {
-        public static M2C_CreateUnits Create(bool isFromPool = true) 
+        public static M2C_CreateUnits Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_CreateUnits), isFromPool) as M2C_CreateUnits; 
         }
@@ -590,7 +590,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_CreateMyUnit: MessageObject, IMessage
     {
-        public static M2C_CreateMyUnit Create(bool isFromPool = true) 
+        public static M2C_CreateMyUnit Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_CreateMyUnit), isFromPool) as M2C_CreateMyUnit; 
         }
@@ -610,7 +610,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_StartSceneChange: MessageObject, IMessage
     {
-        public static M2C_StartSceneChange Create(bool isFromPool = true) 
+        public static M2C_StartSceneChange Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_StartSceneChange), isFromPool) as M2C_StartSceneChange; 
         }
@@ -633,7 +633,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_RemoveUnits: MessageObject, IMessage
     {
-        public static M2C_RemoveUnits Create(bool isFromPool = true) 
+        public static M2C_RemoveUnits Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_RemoveUnits), isFromPool) as M2C_RemoveUnits; 
         }
@@ -653,7 +653,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_PathfindingResult: MessageObject, ILocationMessage
     {
-        public static C2M_PathfindingResult Create(bool isFromPool = true) 
+        public static C2M_PathfindingResult Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2M_PathfindingResult), isFromPool) as C2M_PathfindingResult; 
         }
@@ -676,7 +676,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_Stop: MessageObject, ILocationMessage
     {
-        public static C2M_Stop Create(bool isFromPool = true) 
+        public static C2M_Stop Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2M_Stop), isFromPool) as C2M_Stop; 
         }
@@ -696,7 +696,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_PathfindingResult: MessageObject, IMessage
     {
-        public static M2C_PathfindingResult Create(bool isFromPool = true) 
+        public static M2C_PathfindingResult Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_PathfindingResult), isFromPool) as M2C_PathfindingResult; 
         }
@@ -722,7 +722,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_Stop: MessageObject, IMessage
     {
-        public static M2C_Stop Create(bool isFromPool = true) 
+        public static M2C_Stop Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_Stop), isFromPool) as M2C_Stop; 
         }
@@ -752,7 +752,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2G_Ping: MessageObject, ISessionRequest
     {
-        public static C2G_Ping Create(bool isFromPool = true) 
+        public static C2G_Ping Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2G_Ping), isFromPool) as C2G_Ping; 
         }
@@ -772,7 +772,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_Ping: MessageObject, ISessionResponse
     {
-        public static G2C_Ping Create(bool isFromPool = true) 
+        public static G2C_Ping Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(G2C_Ping), isFromPool) as G2C_Ping; 
         }
@@ -801,7 +801,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_Test: MessageObject, ISessionMessage
     {
-        public static G2C_Test Create(bool isFromPool = true) 
+        public static G2C_Test Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(G2C_Test), isFromPool) as G2C_Test; 
         }
@@ -819,7 +819,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_Reload: MessageObject, ISessionRequest
     {
-        public static C2M_Reload Create(bool isFromPool = true) 
+        public static C2M_Reload Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2M_Reload), isFromPool) as C2M_Reload; 
         }
@@ -845,7 +845,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_Reload: MessageObject, ISessionResponse
     {
-        public static M2C_Reload Create(bool isFromPool = true) 
+        public static M2C_Reload Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_Reload), isFromPool) as M2C_Reload; 
         }
@@ -872,7 +872,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2R_Login: MessageObject, ISessionRequest
     {
-        public static C2R_Login Create(bool isFromPool = true) 
+        public static C2R_Login Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2R_Login), isFromPool) as C2R_Login; 
         }
@@ -898,7 +898,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class R2C_Login: MessageObject, ISessionResponse
     {
-        public static R2C_Login Create(bool isFromPool = true) 
+        public static R2C_Login Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(R2C_Login), isFromPool) as R2C_Login; 
         }
@@ -934,7 +934,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2G_LoginGate: MessageObject, ISessionRequest
     {
-        public static C2G_LoginGate Create(bool isFromPool = true) 
+        public static C2G_LoginGate Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2G_LoginGate), isFromPool) as C2G_LoginGate; 
         }
@@ -960,7 +960,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_LoginGate: MessageObject, ISessionResponse
     {
-        public static G2C_LoginGate Create(bool isFromPool = true) 
+        public static G2C_LoginGate Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(G2C_LoginGate), isFromPool) as G2C_LoginGate; 
         }
@@ -989,7 +989,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_TestHotfixMessage: MessageObject, ISessionMessage
     {
-        public static G2C_TestHotfixMessage Create(bool isFromPool = true) 
+        public static G2C_TestHotfixMessage Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(G2C_TestHotfixMessage), isFromPool) as G2C_TestHotfixMessage; 
         }
@@ -1010,7 +1010,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_TestRobotCase: MessageObject, ILocationRequest
     {
-        public static C2M_TestRobotCase Create(bool isFromPool = true) 
+        public static C2M_TestRobotCase Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2M_TestRobotCase), isFromPool) as C2M_TestRobotCase; 
         }
@@ -1033,7 +1033,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_TestRobotCase: MessageObject, ILocationResponse
     {
-        public static M2C_TestRobotCase Create(bool isFromPool = true) 
+        public static M2C_TestRobotCase Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_TestRobotCase), isFromPool) as M2C_TestRobotCase; 
         }
@@ -1062,7 +1062,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_TestRobotCase2: MessageObject, ILocationMessage
     {
-        public static C2M_TestRobotCase2 Create(bool isFromPool = true) 
+        public static C2M_TestRobotCase2 Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2M_TestRobotCase2), isFromPool) as C2M_TestRobotCase2; 
         }
@@ -1085,7 +1085,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_TestRobotCase2: MessageObject, ILocationMessage
     {
-        public static M2C_TestRobotCase2 Create(bool isFromPool = true) 
+        public static M2C_TestRobotCase2 Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_TestRobotCase2), isFromPool) as M2C_TestRobotCase2; 
         }
@@ -1109,7 +1109,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2M_TransferMap: MessageObject, ILocationRequest
     {
-        public static C2M_TransferMap Create(bool isFromPool = true) 
+        public static C2M_TransferMap Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2M_TransferMap), isFromPool) as C2M_TransferMap; 
         }
@@ -1129,7 +1129,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class M2C_TransferMap: MessageObject, ILocationResponse
     {
-        public static M2C_TransferMap Create(bool isFromPool = true) 
+        public static M2C_TransferMap Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(M2C_TransferMap), isFromPool) as M2C_TransferMap; 
         }
@@ -1156,7 +1156,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class C2G_Benchmark: MessageObject, ISessionRequest
     {
-        public static C2G_Benchmark Create(bool isFromPool = true) 
+        public static C2G_Benchmark Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(C2G_Benchmark), isFromPool) as C2G_Benchmark; 
         }
@@ -1176,7 +1176,7 @@ namespace ET
     //protofile : ET-ClientServer/OuterMessage.proto
     public partial class G2C_Benchmark: MessageObject, ISessionResponse
     {
-        public static G2C_Benchmark Create(bool isFromPool = true) 
+        public static G2C_Benchmark Create(bool isFromPool = false) 
         { 
             return ObjectPool.Instance.Fetch(typeof(G2C_Benchmark), isFromPool) as G2C_Benchmark; 
         }

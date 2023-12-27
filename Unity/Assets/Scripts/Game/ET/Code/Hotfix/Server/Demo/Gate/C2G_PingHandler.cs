@@ -7,8 +7,12 @@ namespace ET.Server
 	{
 		protected override async UniTask Run(Session session, C2G_Ping request, G2C_Ping response)
 		{
+			using C2G_Ping _ = request; // 这里用完调用Dispose可以回收到池，不调用的话GC会回收
+			
 			response.Time = TimeInfo.Instance.ServerNow();
 			await UniTask.CompletedTask;
+			
+			// MessageSessionHandler的response会在函数返回发送完消息回收到池
 		}
 	}
 }

@@ -14,7 +14,7 @@ namespace ET
         {
             MailBoxComponent mailBoxComponent = args.MailBoxComponent;
             
-            MessageObject messageObject = (MessageObject)args.MessageObject;
+            MessageObject messageObject = args.MessageObject;
             
             await MessageDispatcher.Instance.Handle(mailBoxComponent.Parent, args.FromAddress, messageObject);
         }

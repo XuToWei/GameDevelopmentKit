@@ -7,6 +7,8 @@ namespace ET.Server
     {
         protected override async UniTask Run(Scene root, FrameMessage message)
         {
+            using FrameMessage _ = message;  // 让消息回到池中
+            
             Room room = root.GetComponent<Room>();
             FrameBuffer frameBuffer = room.FrameBuffer;
             if (message.Frame % (1000 / LSConstValue.UpdateInterval) == 0)
@@ -36,7 +38,6 @@ namespace ET.Server
                 return;
             }
             oneFrameInputs.Inputs[message.PlayerId] = message.Input;
-
 
             await UniTask.CompletedTask;
         }
