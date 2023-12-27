@@ -24,7 +24,7 @@ namespace UnityGameFramework.Extension
 #if ODIN_INSPECTOR
     public class SpriteCollection : SerializedScriptableObject
     {
-        [OdinSerialize] [DictionaryDrawerSettings(KeyLabel = "Path", ValueLabel = "Sprite", IsReadOnly = true)]
+        [OdinSerialize, Searchable] [DictionaryDrawerSettings(KeyLabel = "Path", ValueLabel = "Sprite", IsReadOnly = true)]
         private Dictionary<string, Sprite> m_Sprites = new Dictionary<string, Sprite>();
 
         public Sprite GetSprite(string path)

@@ -14,15 +14,15 @@ namespace UnityGameFramework.Extension
     public class ResourceListComponent : GameFrameworkComponent
     {
         public const string BytesDataFilePath = "Assets/Res/Config/ResourceList.bytes";
+        [ShowInInspector, Searchable]
         private readonly Dictionary<string, string> m_ResourceNamePathDict = new Dictionary<string, string>();
 #if UNITY_EDITOR
         [SerializeField]
         private bool m_AutoRefreshResourceCollection = true;
 #endif
-        [ShowInInspector] 
-        public Dictionary<string,string> ResourceNamePathDict => m_ResourceNamePathDict;
         [ShowInInspector]
         public int ResourceCount => m_ResourceNamePathDict.Count;
+        public Dictionary<string, string>.KeyCollection ResourceNameKeys => m_ResourceNamePathDict.Keys;
 
         public async UniTask LoadAsync()
         {
