@@ -25,7 +25,8 @@
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
-        "ZString"
+        "ZString",
+        "SLATE"
     ],
     "includePlatforms": [
         "Editor"

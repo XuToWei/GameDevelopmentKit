@@ -21,7 +21,8 @@
         "LoopScrollRect.Runtime",
         "ZString",
         "MemoryPack",
-        "UniTaskExtension"
+        "UniTaskExtension",
+        "SLATE"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
