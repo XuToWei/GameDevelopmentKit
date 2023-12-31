@@ -51,11 +51,9 @@
 
 - 1.安装 [.net6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)，服务器功能需要安装[MongoDB](https://www.mongodb.com/)
 
-- 2.打开Unity项目，等待Unity编译完成
+- 2.打开 Kit.sln 编译（导表，资源服务器，代码分析等功能需要用到）
 
-- 3.打开 Kit.sln 编译（导表，资源服务器，代码分析等功能需要用到）
-
-- 4.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
+- 3.打开Unity工程，点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
 
 ### Windows Build
 
