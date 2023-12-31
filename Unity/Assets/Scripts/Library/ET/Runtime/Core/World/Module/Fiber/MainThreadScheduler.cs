@@ -13,9 +13,7 @@ namespace ET
 
         public MainThreadScheduler(FiberManager fiberManager)
         {
-#if !UNITY_EDITOR
             SynchronizationContext.SetSynchronizationContext(this.threadSynchronizationContext);
-#endif
             this.fiberManager = fiberManager;
         }
 
@@ -27,9 +25,7 @@ namespace ET
 
         public void Update()
         {
-#if !UNITY_EDITOR
             SynchronizationContext.SetSynchronizationContext(this.threadSynchronizationContext);
-#endif
             this.threadSynchronizationContext.Update();
             
             int count = this.idQueue.Count;
@@ -52,9 +48,7 @@ namespace ET
                 }
                 
                 Fiber.Instance = fiber;
-#if !UNITY_EDITOR
                 SynchronizationContext.SetSynchronizationContext(fiber.ThreadSynchronizationContext);
-#endif
                 fiber.Update();
                 Fiber.Instance = null;
                 
@@ -84,9 +78,7 @@ namespace ET
                 }
 
                 Fiber.Instance = fiber;
-#if !UNITY_EDITOR
                 SynchronizationContext.SetSynchronizationContext(fiber.ThreadSynchronizationContext);
-#endif
                 fiber.LateUpdate();
                 Fiber.Instance = null;
                 

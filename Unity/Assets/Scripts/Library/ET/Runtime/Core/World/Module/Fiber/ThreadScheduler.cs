@@ -21,9 +21,7 @@ namespace ET
         {
             Fiber fiber = fiberManager.Get(fiberId);
             Fiber.Instance = fiber;
-#if !UNITY_EDITOR
             SynchronizationContext.SetSynchronizationContext(fiber.ThreadSynchronizationContext);
-#endif
             
             while (true)
             {

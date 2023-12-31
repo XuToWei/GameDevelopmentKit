@@ -10,8 +10,13 @@ namespace UnityGameFramework.Extension
     {
 #if UNITY_EDITOR
         [Tooltip("编辑器模式下能否加载bytes方式运行代码")]
-        [SerializeField, ShowIf("IsHotFix")]
+        [SerializeField, ShowIf("IsHotFix"), OnValueChanged("SaveScene")]
         private bool m_EnableEditorCodeBytesMode = false;
+
+        private void SaveScene()
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.SaveScene(this.gameObject.scene);
+        }
 #endif
 
         [ShowInInspector, ReadOnly]
