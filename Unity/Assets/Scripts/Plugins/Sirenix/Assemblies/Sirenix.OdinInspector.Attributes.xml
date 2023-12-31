@@ -1058,17 +1058,17 @@
              <para>The following example shows how DisplayAsString is used to display a string property as text in the inspector.</para>
              <code>
              public class MyComponent : MonoBehaviour
-            	{
-            		[DisplayAsString]
-            		public string MyInt = 5;
+                {
+                    [DisplayAsString]
+                    public string MyInt = 5;
             
-            		// You can combine with <see cref="T:Sirenix.OdinInspector.HideLabelAttribute"/> to display a message in the inspector.
-            		[DisplayAsString, HideLabel]
-            		public string MyMessage = "This string will be displayed as text in the inspector";
-            		
-            		[DisplayAsString(false)]
-            		public string InlineMessage = "This string is very long, but has been configured to not overflow.";
-            	}
+                    // You can combine with <see cref="T:Sirenix.OdinInspector.HideLabelAttribute"/> to display a message in the inspector.
+                    [DisplayAsString, HideLabel]
+                    public string MyMessage = "This string will be displayed as text in the inspector";
+            
+                    [DisplayAsString(false)]
+                    public string InlineMessage = "This string is very long, but has been configured to not overflow.";
+                }
              </code>
              </example>
              <seealso cref="T:Sirenix.OdinInspector.TitleAttribute"/>
@@ -1078,6 +1078,21 @@
             <summary>
             If <c>true</c>, the string will overflow past the drawn space and be clipped when there's not enough space for the text.
             If <c>false</c> the string will expand to multiple lines, if there's not enough space when drawn.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.DisplayAsStringAttribute.Alignment">
+            <summary>
+            How the string should be aligned.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.DisplayAsStringAttribute.FontSize">
+            <summary>
+            The size of the font.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.DisplayAsStringAttribute.EnableRichText">
+            <summary>
+            If <c>true</c> the string will support rich text.
             </summary>
         </member>
         <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor">
@@ -1090,6 +1105,94 @@
             Displays the property as a string in the inspector.
             </summary>
             <param name="overflow">Value indicating if the string should overflow past the available space, or expand to multiple lines when there's not enough horizontal space.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(UnityEngine.TextAlignment)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="alignment">How the string should be aligned.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(System.Int32)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="fontSize">The size of the font.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(System.Boolean,UnityEngine.TextAlignment)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="overflow">Value indicating if the string should overflow past the available space, or expand to multiple lines when there's not enough horizontal space.</param>
+            <param name="alignment">How the string should be aligned.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(System.Boolean,System.Int32)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="overflow">Value indicating if the string should overflow past the available space, or expand to multiple lines when there's not enough horizontal space.</param>
+            <param name="fontSize">The size of the font.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(System.Int32,UnityEngine.TextAlignment)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="fontSize">The size of the font.</param>
+            <param name="alignment">How the string should be aligned.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(System.Boolean,System.Int32,UnityEngine.TextAlignment)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="overflow">Value indicating if the string should overflow past the available space, or expand to multiple lines when there's not enough horizontal space.</param>
+            <param name="fontSize">The size of the font.</param>
+            <param name="alignment">How the string should be aligned.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(UnityEngine.TextAlignment,System.Boolean)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="alignment">How the string should be aligned.</param>
+            <param name="enableRichText">If <c>true</c> the string will support rich text.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(System.Int32,System.Boolean)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="fontSize">The size of the font.</param>
+            <param name="enableRichText">If <c>true</c> the string will support rich text.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(System.Boolean,UnityEngine.TextAlignment,System.Boolean)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="overflow">Value indicating if the string should overflow past the available space, or expand to multiple lines when there's not enough horizontal space.</param>
+            <param name="alignment">How the string should be aligned.</param>
+            <param name="enableRichText">If <c>true</c> the string will support rich text.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(System.Boolean,System.Int32,System.Boolean)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="overflow">Value indicating if the string should overflow past the available space, or expand to multiple lines when there's not enough horizontal space.</param>
+            <param name="fontSize">The size of the font.</param>
+            <param name="enableRichText">If <c>true</c> the string will support rich text.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(System.Int32,UnityEngine.TextAlignment,System.Boolean)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="fontSize">The size of the font.</param>
+            <param name="alignment">How the string should be aligned.</param>
+            <param name="enableRichText">If <c>true</c> the string will support rich text.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.DisplayAsStringAttribute.#ctor(System.Boolean,System.Int32,UnityEngine.TextAlignment,System.Boolean)">
+            <summary>
+            Displays the property as a string in the inspector.
+            </summary>
+            <param name="overflow">Value indicating if the string should overflow past the available space, or expand to multiple lines when there's not enough horizontal space.</param>
+            <param name="fontSize">The size of the font.</param>
+            <param name="alignment">How the string should be aligned.</param>
+            <param name="enableRichText">If <c>true</c> the string will support rich text.</param>
         </member>
         <member name="T:Sirenix.OdinInspector.DoNotDrawAsReferenceAttribute">
             <summary>
@@ -1130,6 +1233,11 @@
             <remarks>
             <para>Note that this attribute does not mean "disable Odin completely for this property"; it is visual only in nature, and in fact represents an Odin drawer which calls into Unity's old property drawing system. As Odin is still ultimately responsible for arranging the drawing of the property, and since other attributes exist with a higher priority than this attribute, and it is not guaranteed that Unity will draw the property if another attribute is present to override this one.</para>
             </remarks>
+        </member>
+        <member name="T:Sirenix.OdinInspector.DrawWithVisualElementsAttribute">
+            <summary>
+            Force Odin to draw this value as an IMGUI-embedded UI Toolkit Visual Element.
+            </summary>
         </member>
         <member name="T:Sirenix.OdinInspector.EnableGUIAttribute">
             <summary>
@@ -1279,55 +1387,55 @@
              <seealso cref="T:System.Attribute" />
         </member>
         <member name="T:Sirenix.OdinInspector.FilePathAttribute">
-            <summary>
-            <para>FilePath is used on string properties, and provides an interface for file paths.</para>
-            </summary>
-            <example>
-            <para>The following example demonstrates how FilePath is used.</para>
-            <code>
-            public class FilePathExamples : MonoBehaviour
-            {
-            	// By default, FilePath provides a path relative to the Unity project.
-            	[FilePath]
-            	public string UnityProjectPath;
+             <summary>
+             <para>FilePath is used on string properties, and provides an interface for file paths.</para>
+             </summary>
+             <example>
+             <para>The following example demonstrates how FilePath is used.</para>
+             <code>
+            	public class FilePathExamples : MonoBehaviour
+            	{
+            		// By default, FilePath provides a path relative to the Unity project.
+            		[FilePath]
+            		public string UnityProjectPath;
             
-            	// It is possible to provide custom parent path. Parent paths can be relative to the Unity project, or absolute.
-            	[FilePath(ParentFolder = "Assets/Plugins/Sirenix")]
-            	public string RelativeToParentPath;
+            		// It is possible to provide custom parent path. Parent paths can be relative to the Unity project, or absolute.
+            		[FilePath(ParentFolder = "Assets/Plugins/Sirenix")]
+            		public string RelativeToParentPath;
             
-            	// Using parent path, FilePath can also provide a path relative to a resources folder.
-            	[FilePath(ParentFolder = "Assets/Resources")]
-            	public string ResourcePath;
+            		// Using parent path, FilePath can also provide a path relative to a resources folder.
+            		[FilePath(ParentFolder = "Assets/Resources")]
+            		public string ResourcePath;
             
-            	// Provide a comma seperated list of allowed extensions. Dots are optional.
-            	[FilePath(Extensions = "cs")]
-            	public string ScriptFiles;
+            		// Provide a comma seperated list of allowed extensions. Dots are optional.
+            		[FilePath(Extensions = "cs")]
+            		public string ScriptFiles;
             
-            	// By setting AbsolutePath to true, the FilePath will provide an absolute path instead.
-            	[FilePath(AbsolutePath = true)]
-            	[BoxGroup("Conditions")]
-            	public string AbsolutePath;
+            		// By setting AbsolutePath to true, the FilePath will provide an absolute path instead.
+            		[FilePath(AbsolutePath = true)]
+            		[BoxGroup("Conditions")]
+            		public string AbsolutePath;
             
-            	// FilePath can also be configured to show an error, if the provided path is invalid.
-            	[FilePath(RequireValidPath = true)]
-            	public string ValidPath;
+            		// FilePath can also be configured to show an error, if the provided path is invalid.
+            		[FilePath(RequireValidPath = true)]
+            		public string ValidPath;
             
-            	// By default, FilePath will enforce the use of forward slashes. It can also be configured to use backslashes instead.
-            	[FilePath(UseBackslashes = true)]
-            	public string Backslashes;
+            		// By default, FilePath will enforce the use of forward slashes. It can also be configured to use backslashes instead.
+            		[FilePath(UseBackslashes = true)]
+            		public string Backslashes;
             
-            	// FilePath also supports member references with the $ symbol.
-            	[FilePath(ParentFolder = "$DynamicParent", Extensions = "$DynamicExtensions")]
-            	public string DynamicFilePath;
+            		// FilePath also supports member references with the $ symbol.
+            		[FilePath(ParentFolder = "$DynamicParent", Extensions = "$DynamicExtensions")]
+            		public string DynamicFilePath;
             
-            	public string DynamicParent = "Assets/Plugin/Sirenix";
+            		public string DynamicParent = "Assets/Plugin/Sirenix";
             
-            	public string DynamicExtensions = "cs, unity, jpg";
-            }
-            </code>
-            </example>
-            <seealso cref="T:Sirenix.OdinInspector.FolderPathAttribute"/>
-            <seealso cref="T:Sirenix.OdinInspector.DisplayAsStringAttribute"/>
+            		public string DynamicExtensions = "cs, unity, jpg";
+            	}
+             </code>
+             </example>
+             <seealso cref="T:Sirenix.OdinInspector.FolderPathAttribute"/>
+             <seealso cref="T:Sirenix.OdinInspector.DisplayAsStringAttribute"/>
         </member>
         <member name="F:Sirenix.OdinInspector.FilePathAttribute.AbsolutePath">
             <summary>
@@ -1359,6 +1467,11 @@
         <member name="F:Sirenix.OdinInspector.FilePathAttribute.UseBackslashes">
             <summary>
             By default FilePath enforces forward slashes. Set UseBackslashes to <c>true</c> if you want backslashes instead.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.FilePathAttribute.IncludeFileExtension">
+            <summary>
+            If <c>true</c> the file path will include the file's extension.
             </summary>
         </member>
         <member name="P:Sirenix.OdinInspector.FilePathAttribute.ReadOnly">
@@ -3293,7 +3406,7 @@
         </member>
         <member name="F:Sirenix.OdinInspector.PreviewFieldAttribute.FilterMode">
             <summary>
-            The FilterMode to be used for the preview. (Applies only to previews retrieved via the previewGetter parameter).
+            The FilterMode to be used for the preview.
             </summary>
         </member>
         <member name="P:Sirenix.OdinInspector.PreviewFieldAttribute.Alignment">
@@ -4965,6 +5078,30 @@
             If true, tables are drawn with rows/columns reversed (C# initialization order).
             </summary>
         </member>
+        <member name="F:Sirenix.OdinInspector.TableMatrixAttribute.Labels">
+            <summary>
+            A resolved string that should evaluate to a tuple (string, LabelDirection) which will be used as the label for the rows and columns of the table.
+            </summary>
+            <code>
+            [TableMatrix(SquareCells = true, Labels = "GetLabel")]
+            public int[,] ChessBoard = new int[8, 8];
+             
+            private (string, LabelDirection) GetLabel(int[,] array, TableAxis axis, int index)
+            {
+                var chessFileLetters = "ABCDEFGH";
+             
+                switch (axis)
+                {
+                    case TableAxis.Y:
+                        return ((array.GetLength(1) - index).ToString(), LabelDirection.LeftToRight);
+                    case TableAxis.X:
+                        return (chessFileLetters[index].ToString(), LabelDirection.TopToBottom);
+                    default:
+                        return (index.ToString(), LabelDirection.LeftToRight);
+                }
+            }
+            </code>
+        </member>
         <member name="T:Sirenix.OdinInspector.TitleAttribute">
             <summary>
             <para>Title is used to make a bold header above a property.</para>
@@ -5315,6 +5452,82 @@
             Draws an info box at the top of a type in the inspector.
             </summary>
             <param name="message">The message to display in the info box.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Sirenix.OdinInspector.UnitAttribute" -->
+        <member name="F:Sirenix.OdinInspector.UnitAttribute.Base">
+            <summary>
+            The unit of underlying value.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.UnitAttribute.Display">
+            <summary>
+            The unit displayed in the number field.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.UnitAttribute.BaseName">
+            <summary>
+            Name of the underlying unit.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.UnitAttribute.DisplayName">
+            <summary>
+            Name of the unit displayed in the number field.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.UnitAttribute.DisplayAsString">
+            <summary>
+            If <c>true</c> the number field is drawn as read-only text.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.UnitAttribute.ForceDisplayUnit">
+            <summary>
+            If <c>true</c> disables the option to change display unit with the right-click context menu.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.UnitAttribute.#ctor(Sirenix.OdinInspector.Units)">
+            <summary>
+            Displays the number as a unit field.
+            </summary>
+            <param name="unit">The unit of underlying value.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.UnitAttribute.#ctor(System.String)">
+            <summary>
+            Displays the number as a unit field.
+            </summary>
+            <param name="unit">The name of the underlying value.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.UnitAttribute.#ctor(Sirenix.OdinInspector.Units,Sirenix.OdinInspector.Units)">
+            <summary>
+            Displays the number as a unit field.
+            </summary>
+            <param name="base">The unit of underlying value.</param>
+            <param name="display">The unit to display the value as in the inspector.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.UnitAttribute.#ctor(Sirenix.OdinInspector.Units,System.String)">
+            <summary>
+            Displays the number as a unit field.
+            </summary>
+            <param name="base">The unit of underlying value.</param>
+            <param name="display">The unit to display the value as in the inspector.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.UnitAttribute.#ctor(System.String,Sirenix.OdinInspector.Units)">
+            <summary>
+            Displays the number as a unit field.
+            </summary>
+            <param name="base">The unit of underlying value.</param>
+            <param name="display">The unit to display the value as in the inspector.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.UnitAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Displays the number as a unit field.
+            </summary>
+            <param name="base">The unit of underlying value.</param>
+            <param name="display">The unit to display the value as in the inspector.</param>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Units">
+            <summary>
+            Units for use with <see cref="T:Sirenix.OdinInspector.UnitAttribute"/> and <see cref="!:Sirenix.Utilities.Editor.UnitNumberUtility"/>.
+            </summary>
         </member>
         <member name="T:Sirenix.OdinInspector.ValidateInputAttribute">
              <summary>

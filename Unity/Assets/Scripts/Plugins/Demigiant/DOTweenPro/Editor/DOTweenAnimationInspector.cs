@@ -1,4 +1,4 @@
-// Author: Daniele Giardini - http://www.demigiant.com
+﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/03/12 16:03
 
 using System;
@@ -15,7 +15,7 @@ using DOTweenSettings = DG.Tweening.Core.DOTweenSettings;
 #if true // UI_MARKER
 using UnityEngine.UI;
 #endif
-#if true // TEXTMESHPRO_MARKER
+#if false // TEXTMESHPRO_MARKER
     using TMPro;
 #endif
 
@@ -108,6 +108,7 @@ namespace DG.DOTweenEditor
             { DOTweenAnimation.AnimationType.CameraRect, new[] { typeof(Camera) } },
 #if true // UI_MARKER
             { DOTweenAnimation.AnimationType.UIWidthHeight, new[] { typeof(RectTransform) } },
+            { DOTweenAnimation.AnimationType.FillAmount, new[] { typeof(Image) } },
 #endif
         };
 
@@ -119,7 +120,7 @@ namespace DG.DOTweenEditor
             { DOTweenAnimation.AnimationType.Text, new[] { typeof(tk2dTextMesh) } }
         };
 #endif
-#if true // TEXTMESHPRO_MARKER
+#if false // TEXTMESHPRO_MARKER
         static readonly Dictionary<DOTweenAnimation.AnimationType, Type[]> _TMPAnimationTypeToComponent = new Dictionary<DOTweenAnimation.AnimationType, Type[]>() {
             { DOTweenAnimation.AnimationType.Color, new[] { typeof(TextMeshPro), typeof(TextMeshProUGUI) } },
             { DOTweenAnimation.AnimationType.Fade, new[] { typeof(TextMeshPro), typeof(TextMeshProUGUI) } },
@@ -134,12 +135,13 @@ namespace DG.DOTweenEditor
             "Scale",
             "Color", "Fade",
 #if true // UI_MARKER
+            "FillAmount",
             "Text",
 #endif
 #if false // TK2D_MARKER
             "Text",
 #endif
-#if true // TEXTMESHPRO_MARKER
+#if false // TEXTMESHPRO_MARKER
             "Text",
 #endif
 #if true // UI_MARKER
@@ -361,6 +363,9 @@ namespace DG.DOTweenEditor
                         _src.endValueFloat = 0;
                         _src.optionalBool0 = _src.animationType == DOTweenAnimation.AnimationType.UIWidthHeight;
                         break;
+                    case DOTweenAnimation.AnimationType.FillAmount:
+                        _src.endValueFloat = 1;
+                        break;
                     case DOTweenAnimation.AnimationType.Color:
                     case DOTweenAnimation.AnimationType.Fade:
                         _isLightSrc = targetGO.GetComponent<Light>() != null;
@@ -505,6 +510,12 @@ namespace DG.DOTweenEditor
                     else GUIEndValueV2();
                     _src.optionalBool0 = EditorGUILayout.Toggle("Uniform Scale", _src.optionalBool0);
                     break;
+                case DOTweenAnimation.AnimationType.FillAmount:
+                    GUIEndValueFloat();
+                    if (_src.endValueFloat < 0) _src.endValueFloat = 0;
+                    if (_src.endValueFloat > 1) _src.endValueFloat = 1;
+                    canBeRelative = false;
+                    break;
                 case DOTweenAnimation.AnimationType.Color:
                     GUIEndValueColor();
                     canBeRelative = false;
@@ -602,7 +613,7 @@ namespace DG.DOTweenEditor
                 }
             }
 #endif
-#if true // TEXTMESHPRO_MARKER
+#if false // TEXTMESHPRO_MARKER
             if (_TMPAnimationTypeToComponent.ContainsKey(_src.animationType)) {
                 foreach (Type t in _TMPAnimationTypeToComponent[_src.animationType]) {
                     srcTarget = targetGO.GetComponent(t);
