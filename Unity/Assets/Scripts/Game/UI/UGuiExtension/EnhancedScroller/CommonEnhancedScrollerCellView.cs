@@ -6,7 +6,6 @@ namespace Game
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(RectTransform))]
-    [ExecuteInEditMode]
     public class CommonEnhancedScrollerCellView : EnhancedScrollerCellView
     {
         private Action<int, GameObject> m_ItemRenderer;
