@@ -10,7 +10,7 @@ namespace ET.Client
 		[EntitySystem]
 		private static void Awake(this LSCameraComponent self)
 		{
-			self.Camera = GameEntry.Camera.SceneCamera;
+			self.Camera = GameEntry.Camera.MainCamera;
 			self.Camera.transform.rotation = Quaternion.Euler(new Vector3(20, 0, 0));
 		}
 		
