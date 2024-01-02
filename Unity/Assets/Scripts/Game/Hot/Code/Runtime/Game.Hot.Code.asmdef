@@ -16,10 +16,10 @@
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
-        "LoopScrollRect.Runtime",
         "ZString",
         "protobuf-net",
-        "UniTaskExtension"
+        "UniTaskExtension",
+        "EnhancedScroller"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

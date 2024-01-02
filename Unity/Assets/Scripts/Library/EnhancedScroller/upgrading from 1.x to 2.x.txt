@@ -1,0 +1,13 @@
+There have been significant changes in the EnhancedScroller in version 2.
+
+Please go through the Quick Start tutorial to see how to set up the new scroller.
+
+Some changes:
+
+1) The scroller no longer requires the data to be passed to it. It is completely unaware of the underlying data, instead relying on a delegate script to give it the information it needs. You no longer have to have your list as a set of objects. This allows a more flexible model and better separation of concerns for a true MVC solution. The delegate provides the cell sizes, the number of cells, and the cell view to display for a given data index.
+2) Setup of the scroller in the scene is much simpler now. You don't need to worry about anchors and pivots as much. You also don't need to set up much on the Scroll Rect component as that is handled automatically for you at scene start. 
+3) The scroller can handle more than one type of cell prefab. The scroller will recycle the correct type as long as your cell identifiers are unique.
+4) Cell spacing and scroller padding have been added.
+5) More robust SmallList class that can be used in your project on things other than just the scroller. The SmallList is memory friendly, not releasing memory to the garbage collector.
+6) Three new demos to get your creative ideas flowing.
+7) Internal improvements to memory usage and speed, as well as some bug fixes from 1.x.

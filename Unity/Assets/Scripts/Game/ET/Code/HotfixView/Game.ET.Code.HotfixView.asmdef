@@ -22,10 +22,10 @@
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
-        "LoopScrollRect.Runtime",
         "ZString",
         "MemoryPack",
-        "UniTaskExtension"
+        "UniTaskExtension",
+        "EnhancedScroller"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

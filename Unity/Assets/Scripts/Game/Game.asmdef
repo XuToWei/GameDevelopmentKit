@@ -18,11 +18,11 @@
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
-        "LoopScrollRect.Runtime",
         "ZString",
         "MemoryPack",
         "UniTaskExtension",
-        "SLATE"
+        "SLATE",
+        "EnhancedScroller"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -12,9 +12,9 @@
         "UIEffect",
         "Coffee.UIParticle",
         "FancyScrollView",
-        "LoopScrollRect.Runtime",
         "ZString",
-        "UniTaskExtension"
+        "UniTaskExtension",
+        "EnhancedScroller"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
