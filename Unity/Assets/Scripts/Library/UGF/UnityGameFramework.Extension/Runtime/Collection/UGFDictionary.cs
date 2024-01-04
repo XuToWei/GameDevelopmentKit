@@ -4,11 +4,11 @@ using GameFramework;
 
 namespace UnityGameFramework.Extension
 {
-    public sealed class UGFList<T> : List<T>, IDisposable, IReference
+    public sealed class UGFDictionary<K, V> : Dictionary<K, V>, IDisposable, IReference
     {
-        public static UGFList<T> Create()
+        public static UGFDictionary<K, V> Create()
         {
-            return ReferencePool.Acquire<UGFList<T>>();
+            return ReferencePool.Acquire<UGFDictionary<K, V>>();
         }
         
         public void Dispose()

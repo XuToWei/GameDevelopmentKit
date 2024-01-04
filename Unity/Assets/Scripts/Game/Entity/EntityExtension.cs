@@ -16,6 +16,14 @@ namespace Game
             entityComponent.HideEntity(baseEntity.Entity);
         }
 
+        public static void TryHideEntity(this EntityComponent entityComponent, int serialId)
+        {
+            if (entityComponent.HasEntity(serialId))
+            {
+                entityComponent.HideEntity(serialId);
+            }
+        }
+
         public static int? ShowEntity<T>(this EntityComponent entityComponent, int entityTypeId, object userData = null) where T : EntityLogic
         {
             return entityComponent.ShowEntity(entityTypeId, typeof (T), userData);
