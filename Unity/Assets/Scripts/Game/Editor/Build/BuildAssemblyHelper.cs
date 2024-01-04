@@ -28,10 +28,16 @@ namespace Game.Editor
 
         public static void CompileDlls(BuildTarget target, string[] extraScriptingDefines = null, ScriptCompilationOptions options = ScriptCompilationOptions.None)
         {
+            //防止编辑器关闭了Auto Refresh
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             SynchronizationContext lastSynchronizationContext = null;
             if (Application.isPlaying) //运行时编译需要UnitySynchronizationContext
             {
                 lastSynchronizationContext = SynchronizationContext.Current;
+                SynchronizationContext.SetSynchronizationContext(s_UnitySynchronizationContext);
+            }
+            else
+            {
                 SynchronizationContext.SetSynchronizationContext(s_UnitySynchronizationContext);
             }
             try
@@ -52,7 +58,7 @@ namespace Game.Editor
             }
             finally
             {
-                if (lastSynchronizationContext != null)
+                if (Application.isPlaying && lastSynchronizationContext != null)
                 {
                     SynchronizationContext.SetSynchronizationContext(lastSynchronizationContext);
                 }

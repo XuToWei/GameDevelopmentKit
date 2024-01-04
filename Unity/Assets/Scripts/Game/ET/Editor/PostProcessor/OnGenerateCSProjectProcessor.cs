@@ -6,37 +6,63 @@ namespace ET.Editor
 {
     public class OnGenerateCSProjectProcessor: AssetPostprocessor
     {
+        /// <summary>
+        /// 文档:https://learn.microsoft.com/zh-cn/visualstudio/gamedev/unity/extensibility/customize-project-files-created-by-vstu#%E6%A6%82%E8%A7%88
+        /// </summary>
         private static string OnGeneratedCSProject(string path, string content)
         {
+            if (!EditorUserBuildSettings.development)
+            {
+                content = content.Replace("<Optimize>false</Optimize>", "<Optimize>true</Optimize>");
+                content = content.Replace(";DEBUG;", ";");
+            }
+            
             if (path.EndsWith("Game.ET.Loader.csproj"))
             {
-                return GenerateCustomProject(content);
+                content = GenerateCustomProject(content);
             }
             
             if (path.EndsWith("ET.csproj"))
             {
-                return GenerateCustomProject(content);
+                content = GenerateCustomProject(content);
             }
 
             if (path.EndsWith("Game.ET.Code.Hotfix.csproj"))
             {
-                return GenerateCustomProject(content);
+                content = GenerateCustomProject(content);
+                content = AddCopyAfterBuild(content);
             }
 
             if (path.EndsWith("Game.ET.Code.Model.csproj"))
             {
-                return GenerateCustomProject(content);
+                content = GenerateCustomProject(content);
+                content = AddCopyAfterBuild(content);
             }
 
             if (path.EndsWith("Game.ET.Code.HotfixView.csproj"))
             {
-                return GenerateCustomProject(content);
+                content = GenerateCustomProject(content);
+                content = AddCopyAfterBuild(content);
             }
 
             if (path.EndsWith("Game.ET.Code.ModelView.csproj"))
             {
-                return GenerateCustomProject(content);
+                content = GenerateCustomProject(content);
+                content = AddCopyAfterBuild(content);
             }
+            return content;
+        }
+
+        /// <summary>
+        /// 编译dll文件后额外复制的目录配置
+        /// </summary>
+        private static string AddCopyAfterBuild(string content)
+        {
+            content = content.Replace("<Target Name=\"AfterBuild\" />",
+                "<Target Name=\"PostBuild\" AfterTargets=\"PostBuildEvent\">\n" +
+                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).dll\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyTool.CodeDir}/$(TargetName).dll.bytes\" ContinueOnError=\"false\" />\n" +
+                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).pdb\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyTool.CodeDir}/$(TargetName).pdb.bytes\" ContinueOnError=\"false\" />\n" +
+                "  </Target>\n");
             return content;
         }
 

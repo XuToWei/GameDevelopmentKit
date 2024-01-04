@@ -1,9 +1,14 @@
 ﻿using System.Reflection;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 using Game;
 using GameFramework;
+
+#if UNITY_EDITOR
+using System.IO;
+#else
+using UnityEngine;
 using UnityGameFramework.Extension;
+#endif
 
 namespace ET
 {
@@ -73,30 +78,10 @@ namespace ET
             {
                 throw new GameFrameworkException("Client ET LoadHotfix only run when EnableHotfix!");
             }
-#if UNITY_EDITOR
-            await UniTask.CompletedTask;
-            string[] hotfixFiles = System.IO.Directory.GetFiles(Define.ReloadHotfixDir, "Game.ET.Code.Hotfix_*.dll");
-            if (hotfixFiles.Length != 1)
-            {
-                throw new GameFrameworkException("Hotfix dll count != 1");
-            }
-            string[] hotfixViewFiles = System.IO.Directory.GetFiles(Define.ReloadHotfixDir, "Game.ET.Code.HotfixView_*.dll");
-            if (hotfixViewFiles.Length != 1)
-            {
-                throw new GameFrameworkException("HotfixView dll count != 1");
-            }
-            string hotfixName = System.IO.Path.GetFileNameWithoutExtension(hotfixFiles[0]);
-            string hotfixViewName = System.IO.Path.GetFileNameWithoutExtension(hotfixViewFiles[0]);
-            byte[] assBytes_Hotfix = System.IO.File.ReadAllBytes($"{Define.ReloadHotfixDir}/{hotfixName}.dll");
-            byte[] pdbBytes_Hotfix = System.IO.File.ReadAllBytes($"{Define.ReloadHotfixDir}/{hotfixName}.pdb");
-            byte[] assBytes_HotfixView = System.IO.File.ReadAllBytes($"{Define.ReloadHotfixDir}/{hotfixViewName}.dll");
-            byte[] pdbBytes_HotfixView = System.IO.File.ReadAllBytes($"{Define.ReloadHotfixDir}/{hotfixViewName}.pdb");
-#else
             byte[] assBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.dll.bytes");
             byte[] pdbBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.pdb.bytes");
             byte[] assBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.dll.bytes");
             byte[] pdbBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.pdb.bytes");
-#endif
             Assembly hotfix = Assembly.Load(assBytes_Hotfix, pdbBytes_Hotfix);
             Assembly hotfixView = Assembly.Load(assBytes_HotfixView, pdbBytes_HotfixView);
             return (hotfix, hotfixView);
@@ -105,10 +90,16 @@ namespace ET
         private async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
         {
             fileName = AssetUtility.GetETAsset(Utility.Text.Format("Code/{0}", fileName));
+#if UNITY_EDITOR
+            await UniTask.CompletedTask;
+            byte[] bytes = File.ReadAllBytes(fileName);
+            return bytes;
+#else
             TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(fileName);
             byte[] bytes = textAsset.bytes;
             GameEntry.Resource.UnloadAsset(textAsset);
             return bytes;
+#endif
         }
     }
 }

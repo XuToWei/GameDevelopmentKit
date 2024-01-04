@@ -18,7 +18,6 @@ namespace ET.Editor
         {
             BuildAssemblyHelper.CompileDlls(target, ExtraScriptingDefines, options);
             BuildAssemblyHelper.CopyHotUpdateDlls(target, CodeDir, DllNames);
-            CopyReloadHotfixDlls(target);
             AssetDatabase.Refresh();
         }
 
@@ -30,21 +29,6 @@ namespace ET.Editor
                 ? ScriptCompilationOptions.DevelopmentBuild
                 : ScriptCompilationOptions.None;
             Build(target, options);
-        }
-
-        private static void CopyReloadHotfixDlls(BuildTarget target)
-        {
-            // 傻屌Unity在这里搞了个傻逼优化，认为同一个路径的dll，返回的程序集就一样。所以这里每次编译都要随机名字
-            Directory.CreateDirectory(Define.ReloadHotfixDir);
-            FileHelper.CleanDirectory(Define.ReloadHotfixDir);
-            int random = RandomGenerator.RandomNumber(100000000, 999999999);
-            string buildDir = BuildAssemblyHelper.GetBuildTargetDir(target);
-            File.Copy($"{buildDir}/Game.ET.Code.Hotfix.dll", $"{Define.ReloadHotfixDir}/Game.ET.Code.Hotfix_{random}.dll", true);
-            File.Copy($"{buildDir}/Game.ET.Code.Hotfix.pdb", $"{Define.ReloadHotfixDir}/Game.ET.Code.Hotfix_{random}.pdb", true);
-            Debug.Log($"copy:{buildDir}/Game.ET.Code.Hotfix => {Define.ReloadHotfixDir}/Game.ET.Code.Hotfix_{random}");
-            File.Copy($"{buildDir}/Game.ET.Code.HotfixView.dll", $"{Define.ReloadHotfixDir}/Game.ET.Code.HotfixView_{random}.dll", true);
-            File.Copy($"{buildDir}/Game.ET.Code.HotfixView.pdb", $"{Define.ReloadHotfixDir}/Game.ET.Code.HotfixView_{random}.pdb", true);
-            Debug.Log($"copy:{buildDir}/Game.ET.Code.HotfixView => {Define.ReloadHotfixDir}/Game.ET.Code.HotfixView_{random}");
         }
 
         public static void Build(BuildTarget target)

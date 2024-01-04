@@ -12,7 +12,7 @@ namespace Game.Editor
         [MenuItem(MItemName, true)]
         private static bool EnableOptimizeSelectedGameObjects()
         {
-            return (Selection.gameObjects.Length > 0);
+            return Selection.gameObjects.Length > 0;
         }
 
         [MenuItem(MItemName)]

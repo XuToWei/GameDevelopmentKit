@@ -15,7 +15,9 @@ namespace ET
             return Fiber.Instance != null? Fiber.Instance.Log : Logger.Instance.Log;
         }
         
-        [Conditional("DEBUG")]
+        [Conditional("ENABLE_LOG")]
+        [Conditional("ENABLE_DEBUG_LOG")]
+        [Conditional("ENABLE_DEBUG_AND_ABOVE_LOG")]
         public static void Debug(string msg)
         {
             if (Options.Instance.LogLevel > DebugLevel)
@@ -26,7 +28,9 @@ namespace ET
             GetLog().Debug(msg);
         }
         
-        [Conditional("DEBUG")]
+        [Conditional("ENABLE_LOG")]
+        [Conditional("ENABLE_DEBUG_LOG")]
+        [Conditional("ENABLE_DEBUG_AND_ABOVE_LOG")]
         public static void Trace(string msg)
         {
             if (Options.Instance.LogLevel > TraceLevel)
