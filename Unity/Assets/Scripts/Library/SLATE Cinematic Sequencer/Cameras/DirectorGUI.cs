@@ -28,7 +28,9 @@ namespace Slate
 
         public static event Action OnGUIEnable;
         public static event Action OnGUIDisable;
+#if UNITY_EDITOR
         public static event Action OnGUIUpdate;
+#endif
 
         ///----------------------------------------------------------------------------------------------
 
