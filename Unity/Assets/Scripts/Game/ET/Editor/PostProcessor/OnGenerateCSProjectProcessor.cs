@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using System.Xml;
 using System.IO;
+using Game.Editor;
 
 namespace ET.Editor
 {
@@ -62,6 +63,8 @@ namespace ET.Editor
                 "<Target Name=\"PostBuild\" AfterTargets=\"PostBuildEvent\">\n" +
                 $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).dll\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyTool.CodeDir}/$(TargetName).dll.bytes\" ContinueOnError=\"false\" />\n" +
                 $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).pdb\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyTool.CodeDir}/$(TargetName).pdb.bytes\" ContinueOnError=\"false\" />\n" +
+                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).dll\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyHelper.BuildOutputDir}/$(TargetName).dll\" ContinueOnError=\"false\" />\n" +
+                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).pdb\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyHelper.BuildOutputDir}/$(TargetName).pdb\" ContinueOnError=\"false\" />\n" +
                 "  </Target>\n");
             return content;
         }

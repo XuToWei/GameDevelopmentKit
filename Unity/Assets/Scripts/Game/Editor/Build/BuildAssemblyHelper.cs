@@ -12,7 +12,7 @@ namespace Game.Editor
 {
     public static class BuildAssemblyHelper
     {
-        public static string BuildOutputDir => "./Temp/GameBin";
+        public static string BuildOutputDir => "./Temp/Bin/Debug";
         private static SynchronizationContext s_UnitySynchronizationContext;
 
         [InitializeOnLoadMethod]
