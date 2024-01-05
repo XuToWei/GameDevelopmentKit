@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using GameFramework;
+using GameFramework.Event;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityGameFramework.Runtime;
@@ -11,7 +15,9 @@ namespace Game
 
         private Canvas m_CachedCanvas = null;
         private readonly List<ParticleSystemRenderer> m_CachedParticleSystemRenderersContainer = new List<ParticleSystemRenderer>();
-        private List<Canvas> m_CachedCanvasContainer = new List<Canvas>();
+        private readonly List<Canvas> m_CachedCanvasContainer = new List<Canvas>();
+        private EventSubscriber m_EventSubscriber;
+        private EntityLoader m_EntityLoader;
 
         public int OriginalDepth
         {
@@ -82,6 +88,14 @@ namespace Game
         protected internal override void OnClose(bool isShutdown, object userData)
 #endif
         {
+            if (m_EventSubscriber != null)
+            {
+                ReferencePool.Release(m_EventSubscriber);
+            }
+            if (m_EntityLoader != null)
+            {
+                ReferencePool.Release(m_EntityLoader);
+            }
             base.OnClose(isShutdown, userData);
         }
 
@@ -161,6 +175,104 @@ namespace Game
                 t.sortingOrder += deltaDepth;
             }
             m_CachedParticleSystemRenderersContainer.Clear();
+        }
+
+        public void Subscribe(int id, EventHandler<GameEventArgs> handler)
+        {
+            if (m_EventSubscriber == null)
+            {
+                m_EventSubscriber = EventSubscriber.Create(this);
+            }
+            m_EventSubscriber.Subscribe(id, handler);
+        }
+
+        public void Unsubscribe(int id, EventHandler<GameEventArgs> handler)
+        {
+            if (m_EventSubscriber == null)
+                return;
+            m_EventSubscriber.Unsubscribe(id, handler);
+        }
+
+        public void UnsubscribeAll()
+        {
+            if (m_EventSubscriber == null)
+                return;
+            m_EventSubscriber.UnsubscribeAll();
+        }
+
+        public int? ShowEntity(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = default)
+        {
+            if (m_EntityLoader == null)
+            {
+                m_EntityLoader = EntityLoader.Create(this);
+            }
+            return m_EntityLoader.ShowEntity(entityTypeId, onShowSuccess, onShowFailure);
+        }
+
+        public int? ShowEntity<T>(int entityTypeId, object userData) where T : EntityLogic
+        {
+            if (m_EntityLoader == null)
+            {
+                m_EntityLoader = EntityLoader.Create(this);
+            }
+            return m_EntityLoader.ShowEntity<T>(entityTypeId, userData);
+        }
+
+        public int? ShowEntity(int entityTypeId, Type logicType, object userData)
+        { 
+            if (m_EntityLoader == null)
+            {
+                m_EntityLoader = EntityLoader.Create(this);
+            }
+            return m_EntityLoader.ShowEntity(entityTypeId, logicType, userData);
+        }
+        
+        public UniTask<Entity> ShowEntityAsync(int entityTypeId, object userData)
+        {
+            if (m_EntityLoader == null)
+            {
+                m_EntityLoader = EntityLoader.Create(this);
+            }
+            return m_EntityLoader.ShowEntityAsync(entityTypeId, typeof(ItemEntity), userData);
+        }
+
+        public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData) where T : EntityLogic
+        {
+            if (m_EntityLoader == null)
+            {
+                m_EntityLoader = EntityLoader.Create(this);
+            }
+            return m_EntityLoader.ShowEntityAsync(entityTypeId, typeof(T), userData);
+        }
+
+        public UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData)
+        {
+            if (m_EntityLoader == null)
+            {
+                m_EntityLoader = EntityLoader.Create(this);
+            }
+            return m_EntityLoader.ShowEntityAsync(entityTypeId, logicType, userData);
+        }
+        
+        public void HideAllEntity()
+        {
+            if(m_EntityLoader == null)
+                return;
+            m_EntityLoader.HideAllEntity();
+        }
+
+        public void HideEntity(int serialId)
+        {
+            if(m_EntityLoader == null)
+                return;
+            m_EntityLoader.HideEntity(serialId);
+        }
+
+        public void HideEntity(Entity entity)
+        {
+            if(m_EntityLoader == null)
+                return;
+            m_EntityLoader.HideEntity(entity);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
 using UnityGameFramework.Runtime;
@@ -87,9 +88,9 @@ namespace Game
             ReferencePool.Release(eventArgs);
         }
 
-        public int? ShowEntity(int entityTypeId, Type entityLogicType, Action<Entity> onShowSuccess, Action onShowFailure = default)
+        public int? ShowEntity(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = default)
         {
-            int? serialId = GameEntry.Entity.ShowEntity(entityTypeId, entityLogicType, EntityLoaderEventArgs.Create(onShowSuccess, onShowFailure));
+            int? serialId = GameEntry.Entity.ShowEntity(entityTypeId, typeof(ItemEntity), EntityLoaderEventArgs.Create(onShowSuccess, onShowFailure));
             if (serialId.HasValue)
             {
                 m_EntitySerialIds.Add(serialId.Value);
@@ -97,9 +98,34 @@ namespace Game
             return serialId;
         }
 
-        public int? ShowEntity<T>(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = default) where T : EntityLogic
+        public int? ShowEntity<T>(int entityTypeId, object userData) where T : EntityLogic
         {
-            return ShowEntity(entityTypeId, typeof(T), onShowSuccess, onShowFailure);
+            return ShowEntity(entityTypeId, typeof(T), userData);
+        }
+
+        public int? ShowEntity(int entityTypeId, Type logicType, object userData)
+        {
+            int? serialId = GameEntry.Entity.ShowEntity(entityTypeId, logicType, userData);
+            if (serialId.HasValue)
+            {
+                m_EntitySerialIds.Add(serialId.Value);
+            }
+            return serialId;
+        }
+
+        public UniTask<Entity> ShowEntityAsync(int entityTypeId, object userData)
+        {
+            return GameEntry.Entity.ShowEntityAsync(entityTypeId, typeof(ItemEntity), userData);
+        }
+
+        public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData) where T : EntityLogic
+        {
+            return ShowEntityAsync(entityTypeId, typeof(T), userData);
+        }
+
+        public UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData)
+        {
+            return GameEntry.Entity.ShowEntityAsync(entityTypeId, logicType, userData);
         }
 
         public void HideAllEntity()
