@@ -12,12 +12,6 @@ namespace ET.Editor
         /// </summary>
         private static string OnGeneratedCSProject(string path, string content)
         {
-            if (!EditorUserBuildSettings.development)
-            {
-                content = content.Replace("<Optimize>false</Optimize>", "<Optimize>true</Optimize>");
-                content = content.Replace(";DEBUG;", ";");
-            }
-            
             if (path.EndsWith("Game.ET.Loader.csproj"))
             {
                 content = GenerateCustomProject(content);
@@ -28,26 +22,16 @@ namespace ET.Editor
                 content = GenerateCustomProject(content);
             }
 
-            if (path.EndsWith("Game.ET.Code.Hotfix.csproj"))
+            if (path.EndsWith("Game.ET.Code.Hotfix.csproj") ||
+                path.EndsWith("Game.ET.Code.Model.csproj") ||
+                path.EndsWith("Game.ET.Code.HotfixView.csproj") ||
+                path.EndsWith("Game.ET.Code.ModelView.csproj"))
             {
-                content = GenerateCustomProject(content);
-                content = AddCopyAfterBuild(content);
-            }
-
-            if (path.EndsWith("Game.ET.Code.Model.csproj"))
-            {
-                content = GenerateCustomProject(content);
-                content = AddCopyAfterBuild(content);
-            }
-
-            if (path.EndsWith("Game.ET.Code.HotfixView.csproj"))
-            {
-                content = GenerateCustomProject(content);
-                content = AddCopyAfterBuild(content);
-            }
-
-            if (path.EndsWith("Game.ET.Code.ModelView.csproj"))
-            {
+                if (!EditorUserBuildSettings.development)
+                {
+                    content = content.Replace("<Optimize>false</Optimize>", "<Optimize>true</Optimize>");
+                    content = content.Replace(";DEBUG;", ";");
+                }
                 content = GenerateCustomProject(content);
                 content = AddCopyAfterBuild(content);
             }
@@ -69,6 +53,12 @@ namespace ET.Editor
             return content;
         }
 
+        /// <summary>
+        /// 自定义C#项目配置
+        /// 参考链接:
+        /// https://learn.microsoft.com/zh-cn/visualstudio/ide/reference/build-events-page-project-designer-csharp?view=vs-2022
+        /// https://learn.microsoft.com/zh-cn/visualstudio/ide/how-to-specify-build-events-csharp?view=vs-2022
+        /// </summary>
         private static string GenerateCustomProject(string content, params string[] links)
         {
             XmlDocument doc = new XmlDocument();
