@@ -554,13 +554,13 @@ namespace ET
             this.parent = null;
 
             base.Dispose();
-            
-            status = EntityStatus.None;
 
-            if (this.IsFromPool)
-            {
-                ObjectPool.Instance.Recycle(this);
-            }
+            // 把status字段其它的status标记都还原
+            bool isFromPool = this.IsFromPool;
+            this.status = EntityStatus.None;
+            this.IsFromPool = isFromPool;
+            
+            ObjectPool.Instance.Recycle(this);
         }
 
         private void AddToComponents(Entity component)
