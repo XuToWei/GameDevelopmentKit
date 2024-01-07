@@ -25,7 +25,7 @@ MonoBehaviour:
   preserveHotUpdateAssemblies: []
   hotUpdateDllCompileOutputRootDir: HybridCLRData/HotUpdateDlls
   externalHotUpdateAssembliyDirs:
-  - ./Temp/Bin/Debug
+  - ./Temp/HybridCLRBin
   strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip
   patchAOTAssemblies:
   - mscorlib
