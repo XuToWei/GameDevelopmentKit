@@ -12,7 +12,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "88e1f1776cb905a235b45697bffef5ccb09334cd"
+      "hash": "93c7e64d2fa1b8ce1798f0cbce75034f63a45c04"
     },
     "com.code-philosophy.hybridclr": {
       "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
@@ -26,28 +26,28 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "b870d64b5704a764fd03aaccb11f2dbe652b1756"
+      "hash": "0a9cf7a1809a289ca7bedecee594cdf256e26935"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "b43e40508b167d143330d8b9eff0d5c9965cdf3c"
+      "hash": "332340e7bc2f8257816dd28784607a1edf6b6c2a"
     },
     "com.coffee.ui-particle": {
       "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a499f0c04670e6e52893799f02a30aa7b5b4db05"
+      "hash": "6a1fef4150e708d1a1ab6d36dbdae3b0f1782479"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a276ef6e7eaba3a265abb9dd2fbd981ad2ef2cc3"
+      "hash": "33356da2c43fa28397192baee70910c978e3169f"
     },
     "com.cysharp.memorypack": {
       "version": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack",
@@ -75,7 +75,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "c8205ffcd945cd176f4493a8ab25db093efef779"
+      "hash": "17c6330d51a140eac037b9ea6f5d157a846535af"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -260,14 +260,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "abca8cc03f3d473e7cb8495ec2a94119a5b9e1a9"
+      "hash": "6e95eb425044c18b69a2a8982664fe33bcde43d5"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a1b161133146d43d268a011b2389360ef975afd5"
+      "hash": "326831f58dc8db22fdcae4921bff7026923821b5"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
