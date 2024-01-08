@@ -19,7 +19,8 @@ namespace ET
             {
                 new() { "|[", "]" },
                 new() { "|onGenJob. arg" },
-                new() { "|======", "cost", "ms" }
+                new() { "|======", "cost", "ms" },
+                new() { "|comput md5. file:" },
             };
             private static readonly List<string> luban_succ_log_pattern = new ()
             {
