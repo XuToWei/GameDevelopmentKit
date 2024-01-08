@@ -15,20 +15,25 @@ namespace ET
 
         public static void GenerateCode()
         {
-            GenerateCS_Music("ET.Client", "UGFMusicId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFMusicId.cs"));
-            GenerateCS_Music("Game.Hot", "MusicId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/MusicId.cs"));
-            
-            GenerateCS_UISound("ET.Client", "UGFUISoundId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFUISoundId.cs"));
-            GenerateCS_UISound("Game.Hot", "UISoundId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/UISoundId.cs"));
-            
-            GenerateCS_Sound("ET.Client", "UGFSoundId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFSoundId.cs"));
-            GenerateCS_Sound("Game.Hot", "SoundId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/SoundId.cs"));
+            if (ExcelExporter.ExcelExporter_Luban.IsEnableET)
+            {
+                GenerateCS_Music("ET.Client", "UGFMusicId",
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFMusicId.cs"));
+                GenerateCS_UISound("ET.Client", "UGFUISoundId",
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFUISoundId.cs"));
+                GenerateCS_Sound("ET.Client", "UGFSoundId",
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFSoundId.cs"));
+            }
+
+            if (ExcelExporter.ExcelExporter_Luban.IsEnableGameHot)
+            {
+                GenerateCS_Music("Game.Hot", "MusicId",
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/MusicId.cs"));
+                GenerateCS_UISound("Game.Hot", "UISoundId",
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/UISoundId.cs"));
+                GenerateCS_Sound("Game.Hot", "SoundId",
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/SoundId.cs"));
+            }
         }
         
         private static void GenerateCS_Music(string nameSpaceName, string className, string codeFile)

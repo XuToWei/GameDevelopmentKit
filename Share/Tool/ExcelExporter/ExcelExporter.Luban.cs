@@ -60,6 +60,9 @@ namespace ET
                 public string Extra_Command;
             }
 
+            public static bool IsEnableET { get; private set; }
+            public static bool IsEnableGameHot { get; private set; }
+
             public static void DoExport()
             {
                 Log.Info("Start export Luban excel ...");
@@ -108,6 +111,14 @@ namespace ET
                     if (!openNode.Attributes.GetNamedItem("Value").Value.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
+                    }
+                    if (string.Equals(Directory.GetParent(genConfigFile).Name, "ET", StringComparison.Ordinal))
+                    {
+                        IsEnableET = true;
+                    }
+                    else if (string.Equals(Directory.GetParent(genConfigFile).Name, "GameHot", StringComparison.Ordinal))
+                    {
+                        IsEnableGameHot = true;
                     }
                     XmlNodeList xmlGens = xmlRoot.SelectNodes("Gen");
                     for (int j = 0; j < xmlGens.Count; j++)

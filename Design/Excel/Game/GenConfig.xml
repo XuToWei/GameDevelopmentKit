@@ -5,15 +5,19 @@
     <Output_Data_Dirs Value="../Unity/Assets/Res/Luban" />
     <Gen_Type_Code_Data Value="code_cs_unity_bin,data_bin" />
     <Gen_Group Value="client" />
-    <Text_Field_Name Value="English" /> <!--本地化目标映射列的列名-->
-    <Extra_Command Value="--external:selectors unity_cs" /> <!--额外命令-->
+    <!--本地化目标映射列的列名-->
+    <Text_Field_Name Value="English" />
+    <!--额外命令-->
+    <Extra_Command Value="--external:selectors unity_cs" />
   </Gen>
   <Gen>
     <Output_Code_Dirs Value="../Unity/Assets/Scripts/Game/Editor/Generate/Luban" />
     <Output_Data_Dirs Value="../Unity/Assets/Res/Editor/Luban" />
     <Gen_Type_Code_Data Value="code_cs_unity_editor_json,data_json" />
     <Gen_Group Value="all" />
-    <Text_Field_Name Value="" /> <!--本地化目标映射列的列名-->
-    <Extra_Command Value="" /> <!--额外命令-->
+    <!--本地化目标映射列的列名-->
+    <Text_Field_Name Value="" />
+    <!--额外命令-->
+    <Extra_Command Value="" />
   </Gen>
 </Config>

@@ -13,10 +13,17 @@ namespace ET
 
         public static void GenerateCode()
         {
-            GenerateCS("ET.Client", "UGFEntityId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFEntityId.cs"));
-            GenerateCS("Game.Hot", "EntityId",
-                Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/EntityId.cs"));
+            if (ExcelExporter.ExcelExporter_Luban.IsEnableET)
+            {
+                GenerateCS("ET.Client", "UGFEntityId",
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFEntityId.cs"));
+            }
+
+            if (ExcelExporter.ExcelExporter_Luban.IsEnableGameHot)
+            {
+                GenerateCS("Game.Hot", "EntityId",
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/EntityId.cs"));
+            }
         }
         
         private static void GenerateCS(string nameSpaceName, string className, string codeFile)

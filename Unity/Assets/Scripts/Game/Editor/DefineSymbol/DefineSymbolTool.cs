@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Xml;
 using UnityEditor;
 using UnityEngine;
 using UnityGameFramework.Editor;
@@ -49,6 +52,7 @@ namespace Game.Editor
             LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_ET");
 #endif
 #if UNITY_ET
+            Set_Luban_GenConfig("ET", true);
             ResourceRuleTool.ActivateRule_ET();
             LinkXMLHelper.AddLinkXML("UNITY_ET");
             HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.Model");
@@ -56,6 +60,7 @@ namespace Game.Editor
             HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.Hotfix");
             HybridCLRTool.AddHotfixAssemblyDefinition("Game.ET.Code.HotfixView");
 #else
+            Set_Luban_GenConfig("ET", false);
             LinkXMLHelper.RemoveLinkXML("UNITY_ET");
             HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.ET.Code.Model");
             HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.ET.Code.ModelView");
@@ -73,10 +78,12 @@ namespace Game.Editor
             LinkXMLHelper.RemoveLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #endif
 #if UNITY_GAMEHOT
+            Set_Luban_GenConfig("GameHot", true);
             ResourceRuleTool.ActivateRule_GameHot();
             LinkXMLHelper.AddLinkXML("UNITY_GAMEHOT");
             HybridCLRTool.AddHotfixAssemblyDefinition("Game.Hot.Code");
 #else
+            Set_Luban_GenConfig("GameHot", false);
             LinkXMLHelper.RemoveLinkXML("UNITY_GAMEHOT");
             HybridCLRTool.RemoveHotfixAssemblyDefinition("Game.Hot.Code");
 #endif
@@ -147,6 +154,7 @@ namespace Game.Editor
         [MenuItem("Game/Define Symbol/Remove UNITY_ET", false, 3)]
         private static void Remove_UNITY_ET()
         {
+            Set_Luban_GenConfig("ET", false);
             BuildAssemblyHelper.ClearBuildDir();
             LinkXMLHelper.RemoveLinkXML("UNITY_ET");
             LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_ET");
@@ -169,6 +177,7 @@ namespace Game.Editor
         [MenuItem("Game/Define Symbol/Add UNITY_ET", false, 3)]
         private static void Add_UNITY_ET()
         {
+            Set_Luban_GenConfig("ET", true);
             BuildAssemblyHelper.ClearBuildDir();
             ResourceRuleTool.ActivateRule_ET();
             LinkXMLHelper.AddLinkXML("UNITY_ET");
@@ -212,6 +221,7 @@ namespace Game.Editor
         [MenuItem("Game/Define Symbol/Remove UNITY_GAMEHOT", false, 4)]
         private static void Remove_UNITY_GAMEHOT()
         {
+            Set_Luban_GenConfig("GameHot", false);
             BuildAssemblyHelper.ClearBuildDir();
             LinkXMLHelper.RemoveLinkXML("UNITY_GAMEHOT");
             LinkXMLHelper.RemoveLinkXML("UNITY_HOTFIX_GAMEHOT");
@@ -227,6 +237,7 @@ namespace Game.Editor
         [MenuItem("Game/Define Symbol/Add UNITY_GAMEHOT", false, 4)]
         private static void Add_UNITY_GAMEHOT()
         {
+            Set_Luban_GenConfig("GameHot", true);
             BuildAssemblyHelper.ClearBuildDir();
             ResourceRuleTool.ActivateRule_GameHot();
             LinkXMLHelper.AddLinkXML("UNITY_GAMEHOT");
@@ -245,5 +256,29 @@ namespace Game.Editor
             AssetDatabase.SaveAssets();
         }
 #endif
+
+        private static void Set_Luban_GenConfig(string dirName, bool isOpen)
+        {
+            string[] dirs = Directory.GetDirectories("../Design/Excel");
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                string dir = Path.GetFullPath(dirs[i]);
+                string genConfigFile = Path.Combine(dir, "GenConfig.xml");
+                if (!File.Exists(genConfigFile))
+                {
+                    continue;
+                }
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.LoadXml(File.ReadAllText(genConfigFile));
+                XmlNode xmlRoot = xmlDocument.SelectSingleNode("Config");
+                XmlNode openNode = xmlRoot.SelectSingleNode("Open");
+                if (string.Equals(Directory.GetParent(genConfigFile)?.Name, dirName, StringComparison.Ordinal))
+                {
+                    openNode.Attributes.GetNamedItem("Value").Value = isOpen ? "TRUE" : "FALSE";
+                    xmlDocument.Save(genConfigFile);
+                    break;
+                }
+            }
+        }
     }
 }
