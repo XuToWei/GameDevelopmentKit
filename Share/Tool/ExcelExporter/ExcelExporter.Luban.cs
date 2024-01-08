@@ -15,7 +15,16 @@ namespace ET
     {
         public static class ExcelExporter_Luban
         {
-            private const string luban_error_line = "=======================================================================";
+            private static readonly List<List<string>> luban_normal_log_pattern = new()
+            {
+                new() { "|[", "]" },
+                new() { "|onGenJob. arg" },
+                new() { "|======", "cost", "ms" }
+            };
+            private static readonly List<string> luban_succ_log_pattern = new ()
+            {
+                "|== succ ==",
+            };
             private const string not_translated_text_file = "NotLocalization.txt";
 
             /// <summary>
@@ -50,9 +59,9 @@ namespace ET
                 public string Extra_Command;
             }
 
-            public static void Export()
+            public static void DoExport()
             {
-                Log.Info("Start Export Luban Excel ...");
+                Log.Info("Start export Luban excel ...");
                 if (Options.Instance.Customs.Contains("GB2312", StringComparison.OrdinalIgnoreCase))
                 {
                     //luban在windows上编码为GB2312
@@ -70,6 +79,10 @@ namespace ET
                 {
                     throw new Exception($"Directory {excelDir} is empty");
                 }
+
+                var dirList = dirs.ToList();
+                dirList.Sort();
+                dirs = dirList.ToArray();
 
                 string lubanWorkDir = Path.GetFullPath(Path.Combine(WorkDir, luban_work_dir));
                 if (!Directory.Exists(lubanWorkDir))
@@ -132,14 +145,14 @@ namespace ET
                     }
                 }
 
-                Log.Info($"Export Luban Excel Parallel {genInfos.Count} ForEachAsync!");
+                Log.Info($"Export Luban excel {genInfos.Count} project!");
                 bool isSuccess = true;
-                int maxParallelism = Math.Max(1, (int)Math.Sqrt(Environment.ProcessorCount));
                 int processCount = 0;
                 Parallel.ForEachAsync(genInfos,
-                    new ParallelOptions() { MaxDegreeOfParallelism = maxParallelism },
+                    new ParallelOptions() { MaxDegreeOfParallelism = 1 },
                     async (info, _) =>
                     {
+                        Log.Info($"Export Luban work directory : {info.Luban_Work_Dir}");
                         if (info.Luban_Work_Dir != null && !Directory.Exists(info.Luban_Work_Dir))
                         {
                             Directory.CreateDirectory(info.Luban_Work_Dir);
@@ -166,12 +179,12 @@ namespace ET
                                 FileHelper.CopyDirectory(info.Output_Data_Dirs[0], info.Output_Data_Dirs[k]);
                             }
                         }
-                        Log.Info($"Export Luban Process : {Interlocked.Add(ref processCount, 1)}/{genInfos.Count} ");
+                        Log.Info($"Export Luban process : {Interlocked.Add(ref processCount, 1)}/{genInfos.Count}");
                     }).Wait();
 
                 if (!isSuccess)
                 {
-                    throw new Exception("Export Luban Excel Fail!");
+                    throw new Exception("Export Luban excel fail!");
                 }
 
                 foreach (var genInfo in genInfos)
@@ -181,7 +194,7 @@ namespace ET
                     {
                         if (File.ReadAllText(file).Length > 0)
                         {
-                            Log.Error($"Please check {file} to solve not translated text!");
+                            Log.Warning($"Please check {file} to solve not translated text!");
                         }
                     }
                 }
@@ -189,7 +202,7 @@ namespace ET
                 GenerateUGFEntityId.GenerateCode();
                 GenerateUGFUIFormId.GenerateCode();
                 GenerateUGFAllSoundId.GenerateCode();
-                Log.Info("Export Luban Excel Success!");
+                Log.Info("Export Luban excel success!");
             }
 
             private static string GetCommand(Input_Output_Gen_Info info)
@@ -219,6 +232,26 @@ namespace ET
                     cmd += info.Extra_Command;
                 }
                 return cmd;
+            }
+
+            private static bool IsMatch(string target, List<string> pattern)
+            {
+                foreach (string str in pattern)
+                {
+                    if (!target.Contains(str))
+                        return false;
+                }
+                return true;
+            }
+
+            private static bool IsOneMatch(string target, List<List<string>> patterns)
+            {
+                foreach (List<string> pattern in patterns)
+                {
+                    if (IsMatch(target, pattern))
+                        return true;
+                }
+                return false;
             }
 
             /// <summary>
@@ -256,24 +289,20 @@ namespace ET
                     start.StandardOutputEncoding = s_Encoding;
                     start.StandardErrorEncoding = s_Encoding;
 
-                    bool inError = false;
                     process.OutputDataReceived += (sender, args) =>
                     {
                         if (!string.IsNullOrEmpty(args.Data))
                         {
                             //luban运行时候，配置错误不会抛出异常，所以需要从OutputData筛选错误信息
-                            if (string.Equals(luban_error_line, args.Data))
+                            if (IsMatch(args.Data, luban_succ_log_pattern))
                             {
-                                isSuccess = false;
-                                inError = !inError;
-                                Log.Error(args.Data);
+                                Log.Info(args.Data);
                             }
-                            else if (inError)
+                            else
                             {
-                                isSuccess = false;
-                                if (!string.IsNullOrEmpty(args.Data))
+                                if (!IsOneMatch(args.Data, luban_normal_log_pattern))
                                 {
-                                    Log.Error(args.Data);
+                                    Log.Warning(args.Data);
                                 }
                             }
                         }
@@ -295,7 +324,7 @@ namespace ET
                 catch (Exception e)
                 {
                     isSuccess = false;
-                    Log.Error(e.ToString());
+                    Log.Error(e);
                 }
                 finally
                 {

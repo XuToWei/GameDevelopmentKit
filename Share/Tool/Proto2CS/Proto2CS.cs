@@ -39,8 +39,7 @@ namespace ET
             string[] childDirs = Directory.GetDirectories(ProtoDir);
             if (childDirs.Length < 1)
             {
-                Log.Error($"{ProtoDir} doesn't exist child directory!");
-                return;
+                throw new Exception($"{ProtoDir} doesn't exist child directory!");
             }
             List<Gen_Info> genInfos = new List<Gen_Info>();
             foreach (var childDir in childDirs)
@@ -76,8 +75,7 @@ namespace ET
 
             if (genInfos.Count < 1)
             {
-                Log.Error($"{ProtoDir} doesn't exist Open GenConfig.xml!");
-                return;
+                throw new Exception($"{ProtoDir} doesn't exist Open GenConfig.xml!");
             }
 
             foreach (var info in genInfos)

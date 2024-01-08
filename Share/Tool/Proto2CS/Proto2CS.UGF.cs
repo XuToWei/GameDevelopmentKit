@@ -186,7 +186,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Error($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
@@ -210,7 +210,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Error($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
@@ -280,7 +280,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Error($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
                     throw;
                 }
             }

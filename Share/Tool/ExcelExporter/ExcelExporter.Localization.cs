@@ -31,7 +31,7 @@ namespace ET
                 public string key;
             }
 
-            public static void Export()
+            public static void DoExport()
             {
                 Log.Info("Start Export Localization Excel ...");
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -162,7 +162,7 @@ namespace ET
                         jsonWriter.Flush();
                         byte[] bytes = new byte[memoryStream.Length];
                         memoryStream.Seek(0, SeekOrigin.Begin);
-                        memoryStream.Read(bytes, 0, bytes.Length);
+                        _ = memoryStream.Read(bytes, 0, bytes.Length);
                         File.WriteAllBytes(jsonFileFullPath, bytes);
                         if (File.Exists(bytesFileFullPath))
                         {

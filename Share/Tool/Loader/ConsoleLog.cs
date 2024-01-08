@@ -11,7 +11,10 @@ namespace ET
 
         public void Warning(string message)
         {
-            Console.WriteLine(message);
+            var oldColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Error.WriteLine(message);
+            Console.ForegroundColor = oldColor;
         }
 
         public void Info(string message)
@@ -27,7 +30,7 @@ namespace ET
         public void Error(string message)
         {
             var oldColor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.Error.WriteLine(message);
             Console.ForegroundColor = oldColor;
         }

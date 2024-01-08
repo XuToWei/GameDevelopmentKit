@@ -9,8 +9,8 @@ namespace ET
 
         public static void Export()
         {
-            ExcelExporter_Luban.Export();
-            ExcelExporter_Localization.Export();
+            ExcelExporter_Luban.DoExport();
+            ExcelExporter_Localization.DoExport();
         }
     }
 }

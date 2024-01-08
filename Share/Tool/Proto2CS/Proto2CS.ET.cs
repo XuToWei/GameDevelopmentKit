@@ -188,8 +188,8 @@ namespace ET
             {
                 try
                 {
-                    int start = newline.IndexOf("<") + 1;
-                    int end = newline.IndexOf(">");
+                    int start = newline.IndexOf("<", StringComparison.Ordinal) + 1;
+                    int end = newline.IndexOf(">", StringComparison.Ordinal);
                     string types = newline.Substring(start, end - start);
                     string[] ss = types.Split(",");
                     string keyType = ConvertType(ss[0].Trim());
@@ -207,7 +207,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Error($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
@@ -216,7 +216,7 @@ namespace ET
             {
                 try
                 {
-                    int index = newline.IndexOf(";");
+                    int index = newline.IndexOf(";", StringComparison.Ordinal);
                     newline = newline.Remove(index);
                     string[] ss = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
                     string type = ss[1];
@@ -231,7 +231,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Error($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
@@ -277,7 +277,7 @@ namespace ET
             {
                 try
                 {
-                    int index = newline.IndexOf(";");
+                    int index = newline.IndexOf(";", StringComparison.Ordinal);
                     newline = newline.Remove(index);
                     string[] ss = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
                     string type = ss[0];
@@ -301,7 +301,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Error($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
