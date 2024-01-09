@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 {{ 
     name = x.name
     key_type = x.key_ttype
-    key_type1 =  x.key_ttype1
-    key_type2 =  x.key_ttype2
-    value_type =  x.value_ttype
+    key_type1 = x.key_ttype1
+    key_type2 = x.key_ttype2
+    value_type = x.value_ttype
 }}
 {{~if x.comment != '' ~}}
 /// <summary>

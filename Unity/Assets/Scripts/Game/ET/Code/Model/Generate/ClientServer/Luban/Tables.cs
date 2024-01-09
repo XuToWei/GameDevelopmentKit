@@ -66,27 +66,27 @@ public partial class Tables
     public void Refresh()
     {
         PostInit();
-        DTStartMachineConfig.Resolve(_tables); 
-        DTStartProcessConfig.Resolve(_tables); 
-        DTStartSceneConfig.Resolve(_tables); 
-        DTStartZoneConfig.Resolve(_tables); 
-        DTOneConfig.Resolve(_tables); 
-        DTAIConfig.Resolve(_tables); 
-        DTUnitConfig.Resolve(_tables); 
-        DTDemo.Resolve(_tables); 
+        DTStartMachineConfig.Resolve(_tables);
+        DTStartProcessConfig.Resolve(_tables);
+        DTStartSceneConfig.Resolve(_tables);
+        DTStartZoneConfig.Resolve(_tables);
+        DTOneConfig.Resolve(_tables);
+        DTAIConfig.Resolve(_tables);
+        DTUnitConfig.Resolve(_tables);
+        DTDemo.Resolve(_tables);
         PostResolve();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)
     {
-        DTStartMachineConfig.TranslateText(translator); 
-        DTStartProcessConfig.TranslateText(translator); 
-        DTStartSceneConfig.TranslateText(translator); 
-        DTStartZoneConfig.TranslateText(translator); 
-        DTOneConfig.TranslateText(translator); 
-        DTAIConfig.TranslateText(translator); 
-        DTUnitConfig.TranslateText(translator); 
-        DTDemo.TranslateText(translator); 
+        DTStartMachineConfig.TranslateText(translator);
+        DTStartProcessConfig.TranslateText(translator);
+        DTStartSceneConfig.TranslateText(translator);
+        DTStartZoneConfig.TranslateText(translator);
+        DTOneConfig.TranslateText(translator);
+        DTAIConfig.TranslateText(translator);
+        DTUnitConfig.TranslateText(translator);
+        DTDemo.TranslateText(translator);
     }
 
     partial void PostInit();

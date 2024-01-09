@@ -50,19 +50,19 @@ public partial class Tables
     public void Refresh()
     {
         PostInit();
-        DTOneConfig.Resolve(_tables); 
-        DTAIConfig.Resolve(_tables); 
-        DTUnitConfig.Resolve(_tables); 
-        DTDemo.Resolve(_tables); 
+        DTOneConfig.Resolve(_tables);
+        DTAIConfig.Resolve(_tables);
+        DTUnitConfig.Resolve(_tables);
+        DTDemo.Resolve(_tables);
         PostResolve();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)
     {
-        DTOneConfig.TranslateText(translator); 
-        DTAIConfig.TranslateText(translator); 
-        DTUnitConfig.TranslateText(translator); 
-        DTDemo.TranslateText(translator); 
+        DTOneConfig.TranslateText(translator);
+        DTAIConfig.TranslateText(translator);
+        DTUnitConfig.TranslateText(translator);
+        DTDemo.TranslateText(translator);
     }
 
     partial void PostInit();

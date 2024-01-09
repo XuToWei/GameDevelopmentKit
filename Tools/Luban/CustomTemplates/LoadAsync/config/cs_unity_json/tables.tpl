@@ -36,19 +36,24 @@ public sealed partial class {{name}}
 
         await Task.WhenAll(loadTasks);
 
-        PostInit();
-        {{~for table in tables ~}}
-        {{table.name}}.Resolve(_tables); 
-        {{~end~}}
-        PostResolve();
+        Refresh();
 
         TablesMemory.EndRecord();
+    }
+
+    public void Refresh()
+    {
+        PostInit();
+        {{~for table in tables ~}}
+        {{table.name}}.Resolve(_tables);
+        {{~end~}}
+        PostResolve();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)
     {
         {{~for table in tables ~}}
-        {{table.name}}.TranslateText(translator); 
+        {{table.name}}.TranslateText(translator);
         {{~end~}}
     }
 

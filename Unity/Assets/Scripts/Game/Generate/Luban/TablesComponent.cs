@@ -62,25 +62,25 @@ public partial class TablesComponent
     public void Refresh()
     {
         PostInit();
-        DTUIForm.Resolve(_tables); 
-        DTEntity.Resolve(_tables); 
-        DTScene.Resolve(_tables); 
-        DTSound.Resolve(_tables); 
-        DTUISound.Resolve(_tables); 
-        DTMusic.Resolve(_tables); 
-        DTOneConfig.Resolve(_tables); 
+        DTUIForm.Resolve(_tables);
+        DTEntity.Resolve(_tables);
+        DTScene.Resolve(_tables);
+        DTSound.Resolve(_tables);
+        DTUISound.Resolve(_tables);
+        DTMusic.Resolve(_tables);
+        DTOneConfig.Resolve(_tables);
         PostResolve();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)
     {
-        DTUIForm.TranslateText(translator); 
-        DTEntity.TranslateText(translator); 
-        DTScene.TranslateText(translator); 
-        DTSound.TranslateText(translator); 
-        DTUISound.TranslateText(translator); 
-        DTMusic.TranslateText(translator); 
-        DTOneConfig.TranslateText(translator); 
+        DTUIForm.TranslateText(translator);
+        DTEntity.TranslateText(translator);
+        DTScene.TranslateText(translator);
+        DTSound.TranslateText(translator);
+        DTUISound.TranslateText(translator);
+        DTMusic.TranslateText(translator);
+        DTOneConfig.TranslateText(translator);
     }
 
     partial void PostInit();
