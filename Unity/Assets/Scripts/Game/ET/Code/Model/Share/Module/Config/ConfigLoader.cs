@@ -45,9 +45,9 @@ namespace ET
     }
     
     [Invoke]
-    public class LubanLoadOneAsyncHandler: AInvokeHandler<ConfigComponent.LoadOne, UniTask>
+    public class LubanLoadOneAsyncHandler: AInvokeHandler<ConfigComponent.ReloadOne, UniTask>
     {
-        public override async UniTask Handle(ConfigComponent.LoadOne arg)
+        public override async UniTask Handle(ConfigComponent.ReloadOne arg)
         {
             await Tables.Instance.GetDataTable(arg.ConfigName).LoadAsync();
         }

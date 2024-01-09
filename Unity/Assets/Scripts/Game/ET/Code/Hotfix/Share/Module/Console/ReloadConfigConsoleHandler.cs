@@ -17,16 +17,23 @@ namespace ET
                 default:
                     string[] ss = content.Split(" ");
                     string configName = ss[1];
-                    string category = $"{configName}Category";
-                    Type type = CodeTypes.Instance.GetType($"ET.{category}");
-                    if (type == null)
+                    if (configName == "-a")
                     {
-                        Log.Console($"reload config but not find {category}");
-                        return;
+                        await ConfigComponent.Instance.ReloadAllAsync();
+                        Log.Console($"reload all config finish!");
                     }
+                    else
+                    {
+                        Type type = CodeTypes.Instance.GetType($"ET.{configName}");
+                        if (type == null)
+                        {
+                            Log.Console($"reload config but not find {configName}");
+                            return;
+                        }
 
-                    await CodeLoaderComponent.Instance.ReloadAsync();
-                    Log.Console($"reload config {configName} finish!");
+                        await ConfigComponent.Instance.ReloadOneAsync(configName);
+                        Log.Console($"reload config {configName} finish!");
+                    }
                     break;
             }
         }

@@ -24,6 +24,7 @@ namespace ET.Editor
                     {
                         try
                         {
+                            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                             await ConfigComponent.Instance.ReloadAllAsync();
                             Debug.Log("Export And Reload All Excel!");
                         }

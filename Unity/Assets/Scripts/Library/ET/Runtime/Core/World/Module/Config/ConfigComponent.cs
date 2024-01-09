@@ -15,7 +15,7 @@ namespace ET
         {
         }
         
-        public struct LoadOne
+        public struct ReloadOne
         {
             public string ConfigName
             {
@@ -23,7 +23,7 @@ namespace ET
                 get;
             }
 
-            public LoadOne(string configName)
+            public ReloadOne(string configName)
             {
                 this.ConfigName = configName;
             }
@@ -38,9 +38,9 @@ namespace ET
             await EventSystem.Instance.Invoke<LoadAll, UniTask>(new LoadAll());
         }
 
-        public async UniTask LoadOneAsync(string configName)
+        public async UniTask ReloadOneAsync(string configName)
         {
-            await EventSystem.Instance.Invoke<LoadOne, UniTask>(new LoadOne(configName));
+            await EventSystem.Instance.Invoke<ReloadOne, UniTask>(new ReloadOne(configName));
         }
         
         public async UniTask ReloadAllAsync()
