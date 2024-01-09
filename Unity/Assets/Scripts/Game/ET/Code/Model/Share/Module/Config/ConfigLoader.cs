@@ -50,6 +50,7 @@ namespace ET
         public override async UniTask Handle(ConfigComponent.ReloadOne arg)
         {
             await Tables.Instance.GetDataTable(arg.ConfigName).LoadAsync();
+            Tables.Instance.Refresh();
         }
     }
     
@@ -62,6 +63,7 @@ namespace ET
             {
                 await dataTable.LoadAsync();
             }
+            Tables.Instance.Refresh();
         }
     }
 }

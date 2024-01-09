@@ -68,7 +68,11 @@ public {{x.cs_class_modifier}} partial class {{name}} : {{if parent_def_type}} {
     public override int GetTypeId() => __ID__;
     {{~end~}}
 
+    {{~if x.cs_method_modifier != '' ~}}
     public {{x.cs_method_modifier}} void Resolve(Dictionary<string, IDataTable> _tables)
+    {{~else~}}
+    public void Resolve(Dictionary<string, IDataTable> _tables)
+    {{~end~}}
     {
         {{~if parent_def_type~}}
         base.Resolve(_tables);
@@ -83,7 +87,11 @@ public {{x.cs_class_modifier}} partial class {{name}} : {{if parent_def_type}} {
         PostResolve();
     }
 
+    {{~if x.cs_method_modifier != '' ~}}
     public {{x.cs_method_modifier}} void TranslateText(System.Func<string, string, string> translator)
+    {{~else~}}
+    public void TranslateText(System.Func<string, string, string> translator)
+    {{~end~}}
     {
         {{~if parent_def_type~}}
         base.TranslateText(translator);

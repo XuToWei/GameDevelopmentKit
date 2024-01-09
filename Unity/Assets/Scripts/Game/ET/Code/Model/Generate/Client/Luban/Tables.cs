@@ -27,29 +27,34 @@ public partial class Tables
 
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
-        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
+        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig"));
         loadTasks.Add(DTOneConfig.LoadAsync());
         _tables.Add("DTOneConfig", DTOneConfig);
-        DTAIConfig = new DTAIConfig(() => loader("dtaiconfig")); 
+        DTAIConfig = new DTAIConfig(() => loader("dtaiconfig"));
         loadTasks.Add(DTAIConfig.LoadAsync());
         _tables.Add("DTAIConfig", DTAIConfig);
-        DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig")); 
+        DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig"));
         loadTasks.Add(DTUnitConfig.LoadAsync());
         _tables.Add("DTUnitConfig", DTUnitConfig);
-        DTDemo = new DTDemo(() => loader("dtdemo")); 
+        DTDemo = new DTDemo(() => loader("dtdemo"));
         loadTasks.Add(DTDemo.LoadAsync());
         _tables.Add("DTDemo", DTDemo);
 
         await Task.WhenAll(loadTasks);
 
+        Refresh();
+
+        TablesMemory.EndRecord();
+    }
+
+    public void Refresh()
+    {
         PostInit();
         DTOneConfig.Resolve(_tables); 
         DTAIConfig.Resolve(_tables); 
         DTUnitConfig.Resolve(_tables); 
         DTDemo.Resolve(_tables); 
         PostResolve();
-
-        TablesMemory.EndRecord();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)

@@ -30,30 +30,37 @@ public partial class TablesComponent
 
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
-        DTUIForm = new DTUIForm(() => loader("dtuiform")); 
+        DTUIForm = new DTUIForm(() => loader("dtuiform"));
         loadTasks.Add(DTUIForm.LoadAsync());
         _tables.Add("DTUIForm", DTUIForm);
-        DTEntity = new DTEntity(() => loader("dtentity")); 
+        DTEntity = new DTEntity(() => loader("dtentity"));
         loadTasks.Add(DTEntity.LoadAsync());
         _tables.Add("DTEntity", DTEntity);
-        DTScene = new DTScene(() => loader("dtscene")); 
+        DTScene = new DTScene(() => loader("dtscene"));
         loadTasks.Add(DTScene.LoadAsync());
         _tables.Add("DTScene", DTScene);
-        DTSound = new DTSound(() => loader("dtsound")); 
+        DTSound = new DTSound(() => loader("dtsound"));
         loadTasks.Add(DTSound.LoadAsync());
         _tables.Add("DTSound", DTSound);
-        DTUISound = new DTUISound(() => loader("dtuisound")); 
+        DTUISound = new DTUISound(() => loader("dtuisound"));
         loadTasks.Add(DTUISound.LoadAsync());
         _tables.Add("DTUISound", DTUISound);
-        DTMusic = new DTMusic(() => loader("dtmusic")); 
+        DTMusic = new DTMusic(() => loader("dtmusic"));
         loadTasks.Add(DTMusic.LoadAsync());
         _tables.Add("DTMusic", DTMusic);
-        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
+        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig"));
         loadTasks.Add(DTOneConfig.LoadAsync());
         _tables.Add("DTOneConfig", DTOneConfig);
 
         await Task.WhenAll(loadTasks);
 
+        Refresh();
+
+        TablesMemory.EndRecord();
+    }
+
+    public void Refresh()
+    {
         PostInit();
         DTUIForm.Resolve(_tables); 
         DTEntity.Resolve(_tables); 
@@ -63,8 +70,6 @@ public partial class TablesComponent
         DTMusic.Resolve(_tables); 
         DTOneConfig.Resolve(_tables); 
         PostResolve();
-
-        TablesMemory.EndRecord();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)

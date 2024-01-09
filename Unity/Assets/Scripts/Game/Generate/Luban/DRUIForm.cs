@@ -50,12 +50,12 @@ public sealed partial class DRUIForm :  Bright.Config.BeanBase
     public const int __ID__ = 515966854;
     public override int GetTypeId() => __ID__;
 
-    public  void Resolve(Dictionary<string, IDataTable> _tables)
+    public void Resolve(Dictionary<string, IDataTable> _tables)
     {
         PostResolve();
     }
 
-    public  void TranslateText(System.Func<string, string, string> translator)
+    public void TranslateText(System.Func<string, string, string> translator)
     {
     }
 

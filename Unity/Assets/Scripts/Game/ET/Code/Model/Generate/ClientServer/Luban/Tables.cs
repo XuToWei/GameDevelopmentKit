@@ -31,33 +31,40 @@ public partial class Tables
 
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
-        DTStartMachineConfig = new DTStartMachineConfig(() => loader("dtstartmachineconfig")); 
+        DTStartMachineConfig = new DTStartMachineConfig(() => loader("dtstartmachineconfig"));
         loadTasks.Add(DTStartMachineConfig.LoadAsync());
         _tables.Add("DTStartMachineConfig", DTStartMachineConfig);
-        DTStartProcessConfig = new DTStartProcessConfig(() => loader("dtstartprocessconfig")); 
+        DTStartProcessConfig = new DTStartProcessConfig(() => loader("dtstartprocessconfig"));
         loadTasks.Add(DTStartProcessConfig.LoadAsync());
         _tables.Add("DTStartProcessConfig", DTStartProcessConfig);
-        DTStartSceneConfig = new DTStartSceneConfig(() => loader("dtstartsceneconfig")); 
+        DTStartSceneConfig = new DTStartSceneConfig(() => loader("dtstartsceneconfig"));
         loadTasks.Add(DTStartSceneConfig.LoadAsync());
         _tables.Add("DTStartSceneConfig", DTStartSceneConfig);
-        DTStartZoneConfig = new DTStartZoneConfig(() => loader("dtstartzoneconfig")); 
+        DTStartZoneConfig = new DTStartZoneConfig(() => loader("dtstartzoneconfig"));
         loadTasks.Add(DTStartZoneConfig.LoadAsync());
         _tables.Add("DTStartZoneConfig", DTStartZoneConfig);
-        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig")); 
+        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig"));
         loadTasks.Add(DTOneConfig.LoadAsync());
         _tables.Add("DTOneConfig", DTOneConfig);
-        DTAIConfig = new DTAIConfig(() => loader("dtaiconfig")); 
+        DTAIConfig = new DTAIConfig(() => loader("dtaiconfig"));
         loadTasks.Add(DTAIConfig.LoadAsync());
         _tables.Add("DTAIConfig", DTAIConfig);
-        DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig")); 
+        DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig"));
         loadTasks.Add(DTUnitConfig.LoadAsync());
         _tables.Add("DTUnitConfig", DTUnitConfig);
-        DTDemo = new DTDemo(() => loader("dtdemo")); 
+        DTDemo = new DTDemo(() => loader("dtdemo"));
         loadTasks.Add(DTDemo.LoadAsync());
         _tables.Add("DTDemo", DTDemo);
 
         await Task.WhenAll(loadTasks);
 
+        Refresh();
+
+        TablesMemory.EndRecord();
+    }
+
+    public void Refresh()
+    {
         PostInit();
         DTStartMachineConfig.Resolve(_tables); 
         DTStartProcessConfig.Resolve(_tables); 
@@ -68,8 +75,6 @@ public partial class Tables
         DTUnitConfig.Resolve(_tables); 
         DTDemo.Resolve(_tables); 
         PostResolve();
-
-        TablesMemory.EndRecord();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)

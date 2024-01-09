@@ -28,26 +28,31 @@ public partial class {{name}}
         _tables = new Dictionary<string, IDataTable>();
         List<Task> loadTasks = new List<Task>();
         {{~for table in tables ~}}
-        {{table.name}} = new {{table.full_name}}(() => loader("{{table.output_data_file}}")); 
+        {{table.name}} = new {{table.full_name}}(() => loader("{{table.output_data_file}}"));
         loadTasks.Add({{table.name}}.LoadAsync());
         _tables.Add("{{table.full_name}}", {{table.name}});
         {{~end~}}
 
         await Task.WhenAll(loadTasks);
 
-        PostInit();
-        {{~for table in tables ~}}
-        {{table.name}}.Resolve(_tables); 
-        {{~end~}}
-        PostResolve();
+        Refresh();
 
         TablesMemory.EndRecord();
+    }
+
+    public void Refresh()
+    {
+        PostInit();
+        {{~for table in tables ~}}
+        {{table.name}}.Resolve(_tables);
+        {{~end~}}
+        PostResolve();
     }
 
     public void TranslateText(System.Func<string, string, string> translator)
     {
         {{~for table in tables ~}}
-        {{table.name}}.TranslateText(translator); 
+        {{table.name}}.TranslateText(translator);
         {{~end~}}
     }
 
