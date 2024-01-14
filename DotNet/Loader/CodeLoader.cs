@@ -20,7 +20,7 @@ namespace ET
             {
                 if (ass.GetName().Name == "Model")
                 {
-                    model = ass;
+                    this.model = ass;
                     break;
                 }
             }
@@ -33,17 +33,6 @@ namespace ET
             start.Run();
         }
 
-        public async UniTask ReloadAsync()
-        {
-            await UniTask.CompletedTask;
-            Assembly hotfixAssembly = this.LoadHotfix();
-
-            CodeTypes codeTypes = World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[] { typeof (World).Assembly, typeof(Init).Assembly, this.model, hotfixAssembly });
-
-            codeTypes.CreateCode();
-            Log.Debug($"reload dll finish!");
-        }
-
         private Assembly LoadHotfix()
         {
             assemblyLoadContext?.Unload();
@@ -53,6 +42,17 @@ namespace ET
             byte[] pdbBytes = File.ReadAllBytes("./Hotfix.pdb");
             Assembly hotfixAssembly = assemblyLoadContext.LoadFromStream(new MemoryStream(dllBytes), new MemoryStream(pdbBytes));
             return hotfixAssembly;
+        }
+
+        public async UniTask ReloadAsync()
+        {
+            await UniTask.CompletedTask;
+            Assembly hotfixAssembly = this.LoadHotfix();
+
+            CodeTypes codeTypes = World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[] { typeof (World).Assembly, typeof(Init).Assembly, this.model, hotfixAssembly });
+
+            codeTypes.CreateCode();
+            Log.Debug($"reload dll finish!");
         }
     }
 }
