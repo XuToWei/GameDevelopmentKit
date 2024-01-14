@@ -43,28 +43,10 @@ namespace ET.Analyzer
         {
             DotNet_Model,DotNet_Hotfix,
         };
-    }
 
-    public static class UnityCodesPath
-    {
-        public static readonly string Unity_ET_Code_Model = @"Unity\Assets\Scripts\Game\ET\Code\Model\".Replace('\\',Path.DirectorySeparatorChar);
-        public static readonly string Unity_ET_Code_ModelView = @"Unity\Assets\Scripts\Game\ET\Code\ModelView\".Replace('\\',Path.DirectorySeparatorChar);
-        public static readonly string Unity_ET_Code_Hotfix = @"Unity\Assets\Scripts\Game\ET\Code\Hotfix\".Replace('\\',Path.DirectorySeparatorChar);
-        public static readonly string Unity_ET_Code_HotfixView = @"Unity\Assets\Scripts\Game\ET\Code\HotfixView\".Replace('\\',Path.DirectorySeparatorChar);
-
-        public static readonly string[] AllModelHotfix =
+        public static readonly string[] AllLogicModel =
         {
-            Unity_ET_Code_Model, Unity_ET_Code_Hotfix, Unity_ET_Code_ModelView, Unity_ET_Code_HotfixView, 
-        };
-        
-        public static readonly string[] AllHotfix =
-        {
-            Unity_ET_Code_Hotfix, Unity_ET_Code_HotfixView, 
-        };
-
-        public static readonly string[] AllModel =
-        {
-            Unity_ET_Code_Model, Unity_ET_Code_ModelView
+            DotNet_Model, Unity_ET_Code_Model,
         };
     }
 }

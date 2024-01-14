@@ -22,15 +22,19 @@ namespace ET.Analyzer
             
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterCompilationStartAction((this.CompilationStartAnalysis));
+            var entityHashCodeMap = new ConcurrentDictionary<long, string>();
+            
+            context.RegisterCompilationStartAction((analysisContext =>
+            {
+                CompilationStartAnalysis(analysisContext, entityHashCodeMap);
+            } ));
         }
 
-        private void CompilationStartAnalysis(CompilationStartAnalysisContext context)
+        private void CompilationStartAnalysis(CompilationStartAnalysisContext context,ConcurrentDictionary<long, string> entityHashCodeMap)
         {
-            var entityHashCodeMap = new ConcurrentDictionary<long, string>();
             context.RegisterSemanticModelAction((analysisContext =>
             {
-                if (AnalyzerHelper.IsSemanticModelNeedAnalyze(analysisContext.SemanticModel, UnityCodesPath.Unity_ET_Code_Model))
+                if (AnalyzerHelper.IsAssemblyNeedAnalyze(analysisContext.SemanticModel.Compilation.AssemblyName, AnalyzeAssembly.AllModel))
                 {
                     AnalyzeSemanticModel(analysisContext, entityHashCodeMap);
                 }

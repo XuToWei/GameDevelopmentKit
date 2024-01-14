@@ -395,4 +395,40 @@ namespace ET.Analyzer
                     true,
                     Description);
     }
+    
+    public static class EntityComponentChildAnalyzerRule
+    {
+        private const string Title = "实体类禁止同时标记为Component和Child";
+
+        private const string MessageFormat = "实体类:{0} 禁止同时标记为Component和Child";
+
+        private const string Description = "实体类禁止同时标记为Component和Child.";
+
+        public static readonly DiagnosticDescriptor Rule =
+                new DiagnosticDescriptor(DiagnosticIds.EntityComponentChildAnalyzerRuleId,
+                    Title,
+                    MessageFormat,
+                    DiagnosticCategories.All,
+                    DiagnosticSeverity.Error,
+                    true,
+                    Description);
+    }
+    
+    public static class EntityCannotDeclareGenericTypeRule
+    {
+        private const string Title = "实体类禁止声明为泛型实体类";
+
+        private const string MessageFormat = "实体类:{0} 禁止声明为泛型实体类";
+
+        private const string Description = "实体类禁止声明为泛型实体类.";
+
+        public static readonly DiagnosticDescriptor Rule =
+                new DiagnosticDescriptor(DiagnosticIds.EntityCannotDeclareGenericTypeRuleId,
+                    Title,
+                    MessageFormat,
+                    DiagnosticCategories.All,
+                    DiagnosticSeverity.Error,
+                    true,
+                    Description);
+    }
 }

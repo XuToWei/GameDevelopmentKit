@@ -55,5 +55,9 @@
         public const string FiberLogAnalyzerRuleId = "ET0026";
 
         public const string EntityHashCodeAnalyzerRuleId = "ET0027";
+
+        public const string EntityComponentChildAnalyzerRuleId = "ET0028";
+
+        public const string EntityCannotDeclareGenericTypeRuleId = "ET0029";
     }
 }
