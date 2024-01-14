@@ -103,17 +103,13 @@ public class EntitySystemCodeFixProvider:CodeFixProvider
                 args += $", {methodArgsArr[i]} args{i}";
             }
         }
-        string code = @"
+        string code = $$"""
         [{{systemAttr}}]
         private static void {{methodNameArr[0]}}(this {{methodArgsArr[0]}} self{{args}})
         {
             
         }
-";
-        code = code.Replace("{{systemAttr}}", systemAttr);
-        code = code.Replace("{{methodNameArr[0]}}", methodNameArr[0]);
-        code = code.Replace("{{methodArgsArr[0]}}", methodArgsArr[0]);
-        code = code.Replace("{{args}}", args);
+""";
         return SyntaxFactory.ParseMemberDeclaration(code) as MethodDeclarationSyntax;
     }
     

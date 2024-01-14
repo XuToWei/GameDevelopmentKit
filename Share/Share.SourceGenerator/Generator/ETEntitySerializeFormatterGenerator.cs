@@ -26,12 +26,8 @@ public class ETEntitySerializeFormatterGenerator : ISourceGenerator
         string serializeContent = GenerateSerializeContent(receiver);
         string deserializeContent = GenerateDeserializeContent(receiver);
         string genericTypeParam = context.Compilation.AssemblyName == AnalyzeAssembly.DotNet_Model? "<TBufferWriter>" : "";
-#if NET7_0_OR_GREATER
         string scopedCode = context.Compilation.AssemblyName == AnalyzeAssembly.DotNet_Model? "scoped" : "";
-#else
-        string scopedCode = "";
-#endif
-        string code = @"
+        string code = $$"""
 #nullable enable
 #pragma warning disable CS0108 // hides inherited member
 #pragma warning disable CS0162 // Unreachable code
@@ -121,15 +117,8 @@ namespace ET
         }
     }
 }
-";
-        code = code.Replace("{{count}}", count.ToString());
-        code = code.Replace("{{typeHashCodeMapDeclaration}}", typeHashCodeMapDeclaration);
-        code = code.Replace("{{serializeContent}}", serializeContent);
-        code = code.Replace("{{deserializeContent}}", deserializeContent);
-        code = code.Replace("{{genericTypeParam}}", genericTypeParam);
-        code = code.Replace("{{scopedCode}}", scopedCode);
-        code = code.Replace("{{Definition.EntityType}}", Definition.EntityType);
-        context.AddSource($"ETEntitySerializeFormatterGenerator.g.cs", code);
+""";
+        context.AddSource($"ETEntitySerializeFormatterGenerator.g.cs",code);
     }
 
     private string GenerateTypeHashCodeMapDeclaration(ETEntitySerializeFormatterSyntaxContextReceiver receiver)
@@ -137,10 +126,7 @@ namespace ET
         StringBuilder sb = new StringBuilder();
         foreach (var entityName in receiver.entities)
         {
-            string str = "        { typeof(global::{{entityName}}), {{entityName.GetLongHashCode()}} },";
-            str = str.Replace("{{entityName}}", entityName);
-            str = str.Replace("{{entityName.GetLongHashCode()}}", entityName.GetLongHashCode().ToString());
-            sb.AppendLine(str);
+            sb.AppendLine($$"""        { typeof(global::{{entityName}}), {{entityName.GetLongHashCode()}} },""");
         }
         return sb.ToString();
     }
@@ -150,11 +136,7 @@ namespace ET
         StringBuilder sb = new StringBuilder();
         foreach (var entityName in receiver.entities)
         {
-            string str = "                case {{entityName.GetLongHashCode()}}: writer.WritePackable(System.Runtime.CompilerServices.Unsafe.As<global::{{Definition.EntityType}}?, global::{{entityName}}>(ref value)); break;";
-            str = str.Replace("{{entityName.GetLongHashCode()}}", entityName.GetLongHashCode().ToString());
-            str = str.Replace("{{Definition.EntityType}}", Definition.EntityType);
-            str = str.Replace("{{entityName}}", entityName);
-            sb.AppendLine(str);
+            sb.AppendLine($$"""                case {{entityName.GetLongHashCode()}}: writer.WritePackable(System.Runtime.CompilerServices.Unsafe.As<global::{{Definition.EntityType}}?, global::{{entityName}}>(ref value)); break;""");
         }
         return sb.ToString();
     }
@@ -164,7 +146,7 @@ namespace ET
         StringBuilder sb = new StringBuilder();
         foreach (var entityName in receiver.entities)
         {
-            string str = @"
+            sb.AppendLine($$"""
             case {{entityName.GetLongHashCode()}}:
                     if(value is global::{{entityName}})
                     {
@@ -173,11 +155,7 @@ namespace ET
                         value = (global::{{entityName}})reader.ReadPackable<global::{{entityName}}>();
                     }
                     break;
-";
-            str = str.Replace("{{entityName.GetLongHashCode()}}", entityName.GetLongHashCode().ToString());
-            str = str.Replace("{{entityName}}", entityName);
-            str = str.Replace("{{Definition.EntityType}}", Definition.EntityType);
-            sb.AppendLine(str);
+""");
         }
         return sb.ToString();
     }
@@ -193,7 +171,7 @@ namespace ET
         
         public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
         {
-            if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.SemanticModel.Compilation.AssemblyName,AnalyzeAssembly.Unity_ET_Code_Model) 
+            if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.SemanticModel.Compilation.AssemblyName,AnalyzeAssembly.Unity_ET_Code_Model)
                 && !AnalyzerHelper.IsSemanticModelNeedAnalyze(context.SemanticModel, UnityCodesPath.Unity_ET_Code_Model))
             {
                 return;

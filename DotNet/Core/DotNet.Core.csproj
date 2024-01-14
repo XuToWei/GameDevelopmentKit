@@ -1,27 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <AssemblyName>Core</AssemblyName>
         <RootNamespace>ET</RootNamespace>
+        <LangVersion>12</LangVersion>
     </PropertyGroup>
     <PropertyGroup>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DefineConstants>DOTNET</DefineConstants>
         <OutputPath>..\..\Bin\</OutputPath>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <Optimize>false</Optimize>
         <NoWarn>0169,0649,3021,8981,CS9192,CS9193</NoWarn>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DefineConstants>DOTNET</DefineConstants>
         <OutputPath>..\..\Bin\</OutputPath>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <NoWarn>0169,0649,3021,8981,CS9192,CS9193</NoWarn>
     </PropertyGroup>

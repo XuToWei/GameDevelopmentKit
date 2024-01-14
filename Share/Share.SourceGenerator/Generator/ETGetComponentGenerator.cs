@@ -40,7 +40,7 @@ public class ETGetComponentGenerator : ISourceGenerator
         }
 
         string? assemblyName = context.Compilation.AssemblyName?.Replace(".", "_");
-        string code = @"
+        string code = $$"""
 namespace {{nameSpace}}
 {
     public static class {{assemblyName}}ETGetComponentExtension
@@ -48,10 +48,7 @@ namespace {{nameSpace}}
         {{contenSb}}
     }
 }
-";
-        code = code.Replace("{{nameSpace}}", nameSpace);
-        code = code.Replace("{{assemblyName}}", assemblyName);
-        code = code.Replace("{{contenSb}}", contenSb.ToString());
+""";
         context.AddSource($"ETGetComponentGenerator.{nameSpace}.g.cs", code);
     }
 
@@ -59,17 +56,14 @@ namespace {{nameSpace}}
     {
         string getComponentName = componentOfData.ComponentName;
         string parentEntityName = componentOfData.ParentEntityName;
-        string code = @"
+        contenSb.AppendLine($$"""
 
         public static {{getComponentName}} Get{{getComponentName}} (this {{parentEntityName}} self)
         {
             return self.GetComponent<{{getComponentName}}>();
         }
 
-";
-        code = code.Replace("{{getComponentName}}", getComponentName);
-        code = code.Replace("{{parentEntityName}}", parentEntityName);
-        contenSb.AppendLine(code);
+""");
     }
 
     struct ComponentOfData

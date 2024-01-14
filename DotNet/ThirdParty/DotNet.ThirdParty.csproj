@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>disable</Nullable>
-        <LangVersion>10</LangVersion>
+        <LangVersion>12</LangVersion>
         <RootNamespace>ET</RootNamespace>
         <AssemblyName>ThirdParty</AssemblyName>
     </PropertyGroup>
