@@ -175,7 +175,7 @@ namespace ET
                         foreach (string file in files)
                         {
                             FileInfo fileInfo = new (file);
-                            stringBuilder.AppendLine($"{fileInfo.Name}:{fileInfo.LastWriteTime}");
+                            stringBuilder.AppendLine($"{fileInfo.Name}:{fileInfo.LastWriteTime} {fileInfo.LastWriteTime.Millisecond}");
                         }
                         string changeTimeInfo = stringBuilder.ToString();
                         // ReSharper disable once MethodHasAsyncOverloadWithCancellation
