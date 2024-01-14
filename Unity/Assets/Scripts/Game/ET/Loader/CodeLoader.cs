@@ -92,6 +92,7 @@ namespace ET
             fileName = AssetUtility.GetETAsset(Utility.Text.Format("Code/{0}", fileName));
 #if UNITY_EDITOR
             await UniTask.CompletedTask;
+            // ReSharper disable once MethodHasAsyncOverload
             byte[] bytes = File.ReadAllBytes(fileName);
             return bytes;
 #else

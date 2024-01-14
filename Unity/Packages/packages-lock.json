@@ -56,6 +56,13 @@
       "dependencies": {},
       "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
     },
+    "com.cysharp.r3": {
+      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "a175ef1d8ab9cd56c45dfbdcf6171bc579831c4f"
+    },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.0",
       "depth": 0,
@@ -75,7 +82,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "17c6330d51a140eac037b9ea6f5d157a846535af"
+      "hash": "7388d28922b2144497f639630fd8b8b7a3c1ee6d"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
