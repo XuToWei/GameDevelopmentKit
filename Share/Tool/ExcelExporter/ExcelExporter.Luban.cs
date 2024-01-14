@@ -164,11 +164,30 @@ namespace ET
                     new ParallelOptions() { MaxDegreeOfParallelism = 1 },
                     async (info, _) =>
                     {
-                        Log.Info($"Export Luban work directory : {info.Luban_Work_Dir}");
-                        if (info.Luban_Work_Dir != null && !Directory.Exists(info.Luban_Work_Dir))
+                        if (!Directory.Exists(info.Luban_Work_Dir))
                         {
                             Directory.CreateDirectory(info.Luban_Work_Dir);
                         }
+                        string changeTimeInfoFile = Path.Combine(info.Luban_Work_Dir, "ChangeTimeInfo.txt");
+                        List<string> files = FileHelper.GetAllFiles(info.Input_Data_Dir);
+                        files.Sort();
+                        StringBuilder stringBuilder = new ();
+                        foreach (string file in files)
+                        {
+                            FileInfo fileInfo = new (file);
+                            stringBuilder.AppendLine($"{fileInfo.Name}:{fileInfo.LastWriteTime}");
+                        }
+                        string changeTimeInfo = stringBuilder.ToString();
+                        // ReSharper disable once MethodHasAsyncOverloadWithCancellation
+                        if (File.Exists(changeTimeInfoFile) && string.Equals(File.ReadAllText(changeTimeInfoFile), changeTimeInfo))
+                        {
+                            Log.Info($"Export Luban work directory : {info.Luban_Work_Dir} has no change and ignore!");
+                            Log.Info($"Export Luban process : {Interlocked.Add(ref processCount, 1)}/{genInfos.Count}");
+                            return;
+                        }
+                        // ReSharper disable once MethodHasAsyncOverloadWithCancellation
+                        File.WriteAllText(changeTimeInfoFile, changeTimeInfo);
+                        Log.Info($"Export Luban work directory : {info.Luban_Work_Dir}");
                         string cmd = GetCommand(info);
                         if (!await RunCommand(cmd, info.Luban_Work_Dir))
                         {
