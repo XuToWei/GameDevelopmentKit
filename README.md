@@ -49,7 +49,7 @@
 
 ### Unity Editor
 
-- 1.安装 [.net6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)，服务器功能需要安装[MongoDB](https://www.mongodb.com/)
+- 1.安装 [.net8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)，服务器功能需要安装[MongoDB](https://www.mongodb.com/)
 
 - 2.打开Unity项目，等待Unity编译完成
 
