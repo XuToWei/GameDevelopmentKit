@@ -10,10 +10,12 @@ namespace Game.Editor
     public class PluginForGitDevTool
     {
         //需要被导出的文件或文件夹
-        string[] plugins_include = new string[]
+        private readonly string[] plugins_include = new string[]
         {
             "Assets/Scripts/Game/Editor/Tool/PluginForGitDevTool.cs",
             "Assets/Scripts/Game/Debugger/ToolDebuggerWindow.cs",
+            "Assets/Scripts/Library/EnhancedScroller",
+            "Assets/Scripts/Library/SLATE Cinematic Sequencer",
             "Assets/Scripts/Library/SmartUiSelection",
             "Assets/Scripts/Library/StompyRobot",
             "Assets/Scripts/Plugins/Demigiant",
