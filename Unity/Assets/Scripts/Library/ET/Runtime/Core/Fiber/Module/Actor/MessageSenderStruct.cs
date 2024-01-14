@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 using Cysharp.Threading.Tasks;
 
 namespace ET
@@ -7,19 +7,36 @@ namespace ET
     public readonly struct MessageSenderStruct
     {
         public ActorId ActorId { get; }
-        
-        public IRequest Request { get; }
+
+        public Type RequestType { get; }
+
+        private readonly AutoResetUniTaskCompletionSource<IResponse> tcs;
 
         public bool NeedException { get; }
 
-        public AutoResetUniTaskCompletionSource<IResponse> Tcs { get; }
-
-        public MessageSenderStruct(ActorId actorId, IRequest iRequest, AutoResetUniTaskCompletionSource<IResponse> tcs, bool needException)
+        public MessageSenderStruct(ActorId actorId, Type requestType, bool needException)
         {
             this.ActorId = actorId;
-            this.Request = iRequest;
-            this.Tcs = tcs;
+
+            this.RequestType = requestType;
+
+            this.tcs = AutoResetUniTaskCompletionSource<IResponse>.Create();
             this.NeedException = needException;
+        }
+
+        public void SetResult(IResponse response)
+        {
+            this.tcs.TrySetResult(response);
+        }
+
+        public void SetException(Exception exception)
+        {
+            this.tcs.TrySetException(exception);
+        }
+
+        public async UniTask<IResponse> Wait()
+        {
+            return await this.tcs.Task;
         }
     }
 }

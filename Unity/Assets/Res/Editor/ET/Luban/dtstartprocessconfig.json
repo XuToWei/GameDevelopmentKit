@@ -63,7 +63,61 @@
     "StartConfig": "Release",
     "Id": 3,
     "MachineId": 1,
-    "Port": 0
+    "Port": 20003
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 4,
+    "MachineId": 1,
+    "Port": 20004
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 5,
+    "MachineId": 1,
+    "Port": 20005
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 6,
+    "MachineId": 1,
+    "Port": 20006
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 7,
+    "MachineId": 1,
+    "Port": 20007
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 8,
+    "MachineId": 1,
+    "Port": 20008
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 9,
+    "MachineId": 1,
+    "Port": 20009
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 10,
+    "MachineId": 1,
+    "Port": 20010
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 11,
+    "MachineId": 1,
+    "Port": 20011
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 12,
+    "MachineId": 1,
+    "Port": 20012
   },
   {
     "StartConfig": "RouterTest",

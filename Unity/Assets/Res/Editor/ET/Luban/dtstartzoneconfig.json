@@ -32,14 +32,21 @@
     "Id": 1,
     "DBConnection": "mongodb://127.0.0.1",
     "DBName": "ET1",
-    "Desc": ""
+    "Desc": "游戏区"
   },
   {
     "StartConfig": "Release",
     "Id": 2,
-    "DBConnection": "mongodb://127.0.0.1",
-    "DBName": "ET2",
-    "Desc": ""
+    "DBConnection": "",
+    "DBName": "",
+    "Desc": "机器人区"
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 3,
+    "DBConnection": "",
+    "DBName": "",
+    "Desc": "路由区"
   },
   {
     "StartConfig": "RouterTest",

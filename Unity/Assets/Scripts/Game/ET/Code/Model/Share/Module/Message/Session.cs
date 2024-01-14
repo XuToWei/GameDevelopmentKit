@@ -9,13 +9,40 @@ namespace ET
 {
     public readonly struct RpcInfo
     {
-        public readonly IRequest Request;
-        public readonly AutoResetUniTaskCompletionSourcePlus<IResponse> Tcs;
+        public Type RequestType { get; }
+        
+        private readonly AutoResetUniTaskCompletionSourcePlus<IResponse> tcs;
 
-        public RpcInfo(IRequest request)
+        public RpcInfo(Type requestType)
         {
-            this.Request = request;
-            this.Tcs = AutoResetUniTaskCompletionSourcePlus<IResponse>.Create();
+            this.RequestType = requestType;
+            
+            this.tcs = AutoResetUniTaskCompletionSourcePlus<IResponse>.Create();
+        }
+
+        public void SetResult(IResponse response)
+        {
+            this.tcs.TrySetResult(response);
+        }
+
+        public void SetException(Exception exception)
+        {
+            this.tcs.TrySetException(exception);
+        }
+
+        public UniTask<IResponse> Wait()
+        {
+            return this.tcs.Task;
+        }
+
+        public void AddOnCancelAction(Action cancelAction)
+        {
+            this.tcs.AddOnCancelAction(cancelAction);
+        }
+
+        public void AttachCancellation(CancellationToken token)
+        {
+            this.tcs.AttachCancellation(token);
         }
     }
     
@@ -43,7 +70,7 @@ namespace ET
             
             foreach (RpcInfo responseCallback in self.requestCallbacks.Values.ToArray())
             {
-                responseCallback.Tcs.TrySetException(new RpcException(self.Error, $"session dispose: {self.Id} {self.RemoteAddress}"));
+                responseCallback.SetException(new RpcException(self.Error, $"session dispose: {self.Id} {self.RemoteAddress}"));
             }
 
             Log.Info($"session dispose: {self.RemoteAddress} id: {self.Id} ErrorCode: {self.Error}, please see ErrorCode.cs! {TimeInfo.Instance.ClientNow()}");
@@ -53,17 +80,17 @@ namespace ET
         
         public static void OnResponse(this Session self, IResponse response)
         {
-            if (!self.requestCallbacks.Remove(response.RpcId, out var action))
+            if (!self.requestCallbacks.Remove(response.RpcId, out RpcInfo action))
             {
                 return;
             }
-            action.Tcs.TrySetResult(response);
+            action.SetResult(response);
         }
         
         public static UniTask<IResponse> Call(this Session self, IRequest request, CancellationToken token)
         {
             int rpcId = ++self.RpcId;
-            RpcInfo rpcInfo = new RpcInfo(request);
+            RpcInfo rpcInfo = new(request.GetType());
             self.requestCallbacks[rpcId] = rpcInfo;
             request.RpcId = rpcId;
 
@@ -71,26 +98,26 @@ namespace ET
             
             void CancelAction()
             {
-                if (!self.requestCallbacks.TryGetValue(rpcId, out RpcInfo action))
+                if (!self.requestCallbacks.Remove(rpcId, out RpcInfo action))
                 {
                     return;
                 }
 
-                self.requestCallbacks.Remove(rpcId);
-                Type responseType = OpcodeType.Instance.GetResponseType(action.Request.GetType());
+                Type responseType = OpcodeType.Instance.GetResponseType(action.RequestType);
                 IResponse response = (IResponse) Activator.CreateInstance(responseType);
                 response.Error = ErrorCore.ERR_Cancel;
+                action.SetResult(response);
             }
-            
-            rpcInfo.Tcs.AddOnCancelAction(CancelAction);
-            rpcInfo.Tcs.AttachCancellation(token);
-            return rpcInfo.Tcs.Task;
+
+            rpcInfo.AddOnCancelAction(CancelAction);
+            rpcInfo.AttachCancellation(token);
+            return rpcInfo.Wait();
         }
 
         public static async UniTask<IResponse> Call(this Session self, IRequest request, int time = 0)
         {
             int rpcId = ++self.RpcId;
-            RpcInfo rpcInfo = new(request);
+            RpcInfo rpcInfo = new(request.GetType());
             self.requestCallbacks[rpcId] = rpcInfo;
             request.RpcId = rpcId;
             self.Send(request);
@@ -110,13 +137,13 @@ namespace ET
                         return;
                     }
                     
-                    action.Tcs.TrySetException(new Exception($"session call timeout: {request} {time}"));
+                    action.SetException(new Exception($"session call timeout: {action.RequestType.FullName} {time}"));
                 }
                 
                 Timeout().Forget();
             }
 
-            return await rpcInfo.Tcs.Task;
+            return await rpcInfo.Wait();
         }
 
         public static void Send(this Session self, IMessage message)

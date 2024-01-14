@@ -182,7 +182,7 @@
   {
     "StartConfig": "Release",
     "Id": 2,
-    "Process": 2,
+    "Process": 1,
     "Zone": 1,
     "SceneType": "Gate",
     "Name": "Gate1",
@@ -191,7 +191,7 @@
   {
     "StartConfig": "Release",
     "Id": 3,
-    "Process": 2,
+    "Process": 1,
     "Zone": 1,
     "SceneType": "Gate",
     "Name": "Gate2",
@@ -199,8 +199,8 @@
   },
   {
     "StartConfig": "Release",
-    "Id": 11,
-    "Process": 2,
+    "Id": 4,
+    "Process": 1,
     "Zone": 1,
     "SceneType": "Location",
     "Name": "Location",
@@ -208,26 +208,8 @@
   },
   {
     "StartConfig": "Release",
-    "Id": 12,
-    "Process": 2,
-    "Zone": 1,
-    "SceneType": "Map",
-    "Name": "Map1",
-    "Port": 0
-  },
-  {
-    "StartConfig": "Release",
-    "Id": 13,
-    "Process": 2,
-    "Zone": 1,
-    "SceneType": "Map",
-    "Name": "Map2",
-    "Port": 0
-  },
-  {
-    "StartConfig": "Release",
-    "Id": 14,
-    "Process": 2,
+    "Id": 5,
+    "Process": 1,
     "Zone": 1,
     "SceneType": "Match",
     "Name": "Match",
@@ -235,8 +217,26 @@
   },
   {
     "StartConfig": "Release",
-    "Id": 30,
-    "Process": 3,
+    "Id": 6,
+    "Process": 1,
+    "Zone": 1,
+    "SceneType": "Map",
+    "Name": "Map1",
+    "Port": 0
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 7,
+    "Process": 1,
+    "Zone": 1,
+    "SceneType": "Map",
+    "Name": "Map2",
+    "Port": 0
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 300,
+    "Process": 1,
     "Zone": 3,
     "SceneType": "RouterManager",
     "Name": "RouterManager",
@@ -244,8 +244,8 @@
   },
   {
     "StartConfig": "Release",
-    "Id": 31,
-    "Process": 3,
+    "Id": 301,
+    "Process": 1,
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router01",
@@ -253,8 +253,8 @@
   },
   {
     "StartConfig": "Release",
-    "Id": 32,
-    "Process": 3,
+    "Id": 302,
+    "Process": 1,
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router02",
@@ -262,8 +262,8 @@
   },
   {
     "StartConfig": "Release",
-    "Id": 33,
-    "Process": 3,
+    "Id": 303,
+    "Process": 1,
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router03",
@@ -271,8 +271,8 @@
   },
   {
     "StartConfig": "Release",
-    "Id": 34,
-    "Process": 3,
+    "Id": 304,
+    "Process": 1,
     "Zone": 3,
     "SceneType": "Router",
     "Name": "Router04",

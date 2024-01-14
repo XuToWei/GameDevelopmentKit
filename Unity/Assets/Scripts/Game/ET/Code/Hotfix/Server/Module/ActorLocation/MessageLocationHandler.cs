@@ -10,7 +10,6 @@ namespace ET.Server
 
         public async UniTask Handle(Entity entity, Address fromAddress, MessageObject actorMessage)
         {
-            using MessageObject _ = actorMessage;
             Fiber fiber = entity.Fiber();
             if (actorMessage is not Message message)
             {
@@ -53,7 +52,6 @@ namespace ET.Server
         {
             try
             {
-                using MessageObject _ = actorMessage;
                 Fiber fiber = entity.Fiber();
                 if (actorMessage is not Request request)
                 {

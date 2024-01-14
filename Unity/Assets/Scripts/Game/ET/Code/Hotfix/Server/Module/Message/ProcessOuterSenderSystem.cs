@@ -70,18 +70,21 @@ namespace ET.Server
                 case ILocationRequest:
                 case IRequest:
                 {
-                    async UniTask Call()
+                    CallInner().Forget();
+                    break;
+
+                    async UniTask CallInner()
                     {
-                        IRequest request = (IRequest)message;
+                        IRequest req = (IRequest)message;
+                        int rpcId = req.RpcId;
                         // 注意这里都不能抛异常，因为这里只是中转消息
-                        IResponse response = await fiber.Root.GetComponent<ProcessInnerSender>().Call(actorId, request, false);
+                        IResponse res = await fiber.Root.GetComponent<ProcessInnerSender>().Call(actorId, req, false);
                         // 注意这里的response会在该协程执行完之后由ProcessInnerSender dispose。
                         actorId.Process = fromProcess;
-                        self.Send(actorId, response);
-                        ((MessageObject)response).Dispose();
+                        res.RpcId = rpcId;
+                        self.Send(actorId, res);
+                        ((MessageObject)res).Dispose();
                     }
-                    Call().Forget();
-                    break;
                 }
                 default:
                 {
@@ -150,17 +153,17 @@ namespace ET.Server
         {
             if (response.Error == ErrorCore.ERR_MessageTimeout)
             {
-                self.Tcs.TrySetException(new RpcException(response.Error, $"Rpc error: request, 注意Actor消息超时，请注意查看是否死锁或者没有reply: actorId: {self.ActorId} {self.Request}, response: {response}"));
+                self.SetException(new RpcException(response.Error, $"Rpc error: request, 注意Actor消息超时，请注意查看是否死锁或者没有reply: actorId: {self.ActorId} {self.RequestType.FullName}, response: {response}"));
                 return;
             }
 
             if (self.NeedException && ErrorCore.IsRpcNeedThrowException(response.Error))
             {
-                self.Tcs.TrySetException(new RpcException(response.Error, $"Rpc error: actorId: {self.ActorId} request: {self.Request}, response: {response}"));
+                self.SetException(new RpcException(response.Error, $"Rpc error: actorId: {self.ActorId} request: {self.RequestType.FullName}, response: {response}"));
                 return;
             }
 
-            self.Tcs.TrySetResult(response);
+            self.SetResult(response);
         }
 
         public static void Send(this ProcessOuterSender self, ActorId actorId, IMessage message)
@@ -203,10 +206,12 @@ namespace ET.Server
             
             int rpcId = self.GetRpcId();
 
-            var tcs = AutoResetUniTaskCompletionSource<IResponse>.Create();
+            iRequest.RpcId = rpcId;
 
-            self.requestCallback.Add(self.RpcId, new MessageSenderStruct(actorId, iRequest, tcs, needException));
-
+            Type requestType = iRequest.GetType();
+            MessageSenderStruct messageSenderStruct = new(actorId, requestType, needException);
+            self.requestCallback.Add(rpcId, messageSenderStruct);
+            
             self.SendInner(actorId, iRequest as MessageObject);
 
             async UniTask Timeout()
@@ -219,12 +224,12 @@ namespace ET.Server
                 
                 if (needException)
                 {
-                    action.Tcs.TrySetException(new Exception($"actor sender timeout: {iRequest}"));
+                    action.SetException(new Exception($"actor sender timeout: {requestType.FullName}"));
                 }
                 else
                 {
-                    IResponse response = ET.MessageHelper.CreateResponse(iRequest, ErrorCore.ERR_Timeout);
-                    action.Tcs.TrySetResult(response);
+                    IResponse response = MessageHelper.CreateResponse(requestType, rpcId, ErrorCore.ERR_Timeout);
+                    action.SetResult(response);
                 }
             }
 
@@ -232,14 +237,14 @@ namespace ET.Server
 
             long beginTime = TimeInfo.Instance.ServerFrameTime();
 
-            IResponse response = await tcs.Task;
+            IResponse response = await messageSenderStruct.Wait();
 
             long endTime = TimeInfo.Instance.ServerFrameTime();
 
             long costTime = endTime - beginTime;
             if (costTime > 200)
             {
-                Log.Warning($"actor rpc time > 200: {costTime} {iRequest}");
+                Log.Warning($"actor rpc time > 200: {costTime} {requestType.FullName}");
             }
 
             return response;

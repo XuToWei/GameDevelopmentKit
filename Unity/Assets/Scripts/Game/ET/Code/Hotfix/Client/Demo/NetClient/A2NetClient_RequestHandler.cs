@@ -7,7 +7,10 @@ namespace ET.Client
     {
         protected override async UniTask Run(Scene root, A2NetClient_Request request, A2NetClient_Response response)
         {
-            response.MessageObject = await root.GetComponent<SessionComponent>().Session.Call(request.MessageObject);
+            int rpcId = request.RpcId;
+            IResponse res = await root.GetComponent<SessionComponent>().Session.Call(request.MessageObject);
+            res.RpcId = rpcId;
+            response.MessageObject = res;
         }
     }
 }
