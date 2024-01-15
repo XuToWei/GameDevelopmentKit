@@ -16,7 +16,7 @@ namespace ET
         public void Awake()
         {
         }
-        
+
         public async UniTask LoadAsync(string name)
         {
             byte[] buffer = await EventSystem.Instance.Invoke<NavmeshComponent.RecastFileLoader,
@@ -26,7 +26,7 @@ namespace ET
                 this.navmeshs[name] = buffer;
             }
         }
-        
+
         public byte[] Get(string name)
         {
             lock (this)

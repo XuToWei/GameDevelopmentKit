@@ -19,7 +19,7 @@ namespace ET.Server
         {
             NetComponent netClientComponent = self.Root().GetComponent<NetComponent>();
             using Session session = netClientComponent.Create(Tables.Instance.DTStartSceneConfig.Benchmark.OuterIPPort);
-            List<UniTask> list = new List<UniTask>(100000);
+            List<UniTask> list = new List<UniTask>(1000);
 
             async UniTask Call(Session s)
             {

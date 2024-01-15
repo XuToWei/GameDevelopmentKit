@@ -56,6 +56,7 @@ namespace ET.Editor
         /// <summary>
         /// 自定义C#项目配置
         /// 参考链接:
+        /// https://zhuanlan.zhihu.com/p/509046784
         /// https://learn.microsoft.com/zh-cn/visualstudio/ide/reference/build-events-page-project-designer-csharp?view=vs-2022
         /// https://learn.microsoft.com/zh-cn/visualstudio/ide/how-to-specify-build-events-csharp?view=vs-2022
         /// </summary>
@@ -81,7 +82,7 @@ namespace ET.Editor
                 XmlElement compile = newDoc.CreateElement("Compile", newDoc.DocumentElement.NamespaceURI);
                 XmlElement link = newDoc.CreateElement("Link", newDoc.DocumentElement.NamespaceURI);
                 link.InnerText = linkStr;
-                //compile.AppendChild(link);
+                compile.AppendChild(link);
                 compile.SetAttribute("Include", p);
                 itemGroup.AppendChild(compile);
             }

@@ -44,7 +44,7 @@ namespace ET
 
             // 创建需要reload的code singleton
             CodeTypes.Instance.CreateCode();
-            
+
             await ConfigComponent.Instance.LoadAllAsync();
 
             await FiberManager.Instance.Create(SchedulerType.Main, ConstFiberId.Main, 0, SceneType.Main, "");

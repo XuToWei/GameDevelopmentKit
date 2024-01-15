@@ -11,7 +11,8 @@ namespace ET.Analyzer
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AddChildTypeAnalyzer: DiagnosticAnalyzer
     {
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(AddChildTypeAnalyzerRule.Rule,DisableAccessEntityChildAnalyzerRule.Rule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+                ImmutableArray.Create(AddChildTypeAnalyzerRule.Rule, DisableAccessEntityChildAnalyzerRule.Rule);
 
         public override void Initialize(AnalysisContext context)
         {

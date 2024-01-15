@@ -12,7 +12,7 @@ namespace ET.Server
 			response.Time = TimeInfo.Instance.ClientNow();
 			await UniTask.CompletedTask;
 			
-			// MessageSessionHandler的response会在函数返回发送完消息回收到池
+			//response会在函数返回发送完消息回收到池
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace ET.Server
     {
         public async UniTask Handle(Scene scene, HttpListenerContext context)
         {
-            HttpGetRouterResponse response = new();
+            HttpGetRouterResponse response = HttpGetRouterResponse.Create();
             foreach (var startSceneConfig in Tables.Instance.DTStartSceneConfig.Realms)
             {
                 response.Realms.Add(startSceneConfig.InnerIPPort.ToString());

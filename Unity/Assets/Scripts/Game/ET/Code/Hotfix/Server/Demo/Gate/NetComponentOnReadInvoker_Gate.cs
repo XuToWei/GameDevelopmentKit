@@ -64,7 +64,7 @@ namespace ET.Server
                 {
                     break;
                 }
-                case IMessage actorMessage: // 分发IActorMessage消息，目前没有用到，需要的自己添加
+                case IMessage actorMessage:  // 分发IActorMessage消息，目前没有用到，需要的自己添加
                 {
                     break;
                 }

@@ -11,8 +11,9 @@ namespace ET.Server
 
 			var startSceneConfig = Tables.Instance.DTStartSceneConfig.Match;
 
-			await session.Root().GetComponent<MessageSender>().Call(startSceneConfig.ActorId,
-				new G2Match_Match() { Id = player.Id });
+			G2Match_Match g2MatchMatch = G2Match_Match.Create();
+			g2MatchMatch.Id = player.Id;
+			await session.Root().GetComponent<MessageSender>().Call(startSceneConfig.ActorId, g2MatchMatch);
 		}
 	}
 }

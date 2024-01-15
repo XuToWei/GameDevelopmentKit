@@ -30,7 +30,7 @@ namespace ET
     public sealed class KService: AService
     {
         public const int ConnectTimeoutTime = 20 * 1000;
-        
+
         // KService创建的时间
         private readonly long startTime;
 
