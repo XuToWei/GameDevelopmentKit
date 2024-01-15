@@ -46,7 +46,6 @@ crashlytics-build.properties
 # Custom
 /Unity.sln
 /Unity.sln.DotSettings.user
-/Directory.Build.props
 /Unity.sln.DotSettings
 /[Aa]ssets/[Ss]treamingAssets/*.dat
 /[Aa]ssets/[Ss]treamingAssets/*.dat.meta

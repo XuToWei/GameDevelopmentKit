@@ -56,25 +56,9 @@ Server/.DS_Store
 ~$*.xlsx.meta
 /.vscode
 /Unity/UserSettings/Search.settings
-/Unity/Unity.Hotfix.csproj
-/Unity/Unity.HotfixView.csproj
-/Unity/Unity.Model.csproj
-/Unity/Unity.ModelView.csproj
-
 /Unity/ProjectSettings/RiderScriptEditorPersistedState.asset
-/Unity/Unity.Core.csproj
 /Unity/UserSettings
-/Unity/Unity.Codes.csproj
-/Unity/Unity.Loader.csproj
-/Unity/Unity.Ignore.csproj
 Publish/
-/Unity/Unity.Editor.Codes.csproj
-/Unity/Unity.Hotfix.Codes.csproj
-/Unity/Unity.HotfixView.Codes.csproj
-/Unity/Unity.Model.Codes.csproj
-/Unity/Unity.ModelView.Codes.csproj
-/Unity/Unity.GenerateClient.csproj
-/Unity/Unity.GenerateServer.csproj
 
 /Unity/Assets/Bundles/AotDlls
 /Unity/Assets/Bundles/AotDlls.meta
