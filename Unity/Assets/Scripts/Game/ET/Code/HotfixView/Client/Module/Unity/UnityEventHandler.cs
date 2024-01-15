@@ -2,7 +2,7 @@
 
 namespace ET.Client
 {
-    public class UnityEventHandler
+    public static partial class UnityEventHandler
     {
         [Invoke]
         public class OnApplicationPauseHandler: AInvokeHandler<OnApplicationPause>

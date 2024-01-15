@@ -6,7 +6,7 @@ namespace ET.Client
     public static partial class UGFUIHelpComponentSystem
     {
         [UGFUIFormEvent(UGFUIFormId.UIHelp)]
-        public class UGFUIHelpEvent : AUGFUIFormEvent
+        public class UGFUIHelpComponentEvent : AUGFUIFormEvent
         {
             public override void OnInit(UGFUIForm uiForm, object userData)
             {

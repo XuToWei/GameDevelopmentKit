@@ -114,25 +114,45 @@ namespace ET.Analyzer
 
         private bool CheckIsEntityFriendOf(INamedTypeSymbol accessFieldTypeSymbol, INamedTypeSymbol entityTypeSymbol)
         {
-            var attributes = accessFieldTypeSymbol.GetAttributes();
-            foreach (AttributeData? attributeData in attributes)
+            bool Check(INamedTypeSymbol containingType)
             {
-                if (attributeData.AttributeClass?.ToString() != Definition.FriendOfAttribute)
+                var attributes = containingType.GetAttributes();
+                foreach (AttributeData? attributeData in attributes)
                 {
-                    continue;
-                }
+                    if (attributeData.AttributeClass?.ToString() != Definition.FriendOfAttribute)
+                    {
+                        continue;
+                    }
 
-                if (!(attributeData.ConstructorArguments[0].Value is INamedTypeSymbol namedTypeSymbol))
-                {
-                    continue;
-                }
+                    if (!(attributeData.ConstructorArguments[0].Value is INamedTypeSymbol namedTypeSymbol))
+                    {
+                        continue;
+                    }
 
-                if (namedTypeSymbol.ToString() == entityTypeSymbol.ToString())
+                    if (namedTypeSymbol.ToString() == entityTypeSymbol.ToString())
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            if (Check(accessFieldTypeSymbol))
+            {
+                return true;
+            }
+
+            //嵌套类添加对FriendOf的支持
+            INamedTypeSymbol containingType = accessFieldTypeSymbol;
+            while (containingType.ContainingType != null && containingType.ToString() != containingType.ContainingType.ToString())
+            {
+                containingType = containingType.ContainingType;
+                if (Check(containingType))
                 {
                     return true;
                 }
             }
-
+            
             return false;
         }
     }

@@ -7,7 +7,7 @@ namespace ET.Client
     public static partial class UGFUILSRoomComponentSystem
     {
         [UGFUIFormEvent(UGFUIFormId.UILSRoom)]
-        private class UGFUILSRoomEvent : AUGFUIFormEvent
+        private class UGFUILSRoomComponentEvent : AUGFUIFormEvent
         {
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
