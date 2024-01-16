@@ -29,7 +29,7 @@ namespace ET.Server
                 MongoHelper.ToJson(1);
                 
                 Log.Info($"server start........................ ");
-                
+                Options.Instance.AppType = AppType.ExcelExporter;
                 switch (Options.Instance.AppType)
                 {
                     case AppType.ExcelExporter:

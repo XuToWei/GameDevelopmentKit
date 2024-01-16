@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -15,50 +14,33 @@ namespace ET
     {
         public static class ExcelExporter_Luban
         {
-            private static readonly List<List<string>> luban_normal_log_pattern = new()
-            {
-                new() { "|[", "]" },
-                new() { "|onGenJob. arg" },
-                new() { "|======", "cost", "ms" },
-                new() { "|comput md5. file:" },
-            };
-            private static readonly List<string> luban_succ_log_pattern = new ()
-            {
-                "|== succ ==",
-            };
             private const string not_translated_text_file = "NotLocalization.txt";
 
             /// <summary>
             /// luban命令模板，不能带换行符
             /// </summary>
             private static readonly string lubanCommandTemplate =
-                    $"dotnet %GEN_CLIENT% --template_search_path %CUSTOM_TEMPLATE_DIR% -j cfg -- -d %INPUT_DATA_DIR%/Defines/__root__.xml --input_data_dir %INPUT_DATA_DIR%/Datas --output_code_dir %OUTPUT_CODE_DIR% --output_data_dir %OUTPUT_DATA_DIR% --gen_types %GEN_TYPE_CODE_DATA% -s %GEN_GROUP%";
+                    $"dotnet %GEN_CLIENT% --customTemplateDir %CUSTOM_TEMPLATE_DIR% --conf %CONF_ROOT%/luban.conf ";
 
-            /// <summary>
-            /// luban本地化命令模板，不能带换行符
-            /// </summary>
-            private static readonly string lubanLocalizationCommandTemplate =
-                    $" --l10n:input_text_files {LocalizationExcelFile} --l10n:text_field_name %TEXT_FIELD_NAME% --l10n:output_not_translated_text_file {not_translated_text_file}";
-
-            private const string gen_client = "../Tools/Luban/Tools/Luban.ClientServer/Luban.ClientServer.dll";
+            private const string gen_client = "../Tools/Luban/Tools/Luban/Luban.dll";
             private const string custom_template_dir = "../Tools/Luban/CustomTemplates/LoadAsync";
             private const string excel_dir = "../Design/Excel";
             private const string gen_config_name = "GenConfig.xml";
-            private const string luban_work_dir = "../Temp/Luban";
+            private const string luban_temp_dir = "../Temp/Luban";
 
             private static Encoding s_Encoding;
 
-            private class Input_Output_Gen_Info
-            {
-                public string Luban_Work_Dir;
-                public string Input_Data_Dir;
-                public List<string> Output_Code_Dirs;
-                public List<string> Output_Data_Dirs;
-                public string Gen_Type_Code_Data;
-                public string Gen_Group;
-                public string Text_Field_Name;
-                public string Extra_Command;
-            }
+            // private class Input_Output_Gen_Info
+            // {
+            //     public string Luban_Work_Dir;
+            //     public string Input_Data_Dir;
+            //     public List<string> Output_Code_Dirs;
+            //     public List<string> Output_Data_Dirs;
+            //     public string Gen_Type_Code_Data;
+            //     public string Gen_Group;
+            //     public string Text_Field_Name;
+            //     public string Extra_Command;
+            // }
 
             public static bool IsEnableET { get; private set; }
             public static bool IsEnableGameHot { get; private set; }
@@ -88,14 +70,15 @@ namespace ET
                 dirList.Sort();
                 dirs = dirList.ToArray();
 
-                string lubanWorkDir = Path.GetFullPath(Path.Combine(WorkDir, luban_work_dir));
-                if (!Directory.Exists(lubanWorkDir))
+                string lubanTempDir = Path.GetFullPath(Path.Combine(WorkDir, luban_temp_dir));
+                if (!Directory.Exists(lubanTempDir))
                 {
-                    Directory.CreateDirectory(lubanWorkDir);
+                    Directory.CreateDirectory(lubanTempDir);
                 }
 
                 bool useJson = Options.Instance.Customs.Contains("Json", StringComparison.OrdinalIgnoreCase);
-                List<Input_Output_Gen_Info> genInfos = new List<Input_Output_Gen_Info>();
+                StringBuilder cmdStringBuilder = new ();
+                List<Action> saveTimeActions = new List<Action>();
                 for (int i = 0; i < dirs.Length; i++)
                 {
                     string dir = Path.GetFullPath(dirs[i]);
@@ -120,169 +103,95 @@ namespace ET
                     {
                         IsEnableGameHot = true;
                     }
+                    
+                    int lastIndex = dir.LastIndexOf(Path.DirectorySeparatorChar) + 1;
+                    string dirName = dir.Substring(lastIndex, dir.Length - lastIndex);
+                    string changeTimeInfoFile = Path.Combine(lubanTempDir, $"ChangeTimeInfo_{dirName}.txt");
+                    List<string> files = FileHelper.GetAllFiles(dir);
+                    files.Sort();
+                    StringBuilder timeStringBuilder = new ();
+                    foreach (string file in files)
+                    {
+                        FileInfo fileInfo = new (file);
+                        timeStringBuilder.AppendLine($"{fileInfo.Name}:{fileInfo.LastWriteTime} {fileInfo.LastWriteTime.Millisecond}");
+                    }
+                    string changeTimeInfo = timeStringBuilder.ToString();
+                    // ReSharper disable once MethodHasAsyncOverloadWithCancellation
+                    if (File.Exists(changeTimeInfoFile) && string.Equals(File.ReadAllText(changeTimeInfoFile), changeTimeInfo))
+                    {
+                        Log.Info($"Luban directory {dir} has no change and ignore export !");
+                        continue;
+                    }
+                    saveTimeActions.Add(() =>
+                    {
+                        File.WriteAllText(changeTimeInfoFile, changeTimeInfo);
+                    });
+                    
+                    string cmdHeader = lubanCommandTemplate.Replace("%GEN_CLIENT%", Path.GetFullPath(Path.Combine(WorkDir, gen_client)).Replace("/", "\\"))
+                            .Replace("%CUSTOM_TEMPLATE_DIR%", Path.GetFullPath(Path.Combine(WorkDir, custom_template_dir)).Replace("/", "\\"))
+                            .Replace("%CONF_ROOT%", Path.GetFullPath(dir).Replace("/", "\\"));
                     XmlNodeList xmlGens = xmlRoot.SelectNodes("Gen");
+                    Log.Info(cmdHeader);
                     for (int j = 0; j < xmlGens.Count; j++)
                     {
+                        cmdStringBuilder.Append(cmdHeader);
                         XmlNode xmlGen = xmlGens.Item(j);
-                        Input_Output_Gen_Info info = new Input_Output_Gen_Info();
-                        int lastIndex = dir.LastIndexOf(Path.DirectorySeparatorChar) + 1;
-                        info.Luban_Work_Dir = Path.Combine(lubanWorkDir, $"{dir.Substring(lastIndex, dir.Length - lastIndex)}_{j}");
-                        info.Input_Data_Dir = dir;
-                        string dirsStr = xmlGen.SelectSingleNode("Output_Code_Dirs").Attributes.GetNamedItem("Value").Value;
-                        info.Output_Code_Dirs = dirsStr.Split(',').ToList();
-                        dirsStr = xmlGen.SelectSingleNode("Output_Data_Dirs").Attributes.GetNamedItem("Value").Value;
-                        info.Output_Data_Dirs = dirsStr.Split(',').ToList();
-                        info.Gen_Type_Code_Data = xmlGen.SelectSingleNode("Gen_Type_Code_Data").Attributes.GetNamedItem("Value").Value;
+                        string genCmd = xmlGen.InnerText.Replace("\r\n", " ")
+                                .Replace("  ", " ")
+                                .Replace("   ", " ")
+                                .Replace("    ", " ")
+                                .Replace("     ", " ")
+                                .Replace("      ", " ")
+                                .Replace("       ", " ")
+                                .Replace("        ", " ");
                         if (useJson)
                         {
-                            info.Gen_Type_Code_Data = info.Gen_Type_Code_Data.Replace("code_cs_unity_bin", "code_cs_unity_json")
-                                    .Replace("data_bin", "data_json")
-                                    .Replace("code_cs_bin", "code_cs_dotnet_json");
+                            genCmd = genCmd.Replace("-c cs-bin", "-c cs-simple-json")
+                                    .Replace("-c cs-bin", "-c cs-simple-json")
+                                    .Replace("-d bin", "-d json");
                         }
-                        info.Gen_Group = xmlGen.SelectSingleNode("Gen_Group").Attributes.GetNamedItem("Value").Value;
-                        XmlNode textFieldNameNode = xmlGen.SelectSingleNode("Text_Field_Name");
-                        info.Text_Field_Name = textFieldNameNode == null? string.Empty : textFieldNameNode.Attributes.GetNamedItem("Value").Value;
-                        XmlNode extraCommandNode = xmlGen.SelectSingleNode("Extra_Command");
-                        info.Extra_Command = extraCommandNode == null? string.Empty : $" {extraCommandNode.Attributes.GetNamedItem("Value").Value}";
-                        genInfos.Add(info);
-                    }
-                }
-                
-                foreach (var genInfo in genInfos)
-                {
-                    string file = Path.Combine(genInfo.Luban_Work_Dir, not_translated_text_file);
-                    if (File.Exists(file))
-                    {
-                        File.Delete(file);
+                        Log.Info(xmlGen.InnerText);
+                        Log.Info(genCmd);
+                        cmdStringBuilder.Append(genCmd);
+                        cmdStringBuilder.AppendLine();
                     }
                 }
 
-                Log.Info($"Export Luban excel {genInfos.Count} project!");
                 bool isSuccess = true;
-                int processCount = 0;
-                Parallel.ForEachAsync(genInfos,
-                    new ParallelOptions() { MaxDegreeOfParallelism = 1 },
-                    async (info, _) =>
+                async Task ExportAsync()
+                { 
+                    if (!await RunCommand(cmdStringBuilder.ToString(), lubanTempDir))
                     {
-                        if (!Directory.Exists(info.Luban_Work_Dir))
-                        {
-                            Directory.CreateDirectory(info.Luban_Work_Dir);
-                        }
-                        string changeTimeInfoFile = Path.Combine(info.Luban_Work_Dir, "ChangeTimeInfo.txt");
-                        List<string> files = FileHelper.GetAllFiles(info.Input_Data_Dir);
-                        files.Sort();
-                        StringBuilder stringBuilder = new ();
-                        foreach (string file in files)
-                        {
-                            FileInfo fileInfo = new (file);
-                            stringBuilder.AppendLine($"{fileInfo.Name}:{fileInfo.LastWriteTime} {fileInfo.LastWriteTime.Millisecond}");
-                        }
-                        string changeTimeInfo = stringBuilder.ToString();
-                        // ReSharper disable once MethodHasAsyncOverloadWithCancellation
-                        if (File.Exists(changeTimeInfoFile) && string.Equals(File.ReadAllText(changeTimeInfoFile), changeTimeInfo))
-                        {
-                            Log.Info($"Export Luban work directory : {info.Luban_Work_Dir} has no change and ignore!");
-                            Log.Info($"Export Luban process : {Interlocked.Add(ref processCount, 1)}/{genInfos.Count}");
-                            return;
-                        }
-                        // ReSharper disable once MethodHasAsyncOverloadWithCancellation
-                        File.WriteAllText(changeTimeInfoFile, changeTimeInfo);
-                        Log.Info($"Export Luban work directory : {info.Luban_Work_Dir}");
-                        string cmd = GetCommand(info);
-                        if (!await RunCommand(cmd, info.Luban_Work_Dir))
-                        {
-                            isSuccess = false;
-                            return;
-                        }
-                        if (info.Output_Code_Dirs.Count > 1)
-                        {
-                            for (int k = 1; k < info.Output_Code_Dirs.Count; k++)
-                            {
-                                FileHelper.CleanDirectory(info.Output_Code_Dirs[k]);
-                                FileHelper.CopyDirectory(info.Output_Code_Dirs[0], info.Output_Code_Dirs[k]);
-                            }
-                        }
-                        if (info.Output_Data_Dirs.Count > 1)
-                        {
-                            for (int k = 1; k < info.Output_Data_Dirs.Count; k++)
-                            {
-                                FileHelper.CleanDirectory(info.Output_Data_Dirs[k]);
-                                FileHelper.CopyDirectory(info.Output_Data_Dirs[0], info.Output_Data_Dirs[k]);
-                            }
-                        }
-                        Log.Info($"Export Luban process : {Interlocked.Add(ref processCount, 1)}/{genInfos.Count}");
-                    }).Wait();
-
-                if (!isSuccess)
-                {
-                    throw new Exception("Export Luban excel fail!");
-                }
-
-                foreach (var genInfo in genInfos)
-                {
-                    string file = Path.Combine(genInfo.Luban_Work_Dir, not_translated_text_file);
-                    if (File.Exists(file))
-                    {
-                        if (File.ReadAllText(file).Length > 0)
-                        {
-                            Log.Warning($"Please check {file} to solve not translated text!");
-                        }
+                        isSuccess = false;
                     }
                 }
-
-                GenerateUGFEntityId.GenerateCode();
-                GenerateUGFUIFormId.GenerateCode();
-                GenerateUGFAllSoundId.GenerateCode();
-                Log.Info("Export Luban excel success!");
-            }
-
-            private static string GetCommand(Input_Output_Gen_Info info)
-            {
-                string cmd = lubanCommandTemplate;
-                if (string.Equals(info.Gen_Type_Code_Data, "code_cs_unity_editor_json")) //editor,不用自定义模板,不用导出数据
-                {
-                    cmd = cmd.Replace(" --template_search_path %CUSTOM_TEMPLATE_DIR%", "");
-                    cmd = cmd.Replace(" --output_data_dir %OUTPUT_DATA_DIR%", "");
-                }
-
-                cmd = cmd.Replace("%GEN_CLIENT%", Path.GetFullPath(Path.Combine(WorkDir, gen_client)))
-                        .Replace("%CUSTOM_TEMPLATE_DIR%", Path.GetFullPath(Path.Combine(WorkDir, custom_template_dir)))
-                        .Replace("%INPUT_DATA_DIR%", Path.Combine(info.Input_Data_Dir))
-                        .Replace("%OUTPUT_CODE_DIR%", Path.Combine(WorkDir, info.Output_Code_Dirs[0]))
-                        .Replace("%OUTPUT_DATA_DIR%", Path.Combine(WorkDir, info.Output_Data_Dirs[0]))
-                        .Replace("%GEN_TYPE_CODE_DATA%", info.Gen_Type_Code_Data)
-                        .Replace("%GEN_GROUP%", info.Gen_Group);
+                ExportAsync().Wait();
                 
-                if (!string.IsNullOrEmpty(info.Text_Field_Name))//如果Text_Field_Name有配置就执行本地化
-                {
-                    cmd += lubanLocalizationCommandTemplate.Replace("%TEXT_FIELD_NAME%", info.Text_Field_Name);
-                }
-                
-                if (!string.IsNullOrEmpty(info.Extra_Command))
-                {
-                    cmd += info.Extra_Command;
-                }
-                return cmd;
-            }
+                //
+                // foreach (var genInfo in genInfos)
+                // {
+                //     string file = Path.Combine(genInfo.Luban_Work_Dir, not_translated_text_file);
+                //     if (File.Exists(file))
+                //     {
+                //         if (File.ReadAllText(file).Length > 0)
+                //         {
+                //             Log.Warning($"Please check {file} to solve not translated text!");
+                //         }
+                //     }
+                // }
+                //
+                // GenerateUGFEntityId.GenerateCode();
+                // GenerateUGFUIFormId.GenerateCode();
+                // GenerateUGFAllSoundId.GenerateCode();
 
-            private static bool IsMatch(string target, List<string> pattern)
-            {
-                foreach (string str in pattern)
+                if (isSuccess)
                 {
-                    if (!target.Contains(str))
-                        return false;
+                    Log.Info("Export Luban excel success!");
                 }
-                return true;
-            }
-
-            private static bool IsOneMatch(string target, List<List<string>> patterns)
-            {
-                foreach (List<string> pattern in patterns)
+                else
                 {
-                    if (IsMatch(target, pattern))
-                        return true;
+                    Log.Error($"Export Luban excel fail!");
                 }
-                return false;
             }
 
             /// <summary>
@@ -290,9 +199,10 @@ namespace ET
             /// </summary>
             /// <param name="cmd">命令</param>
             /// <param name="workDir">工作目录</param>
-            /// <returns>错误信息</returns>
+            /// <returns>是否成功</returns>
             private static async Task<bool> RunCommand(string cmd, string workDir)
             {
+                Log.Info(cmd);
                 bool isSuccess = true;
                 Process process = new();
                 try
@@ -324,18 +234,7 @@ namespace ET
                     {
                         if (!string.IsNullOrEmpty(args.Data))
                         {
-                            //luban运行时候，配置错误不会抛出异常，所以需要从OutputData筛选错误信息
-                            if (IsMatch(args.Data, luban_succ_log_pattern))
-                            {
-                                Log.Info(args.Data);
-                            }
-                            else
-                            {
-                                if (!IsOneMatch(args.Data, luban_normal_log_pattern))
-                                {
-                                    Log.Warning(args.Data);
-                                }
-                            }
+                            Log.Info(args.Data);
                         }
                     };
                     process.ErrorDataReceived += (sender, args) =>
@@ -343,7 +242,7 @@ namespace ET
                         if (!string.IsNullOrEmpty(args.Data))
                         {
                             isSuccess = false;
-                            Log.Error(args.Data);
+                            Log.Warning(args.Data);
                         }
                     };
 

@@ -1,0 +1,25 @@
+<Config>
+  <Open Value="TRUE" />
+  <Gen>
+    -t client
+    -c cs-bin
+    -d bin
+    -x outputCodeDir=../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/Client/Luban
+    -x outputDataDir=../Unity/Assets/Res/ET/Client/Luban
+  </Gen>
+  <Gen>
+    -t clientserver
+    -c cs-bin
+    -d bin
+    -x outputCodeDir=../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Luban
+    -x outputDataDir=../Config/Luban
+    -x outputDataDir=../Unity/Assets/Res/ET/ClientServer/Luban
+  </Gen>
+  <Gen>
+    -t editor
+    -c cs-editor-json
+    -d json
+    -x outputCodeDir=../Unity/Assets/Scripts/Game/ET/Editor/Generate/Luban
+    -x outputDataDir=../Unity/Assets/Res/Editor/ET/Luban
+  </Gen>
+</Config>
