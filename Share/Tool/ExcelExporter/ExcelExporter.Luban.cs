@@ -6,9 +6,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace ET
 {
@@ -37,12 +37,13 @@ namespace ET
             {
                 public string cmd;
                 public Action save;
+                public string dirName;
             }
-            
+
             public class GenConfig
             {
                 public bool active { get; set; }
-                public List<string> cmds{ get; set; }
+                public List<string> cmds { get; set; }
             }
 
             public static bool IsEnableET { get; private set; }
@@ -81,6 +82,7 @@ namespace ET
 
                 bool useJson = Options.Instance.Customs.Contains("Json", StringComparison.OrdinalIgnoreCase);
                 bool isCheck = Options.Instance.Customs.Contains("Check", StringComparison.OrdinalIgnoreCase);
+                bool showCmd = Options.Instance.Customs.Contains("ShowCmd", StringComparison.OrdinalIgnoreCase);
                 StringBuilder cmdStringBuilder = new();
                 List<CmdInfo> cmdInfos = new List<CmdInfo>();
                 for (int i = 0; i < dirs.Length; i++)
@@ -91,14 +93,15 @@ namespace ET
                     {
                         continue;
                     }
-                    var genConfig = JsonSerializer.Deserialize<GenConfig>(File.ReadAllText(genConfigFile, Encoding.UTF8), new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                    });
+
+                    var genConfig = JsonSerializer.Deserialize<GenConfig>(
+                        File.ReadAllText(genConfigFile, Encoding.UTF8).Replace("\r\n", " ").Replace("\n", " ").Replace("\u0009", " "),
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true, });
                     if (!genConfig.active)
                     {
                         continue;
                     }
+
                     if (string.Equals(Directory.GetParent(genConfigFile).Name, "ET", StringComparison.Ordinal))
                     {
                         IsEnableET = true;
@@ -107,6 +110,7 @@ namespace ET
                     {
                         IsEnableGameHot = true;
                     }
+
                     int lastIndex = dir.LastIndexOf(Path.DirectorySeparatorChar) + 1;
                     string dirName = dir.Substring(lastIndex, dir.Length - lastIndex);
                     string changeTimeInfoFile = Path.Combine(lubanTempDir, $"temp_timeinfo_{dirName}.txt");
@@ -123,22 +127,27 @@ namespace ET
                     // ReSharper disable once MethodHasAsyncOverloadWithCancellation
                     if (File.Exists(changeTimeInfoFile) && string.Equals(File.ReadAllText(changeTimeInfoFile), changeTimeInfo))
                     {
-                        Log.Info($"Luban directory {dir} has no change and ignore export !");
+                        Log.Info($"Luban ignore export directory : {dir}!");
                         continue;
                     }
+
                     cmdStringBuilder.Clear();
-                    
+
                     for (int j = 0; j < genConfig.cmds.Count; j++)
                     {
-                        string genCmd = genConfig.cmds[j];
-                        if (useJson)
-                        {
-                            genCmd = genCmd.Replace("-c cs-bin", "-c cs-simple-json")
-                                    .Replace("-c cs-bin", "-c cs-simple-json")
-                                    .Replace("-d bin", "-d json");
-                        }
                         cmdStringBuilder.Append(lubanCommandHeaderTemplate);
-                        cmdStringBuilder.Append(genCmd);
+                        var cmd = genConfig.cmds[j];
+                        if (!cmd.Contains("-x l10n.textProviderFile"))
+                        {
+                            cmd += $" -x l10n.textProviderFile={LocalizationExcelFile.Replace("/", "\\")}";
+                        }
+
+                        if (isCheck)
+                        {
+                            cmd += " -f";
+                        }
+
+                        cmdStringBuilder.Append(cmd);
                         cmdStringBuilder.AppendLine();
                     }
 
@@ -149,16 +158,45 @@ namespace ET
                             .Replace("%CONF_ROOT%", Path.GetFullPath(dir))
                             .Replace("%UNITY_ASSETS%", Path.GetFullPath(Path.Combine(WorkDir, unity_assets_path)))
                             .Replace("/", "\\");
+                    Match match = Regex.Match(cmdInfo.cmd, "-(.*)");
+                    if (match.Success)
+                    {
+                        string hyphenAndAfter = match.Value;
+                        string replaced = Regex.Replace(hyphenAndAfter, @"(\s+)", " ");
+                        cmdInfo.cmd = cmdInfo.cmd.Replace(hyphenAndAfter, replaced);
+                    }
+
+                    if (useJson)
+                    {
+                        cmdInfo.cmd = cmdInfo.cmd
+                                .Replace("-c cs-bin", "-c cs-simple-json")
+                                .Replace("-d bin", "-d json");
+                    }
+
+                    if (isCheck)
+                    {
+                        const string pattern1 = @"-x\s.*outputDataDir=\S*";
+                        cmdInfo.cmd = Regex.Replace(cmdInfo.cmd, pattern1, "");
+                        const string pattern2 = @"-x\s.*outputCodeDir=\S*";
+                        cmdInfo.cmd = Regex.Replace(cmdInfo.cmd, pattern2, "");
+                    }
+
                     cmdInfo.save = () => { File.WriteAllText(changeTimeInfoFile, changeTimeInfo); };
                     cmdInfos.Add(cmdInfo);
+                    cmdInfo.dirName = dirName;
                 }
 
                 bool isSuccess = true;
                 int processCount = 0;
                 Parallel.ForEachAsync(cmdInfos,
-                    new ParallelOptions() { MaxDegreeOfParallelism = 1 },
                     async (cmdInfo, _) =>
                     {
+                        Log.Info($"Export Luban directory : {cmdInfo.dirName}");
+                        if (showCmd)
+                        {
+                            Log.Info(cmdInfo.cmd);
+                        }
+
                         if (await RunCommand(cmdInfo.cmd, lubanTempDir))
                         {
                             cmdInfo.save();
@@ -166,7 +204,8 @@ namespace ET
                         }
                         else
                         {
-                            Log.Info($"Export Luban process : {Interlocked.Add(ref processCount, 1)}/{cmdInfos.Count}");
+                            isSuccess = false;
+                            Log.Warning($"Export Luban process : {Interlocked.Add(ref processCount, 1)}/{cmdInfos.Count}");
                         }
                     }).Wait();
 
@@ -188,7 +227,6 @@ namespace ET
             /// <returns>是否成功</returns>
             private static async Task<bool> RunCommand(string cmd, string workDir)
             {
-                Log.Info(cmd);
                 bool isSuccess = true;
                 Process process = new();
                 try
@@ -210,19 +248,19 @@ namespace ET
                     start.UseShellExecute = false;
                     start.WorkingDirectory = workDir;
 
-                    start.RedirectStandardOutput = true;
+                    // start.RedirectStandardOutput = true;
                     start.RedirectStandardError = true;
                     start.RedirectStandardInput = true;
-                    start.StandardOutputEncoding = s_Encoding;
+                    // start.StandardOutputEncoding = s_Encoding;
                     start.StandardErrorEncoding = s_Encoding;
 
-                    process.OutputDataReceived += (sender, args) =>
-                    {
-                        if (!string.IsNullOrEmpty(args.Data))
-                        {
-                            Log.Info(args.Data);
-                        }
-                    };
+                    // process.OutputDataReceived += (sender, args) =>
+                    // {
+                    //     if (!string.IsNullOrEmpty(args.Data))
+                    //     {
+                    //         Log.Info(args.Data);
+                    //     }
+                    // };
                     process.ErrorDataReceived += (sender, args) =>
                     {
                         if (!string.IsNullOrEmpty(args.Data))
@@ -233,7 +271,7 @@ namespace ET
                     };
 
                     process.Start();
-                    process.BeginOutputReadLine();
+                    // process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
                     await process.WaitForExitAsync();
                 }
