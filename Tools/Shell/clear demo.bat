@@ -1,4 +1,4 @@
-set DESTINATION=..\..\..\GameDevelopmentKit\Unity\Assets\Res
+set DESTINATION=..\..\Unity\Assets\Res
 
 rd/s /q %DESTINATION%\Art
 rd/s /q %DESTINATION%\Font
@@ -14,7 +14,7 @@ rd/s /q %DESTINATION%\UI\UIItem
 rd/s /q %DESTINATION%\UI\UISound
 rd/s /q %DESTINATION%\UI\UISprite
 
-set DESTINATION=..\..\..\GameDevelopmentKit\Unity\Assets\Scripts\Game\ET\Code
+set DESTINATION=..\..\Unity\Assets\Scripts\Game\ET\Code
 
 xcopy %DESTINATION%\Hotfix\Client\Demo\NetClient %DESTINATION%\Hotfix\Client\Module\NetClient /s /e /i
 xcopy %DESTINATION%\Model\Client\Demo\NetClient %DESTINATION%\Model\Client\Module\NetClient /s /e /i
@@ -74,7 +74,7 @@ rd/s /q %DESTINATION%\ModelView\Client\LockStep
 del %DESTINATION%\ModelView\Client\Demo.meta
 del %DESTINATION%\ModelView\Client\LockStep.meta
 
-set DESTINATION=..\..\..\GameDevelopmentKit\Unity\Assets\Scripts\Game\Hot\Code\Runtime
+set DESTINATION=..\..\Unity\Assets\Scripts\Game\Hot\Code\Runtime
 
 rd/s /q %DESTINATION%\Definition\DataStruct
 rd/s /q %DESTINATION%\Definition\Enum

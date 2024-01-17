@@ -60,8 +60,6 @@ Server/.DS_Store
 /Unity/UserSettings
 Publish/
 
-/Unity/Assets/Bundles/AotDlls
-/Unity/Assets/Bundles/AotDlls.meta
 /Unity/HybridCLRData
 global.json
 Unity/ProjectSettings/EditorBuildSettings.asset

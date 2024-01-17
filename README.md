@@ -45,6 +45,11 @@
 
 ***
 
+### 该项目依赖以下收费插件（请自行购买安装）：
+- [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)
+- [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)
+- [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)
+
 # 运行步骤
 
 ### Unity Editor
