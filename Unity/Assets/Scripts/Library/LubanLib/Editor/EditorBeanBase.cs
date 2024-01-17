@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bright.Config
+namespace Luban
 {
     public abstract class EditorBeanBase
     {

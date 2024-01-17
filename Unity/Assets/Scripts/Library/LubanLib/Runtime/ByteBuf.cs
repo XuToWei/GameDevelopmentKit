@@ -4,7 +4,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Bright.Serialization
+namespace Luban
 {
 
     public enum EDeserializeError

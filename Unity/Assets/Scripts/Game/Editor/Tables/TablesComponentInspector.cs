@@ -1,4 +1,4 @@
-using Bright.Serialization;
+using Luban;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 

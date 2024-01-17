@@ -9,7 +9,7 @@ namespace Game
     {
         public static string GetLocalizationAsset(Language language)
         {
-            return Utility.Text.Format("Assets/Res/Localization/{0}/Localization.bytes", language);
+            return Utility.Text.Format("Assets/Res/Localization/{0}/Localization.json", language);
         }
     }
 }

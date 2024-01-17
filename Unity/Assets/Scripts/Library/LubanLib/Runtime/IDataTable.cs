@@ -1,9 +1,9 @@
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
-namespace Bright.Serialization
+namespace Luban
 {
     public interface IDataTable
     {
-        Task LoadAsync();
+        UniTask LoadAsync();
     }
 }

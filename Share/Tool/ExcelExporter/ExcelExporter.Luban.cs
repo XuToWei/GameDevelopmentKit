@@ -36,7 +36,6 @@ namespace ET
             private class CmdInfo
             {
                 public string cmd;
-                public Action save;
                 public string dirName;
             }
 
@@ -83,7 +82,7 @@ namespace ET
                 bool useJson = Options.Instance.Customs.Contains("Json", StringComparison.OrdinalIgnoreCase);
                 bool isCheck = Options.Instance.Customs.Contains("Check", StringComparison.OrdinalIgnoreCase);
                 bool showCmd = Options.Instance.Customs.Contains("ShowCmd", StringComparison.OrdinalIgnoreCase);
-                StringBuilder cmdStringBuilder = new();
+                List<Action> saveActions = new List<Action>();
                 List<CmdInfo> cmdInfos = new List<CmdInfo>();
                 for (int i = 0; i < dirs.Length; i++)
                 {
@@ -115,6 +114,8 @@ namespace ET
                     string dirName = dir.Substring(lastIndex, dir.Length - lastIndex);
                     string changeTimeInfoFile = Path.Combine(lubanTempDir, $"temp_timeinfo_{dirName}.txt");
                     List<string> files = FileHelper.GetAllFiles(dir);
+                    files.AddRange(FileHelper.GetAllFiles(custom_template_dir));
+                    files.AddRange(Directory.GetFiles(excel_dir));
                     files.Sort();
                     StringBuilder timeStringBuilder = new();
                     foreach (string file in files)
@@ -131,12 +132,9 @@ namespace ET
                         continue;
                     }
 
-                    cmdStringBuilder.Clear();
-
                     for (int j = 0; j < genConfig.cmds.Count; j++)
                     {
-                        cmdStringBuilder.Append(lubanCommandHeaderTemplate);
-                        var cmd = genConfig.cmds[j];
+                        var cmd = lubanCommandHeaderTemplate + genConfig.cmds[j];
                         if (!cmd.Contains("-x l10n.textProviderFile"))
                         {
                             cmd += $" -x l10n.textProviderFile={LocalizationExcelFile.Replace("/", "\\")}";
@@ -147,43 +145,45 @@ namespace ET
                             cmd += " -f";
                         }
 
-                        cmdStringBuilder.Append(cmd);
-                        cmdStringBuilder.AppendLine();
+                        cmd = cmd
+                                .Replace("%GEN_CLIENT%", Path.GetFullPath(Path.Combine(WorkDir, gen_client)))
+                                .Replace("%CUSTOM_TEMPLATE_DIR%", Path.GetFullPath(Path.Combine(WorkDir, custom_template_dir)))
+                                .Replace("%CONF_ROOT%", Path.GetFullPath(dir))
+                                .Replace("%UNITY_ASSETS%", Path.GetFullPath(Path.Combine(WorkDir, unity_assets_path)))
+                                .Replace("/", "\\");
+                        //去掉连续多个空格
+                        Match match = Regex.Match(cmd, "-(.*)");
+                        if (match.Success)
+                        {
+                            string hyphenAndAfter = match.Value;
+                            string replaced = Regex.Replace(hyphenAndAfter, @"(\s+)", " ");
+                            cmd = cmd.Replace(hyphenAndAfter, replaced);
+                        }
+                        const string pattern = @"\s+(?=-)";
+                        cmd = Regex.Replace(cmd, pattern, " ");
+
+                        if (useJson)
+                        {
+                            cmd = cmd
+                                    .Replace("-c cs-bin", "-c cs-simple-json")
+                                    .Replace("-d bin", "-d json");
+                        }
+
+                        if (isCheck)
+                        {
+                            const string pattern1 = @"-x\s.*outputDataDir=\S*";
+                            cmd = Regex.Replace(cmd, pattern1, "");
+                            const string pattern2 = @"-x\s.*outputCodeDir=\S*";
+                            cmd = Regex.Replace(cmd, pattern2, "");
+                        }
+
+                        var cmdInfo = new CmdInfo();
+                        cmdInfo.cmd = cmd;
+                        cmdInfo.dirName = dirName;
+                        cmdInfos.Add(cmdInfo);
                     }
 
-                    var cmdInfo = new CmdInfo();
-                    cmdInfo.cmd = cmdStringBuilder.ToString()
-                            .Replace("%GEN_CLIENT%", Path.GetFullPath(Path.Combine(WorkDir, gen_client)))
-                            .Replace("%CUSTOM_TEMPLATE_DIR%", Path.GetFullPath(Path.Combine(WorkDir, custom_template_dir)))
-                            .Replace("%CONF_ROOT%", Path.GetFullPath(dir))
-                            .Replace("%UNITY_ASSETS%", Path.GetFullPath(Path.Combine(WorkDir, unity_assets_path)))
-                            .Replace("/", "\\");
-                    Match match = Regex.Match(cmdInfo.cmd, "-(.*)");
-                    if (match.Success)
-                    {
-                        string hyphenAndAfter = match.Value;
-                        string replaced = Regex.Replace(hyphenAndAfter, @"(\s+)", " ");
-                        cmdInfo.cmd = cmdInfo.cmd.Replace(hyphenAndAfter, replaced);
-                    }
-
-                    if (useJson)
-                    {
-                        cmdInfo.cmd = cmdInfo.cmd
-                                .Replace("-c cs-bin", "-c cs-simple-json")
-                                .Replace("-d bin", "-d json");
-                    }
-
-                    if (isCheck)
-                    {
-                        const string pattern1 = @"-x\s.*outputDataDir=\S*";
-                        cmdInfo.cmd = Regex.Replace(cmdInfo.cmd, pattern1, "");
-                        const string pattern2 = @"-x\s.*outputCodeDir=\S*";
-                        cmdInfo.cmd = Regex.Replace(cmdInfo.cmd, pattern2, "");
-                    }
-
-                    cmdInfo.save = () => { File.WriteAllText(changeTimeInfoFile, changeTimeInfo); };
-                    cmdInfos.Add(cmdInfo);
-                    cmdInfo.dirName = dirName;
+                    saveActions.Add(() => File.WriteAllText(changeTimeInfoFile, changeTimeInfo));
                 }
 
                 bool isSuccess = true;
@@ -199,7 +199,6 @@ namespace ET
 
                         if (await RunCommand(cmdInfo.cmd, lubanTempDir))
                         {
-                            cmdInfo.save();
                             Log.Info($"Export Luban process : {Interlocked.Add(ref processCount, 1)}/{cmdInfos.Count}");
                         }
                         else
@@ -211,6 +210,10 @@ namespace ET
 
                 if (isSuccess)
                 {
+                    foreach (var saveAction in saveActions)
+                    {
+                        saveAction();
+                    }
                     Log.Info("Export Luban excel success!");
                 }
                 else

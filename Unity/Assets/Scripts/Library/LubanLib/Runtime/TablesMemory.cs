@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Bright.Serialization
+namespace Luban
 {
     public static class TablesMemory
     {

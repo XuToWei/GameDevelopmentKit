@@ -1,8 +1,7 @@
-using Bright.Serialization;
 
-namespace Bright.Config
+namespace Luban
 {
-    public abstract class BeanBase : ITypeId
+    public abstract class BeanBase
     {
         public abstract int GetTypeId();
     }

@@ -8,8 +8,7 @@
 using GameFramework.Localization;
 using System;
 using System.Collections.Generic;
-using Bright.Serialization;
-using GameFramework;
+using Luban;
 using SimpleJSON;
 using UnityGameFramework.Runtime;
 

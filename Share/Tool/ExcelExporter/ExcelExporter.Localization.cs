@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using Bright.Serialization;
 using ExcelDataReader;
 using GameFramework.Localization;
+using Luban;
 
 namespace ET
 {

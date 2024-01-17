@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Bright.Serialization;
 using GameFramework.Localization;
+using Luban;
 using SimpleJSON;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game.Editor
 {

@@ -1,0 +1,56 @@
+using Luban;
+using SimpleJSON;
+
+{{namespace_with_grace_begin __namespace}}
+public partial class {{__name}}
+{
+    {{~for table in __tables ~}}
+    {{~if table.comment != '' ~}}
+    /// <summary>
+    /// {{escape_comment table.comment}}
+    /// </summary>
+    {{~end~}}
+    public {{table.full_name}} {{format_property_name __code_style table.name}} { private set; get; }
+    {{~end~}}
+    private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
+    public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
+    public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
+
+    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<JSONNode>> loader)
+    {
+        TablesMemory.BeginRecord();
+
+        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
+        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
+
+        {{~for table in __tables ~}}
+        {{format_property_name __code_style table.name}} = new {{table.full_name}}(() => loader("{{table.output_data_file}}"));
+        loadTasks.Add({{format_property_name __code_style table.name}}.LoadAsync());
+        _tables.Add("{{table.full_name}}", {{format_property_name __code_style table.name}});
+        {{~end~}}
+
+        await Cysharp.Threading.Tasks.UniTask.WhenAll(loadTasks);
+
+        Refresh();
+
+        TablesMemory.EndRecord();
+    }
+
+    private void ResolveRef()
+    {
+        {{~for table in __tables ~}}
+        {{format_property_name __code_style table.name}}.ResolveRef(this);
+        {{~end~}}
+        PostResolve();
+    }
+
+    public void Refresh()
+    {
+        PostInit();
+        ResolveRef();
+    }
+
+    partial void PostInit();
+    partial void PostResolve();
+}
+{{namespace_with_grace_end __namespace}}

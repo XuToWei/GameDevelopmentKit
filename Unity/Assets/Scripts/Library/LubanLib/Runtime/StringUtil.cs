@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Bright.Common
+namespace Luban
 {
     public static class StringUtil
     {

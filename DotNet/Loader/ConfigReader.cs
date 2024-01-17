@@ -8,12 +8,14 @@ namespace ET
         public async UniTask<byte[]> ReadBytesAsync(string file)
         {
             await UniTask.CompletedTask;
+            // ReSharper disable once MethodHasAsyncOverload
             return File.ReadAllBytes(GetLubanAssetPath(file, false));
         }
 
         public async UniTask<string> ReadTextAsync(string file)
         {
             await UniTask.CompletedTask;
+            // ReSharper disable once MethodHasAsyncOverload
             return File.ReadAllText(GetLubanAssetPath(file, true));
         }
         

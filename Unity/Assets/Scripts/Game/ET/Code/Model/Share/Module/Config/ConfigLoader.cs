@@ -1,8 +1,7 @@
 using System;
 using System.Reflection;
-using System.Threading.Tasks;
-using Bright.Serialization;
 using Cysharp.Threading.Tasks;
+using Luban;
 using SimpleJSON;
 
 namespace ET
@@ -21,25 +20,25 @@ namespace ET
             Type loaderReturnType = loadMethodInfo.GetParameters()[0].ParameterType.GetGenericArguments()[1];
             
             // 根据cfg.Tables的构造函数的Loader的返回值类型决定使用json还是ByteBuf Loader
-            if (loaderReturnType == typeof (Task<ByteBuf>))
+            if (loaderReturnType == typeof (UniTask<ByteBuf>))
             {
-                async Task<ByteBuf> LoadByteBuf(string file)
+                async UniTask<ByteBuf> LoadByteBuf(string file)
                 {
                     return new ByteBuf(await ConfigComponent.Instance.ReadBytesAsync(file));
                 }
 
-                Func<string, Task<ByteBuf>> func = LoadByteBuf;
-                await (Task)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
+                Func<string, UniTask<ByteBuf>> func = LoadByteBuf;
+                await (UniTask)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
             }
             else
             {
-                async Task<JSONNode> LoadJson(string file)
+                async UniTask<JSONNode> LoadJson(string file)
                 {
                     return JSON.Parse(await ConfigComponent.Instance.ReadTextAsync(file));
                 }
 
-                Func<string, Task<JSONNode>> func = LoadJson;
-                await (Task)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
+                Func<string, UniTask<JSONNode>> func = LoadJson;
+                await (UniTask)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
             }
         }
     }
