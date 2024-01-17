@@ -8,21 +8,20 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game
 {
 public sealed partial class DRMusic : Luban.BeanBase
 {
-    public DRMusic(JSONNode _buf) 
+    public DRMusic(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["AssetName"].IsString) { throw new SerializationException(); }  AssetName = _buf["AssetName"]; }
-        { if(!_buf["Volume"].IsNumber) { throw new SerializationException(); }  Volume = _buf["Volume"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        AssetName = _buf.ReadString();
+        Volume = _buf.ReadFloat();
+        PostLoad();
     }
 
-    public static DRMusic DeserializeDRMusic(JSONNode _buf)
+    public static DRMusic DeserializeDRMusic(ByteBuf _buf)
     {
         return new DRMusic(_buf);
     }
@@ -39,6 +38,7 @@ public sealed partial class DRMusic : Luban.BeanBase
     /// 音量（0~1）
     /// </summary>
     public readonly float Volume;
+
     public const int __ID__ = -1651958217;
     public override int GetTypeId() => __ID__;
 
@@ -47,7 +47,7 @@ public sealed partial class DRMusic : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -59,7 +59,7 @@ public sealed partial class DRMusic : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

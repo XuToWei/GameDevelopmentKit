@@ -8,24 +8,23 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace ET
 {
 public sealed partial class DRAIConfig : Luban.BeanBase
 {
-    public DRAIConfig(JSONNode _buf) 
+    public DRAIConfig(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["AIConfigId"].IsNumber) { throw new SerializationException(); }  AIConfigId = _buf["AIConfigId"]; }
-        { if(!_buf["Order"].IsNumber) { throw new SerializationException(); }  Order = _buf["Order"]; }
-        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
-        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
-        { var __json0 = _buf["NodeParams"]; if(!__json0.IsArray) { throw new SerializationException(); } NodeParams = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  NodeParams.Add(__v0); }   }
-        PostInit();
+        Id = _buf.ReadInt();
+        AIConfigId = _buf.ReadInt();
+        Order = _buf.ReadInt();
+        Name = _buf.ReadString();
+        Desc = _buf.ReadString();
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);NodeParams = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); NodeParams.Add(_e0);}}
+        PostLoad();
     }
 
-    public static DRAIConfig DeserializeDRAIConfig(JSONNode _buf)
+    public static DRAIConfig DeserializeDRAIConfig(ByteBuf _buf)
     {
         return new DRAIConfig(_buf);
     }
@@ -54,6 +53,7 @@ public sealed partial class DRAIConfig : Luban.BeanBase
     /// 节点参数
     /// </summary>
     public readonly System.Collections.Generic.List<int> NodeParams;
+
     public const int __ID__ = 1340429336;
     public override int GetTypeId() => __ID__;
 
@@ -65,7 +65,7 @@ public sealed partial class DRAIConfig : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -80,7 +80,7 @@ public sealed partial class DRAIConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

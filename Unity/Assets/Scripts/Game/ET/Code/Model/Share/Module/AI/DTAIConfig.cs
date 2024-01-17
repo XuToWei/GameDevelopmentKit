@@ -11,7 +11,7 @@ namespace ET
             return this.AIConfigs[aiConfigId];
         }
 
-        partial void PostInit()
+        partial void PostLoad()
         {
             this.AIConfigs.Clear();
             foreach (var kv in this.DataMap)

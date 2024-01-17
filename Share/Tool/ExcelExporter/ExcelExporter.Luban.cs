@@ -28,8 +28,8 @@ namespace ET
             private const string custom_template_dir = "../Tools/Luban/CustomTemplates/LoadAsync";
             private const string excel_dir = "../Design/Excel";
             private const string gen_config_name = "luban.conf";
-            private const string luban_temp_dir = "../Temp/Luban";
             private const string unity_assets_path = "../Unity/Assets";
+            private const string root_path = "..";
 
             private static Encoding s_Encoding;
 
@@ -37,6 +37,10 @@ namespace ET
             {
                 public string cmd;
                 public string dirName;
+                public string sourceCodePath;
+                public List<string> copyCodePath;
+                public string sourceDataPath;
+                public List<string> copyDataPath;
             }
 
             public class GenConfig
@@ -50,8 +54,15 @@ namespace ET
 
             public static void DoExport()
             {
-                Log.Info("Start export Luban excel ...");
-                if (Options.Instance.Customs.Contains("GB2312", StringComparison.OrdinalIgnoreCase))
+                bool isGB2312 = Options.Instance.Customs.Contains("GB2312", StringComparison.OrdinalIgnoreCase);
+                bool useJson = Options.Instance.Customs.Contains("Json", StringComparison.OrdinalIgnoreCase);
+                bool isCheck = Options.Instance.Customs.Contains("Check", StringComparison.OrdinalIgnoreCase);
+                bool showCmd = Options.Instance.Customs.Contains("ShowCmd", StringComparison.OrdinalIgnoreCase);
+                bool showInfo = Options.Instance.Customs.Contains("ShowInfo", StringComparison.OrdinalIgnoreCase);
+
+                string actionStr = isCheck? "check" : "export";
+                Log.Info($"Start {actionStr} Luban excel ...");
+                if (isGB2312)
                 {
                     //luban在windows上编码为GB2312
                     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -73,16 +84,6 @@ namespace ET
                 dirList.Sort();
                 dirs = dirList.ToArray();
 
-                string lubanTempDir = Path.GetFullPath(Path.Combine(WorkDir, luban_temp_dir));
-                if (!Directory.Exists(lubanTempDir))
-                {
-                    Directory.CreateDirectory(lubanTempDir);
-                }
-
-                bool useJson = Options.Instance.Customs.Contains("Json", StringComparison.OrdinalIgnoreCase);
-                bool isCheck = Options.Instance.Customs.Contains("Check", StringComparison.OrdinalIgnoreCase);
-                bool showCmd = Options.Instance.Customs.Contains("ShowCmd", StringComparison.OrdinalIgnoreCase);
-                List<Action> saveActions = new List<Action>();
                 List<CmdInfo> cmdInfos = new List<CmdInfo>();
                 for (int i = 0; i < dirs.Length; i++)
                 {
@@ -112,45 +113,18 @@ namespace ET
 
                     int lastIndex = dir.LastIndexOf(Path.DirectorySeparatorChar) + 1;
                     string dirName = dir.Substring(lastIndex, dir.Length - lastIndex);
-                    string changeTimeInfoFile = Path.Combine(lubanTempDir, $"temp_timeinfo_{dirName}.txt");
-                    List<string> files = FileHelper.GetAllFiles(dir);
-                    files.AddRange(FileHelper.GetAllFiles(custom_template_dir));
-                    files.AddRange(Directory.GetFiles(excel_dir));
-                    files.Sort();
-                    StringBuilder timeStringBuilder = new();
-                    foreach (string file in files)
-                    {
-                        FileInfo fileInfo = new(file);
-                        timeStringBuilder.AppendLine($"{fileInfo.Name}:{fileInfo.LastWriteTime} {fileInfo.LastWriteTime.Millisecond}");
-                    }
-
-                    string changeTimeInfo = timeStringBuilder.ToString();
-                    // ReSharper disable once MethodHasAsyncOverloadWithCancellation
-                    if (File.Exists(changeTimeInfoFile) && string.Equals(File.ReadAllText(changeTimeInfoFile), changeTimeInfo))
-                    {
-                        Log.Info($"Luban ignore export directory : {dir}!");
-                        continue;
-                    }
-
                     for (int j = 0; j < genConfig.cmds.Count; j++)
                     {
+                        var cmdInfo = new CmdInfo();
                         var cmd = lubanCommandHeaderTemplate + genConfig.cmds[j];
-                        if (!cmd.Contains("-x l10n.textProviderFile"))
-                        {
-                            cmd += $" -x l10n.textProviderFile={LocalizationExcelFile.Replace("/", "\\")}";
-                        }
-
-                        if (isCheck)
-                        {
-                            cmd += " -f";
-                        }
-
                         cmd = cmd
                                 .Replace("%GEN_CLIENT%", Path.GetFullPath(Path.Combine(WorkDir, gen_client)))
                                 .Replace("%CUSTOM_TEMPLATE_DIR%", Path.GetFullPath(Path.Combine(WorkDir, custom_template_dir)))
-                                .Replace("%CONF_ROOT%", Path.GetFullPath(dir))
+                                .Replace("%CONF_ROOT%", dir)
                                 .Replace("%UNITY_ASSETS%", Path.GetFullPath(Path.Combine(WorkDir, unity_assets_path)))
-                                .Replace("/", "\\");
+                                .Replace("%ROOT%", Path.GetFullPath(Path.Combine(WorkDir, root_path)))
+                                .Replace('\\', '/');
+
                         //去掉连续多个空格
                         Match match = Regex.Match(cmd, "-(.*)");
                         if (match.Success)
@@ -159,8 +133,6 @@ namespace ET
                             string replaced = Regex.Replace(hyphenAndAfter, @"(\s+)", " ");
                             cmd = cmd.Replace(hyphenAndAfter, replaced);
                         }
-                        const string pattern = @"\s+(?=-)";
-                        cmd = Regex.Replace(cmd, pattern, " ");
 
                         if (useJson)
                         {
@@ -171,19 +143,58 @@ namespace ET
 
                         if (isCheck)
                         {
-                            const string pattern1 = @"-x\s.*outputDataDir=\S*";
-                            cmd = Regex.Replace(cmd, pattern1, "");
-                            const string pattern2 = @"-x\s.*outputCodeDir=\S*";
-                            cmd = Regex.Replace(cmd, pattern2, "");
+                            cmd = Regex.Replace(cmd, @"-x\s.*outputCodeDir\s*=\S*\s", "");
+                            cmd = Regex.Replace(cmd, @"-x\s.*outputDataDir\s*=\S*\s", "");
+                            cmd = Regex.Replace(cmd, @"-c\s\S+\s", "");
+                            cmd = Regex.Replace(cmd, @"-d\s\S+\s", "");
+                            cmd += " -f";
                         }
 
-                        var cmdInfo = new CmdInfo();
+                        if (!cmd.Contains("-x l10n.textProviderFile"))
+                        {
+                            cmd += $" -x l10n.textProviderFile={LocalizationExcelFile.Replace('\\', '/')}";
+                        }
+
+                        cmd = Regex.Replace(cmd, @"\s+(?=-)", " ");
+
+                        match = Regex.Match(cmd, @"-x\s.*outputCodeDir\s*=([^\s]*)");
+                        if (match.Success)
+                        {
+                            string pathStr = match.Groups[1].Value.Trim();
+                            string[] paths = pathStr.Split(',');
+                            if (paths.Length > 1)
+                            {
+                                cmdInfo.sourceCodePath = paths[0];
+                                cmd = cmd.Replace(pathStr, cmdInfo.sourceCodePath);
+                                cmdInfo.copyCodePath = new List<string>();
+                                for (int k = 1; k < paths.Length; k++)
+                                {
+                                    cmdInfo.copyCodePath.Add(paths[k]);
+                                }
+                            }
+                        }
+
+                        match = Regex.Match(cmd, @"-x\s.*outputDataDir\s*=([^\s]*)");
+                        if (match.Success)
+                        {
+                            string pathStr = match.Groups[1].Value.Trim();
+                            string[] paths = pathStr.Split(',');
+                            if (paths.Length > 1)
+                            {
+                                cmdInfo.sourceDataPath = paths[0];
+                                cmd = cmd.Replace(pathStr, cmdInfo.sourceDataPath);
+                                cmdInfo.copyDataPath = new List<string>();
+                                for (int k = 1; k < paths.Length; k++)
+                                {
+                                    cmdInfo.copyDataPath.Add(paths[k]);
+                                }
+                            }
+                        }
+
                         cmdInfo.cmd = cmd;
                         cmdInfo.dirName = dirName;
                         cmdInfos.Add(cmdInfo);
                     }
-
-                    saveActions.Add(() => File.WriteAllText(changeTimeInfoFile, changeTimeInfo));
                 }
 
                 bool isSuccess = true;
@@ -191,44 +202,56 @@ namespace ET
                 Parallel.ForEachAsync(cmdInfos,
                     async (cmdInfo, _) =>
                     {
-                        Log.Info($"Export Luban directory : {cmdInfo.dirName}");
                         if (showCmd)
                         {
-                            Log.Info(cmdInfo.cmd);
+                            Log.Info($"{cmdInfo.dirName} : {cmdInfo.cmd}");
                         }
 
-                        if (await RunCommand(cmdInfo.cmd, lubanTempDir))
+                        if (await RunCommand(cmdInfo.cmd, WorkDir, cmdInfo.dirName, showInfo))
                         {
-                            Log.Info($"Export Luban process : {Interlocked.Add(ref processCount, 1)}/{cmdInfos.Count}");
+                            Log.Info($"Luban {actionStr} process : {Interlocked.Add(ref processCount, 1)}/{cmdInfos.Count}");
                         }
                         else
                         {
                             isSuccess = false;
-                            Log.Warning($"Export Luban process : {Interlocked.Add(ref processCount, 1)}/{cmdInfos.Count}");
+                            Log.Warning($"Luban {actionStr} process : {Interlocked.Add(ref processCount, 1)}/{cmdInfos.Count}");
                         }
                     }).Wait();
 
+                foreach (var cmdInfo in cmdInfos)
+                {
+                    LubanFileHelper.ClearSubEmptyDirectory(cmdInfo.sourceCodePath);
+                    LubanFileHelper.ClearSubEmptyDirectory(cmdInfo.sourceDataPath);
+                    if (cmdInfo.copyCodePath != null)
+                    {
+                        foreach (var copyPath in cmdInfo.copyCodePath)
+                        {
+                            LubanFileHelper.CopyDirectory(cmdInfo.sourceCodePath, copyPath);
+                            LubanFileHelper.ClearSubEmptyDirectory(copyPath);
+                        }
+                    }
+
+                    if (cmdInfo.copyDataPath != null)
+                    {
+                        foreach (var copyPath in cmdInfo.copyDataPath)
+                        {
+                            LubanFileHelper.CopyDirectory(cmdInfo.sourceDataPath, copyPath);
+                            LubanFileHelper.ClearSubEmptyDirectory(copyPath);
+                        }
+                    }
+                }
+
                 if (isSuccess)
                 {
-                    foreach (var saveAction in saveActions)
-                    {
-                        saveAction();
-                    }
-                    Log.Info("Export Luban excel success!");
+                    Log.Info($"Luban excel {actionStr} success!");
                 }
                 else
                 {
-                    Log.Warning($"Export Luban excel fail!");
+                    Log.Warning($"Luban excel {actionStr} fail!");
                 }
             }
 
-            /// <summary>
-            /// 执行命令
-            /// </summary>
-            /// <param name="cmd">命令</param>
-            /// <param name="workDir">工作目录</param>
-            /// <returns>是否成功</returns>
-            private static async Task<bool> RunCommand(string cmd, string workDir)
+            private static async Task<bool> RunCommand(string cmd, string workDir, string logHeader, bool showInfo)
             {
                 bool isSuccess = true;
                 Process process = new();
@@ -251,30 +274,30 @@ namespace ET
                     start.UseShellExecute = false;
                     start.WorkingDirectory = workDir;
 
-                    // start.RedirectStandardOutput = true;
+                    start.RedirectStandardOutput = true;
                     start.RedirectStandardError = true;
                     start.RedirectStandardInput = true;
-                    // start.StandardOutputEncoding = s_Encoding;
+                    start.StandardOutputEncoding = s_Encoding;
                     start.StandardErrorEncoding = s_Encoding;
 
-                    // process.OutputDataReceived += (sender, args) =>
-                    // {
-                    //     if (!string.IsNullOrEmpty(args.Data))
-                    //     {
-                    //         Log.Info(args.Data);
-                    //     }
-                    // };
+                    process.OutputDataReceived += (sender, args) =>
+                    {
+                        if (showInfo && !string.IsNullOrEmpty(args.Data))
+                        {
+                            Log.Info(args.Data);
+                        }
+                    };
                     process.ErrorDataReceived += (sender, args) =>
                     {
                         if (!string.IsNullOrEmpty(args.Data))
                         {
                             isSuccess = false;
-                            Log.Warning(args.Data);
+                            Log.Warning($"{logHeader} : {args.Data}");
                         }
                     };
 
                     process.Start();
-                    // process.BeginOutputReadLine();
+                    process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
                     await process.WaitForExitAsync();
                 }

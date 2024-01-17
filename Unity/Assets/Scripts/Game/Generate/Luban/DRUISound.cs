@@ -8,22 +8,21 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game
 {
 public sealed partial class DRUISound : Luban.BeanBase
 {
-    public DRUISound(JSONNode _buf) 
+    public DRUISound(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["AssetName"].IsString) { throw new SerializationException(); }  AssetName = _buf["AssetName"]; }
-        { if(!_buf["Priority"].IsNumber) { throw new SerializationException(); }  Priority = _buf["Priority"]; }
-        { if(!_buf["Volume"].IsNumber) { throw new SerializationException(); }  Volume = _buf["Volume"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        AssetName = _buf.ReadString();
+        Priority = _buf.ReadInt();
+        Volume = _buf.ReadFloat();
+        PostLoad();
     }
 
-    public static DRUISound DeserializeDRUISound(JSONNode _buf)
+    public static DRUISound DeserializeDRUISound(ByteBuf _buf)
     {
         return new DRUISound(_buf);
     }
@@ -44,6 +43,7 @@ public sealed partial class DRUISound : Luban.BeanBase
     /// 音量（0~1）
     /// </summary>
     public readonly float Volume;
+
     public const int __ID__ = -1172887923;
     public override int GetTypeId() => __ID__;
 
@@ -53,7 +53,7 @@ public sealed partial class DRUISound : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -66,7 +66,7 @@ public sealed partial class DRUISound : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

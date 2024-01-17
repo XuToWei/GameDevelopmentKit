@@ -8,24 +8,23 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game.Hot
 {
 public sealed partial class DRWeapon : Luban.BeanBase
 {
-    public DRWeapon(JSONNode _buf) 
+    public DRWeapon(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["Attack"].IsNumber) { throw new SerializationException(); }  Attack = _buf["Attack"]; }
-        { if(!_buf["AttackInterval"].IsNumber) { throw new SerializationException(); }  AttackInterval = _buf["AttackInterval"]; }
-        { if(!_buf["BulletId"].IsNumber) { throw new SerializationException(); }  BulletId = _buf["BulletId"]; }
-        { if(!_buf["BulletSpeed"].IsNumber) { throw new SerializationException(); }  BulletSpeed = _buf["BulletSpeed"]; }
-        { if(!_buf["BulletSoundId"].IsNumber) { throw new SerializationException(); }  BulletSoundId = _buf["BulletSoundId"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        Attack = _buf.ReadInt();
+        AttackInterval = _buf.ReadFloat();
+        BulletId = _buf.ReadInt();
+        BulletSpeed = _buf.ReadFloat();
+        BulletSoundId = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DRWeapon DeserializeDRWeapon(JSONNode _buf)
+    public static DRWeapon DeserializeDRWeapon(ByteBuf _buf)
     {
         return new DRWeapon(_buf);
     }
@@ -54,6 +53,7 @@ public sealed partial class DRWeapon : Luban.BeanBase
     /// 子弹声音编号
     /// </summary>
     public readonly int BulletSoundId;
+
     public const int __ID__ = 599888970;
     public override int GetTypeId() => __ID__;
 
@@ -65,7 +65,7 @@ public sealed partial class DRWeapon : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -80,7 +80,7 @@ public sealed partial class DRWeapon : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

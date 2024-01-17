@@ -8,17 +8,17 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace ET
 {
 public partial class DTStartProcessConfig : IDataTable
 {
     private readonly System.Collections.Generic.List<DRStartProcessConfig> _dataList;
-    private System.Collections.Generic.Dictionary<(string, int), DRStartProcessConfig> _dataMapUnion;
-    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> _loadFunc;
 
-    public DTStartProcessConfig(System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> loadFunc)
+    private System.Collections.Generic.Dictionary<(string, int), DRStartProcessConfig> _dataMapUnion;
+    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
+
+    public DTStartProcessConfig(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataList = new System.Collections.Generic.List<DRStartProcessConfig>();
@@ -27,23 +27,24 @@ public partial class DTStartProcessConfig : IDataTable
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
-        JSONNode _json = await _loadFunc();
+        ByteBuf _buf = await _loadFunc();
         _dataList.Clear();
         _dataMapUnion.Clear();
-        foreach(JSONNode _ele in _json.Children)
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRStartProcessConfig _v;
-            { if(!_ele.IsObject) { throw new SerializationException(); }  _v = DRStartProcessConfig.DeserializeDRStartProcessConfig(_ele);  }
+            _v = DRStartProcessConfig.DeserializeDRStartProcessConfig(_buf);
             _dataList.Add(_v);
         }
         foreach(var _v in _dataList)
         {
             _dataMapUnion.Add((_v.StartConfig, _v.Id), _v);
         }
-        PostInit();
+        PostLoad();
     }
 
     public System.Collections.Generic.List<DRStartProcessConfig> DataList => _dataList;
+
     public DRStartProcessConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartProcessConfig __v) ? __v : null;
 
     public void ResolveRef(Tables tables)
@@ -52,11 +53,10 @@ public partial class DTStartProcessConfig : IDataTable
         {
             _v.ResolveRef(tables);
         }
-        PostResolve();
+        PostResolveRef();
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }
-

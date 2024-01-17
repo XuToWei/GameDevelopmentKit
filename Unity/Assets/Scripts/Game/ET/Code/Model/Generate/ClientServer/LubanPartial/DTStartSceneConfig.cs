@@ -32,7 +32,7 @@ namespace ET
             return this.ClientScenesByName[zone][name];
         }
 
-        partial void PostInit()
+        partial void PostLoad()
         {
             foreach (var startSceneConfig in this.DataList)
             {

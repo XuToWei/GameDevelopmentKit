@@ -5,6 +5,7 @@
       <Resource Name="Config" FileSystem="GameData" LoadType="0" Packed="False" />
       <Resource Name="Entity" LoadType="0" Packed="False" />
       <Resource Name="ET.ClientServer" FileSystem="GameData" LoadType="0" Packed="False" />
+      <Resource Name="ET.Code" FileSystem="GameData" LoadType="0" Packed="False" />
       <Resource Name="GameHot" FileSystem="GameData" LoadType="0" Packed="False" />
       <Resource Name="HybridCLR" LoadType="0" Packed="False" />
       <Resource Name="Luban" FileSystem="GameData" LoadType="0" Packed="False" />
@@ -44,7 +45,10 @@
       <Asset Guid="156d241f796508c4da4fc354a7fbf5a8" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="160925a6fe2664f2a978566b819f0af0" ResourceName="Entity" />
       <Asset Guid="172ab742804613d4f99fee07a3878843" ResourceName="Luban" />
+      <Asset Guid="17f5310d3dec45741a7fb12f6c9e9c48" ResourceName="ET.Code" />
+      <Asset Guid="19a9ef0c9c4190e4282ffd701c7c67fc" ResourceName="ET.Code" />
       <Asset Guid="1abfbe65a6e3c034cb43df1cff7317cb" ResourceName="Luban" />
+      <Asset Guid="1fc2de2941d57bb4e92cb70f9818bc50" ResourceName="ET.Code" />
       <Asset Guid="236433a27ce40a7429b87d14d8fa3035" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="24ca310f92a6796408f1db7647ec4e55" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="3455fe69f7ddc4604b95bf9b0a1e88d7" ResourceName="Entity" />
@@ -74,6 +78,7 @@
       <Asset Guid="8cf749fdfa5edc3478d16893efeaa0eb" ResourceName="Entity" />
       <Asset Guid="9143e2b62ad50488482f9b73672fc331" ResourceName="Entity" />
       <Asset Guid="943f3c476130c4f4f8ae55ef3ccd38ba" ResourceName="Res/Prefab/Skeleton/Texture/Skeleton_D" />
+      <Asset Guid="95d323882a151f14e9215c0371eac34d" ResourceName="ET.Code" />
       <Asset Guid="96d83c7380035564ba399a83d77e7f91" ResourceName="ET.ClientServer" />
       <Asset Guid="9e27b0bdab1ad7242a009899d15c0e67" ResourceName="Res/Prefab/Skeleton/Skeleton" />
       <Asset Guid="9f6d9adc6f537764fa0fea29671e77bf" ResourceName="Res/UI/UIForm/Demo/UILogin" />
@@ -89,13 +94,17 @@
       <Asset Guid="b031b4f2980561542a7f7ba41391edc3" ResourceName="Res/Scene/Menu" />
       <Asset Guid="b124cd64fafb18b4880a1461b91bf3c1" ResourceName="GameHot" />
       <Asset Guid="b1494958bf9856a479bec1767c02878e" ResourceName="Res/Prefab/Skeleton/Materials/skeleton_D" />
+      <Asset Guid="b34830a358f78ad43b40622d268fc412" ResourceName="ET.Code" />
       <Asset Guid="b420ab0d7cecc4691b5ccbe3a60049de" ResourceName="ET.ClientServer" />
       <Asset Guid="bbfd75fe6fe00e1448fe988173ede7f9" ResourceName="Res/UI/UIForm/Hot/SettingForm" />
+      <Asset Guid="bcc692d7ec0d6bc44b9ef601f7c78fb1" ResourceName="ET.Code" />
+      <Asset Guid="c15f52d0a8ba77442b6b212a763f3b2a" ResourceName="ET.Code" />
       <Asset Guid="c54e8d9624286b24fa23519e5df2ed0a" ResourceName="Res/UI/UIForm/Demo/UIHelp" />
       <Asset Guid="c7d1e11dd37634b48a9dd4012b8e4306" ResourceName="UI.UISound" />
       <Asset Guid="ca9eca684ec84504a955194cb34433a7" ResourceName="GameHot" />
       <Asset Guid="cadd0764941c8b646ae79b51d0ea8285" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="cd590f301d3662040841baada9b1dfb4" ResourceName="Luban" />
+      <Asset Guid="d0c9e524431407f4a9c890961698255c" ResourceName="ET.Code" />
       <Asset Guid="d6d2a8e7150a19c4a9aec43c56f70ed1" ResourceName="ET.ClientServer" />
       <Asset Guid="d8d87e53d93e234448658c9a801a9967" ResourceName="Res/UI/UIForm/Demo/UILobby" />
       <Asset Guid="db58965402f12ed47b4dad61a9e48c9d" ResourceName="Res/UI/UISprite/Icons" />

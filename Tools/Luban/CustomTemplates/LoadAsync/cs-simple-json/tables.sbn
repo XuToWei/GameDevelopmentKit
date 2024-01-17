@@ -41,16 +41,16 @@ public partial class {{__name}}
         {{~for table in __tables ~}}
         {{format_property_name __code_style table.name}}.ResolveRef(this);
         {{~end~}}
-        PostResolve();
+        PostResolveRef();
     }
 
     public void Refresh()
     {
-        PostInit();
+        PostLoad();
         ResolveRef();
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 {{namespace_with_grace_end __namespace}}

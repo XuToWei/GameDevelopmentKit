@@ -29,16 +29,17 @@ namespace ET.Server
                 MongoHelper.ToJson(1);
                 
                 Log.Info($"server start........................ ");
+                Options.Instance.AppType = AppType.ExcelExporter;
                 switch (Options.Instance.AppType)
                 {
                     case AppType.ExcelExporter:
                     {
                         Options.Instance.Console = 1;
                         //Options: Customs
+                        //GB2312: 使用GB2312编码解决中文乱码
                         //Json: luban导出json
                         //Check: 只检查，不导出
                         //ShowCmd: 显示cmd
-                        //GB2312: 使用GB2312编码解决中文乱码
                         ExcelExporter.Export();
                         return 0;
                     }

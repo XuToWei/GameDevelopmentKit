@@ -33,10 +33,13 @@ namespace ET
 
             public static void DoExport()
             {
+                bool isCheck = Options.Instance.Customs.Contains("Check", StringComparison.OrdinalIgnoreCase);
+                if (isCheck)
+                    return;
                 Log.Info("Start Export Localization Excel ...");
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 SortedDictionary<Language, SortedDictionary<string, string>> resultDict = new SortedDictionary<Language, SortedDictionary<string, string>>();
-                using (FileStream stream = new FileStream(LocalizationExcelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var stream = new FileStream(LocalizationExcelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (IExcelDataReader reader = ExcelReaderFactory.CreateReader(stream))
                     {
@@ -145,8 +148,8 @@ namespace ET
                     string bytesFileFullPath = Path.GetFullPath($"{resFullPath}/Localization.bytes");
                     if (useJson)
                     {
-                        MemoryStream memoryStream = new MemoryStream();
-                        Utf8JsonWriter jsonWriter = new Utf8JsonWriter(memoryStream, new JsonWriterOptions()
+                        var memoryStream = new MemoryStream();
+                        var jsonWriter = new Utf8JsonWriter(memoryStream, new JsonWriterOptions()
                         {
                             Indented = true,
                             SkipValidation = false,

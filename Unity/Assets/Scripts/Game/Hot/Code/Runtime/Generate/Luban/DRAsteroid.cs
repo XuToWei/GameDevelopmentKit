@@ -8,25 +8,24 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game.Hot
 {
 public sealed partial class DRAsteroid : Luban.BeanBase
 {
-    public DRAsteroid(JSONNode _buf) 
+    public DRAsteroid(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["MaxHP"].IsNumber) { throw new SerializationException(); }  MaxHP = _buf["MaxHP"]; }
-        { if(!_buf["Attack"].IsNumber) { throw new SerializationException(); }  Attack = _buf["Attack"]; }
-        { if(!_buf["Speed"].IsNumber) { throw new SerializationException(); }  Speed = _buf["Speed"]; }
-        { if(!_buf["AngularSpeed"].IsNumber) { throw new SerializationException(); }  AngularSpeed = _buf["AngularSpeed"]; }
-        { if(!_buf["DeadEffectId"].IsNumber) { throw new SerializationException(); }  DeadEffectId = _buf["DeadEffectId"]; }
-        { if(!_buf["DeadSoundId"].IsNumber) { throw new SerializationException(); }  DeadSoundId = _buf["DeadSoundId"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        MaxHP = _buf.ReadInt();
+        Attack = _buf.ReadInt();
+        Speed = _buf.ReadFloat();
+        AngularSpeed = _buf.ReadFloat();
+        DeadEffectId = _buf.ReadInt();
+        DeadSoundId = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DRAsteroid DeserializeDRAsteroid(JSONNode _buf)
+    public static DRAsteroid DeserializeDRAsteroid(ByteBuf _buf)
     {
         return new DRAsteroid(_buf);
     }
@@ -59,6 +58,7 @@ public sealed partial class DRAsteroid : Luban.BeanBase
     /// 死亡声音编号
     /// </summary>
     public readonly int DeadSoundId;
+
     public const int __ID__ = 1354599273;
     public override int GetTypeId() => __ID__;
 
@@ -71,7 +71,7 @@ public sealed partial class DRAsteroid : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -87,7 +87,7 @@ public sealed partial class DRAsteroid : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

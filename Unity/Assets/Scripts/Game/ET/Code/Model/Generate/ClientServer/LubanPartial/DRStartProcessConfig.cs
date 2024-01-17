@@ -25,9 +25,5 @@ namespace ET
         }
 
         public DRStartMachineConfig StartMachineConfig => Tables.Instance.DTStartMachineConfig.Get(Options.Instance.StartConfig, this.MachineId);
-
-        partial void PostInit()
-        {
-        }
     }
 }

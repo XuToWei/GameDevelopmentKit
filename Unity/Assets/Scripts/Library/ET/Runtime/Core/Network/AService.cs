@@ -16,7 +16,7 @@ namespace ET
         public ServiceType ServiceType { get; protected set; }
         
         private const int MaxMemoryBufferSize = 1024;
-		
+        
         private readonly Queue<MemoryBuffer> pool = new();
 
         public MemoryBuffer Fetch(int size = 0)

@@ -8,21 +8,20 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game
 {
 public sealed partial class DRScene : Luban.BeanBase
 {
-    public DRScene(JSONNode _buf) 
+    public DRScene(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["AssetName"].IsString) { throw new SerializationException(); }  AssetName = _buf["AssetName"]; }
-        { if(!_buf["BackgroundMusicId"].IsNumber) { throw new SerializationException(); }  BackgroundMusicId = _buf["BackgroundMusicId"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        AssetName = _buf.ReadString();
+        BackgroundMusicId = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DRScene DeserializeDRScene(JSONNode _buf)
+    public static DRScene DeserializeDRScene(ByteBuf _buf)
     {
         return new DRScene(_buf);
     }
@@ -39,6 +38,7 @@ public sealed partial class DRScene : Luban.BeanBase
     /// 背景音乐编号
     /// </summary>
     public readonly int BackgroundMusicId;
+
     public const int __ID__ = -1646966626;
     public override int GetTypeId() => __ID__;
 
@@ -47,7 +47,7 @@ public sealed partial class DRScene : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -59,7 +59,7 @@ public sealed partial class DRScene : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

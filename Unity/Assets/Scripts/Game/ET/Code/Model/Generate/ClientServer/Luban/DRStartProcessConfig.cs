@@ -8,22 +8,21 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace ET
 {
 public sealed partial class DRStartProcessConfig : Luban.BeanBase
 {
-    public DRStartProcessConfig(JSONNode _buf) 
+    public DRStartProcessConfig(ByteBuf _buf) 
     {
-        { if(!_buf["StartConfig"].IsString) { throw new SerializationException(); }  StartConfig = _buf["StartConfig"]; }
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["MachineId"].IsNumber) { throw new SerializationException(); }  MachineId = _buf["MachineId"]; }
-        { if(!_buf["Port"].IsNumber) { throw new SerializationException(); }  Port = _buf["Port"]; }
-        PostInit();
+        StartConfig = _buf.ReadString();
+        Id = _buf.ReadInt();
+        MachineId = _buf.ReadInt();
+        Port = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DRStartProcessConfig DeserializeDRStartProcessConfig(JSONNode _buf)
+    public static DRStartProcessConfig DeserializeDRStartProcessConfig(ByteBuf _buf)
     {
         return new DRStartProcessConfig(_buf);
     }
@@ -44,6 +43,7 @@ public sealed partial class DRStartProcessConfig : Luban.BeanBase
     /// 外网端口
     /// </summary>
     public readonly int Port;
+
     public const int __ID__ = -417016195;
     public override int GetTypeId() => __ID__;
 
@@ -53,7 +53,7 @@ public sealed partial class DRStartProcessConfig : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -66,7 +66,7 @@ public sealed partial class DRStartProcessConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

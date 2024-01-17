@@ -5,7 +5,7 @@ namespace ET.Server
     public static partial class WatcherComponentSystem
     {
         [EntitySystem]
-        public static void Awake(this WatcherComponent self)
+        private static void Awake(this WatcherComponent self)
         {
             string[] localIP = NetworkHelper.GetAddressIPs();
             foreach (var startProcessConfig in Tables.Instance.DTStartProcessConfig.DataList)

@@ -8,21 +8,20 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game.Hot
 {
 public sealed partial class DRArmor : Luban.BeanBase
 {
-    public DRArmor(JSONNode _buf) 
+    public DRArmor(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["MaxHP"].IsNumber) { throw new SerializationException(); }  MaxHP = _buf["MaxHP"]; }
-        { if(!_buf["Defense"].IsNumber) { throw new SerializationException(); }  Defense = _buf["Defense"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        MaxHP = _buf.ReadInt();
+        Defense = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DRArmor DeserializeDRArmor(JSONNode _buf)
+    public static DRArmor DeserializeDRArmor(ByteBuf _buf)
     {
         return new DRArmor(_buf);
     }
@@ -39,6 +38,7 @@ public sealed partial class DRArmor : Luban.BeanBase
     /// 防御力
     /// </summary>
     public readonly int Defense;
+
     public const int __ID__ = -1663135407;
     public override int GetTypeId() => __ID__;
 
@@ -47,7 +47,7 @@ public sealed partial class DRArmor : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -59,7 +59,7 @@ public sealed partial class DRArmor : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

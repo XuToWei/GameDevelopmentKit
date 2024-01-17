@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace ET
 {
@@ -21,11 +20,12 @@ public partial class Tables
     public DTOneConfig DTOneConfig { private set; get; }
     public DTAIConfig DTAIConfig { private set; get; }
     public DTUnitConfig DTUnitConfig { private set; get; }
+    public DTDemo DTDemo { private set; get; }
     private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
     public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
-    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<JSONNode>> loader)
+    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<ByteBuf>> loader)
     {
         TablesMemory.BeginRecord();
 
@@ -53,6 +53,9 @@ public partial class Tables
         DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig"));
         loadTasks.Add(DTUnitConfig.LoadAsync());
         _tables.Add("DTUnitConfig", DTUnitConfig);
+        DTDemo = new DTDemo(() => loader("dtdemo"));
+        loadTasks.Add(DTDemo.LoadAsync());
+        _tables.Add("DTDemo", DTDemo);
 
         await Cysharp.Threading.Tasks.UniTask.WhenAll(loadTasks);
 
@@ -70,16 +73,17 @@ public partial class Tables
         DTOneConfig.ResolveRef(this);
         DTAIConfig.ResolveRef(this);
         DTUnitConfig.ResolveRef(this);
-        PostResolve();
+        DTDemo.ResolveRef(this);
+        PostResolveRef();
     }
 
     public void Refresh()
     {
-        PostInit();
+        PostLoad();
         ResolveRef();
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

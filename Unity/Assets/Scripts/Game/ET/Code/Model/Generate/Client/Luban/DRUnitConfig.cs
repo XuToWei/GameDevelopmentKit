@@ -8,24 +8,23 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace ET
 {
 public sealed partial class DRUnitConfig : Luban.BeanBase
 {
-    public DRUnitConfig(JSONNode _buf) 
+    public DRUnitConfig(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["Type"].IsNumber) { throw new SerializationException(); }  Type = _buf["Type"]; }
-        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
-        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
-        { if(!_buf["Position"].IsNumber) { throw new SerializationException(); }  Position = _buf["Position"]; }
-        { if(!_buf["Height"].IsNumber) { throw new SerializationException(); }  Height = _buf["Height"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        Type = _buf.ReadInt();
+        Name = _buf.ReadString();
+        Desc = _buf.ReadString();
+        Position = _buf.ReadInt();
+        Height = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DRUnitConfig DeserializeDRUnitConfig(JSONNode _buf)
+    public static DRUnitConfig DeserializeDRUnitConfig(ByteBuf _buf)
     {
         return new DRUnitConfig(_buf);
     }
@@ -54,6 +53,7 @@ public sealed partial class DRUnitConfig : Luban.BeanBase
     /// 身高
     /// </summary>
     public readonly int Height;
+
     public const int __ID__ = -1701961452;
     public override int GetTypeId() => __ID__;
 
@@ -65,7 +65,7 @@ public sealed partial class DRUnitConfig : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -80,7 +80,7 @@ public sealed partial class DRUnitConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

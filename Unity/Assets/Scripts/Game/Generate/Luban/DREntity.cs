@@ -8,22 +8,21 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game
 {
 public sealed partial class DREntity : Luban.BeanBase
 {
-    public DREntity(JSONNode _buf) 
+    public DREntity(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["AssetName"].IsString) { throw new SerializationException(); }  AssetName = _buf["AssetName"]; }
-        { if(!_buf["EntityGroupName"].IsString) { throw new SerializationException(); }  EntityGroupName = _buf["EntityGroupName"]; }
-        { if(!_buf["Priority"].IsNumber) { throw new SerializationException(); }  Priority = _buf["Priority"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        AssetName = _buf.ReadString();
+        EntityGroupName = _buf.ReadString();
+        Priority = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DREntity DeserializeDREntity(JSONNode _buf)
+    public static DREntity DeserializeDREntity(ByteBuf _buf)
     {
         return new DREntity(_buf);
     }
@@ -44,6 +43,7 @@ public sealed partial class DREntity : Luban.BeanBase
     /// 加载优先级
     /// </summary>
     public readonly int Priority;
+
     public const int __ID__ = 93435409;
     public override int GetTypeId() => __ID__;
 
@@ -53,7 +53,7 @@ public sealed partial class DREntity : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -66,7 +66,7 @@ public sealed partial class DREntity : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

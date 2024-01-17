@@ -23,6 +23,14 @@
   <Resource Name="ET_dtstartsceneconfig.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtstartsceneconfig.bytes" />
   <Resource Name="ET_dtstartzoneconfig.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtstartzoneconfig.bytes" />
   <Resource Name="ET_dtunitconfig.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtunitconfig.bytes" />
+  <Resource Name="ET_Game.ET.Code.Hotfix.dll.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.Hotfix.dll.bytes" />
+  <Resource Name="ET_Game.ET.Code.Hotfix.pdb.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.Hotfix.pdb.bytes" />
+  <Resource Name="ET_Game.ET.Code.HotfixView.dll.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.HotfixView.dll.bytes" />
+  <Resource Name="ET_Game.ET.Code.HotfixView.pdb.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.HotfixView.pdb.bytes" />
+  <Resource Name="ET_Game.ET.Code.Model.dll.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.Model.dll.bytes" />
+  <Resource Name="ET_Game.ET.Code.Model.pdb.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.Model.pdb.bytes" />
+  <Resource Name="ET_Game.ET.Code.ModelView.dll.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.ModelView.dll.bytes" />
+  <Resource Name="ET_Game.ET.Code.ModelView.pdb.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.ModelView.pdb.bytes" />
   <Resource Name="ET_Map1.bytes" Path="Assets/Res/ET/ClientServer/Recast/Map1.bytes" />
   <Resource Name="ET_Map2.bytes" Path="Assets/Res/ET/ClientServer/Recast/Map2.bytes" />
   <Resource Name="Hot_dtaircraft.bytes" Path="Assets/Res/Hot/Luban/dtaircraft.bytes" />

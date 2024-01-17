@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game.Hot
 {
@@ -16,9 +15,9 @@ public partial class DTAsteroid : IDataTable
 {
     private readonly System.Collections.Generic.Dictionary<int, DRAsteroid> _dataMap;
     private readonly System.Collections.Generic.List<DRAsteroid> _dataList;
-    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> _loadFunc;
+    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
-    public DTAsteroid(System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> loadFunc)
+    public DTAsteroid(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataMap = new System.Collections.Generic.Dictionary<int, DRAsteroid>();
@@ -27,21 +26,22 @@ public partial class DTAsteroid : IDataTable
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
-        JSONNode _json = await _loadFunc();
+        ByteBuf _buf = await _loadFunc();
         _dataMap.Clear();
         _dataList.Clear();
-        foreach(JSONNode _ele in _json.Children)
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRAsteroid _v;
-            { if(!_ele.IsObject) { throw new SerializationException(); }  _v = DRAsteroid.DeserializeDRAsteroid(_ele);  }
+            _v = DRAsteroid.DeserializeDRAsteroid(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
-        PostInit();
+        PostLoad();
     }
 
     public System.Collections.Generic.Dictionary<int, DRAsteroid> DataMap => _dataMap;
     public System.Collections.Generic.List<DRAsteroid> DataList => _dataList;
+
     public DRAsteroid GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRAsteroid Get(int key) => _dataMap[key];
     public DRAsteroid this[int key] => _dataMap[key];
@@ -52,12 +52,11 @@ public partial class DTAsteroid : IDataTable
         {
             _v.ResolveRef(tables);
         }
-        PostResolve();
+        PostResolveRef();
     }
 
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }
-

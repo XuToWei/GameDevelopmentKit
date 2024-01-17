@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game.Hot
 {
@@ -24,7 +23,7 @@ public partial class Tables
     public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
-    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<JSONNode>> loader)
+    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<ByteBuf>> loader)
     {
         TablesMemory.BeginRecord();
 
@@ -65,16 +64,16 @@ public partial class Tables
         DTAsteroid.ResolveRef(this);
         DTThruster.ResolveRef(this);
         DTWeapon.ResolveRef(this);
-        PostResolve();
+        PostResolveRef();
     }
 
     public void Refresh()
     {
-        PostInit();
+        PostLoad();
         ResolveRef();
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

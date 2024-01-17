@@ -8,24 +8,23 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game.Hot
 {
 public sealed partial class DRAircraft : Luban.BeanBase
 {
-    public DRAircraft(JSONNode _buf) 
+    public DRAircraft(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["ThrusterId"].IsNumber) { throw new SerializationException(); }  ThrusterId = _buf["ThrusterId"]; }
-        { var __json0 = _buf["WeaponIds"]; if(!__json0.IsArray) { throw new SerializationException(); } WeaponIds = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  WeaponIds.Add(__v0); }   }
-        { var __json0 = _buf["ArmorIds"]; if(!__json0.IsArray) { throw new SerializationException(); } ArmorIds = new System.Collections.Generic.List<int>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ArmorIds.Add(__v0); }   }
-        { if(!_buf["DeadEffectId"].IsNumber) { throw new SerializationException(); }  DeadEffectId = _buf["DeadEffectId"]; }
-        { if(!_buf["DeadSoundId"].IsNumber) { throw new SerializationException(); }  DeadSoundId = _buf["DeadSoundId"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        ThrusterId = _buf.ReadInt();
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);WeaponIds = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); WeaponIds.Add(_e0);}}
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);ArmorIds = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); ArmorIds.Add(_e0);}}
+        DeadEffectId = _buf.ReadInt();
+        DeadSoundId = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DRAircraft DeserializeDRAircraft(JSONNode _buf)
+    public static DRAircraft DeserializeDRAircraft(ByteBuf _buf)
     {
         return new DRAircraft(_buf);
     }
@@ -54,6 +53,7 @@ public sealed partial class DRAircraft : Luban.BeanBase
     /// 死亡声音编号
     /// </summary>
     public readonly int DeadSoundId;
+
     public const int __ID__ = 1010378180;
     public override int GetTypeId() => __ID__;
 
@@ -65,7 +65,7 @@ public sealed partial class DRAircraft : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -80,7 +80,7 @@ public sealed partial class DRAircraft : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

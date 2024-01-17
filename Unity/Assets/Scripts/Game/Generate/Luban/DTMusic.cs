@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game
 {
@@ -16,9 +15,9 @@ public partial class DTMusic : IDataTable
 {
     private readonly System.Collections.Generic.Dictionary<int, DRMusic> _dataMap;
     private readonly System.Collections.Generic.List<DRMusic> _dataList;
-    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> _loadFunc;
+    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
-    public DTMusic(System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> loadFunc)
+    public DTMusic(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataMap = new System.Collections.Generic.Dictionary<int, DRMusic>();
@@ -27,21 +26,22 @@ public partial class DTMusic : IDataTable
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
-        JSONNode _json = await _loadFunc();
+        ByteBuf _buf = await _loadFunc();
         _dataMap.Clear();
         _dataList.Clear();
-        foreach(JSONNode _ele in _json.Children)
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRMusic _v;
-            { if(!_ele.IsObject) { throw new SerializationException(); }  _v = DRMusic.DeserializeDRMusic(_ele);  }
+            _v = DRMusic.DeserializeDRMusic(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
-        PostInit();
+        PostLoad();
     }
 
     public System.Collections.Generic.Dictionary<int, DRMusic> DataMap => _dataMap;
     public System.Collections.Generic.List<DRMusic> DataList => _dataList;
+
     public DRMusic GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRMusic Get(int key) => _dataMap[key];
     public DRMusic this[int key] => _dataMap[key];
@@ -52,12 +52,11 @@ public partial class DTMusic : IDataTable
         {
             _v.ResolveRef(tables);
         }
-        PostResolve();
+        PostResolveRef();
     }
 
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }
-

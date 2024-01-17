@@ -8,17 +8,17 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace ET
 {
 public partial class DTStartMachineConfig : IDataTable
 {
     private readonly System.Collections.Generic.List<DRStartMachineConfig> _dataList;
-    private System.Collections.Generic.Dictionary<(string, int), DRStartMachineConfig> _dataMapUnion;
-    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> _loadFunc;
 
-    public DTStartMachineConfig(System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> loadFunc)
+    private System.Collections.Generic.Dictionary<(string, int), DRStartMachineConfig> _dataMapUnion;
+    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
+
+    public DTStartMachineConfig(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataList = new System.Collections.Generic.List<DRStartMachineConfig>();
@@ -27,23 +27,24 @@ public partial class DTStartMachineConfig : IDataTable
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
-        JSONNode _json = await _loadFunc();
+        ByteBuf _buf = await _loadFunc();
         _dataList.Clear();
         _dataMapUnion.Clear();
-        foreach(JSONNode _ele in _json.Children)
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRStartMachineConfig _v;
-            { if(!_ele.IsObject) { throw new SerializationException(); }  _v = DRStartMachineConfig.DeserializeDRStartMachineConfig(_ele);  }
+            _v = DRStartMachineConfig.DeserializeDRStartMachineConfig(_buf);
             _dataList.Add(_v);
         }
         foreach(var _v in _dataList)
         {
             _dataMapUnion.Add((_v.StartConfig, _v.Id), _v);
         }
-        PostInit();
+        PostLoad();
     }
 
     public System.Collections.Generic.List<DRStartMachineConfig> DataList => _dataList;
+
     public DRStartMachineConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartMachineConfig __v) ? __v : null;
 
     public void ResolveRef(Tables tables)
@@ -52,11 +53,10 @@ public partial class DTStartMachineConfig : IDataTable
         {
             _v.ResolveRef(tables);
         }
-        PostResolve();
+        PostResolveRef();
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }
-

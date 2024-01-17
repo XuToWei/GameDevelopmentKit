@@ -8,20 +8,19 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game.Hot
 {
 public sealed partial class DRThruster : Luban.BeanBase
 {
-    public DRThruster(JSONNode _buf) 
+    public DRThruster(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["Speed"].IsNumber) { throw new SerializationException(); }  Speed = _buf["Speed"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        Speed = _buf.ReadFloat();
+        PostLoad();
     }
 
-    public static DRThruster DeserializeDRThruster(JSONNode _buf)
+    public static DRThruster DeserializeDRThruster(ByteBuf _buf)
     {
         return new DRThruster(_buf);
     }
@@ -34,6 +33,7 @@ public sealed partial class DRThruster : Luban.BeanBase
     /// 速度
     /// </summary>
     public readonly float Speed;
+
     public const int __ID__ = -1106796109;
     public override int GetTypeId() => __ID__;
 
@@ -41,7 +41,7 @@ public sealed partial class DRThruster : Luban.BeanBase
     {
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -52,7 +52,7 @@ public sealed partial class DRThruster : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

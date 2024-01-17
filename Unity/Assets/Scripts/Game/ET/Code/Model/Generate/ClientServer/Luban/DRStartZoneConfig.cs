@@ -8,23 +8,22 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace ET
 {
 public sealed partial class DRStartZoneConfig : Luban.BeanBase
 {
-    public DRStartZoneConfig(JSONNode _buf) 
+    public DRStartZoneConfig(ByteBuf _buf) 
     {
-        { if(!_buf["StartConfig"].IsString) { throw new SerializationException(); }  StartConfig = _buf["StartConfig"]; }
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["DBConnection"].IsString) { throw new SerializationException(); }  DBConnection = _buf["DBConnection"]; }
-        { if(!_buf["DBName"].IsString) { throw new SerializationException(); }  DBName = _buf["DBName"]; }
-        { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
-        PostInit();
+        StartConfig = _buf.ReadString();
+        Id = _buf.ReadInt();
+        DBConnection = _buf.ReadString();
+        DBName = _buf.ReadString();
+        Desc = _buf.ReadString();
+        PostLoad();
     }
 
-    public static DRStartZoneConfig DeserializeDRStartZoneConfig(JSONNode _buf)
+    public static DRStartZoneConfig DeserializeDRStartZoneConfig(ByteBuf _buf)
     {
         return new DRStartZoneConfig(_buf);
     }
@@ -49,6 +48,7 @@ public sealed partial class DRStartZoneConfig : Luban.BeanBase
     /// 说明
     /// </summary>
     public readonly string Desc;
+
     public const int __ID__ = -1835667038;
     public override int GetTypeId() => __ID__;
 
@@ -59,7 +59,7 @@ public sealed partial class DRStartZoneConfig : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -73,7 +73,7 @@ public sealed partial class DRStartZoneConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

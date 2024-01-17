@@ -8,23 +8,22 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game
 {
 public sealed partial class DRUIForm : Luban.BeanBase
 {
-    public DRUIForm(JSONNode _buf) 
+    public DRUIForm(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["AssetName"].IsString) { throw new SerializationException(); }  AssetName = _buf["AssetName"]; }
-        { if(!_buf["UIGroupName"].IsString) { throw new SerializationException(); }  UIGroupName = _buf["UIGroupName"]; }
-        { if(!_buf["AllowMultiInstance"].IsBoolean) { throw new SerializationException(); }  AllowMultiInstance = _buf["AllowMultiInstance"]; }
-        { if(!_buf["PauseCoveredUIForm"].IsBoolean) { throw new SerializationException(); }  PauseCoveredUIForm = _buf["PauseCoveredUIForm"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        AssetName = _buf.ReadString();
+        UIGroupName = _buf.ReadString();
+        AllowMultiInstance = _buf.ReadBool();
+        PauseCoveredUIForm = _buf.ReadBool();
+        PostLoad();
     }
 
-    public static DRUIForm DeserializeDRUIForm(JSONNode _buf)
+    public static DRUIForm DeserializeDRUIForm(ByteBuf _buf)
     {
         return new DRUIForm(_buf);
     }
@@ -49,6 +48,7 @@ public sealed partial class DRUIForm : Luban.BeanBase
     /// 是否暂停被其覆盖的界面
     /// </summary>
     public readonly bool PauseCoveredUIForm;
+
     public const int __ID__ = 515966854;
     public override int GetTypeId() => __ID__;
 
@@ -59,7 +59,7 @@ public sealed partial class DRUIForm : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -73,7 +73,7 @@ public sealed partial class DRUIForm : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

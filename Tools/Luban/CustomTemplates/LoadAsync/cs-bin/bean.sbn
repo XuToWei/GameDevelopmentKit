@@ -4,7 +4,6 @@
     export_fields = __bean.export_fields
     hierarchy_export_fields = __bean.hierarchy_export_fields
 }}
-
 {{namespace_with_grace_begin __namespace_with_top_module}}
 {{~if __bean.comment != '' ~}}
 /// <summary>
@@ -84,7 +83,7 @@ public {{class_modifier __bean}} partial class {{__name}} : {{if parent_def_type
         }
         {{~end~}}
         {{~end~}}
-        PostInit();
+        PostLoad();
     }
 
     public static {{__name}} Deserialize{{__name}}(ByteBuf _buf)
@@ -134,7 +133,7 @@ public {{class_modifier __bean}} partial class {{__name}} : {{if parent_def_type
         {{~for field in export_fields~}}
         {{generate_resolve_field_ref field}}
         {{~end~}}
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -146,8 +145,7 @@ public {{class_modifier __bean}} partial class {{__name}} : {{if parent_def_type
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
-
 {{namespace_with_grace_end __namespace_with_top_module}}

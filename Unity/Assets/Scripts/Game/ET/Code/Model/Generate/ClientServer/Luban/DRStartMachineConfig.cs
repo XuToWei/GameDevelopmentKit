@@ -8,23 +8,22 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace ET
 {
 public sealed partial class DRStartMachineConfig : Luban.BeanBase
 {
-    public DRStartMachineConfig(JSONNode _buf) 
+    public DRStartMachineConfig(ByteBuf _buf) 
     {
-        { if(!_buf["StartConfig"].IsString) { throw new SerializationException(); }  StartConfig = _buf["StartConfig"]; }
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["InnerIP"].IsString) { throw new SerializationException(); }  InnerIP = _buf["InnerIP"]; }
-        { if(!_buf["OuterIP"].IsString) { throw new SerializationException(); }  OuterIP = _buf["OuterIP"]; }
-        { if(!_buf["WatcherPort"].IsString) { throw new SerializationException(); }  WatcherPort = _buf["WatcherPort"]; }
-        PostInit();
+        StartConfig = _buf.ReadString();
+        Id = _buf.ReadInt();
+        InnerIP = _buf.ReadString();
+        OuterIP = _buf.ReadString();
+        WatcherPort = _buf.ReadString();
+        PostLoad();
     }
 
-    public static DRStartMachineConfig DeserializeDRStartMachineConfig(JSONNode _buf)
+    public static DRStartMachineConfig DeserializeDRStartMachineConfig(ByteBuf _buf)
     {
         return new DRStartMachineConfig(_buf);
     }
@@ -49,6 +48,7 @@ public sealed partial class DRStartMachineConfig : Luban.BeanBase
     /// 守护进程端口
     /// </summary>
     public readonly string WatcherPort;
+
     public const int __ID__ = -929351083;
     public override int GetTypeId() => __ID__;
 
@@ -59,7 +59,7 @@ public sealed partial class DRStartMachineConfig : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -73,7 +73,7 @@ public sealed partial class DRStartMachineConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

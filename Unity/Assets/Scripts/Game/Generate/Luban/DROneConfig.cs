@@ -8,19 +8,18 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game
 {
 public sealed partial class DROneConfig : Luban.BeanBase
 {
-    public DROneConfig(JSONNode _buf) 
+    public DROneConfig(ByteBuf _buf) 
     {
-        { if(!_buf["Test"].IsNumber) { throw new SerializationException(); }  Test = _buf["Test"]; }
-        PostInit();
+        Test = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DROneConfig DeserializeDROneConfig(JSONNode _buf)
+    public static DROneConfig DeserializeDROneConfig(ByteBuf _buf)
     {
         return new DROneConfig(_buf);
     }
@@ -29,13 +28,14 @@ public sealed partial class DROneConfig : Luban.BeanBase
     /// 匹配最大时间
     /// </summary>
     public readonly int Test;
+
     public const int __ID__ = -2019618726;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(TablesComponent tables)
     {
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -45,7 +45,7 @@ public sealed partial class DROneConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

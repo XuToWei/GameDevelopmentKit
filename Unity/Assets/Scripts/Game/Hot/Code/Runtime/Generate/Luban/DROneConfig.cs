@@ -8,21 +8,20 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game.Hot
 {
 public sealed partial class DROneConfig : Luban.BeanBase
 {
-    public DROneConfig(JSONNode _buf) 
+    public DROneConfig(ByteBuf _buf) 
     {
-        { if(!_buf["GameId"].IsString) { throw new SerializationException(); }  GameId = _buf["GameId"]; }
-        { if(!_buf["SceneMenu"].IsNumber) { throw new SerializationException(); }  SceneMenu = _buf["SceneMenu"]; }
-        { if(!_buf["SceneMain"].IsNumber) { throw new SerializationException(); }  SceneMain = _buf["SceneMain"]; }
-        PostInit();
+        GameId = _buf.ReadString();
+        SceneMenu = _buf.ReadInt();
+        SceneMain = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DROneConfig DeserializeDROneConfig(JSONNode _buf)
+    public static DROneConfig DeserializeDROneConfig(ByteBuf _buf)
     {
         return new DROneConfig(_buf);
     }
@@ -30,6 +29,7 @@ public sealed partial class DROneConfig : Luban.BeanBase
     public readonly string GameId;
     public readonly int SceneMenu;
     public readonly int SceneMain;
+
     public const int __ID__ = -2019618726;
     public override int GetTypeId() => __ID__;
 
@@ -38,7 +38,7 @@ public sealed partial class DROneConfig : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -50,7 +50,7 @@ public sealed partial class DROneConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

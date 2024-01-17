@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game.Hot
 {
@@ -16,9 +15,9 @@ public partial class DTWeapon : IDataTable
 {
     private readonly System.Collections.Generic.Dictionary<int, DRWeapon> _dataMap;
     private readonly System.Collections.Generic.List<DRWeapon> _dataList;
-    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> _loadFunc;
+    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
-    public DTWeapon(System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> loadFunc)
+    public DTWeapon(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
         _dataMap = new System.Collections.Generic.Dictionary<int, DRWeapon>();
@@ -27,21 +26,22 @@ public partial class DTWeapon : IDataTable
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
-        JSONNode _json = await _loadFunc();
+        ByteBuf _buf = await _loadFunc();
         _dataMap.Clear();
         _dataList.Clear();
-        foreach(JSONNode _ele in _json.Children)
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRWeapon _v;
-            { if(!_ele.IsObject) { throw new SerializationException(); }  _v = DRWeapon.DeserializeDRWeapon(_ele);  }
+            _v = DRWeapon.DeserializeDRWeapon(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
-        PostInit();
+        PostLoad();
     }
 
     public System.Collections.Generic.Dictionary<int, DRWeapon> DataMap => _dataMap;
     public System.Collections.Generic.List<DRWeapon> DataList => _dataList;
+
     public DRWeapon GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRWeapon Get(int key) => _dataMap[key];
     public DRWeapon this[int key] => _dataMap[key];
@@ -52,12 +52,11 @@ public partial class DTWeapon : IDataTable
         {
             _v.ResolveRef(tables);
         }
-        PostResolve();
+        PostResolveRef();
     }
 
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }
-

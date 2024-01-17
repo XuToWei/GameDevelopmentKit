@@ -8,26 +8,25 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game
 {
 public sealed partial class DRSound : Luban.BeanBase
 {
-    public DRSound(JSONNode _buf) 
+    public DRSound(ByteBuf _buf) 
     {
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["AssetName"].IsString) { throw new SerializationException(); }  AssetName = _buf["AssetName"]; }
-        { if(!_buf["SoundGroupName"].IsString) { throw new SerializationException(); }  SoundGroupName = _buf["SoundGroupName"]; }
-        { if(!_buf["Priority"].IsNumber) { throw new SerializationException(); }  Priority = _buf["Priority"]; }
-        { if(!_buf["Loop"].IsBoolean) { throw new SerializationException(); }  Loop = _buf["Loop"]; }
-        { if(!_buf["Volume"].IsNumber) { throw new SerializationException(); }  Volume = _buf["Volume"]; }
-        { if(!_buf["SpatialBlend"].IsNumber) { throw new SerializationException(); }  SpatialBlend = _buf["SpatialBlend"]; }
-        { if(!_buf["MaxDistance"].IsNumber) { throw new SerializationException(); }  MaxDistance = _buf["MaxDistance"]; }
-        PostInit();
+        Id = _buf.ReadInt();
+        AssetName = _buf.ReadString();
+        SoundGroupName = _buf.ReadString();
+        Priority = _buf.ReadInt();
+        Loop = _buf.ReadBool();
+        Volume = _buf.ReadFloat();
+        SpatialBlend = _buf.ReadFloat();
+        MaxDistance = _buf.ReadFloat();
+        PostLoad();
     }
 
-    public static DRSound DeserializeDRSound(JSONNode _buf)
+    public static DRSound DeserializeDRSound(ByteBuf _buf)
     {
         return new DRSound(_buf);
     }
@@ -64,6 +63,7 @@ public sealed partial class DRSound : Luban.BeanBase
     /// 声音最大距离
     /// </summary>
     public readonly float MaxDistance;
+
     public const int __ID__ = -1646593759;
     public override int GetTypeId() => __ID__;
 
@@ -77,7 +77,7 @@ public sealed partial class DRSound : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -94,7 +94,7 @@ public sealed partial class DRSound : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

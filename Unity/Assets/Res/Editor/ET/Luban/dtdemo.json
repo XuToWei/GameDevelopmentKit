@@ -1,66 +1,34 @@
 [
   {
-    "id": 11,
-    "name": {
-      "key": "/demo/1",
-      "text": "测试1"
-    },
-    "testMap": []
+    "Id": 11,
+    "Key": "/apple"
   },
   {
-    "id": 12,
-    "name": {
-      "key": "/demo/2",
-      "text": "测试2"
-    },
-    "testMap": []
+    "Id": 12,
+    "Key": "/apple"
   },
   {
-    "id": 13,
-    "name": {
-      "key": "/demo/3",
-      "text": "测试3"
-    },
-    "testMap": []
+    "Id": 13,
+    "Key": "/apple"
   },
   {
-    "id": 14,
-    "name": {
-      "key": "",
-      "text": ""
-    },
-    "testMap": []
+    "Id": 14,
+    "Key": "/apple"
   },
   {
-    "id": 15,
-    "name": {
-      "key": "/demo/5",
-      "text": "测试5"
-    },
-    "testMap": []
+    "Id": 15,
+    "Key": "/apple"
   },
   {
-    "id": 16,
-    "name": {
-      "key": "/demo/6",
-      "text": "测试6"
-    },
-    "testMap": []
+    "Id": 16,
+    "Key": "/apple"
   },
   {
-    "id": 17,
-    "name": {
-      "key": "/demo/7",
-      "text": "测试7"
-    },
-    "testMap": []
+    "Id": 17,
+    "Key": "/apple"
   },
   {
-    "id": 18,
-    "name": {
-      "key": "/demo/8",
-      "text": "测试8"
-    },
-    "testMap": []
+    "Id": 18,
+    "Key": "/apple_bad"
   }
 ]

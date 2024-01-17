@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace Game
 {
@@ -25,7 +24,7 @@ public partial class TablesComponent
     public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
-    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<JSONNode>> loader)
+    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<ByteBuf>> loader)
     {
         TablesMemory.BeginRecord();
 
@@ -70,16 +69,16 @@ public partial class TablesComponent
         DTUISound.ResolveRef(this);
         DTMusic.ResolveRef(this);
         DTOneConfig.ResolveRef(this);
-        PostResolve();
+        PostResolveRef();
     }
 
     public void Refresh()
     {
-        PostInit();
+        PostLoad();
         ResolveRef();
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }

@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace ET
 {
@@ -17,19 +16,20 @@ public partial class DTOneConfig : IDataTable
 
     private DROneConfig _data;
     public DROneConfig Data => _data;
-    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> _loadFunc;
+    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
-    public DTOneConfig(System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> loadFunc)
+    public DTOneConfig(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
-        JSONNode _json = await _loadFunc();
-        int n = _json.Count;
+        ByteBuf _buf = await _loadFunc();
+        int n = _buf.ReadSize();
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
-        { if(!_json[0].IsObject) { throw new SerializationException(); }  _data = DROneConfig.DeserializeDROneConfig(_json[0]);  }
+        _data = DROneConfig.DeserializeDROneConfig(_buf);
+        PostLoad();
     }
 
     /// <summary>
@@ -40,15 +40,14 @@ public partial class DTOneConfig : IDataTable
     /// 匹配最大时间
     /// </summary>
     public int Test => _data.Test;
-
+    
     public void ResolveRef(Tables tables)
     {
         _data.ResolveRef(tables);
-        PostResolve();
+        PostResolveRef();
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }
-

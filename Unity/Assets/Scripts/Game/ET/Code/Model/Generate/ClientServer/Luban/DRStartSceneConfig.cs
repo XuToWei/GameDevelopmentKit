@@ -8,25 +8,24 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 namespace ET
 {
 public sealed partial class DRStartSceneConfig : Luban.BeanBase
 {
-    public DRStartSceneConfig(JSONNode _buf) 
+    public DRStartSceneConfig(ByteBuf _buf) 
     {
-        { if(!_buf["StartConfig"].IsString) { throw new SerializationException(); }  StartConfig = _buf["StartConfig"]; }
-        { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-        { if(!_buf["Process"].IsNumber) { throw new SerializationException(); }  Process = _buf["Process"]; }
-        { if(!_buf["Zone"].IsNumber) { throw new SerializationException(); }  Zone = _buf["Zone"]; }
-        { if(!_buf["SceneType"].IsString) { throw new SerializationException(); }  SceneType = _buf["SceneType"]; }
-        { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
-        { if(!_buf["Port"].IsNumber) { throw new SerializationException(); }  Port = _buf["Port"]; }
-        PostInit();
+        StartConfig = _buf.ReadString();
+        Id = _buf.ReadInt();
+        Process = _buf.ReadInt();
+        Zone = _buf.ReadInt();
+        SceneType = _buf.ReadString();
+        Name = _buf.ReadString();
+        Port = _buf.ReadInt();
+        PostLoad();
     }
 
-    public static DRStartSceneConfig DeserializeDRStartSceneConfig(JSONNode _buf)
+    public static DRStartSceneConfig DeserializeDRStartSceneConfig(ByteBuf _buf)
     {
         return new DRStartSceneConfig(_buf);
     }
@@ -59,6 +58,7 @@ public sealed partial class DRStartSceneConfig : Luban.BeanBase
     /// 外网端口
     /// </summary>
     public readonly int Port;
+
     public const int __ID__ = 1720259034;
     public override int GetTypeId() => __ID__;
 
@@ -71,7 +71,7 @@ public sealed partial class DRStartSceneConfig : Luban.BeanBase
         
         
         
-        PostResolve();
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -87,7 +87,7 @@ public sealed partial class DRStartSceneConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostInit();
-    partial void PostResolve();
+    partial void PostLoad();
+    partial void PostResolveRef();
 }
 }
