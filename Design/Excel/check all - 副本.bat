@@ -1,2 +1,0 @@
-dotnet D:/GitHub/GameDevelopmentKit/Tools/Luban/Tools/Luban/Luban.dll --customTemplateDir D:/GitHub/GameDevelopmentKit/Tools/Luban/CustomTemplates/LoadAsync --conf D:/GitHub/GameDevelopmentKit/Design/Excel/ET/luban.conf -t clientserver -c cs-bin -d bin -x outputCodeDir=D:/GitHub/GameDevelopmentKit/Unity/Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Luban -x outputDataDir=D:/GitHub/GameDevelopmentKit/Unity/Assets/Res/ET/ClientServer/Luban -x l10n.textProviderFile=D:/GitHub/GameDevelopmentKit/Design/Excel/Localization.xlsx
-pause

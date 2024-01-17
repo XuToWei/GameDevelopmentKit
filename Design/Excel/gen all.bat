@@ -1,3 +1,3 @@
 cd /d ../../Bin
-Tool.exe --AppType=ExcelExporter --Console=1 --Customs=ShowInfo,ShowCmd
+Tool.exe --AppType=ExcelExporter --Console=1
 pause
