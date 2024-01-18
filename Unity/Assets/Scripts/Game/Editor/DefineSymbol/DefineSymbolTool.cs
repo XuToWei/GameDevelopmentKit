@@ -263,19 +263,23 @@ namespace Game.Editor
             for (int i = 0; i < dirs.Length; i++)
             {
                 string dir = Path.GetFullPath(dirs[i]);
-                string genConfigFile = Path.Combine(dir, "GenConfig.xml");
+                string genConfigFile = Path.Combine(dir, "luban.conf");
                 if (!File.Exists(genConfigFile))
                 {
                     continue;
                 }
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(File.ReadAllText(genConfigFile));
-                XmlNode xmlRoot = xmlDocument.SelectSingleNode("Config");
-                XmlNode openNode = xmlRoot.SelectSingleNode("Open");
                 if (string.Equals(Directory.GetParent(genConfigFile)?.Name, dirName, StringComparison.Ordinal))
                 {
-                    openNode.Attributes.GetNamedItem("Value").Value = isOpen ? "TRUE" : "FALSE";
-                    xmlDocument.Save(genConfigFile);
+                    string json = File.ReadAllText(genConfigFile);
+                    if (isOpen)
+                    {
+                        json = json.Replace(@"""active"":false", @"""active"":true");
+                    }
+                    else
+                    {
+                        json = json.Replace(@"""active"":true", @"""active"":false");
+                    }
+                    File.WriteAllText(genConfigFile, json);
                     break;
                 }
             }
