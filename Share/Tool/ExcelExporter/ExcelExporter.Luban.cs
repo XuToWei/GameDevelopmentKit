@@ -218,27 +218,34 @@ namespace ET
                         }
                     }).Wait();
 
-                foreach (var cmdInfo in cmdInfos)
+                if (!isCheck)
                 {
-                    LubanFileHelper.ClearSubEmptyDirectory(cmdInfo.sourceCodePath);
-                    LubanFileHelper.ClearSubEmptyDirectory(cmdInfo.sourceDataPath);
-                    if (cmdInfo.copyCodePath != null)
+                    foreach (var cmdInfo in cmdInfos)
                     {
-                        foreach (var copyPath in cmdInfo.copyCodePath)
+                        LubanFileHelper.ClearSubEmptyDirectory(cmdInfo.sourceCodePath);
+                        LubanFileHelper.ClearSubEmptyDirectory(cmdInfo.sourceDataPath);
+                        if (cmdInfo.copyCodePath != null)
                         {
-                            LubanFileHelper.CopyDirectory(cmdInfo.sourceCodePath, copyPath);
-                            LubanFileHelper.ClearSubEmptyDirectory(copyPath);
+                            foreach (var copyPath in cmdInfo.copyCodePath)
+                            {
+                                LubanFileHelper.CopyDirectory(cmdInfo.sourceCodePath, copyPath);
+                                LubanFileHelper.ClearSubEmptyDirectory(copyPath);
+                            }
+                        }
+
+                        if (cmdInfo.copyDataPath != null)
+                        {
+                            foreach (var copyPath in cmdInfo.copyDataPath)
+                            {
+                                LubanFileHelper.CopyDirectory(cmdInfo.sourceDataPath, copyPath);
+                                LubanFileHelper.ClearSubEmptyDirectory(copyPath);
+                            }
                         }
                     }
 
-                    if (cmdInfo.copyDataPath != null)
-                    {
-                        foreach (var copyPath in cmdInfo.copyDataPath)
-                        {
-                            LubanFileHelper.CopyDirectory(cmdInfo.sourceDataPath, copyPath);
-                            LubanFileHelper.ClearSubEmptyDirectory(copyPath);
-                        }
-                    }
+                    GenerateUGFAllSoundId.GenerateCode();
+                    GenerateUGFEntityId.GenerateCode();
+                    GenerateUGFUIFormId.GenerateCode();
                 }
 
                 if (isSuccess)
