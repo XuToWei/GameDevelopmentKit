@@ -1,5 +1,4 @@
 using Luban;
-using SimpleJSON;
 
 {{namespace_with_grace_begin __namespace}}
 public partial class {{__name}}
@@ -16,7 +15,7 @@ public partial class {{__name}}
     public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
-    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<JSONNode>> loader)
+    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<ByteBuf>> loader)
     {
         TablesMemory.BeginRecord();
 
@@ -41,16 +40,14 @@ public partial class {{__name}}
         {{~for table in __tables ~}}
         {{format_property_name __code_style table.name}}.ResolveRef(this);
         {{~end~}}
-        PostResolveRef();
     }
 
     public void Refresh()
     {
-        PostLoad();
+        PostInit();
         ResolveRef();
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 {{namespace_with_grace_end __namespace}}

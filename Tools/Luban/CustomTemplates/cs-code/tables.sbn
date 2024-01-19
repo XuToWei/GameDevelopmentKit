@@ -1,0 +1,37 @@
+using Luban;
+
+{{namespace_with_grace_begin __namespace}}
+public partial class {{__name}}
+{
+    {{~for table in __tables ~}}
+    {{~if table.comment != '' ~}}
+    /// <summary>
+    /// {{escape_comment table.comment}}
+    /// </summary>
+    {{~end~}}
+    public {{table.full_name}} {{format_property_name __code_style table.name}} { private set; get; }
+    {{~end~}}
+    private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
+    public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
+    public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
+
+    public {{__name}}()
+    {
+        {{~for table in __tables ~}}
+        {{format_property_name __code_style table.name}} = new {{table.full_name}}();
+        {{~end~}}
+
+        PostInit();
+        ResolveRef();
+    }
+
+    private void ResolveRef()
+    {
+        {{~for table in __tables ~}}
+        {{format_property_name __code_style table.name}}.ResolveRef(this);
+        {{~end~}}
+    }
+
+    partial void PostInit();
+}
+{{namespace_with_grace_end __namespace}}

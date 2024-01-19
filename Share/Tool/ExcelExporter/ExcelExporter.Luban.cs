@@ -25,7 +25,7 @@ namespace ET
                     $"dotnet %GEN_CLIENT% --customTemplateDir %CUSTOM_TEMPLATE_DIR% --conf %CONF_ROOT%/luban.conf ";
 
             private const string gen_client = "../Tools/Luban/Tools/Luban/Luban.dll";
-            private const string custom_template_dir = "../Tools/Luban/CustomTemplates/LoadAsync";
+            private const string custom_template_dir = "../Tools/Luban/CustomTemplates";
             private const string excel_dir = "../Design/Excel";
             private const string gen_config_name = "luban.conf";
             private const string unity_assets_path = "../Unity/Assets";
