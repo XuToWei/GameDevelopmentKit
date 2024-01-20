@@ -36,12 +36,11 @@ public partial class DTUIForm : IDataTable
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
-        PostLoad();
+        PostInit();
     }
 
     public System.Collections.Generic.Dictionary<int, DRUIForm> DataMap => _dataMap;
     public System.Collections.Generic.List<DRUIForm> DataList => _dataList;
-
     public DRUIForm GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRUIForm Get(int key) => _dataMap[key];
     public DRUIForm this[int key] => _dataMap[key];
@@ -52,11 +51,9 @@ public partial class DTUIForm : IDataTable
         {
             _v.ResolveRef(tables);
         }
-        PostResolveRef();
     }
 
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

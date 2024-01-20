@@ -13,30 +13,21 @@ namespace ET
 {
 public partial struct vec3
 {
-    public vec3(ByteBuf _buf) 
+    public float X;
+    public float Y;
+    public float Z;
+
+    public void Init(Tables tables)
     {
-        X = _buf.ReadFloat();
-        Y = _buf.ReadFloat();
-        Z = _buf.ReadFloat();
-        PostLoad();
+        PostInit();
+        ResolveRef(tables);
     }
-
-    public static vec3 Deserializevec3(ByteBuf _buf)
-    {
-        return new vec3(_buf);
-    }
-
-    public readonly float X;
-    public readonly float Y;
-    public readonly float Z;
-
 
     public  void ResolveRef(Tables tables)
     {
         
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -48,7 +39,6 @@ public partial struct vec3
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

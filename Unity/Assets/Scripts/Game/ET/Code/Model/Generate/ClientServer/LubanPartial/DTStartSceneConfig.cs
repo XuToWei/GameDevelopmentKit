@@ -32,15 +32,16 @@ namespace ET
             return this.ClientScenesByName[zone][name];
         }
 
-        partial void PostLoad()
+        partial void PostInit()
         {
-            foreach (var startSceneConfig in this.DataList)
+            foreach (var key in this.KeyList)
             {
-                if (!string.Equals(startSceneConfig.StartConfig, Options.Instance.StartConfig))
+                if (!string.Equals(key.Item1, Options.Instance.StartConfig))
                 {
                     continue;
                 }
                 
+                var startSceneConfig = this.Get(key);
                 this.ProcessScenes.Add(startSceneConfig.Process, startSceneConfig);
                 
                 if (!this.ClientScenesByName.ContainsKey(startSceneConfig.Zone))

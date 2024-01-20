@@ -13,29 +13,22 @@ namespace ET
 {
 public sealed partial class DROneConfig : Luban.BeanBase
 {
-    public DROneConfig(ByteBuf _buf) 
-    {
-        Test = _buf.ReadInt();
-        PostLoad();
-    }
-
-    public static DROneConfig DeserializeDROneConfig(ByteBuf _buf)
-    {
-        return new DROneConfig(_buf);
-    }
-
     /// <summary>
     /// 匹配最大时间
     /// </summary>
-    public readonly int Test;
-
+    public int Test;
     public const int __ID__ = -2019618726;
     public override int GetTypeId() => __ID__;
+
+    public void Init(Tables tables)
+    {
+        PostInit();
+        ResolveRef(tables);
+    }
 
     public  void ResolveRef(Tables tables)
     {
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -45,7 +38,6 @@ public sealed partial class DROneConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

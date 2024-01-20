@@ -19,7 +19,7 @@ public sealed partial class DRUISound : Luban.BeanBase
         AssetName = _buf.ReadString();
         Priority = _buf.ReadInt();
         Volume = _buf.ReadFloat();
-        PostLoad();
+        PostInit();
     }
 
     public static DRUISound DeserializeDRUISound(ByteBuf _buf)
@@ -43,7 +43,6 @@ public sealed partial class DRUISound : Luban.BeanBase
     /// 音量（0~1）
     /// </summary>
     public readonly float Volume;
-
     public const int __ID__ = -1172887923;
     public override int GetTypeId() => __ID__;
 
@@ -53,7 +52,6 @@ public sealed partial class DRUISound : Luban.BeanBase
         
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -66,7 +64,6 @@ public sealed partial class DRUISound : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

@@ -11,39 +11,23 @@ using Luban;
 
 namespace ET
 {
-public partial class DTOneConfig : IDataTable
+public partial class DTOneConfig
 {
+    private readonly Tables _tables;
+    public DTOneConfig(Tables tables)
+    {
+        _tables = tables;
+        PostConstructor();
+        PostInit();
+    }
 
     private DROneConfig _data;
-    public DROneConfig Data => _data;
-    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
-
-    public DTOneConfig(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
-    {
-        _loadFunc = loadFunc;
-    }
-
-    public async Cysharp.Threading.Tasks.UniTask LoadAsync()
-    {
-        ByteBuf _buf = await _loadFunc();
-        int n = _buf.ReadSize();
-        if (n != 1) throw new SerializationException("table mode=one, but size != 1");
-        _data = DROneConfig.DeserializeDROneConfig(_buf);
-        PostLoad();
-    }
-
     /// <summary>
     /// 匹配最大时间
     /// </summary>
     public int Test => _data.Test;
-    
-    public void ResolveRef(Tables tables)
-    {
-        _data.ResolveRef(tables);
-        PostResolveRef();
-    }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostConstructor();
+    partial void PostInit();
 }
 }

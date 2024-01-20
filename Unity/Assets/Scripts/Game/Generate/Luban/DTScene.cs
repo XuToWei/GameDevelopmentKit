@@ -36,12 +36,11 @@ public partial class DTScene : IDataTable
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
-        PostLoad();
+        PostInit();
     }
 
     public System.Collections.Generic.Dictionary<int, DRScene> DataMap => _dataMap;
     public System.Collections.Generic.List<DRScene> DataList => _dataList;
-
     public DRScene GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRScene Get(int key) => _dataMap[key];
     public DRScene this[int key] => _dataMap[key];
@@ -52,11 +51,9 @@ public partial class DTScene : IDataTable
         {
             _v.ResolveRef(tables);
         }
-        PostResolveRef();
     }
 
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

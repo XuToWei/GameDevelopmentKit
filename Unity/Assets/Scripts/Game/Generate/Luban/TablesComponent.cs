@@ -69,16 +69,14 @@ public partial class TablesComponent
         DTUISound.ResolveRef(this);
         DTMusic.ResolveRef(this);
         DTOneConfig.ResolveRef(this);
-        PostResolveRef();
     }
 
     public void Refresh()
     {
-        PostLoad();
+        PostInit();
         ResolveRef();
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

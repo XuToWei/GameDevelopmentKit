@@ -23,7 +23,7 @@ public sealed partial class DRSound : Luban.BeanBase
         Volume = _buf.ReadFloat();
         SpatialBlend = _buf.ReadFloat();
         MaxDistance = _buf.ReadFloat();
-        PostLoad();
+        PostInit();
     }
 
     public static DRSound DeserializeDRSound(ByteBuf _buf)
@@ -63,7 +63,6 @@ public sealed partial class DRSound : Luban.BeanBase
     /// 声音最大距离
     /// </summary>
     public readonly float MaxDistance;
-
     public const int __ID__ = -1646593759;
     public override int GetTypeId() => __ID__;
 
@@ -77,7 +76,6 @@ public sealed partial class DRSound : Luban.BeanBase
         
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -94,7 +92,6 @@ public sealed partial class DRSound : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

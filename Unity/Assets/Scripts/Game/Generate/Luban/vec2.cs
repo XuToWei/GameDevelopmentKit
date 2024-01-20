@@ -17,7 +17,7 @@ public partial struct vec2
     {
         X = _buf.ReadFloat();
         Y = _buf.ReadFloat();
-        PostLoad();
+        PostInit();
     }
 
     public static vec2 Deserializevec2(ByteBuf _buf)
@@ -28,12 +28,10 @@ public partial struct vec2
     public readonly float X;
     public readonly float Y;
 
-
     public  void ResolveRef(TablesComponent tables)
     {
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -44,7 +42,6 @@ public partial struct vec2
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

@@ -13,25 +13,16 @@ namespace ET
 {
 public partial struct vec4
 {
-    public vec4(ByteBuf _buf) 
+    public float X;
+    public float Y;
+    public float Z;
+    public float W;
+
+    public void Init(Tables tables)
     {
-        X = _buf.ReadFloat();
-        Y = _buf.ReadFloat();
-        Z = _buf.ReadFloat();
-        W = _buf.ReadFloat();
-        PostLoad();
+        PostInit();
+        ResolveRef(tables);
     }
-
-    public static vec4 Deserializevec4(ByteBuf _buf)
-    {
-        return new vec4(_buf);
-    }
-
-    public readonly float X;
-    public readonly float Y;
-    public readonly float Z;
-    public readonly float W;
-
 
     public  void ResolveRef(Tables tables)
     {
@@ -39,7 +30,6 @@ public partial struct vec4
         
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -52,7 +42,6 @@ public partial struct vec4
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

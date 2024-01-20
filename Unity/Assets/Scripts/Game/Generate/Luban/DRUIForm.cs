@@ -20,7 +20,7 @@ public sealed partial class DRUIForm : Luban.BeanBase
         UIGroupName = _buf.ReadString();
         AllowMultiInstance = _buf.ReadBool();
         PauseCoveredUIForm = _buf.ReadBool();
-        PostLoad();
+        PostInit();
     }
 
     public static DRUIForm DeserializeDRUIForm(ByteBuf _buf)
@@ -48,7 +48,6 @@ public sealed partial class DRUIForm : Luban.BeanBase
     /// 是否暂停被其覆盖的界面
     /// </summary>
     public readonly bool PauseCoveredUIForm;
-
     public const int __ID__ = 515966854;
     public override int GetTypeId() => __ID__;
 
@@ -59,7 +58,6 @@ public sealed partial class DRUIForm : Luban.BeanBase
         
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -73,7 +71,6 @@ public sealed partial class DRUIForm : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

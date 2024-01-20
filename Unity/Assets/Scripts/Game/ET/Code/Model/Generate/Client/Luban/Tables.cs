@@ -17,53 +17,18 @@ public partial class Tables
     public DTAIConfig DTAIConfig { private set; get; }
     public DTUnitConfig DTUnitConfig { private set; get; }
     public DTDemo DTDemo { private set; get; }
-    private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
-    public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
-    public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
-    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<ByteBuf>> loader)
+    public Tables()
     {
-        TablesMemory.BeginRecord();
+        DTOneConfig = new DTOneConfig(this);
+        DTAIConfig = new DTAIConfig(this);
+        DTUnitConfig = new DTUnitConfig(this);
+        DTDemo = new DTDemo(this);
 
-        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
-        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
-
-        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig"));
-        loadTasks.Add(DTOneConfig.LoadAsync());
-        _tables.Add("DTOneConfig", DTOneConfig);
-        DTAIConfig = new DTAIConfig(() => loader("dtaiconfig"));
-        loadTasks.Add(DTAIConfig.LoadAsync());
-        _tables.Add("DTAIConfig", DTAIConfig);
-        DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig"));
-        loadTasks.Add(DTUnitConfig.LoadAsync());
-        _tables.Add("DTUnitConfig", DTUnitConfig);
-        DTDemo = new DTDemo(() => loader("dtdemo"));
-        loadTasks.Add(DTDemo.LoadAsync());
-        _tables.Add("DTDemo", DTDemo);
-
-        await Cysharp.Threading.Tasks.UniTask.WhenAll(loadTasks);
-
-        Refresh();
-
-        TablesMemory.EndRecord();
+        PostInit();
     }
 
-    private void ResolveRef()
-    {
-        DTOneConfig.ResolveRef(this);
-        DTAIConfig.ResolveRef(this);
-        DTUnitConfig.ResolveRef(this);
-        DTDemo.ResolveRef(this);
-        PostResolveRef();
-    }
-
-    public void Refresh()
-    {
-        PostLoad();
-        ResolveRef();
-    }
-
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }
+

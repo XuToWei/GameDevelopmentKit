@@ -13,32 +13,24 @@ namespace ET
 {
 public sealed partial class DRDemo : Luban.BeanBase
 {
-    public DRDemo(ByteBuf _buf) 
-    {
-        Id = _buf.ReadInt();
-        Key = _buf.ReadString();
-        PostLoad();
-    }
-
-    public static DRDemo DeserializeDRDemo(ByteBuf _buf)
-    {
-        return new DRDemo(_buf);
-    }
-
-    public readonly int Id;
+    public int Id;
     /// <summary>
     /// 策划备注不导表
     /// </summary>
-    public readonly string Key;
-
+    public string Key;
     public const int __ID__ = 2024637329;
     public override int GetTypeId() => __ID__;
+
+    public void Init(Tables tables)
+    {
+        PostInit();
+        ResolveRef(tables);
+    }
 
     public  void ResolveRef(Tables tables)
     {
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -49,7 +41,6 @@ public sealed partial class DRDemo : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

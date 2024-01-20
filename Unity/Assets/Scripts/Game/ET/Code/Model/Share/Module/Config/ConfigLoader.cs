@@ -16,6 +16,8 @@ namespace ET
             Type tablesType = typeof (Tables);
 
             MethodInfo loadMethodInfo = tablesType.GetMethod("LoadAsync");
+            if (loadMethodInfo == null)
+                return;
 
             Type loaderReturnType = loadMethodInfo.GetParameters()[0].ParameterType.GetGenericArguments()[1];
             
@@ -48,8 +50,9 @@ namespace ET
     {
         public override async UniTask Handle(ConfigComponent.ReloadOne arg)
         {
-            await Tables.Instance.GetDataTable(arg.ConfigName).LoadAsync();
-            Tables.Instance.Refresh();
+            await UniTask.CompletedTask;
+            // await Tables.Instance.GetDataTable(arg.ConfigName).LoadAsync();
+            // Tables.Instance.Refresh();
         }
     }
     
@@ -58,11 +61,12 @@ namespace ET
     {
         public override async UniTask Handle(ConfigComponent.ReloadAll arg)
         {
-            foreach (var dataTable in Tables.Instance.DataTables)
-            {
-                await dataTable.LoadAsync();
-            }
-            Tables.Instance.Refresh();
+            await UniTask.CompletedTask;
+            // foreach (var dataTable in Tables.Instance.DataTables)
+            // {
+            //     await dataTable.LoadAsync();
+            // }
+            // Tables.Instance.Refresh();
         }
     }
 }

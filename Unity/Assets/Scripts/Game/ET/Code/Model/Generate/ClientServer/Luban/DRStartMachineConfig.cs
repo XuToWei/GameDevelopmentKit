@@ -13,44 +13,34 @@ namespace ET
 {
 public sealed partial class DRStartMachineConfig : Luban.BeanBase
 {
-    public DRStartMachineConfig(ByteBuf _buf) 
-    {
-        StartConfig = _buf.ReadString();
-        Id = _buf.ReadInt();
-        InnerIP = _buf.ReadString();
-        OuterIP = _buf.ReadString();
-        WatcherPort = _buf.ReadString();
-        PostLoad();
-    }
-
-    public static DRStartMachineConfig DeserializeDRStartMachineConfig(ByteBuf _buf)
-    {
-        return new DRStartMachineConfig(_buf);
-    }
-
     /// <summary>
     /// 开启类型
     /// </summary>
-    public readonly string StartConfig;
+    public string StartConfig;
     /// <summary>
     /// Id
     /// </summary>
-    public readonly int Id;
+    public int Id;
     /// <summary>
     /// 内网地址
     /// </summary>
-    public readonly string InnerIP;
+    public string InnerIP;
     /// <summary>
     /// 外网地址
     /// </summary>
-    public readonly string OuterIP;
+    public string OuterIP;
     /// <summary>
     /// 守护进程端口
     /// </summary>
-    public readonly string WatcherPort;
-
+    public string WatcherPort;
     public const int __ID__ = -929351083;
     public override int GetTypeId() => __ID__;
+
+    public void Init(Tables tables)
+    {
+        PostInit();
+        ResolveRef(tables);
+    }
 
     public  void ResolveRef(Tables tables)
     {
@@ -59,7 +49,6 @@ public sealed partial class DRStartMachineConfig : Luban.BeanBase
         
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -73,7 +62,6 @@ public sealed partial class DRStartMachineConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

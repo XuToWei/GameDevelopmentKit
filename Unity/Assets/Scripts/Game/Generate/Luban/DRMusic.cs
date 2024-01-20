@@ -18,7 +18,7 @@ public sealed partial class DRMusic : Luban.BeanBase
         Id = _buf.ReadInt();
         AssetName = _buf.ReadString();
         Volume = _buf.ReadFloat();
-        PostLoad();
+        PostInit();
     }
 
     public static DRMusic DeserializeDRMusic(ByteBuf _buf)
@@ -38,7 +38,6 @@ public sealed partial class DRMusic : Luban.BeanBase
     /// 音量（0~1）
     /// </summary>
     public readonly float Volume;
-
     public const int __ID__ = -1651958217;
     public override int GetTypeId() => __ID__;
 
@@ -47,7 +46,6 @@ public sealed partial class DRMusic : Luban.BeanBase
         
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -59,7 +57,6 @@ public sealed partial class DRMusic : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

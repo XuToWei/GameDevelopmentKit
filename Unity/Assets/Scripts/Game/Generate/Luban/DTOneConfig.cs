@@ -29,21 +29,19 @@ public partial class DTOneConfig : IDataTable
         int n = _buf.ReadSize();
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
         _data = DROneConfig.DeserializeDROneConfig(_buf);
-        PostLoad();
+        PostInit();
     }
 
     /// <summary>
     /// 匹配最大时间
     /// </summary>
     public int Test => _data.Test;
-    
+
     public void ResolveRef(TablesComponent tables)
     {
         _data.ResolveRef(tables);
-        PostResolveRef();
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

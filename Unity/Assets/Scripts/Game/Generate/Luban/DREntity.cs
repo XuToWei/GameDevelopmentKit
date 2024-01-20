@@ -19,7 +19,7 @@ public sealed partial class DREntity : Luban.BeanBase
         AssetName = _buf.ReadString();
         EntityGroupName = _buf.ReadString();
         Priority = _buf.ReadInt();
-        PostLoad();
+        PostInit();
     }
 
     public static DREntity DeserializeDREntity(ByteBuf _buf)
@@ -43,7 +43,6 @@ public sealed partial class DREntity : Luban.BeanBase
     /// 加载优先级
     /// </summary>
     public readonly int Priority;
-
     public const int __ID__ = 93435409;
     public override int GetTypeId() => __ID__;
 
@@ -53,7 +52,6 @@ public sealed partial class DREntity : Luban.BeanBase
         
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -66,7 +64,6 @@ public sealed partial class DREntity : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }

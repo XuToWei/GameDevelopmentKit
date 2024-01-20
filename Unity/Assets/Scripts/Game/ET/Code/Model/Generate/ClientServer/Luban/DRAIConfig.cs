@@ -13,49 +13,38 @@ namespace ET
 {
 public sealed partial class DRAIConfig : Luban.BeanBase
 {
-    public DRAIConfig(ByteBuf _buf) 
-    {
-        Id = _buf.ReadInt();
-        AIConfigId = _buf.ReadInt();
-        Order = _buf.ReadInt();
-        Name = _buf.ReadString();
-        Desc = _buf.ReadString();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);NodeParams = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); NodeParams.Add(_e0);}}
-        PostLoad();
-    }
-
-    public static DRAIConfig DeserializeDRAIConfig(ByteBuf _buf)
-    {
-        return new DRAIConfig(_buf);
-    }
-
     /// <summary>
     /// Id
     /// </summary>
-    public readonly int Id;
+    public int Id;
     /// <summary>
     /// 所属ai
     /// </summary>
-    public readonly int AIConfigId;
+    public int AIConfigId;
     /// <summary>
     /// 此ai中的顺序
     /// </summary>
-    public readonly int Order;
+    public int Order;
     /// <summary>
     /// 节点名字
     /// </summary>
-    public readonly string Name;
+    public string Name;
     /// <summary>
     /// 描述
     /// </summary>
-    public readonly string Desc;
+    public string Desc;
     /// <summary>
     /// 节点参数
     /// </summary>
-    public readonly System.Collections.Generic.List<int> NodeParams;
-
+    public System.Collections.Generic.List<int> NodeParams;
     public const int __ID__ = 1340429336;
     public override int GetTypeId() => __ID__;
+
+    public void Init(Tables tables)
+    {
+        PostInit();
+        ResolveRef(tables);
+    }
 
     public  void ResolveRef(Tables tables)
     {
@@ -65,7 +54,6 @@ public sealed partial class DRAIConfig : Luban.BeanBase
         
         
         
-        PostResolveRef();
     }
 
     public override string ToString()
@@ -80,7 +68,6 @@ public sealed partial class DRAIConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
-    partial void PostResolveRef();
+    partial void PostInit();
 }
 }
