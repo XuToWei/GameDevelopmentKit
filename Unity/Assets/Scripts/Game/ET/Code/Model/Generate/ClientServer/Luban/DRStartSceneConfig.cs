@@ -13,42 +13,53 @@ namespace ET
 {
 public sealed partial class DRStartSceneConfig : Luban.BeanBase
 {
+    public DRStartSceneConfig(ByteBuf _buf) 
+    {
+        StartConfig = _buf.ReadString();
+        Id = _buf.ReadInt();
+        Process = _buf.ReadInt();
+        Zone = _buf.ReadInt();
+        SceneType = _buf.ReadString();
+        Name = _buf.ReadString();
+        Port = _buf.ReadInt();
+        PostInit();
+    }
+
+    public static DRStartSceneConfig DeserializeDRStartSceneConfig(ByteBuf _buf)
+    {
+        return new DRStartSceneConfig(_buf);
+    }
+
     /// <summary>
     /// 开启类型
     /// </summary>
-    public string StartConfig;
+    public readonly string StartConfig;
     /// <summary>
     /// Id
     /// </summary>
-    public int Id;
+    public readonly int Id;
     /// <summary>
     /// 所属进程
     /// </summary>
-    public int Process;
+    public readonly int Process;
     /// <summary>
     /// 所属区
     /// </summary>
-    public int Zone;
+    public readonly int Zone;
     /// <summary>
     /// 类型
     /// </summary>
-    public string SceneType;
+    public readonly string SceneType;
     /// <summary>
     /// 名字
     /// </summary>
-    public string Name;
+    public readonly string Name;
     /// <summary>
     /// 外网端口
     /// </summary>
-    public int Port;
+    public readonly int Port;
     public const int __ID__ = 1720259034;
     public override int GetTypeId() => __ID__;
-
-    public void Init(Tables tables)
-    {
-        PostInit();
-        ResolveRef(tables);
-    }
 
     public  void ResolveRef(Tables tables)
     {
@@ -59,6 +70,7 @@ public sealed partial class DRStartSceneConfig : Luban.BeanBase
         
         
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -75,5 +87,6 @@ public sealed partial class DRStartSceneConfig : Luban.BeanBase
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

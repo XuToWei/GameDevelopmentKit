@@ -40,8 +40,10 @@ public partial class DTOneConfig : IDataTable
     public void ResolveRef(TablesComponent tables)
     {
         _data.ResolveRef(tables);
+        PostResolveRef();
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

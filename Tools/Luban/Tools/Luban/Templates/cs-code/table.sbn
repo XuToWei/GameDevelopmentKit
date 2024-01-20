@@ -69,7 +69,7 @@ public partial class {{__name}}
         if(InternalTryGetValue(key, out value))
         {
             _dataMap.Add(key, value);
-            value.ResolveRef(_tables);
+            value.Init(_tables);
             return true;
         }
         value = default;
@@ -87,7 +87,8 @@ public partial class {{__name}}
 
     private {{table_union_map_type_name}} _dataMapUnion;
     public System.Collections.Generic.List<({{table_param_type_list}})> KeyList { private set; get; }
-    public {{declaring_type_name value_type}} Get({{table_param_def_list}}) => TryGetValue(({{table_param_name_list}}), out {{declaring_type_name value_type}} __v) ? __v : null;
+    public {{declaring_type_name value_type}} Get(({{table_param_type_list}}) key) => TryGetValue(key, out {{declaring_type_name value_type}} v) ? v : null;
+    public {{declaring_type_name value_type}} Get({{table_param_def_list}}) => Get(({{table_param_name_list}}));
 
     // partial bool InternalTryGetValue(({{table_param_type_list}}) key, out {{declaring_type_name value_type}} value);
     private bool TryGetValue(({{table_param_type_list}}) key, out {{declaring_type_name value_type}} value)
@@ -99,6 +100,7 @@ public partial class {{__name}}
         if(InternalTryGetValue(key, out value))
         {
             _dataMapUnion.Add(key, value);
+            value.Init(_tables);
             return true;
         }
         value = default;
@@ -133,7 +135,7 @@ public partial class {{__name}}
             {{~for mapIdx in __table.index_list~}}
             _dataMap_{{mapIdx.index_field.name}}.Add(value.{{format_property_name __code_style mapIdx.index_field.name}}, value);
             {{~end~}}
-            value.ResolveRef(_tables);
+            value.Init(_tables);
             return true;
         }
         value = default;
@@ -163,7 +165,7 @@ public partial class {{__name}}
         if(InternalTryGetValue(index, out value))
         {
             _dataMap.Add(index, value);
-            value.ResolveRef(_tables);
+            value.Init(_tables);
             return true;
         }
         value = default;

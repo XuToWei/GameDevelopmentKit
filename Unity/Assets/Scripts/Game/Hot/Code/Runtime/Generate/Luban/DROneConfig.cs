@@ -18,7 +18,7 @@ public sealed partial class DROneConfig : Luban.BeanBase
         GameId = _buf.ReadString();
         SceneMenu = _buf.ReadInt();
         SceneMain = _buf.ReadInt();
-        PostLoad();
+        PostInit();
     }
 
     public static DROneConfig DeserializeDROneConfig(ByteBuf _buf)
@@ -29,7 +29,6 @@ public sealed partial class DROneConfig : Luban.BeanBase
     public readonly string GameId;
     public readonly int SceneMenu;
     public readonly int SceneMain;
-
     public const int __ID__ = -2019618726;
     public override int GetTypeId() => __ID__;
 
@@ -50,7 +49,7 @@ public sealed partial class DROneConfig : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

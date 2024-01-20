@@ -4,7 +4,7 @@ using System;
 
 namespace Game
 {
-    public class EventSubscriber : IReference
+    public sealed class EventContainer : IReference
     {
         private readonly GameFrameworkMultiDictionary<int, EventHandler<GameEventArgs>> m_EventHandlerDict = new GameFrameworkMultiDictionary<int, EventHandler<GameEventArgs>>();
 
@@ -18,9 +18,8 @@ namespace Game
         {
             if (handler == null)
             {
-                throw new Exception("Event handler is invalid.");
+                throw new GameFrameworkException("Event handler is invalid.");
             }
-
             m_EventHandlerDict.Add(id, handler);
             GameEntry.Event.Subscribe(id, handler);
         }
@@ -29,9 +28,8 @@ namespace Game
         {
             if (!m_EventHandlerDict.Remove(id, handler))
             {
-                throw new Exception(Utility.Text.Format("Event '{0}' not exists specified handler.", id.ToString()));
+                throw new GameFrameworkException(Utility.Text.Format("Event '{0}' not exists specified handler.", id.ToString()));
             }
-
             GameEntry.Event.Unsubscribe(id, handler);
         }
 
@@ -39,7 +37,6 @@ namespace Game
         {
             if (m_EventHandlerDict == null)
                 return;
-
             foreach (var item in m_EventHandlerDict)
             {
                 foreach (var eventHandler in item.Value)
@@ -47,15 +44,14 @@ namespace Game
                     GameEntry.Event.Unsubscribe(item.Key, eventHandler);
                 }
             }
-
             m_EventHandlerDict.Clear();
         }
 
-        public static EventSubscriber Create(object owner)
+        public static EventContainer Create(object owner)
         {
-            EventSubscriber eventSubscriber = ReferencePool.Acquire<EventSubscriber>();
-            eventSubscriber.Owner = owner;
-            return eventSubscriber;
+            EventContainer eventContainer = ReferencePool.Acquire<EventContainer>();
+            eventContainer.Owner = owner;
+            return eventContainer;
         }
 
         public void Clear()

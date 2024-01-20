@@ -14,17 +14,16 @@ namespace ET
         partial void PostInit()
         {
             this.AIConfigs.Clear();
-            foreach (var key in this.KeyList)
+            foreach (var kv in this.DataMap)
             {
-                var value = this.Get(key);
                 SortedDictionary<int, DRAIConfig> aiNodeConfig;
-                if (!this.AIConfigs.TryGetValue(value.AIConfigId, out aiNodeConfig))
+                if (!this.AIConfigs.TryGetValue(kv.Value.AIConfigId, out aiNodeConfig))
                 {
                     aiNodeConfig = new SortedDictionary<int, DRAIConfig>();
-                    this.AIConfigs.Add(value.AIConfigId, aiNodeConfig);
+                    this.AIConfigs.Add(kv.Value.AIConfigId, aiNodeConfig);
                 }
 
-                aiNodeConfig.Add(key, value);
+                aiNodeConfig.Add(kv.Key, kv.Value);
             }
         }
     }

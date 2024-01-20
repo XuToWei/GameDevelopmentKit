@@ -11,42 +11,51 @@ using Luban;
 
 namespace ET
 {
-public partial class DTUnitConfig
+public partial class DTUnitConfig : IDataTable
 {
-    private readonly Tables _tables;
+    private readonly System.Collections.Generic.Dictionary<int, DRUnitConfig> _dataMap;
+    private readonly System.Collections.Generic.List<DRUnitConfig> _dataList;
+    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
-    public DTUnitConfig(Tables tables)
+    public DTUnitConfig(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
-        _tables = tables;
+        _loadFunc = loadFunc;
         _dataMap = new System.Collections.Generic.Dictionary<int, DRUnitConfig>();
-        PostConstructor();
+        _dataList = new System.Collections.Generic.List<DRUnitConfig>();
+    }
+
+    public async Cysharp.Threading.Tasks.UniTask LoadAsync()
+    {
+        ByteBuf _buf = await _loadFunc();
+        _dataMap.Clear();
+        _dataList.Clear();
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        {
+            DRUnitConfig _v;
+            _v = DRUnitConfig.DeserializeDRUnitConfig(_buf);
+            _dataList.Add(_v);
+            _dataMap.Add(_v.Id, _v);
+        }
         PostInit();
     }
 
-    private readonly System.Collections.Generic.Dictionary<int, DRUnitConfig> _dataMap;
-    public System.Collections.Generic.List<int> KeyList { private set; get; }
-    public DRUnitConfig Get(int key) => TryGetValue(key, out var v) ? v : null;
-    public DRUnitConfig this[int key] => TryGetValue(key, out var v) ? v : null;
+    public System.Collections.Generic.Dictionary<int, DRUnitConfig> DataMap => _dataMap;
+    public System.Collections.Generic.List<DRUnitConfig> DataList => _dataList;
+    public DRUnitConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRUnitConfig Get(int key) => _dataMap[key];
+    public DRUnitConfig this[int key] => _dataMap[key];
 
-    // private bool InternalTryGetValue(int key, out DRUnitConfig value);
-    private bool TryGetValue(int key, out DRUnitConfig value)
+    public void ResolveRef(Tables tables)
     {
-        if(_dataMap.TryGetValue(key, out value))
+        foreach(var _v in _dataList)
         {
-            return true;
+            _v.ResolveRef(tables);
         }
-        if(InternalTryGetValue(key, out value))
-        {
-            _dataMap.Add(key, value);
-            value.Init(_tables);
-            return true;
-        }
-        value = default;
-        return false;
+        PostResolveRef();
     }
 
 
-    partial void PostConstructor();
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

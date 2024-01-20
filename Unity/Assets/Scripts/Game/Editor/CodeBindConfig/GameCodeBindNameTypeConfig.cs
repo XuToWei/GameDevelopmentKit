@@ -9,9 +9,10 @@ namespace Game
         [CodeBindNameType]
         static Dictionary<string, Type> BindNameTypeDict = new Dictionary<string, Type>()
         {
-            { "TMPText", typeof (TMPro.TMP_Text) },
-            { "TMPInputField", typeof (TMPro.TMP_InputField) },
-            { "TMPProText", typeof (TMPro.TextMeshProUGUI) },
+            { "UIWidget", typeof(UIWidget) },
+            { "TMPText", typeof(TMPro.TMP_Text) },
+            { "TMPInputField", typeof(TMPro.TMP_InputField) },
+            { "TMPProText", typeof(TMPro.TextMeshProUGUI) },
         };
     }
 }

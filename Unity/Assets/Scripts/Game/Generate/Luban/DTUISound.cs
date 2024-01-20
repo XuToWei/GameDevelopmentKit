@@ -51,9 +51,11 @@ public partial class DTUISound : IDataTable
         {
             _v.ResolveRef(tables);
         }
+        PostResolveRef();
     }
 
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

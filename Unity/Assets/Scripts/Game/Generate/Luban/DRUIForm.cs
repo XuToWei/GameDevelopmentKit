@@ -58,6 +58,7 @@ public sealed partial class DRUIForm : Luban.BeanBase
         
         
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -72,5 +73,6 @@ public sealed partial class DRUIForm : Luban.BeanBase
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

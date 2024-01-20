@@ -36,12 +36,11 @@ public partial class DTAircraft : IDataTable
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
-        PostLoad();
+        PostInit();
     }
 
     public System.Collections.Generic.Dictionary<int, DRAircraft> DataMap => _dataMap;
     public System.Collections.Generic.List<DRAircraft> DataList => _dataList;
-
     public DRAircraft GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRAircraft Get(int key) => _dataMap[key];
     public DRAircraft this[int key] => _dataMap[key];
@@ -56,7 +55,7 @@ public partial class DTAircraft : IDataTable
     }
 
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

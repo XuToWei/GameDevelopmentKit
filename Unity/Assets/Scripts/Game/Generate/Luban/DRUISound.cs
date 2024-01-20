@@ -52,6 +52,7 @@ public sealed partial class DRUISound : Luban.BeanBase
         
         
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -65,5 +66,6 @@ public sealed partial class DRUISound : Luban.BeanBase
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

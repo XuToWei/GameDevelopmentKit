@@ -4,7 +4,8 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    [CodeBindName("")]
+    [CodeBind]
+    [DisallowMultipleComponent]
     public abstract class UIWidget: MonoBehaviour
     {
         private Transform m_CachedTransform = null;
@@ -27,12 +28,10 @@ namespace Game
                     Log.Warning("UI widget '{0}' is not available.", this.gameObject.name);
                     return;
                 }
-
                 if (m_Visible == value)
                 {
                     return;
                 }
-
                 m_Visible = value;
                 InternalSetVisible(value);
             }
@@ -149,7 +148,7 @@ namespace Game
         /// 设置界面的可见性。
         /// </summary>
         /// <param name="visible">界面的可见性。</param>
-        protected virtual void InternalSetVisible(bool visible)
+        protected internal virtual void InternalSetVisible(bool visible)
         {
             gameObject.SetActive(visible);
         }

@@ -21,7 +21,7 @@ public sealed partial class DRAircraft : Luban.BeanBase
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);ArmorIds = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); ArmorIds.Add(_e0);}}
         DeadEffectId = _buf.ReadInt();
         DeadSoundId = _buf.ReadInt();
-        PostLoad();
+        PostInit();
     }
 
     public static DRAircraft DeserializeDRAircraft(ByteBuf _buf)
@@ -53,7 +53,6 @@ public sealed partial class DRAircraft : Luban.BeanBase
     /// 死亡声音编号
     /// </summary>
     public readonly int DeadSoundId;
-
     public const int __ID__ = 1010378180;
     public override int GetTypeId() => __ID__;
 
@@ -80,7 +79,7 @@ public sealed partial class DRAircraft : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

@@ -36,12 +36,11 @@ public partial class DTAsteroid : IDataTable
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
-        PostLoad();
+        PostInit();
     }
 
     public System.Collections.Generic.Dictionary<int, DRAsteroid> DataMap => _dataMap;
     public System.Collections.Generic.List<DRAsteroid> DataList => _dataList;
-
     public DRAsteroid GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRAsteroid Get(int key) => _dataMap[key];
     public DRAsteroid this[int key] => _dataMap[key];
@@ -56,7 +55,7 @@ public partial class DTAsteroid : IDataTable
     }
 
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

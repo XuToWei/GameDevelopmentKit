@@ -8,13 +8,12 @@ namespace ET.Server
         private static void Awake(this WatcherComponent self)
         {
             string[] localIP = NetworkHelper.GetAddressIPs();
-            foreach (var key in Tables.Instance.DTStartProcessConfig.KeyList)
+            foreach (var startProcessConfig in Tables.Instance.DTStartProcessConfig.DataList)
             {
-                if (key.Item1 != Options.Instance.StartConfig)
+                if (startProcessConfig.StartConfig != Options.Instance.StartConfig)
                 {
                     continue;
                 }
-                var startProcessConfig = Tables.Instance.DTStartProcessConfig.Get(key);
                 if (!WatcherHelper.IsThisMachine(startProcessConfig.InnerIP, localIP))
                 {
                     continue;

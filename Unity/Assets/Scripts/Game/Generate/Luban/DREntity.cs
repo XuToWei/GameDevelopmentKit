@@ -52,6 +52,7 @@ public sealed partial class DREntity : Luban.BeanBase
         
         
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -65,5 +66,6 @@ public sealed partial class DREntity : Luban.BeanBase
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

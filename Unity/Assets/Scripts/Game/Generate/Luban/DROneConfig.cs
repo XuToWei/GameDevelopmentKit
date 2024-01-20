@@ -34,6 +34,7 @@ public sealed partial class DROneConfig : Luban.BeanBase
     public  void ResolveRef(TablesComponent tables)
     {
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -44,5 +45,6 @@ public sealed partial class DROneConfig : Luban.BeanBase
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

@@ -38,6 +38,7 @@ public partial struct vec4
         
         
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -51,5 +52,6 @@ public partial struct vec4
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

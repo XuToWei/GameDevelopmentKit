@@ -90,6 +90,12 @@ public {{class_modifier __bean}} partial class {{__name}} : {{if parent_def_type
     public override int GetTypeId() => __ID__;
     {{~end~}}
 
+    public void Init({{__manager_name}} tables)
+    {
+        PostInit();
+        ResolveRef(tables);
+    }
+
     public {{method_modifier __bean}} void ResolveRef({{__manager_name}} tables)
     {
         {{~if parent_def_type~}}
@@ -108,5 +114,7 @@ public {{class_modifier __bean}} partial class {{__name}} : {{if parent_def_type
         {{~end~}}
         + "}";
     }
+
+    partial void PostInit();
 }
 {{namespace_with_grace_end __namespace_with_top_module}}

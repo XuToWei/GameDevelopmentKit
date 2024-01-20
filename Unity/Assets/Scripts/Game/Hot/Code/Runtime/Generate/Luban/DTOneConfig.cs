@@ -29,20 +29,20 @@ public partial class DTOneConfig : IDataTable
         int n = _buf.ReadSize();
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
         _data = DROneConfig.DeserializeDROneConfig(_buf);
-        PostLoad();
+        PostInit();
     }
 
     public string GameId => _data.GameId;
     public int SceneMenu => _data.SceneMenu;
     public int SceneMain => _data.SceneMain;
-    
+
     public void ResolveRef(Tables tables)
     {
         _data.ResolveRef(tables);
         PostResolveRef();
     }
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

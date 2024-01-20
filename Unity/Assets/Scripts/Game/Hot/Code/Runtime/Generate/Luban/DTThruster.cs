@@ -36,12 +36,11 @@ public partial class DTThruster : IDataTable
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
-        PostLoad();
+        PostInit();
     }
 
     public System.Collections.Generic.Dictionary<int, DRThruster> DataMap => _dataMap;
     public System.Collections.Generic.List<DRThruster> DataList => _dataList;
-
     public DRThruster GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRThruster Get(int key) => _dataMap[key];
     public DRThruster this[int key] => _dataMap[key];
@@ -56,7 +55,7 @@ public partial class DTThruster : IDataTable
     }
 
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

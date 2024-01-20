@@ -22,7 +22,7 @@ public sealed partial class DRAsteroid : Luban.BeanBase
         AngularSpeed = _buf.ReadFloat();
         DeadEffectId = _buf.ReadInt();
         DeadSoundId = _buf.ReadInt();
-        PostLoad();
+        PostInit();
     }
 
     public static DRAsteroid DeserializeDRAsteroid(ByteBuf _buf)
@@ -58,7 +58,6 @@ public sealed partial class DRAsteroid : Luban.BeanBase
     /// 死亡声音编号
     /// </summary>
     public readonly int DeadSoundId;
-
     public const int __ID__ = 1354599273;
     public override int GetTypeId() => __ID__;
 
@@ -87,7 +86,7 @@ public sealed partial class DRAsteroid : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

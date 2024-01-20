@@ -134,7 +134,7 @@ MonoBehaviour:
     packed: 0
     filterType: 0
     searchPatterns: '*.*'
-  - valid: 1
+  - valid: 0
     name: ET.ClientServer
     variant: 
     fileSystem: GameData
@@ -144,7 +144,7 @@ MonoBehaviour:
     packed: 0
     filterType: 0
     searchPatterns: '*.*'
-  - valid: 0
+  - valid: 1
     name: ET.Client
     variant: 
     fileSystem: GameData

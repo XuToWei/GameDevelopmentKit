@@ -21,22 +21,69 @@ public partial class Tables
     public DTAIConfig DTAIConfig { private set; get; }
     public DTUnitConfig DTUnitConfig { private set; get; }
     public DTDemo DTDemo { private set; get; }
+    private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
+    public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
+    public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
 
-    public Tables()
+    public async Cysharp.Threading.Tasks.UniTask LoadAsync(System.Func<string, Cysharp.Threading.Tasks.UniTask<ByteBuf>> loader)
     {
-        DTStartMachineConfig = new DTStartMachineConfig(this);
-        DTStartProcessConfig = new DTStartProcessConfig(this);
-        DTStartSceneConfig = new DTStartSceneConfig(this);
-        DTStartZoneConfig = new DTStartZoneConfig(this);
-        DTOneConfig = new DTOneConfig(this);
-        DTAIConfig = new DTAIConfig(this);
-        DTUnitConfig = new DTUnitConfig(this);
-        DTDemo = new DTDemo(this);
+        TablesMemory.BeginRecord();
 
+        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
+        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
+
+        DTStartMachineConfig = new DTStartMachineConfig(() => loader("dtstartmachineconfig"));
+        loadTasks.Add(DTStartMachineConfig.LoadAsync());
+        _tables.Add("DTStartMachineConfig", DTStartMachineConfig);
+        DTStartProcessConfig = new DTStartProcessConfig(() => loader("dtstartprocessconfig"));
+        loadTasks.Add(DTStartProcessConfig.LoadAsync());
+        _tables.Add("DTStartProcessConfig", DTStartProcessConfig);
+        DTStartSceneConfig = new DTStartSceneConfig(() => loader("dtstartsceneconfig"));
+        loadTasks.Add(DTStartSceneConfig.LoadAsync());
+        _tables.Add("DTStartSceneConfig", DTStartSceneConfig);
+        DTStartZoneConfig = new DTStartZoneConfig(() => loader("dtstartzoneconfig"));
+        loadTasks.Add(DTStartZoneConfig.LoadAsync());
+        _tables.Add("DTStartZoneConfig", DTStartZoneConfig);
+        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig"));
+        loadTasks.Add(DTOneConfig.LoadAsync());
+        _tables.Add("DTOneConfig", DTOneConfig);
+        DTAIConfig = new DTAIConfig(() => loader("dtaiconfig"));
+        loadTasks.Add(DTAIConfig.LoadAsync());
+        _tables.Add("DTAIConfig", DTAIConfig);
+        DTUnitConfig = new DTUnitConfig(() => loader("dtunitconfig"));
+        loadTasks.Add(DTUnitConfig.LoadAsync());
+        _tables.Add("DTUnitConfig", DTUnitConfig);
+        DTDemo = new DTDemo(() => loader("dtdemo"));
+        loadTasks.Add(DTDemo.LoadAsync());
+        _tables.Add("DTDemo", DTDemo);
+
+        await Cysharp.Threading.Tasks.UniTask.WhenAll(loadTasks);
+
+        Refresh();
+
+        TablesMemory.EndRecord();
+    }
+
+    private void ResolveRef()
+    {
+        DTStartMachineConfig.ResolveRef(this);
+        DTStartProcessConfig.ResolveRef(this);
+        DTStartSceneConfig.ResolveRef(this);
+        DTStartZoneConfig.ResolveRef(this);
+        DTOneConfig.ResolveRef(this);
+        DTAIConfig.ResolveRef(this);
+        DTUnitConfig.ResolveRef(this);
+        DTDemo.ResolveRef(this);
+        PostResolveRef();
+    }
+
+    public void Refresh()
+    {
         PostInit();
+        ResolveRef();
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }
-

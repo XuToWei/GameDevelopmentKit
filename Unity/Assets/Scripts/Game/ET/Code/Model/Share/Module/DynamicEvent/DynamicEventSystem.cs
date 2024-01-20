@@ -49,32 +49,22 @@ namespace ET
 
         public void Publish<A>(A arg) where A : struct
         {
-            Publish(SceneType.All, arg);
+            Publish(0, arg);
         }
 
         public UniTask PublishAsync<A>(A arg) where A : struct
         {
-            return PublishAsync(SceneType.All, arg);
+            return PublishAsync(0, arg);
         }
 
-        public void Publish<A>(Scene scene, A arg) where A : struct
-        {
-            Publish(scene.SceneType, arg);
-        }
-
-        public UniTask PublishAsync<A>(Scene scene, A arg) where A : struct
-        {
-            return PublishAsync(scene.SceneType, arg);
-        }
-
-        public void Publish<A>(SceneType sceneType, A arg) where A : struct
+        public void Publish<A>(long type, A arg) where A : struct
         {
             Type argType = typeof(A);
             if (DynamicEventTypeSystem.Instance.AllEventInfos.TryGetValue(argType, out List<DynamicEventInfo> dynamicEventInfos))
             {
                 foreach (DynamicEventInfo dynamicEventInfo in dynamicEventInfos)
                 {
-                    if (!sceneType.HasSameFlag(dynamicEventInfo.SceneType))
+                    if (type != dynamicEventInfo.Type)
                     {
                         continue;
                     }
@@ -93,7 +83,7 @@ namespace ET
             }
         }
 
-        public async UniTask PublishAsync<A>(SceneType sceneType, A arg) where A : struct
+        public async UniTask PublishAsync<A>(long type, A arg) where A : struct
         {
             using ListComponent<UniTask> taskList = ListComponent<UniTask>.Create();
             Type argType = typeof(A);
@@ -101,7 +91,7 @@ namespace ET
             {
                 foreach (DynamicEventInfo dynamicEventInfo in dynamicEventInfos)
                 {
-                    if (!sceneType.HasSameFlag(dynamicEventInfo.SceneType))
+                    if (type != dynamicEventInfo.Type)
                     {
                         continue;
                     }

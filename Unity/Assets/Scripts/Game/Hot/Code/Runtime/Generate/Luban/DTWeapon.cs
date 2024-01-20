@@ -36,12 +36,11 @@ public partial class DTWeapon : IDataTable
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
-        PostLoad();
+        PostInit();
     }
 
     public System.Collections.Generic.Dictionary<int, DRWeapon> DataMap => _dataMap;
     public System.Collections.Generic.List<DRWeapon> DataList => _dataList;
-
     public DRWeapon GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public DRWeapon Get(int key) => _dataMap[key];
     public DRWeapon this[int key] => _dataMap[key];
@@ -56,7 +55,7 @@ public partial class DTWeapon : IDataTable
     }
 
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

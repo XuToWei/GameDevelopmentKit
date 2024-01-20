@@ -13,34 +13,43 @@ namespace ET
 {
 public sealed partial class DRStartZoneConfig : Luban.BeanBase
 {
+    public DRStartZoneConfig(ByteBuf _buf) 
+    {
+        StartConfig = _buf.ReadString();
+        Id = _buf.ReadInt();
+        DBConnection = _buf.ReadString();
+        DBName = _buf.ReadString();
+        Desc = _buf.ReadString();
+        PostInit();
+    }
+
+    public static DRStartZoneConfig DeserializeDRStartZoneConfig(ByteBuf _buf)
+    {
+        return new DRStartZoneConfig(_buf);
+    }
+
     /// <summary>
     /// 开启类型
     /// </summary>
-    public string StartConfig;
+    public readonly string StartConfig;
     /// <summary>
     /// Id
     /// </summary>
-    public int Id;
+    public readonly int Id;
     /// <summary>
     /// 数据库地址
     /// </summary>
-    public string DBConnection;
+    public readonly string DBConnection;
     /// <summary>
     /// 数据库名
     /// </summary>
-    public string DBName;
+    public readonly string DBName;
     /// <summary>
     /// 说明
     /// </summary>
-    public string Desc;
+    public readonly string Desc;
     public const int __ID__ = -1835667038;
     public override int GetTypeId() => __ID__;
-
-    public void Init(Tables tables)
-    {
-        PostInit();
-        ResolveRef(tables);
-    }
 
     public  void ResolveRef(Tables tables)
     {
@@ -49,6 +58,7 @@ public sealed partial class DRStartZoneConfig : Luban.BeanBase
         
         
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -63,5 +73,6 @@ public sealed partial class DRStartZoneConfig : Luban.BeanBase
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

@@ -34,14 +34,13 @@ namespace ET
 
         partial void PostInit()
         {
-            foreach (var key in this.KeyList)
+            foreach (var startSceneConfig in this.DataList)
             {
-                if (!string.Equals(key.Item1, Options.Instance.StartConfig))
+                if (!string.Equals(startSceneConfig.StartConfig, Options.Instance.StartConfig))
                 {
                     continue;
                 }
                 
-                var startSceneConfig = this.Get(key);
                 this.ProcessScenes.Add(startSceneConfig.Process, startSceneConfig);
                 
                 if (!this.ClientScenesByName.ContainsKey(startSceneConfig.Zone))

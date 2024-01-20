@@ -9,14 +9,13 @@ namespace ET.Server
         {
             string[] localIP = NetworkHelper.GetAddressIPs();
             DRStartMachineConfig startMachineConfig = null;
-            foreach (var key in Tables.Instance.DTStartMachineConfig.KeyList)
+            foreach (var config in Tables.Instance.DTStartMachineConfig.DataList)
             {
-                if (key.Item1 != Options.Instance.StartConfig)
+                if (config.StartConfig != Options.Instance.StartConfig)
                 {
                     continue;
                 }
-                var config = Tables.Instance.DTStartMachineConfig.Get(key);
-                if (!IsThisMachine(config.InnerIP, localIP))
+                if (!WatcherHelper.IsThisMachine(config.InnerIP, localIP))
                 {
                     continue;
                 }

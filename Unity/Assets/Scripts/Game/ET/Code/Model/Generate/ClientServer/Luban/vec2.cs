@@ -13,19 +13,26 @@ namespace ET
 {
 public partial struct vec2
 {
-    public float X;
-    public float Y;
-
-    public void Init(Tables tables)
+    public vec2(ByteBuf _buf) 
     {
+        X = _buf.ReadFloat();
+        Y = _buf.ReadFloat();
         PostInit();
-        ResolveRef(tables);
     }
+
+    public static vec2 Deserializevec2(ByteBuf _buf)
+    {
+        return new vec2(_buf);
+    }
+
+    public readonly float X;
+    public readonly float Y;
 
     public  void ResolveRef(Tables tables)
     {
         
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -37,5 +44,6 @@ public partial struct vec2
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

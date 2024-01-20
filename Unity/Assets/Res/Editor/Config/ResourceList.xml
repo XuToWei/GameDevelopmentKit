@@ -15,24 +15,7 @@
   <Resource Name="Entity_PlayerEngine.prefab" Path="Assets/Res/Entity/PlayerEngine.prefab" />
   <Resource Name="Entity_PlayerExplosion.prefab" Path="Assets/Res/Entity/PlayerExplosion.prefab" />
   <Resource Name="Entity_PlayerShip.prefab" Path="Assets/Res/Entity/PlayerShip.prefab" />
-  <Resource Name="ET_dtaiconfig.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtaiconfig.bytes" />
-  <Resource Name="ET_dtdemo.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtdemo.bytes" />
-  <Resource Name="ET_dtoneconfig.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtoneconfig.bytes" />
-  <Resource Name="ET_dtstartmachineconfig.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtstartmachineconfig.bytes" />
-  <Resource Name="ET_dtstartprocessconfig.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtstartprocessconfig.bytes" />
-  <Resource Name="ET_dtstartsceneconfig.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtstartsceneconfig.bytes" />
-  <Resource Name="ET_dtstartzoneconfig.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtstartzoneconfig.bytes" />
-  <Resource Name="ET_dtunitconfig.bytes" Path="Assets/Res/ET/ClientServer/Luban/dtunitconfig.bytes" />
-  <Resource Name="ET_Game.ET.Code.Hotfix.dll.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.Hotfix.dll.bytes" />
-  <Resource Name="ET_Game.ET.Code.Hotfix.pdb.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.Hotfix.pdb.bytes" />
-  <Resource Name="ET_Game.ET.Code.HotfixView.dll.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.HotfixView.dll.bytes" />
-  <Resource Name="ET_Game.ET.Code.HotfixView.pdb.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.HotfixView.pdb.bytes" />
-  <Resource Name="ET_Game.ET.Code.Model.dll.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.Model.dll.bytes" />
-  <Resource Name="ET_Game.ET.Code.Model.pdb.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.Model.pdb.bytes" />
-  <Resource Name="ET_Game.ET.Code.ModelView.dll.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.ModelView.dll.bytes" />
-  <Resource Name="ET_Game.ET.Code.ModelView.pdb.bytes" Path="Assets/Res/ET/Code/Game.ET.Code.ModelView.pdb.bytes" />
-  <Resource Name="ET_Map1.bytes" Path="Assets/Res/ET/ClientServer/Recast/Map1.bytes" />
-  <Resource Name="ET_Map2.bytes" Path="Assets/Res/ET/ClientServer/Recast/Map2.bytes" />
+  <Resource Name="Font_MainFont.ttf" Path="Assets/Res/Font/MainFont.ttf" />
   <Resource Name="Hot_dtaircraft.bytes" Path="Assets/Res/Hot/Luban/dtaircraft.bytes" />
   <Resource Name="Hot_dtarmor.bytes" Path="Assets/Res/Hot/Luban/dtarmor.bytes" />
   <Resource Name="Hot_dtasteroid.bytes" Path="Assets/Res/Hot/Luban/dtasteroid.bytes" />
@@ -47,6 +30,37 @@
   <Resource Name="Luban_dtsound.bytes" Path="Assets/Res/Luban/dtsound.bytes" />
   <Resource Name="Luban_dtuiform.bytes" Path="Assets/Res/Luban/dtuiform.bytes" />
   <Resource Name="Luban_dtuisound.bytes" Path="Assets/Res/Luban/dtuisound.bytes" />
+  <Resource Name="Material_done_fx_bolt_cyan_mat.mat" Path="Assets/Res/Material/done_fx_bolt_cyan_mat.mat" />
+  <Resource Name="Material_done_fx_bolt_orange_mat.mat" Path="Assets/Res/Material/done_fx_bolt_orange_mat.mat" />
+  <Resource Name="Material_done_tile_nebula_green_dff.mat" Path="Assets/Res/Material/done_tile_nebula_green_dff.mat" />
+  <Resource Name="Material_fx_enemyShip_engines_mat.mat" Path="Assets/Res/Material/fx_enemyShip_engines_mat.mat" />
+  <Resource Name="Material_part_blast_mat.mat" Path="Assets/Res/Material/part_blast_mat.mat" />
+  <Resource Name="Material_part_glow_mat.mat" Path="Assets/Res/Material/part_glow_mat.mat" />
+  <Resource Name="Material_part_jet_core_mat.mat" Path="Assets/Res/Material/part_jet_core_mat.mat" />
+  <Resource Name="Material_part_jet_flare_mat.mat" Path="Assets/Res/Material/part_jet_flare_mat.mat" />
+  <Resource Name="Material_part_shockwave_mat.mat" Path="Assets/Res/Material/part_shockwave_mat.mat" />
+  <Resource Name="Material_part_spark_blue_mat.mat" Path="Assets/Res/Material/part_spark_blue_mat.mat" />
+  <Resource Name="Material_part_spark_large_mat.mat" Path="Assets/Res/Material/part_spark_large_mat.mat" />
+  <Resource Name="Material_part_spark_white_mat.mat" Path="Assets/Res/Material/part_spark_white_mat.mat" />
+  <Resource Name="Material_part_spark_yellow_mat.mat" Path="Assets/Res/Material/part_spark_yellow_mat.mat" />
+  <Resource Name="Material_part_star_mat.mat" Path="Assets/Res/Material/part_star_mat.mat" />
+  <Resource Name="Material_prop_asteroid_01_mat.mat" Path="Assets/Res/Material/prop_asteroid_01_mat.mat" />
+  <Resource Name="Material_prop_asteroid_02_mat.mat" Path="Assets/Res/Material/prop_asteroid_02_mat.mat" />
+  <Resource Name="Material_prop_asteroid_03_mat.mat" Path="Assets/Res/Material/prop_asteroid_03_mat.mat" />
+  <Resource Name="Material_Urp.mat" Path="Assets/Res/Material/Urp.mat" />
+  <Resource Name="Material_vehicle_enemyShip_glow_mat.mat" Path="Assets/Res/Material/vehicle_enemyShip_glow_mat.mat" />
+  <Resource Name="Material_vehicle_enemyShip_metal_mat.mat" Path="Assets/Res/Material/vehicle_enemyShip_metal_mat.mat" />
+  <Resource Name="Material_vehicle_playerShip_glass_mat.mat" Path="Assets/Res/Material/vehicle_playerShip_glass_mat.mat" />
+  <Resource Name="Material_vehicle_playerShip_metal_mat.mat" Path="Assets/Res/Material/vehicle_playerShip_metal_mat.mat" />
+  <Resource Name="Mesh_prop_asteroid_01.FBX" Path="Assets/Res/Mesh/prop_asteroid_01.FBX" />
+  <Resource Name="Mesh_prop_asteroid_02.FBX" Path="Assets/Res/Mesh/prop_asteroid_02.FBX" />
+  <Resource Name="Mesh_prop_asteroid_03.FBX" Path="Assets/Res/Mesh/prop_asteroid_03.FBX" />
+  <Resource Name="Mesh_vehicle_enemyShip.FBX" Path="Assets/Res/Mesh/vehicle_enemyShip.FBX" />
+  <Resource Name="Mesh_vehicle_playerShip.FBX" Path="Assets/Res/Mesh/vehicle_playerShip.FBX" />
+  <Resource Name="Mesh_vehicle_playerShip_collider.FBX" Path="Assets/Res/Mesh/vehicle_playerShip_collider.FBX" />
+  <Resource Name="Music_music_about.mp3" Path="Assets/Res/Music/music_about.mp3" />
+  <Resource Name="Music_music_background.mp3" Path="Assets/Res/Music/music_background.mp3" />
+  <Resource Name="Music_music_menu.mp3" Path="Assets/Res/Music/music_menu.mp3" />
   <Resource Name="Prefab_Skeleton.prefab" Path="Assets/Res/Prefab/Skeleton/Skeleton.prefab" />
   <Resource Name="Prefab_skeleton_D.mat" Path="Assets/Res/Prefab/Skeleton/Materials/skeleton_D.mat" />
   <Resource Name="Prefab_Skeleton_D.tif" Path="Assets/Res/Prefab/Skeleton/Texture/Skeleton_D.tif" />
@@ -55,6 +69,11 @@
   <Resource Name="Scene_Map1.unity" Path="Assets/Res/Scene/Map1.unity" />
   <Resource Name="Scene_Map2.unity" Path="Assets/Res/Scene/Map2.unity" />
   <Resource Name="Scene_Menu.unity" Path="Assets/Res/Scene/Menu.unity" />
+  <Resource Name="Sound_explosion_asteroid.wav" Path="Assets/Res/Sound/explosion_asteroid.wav" />
+  <Resource Name="Sound_explosion_enemy.wav" Path="Assets/Res/Sound/explosion_enemy.wav" />
+  <Resource Name="Sound_explosion_player.wav" Path="Assets/Res/Sound/explosion_player.wav" />
+  <Resource Name="Sound_weapon_enemy.wav" Path="Assets/Res/Sound/weapon_enemy.wav" />
+  <Resource Name="Sound_weapon_player.wav" Path="Assets/Res/Sound/weapon_player.wav" />
   <Resource Name="UI_AboutForm.prefab" Path="Assets/Res/UI/UIForm/Hot/AboutForm.prefab" />
   <Resource Name="UI_background.png" Path="Assets/Res/UI/UISprite/Common/background.png" />
   <Resource Name="UI_box.png" Path="Assets/Res/UI/UISprite/Common/box.png" />
@@ -68,6 +87,8 @@
   <Resource Name="UI_dialog-background.png" Path="Assets/Res/UI/UISprite/Common/dialog-background.png" />
   <Resource Name="UI_DialogForm.prefab" Path="Assets/Res/UI/UIForm/Hot/DialogForm.prefab" />
   <Resource Name="UI_dialog-title-background.png" Path="Assets/Res/UI/UISprite/Common/dialog-title-background.png" />
+  <Resource Name="UI_HPBarInstances.prefab" Path="Assets/Res/UI/UIItem/HPBarInstances.prefab" />
+  <Resource Name="UI_HPBarItem.prefab" Path="Assets/Res/UI/UIItem/HPBarItem.prefab" />
   <Resource Name="UI_info.png" Path="Assets/Res/UI/UISprite/Common/info.png" />
   <Resource Name="UI_line.png" Path="Assets/Res/UI/UISprite/Common/line.png" />
   <Resource Name="UI_MenuForm.prefab" Path="Assets/Res/UI/UIForm/Hot/MenuForm.prefab" />
@@ -80,12 +101,6 @@
   <Resource Name="UI_select.wav" Path="Assets/Res/UI/UISound/select.wav" />
   <Resource Name="UI_SettingForm.prefab" Path="Assets/Res/UI/UIForm/Hot/SettingForm.prefab" />
   <Resource Name="UI_sound.png" Path="Assets/Res/UI/UISprite/Icons/sound.png" />
-  <Resource Name="UI_UIHelp.prefab" Path="Assets/Res/UI/UIForm/Demo/UIHelp.prefab" />
-  <Resource Name="UI_UILobby.prefab" Path="Assets/Res/UI/UIForm/Demo/UILobby.prefab" />
-  <Resource Name="UI_UILogin.prefab" Path="Assets/Res/UI/UIForm/Demo/UILogin.prefab" />
-  <Resource Name="UI_UILSLobby.prefab" Path="Assets/Res/UI/UIForm/LockStep/UILSLobby.prefab" />
-  <Resource Name="UI_UILSLogin.prefab" Path="Assets/Res/UI/UIForm/LockStep/UILSLogin.prefab" />
-  <Resource Name="UI_UILSRoom.prefab" Path="Assets/Res/UI/UIForm/LockStep/UILSRoom.prefab" />
   <Resource Name="UI_unity-logo.png" Path="Assets/Res/UI/UISprite/Logos/unity-logo.png" />
   <Resource Name="UI_world.png" Path="Assets/Res/UI/UISprite/Icons/world.png" />
 </ResourceList>

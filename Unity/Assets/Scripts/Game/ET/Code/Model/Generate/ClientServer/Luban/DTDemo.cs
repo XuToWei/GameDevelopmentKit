@@ -11,42 +11,51 @@ using Luban;
 
 namespace ET
 {
-public partial class DTDemo
+public partial class DTDemo : IDataTable
 {
-    private readonly Tables _tables;
+    private readonly System.Collections.Generic.Dictionary<int, DRDemo> _dataMap;
+    private readonly System.Collections.Generic.List<DRDemo> _dataList;
+    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
-    public DTDemo(Tables tables)
+    public DTDemo(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
-        _tables = tables;
+        _loadFunc = loadFunc;
         _dataMap = new System.Collections.Generic.Dictionary<int, DRDemo>();
-        PostConstructor();
+        _dataList = new System.Collections.Generic.List<DRDemo>();
+    }
+
+    public async Cysharp.Threading.Tasks.UniTask LoadAsync()
+    {
+        ByteBuf _buf = await _loadFunc();
+        _dataMap.Clear();
+        _dataList.Clear();
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        {
+            DRDemo _v;
+            _v = DRDemo.DeserializeDRDemo(_buf);
+            _dataList.Add(_v);
+            _dataMap.Add(_v.Id, _v);
+        }
         PostInit();
     }
 
-    private readonly System.Collections.Generic.Dictionary<int, DRDemo> _dataMap;
-    public System.Collections.Generic.List<int> KeyList { private set; get; }
-    public DRDemo Get(int key) => TryGetValue(key, out var v) ? v : null;
-    public DRDemo this[int key] => TryGetValue(key, out var v) ? v : null;
+    public System.Collections.Generic.Dictionary<int, DRDemo> DataMap => _dataMap;
+    public System.Collections.Generic.List<DRDemo> DataList => _dataList;
+    public DRDemo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRDemo Get(int key) => _dataMap[key];
+    public DRDemo this[int key] => _dataMap[key];
 
-    // private bool InternalTryGetValue(int key, out DRDemo value);
-    private bool TryGetValue(int key, out DRDemo value)
+    public void ResolveRef(Tables tables)
     {
-        if(_dataMap.TryGetValue(key, out value))
+        foreach(var _v in _dataList)
         {
-            return true;
+            _v.ResolveRef(tables);
         }
-        if(InternalTryGetValue(key, out value))
-        {
-            _dataMap.Add(key, value);
-            value.Init(_tables);
-            return true;
-        }
-        value = default;
-        return false;
+        PostResolveRef();
     }
 
 
-    partial void PostConstructor();
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

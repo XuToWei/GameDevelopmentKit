@@ -13,38 +13,48 @@ namespace ET
 {
 public sealed partial class DRUnitConfig : Luban.BeanBase
 {
+    public DRUnitConfig(ByteBuf _buf) 
+    {
+        Id = _buf.ReadInt();
+        Type = _buf.ReadInt();
+        Name = _buf.ReadString();
+        Desc = _buf.ReadString();
+        Position = _buf.ReadInt();
+        Height = _buf.ReadInt();
+        PostInit();
+    }
+
+    public static DRUnitConfig DeserializeDRUnitConfig(ByteBuf _buf)
+    {
+        return new DRUnitConfig(_buf);
+    }
+
     /// <summary>
     /// Id
     /// </summary>
-    public int Id;
+    public readonly int Id;
     /// <summary>
     /// Type
     /// </summary>
-    public int Type;
+    public readonly int Type;
     /// <summary>
     /// 名字
     /// </summary>
-    public string Name;
+    public readonly string Name;
     /// <summary>
     /// 描述
     /// </summary>
-    public string Desc;
+    public readonly string Desc;
     /// <summary>
     /// 位置
     /// </summary>
-    public int Position;
+    public readonly int Position;
     /// <summary>
     /// 身高
     /// </summary>
-    public int Height;
+    public readonly int Height;
     public const int __ID__ = -1701961452;
     public override int GetTypeId() => __ID__;
-
-    public void Init(Tables tables)
-    {
-        PostInit();
-        ResolveRef(tables);
-    }
 
     public  void ResolveRef(Tables tables)
     {
@@ -54,6 +64,7 @@ public sealed partial class DRUnitConfig : Luban.BeanBase
         
         
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -69,5 +80,6 @@ public sealed partial class DRUnitConfig : Luban.BeanBase
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

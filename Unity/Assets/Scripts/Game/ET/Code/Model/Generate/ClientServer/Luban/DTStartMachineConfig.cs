@@ -11,41 +11,50 @@ using Luban;
 
 namespace ET
 {
-public partial class DTStartMachineConfig
+public partial class DTStartMachineConfig : IDataTable
 {
-    private readonly Tables _tables;
-    public DTStartMachineConfig(Tables tables)
+    private readonly System.Collections.Generic.List<DRStartMachineConfig> _dataList;
+    private System.Collections.Generic.Dictionary<(string, int), DRStartMachineConfig> _dataMapUnion;
+    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
+
+    public DTStartMachineConfig(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
-        _tables = tables;
-        _dataMapUnion = new System.Collections.Generic.Dictionary<(string, int), DRStartMachineConfig>();
-        PostConstructor();
+        _loadFunc = loadFunc;
+        _dataList = new System.Collections.Generic.List<DRStartMachineConfig>();
+         _dataMapUnion = new System.Collections.Generic.Dictionary<(string, int), DRStartMachineConfig>();
+    }
+
+    public async Cysharp.Threading.Tasks.UniTask LoadAsync()
+    {
+        ByteBuf _buf = await _loadFunc();
+        _dataList.Clear();
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        {
+            DRStartMachineConfig _v;
+            _v = DRStartMachineConfig.DeserializeDRStartMachineConfig(_buf);
+            _dataList.Add(_v);
+        }
+        _dataMapUnion.Clear();
+        foreach(var _v in _dataList)
+        {
+            _dataMapUnion.Add((_v.StartConfig, _v.Id), _v);
+        }
         PostInit();
     }
 
-    private System.Collections.Generic.Dictionary<(string, int), DRStartMachineConfig> _dataMapUnion;
-    public System.Collections.Generic.List<(string, int)> KeyList { private set; get; }
-    public DRStartMachineConfig Get((string, int) key) => TryGetValue(key, out DRStartMachineConfig v) ? v : null;
-    public DRStartMachineConfig Get(string StartConfig, int Id) => Get((StartConfig, Id));
+    public System.Collections.Generic.List<DRStartMachineConfig> DataList => _dataList;
+    public DRStartMachineConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartMachineConfig __v) ? __v : null;
 
-    // partial bool InternalTryGetValue((string, int) key, out DRStartMachineConfig value);
-    private bool TryGetValue((string, int) key, out DRStartMachineConfig value)
+    public void ResolveRef(Tables tables)
     {
-        if(_dataMapUnion.TryGetValue(key, out value))
+        foreach(var _v in _dataList)
         {
-            return true;
+            _v.ResolveRef(tables);
         }
-        if(InternalTryGetValue(key, out value))
-        {
-            _dataMapUnion.Add(key, value);
-            value.Init(_tables);
-            return true;
-        }
-        value = default;
-        return false;
+        PostResolveRef();
     }
-    
 
-    partial void PostConstructor();
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

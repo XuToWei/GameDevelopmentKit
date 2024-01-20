@@ -11,42 +11,51 @@ using Luban;
 
 namespace ET
 {
-public partial class DTAIConfig
+public partial class DTAIConfig : IDataTable
 {
-    private readonly Tables _tables;
+    private readonly System.Collections.Generic.Dictionary<int, DRAIConfig> _dataMap;
+    private readonly System.Collections.Generic.List<DRAIConfig> _dataList;
+    private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
-    public DTAIConfig(Tables tables)
+    public DTAIConfig(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
-        _tables = tables;
+        _loadFunc = loadFunc;
         _dataMap = new System.Collections.Generic.Dictionary<int, DRAIConfig>();
-        PostConstructor();
+        _dataList = new System.Collections.Generic.List<DRAIConfig>();
+    }
+
+    public async Cysharp.Threading.Tasks.UniTask LoadAsync()
+    {
+        ByteBuf _buf = await _loadFunc();
+        _dataMap.Clear();
+        _dataList.Clear();
+        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        {
+            DRAIConfig _v;
+            _v = DRAIConfig.DeserializeDRAIConfig(_buf);
+            _dataList.Add(_v);
+            _dataMap.Add(_v.Id, _v);
+        }
         PostInit();
     }
 
-    private readonly System.Collections.Generic.Dictionary<int, DRAIConfig> _dataMap;
-    public System.Collections.Generic.List<int> KeyList { private set; get; }
-    public DRAIConfig Get(int key) => TryGetValue(key, out var v) ? v : null;
-    public DRAIConfig this[int key] => TryGetValue(key, out var v) ? v : null;
+    public System.Collections.Generic.Dictionary<int, DRAIConfig> DataMap => _dataMap;
+    public System.Collections.Generic.List<DRAIConfig> DataList => _dataList;
+    public DRAIConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRAIConfig Get(int key) => _dataMap[key];
+    public DRAIConfig this[int key] => _dataMap[key];
 
-    // private bool InternalTryGetValue(int key, out DRAIConfig value);
-    private bool TryGetValue(int key, out DRAIConfig value)
+    public void ResolveRef(Tables tables)
     {
-        if(_dataMap.TryGetValue(key, out value))
+        foreach(var _v in _dataList)
         {
-            return true;
+            _v.ResolveRef(tables);
         }
-        if(InternalTryGetValue(key, out value))
-        {
-            _dataMap.Add(key, value);
-            value.Init(_tables);
-            return true;
-        }
-        value = default;
-        return false;
+        PostResolveRef();
     }
 
 
-    partial void PostConstructor();
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

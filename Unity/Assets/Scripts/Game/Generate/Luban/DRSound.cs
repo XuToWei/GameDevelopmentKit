@@ -76,6 +76,7 @@ public sealed partial class DRSound : Luban.BeanBase
         
         
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -93,5 +94,6 @@ public sealed partial class DRSound : Luban.BeanBase
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

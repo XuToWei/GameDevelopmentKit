@@ -69,11 +69,11 @@ public partial class Tables
 
     public void Refresh()
     {
-        PostLoad();
+        PostInit();
         ResolveRef();
     }
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

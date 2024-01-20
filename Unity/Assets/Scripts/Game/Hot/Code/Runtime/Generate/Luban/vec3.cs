@@ -18,7 +18,7 @@ public partial struct vec3
         X = _buf.ReadFloat();
         Y = _buf.ReadFloat();
         Z = _buf.ReadFloat();
-        PostLoad();
+        PostInit();
     }
 
     public static vec3 Deserializevec3(ByteBuf _buf)
@@ -29,7 +29,6 @@ public partial struct vec3
     public readonly float X;
     public readonly float Y;
     public readonly float Z;
-
 
     public  void ResolveRef(Tables tables)
     {
@@ -48,7 +47,7 @@ public partial struct vec3
         + "}";
     }
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

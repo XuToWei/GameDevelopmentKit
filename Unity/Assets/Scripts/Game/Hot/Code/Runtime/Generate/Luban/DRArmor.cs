@@ -18,7 +18,7 @@ public sealed partial class DRArmor : Luban.BeanBase
         Id = _buf.ReadInt();
         MaxHP = _buf.ReadInt();
         Defense = _buf.ReadInt();
-        PostLoad();
+        PostInit();
     }
 
     public static DRArmor DeserializeDRArmor(ByteBuf _buf)
@@ -38,7 +38,6 @@ public sealed partial class DRArmor : Luban.BeanBase
     /// 防御力
     /// </summary>
     public readonly int Defense;
-
     public const int __ID__ = -1663135407;
     public override int GetTypeId() => __ID__;
 
@@ -59,7 +58,7 @@ public sealed partial class DRArmor : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }

@@ -46,6 +46,7 @@ public sealed partial class DRScene : Luban.BeanBase
         
         
         
+        PostResolveRef();
     }
 
     public override string ToString()
@@ -58,5 +59,6 @@ public sealed partial class DRScene : Luban.BeanBase
     }
 
     partial void PostInit();
+    partial void PostResolveRef();
 }
 }

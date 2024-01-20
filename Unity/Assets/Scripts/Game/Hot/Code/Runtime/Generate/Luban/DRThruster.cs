@@ -17,7 +17,7 @@ public sealed partial class DRThruster : Luban.BeanBase
     {
         Id = _buf.ReadInt();
         Speed = _buf.ReadFloat();
-        PostLoad();
+        PostInit();
     }
 
     public static DRThruster DeserializeDRThruster(ByteBuf _buf)
@@ -33,7 +33,6 @@ public sealed partial class DRThruster : Luban.BeanBase
     /// 速度
     /// </summary>
     public readonly float Speed;
-
     public const int __ID__ = -1106796109;
     public override int GetTypeId() => __ID__;
 
@@ -52,7 +51,7 @@ public sealed partial class DRThruster : Luban.BeanBase
         + "}";
     }
 
-    partial void PostLoad();
+    partial void PostInit();
     partial void PostResolveRef();
 }
 }
