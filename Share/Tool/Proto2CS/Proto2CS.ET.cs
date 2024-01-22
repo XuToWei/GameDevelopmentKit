@@ -137,7 +137,7 @@ namespace ET
                             // 加了no dispose则自己去定义dispose函数，不要自动生成
                             if (!newline.Contains("// no dispose"))
                             {
-                                sb.Append($"\t\tpublic override void Dispose() \n\t\t{{\n\t\t\tif (!this.IsFromPool) return;\n{sbDispose.ToString()}\t\t\tObjectPool.Instance.Recycle(this); \n\t\t}}\n");
+                                sb.Append($"\t\tpublic override void Dispose() \n\t\t{{\n\t\t\tif (!this.IsFromPool) {{ return; }}\n{sbDispose.ToString()}\t\t\tObjectPool.Instance.Recycle(this); \n\t\t}}\n");
                             }
 
                             sb.Append("\t}\n\n");
