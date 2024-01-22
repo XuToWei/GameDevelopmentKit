@@ -60,6 +60,27 @@ func generate_resolve_field_ref
         end
     end
 end
+
+func get_param_def_list(bean)
+    paramList = []
+    while bean
+        tempList = bean.export_fields |array.each do; ret (declaring_type_name $0.ctype) + ' ' + (format_property_name __code_style $0.name); end
+        paramList = tempList + paramList
+        bean = bean.parent_def_type
+    end
+    ret array.join paramList ', '
+end
+
+func get_param_name_list(bean)
+    paramList = []
+    index = 0
+    while bean
+        tempList = bean.export_fields |array.each do; ret (format_property_name __code_style $0.name); end
+        paramList = tempList + paramList
+        bean = bean.parent_def_type
+    end
+    ret array.join paramList ', '
+end
 ~}}
 {{~if __bean.is_value_type~}}
 public partial struct {{__name}}
@@ -67,13 +88,33 @@ public partial struct {{__name}}
 public {{class_modifier __bean}} partial class {{__name}} : {{if parent_def_type}}{{__bean.parent}}{{else}}Luban.BeanBase{{end}}
 {{~end~}}
 {
+    public {{__name}}({{get_param_def_list(__bean)}}) {{if parent_def_type}} : base({{get_param_name_list(__bean.parent_def_type)}}) {{end}}
+    {
+        {{~ for field in export_fields
+        fieldName = format_property_name __code_style field.name
+        ~}}
+        this.{{fieldName}} = {{fieldName}};
+        {{~if can_generate_ref field~}}
+        this.{{get_ref_name field}} = null;
+        {{~end~}}
+        {{~if has_index field~}}
+        this.{{get_index_var_name field}} = new {{declaring_type_name (get_index_map_type field)}}({{field.size}});
+        foreach(var _v in {{fieldName}})
+        { 
+            this.{{get_index_var_name field}}.Add(_v.{{format_property_name __code_style (get_index_field field).name}}, _v);
+        }
+        {{~end~}}
+        {{~end~}}
+        PostInit();
+    }
+
     {{~ for field in export_fields ~}}
     {{~if field.comment != '' ~}}
     /// <summary>
     /// {{escape_comment field.comment}}
     /// </summary>
     {{~end~}}
-    public {{declaring_type_name field.ctype}} {{format_property_name __code_style field.name}};
+    public readonly {{declaring_type_name field.ctype}} {{format_property_name __code_style field.name}};
     {{~if can_generate_ref field~}}
     public {{declaring_type_name (get_ref_type field)}} {{get_ref_name field}} { private set; get; }
     {{~else if can_generate_collection_ref field~}}
@@ -82,19 +123,13 @@ public {{class_modifier __bean}} partial class {{__name}} : {{if parent_def_type
     {{~if has_index field
     indexMapType = get_index_map_type field
     ~}}
-    public readonly {{declaring_type_name indexMapType}} {{get_index_var_name field}} = new {{declaring_type_name indexMapType}}();
+    public readonly {{declaring_type_name indexMapType}} {{get_index_var_name field}};
     {{~end~}}
     {{~end~}}
     {{~if !__bean.is_abstract_type && !__bean.is_value_type~}}
     public const int __ID__ = {{__bean.id}};
     public override int GetTypeId() => __ID__;
     {{~end~}}
-
-    public void Init({{__manager_name}} tables)
-    {
-        PostInit();
-        ResolveRef(tables);
-    }
 
     public {{method_modifier __bean}} void ResolveRef({{__manager_name}} tables)
     {

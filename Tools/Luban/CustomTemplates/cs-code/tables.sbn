@@ -14,11 +14,23 @@ public partial class {{__name}}
 
     public {{__name}}()
     {
+        TablesMemory.BeginRecord();
+
         {{~for table in __tables ~}}
-        {{format_property_name __code_style table.name}} = new {{table.full_name}}(this);
+        {{format_property_name __code_style table.name}} = new {{table.full_name}}();
         {{~end~}}
 
         PostInit();
+        ResolveRef();
+
+        TablesMemory.EndRecord();
+    }
+
+    private void ResolveRef()
+    {
+        {{~for table in __tables ~}}
+        {{format_property_name __code_style table.name}}.ResolveRef(this);
+        {{~end~}}
     }
 
     partial void PostInit();
