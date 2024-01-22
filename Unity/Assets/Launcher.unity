@@ -1006,7 +1006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f14696d9bb8d75479fbe096fb1525c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AutoRefreshResourceCollection: 1
+  m_AutoRefreshResourceCollection: 0
 --- !u!4 &432952642 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 430602, guid: adb3eb1c35fcff14f89fba7b05c9d71c,
