@@ -34,7 +34,7 @@ namespace ET.Client
                 CodeLoaderComponent.Instance.ReloadAsync().Forget();
                 return;
             }
-        
+
             if (Input.GetKeyDown(KeyCode.T))
             {
                 C2M_TransferMap c2MTransferMap = C2M_TransferMap.Create();

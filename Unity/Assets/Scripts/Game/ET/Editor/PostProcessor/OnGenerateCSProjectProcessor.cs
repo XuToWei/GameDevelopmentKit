@@ -8,6 +8,7 @@ namespace ET.Editor
     public class OnGenerateCSProjectProcessor: AssetPostprocessor
     {
         /// <summary>
+        /// 对生成的C#项目文件(.csproj)进行处理
         /// 文档:https://learn.microsoft.com/zh-cn/visualstudio/gamedev/unity/extensibility/customize-project-files-created-by-vstu#%E6%A6%82%E8%A7%88
         /// </summary>
         private static string OnGeneratedCSProject(string path, string content)
@@ -39,17 +40,25 @@ namespace ET.Editor
         }
 
         /// <summary>
-        /// 编译dll文件后额外复制的目录配置
+        /// 对生成的解决方案文件(.sln)进行处理, 此处主要为了隐藏一些没有作用的C#项目
         /// </summary>
-        private static string AddCopyAfterBuild(string content)
+        private static string OnGeneratedSlnSolution(string _, string content)
         {
-            content = content.Replace("<Target Name=\"AfterBuild\" />",
-                "<Target Name=\"PostBuild\" AfterTargets=\"PostBuildEvent\">\n" +
-                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).dll\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyTool.CodeDir}/$(TargetName).dll.bytes\" ContinueOnError=\"false\" />\n" +
-                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).pdb\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyTool.CodeDir}/$(TargetName).pdb.bytes\" ContinueOnError=\"false\" />\n" +
-                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).dll\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyHelper.BuildOutputDir}/$(TargetName).dll\" ContinueOnError=\"false\" />\n" +
-                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).pdb\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyHelper.BuildOutputDir}/$(TargetName).pdb\" ContinueOnError=\"false\" />\n" +
-                "  </Target>\n");
+            // Client
+            content = HideCSProject(content, "Ignore.Generate.Client.csproj");
+            content = HideCSProject(content, "Ignore.Model.Client.csproj");
+            content = HideCSProject(content, "Ignore.Hotfix.Client.csproj");
+            content = HideCSProject(content, "Ignore.ModelView.Client.csproj");
+            content = HideCSProject(content, "Ignore.HotfixView.Client.csproj");
+
+            // Server
+            content = HideCSProject(content, "Ignore.Generate.Server.csproj");
+            content = HideCSProject(content, "Ignore.Model.Server.csproj");
+            content = HideCSProject(content, "Ignore.Hotfix.Server.csproj");
+
+            // ClientServer
+            content = HideCSProject(content, "Ignore.Generate.ClientServer.csproj");
+
             return content;
         }
 
@@ -110,6 +119,28 @@ namespace ET.Editor
             newDoc.WriteTo(tx);
             tx.Flush();
             return sw.GetStringBuilder().ToString();
+        }
+
+        /// <summary>
+        /// 编译dll文件后额外复制的目录配置
+        /// </summary>
+        private static string AddCopyAfterBuild(string content)
+        {
+            return content = content.Replace("<Target Name=\"AfterBuild\" />",
+                "<Target Name=\"PostBuild\" AfterTargets=\"PostBuildEvent\">\n" +
+                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).dll\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyTool.CodeDir}/$(TargetName).dll.bytes\" ContinueOnError=\"false\" />\n" +
+                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).pdb\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyTool.CodeDir}/$(TargetName).pdb.bytes\" ContinueOnError=\"false\" />\n" +
+                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).dll\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyHelper.BuildOutputDir}/$(TargetName).dll\" ContinueOnError=\"false\" />\n" +
+                $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).pdb\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyHelper.BuildOutputDir}/$(TargetName).pdb\" ContinueOnError=\"false\" />\n" +
+                "  </Target>\n");
+        }
+
+        /// <summary>
+        /// 隐藏指定项目
+        /// </summary>
+        private static string HideCSProject(string content, string projectName)
+        {
+            return Regex.Replace(content, $"Project.*{projectName}.*\nEndProject", string.Empty);
         }
     }
 }
