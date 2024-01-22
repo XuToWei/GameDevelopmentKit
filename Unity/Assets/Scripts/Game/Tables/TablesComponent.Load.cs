@@ -15,6 +15,7 @@ namespace Game
         Undefined = 0,
         Bytes,
         Json,
+        Code,
     }
     
     public partial class TablesComponent : GameFrameworkComponent
@@ -44,6 +45,11 @@ namespace Game
         {
             Type tablesType = this.GetType();
             MethodInfo loadMethodInfo = tablesType.GetMethod("LoadAsync");
+            if (loadMethodInfo == null)
+            {
+                LoadType = TablesLoadType.Code;
+                return;
+            }
             Type loaderReturnType = loadMethodInfo.GetParameters()[0].ParameterType.GetGenericArguments()[1];
             // 根据cfg.Tables的构造函数的Loader的返回值类型决定使用json还是ByteBuf Loader
             if (loaderReturnType == typeof (UniTask<ByteBuf>))

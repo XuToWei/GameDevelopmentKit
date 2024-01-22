@@ -106,13 +106,13 @@ namespace ET.Editor
         /// </summary>
         private static string AddCopyAfterBuild(string content)
         {
-            return content = content.Replace("<Target Name=\"AfterBuild\" />",
+            return content.Replace("<Target Name=\"AfterBuild\" />",
                 "<Target Name=\"PostBuild\" AfterTargets=\"PostBuildEvent\">\n" +
                 $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).dll\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyTool.CodeDir}/$(TargetName).dll.bytes\" ContinueOnError=\"false\" />\n" +
                 $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).pdb\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyTool.CodeDir}/$(TargetName).pdb.bytes\" ContinueOnError=\"false\" />\n" +
                 $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).dll\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyHelper.BuildOutputDir}/$(TargetName).dll\" ContinueOnError=\"false\" />\n" +
                 $"    <Copy SourceFiles=\"$(TargetDir)/$(TargetName).pdb\" DestinationFiles=\"$(ProjectDir)/{BuildAssemblyHelper.BuildOutputDir}/$(TargetName).pdb\" ContinueOnError=\"false\" />\n" +
-                "  </Target>\n");
+                "  </Target>");
         }
 
         /// <summary>

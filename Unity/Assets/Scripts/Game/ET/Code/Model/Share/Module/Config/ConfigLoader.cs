@@ -12,13 +12,13 @@ namespace ET
         public override async UniTask Handle(ConfigComponent.LoadAll arg)
         {
             World.Instance.AddSingleton<Tables>();
-            
             Type tablesType = typeof (Tables);
-
             MethodInfo loadMethodInfo = tablesType.GetMethod("LoadAsync");
-
+            if (loadMethodInfo == null)
+            {
+                return;
+            }
             Type loaderReturnType = loadMethodInfo.GetParameters()[0].ParameterType.GetGenericArguments()[1];
-            
             // 根据cfg.Tables的构造函数的Loader的返回值类型决定使用json还是ByteBuf Loader
             if (loaderReturnType == typeof (UniTask<ByteBuf>))
             {
@@ -26,7 +26,6 @@ namespace ET
                 {
                     return new ByteBuf(await ConfigComponent.Instance.ReadBytesAsync(file));
                 }
-
                 Func<string, UniTask<ByteBuf>> func = LoadByteBuf;
                 await (UniTask)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
             }
@@ -36,7 +35,6 @@ namespace ET
                 {
                     return JSON.Parse(await ConfigComponent.Instance.ReadTextAsync(file));
                 }
-
                 Func<string, UniTask<JSONNode>> func = LoadJson;
                 await (UniTask)loadMethodInfo.Invoke(Tables.Instance, new object[] { func });
             }
@@ -48,8 +46,22 @@ namespace ET
     {
         public override async UniTask Handle(ConfigComponent.ReloadOne arg)
         {
-            await Tables.Instance.GetDataTable(arg.ConfigName).LoadAsync();
-            Tables.Instance.Refresh();
+            Type tablesType = typeof (Tables);
+            MethodInfo refreshMethodInfo = tablesType.GetMethod("Refresh");
+            if (refreshMethodInfo == null)
+            {
+#if UNITY_HOTFIX
+                await ConfigComponent.Instance.ReadBytesAsync("Config");
+                object obj = Activator.CreateInstance(tablesType);
+                ((ISingletonAwake)obj).Awake();
+                World.Instance.AddSingleton((ASingleton)obj);
+#endif
+            }
+            else
+            {
+                await Tables.Instance.GetDataTable(arg.ConfigName).LoadAsync();
+                refreshMethodInfo.Invoke(Tables.Instance, null);
+            }
         }
     }
     
@@ -58,11 +70,25 @@ namespace ET
     {
         public override async UniTask Handle(ConfigComponent.ReloadAll arg)
         {
-            foreach (var dataTable in Tables.Instance.DataTables)
+            Type tablesType = typeof (Tables);
+            MethodInfo refreshMethodInfo = tablesType.GetMethod("Refresh");
+            if (refreshMethodInfo == null)
             {
-                await dataTable.LoadAsync();
+#if UNITY_HOTFIX
+                await ConfigComponent.Instance.ReadBytesAsync("Config");
+                object obj = Activator.CreateInstance(tablesType);
+                ((ISingletonAwake)obj).Awake();
+                World.Instance.AddSingleton((ASingleton)obj);
+#endif
             }
-            Tables.Instance.Refresh();
+            else
+            {
+                foreach (var dataTable in Tables.Instance.DataTables)
+                {
+                    await dataTable.LoadAsync();
+                }
+                refreshMethodInfo.Invoke(Tables.Instance, null);
+            }
         }
     }
 }
