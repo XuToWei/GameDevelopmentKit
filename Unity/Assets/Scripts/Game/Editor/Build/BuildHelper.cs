@@ -90,9 +90,10 @@ namespace Game.Editor
             BuildReport buildReport = BuildPipeline.BuildPlayer(levels, locationPathName, buildTarget, BuildOptions.None);
             if (buildReport.summary.result != BuildResult.Succeeded)
             {
-                throw new GameFrameworkException("build pkg fail!");
+                throw new GameFrameworkException($"build pkg fail : { buildReport.summary.result }");
             }
             Debug.Log($"finish build pkg at {locationPathName}");
+            EditorUtility.OpenWithDefaultApp(fold);
         }
 
         public static void BuildResource(Platform platform)

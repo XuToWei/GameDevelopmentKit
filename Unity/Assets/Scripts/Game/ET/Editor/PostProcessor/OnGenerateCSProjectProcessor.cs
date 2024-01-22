@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using System.Xml;
 using System.IO;
+using System.Text.RegularExpressions;
 using Game.Editor;
 
 namespace ET.Editor
@@ -44,21 +45,14 @@ namespace ET.Editor
         /// </summary>
         private static string OnGeneratedSlnSolution(string _, string content)
         {
-            // Client
-            content = HideCSProject(content, "Ignore.Generate.Client.csproj");
-            content = HideCSProject(content, "Ignore.Model.Client.csproj");
             content = HideCSProject(content, "Ignore.Hotfix.Client.csproj");
-            content = HideCSProject(content, "Ignore.ModelView.Client.csproj");
-            content = HideCSProject(content, "Ignore.HotfixView.Client.csproj");
-
-            // Server
-            content = HideCSProject(content, "Ignore.Generate.Server.csproj");
-            content = HideCSProject(content, "Ignore.Model.Server.csproj");
             content = HideCSProject(content, "Ignore.Hotfix.Server.csproj");
-
-            // ClientServer
-            content = HideCSProject(content, "Ignore.Generate.ClientServer.csproj");
-
+            content = HideCSProject(content, "Ignore.HotfixView.Client.csproj");
+            content = HideCSProject(content, "Ignore.Model.Client.csproj");
+            content = HideCSProject(content, "Ignore.Model.Generate.Client");
+            content = HideCSProject(content, "Ignore.Model.Generate.ClientServer.csproj");
+            content = HideCSProject(content, "Ignore.Model.Server.csproj");
+            content = HideCSProject(content, "Ignore.ModelView.Client.csproj");
             return content;
         }
 
@@ -71,31 +65,13 @@ namespace ET.Editor
         /// </summary>
         private static string GenerateCustomProject(string content, params string[] links)
         {
-            XmlDocument doc = new XmlDocument();
+            XmlDocument doc = new();
             doc.LoadXml(content);
-
             var newDoc = doc.Clone() as XmlDocument;
-
             var rootNode = newDoc.GetElementsByTagName("Project")[0];
 
-            var target = newDoc.CreateElement("Target", newDoc.DocumentElement.NamespaceURI);
-            target.SetAttribute("Name", "AfterBuild");
-            rootNode.AppendChild(target);
-
+            // 添加分析器引用
             XmlElement itemGroup = newDoc.CreateElement("ItemGroup", newDoc.DocumentElement.NamespaceURI);
-            foreach (var s in links)
-            {
-                string[] ss = s.Split(' ');
-                string p = ss[0];
-                string linkStr = ss[1];
-                XmlElement compile = newDoc.CreateElement("Compile", newDoc.DocumentElement.NamespaceURI);
-                XmlElement link = newDoc.CreateElement("Link", newDoc.DocumentElement.NamespaceURI);
-                link.InnerText = linkStr;
-                compile.AppendChild(link);
-                compile.SetAttribute("Include", p);
-                itemGroup.AppendChild(compile);
-            }
-
             var projectReference = newDoc.CreateElement("ProjectReference", newDoc.DocumentElement.NamespaceURI);
             projectReference.SetAttribute("Include", @"..\Share\Analyzer\Share.Analyzer.csproj");
             projectReference.SetAttribute("OutputItemType", @"Analyzer");
@@ -107,11 +83,15 @@ namespace ET.Editor
 
             var name = newDoc.CreateElement("Name", newDoc.DocumentElement.NamespaceURI);
             name.InnerText = "Analyzer";
-            projectReference.AppendChild(project);
+            projectReference.AppendChild(name);
 
             itemGroup.AppendChild(projectReference);
-
             rootNode.AppendChild(itemGroup);
+
+            // AfterBuild(字符串替换后作用是编译后复制到CodeDir)
+            var target = newDoc.CreateElement("Target", newDoc.DocumentElement.NamespaceURI);
+            target.SetAttribute("Name", "AfterBuild");
+            rootNode.AppendChild(target);
 
             using StringWriter sw = new();
             using XmlTextWriter tx = new(sw);

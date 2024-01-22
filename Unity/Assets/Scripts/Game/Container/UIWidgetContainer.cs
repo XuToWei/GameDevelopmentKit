@@ -186,7 +186,7 @@ namespace Game
         /// 设置界面的可见性。
         /// </summary>
         /// <param name="visible">界面的可见性。</param>
-        protected void InternalSetVisible(bool visible)
+        public void InternalSetVisible(bool visible)
         {
             foreach (var uiWidget in m_UIWidgets)
             {
