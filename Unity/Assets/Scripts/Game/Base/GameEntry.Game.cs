@@ -12,19 +12,13 @@ namespace Game
             get;
             private set;
         }
-        
+
         public static PlatformComponent Platform
         {
             get;
             private set;
         }
 
-        public static ResourceListComponent ResourceList
-        {
-            get;
-            private set;
-        }
-        
         public static TablesComponent Tables
         {
             get;
@@ -35,7 +29,6 @@ namespace Game
         {
             CodeRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<CodeRunnerComponent>();
             Platform = UnityGameFramework.Runtime.GameEntry.GetComponent<PlatformComponent>();
-            ResourceList = UnityGameFramework.Runtime.GameEntry.GetComponent<ResourceListComponent>();
             Tables = UnityGameFramework.Runtime.GameEntry.GetComponent<TablesComponent>();
         }
     }

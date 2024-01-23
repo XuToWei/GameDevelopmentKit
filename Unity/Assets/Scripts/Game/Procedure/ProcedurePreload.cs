@@ -15,10 +15,6 @@ namespace Game
 
         private async UniTaskVoid PreloadAsync(ProcedureOwner procedureOwner)
         {
-            Log.Info("Start load Resource List!");
-            await GameEntry.ResourceList.LoadAsync();
-            Log.Info("Finish load Resource List!");
-            
             Log.Info("Start load Game Tables!");
             await GameEntry.Tables.LoadAllAsync();
             Log.Info("Finish load Game Tables!");

@@ -435,9 +435,6 @@ namespace UnityGameFramework.Extension.Editor
 
             ResourceOptimize optimize = new ResourceOptimize();
             optimize.Optimize(m_ResourceCollection);
-            
-            ResourceListGenerator generator = new ResourceListGenerator();
-            generator.GenerateList(m_ResourceCollection);
         }
 
         public void RefreshResourceCollection(string configPath)
