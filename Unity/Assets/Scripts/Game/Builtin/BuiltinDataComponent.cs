@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GameFramework;
 using GameFramework.Localization;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -67,15 +68,18 @@ namespace Game
             for (int i = 0; i < guids.Length; i++)
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(guids[i]);
-                m_LocalizationDictionaries[i] = AssetDatabase.LoadAssetAtPath<BuiltinLocalizationDictionary>(assetPath);
+                var localizationDictionary = AssetDatabase.LoadAssetAtPath<BuiltinLocalizationDictionary>(assetPath);
+                if (localizationDictionary.Dictionary == null)
+                {
+                    throw new GameFrameworkException(Utility.Text.Format("BuiltinLocalizationDictionary({0}) dictionary is empty!", assetPath));
+                }
+                m_LocalizationDictionaries[i] = localizationDictionary;
             }
-
             if (!Application.isPlaying)
             {
                 EditorUtility.SetDirty(this);
                 AssetDatabase.SaveAssets();
             }
-
             HashSet<Language> allLanguages = new HashSet<Language>();
             HashSet<string> allKeys = new HashSet<string>();
             foreach (var dictionary in m_LocalizationDictionaries)
@@ -88,7 +92,6 @@ namespace Game
                 {
                     Log.Error("Language({0}) is duplicate!", dictionary.Language);
                 }
-
                 foreach (var key in dictionary.Dictionary.Keys)
                 {
                     allKeys.Add(key);

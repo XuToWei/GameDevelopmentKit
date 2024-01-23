@@ -8,8 +8,8 @@ namespace Game
     [CreateAssetMenu(menuName = "Game/Localization Dictionary", fileName = "UGFLocalizationDictionary", order = 0)]
     public class BuiltinLocalizationDictionary : SerializedScriptableObject
     {
-        [SerializeField] private readonly Language m_Language;
-        [SerializeField] private readonly Dictionary<string, string> m_Dictionary = new Dictionary<string, string>();
+        [SerializeField] private Language m_Language;
+        [SerializeField] private Dictionary<string, string> m_Dictionary;
 
         public Language Language => m_Language;
         public Dictionary<string, string> Dictionary => m_Dictionary;
