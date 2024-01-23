@@ -84,20 +84,14 @@ namespace Game
                 {
                     Log.Error("Language({0}) is Unspecified!", dictionary.Language);
                 }
-                else if (allLanguages.Contains(dictionary.Language))
+                else if (!allLanguages.Add(dictionary.Language))
                 {
                     Log.Error("Language({0}) is duplicate!", dictionary.Language);
                 }
-                else
-                {
-                    allLanguages.Add(dictionary.Language);
-                }
+
                 foreach (var key in dictionary.Dictionary.Keys)
                 {
-                    if (!allKeys.Contains(key))
-                    {
-                        allKeys.Add(key);
-                    }
+                    allKeys.Add(key);
                 }
             }
             foreach (var dictionary in m_LocalizationDictionaries)
