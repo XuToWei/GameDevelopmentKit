@@ -245,7 +245,7 @@ namespace Game.Editor
             Remove_UNITY_ET();
 #endif
 #if UNITY_HOTFIX
-            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_GAMEHOTT");
+            LinkXMLHelper.AddLinkXML("UNITY_HOTFIX_GAMEHOT");
 #else
             LinkXMLHelper.AddLinkXML("UNITY_!HOTFIX_GAMEHOT");
 #endif
