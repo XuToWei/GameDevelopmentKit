@@ -16,8 +16,6 @@ namespace ET
     {
         public static class ExcelExporter_Luban
         {
-            private const string not_translated_text_file = "NotLocalization.txt";
-
             /// <summary>
             /// luban命令模板，不能带换行符
             /// </summary>
@@ -96,7 +94,7 @@ namespace ET
 
                     var genConfig = JsonSerializer.Deserialize<GenConfig>(
                         File.ReadAllText(genConfigFile, Encoding.UTF8).Replace("\r\n", " ").Replace("\n", " ").Replace("\u0009", " "),
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true, });
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (!genConfig.active)
                     {
                         continue;

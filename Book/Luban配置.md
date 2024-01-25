@@ -16,16 +16,15 @@
 
 1.  Luban的Excel工程目录目录必须是Design/Excel下，对目录命名不做要求
 
-2.  Luban的Excel工程目录中需要有GenConfig.xml文件才能生效，方便多程序集配置使用（热更，非热更等等）
+2.  Luban的Excel工程目录中需要有luban.conf文件才能生效，方便多程序集配置使用（热更，非热更等等）
 
-3.  GenConfig.xml配置
-   - Open -- 是否开启
-   - Output_Code_Dirs -- 输出代码目录，可以填多个
-   - Output_Data_Dirs -- 输出配置目录，可以填多个
-   - Gen_Type_Code_Data -- 输出代码类型，参考[Luban中的命名参数](https://focus-creative-games.github.io/luban-doc/#/manual/commandtools?id=gen_types-%e5%8f%82%e6%95%b0%e4%bb%8b%e7%bb%8d)
-   - Gen_Group -- 分组导出参数，参考[Luban中的group](https://focus-creative-games.github.io/luban-doc/#/manual/generatecodedata?id=%e7%94%9f%e6%88%90%e4%bb%a3%e7%a0%81%e5%92%8c%e6%95%b0%e6%8d%ae)
-   - Text_Field_Name -- [本地化](https://focus-creative-games.github.io/luban-doc/#/manual/l10n?id=lubanclient-%e5%91%bd%e4%bb%a4)Localization.xlsx默认的字段名，不填不执行本地化
-   - Extra_Command --  补充执行的[命令](https://focus-creative-games.github.io/luban-doc/#/manual/commandtools?id=luban-client-%e4%bd%bf%e7%94%a8%e4%bb%8b%e7%bb%8d)
+3.  luban.conf配置
+   - active -- 是否开启
+   - cmds -- luban执行命令，具体查看[文档](https://luban.doc.code-philosophy.com/docs/manual/commandtools)
+      - 自定义目录 
+      - %UNITY_ASSETS% （Unity的Assets目录）
+      - %CONF_ROOT% （当前luban.conf的目录）
+      - %ROOT% （GDK根目录）
 
 ![](png/luban_genconfig.png)
 

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
+using System.Text;
+using System.Text.Json;
 
 namespace ET
 {
@@ -14,73 +15,67 @@ namespace ET
 
     public static partial class Proto2CS
     {
-        private const string ProtoDir = "../Design/Proto";
-        private static readonly char[] splitChars = { ' ', '\t' };
+        private static readonly string WorkDir = Path.GetFullPath("../Bin");
+        private const string unity_assets_path = "../Unity/Assets";
+        private const string root_path = "..";
+
+        private const string proto_root_dir = "../Design/Proto";
+        private static readonly char[] splitChars = [' ', '\t'];
         
-        private class Gen_Info
+        private class GenConfig
         {
-            public string Proto_Dir;
-            public int Start_Opcode;
-            public string Code_Name;
-            public List<string> Code_Output_Dirs;
-            public GenCodeType Code_Type;
-            public string Name_Space;
+            public string protoDir { get; set; }
+            public bool active { get; set; }
+            public int startOpcode { get; set; }
+            public string codeName { get; set; }
+            public List<string> codeOutputDirs { get; set; }
+            public string codeType { get; set; }
+            public string nameSpace { get; set; }
         }
-        
-        private enum GenCodeType
-        {
-            ET,
-            UGF
-        }
-        
+
         public static void Export()
         {
             Log.Info("proto2cs start!");
-            string[] childDirs = Directory.GetDirectories(ProtoDir);
+            string[] childDirs = Directory.GetDirectories(proto_root_dir);
             if (childDirs.Length < 1)
             {
-                throw new Exception($"{ProtoDir} doesn't exist child directory!");
+                throw new Exception($"{proto_root_dir} doesn't exist child directory!");
             }
-            List<Gen_Info> genInfos = new List<Gen_Info>();
+            List<GenConfig> genConfigs = new List<GenConfig>();
             foreach (var childDir in childDirs)
             {
-                string genConfigFile = $"{childDir}/GenConfig.xml";
+                string genConfigFile = $"{childDir}/proto.conf";
                 if (!File.Exists(genConfigFile))
                 {
                     continue;
                 }
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(File.ReadAllText(genConfigFile));
-                XmlNode xmlRoot = xmlDocument.SelectSingleNode("Config");
-                XmlNodeList xmlGens = xmlRoot.SelectNodes("Gen");
-                for (int i = 0; i < xmlGens.Count; i++)
+                var genConfig = JsonSerializer.Deserialize<GenConfig>(
+                    File.ReadAllText(genConfigFile, Encoding.UTF8),
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (!genConfig.active)
                 {
-                    XmlNode xmlGen = xmlGens.Item(i);
-                    XmlNode openNode = xmlGen.SelectSingleNode("Open");
-                    if (!openNode.Attributes.GetNamedItem("Value").Value.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
-                    {
-                        continue;
-                    }
-                    Gen_Info info = new Gen_Info();
-                    info.Proto_Dir = childDir;
-                    info.Start_Opcode = int.Parse(xmlGen.SelectSingleNode("Start_Opcode").Attributes.GetNamedItem("Value").Value);
-                    info.Code_Name = xmlGen.SelectSingleNode("Code_Name").Attributes.GetNamedItem("Value").Value;
-                    string dirsStr = xmlGen.SelectSingleNode("Code_Output_Dirs").Attributes.GetNamedItem("Value").Value;
-                    info.Code_Output_Dirs = dirsStr.Split(',').ToList();
-                    info.Code_Type = Enum.Parse<GenCodeType>(xmlGen.SelectSingleNode("Code_Type").Attributes.GetNamedItem("Value").Value);
-                    info.Name_Space = xmlGen.SelectSingleNode("Name_Space").Attributes.GetNamedItem("Value").Value;
-                    genInfos.Add(info);
+                    continue;
                 }
+                for (int i = 0; i < genConfig.codeOutputDirs.Count; i++)
+                {
+                    genConfig.codeOutputDirs[i] = genConfig.codeOutputDirs[i]
+                            .Replace("%CONF_ROOT%", childDir)
+                            .Replace("%UNITY_ASSETS%", Path.GetFullPath(Path.Combine(WorkDir, unity_assets_path)))
+                            .Replace("%ROOT%", Path.GetFullPath(Path.Combine(WorkDir, root_path)))
+                            .Replace('\\', '/');
+                }
+                genConfig.protoDir = childDir;
+                genConfigs.Add(genConfig);
             }
 
-            if (genInfos.Count < 1)
+            if (genConfigs.Count < 1)
             {
-                throw new Exception($"{ProtoDir} doesn't exist Open GenConfig.xml!");
+                throw new Exception($"{proto_root_dir} doesn't exist any proto.conf file!");
             }
 
-            foreach (var info in genInfos)
+            foreach (var genConfig in genConfigs)
             {
-                foreach (var dir in info.Code_Output_Dirs)
+                foreach (var dir in genConfig.codeOutputDirs)
                 {
                     if (Directory.Exists(dir))
                     {
@@ -89,42 +84,46 @@ namespace ET
                 }
             }
 
-            foreach (var info in genInfos)
+            foreach (var genConfig in genConfigs)
             {
-                if (info.Code_Type == GenCodeType.ET)
+                if (string.Equals(genConfig.codeType, "ET", StringComparison.CurrentCultureIgnoreCase))
                 {
                     //MemoryPack
-                    List<string> protoFiles = Directory.GetFiles(info.Proto_Dir).ToList();
+                    List<string> protoFiles = Directory.GetFiles(genConfig.protoDir, "*.proto").ToList();
                     if (protoFiles.Count < 1)
                     {
                         continue;
                     }
                     protoFiles.Sort((a, b)=> String.Compare(a, b, StringComparison.Ordinal));
-                    Proto2CS_ET.Start(info.Code_Name, info.Code_Output_Dirs, info.Start_Opcode, info.Name_Space);
+                    Proto2CS_ET.Start(genConfig.codeName, genConfig.codeOutputDirs, genConfig.startOpcode, genConfig.nameSpace);
                     foreach (var protoFile in protoFiles)
                     {
                         Proto2CS_ET.Proto2CS(protoFile);
                     }
                     Proto2CS_ET.Stop();
                 }
-                else if (info.Code_Type == GenCodeType.UGF)
+                else if (string.Equals(genConfig.codeType, "UGF", StringComparison.CurrentCultureIgnoreCase))
                 {
                     //Protobuf，为了通用
-                    List<string> protoFiles = Directory.GetFiles(info.Proto_Dir).ToList();
+                    List<string> protoFiles = Directory.GetFiles(genConfig.protoDir, "*.proto").ToList();
                     if (protoFiles.Count < 1)
                     {
                         continue;
                     }
                     protoFiles.Sort((a, b)=> String.Compare(a, b, StringComparison.Ordinal));
-                    Proto2CS_UGF.Start(info.Code_Name, info.Code_Output_Dirs, info.Start_Opcode, info.Name_Space);
+                    Proto2CS_UGF.Start(genConfig.codeName, genConfig.codeOutputDirs, genConfig.startOpcode, genConfig.nameSpace);
                     foreach (var protoFile in protoFiles)
                     {
                         Proto2CS_UGF.Proto2CS(protoFile);
                     }
                     Proto2CS_UGF.Stop();
                 }
+                else
+                {
+                    throw new Exception($"{genConfig.protoDir} error codeType : {genConfig.codeType} !");
+                }
             }
-            
+
             Log.Info("proto2cs succeed!");
         }
     }

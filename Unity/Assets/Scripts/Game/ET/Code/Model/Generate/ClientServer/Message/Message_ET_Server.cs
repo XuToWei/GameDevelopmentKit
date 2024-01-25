@@ -24,7 +24,7 @@ namespace ET
         public long InstanceId { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Key = default;
             this.InstanceId = default;
@@ -47,7 +47,7 @@ namespace ET
         public int RpcId { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             ObjectPool.Instance.Recycle(this); 
         }
@@ -71,7 +71,7 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -98,7 +98,7 @@ namespace ET
         public string Address { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Id = default;
             this.Address = default;
@@ -124,7 +124,7 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -151,7 +151,7 @@ namespace ET
         public string Address { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Id = default;
             this.Address = default;
@@ -177,7 +177,7 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -206,7 +206,7 @@ namespace ET
         public ActorId ActorId { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Type = default;
             this.Key = default;
@@ -233,7 +233,7 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -264,7 +264,7 @@ namespace ET
         public int Time { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Type = default;
             this.Key = default;
@@ -292,7 +292,7 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -323,7 +323,7 @@ namespace ET
         public ActorId NewActorId { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Type = default;
             this.Key = default;
@@ -351,7 +351,7 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -378,7 +378,7 @@ namespace ET
         public long Key { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Type = default;
             this.Key = default;
@@ -404,7 +404,7 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -431,7 +431,7 @@ namespace ET
         public long Key { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Type = default;
             this.Key = default;
@@ -461,7 +461,7 @@ namespace ET
         public ActorId ActorId { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -488,7 +488,7 @@ namespace ET
         public string Account { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Account = default;
             ObjectPool.Instance.Recycle(this); 
@@ -517,7 +517,7 @@ namespace ET
         public long GateId { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -541,7 +541,7 @@ namespace ET
         public int RpcId { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             ObjectPool.Instance.Recycle(this); 
         }
@@ -567,7 +567,7 @@ namespace ET
         public byte[] Entity { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -597,7 +597,7 @@ namespace ET
         public List<byte[]> Entitys { get; set; } = new List<byte[]>();
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.OldActorId = default;
             this.Unit = default;
@@ -624,7 +624,7 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -650,7 +650,7 @@ namespace ET
         public long Id { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Id = default;
             ObjectPool.Instance.Recycle(this); 
@@ -675,7 +675,7 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -700,7 +700,7 @@ namespace ET
         public List<long> PlayerIds { get; set; } = new List<long>();
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.PlayerIds.Clear();
             ObjectPool.Instance.Recycle(this); 
@@ -728,7 +728,7 @@ namespace ET
         public ActorId ActorId { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -754,7 +754,7 @@ namespace ET
         public long PlayerId { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.PlayerId = default;
             ObjectPool.Instance.Recycle(this); 
@@ -785,7 +785,7 @@ namespace ET
         public int Frame { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
@@ -813,7 +813,7 @@ namespace ET
         public List<long> PlayerIds { get; set; } = new List<long>();
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.PlayerIds.Clear();
             ObjectPool.Instance.Recycle(this); 
@@ -838,7 +838,7 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose() 
         {
-            if (!this.IsFromPool) return;
+            if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;

@@ -1,7 +1,7 @@
 # GameDevelopmentKit的介绍：
 努力提供完善的双端开发工具
 
-服务端以[ET8.0框架](https://github.com/egametang/ET)为基础
+服务端以[ET8.1框架](https://github.com/egametang/ET)为基础
 
 客户端以[UnityGameFramework框架（GF）](https://github.com/EllanJiang/UnityGameFramework)为基础，将ET框架子模块化入GF，完善ET的客户端功能
 
@@ -91,7 +91,7 @@
 # 引用库 致谢
 [UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
 
-[ET](https://github.com/egametang/ET)（版本：[8.0](https://github.com/egametang/ET/commit/ab65ef95a166156c2bdc577d622b0d35a159568e)）
+[ET](https://github.com/egametang/ET)（版本：[8.1](https://github.com/egametang/ET/commit/9dade6b528e013e3eccc0c73858cfcccce88fa8f)）
 
 [Luban](https://github.com/focus-creative-games/luban)
 

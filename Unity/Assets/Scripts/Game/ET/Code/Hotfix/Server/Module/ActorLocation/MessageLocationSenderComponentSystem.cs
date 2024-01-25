@@ -181,10 +181,7 @@ namespace ET.Server
             MessageLocationSender messageLocationSender = self.GetOrCreate(entityId);
 
             Scene root = self.Root();
-            
-            int rpcId = root.GetComponent<MessageSender>().GetRpcId();
-            iRequest.RpcId = rpcId;
-            
+            Type iRequestType = iRequest.GetType();
             long actorLocationSenderInstanceId = messageLocationSender.InstanceId;
             int coroutineLockType = (self.LocationType << 16) | CoroutineLockType.MessageLocationSender;
             using (await root.GetComponent<CoroutineLockComponent>().Wait(coroutineLockType, entityId))
@@ -196,7 +193,7 @@ namespace ET.Server
 
                 try
                 {
-                    return await self.CallInner(messageLocationSender, rpcId, iRequest);
+                    return await self.CallInner(messageLocationSender, iRequest);
                 }
                 catch (RpcException)
                 {
@@ -206,12 +203,12 @@ namespace ET.Server
                 catch (Exception e)
                 {
                     self.Remove(messageLocationSender.Id);
-                    throw new Exception($"{iRequest}", e);
+                    throw new Exception($"{iRequestType.FullName}", e);
                 }
             }
         }
 
-        private static async UniTask<IResponse> CallInner(this MessageLocationSenderOneType self, MessageLocationSender messageLocationSender, int rpcId, IRequest iRequest)
+        private static async UniTask<IResponse> CallInner(this MessageLocationSenderOneType self, MessageLocationSender messageLocationSender, IRequest iRequest)
         {
             int failTimes = 0;
             long instanceId = messageLocationSender.InstanceId;
@@ -233,9 +230,9 @@ namespace ET.Server
 
                 if (messageLocationSender.ActorId == default)
                 {
-                    return MessageHelper.CreateResponse(requestType, rpcId, ErrorCore.ERR_NotFoundActor);
+                    return MessageHelper.CreateResponse(requestType, 0, ErrorCore.ERR_NotFoundActor);
                 }
-                IResponse response = await root.GetComponent<MessageSender>().Call(messageLocationSender.ActorId, rpcId, iRequest, needException: false);
+                IResponse response = await root.GetComponent<MessageSender>().Call(messageLocationSender.ActorId, iRequest, needException: false);
                 
                 if (messageLocationSender.InstanceId != instanceId)
                 {
