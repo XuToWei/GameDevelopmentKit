@@ -12,7 +12,7 @@ namespace Game.Editor
     public static class HybridCLRTool
     {
         public static string ExternalHotUpdateAssemblyDir => "./Temp/HybridCLRBin";
-        
+
         public static void EnableHybridCLR()
         {
             HybridCLRSettings.Instance.enable = true;

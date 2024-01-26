@@ -1,34 +1,35 @@
+using System;
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 
 namespace ET
 {
     [ChildOf]
-    public sealed class UGFEntity : Entity, IAwake<string, ETMonoEntity>, IDestroy
+    public sealed class UGFEntity : Entity, IAwake<Type, ETMonoEntity>, IDestroy
     {
         [BsonIgnore]
-        public UnityGameFramework.Runtime.Entity entity { get; private set; }
-        public string entityEventTypeName { get; private set; }
+        public UnityGameFramework.Runtime.Entity Entity { get; private set; }
+        public Type EntityEventType { get; private set; }
         [BsonIgnore]
-        public Transform transform { get; private set; }
-        public bool isShow => this.etMonoEntity.isShow;
+        public Transform Transform { get; private set; }
+        public bool IsShow => ETMonoEntity.IsShow;
         [BsonIgnore]
-        public ETMonoEntity etMonoEntity;
+        public ETMonoEntity ETMonoEntity { get; private set; }
         
-        internal void OnAwake(string entityEventTypeName, ETMonoEntity etMonoEntity)
+        internal void OnAwake(Type entityEventType, ETMonoEntity etMonoEntity)
         {
-            this.etMonoEntity = etMonoEntity;
-            this.entityEventTypeName = entityEventTypeName;
-            this.transform = etMonoEntity.CachedTransform;
-            this.entity = etMonoEntity.Entity;
+            ETMonoEntity = etMonoEntity;
+            EntityEventType = entityEventType;
+            Transform = etMonoEntity.CachedTransform;
+            Entity = etMonoEntity.Entity;
         }
         
         internal void OnDestroy()
         {
-            this.etMonoEntity = default;
-            this.entityEventTypeName = default;
-            this.transform = default;
-            this.entity = default;
+            ETMonoEntity = default;
+            EntityEventType = default;
+            Transform = default;
+            Entity = default;
         }
     }
 
@@ -37,9 +38,9 @@ namespace ET
     public static partial class UGFEntitySystem
     {
         [EntitySystem]
-        private static void Awake(this UGFEntity self, string entityEventTypeName, ETMonoEntity etMonoEntity)
+        private static void Awake(this UGFEntity self, Type entityEventTyp, ETMonoEntity etMonoEntity)
         {
-            self.OnAwake(entityEventTypeName, etMonoEntity);
+            self.OnAwake(entityEventTyp, etMonoEntity);
         }
 
         [EntitySystem]

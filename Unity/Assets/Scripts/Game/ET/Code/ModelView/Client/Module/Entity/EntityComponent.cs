@@ -15,7 +15,7 @@ namespace ET.Client
         {
             foreach (UGFEntity entity in this.AllShowEntities.ToArray())
             {
-                GameEntry.Entity.HideEntity(entity.entity);
+                GameEntry.Entity.HideEntity(entity.Entity);
             }
             this.AllShowEntities.Clear();
             base.Dispose();

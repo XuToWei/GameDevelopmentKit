@@ -9,23 +9,19 @@ namespace ET
     {
         private UGFUIForm m_UGFUIForm;
         private int m_UIFormId;
-        private IUGFUIFormEvent m_UIFormEvent;
-
-        public bool isOpen { get; private set; }
-        public UGFUIForm ugfUIForm => this.m_UGFUIForm;
+        public bool IsOpen { get; private set; }
+        public UGFUIForm UGFUIForm => m_UGFUIForm;
 
         public void OnReload()
         {
-            if(UGFEventComponent.Instance.TryGetUIFormEvent(this.m_UIFormId, out IUGFUIFormEvent uiFormEvent))
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnReload(m_UGFUIForm);
+            if (m_UGFUIForm.UIWidgets != null)
             {
-                this.m_UIFormEvent = uiFormEvent;
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnReload(uiWidget);
+                }
             }
-            else
-            {
-                this.m_UIFormEvent = default;
-                throw new GameFrameworkException($"UIFormId {this.m_UIFormId} doesn't exist UIFormEvent!");
-            }
-            this.m_UIFormEvent.OnReload(this.m_UGFUIForm);
         }
 
         protected override void OnOpen(object userData)
@@ -36,33 +32,38 @@ namespace ET
             {
                 throw new GameFrameworkException("ETMonoUIFormData ParentEntity is null!");
             }
-            if (this.m_UGFUIForm == default || this.m_UIFormId != formData.UIFormId || formData.ParentEntity != this.m_UGFUIForm.Parent)
+            if (m_UGFUIForm == default || m_UIFormId != formData.UIFormId || formData.ParentEntity != m_UGFUIForm.Parent)
             {
                 UGFUIFormDispose();
-                if(UGFEventComponent.Instance.TryGetUIFormEvent(formData.UIFormId, out IUGFUIFormEvent uiFormEvent))
+                m_UIFormId = formData.UIFormId;
+                m_UGFUIForm = formData.ParentEntity.AddChild<UGFUIForm, int, ETMonoUIForm>(m_UIFormId, this);
+                UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnInit(m_UGFUIForm, formData.UserData);
+                if (m_UGFUIForm.UIWidgets != null)
                 {
-                    this.m_UIFormEvent = uiFormEvent;
+                    foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                    {
+                        UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnInit(uiWidget, formData.UserData);
+                    }
                 }
-                else
-                {
-                    this.m_UIFormEvent = default;
-                    throw new GameFrameworkException($"UIFormId {this.m_UIFormId} doesn't exist UIFormEvent!");
-                }
-                this.m_UIFormId = formData.UIFormId;
-                this.m_UGFUIForm = formData.ParentEntity.AddChild<UGFUIForm, int, ETMonoUIForm>(this.m_UIFormId, this);
-                this.m_UIFormEvent.OnInit(this.m_UGFUIForm, formData.UserData);
             }
-            this.isOpen = true;
-            this.m_UIFormEvent.OnOpen(this.m_UGFUIForm, formData.UserData);
+            IsOpen = true;
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnOpen(m_UGFUIForm, formData.UserData);
+            if (m_UGFUIForm.UIWidgets != null)
+            {
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnOpen(uiWidget, formData.UserData);
+                }
+            }
             formData.Release();
         }
 
         private void UGFUIFormDispose()
         {
-            if (this.m_UGFUIForm != default && !this.m_UGFUIForm.IsDisposed)
+            if (m_UGFUIForm != default && !m_UGFUIForm.IsDisposed)
             {
-                UGFUIForm ugfUIForm = this.m_UGFUIForm;
-                this.m_UGFUIForm = default;
+                UGFUIForm ugfUIForm = m_UGFUIForm;
+                m_UGFUIForm = default;
                 ugfUIForm.Dispose();
             }
         }
@@ -74,8 +75,15 @@ namespace ET
 
         protected override void OnClose(bool isShutdown, object userData)
         {
-            this.isOpen = false;
-            this.m_UIFormEvent.OnClose(this.m_UGFUIForm, isShutdown, userData);
+            if (m_UGFUIForm.UIWidgets != null)
+            {
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnClose(uiWidget, isShutdown, userData);
+                }
+            }
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnClose(m_UGFUIForm, isShutdown, userData);
+            IsOpen = false;
             if (isShutdown)
             {
                 UGFUIFormDispose();
@@ -86,49 +94,105 @@ namespace ET
         protected override void OnPause()
         {
             base.OnPause();
-            this.m_UIFormEvent.OnPause(this.m_UGFUIForm);
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnPause(m_UGFUIForm);
+            if (m_UGFUIForm.UIWidgets != null)
+            {
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnPause(uiWidget);
+                }
+            }
         }
 
         protected override void OnResume()
         {
             base.OnResume();
-            this.m_UIFormEvent.OnResume(this.m_UGFUIForm);
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnResume(m_UGFUIForm);
+            if (m_UGFUIForm.UIWidgets != null)
+            {
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnResume(uiWidget);
+                }
+            }
         }
 
         protected override void OnCover()
         {
             base.OnCover();
-            this.m_UIFormEvent.OnCover(this.m_UGFUIForm);
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnCover(m_UGFUIForm);
+            if (m_UGFUIForm.UIWidgets != null)
+            {
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnCover(uiWidget);
+                }
+            }
         }
 
         protected override void OnReveal()
         {
             base.OnReveal();
-            this.m_UIFormEvent.OnReveal(this.m_UGFUIForm);
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnReveal(m_UGFUIForm);
+            if (m_UGFUIForm.UIWidgets != null)
+            {
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnReveal(uiWidget);
+                }
+            }
         }
 
         protected override void OnRefocus(object userData)
         {
             base.OnRefocus(userData);
-            this.m_UIFormEvent.OnRefocus(this.m_UGFUIForm, userData);
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnRefocus(m_UGFUIForm, userData);
+            if (m_UGFUIForm.UIWidgets != null)
+            {
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnRefocus(uiWidget, userData);
+                }
+            }
         }
 
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
-            this.m_UIFormEvent.OnUpdate(this.m_UGFUIForm, elapseSeconds, realElapseSeconds);
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnUpdate(m_UGFUIForm, elapseSeconds, realElapseSeconds);
+            if (m_UGFUIForm.UIWidgets != null)
+            {
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnUpdate(uiWidget, elapseSeconds, realElapseSeconds);
+                }
+            }
         }
 
         protected override void OnDepthChanged(int uiGroupDepth, int depthInUIGroup)
         {
             base.OnDepthChanged(uiGroupDepth, depthInUIGroup);
-            this.m_UIFormEvent.OnDepthChanged(this.m_UGFUIForm, uiGroupDepth, depthInUIGroup);
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnDepthChanged(m_UGFUIForm, uiGroupDepth, depthInUIGroup);
+            if (m_UGFUIForm.UIWidgets != null)
+            {
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnDepthChanged(uiWidget, uiGroupDepth, depthInUIGroup);
+                }
+            }
         }
 
         protected override void OnRecycle()
         {
             base.OnRecycle();
-            this.m_UIFormEvent.OnRecycle(this.m_UGFUIForm);
+            UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnRecycle(m_UGFUIForm);
+            if (m_UGFUIForm.UIWidgets != null)
+            {
+                foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
+                {
+                    UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnRecycle(uiWidget);
+                }
+            }
         }
     }
 }

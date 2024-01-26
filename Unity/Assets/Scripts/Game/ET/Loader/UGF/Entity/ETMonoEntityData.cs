@@ -5,7 +5,7 @@ namespace ET
 {
     public sealed class ETMonoEntityData : IReference
     {
-        public string EntityEventTypeName
+        public Type EntityEventType
         {
             get;
             private set;
@@ -25,7 +25,7 @@ namespace ET
         
         public void Clear()
         {
-            this.EntityEventTypeName = default;
+            this.EntityEventType = default;
             this.ParentEntity = default;
             this.UserData = default;
         }
@@ -33,7 +33,7 @@ namespace ET
         public static ETMonoEntityData Acquire(Type entityEventType, Entity parentEntity, object userData)
         {
             ETMonoEntityData entityData = ReferencePool.Acquire<ETMonoEntityData>();
-            entityData.EntityEventTypeName = entityEventType.FullName;
+            entityData.EntityEventType = entityEventType;
             entityData.ParentEntity = parentEntity;
             entityData.UserData = userData;
             return entityData;

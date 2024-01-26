@@ -19,15 +19,13 @@ namespace ET
             /// <summary>
             /// luban命令模板，不能带换行符
             /// </summary>
-            private static readonly string lubanCommandHeaderTemplate =
+            private static readonly string s_LubanCommandHeaderTemplate =
                     $"dotnet %GEN_CLIENT% --customTemplateDir %CUSTOM_TEMPLATE_DIR% --conf %CONF_ROOT%/luban.conf ";
 
-            private const string gen_client = "../Tools/Luban/Tools/Luban/Luban.dll";
-            private const string custom_template_dir = "../Tools/Luban/CustomTemplates";
-            private const string excel_dir = "../Design/Excel";
-            private const string gen_config_name = "luban.conf";
-            private const string unity_assets_path = "../Unity/Assets";
-            private const string root_path = "..";
+            private const string GEN_CLIENT = "../Tools/Luban/Tools/Luban/Luban.dll";
+            private const string CUSTOM_TEMPLATE_DIR = "../Tools/Luban/CustomTemplates";
+            private const string EXCEL_DIR = "../Design/Excel";
+            private const string GEN_CONFIG_NAME = "luban.conf";
 
             private static Encoding s_Encoding;
 
@@ -71,7 +69,7 @@ namespace ET
                     s_Encoding = Encoding.UTF8;
                 }
 
-                string excelDir = Path.GetFullPath(Path.Combine(WorkDir, excel_dir));
+                string excelDir = Path.GetFullPath(Path.Combine(Define.WorkDir, EXCEL_DIR));
                 string[] dirs = Directory.GetDirectories(excelDir);
                 if (dirs.Length < 1)
                 {
@@ -86,7 +84,7 @@ namespace ET
                 for (int i = 0; i < dirs.Length; i++)
                 {
                     string dir = Path.GetFullPath(dirs[i]);
-                    string genConfigFile = Path.Combine(dir, gen_config_name);
+                    string genConfigFile = Path.Combine(dir, GEN_CONFIG_NAME);
                     if (!File.Exists(genConfigFile))
                     {
                         continue;
@@ -114,13 +112,13 @@ namespace ET
                     for (int j = 0; j < genConfig.cmds.Count; j++)
                     {
                         var cmdInfo = new CmdInfo();
-                        var cmd = lubanCommandHeaderTemplate + genConfig.cmds[j];
+                        var cmd = s_LubanCommandHeaderTemplate + genConfig.cmds[j];
                         cmd = cmd
-                                .Replace("%GEN_CLIENT%", Path.GetFullPath(Path.Combine(WorkDir, gen_client)))
-                                .Replace("%CUSTOM_TEMPLATE_DIR%", Path.GetFullPath(Path.Combine(WorkDir, custom_template_dir)))
+                                .Replace("%GEN_CLIENT%", Path.GetFullPath(Path.Combine(Define.WorkDir, GEN_CLIENT)))
+                                .Replace("%CUSTOM_TEMPLATE_DIR%", Path.GetFullPath(Path.Combine(Define.WorkDir, CUSTOM_TEMPLATE_DIR)))
                                 .Replace("%CONF_ROOT%", dir)
-                                .Replace("%UNITY_ASSETS%", Path.GetFullPath(Path.Combine(WorkDir, unity_assets_path)))
-                                .Replace("%ROOT%", Path.GetFullPath(Path.Combine(WorkDir, root_path)))
+                                .Replace("%UNITY_ASSETS%", Path.GetFullPath(Path.Combine(Define.WorkDir, Define.UNITY_ASSETS_PATH)))
+                                .Replace("%ROOT%", Path.GetFullPath(Path.Combine(Define.WorkDir, Define.ROOT_PATH)))
                                 .Replace('\\', '/');
 
                         //去掉连续多个空格
@@ -150,7 +148,7 @@ namespace ET
 
                         if (!cmd.Contains("-x l10n.textProviderFile"))
                         {
-                            cmd += $" -x l10n.textProviderFile={LocalizationExcelFile.Replace('\\', '/')}";
+                            cmd += $" -x l10n.textProviderFile={s_LocalizationExcelFile.Replace('\\', '/')}";
                         }
 
                         cmd = Regex.Replace(cmd, @"\s+(?=-)", " ");
@@ -205,7 +203,7 @@ namespace ET
                             Log.Info($"{cmdInfo.dirName} : {cmdInfo.cmd}");
                         }
 
-                        if (await RunCommand(cmdInfo.cmd, WorkDir, cmdInfo.dirName, showInfo))
+                        if (await RunCommand(cmdInfo.cmd, Define.WorkDir, cmdInfo.dirName, showInfo))
                         {
                             Log.Info($"Luban {actionStr} process : {Interlocked.Add(ref processCount, 1)}/{cmdInfos.Count}");
                         }

@@ -12,21 +12,21 @@ namespace ET.Client
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                UGFUILSRoomComponent uiLSRoom = uiForm.AddComponent<UGFUILSRoomComponent, Transform>(uiForm.transform);
+                UGFUILSRoomComponent uiLSRoom = uiForm.AddComponent<UGFUILSRoomComponent, Transform>(uiForm.Transform);
                 Room room = uiLSRoom.Room();
                 if (room.IsReplay)
                 {
-                    uiLSRoom.replayTransform.gameObject.SetActive(true);
-                    uiLSRoom.playTransform.gameObject.SetActive(false);
-                    uiLSRoom.jumpButton.Set(uiLSRoom.JumpReplay);
-                    uiLSRoom.speedButton.Set(uiLSRoom.OnReplaySpeedClicked);
-                    uiLSRoom.frameCountText.text = uiLSRoom.Room().Replay.FrameInputs.Count.ToString();
+                    uiLSRoom.ReplayTransform.gameObject.SetActive(true);
+                    uiLSRoom.PlayTransform.gameObject.SetActive(false);
+                    uiLSRoom.JumpButton.Set(uiLSRoom.JumpReplay);
+                    uiLSRoom.SpeedButton.Set(uiLSRoom.OnReplaySpeedClicked);
+                    uiLSRoom.FrameCountText.text = uiLSRoom.Room().Replay.FrameInputs.Count.ToString();
                 }
                 else
                 {
-                    uiLSRoom.replayTransform.gameObject.SetActive(false);
-                    uiLSRoom.playTransform.gameObject.SetActive(true);
-                    uiLSRoom.saveReplayButton.Set(uiLSRoom.OnSaveReplay);
+                    uiLSRoom.ReplayTransform.gameObject.SetActive(false);
+                    uiLSRoom.PlayTransform.gameObject.SetActive(true);
+                    uiLSRoom.SaveReplayButton.Set(uiLSRoom.OnSaveReplay);
                 }
             }
             
@@ -44,7 +44,7 @@ namespace ET.Client
                 if (uiLSRoom.frame != room.AuthorityFrame)
                 {
                     uiLSRoom.frame = room.AuthorityFrame;
-                    uiLSRoom.frameCountText.text = room.AuthorityFrame.ToString();
+                    uiLSRoom.FrameCountText.text = room.AuthorityFrame.ToString();
                 }
 
                 if (!room.IsReplay)
@@ -52,7 +52,7 @@ namespace ET.Client
                     if (uiLSRoom.predictFrame != room.PredictionFrame)
                     {
                         uiLSRoom.predictFrame = room.PredictionFrame;
-                        uiLSRoom.predictText.text = room.PredictionFrame.ToString();
+                        uiLSRoom.PredictText.text = room.PredictionFrame.ToString();
                     }
                 }
             }

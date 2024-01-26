@@ -36,14 +36,14 @@ namespace ET.Client
             {
                 throw new Exception($"Open UI fail! UiFomId:{uiFormId}) is not ETMonoUIForm!");
             }
-            return etMonoUIForm.ugfUIForm;
+            return etMonoUIForm.UGFUIForm;
         }
 
         public static void CloseUIForm(this UGFUIComponent self, UGFUIForm uiForm)
         {
             if (!self.AllOpenUIForms.Contains(uiForm))
                 return;
-            GameEntry.UI.CloseUIForm(uiForm.uiForm);
+            GameEntry.UI.CloseUIForm(uiForm.UIForm);
         }
 
         public static void CloseUIForm(this UGFUIComponent self, int uiFormId)
@@ -51,7 +51,7 @@ namespace ET.Client
             using HashSetComponent<UGFUIForm> needRemoves = new HashSetComponent<UGFUIForm>();
             foreach (UGFUIForm uiForm in self.AllOpenUIForms)
             {
-                if (uiForm.uiFormId == uiFormId)
+                if (uiForm.UIFormId == uiFormId)
                 {
                     needRemoves.Add(uiForm);
                 }
@@ -67,7 +67,7 @@ namespace ET.Client
         {
             if (!self.AllOpenUIForms.Contains(uiForm))
                 return;
-            GameEntry.UI.RefocusUIForm(uiForm.uiForm, userData);
+            GameEntry.UI.RefocusUIForm(uiForm.UIForm, userData);
         }
 
         public static void CloseAllUIForms(this UGFUIComponent self)

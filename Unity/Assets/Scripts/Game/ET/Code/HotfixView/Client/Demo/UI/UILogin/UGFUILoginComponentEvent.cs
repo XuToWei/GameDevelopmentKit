@@ -12,8 +12,8 @@ namespace ET.Client
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                var uiLogin = uiForm.AddComponent<UGFUILoginComponent, Transform>(uiForm.transform);
-                uiLogin.loginButton.SetAsync(uiLogin.OnLogin);
+                var uiLogin = uiForm.AddComponent<UGFUILoginComponent, Transform>(uiForm.Transform);
+                uiLogin.LoginButton.SetAsync(uiLogin.OnLogin);
             }
             
             public override void OnOpen(UGFUIForm uiForm, object userData)

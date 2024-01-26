@@ -4,24 +4,24 @@ namespace ET.Client
 {
     public partial class UGFUIHelpComponent : CodeBind.ICSCodeBind
     {
-        public CodeBind.CSCodeBindMono mono { get; private set; }
-        public UnityEngine.Transform transform { get; private set; }
+        public CodeBind.CSCodeBindMono Mono { get; private set; }
+        public UnityEngine.Transform Transform { get; private set; }
 
-        public UnityEngine.UI.Text descText { get; private set; }
+        public UnityEngine.UI.Text DescText { get; private set; }
 
 
         public void InitBind(CodeBind.CSCodeBindMono mono)
         {
-            this.mono = mono;
-            this.transform = mono.transform;
-            this.descText = this.mono.bindComponents[0] as UnityEngine.UI.Text;
+            Mono = mono;
+            Transform = mono.transform;
+            DescText = Mono.BindComponents[0] as UnityEngine.UI.Text;
         }
 
         public void ClearBind()
         {
-            this.mono = null;
-            this.transform = null;
-            this.descText = null;
+            Mono = null;
+            Transform = null;
+            DescText = null;
         }
     }
 }

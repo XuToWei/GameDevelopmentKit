@@ -4,8 +4,7 @@ namespace ET
 {
     public static partial class ExcelExporter
     {
-        private static readonly string WorkDir = Path.GetFullPath("../Bin");
-        private static readonly string LocalizationExcelFile = Path.GetFullPath($"{WorkDir}/../Design/Excel/Localization.xlsx");
+        private static readonly string s_LocalizationExcelFile = Path.GetFullPath($"{Define.WorkDir}/../Design/Excel/Localization.xlsx");
 
         public static void Export()
         {

@@ -10,16 +10,21 @@ namespace ET
     {
         private readonly Dictionary<int, IUGFUIFormEvent> m_UIFormEvents = new();
         private readonly Dictionary<Type, IUGFUIWidgetEvent> m_UIWidgetEvents = new();
-        private readonly Dictionary<string, IUGFEntityEvent> m_EntityEvents = new();
+        private readonly Dictionary<Type, IUGFEntityEvent> m_EntityEvents = new();
 
         public bool TryGetUIFormEvent(int uiFormId, out IUGFUIFormEvent uiFormEvent)
         {
-            return this.m_UIFormEvents.TryGetValue(uiFormId, out uiFormEvent);
+            return m_UIFormEvents.TryGetValue(uiFormId, out uiFormEvent);
         }
-        
-        public bool TryGetEntityEvent(string entityEventTypeName, out IUGFEntityEvent entityEvent)
+
+        public bool TryGetUIWidgetEvent(Type uiWidgetEventType, out IUGFUIWidgetEvent uiWidgetEvent)
         {
-            return this.m_EntityEvents.TryGetValue(entityEventTypeName, out entityEvent);
+            return m_UIWidgetEvents.TryGetValue(uiWidgetEventType, out uiWidgetEvent);
+        }
+
+        public bool TryGetEntityEvent(Type entityEventType, out IUGFEntityEvent entityEvent)
+        {
+            return m_EntityEvents.TryGetValue(entityEventType, out entityEvent);
         }
 
         public IUGFUIFormEvent GetUIFormEvent(int uiFormId)
@@ -27,19 +32,19 @@ namespace ET
             return m_UIFormEvents[uiFormId];
         }
 
-        public IUGFUIWidgetEvent GetUIWidgetEvent(Type type)
+        public IUGFUIWidgetEvent GetUIWidgetEvent(Type uiWidgetEventType)
         {
-            return m_UIWidgetEvents[type];
+            return m_UIWidgetEvents[uiWidgetEventType];
         }
 
-        public IUGFEntityEvent GetEntityEvent(string entityEventTypeName)
+        public IUGFEntityEvent GetEntityEvent(Type entityEventType)
         {
-            return m_EntityEvents[entityEventTypeName];
+            return m_EntityEvents[entityEventType];
         }
 
         public void Awake()
         {
-            this.m_UIFormEvents.Clear();
+            m_UIFormEvents.Clear();
             HashSet<Type> uiFormEventAttributes = CodeTypes.Instance.GetTypes(typeof(UGFUIFormEventAttribute));
             foreach (Type type in uiFormEventAttributes)
             {
@@ -48,7 +53,7 @@ namespace ET
                 IUGFUIFormEvent ugfUIFormEvent = Activator.CreateInstance(type) as IUGFUIFormEvent;
                 foreach (int uiFormId in ugfUIFormEventAttribute.uiFormIds)
                 {
-                    this.m_UIFormEvents.Add(uiFormId, ugfUIFormEvent);
+                    m_UIFormEvents.Add(uiFormId, ugfUIFormEvent);
                 }
             }
 
@@ -56,10 +61,10 @@ namespace ET
             foreach (Type type in uiWidgetEventAttributes)
             {
                 IUGFUIWidgetEvent ugfUIWidgetEvent = Activator.CreateInstance(type) as IUGFUIWidgetEvent;
-                this.m_UIWidgetEvents.Add(ugfUIWidgetEvent.GetType(), ugfUIWidgetEvent);
+                m_UIWidgetEvents.Add(type, ugfUIWidgetEvent);
             }
 
-            this.m_EntityEvents.Clear();
+            m_EntityEvents.Clear();
             var types = CodeTypes.Instance.GetTypes();
             Type entityEventType = typeof(IUGFEntityEvent);
             foreach (Type type in types.Values)
@@ -69,7 +74,7 @@ namespace ET
                     continue;
                 }
                 IUGFEntityEvent ugfEntityEvent = Activator.CreateInstance(type) as IUGFEntityEvent;
-                this.m_EntityEvents.Add(type.FullName, ugfEntityEvent);
+                m_EntityEvents.Add(type, ugfEntityEvent);
             }
         }
     }

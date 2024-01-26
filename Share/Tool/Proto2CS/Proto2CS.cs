@@ -9,18 +9,15 @@ namespace ET
 {
     internal class OpcodeInfo
     {
-        public string Name;
-        public int Opcode;
+        public string name;
+        public int opcode;
     }
 
     public static partial class Proto2CS
     {
         private static readonly string WorkDir = Path.GetFullPath("../Bin");
-        private const string unity_assets_path = "../Unity/Assets";
-        private const string root_path = "..";
-
-        private const string proto_root_dir = "../Design/Proto";
-        private static readonly char[] splitChars = [' ', '\t'];
+        private const string PROTO_ROOT_DIR = "../Design/Proto";
+        private static readonly char[] s_SplitChars = [' ', '\t'];
         
         private class GenConfig
         {
@@ -36,10 +33,10 @@ namespace ET
         public static void Export()
         {
             Log.Info("proto2cs start!");
-            string[] childDirs = Directory.GetDirectories(proto_root_dir);
+            string[] childDirs = Directory.GetDirectories(PROTO_ROOT_DIR);
             if (childDirs.Length < 1)
             {
-                throw new Exception($"{proto_root_dir} doesn't exist child directory!");
+                throw new Exception($"{PROTO_ROOT_DIR} doesn't exist child directory!");
             }
             List<GenConfig> genConfigs = new List<GenConfig>();
             foreach (var childDir in childDirs)
@@ -60,8 +57,8 @@ namespace ET
                 {
                     genConfig.codeOutputDirs[i] = genConfig.codeOutputDirs[i]
                             .Replace("%CONF_ROOT%", childDir)
-                            .Replace("%UNITY_ASSETS%", Path.GetFullPath(Path.Combine(WorkDir, unity_assets_path)))
-                            .Replace("%ROOT%", Path.GetFullPath(Path.Combine(WorkDir, root_path)))
+                            .Replace("%UNITY_ASSETS%", Path.GetFullPath(Path.Combine(WorkDir, Define.UNITY_ASSETS_PATH)))
+                            .Replace("%ROOT%", Path.GetFullPath(Path.Combine(WorkDir, Define.ROOT_PATH)))
                             .Replace('\\', '/');
                 }
                 genConfig.protoDir = childDir;
@@ -70,7 +67,7 @@ namespace ET
 
             if (genConfigs.Count < 1)
             {
-                throw new Exception($"{proto_root_dir} doesn't exist any proto.conf file!");
+                throw new Exception($"{PROTO_ROOT_DIR} doesn't exist any proto.conf file!");
             }
 
             foreach (var genConfig in genConfigs)

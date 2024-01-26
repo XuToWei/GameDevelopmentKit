@@ -2,7 +2,6 @@ using System.Linq;
 using GameFramework.Localization;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
-using UnityEngine.UI;
 
 namespace Game.Editor
 {

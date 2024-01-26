@@ -8,30 +8,30 @@ namespace Game.Editor
 {
     public static class HybridCLREditor
     {
-        static readonly string ResDir = "Assets/Res/HybridCLR";
+        static readonly string s_ResDir = "Assets/Res/HybridCLR";
         
         [MenuItem("HybridCLR/CopyAotDlls")]
         public static void CopyAotDll()
         {
             BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
             string fromDir = Path.Combine(HybridCLRSettings.Instance.strippedAOTDllOutputRootDir, target.ToString());
-            FileTool.CleanDirectoryFiles(ResDir, "*.dll.bytes");
-            FileTool.CleanDirectoryFiles(ResDir, "*.dll.bytes.meta");
+            FileTool.CleanDirectoryFiles(s_ResDir, "*.dll.bytes");
+            FileTool.CleanDirectoryFiles(s_ResDir, "*.dll.bytes.meta");
             foreach (string aotDll in HybridCLRSettings.Instance.patchAOTAssemblies)
             {
                 string file = Path.Combine(fromDir, $"{aotDll}.dll");
                 if(!File.Exists(file))
                     continue;
-                File.Copy(file, Path.Combine(ResDir, $"{aotDll}.dll.bytes"), true);
+                File.Copy(file, Path.Combine(s_ResDir, $"{aotDll}.dll.bytes"), true);
             }
-            AssetDatabase.ImportAsset(ResDir, ImportAssetOptions.ForceUpdate);
+            AssetDatabase.ImportAsset(s_ResDir, ImportAssetOptions.ForceUpdate);
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 
             // 设置aot dlls
             List<TextAsset> aotAssemblyList = new List<TextAsset>();
             for (int i = 0; i < HybridCLRSettings.Instance.patchAOTAssemblies.Length; i++)
             {
-                string file = Path.Combine(ResDir, $"{HybridCLRSettings.Instance.patchAOTAssemblies[i]}.dll.bytes");
+                string file = Path.Combine(s_ResDir, $"{HybridCLRSettings.Instance.patchAOTAssemblies[i]}.dll.bytes");
                 if(!File.Exists(file))
                     continue;
                 aotAssemblyList.Add(AssetDatabase.LoadAssetAtPath<TextAsset>(file));

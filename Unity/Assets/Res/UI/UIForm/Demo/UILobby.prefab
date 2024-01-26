@@ -109,7 +109,7 @@ MonoBehaviour:
   m_SeparatorChar: 95
   m_BindScript: {fileID: 11500000, guid: bdd13edeb1a192d488c493427453ddb8, type: 3}
   m_BindComponentNames:
-  - enterMapButton
+  - EnterMapButton
 --- !u!1 &899722670427233733
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 1003519326168939849}
   - component: {fileID: 1003626380862230063}
   m_Layer: 5
-  m_Name: enterMap_Button
+  m_Name: EnterMap_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

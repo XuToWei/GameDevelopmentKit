@@ -238,7 +238,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.6",
+      "version": "3.0.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -267,14 +267,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "19a9815d9374dacf531cb01337a487a44f65e5eb"
+      "hash": "b448befaca714c72e87733c796cc4c0f9f178eb7"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "326831f58dc8db22fdcae4921bff7026923821b5"
+      "hash": "29b61c47e5ff4ba7f1976918ec0d4b9b4ecb1576"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

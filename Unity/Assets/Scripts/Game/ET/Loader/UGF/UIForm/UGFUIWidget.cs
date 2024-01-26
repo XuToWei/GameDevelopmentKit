@@ -1,23 +1,25 @@
-using CodeBind;
+using System;
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 
 namespace ET
 {
     [ChildOf]
-    public sealed class UGFUIWidget : Entity, IAwake<Transform>, IDestroy
+    public sealed class UGFUIWidget : Entity, IAwake<Transform, Type>, IDestroy
     {
         [BsonIgnore]
-        public Transform transform { get; private set; }
+        public Transform Transform { get; private set; }
+        public Type WidgetEventType { get; private set; }
 
-        internal void OnAwake(Transform trans)
+        internal void OnAwake(Transform transform, Type widgetEventType)
         {
-            this.transform = trans;
+            Transform = transform;
+            WidgetEventType = widgetEventType;
         }
 
         internal void OnDestroy()
         {
-            this.transform = default;
+            this.Transform = default;
         }
     }
     
@@ -26,9 +28,9 @@ namespace ET
     public static partial class UGFUIWidgetSystem
     {
         [EntitySystem]
-        private static void Awake(this UGFUIWidget self, Transform trans)
+        private static void Awake(this UGFUIWidget self, Transform transform, Type widgetEventType)
         {
-            self.OnAwake(trans);
+            self.OnAwake(transform, widgetEventType);
         }
     
         [EntitySystem]

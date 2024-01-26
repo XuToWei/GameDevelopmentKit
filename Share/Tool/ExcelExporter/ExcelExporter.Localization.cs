@@ -15,9 +15,9 @@ namespace ET
     {
         public static class ExcelExporter_Localization
         {
-            private static readonly string LocalizationOutPutDir = Path.GetFullPath("../Unity/Assets/Res/Localization");
-            private static readonly string AssetUtilityCodeFile = Path.GetFullPath("../Unity/Assets/Scripts/Game/Generate/Localization/AssetUtility.Localization.cs");
-            private static readonly string LocalizationReadyLanguageCodeFile = Path.GetFullPath("../Unity/Assets/Scripts/Game/Editor/Generate/Localization/LocalizationReadyLanguage.cs");
+            private static readonly string s_LocalizationOutPutDir = Path.GetFullPath("../Unity/Assets/Res/Localization");
+            private static readonly string s_AssetUtilityCodeFile = Path.GetFullPath("../Unity/Assets/Scripts/Game/Generate/Localization/AssetUtility.Localization.cs");
+            private static readonly string s_LocalizationReadyLanguageCodeFile = Path.GetFullPath("../Unity/Assets/Scripts/Game/Editor/Generate/Localization/LocalizationReadyLanguage.cs");
             
             private struct LanguageTableInfo
             {
@@ -39,7 +39,7 @@ namespace ET
                 Log.Info("Start Export Localization Excel ...");
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 SortedDictionary<Language, SortedDictionary<string, string>> resultDict = new SortedDictionary<Language, SortedDictionary<string, string>>();
-                using (var stream = new FileStream(LocalizationExcelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var stream = new FileStream(s_LocalizationExcelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (IExcelDataReader reader = ExcelReaderFactory.CreateReader(stream))
                     {
@@ -139,7 +139,7 @@ namespace ET
                 {
                     Language language = pair.Key;
                     SortedDictionary<string, string> dict = pair.Value;
-                    string resFullPath = Path.GetFullPath($"{LocalizationOutPutDir}/{language.ToString()}");
+                    string resFullPath = Path.GetFullPath($"{s_LocalizationOutPutDir}/{language.ToString()}");
                     if (!Directory.Exists(resFullPath))
                     {
                         Directory.CreateDirectory(resFullPath);
@@ -214,10 +214,10 @@ namespace ET
                 stringBuilder.AppendLine("    }");
                 stringBuilder.AppendLine("}");
                 string codeContent = stringBuilder.ToString();
-                if (!File.Exists(AssetUtilityCodeFile) || !string.Equals(codeContent, File.ReadAllText(AssetUtilityCodeFile)))
+                if (!File.Exists(s_AssetUtilityCodeFile) || !string.Equals(codeContent, File.ReadAllText(s_AssetUtilityCodeFile)))
                 {
-                    File.WriteAllText(AssetUtilityCodeFile, codeContent);
-                    Log.Info($"Generate code : {AssetUtilityCodeFile}!");
+                    File.WriteAllText(s_AssetUtilityCodeFile, codeContent);
+                    Log.Info($"Generate code : {s_AssetUtilityCodeFile}!");
                 }
             }
             
@@ -240,10 +240,10 @@ namespace ET
                 stringBuilder.AppendLine("    }");
                 stringBuilder.AppendLine("}");
                 string codeContent = stringBuilder.ToString();
-                if (!File.Exists(LocalizationReadyLanguageCodeFile) || !string.Equals(codeContent, File.ReadAllText(LocalizationReadyLanguageCodeFile)))
+                if (!File.Exists(s_LocalizationReadyLanguageCodeFile) || !string.Equals(codeContent, File.ReadAllText(s_LocalizationReadyLanguageCodeFile)))
                 {
-                    File.WriteAllText(LocalizationReadyLanguageCodeFile, codeContent);
-                    Log.Info($"Generate code : {LocalizationReadyLanguageCodeFile}!");
+                    File.WriteAllText(s_LocalizationReadyLanguageCodeFile, codeContent);
+                    Log.Info($"Generate code : {s_LocalizationReadyLanguageCodeFile}!");
                 }
             }
 
@@ -260,7 +260,7 @@ namespace ET
 =======================================================================
     解析失败!
 
-        文件:        {LocalizationExcelFile}
+        文件:        {s_LocalizationExcelFile}
         错误位置:    sheet:{table.TableName} [{ToAlphaString(columnIndex)}:{rowIndex + 1}] {table.Rows[rowIndex][columnIndex]}
         Err:         {errorMsg}
         字段:        {table.Rows[0][columnIndex]}

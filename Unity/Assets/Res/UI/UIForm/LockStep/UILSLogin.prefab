@@ -185,14 +185,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BindComponents:
   - {fileID: 114341495829030012}
-  - {fileID: 114630311973242952}
   - {fileID: 114663064108016614}
+  - {fileID: 114630311973242952}
   m_SeparatorChar: 95
   m_BindScript: {fileID: 11500000, guid: c635abf8be58d764087fae2f80df759b, type: 3}
   m_BindComponentNames:
-  - accountInputField
-  - loginButton
-  - passwordInputField
+  - AccountInputField
+  - PasswordInputField
+  - LoginButton
 --- !u!1 &1568484768885604
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 114107327146574444}
   - component: {fileID: 114663064108016614}
   m_Layer: 5
-  m_Name: password_InputField
+  m_Name: Password_InputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 114899069937167200}
   - component: {fileID: 114341495829030012}
   m_Layer: 5
-  m_Name: account_InputField
+  m_Name: Account_InputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -577,7 +577,7 @@ GameObject:
   - component: {fileID: 114719520540637998}
   - component: {fileID: 114630311973242952}
   m_Layer: 5
-  m_Name: login_Button
+  m_Name: Login_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

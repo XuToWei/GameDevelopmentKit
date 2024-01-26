@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace FileServer
 {
     public class Program
     {
         public static Config Config;
-        
+
         public static void Main(string[] args)
         {
             Config = new Config();

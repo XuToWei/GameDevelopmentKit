@@ -12,9 +12,9 @@ namespace ET.Client
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                UGFUILSLobbyComponent uiLSLobby = uiForm.AddComponent<UGFUILSLobbyComponent, Transform>(uiForm.transform);
-                uiLSLobby.enterMapButton.SetAsync(uiLSLobby.EnterMap);
-                uiLSLobby.replayButton.Set(uiLSLobby.Replay);
+                UGFUILSLobbyComponent uiLSLobby = uiForm.AddComponent<UGFUILSLobbyComponent, Transform>(uiForm.Transform);
+                uiLSLobby.EnterMapButton.SetAsync(uiLSLobby.EnterMap);
+                uiLSLobby.ReplayButton.Set(uiLSLobby.Replay);
             }
 
             public override void OnOpen(UGFUIForm uiForm, object userData)

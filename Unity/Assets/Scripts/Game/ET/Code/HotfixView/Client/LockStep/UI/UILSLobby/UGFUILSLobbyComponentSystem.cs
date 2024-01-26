@@ -28,7 +28,7 @@ namespace ET.Client
         
         public static void Replay(this UGFUILSLobbyComponent self)
         {
-            byte[] bytes = File.ReadAllBytes(self.replayPathInputField.text);
+            byte[] bytes = File.ReadAllBytes(self.ReplayPathInputField.text);
             
             Replay replay = MemoryPackHelper.Deserialize(typeof (Replay), bytes, 0, bytes.Length) as Replay;
             Log.Debug($"start replay: {replay.Snapshots.Count} {replay.FrameInputs.Count} {replay.UnitInfos.Count}");

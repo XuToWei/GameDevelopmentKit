@@ -9,35 +9,35 @@ namespace ET
     {
         public static class Proto2CS_UGF
         {
-            private static readonly List<OpcodeInfo> msgOpcode = new List<OpcodeInfo>();
-            private static string csName;
-            private static List<string> csOutDirs;
-            private static int startOpcode;
-            private static StringBuilder sb;
+            private static readonly List<OpcodeInfo> s_MsgOpcode = new List<OpcodeInfo>();
+            private static string s_CSName;
+            private static List<string> s_CSOutDirs;
+            private static int s_StartOpcode;
+            private static StringBuilder s_StringBuilder;
 
             public static void Start(string codeName, List<string> outDirs, int opcode, string nameSpace)
             {
-                csName = codeName;
-                csOutDirs = outDirs;
-                startOpcode = opcode;
+                s_CSName = codeName;
+                s_CSOutDirs = outDirs;
+                s_StartOpcode = opcode;
                 
-                sb = new StringBuilder();
-                sb.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
-                sb.Append("\n");
-                sb.Append("using ProtoBuf;\n");
-                sb.Append("using System;\n");
-                sb.Append("using System.Collections.Generic;\n");
-                sb.Append("\n");
-                sb.Append($"namespace {nameSpace}\n");
-                sb.Append("{\n");
+                s_StringBuilder = new StringBuilder();
+                s_StringBuilder.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
+                s_StringBuilder.Append("\n");
+                s_StringBuilder.Append("using ProtoBuf;\n");
+                s_StringBuilder.Append("using System;\n");
+                s_StringBuilder.Append("using System.Collections.Generic;\n");
+                s_StringBuilder.Append("\n");
+                s_StringBuilder.Append($"namespace {nameSpace}\n");
+                s_StringBuilder.Append("{\n");
             }
 
             public static void Stop()
             {
-                sb.Append("}\n");
-                foreach (var csOutDir in csOutDirs)
+                s_StringBuilder.Append("}\n");
+                foreach (var csOutDir in s_CSOutDirs)
                 {
-                    GenerateCS(sb, csOutDir, csName);
+                    GenerateCS(s_StringBuilder, csOutDir, s_CSName);
                 }
             }
 
@@ -58,7 +58,7 @@ namespace ET
 
                     if (newline.StartsWith("//"))
                     {
-                        sb.Append($"{newline}\n");
+                        s_StringBuilder.Append($"{newline}\n");
                         continue;
                     }
 
@@ -71,7 +71,7 @@ namespace ET
                         disposeSb.Append($"\t\tpublic override void Clear()\n");
                         disposeSb.Append("\t\t{\n");
 
-                        string msgName = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries)[1];
+                        string msgName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
                         string[] ss = newline.Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
 
                         if (ss.Length == 2)
@@ -79,18 +79,18 @@ namespace ET
                             parentClass = ss[1].Trim();
                         }
                         
-                        sb.Append($"\t[Serializable, ProtoContract(Name = @\"{msgName}\")]\n");
-                        sb.Append($"\t//protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
-                        sb.Append($"\tpublic partial class {msgName}");
+                        s_StringBuilder.Append($"\t[Serializable, ProtoContract(Name = @\"{msgName}\")]\n");
+                        s_StringBuilder.Append($"\t//protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
+                        s_StringBuilder.Append($"\tpublic partial class {msgName}");
                         if (string.IsNullOrEmpty(parentClass))
                         {
                             if (msgName.StartsWith("CS", StringComparison.OrdinalIgnoreCase))
                             {
-                                sb.Append(" : CSPacketBase\n");
+                                s_StringBuilder.Append(" : CSPacketBase\n");
                             }
                             else if (msgName.StartsWith("SC", StringComparison.OrdinalIgnoreCase))
                             {
-                                sb.Append(" : SCPacketBase\n");
+                                s_StringBuilder.Append(" : SCPacketBase\n");
                             }
                             else
                             {
@@ -99,7 +99,7 @@ namespace ET
                         }
                         else
                         {
-                            sb.Append($" : {parentClass}\n");
+                            s_StringBuilder.Append($" : {parentClass}\n");
                         }
                         
                         continue;
@@ -109,8 +109,8 @@ namespace ET
                     {
                         if (newline == "{")
                         {
-                            sb.Append("\t{\n");
-                            sb.Append($"\t\tpublic override int Id => {++startOpcode};\n");
+                            s_StringBuilder.Append("\t{\n");
+                            s_StringBuilder.Append($"\t\tpublic override int Id => {++s_StartOpcode};\n");
                             continue;
                         }
 
@@ -118,15 +118,15 @@ namespace ET
                         {
                             isMsgStart = false;
                             disposeSb.Append("\t\t}\n");
-                            sb.Append(disposeSb.ToString());
+                            s_StringBuilder.Append(disposeSb.ToString());
                             disposeSb.Clear();
-                            sb.Append("\t}\n\n");
+                            s_StringBuilder.Append("\t}\n\n");
                             continue;
                         }
 
                         if (newline.Trim().StartsWith("//"))
                         {
-                            sb.Append($"{newline}\n");
+                            s_StringBuilder.Append($"{newline}\n");
                             continue;
                         }
 
@@ -134,15 +134,15 @@ namespace ET
                         {
                             if (newline.StartsWith("map<"))
                             {
-                                Map(sb, newline, disposeSb);
+                                Map(s_StringBuilder, newline, disposeSb);
                             }
                             else if (newline.StartsWith("repeated"))
                             {
-                                Repeated(sb, newline, disposeSb);
+                                Repeated(s_StringBuilder, newline, disposeSb);
                             }
                             else
                             {
-                                Members(sb, newline, disposeSb);
+                                Members(s_StringBuilder, newline, disposeSb);
                             }
                         }
                     }
@@ -168,8 +168,8 @@ namespace ET
             {
                 try
                 {
-                    int start = newline.IndexOf("<") + 1;
-                    int end = newline.IndexOf(">");
+                    int start = newline.IndexOf("<", StringComparison.Ordinal) + 1;
+                    int end = newline.IndexOf(">", StringComparison.Ordinal);
                     string types = newline.Substring(start, end - start);
                     string[] ss = types.Split(",");
                     string keyType = ConvertType(ss[0].Trim());
@@ -186,7 +186,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{s_CSName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
@@ -195,9 +195,9 @@ namespace ET
             {
                 try
                 {
-                    int index = newline.IndexOf(";");
+                    int index = newline.IndexOf(";", StringComparison.Ordinal);
                     newline = newline.Remove(index);
-                    string[] ss = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
+                    string[] ss = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries);
                     string type = ss[1];
                     type = ConvertType(type);
                     string name = ss[2];
@@ -210,7 +210,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{s_CSName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
@@ -256,9 +256,9 @@ namespace ET
             {
                 try
                 {
-                    int index = newline.IndexOf(";");
+                    int index = newline.IndexOf(";", StringComparison.Ordinal);
                     newline = newline.Remove(index);
-                    string[] ss = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
+                    string[] ss = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries);
                     string type = ss[0];
                     string name = ss[1];
                     int n = int.Parse(ss[3]);
@@ -280,7 +280,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{s_CSName}\" : \"{newline}\"\n");
                     throw;
                 }
             }

@@ -7,7 +7,7 @@ namespace Game
     sealed class GameCodeBindNameTypeConfig
     {
         [CodeBindNameType]
-        static Dictionary<string, Type> BindNameTypeDict = new Dictionary<string, Type>()
+        public static Dictionary<string, Type> BindNameTypeDict = new Dictionary<string, Type>()
         {
             { "UIWidget", typeof(UIWidget) },
             { "TMPText", typeof(TMPro.TMP_Text) },

@@ -7,9 +7,8 @@ namespace Game.Editor
 {
     public class SpriteAssetPostprocessor : AssetPostprocessor
     {
-        private readonly HashSet<string> spritePaths = new HashSet<string>()
+        private readonly HashSet<string> m_UISpritePaths = new HashSet<string>()
         {
-            "Assets/Res/Sprite/",
             "Assets/Res/UI/UISprite/"
         };
 
@@ -17,7 +16,7 @@ namespace Game.Editor
         {
             TextureImporter textureImporter = (TextureImporter)assetImporter;
             string aPath = Utility.Path.GetRegularPath(textureImporter.assetPath);
-            foreach (var spritePath in spritePaths)
+            foreach (var spritePath in m_UISpritePaths)
             {
                 if (aPath.StartsWith(spritePath, StringComparison.Ordinal))
                 {

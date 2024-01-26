@@ -9,41 +9,41 @@ namespace ET
     {
         public static class Proto2CS_ET
         {
-            private static readonly List<OpcodeInfo> msgOpcode = new List<OpcodeInfo>();
-            private static string csName;
-            private static List<string> csOutDirs;
-            private static int startOpcode;
-            private static StringBuilder sb;
+            private static readonly List<OpcodeInfo> s_MsgOpcode = new List<OpcodeInfo>();
+            private static string s_CSName;
+            private static List<string> s_CSOutDirs;
+            private static int s_StartOpcode;
+            private static StringBuilder s_StringBuilder;
             
             public static void Start(string codeName, List<string> outDirs, int opcode, string nameSpace)
             {
-                csName = codeName;
-                csOutDirs = outDirs;
-                startOpcode = opcode;
+                s_CSName = codeName;
+                s_CSOutDirs = outDirs;
+                s_StartOpcode = opcode;
                 
-                msgOpcode.Clear();
-                sb = new StringBuilder();
-                sb.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
-                sb.Append("\n");
-                sb.Append("using MemoryPack;\n");
-                sb.Append("using System.Collections.Generic;\n");
-                sb.Append("\n");
-                sb.Append($"namespace {nameSpace}\n");
-                sb.Append("{\n");
+                s_MsgOpcode.Clear();
+                s_StringBuilder = new StringBuilder();
+                s_StringBuilder.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
+                s_StringBuilder.Append("\n");
+                s_StringBuilder.Append("using MemoryPack;\n");
+                s_StringBuilder.Append("using System.Collections.Generic;\n");
+                s_StringBuilder.Append("\n");
+                s_StringBuilder.Append($"namespace {nameSpace}\n");
+                s_StringBuilder.Append("{\n");
             }
 
             public static void Stop()
             {
-                sb.Append("\tpublic static partial class " + csName + "\n\t{\n");
-                foreach (OpcodeInfo info in msgOpcode)
+                s_StringBuilder.Append("\tpublic static partial class " + s_CSName + "\n\t{\n");
+                foreach (OpcodeInfo info in s_MsgOpcode)
                 {
-                    sb.Append($"\t\t public const ushort {info.Name} = {info.Opcode};\n");
+                    s_StringBuilder.Append($"\t\t public const ushort {info.name} = {info.opcode};\n");
                 }
-                sb.Append("\t}\n");
-                sb.Append("}\n");
-                foreach (var csOutDir in csOutDirs)
+                s_StringBuilder.Append("\t}\n");
+                s_StringBuilder.Append("}\n");
+                foreach (var csOutDir in s_CSOutDirs)
                 {
-                    GenerateCS(sb, csOutDir, csName);
+                    GenerateCS(s_StringBuilder, csOutDir, s_CSName);
                 }
             }
 
@@ -70,13 +70,13 @@ namespace ET
                     if (newline.StartsWith("//ResponseType"))
                     {
                         string responseType = line.Split(" ")[1].TrimEnd('\r', '\n');
-                        sb.Append($"\t[ResponseType(nameof({responseType}))]\n");
+                        s_StringBuilder.Append($"\t[ResponseType(nameof({responseType}))]\n");
                         continue;
                     }
 
                     if (newline.StartsWith("//"))
                     {
-                        sb.Append($"{newline}\n");
+                        s_StringBuilder.Append($"{newline}\n");
                         continue;
                     }
 
@@ -85,7 +85,7 @@ namespace ET
                         string parentClass = "";
                         isMsgStart = true;
 
-                        msgName = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries)[1];
+                        msgName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
                         string[] ss = newline.Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
 
                         if (ss.Length == 2)
@@ -93,27 +93,27 @@ namespace ET
                             parentClass = ss[1].Trim();
                         }
 
-                        if (startOpcode - 1 >= OpcodeRangeDefine.MaxOpcode)
+                        if (s_StartOpcode - 1 >= OpcodeRangeDefine.MaxOpcode)
                         {
                             throw new Exception($"Proto_ET error : {protoFile}'s opcode is larger then max opcode:{OpcodeRangeDefine.MaxOpcode}!");
                         }
-                        msgOpcode.Add(new OpcodeInfo() { Name = msgName, Opcode = ++startOpcode });
+                        s_MsgOpcode.Add(new OpcodeInfo() { name = msgName, opcode = ++s_StartOpcode });
                         
-                        sb.Append($"\t[Message({csName}.{msgName})]\n");
-                        sb.Append($"\t[MemoryPackable]\n");
-                        sb.Append($"\t//protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
-                        sb.Append($"\tpublic partial class {msgName}: MessageObject");
+                        s_StringBuilder.Append($"\t[Message({s_CSName}.{msgName})]\n");
+                        s_StringBuilder.Append($"\t[MemoryPackable]\n");
+                        s_StringBuilder.Append($"\t//protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
+                        s_StringBuilder.Append($"\tpublic partial class {msgName}: MessageObject");
                         if (parentClass == "IActorMessage" || parentClass == "IActorRequest" || parentClass == "IActorResponse")
                         {
-                            sb.Append($", {parentClass}\n");
+                            s_StringBuilder.Append($", {parentClass}\n");
                         }
                         else if (parentClass != "")
                         {
-                            sb.Append($", {parentClass}\n");
+                            s_StringBuilder.Append($", {parentClass}\n");
                         }
                         else
                         {
-                            sb.Append("\n");
+                            s_StringBuilder.Append("\n");
                         }
 
                         continue;
@@ -124,9 +124,9 @@ namespace ET
                         if (newline.StartsWith("{"))
                         {
                             sbDispose.Clear();
-                            sb.Append("\t{\n");
+                            s_StringBuilder.Append("\t{\n");
 
-                            sb.Append($"\t\tpublic static {msgName} Create(bool isFromPool = false) \n\t\t{{ \n\t\t\treturn ObjectPool.Instance.Fetch(typeof({msgName}), isFromPool) as {msgName}; \n\t\t}}\n\n");
+                            s_StringBuilder.Append($"\t\tpublic static {msgName} Create(bool isFromPool = false) \n\t\t{{ \n\t\t\treturn ObjectPool.Instance.Fetch(typeof({msgName}), isFromPool) as {msgName}; \n\t\t}}\n\n");
                             continue;
                         }
 
@@ -137,16 +137,16 @@ namespace ET
                             // 加了no dispose则自己去定义dispose函数，不要自动生成
                             if (!newline.Contains("// no dispose"))
                             {
-                                sb.Append($"\t\tpublic override void Dispose() \n\t\t{{\n\t\t\tif (!this.IsFromPool) {{ return; }}\n{sbDispose.ToString()}\t\t\tObjectPool.Instance.Recycle(this); \n\t\t}}\n");
+                                s_StringBuilder.Append($"\t\tpublic override void Dispose() \n\t\t{{\n\t\t\tif (!this.IsFromPool) {{ return; }}\n{sbDispose.ToString()}\t\t\tObjectPool.Instance.Recycle(this); \n\t\t}}\n");
                             }
 
-                            sb.Append("\t}\n\n");
+                            s_StringBuilder.Append("\t}\n\n");
                             continue;
                         }
 
                         if (newline.Trim().StartsWith("//"))
                         {
-                            sb.Append($"{newline}\n");
+                            s_StringBuilder.Append($"{newline}\n");
                             continue;
                         }
 
@@ -154,15 +154,15 @@ namespace ET
                         {
                             if (newline.StartsWith("map<"))
                             {
-                                Map(sb, newline, sbDispose);
+                                Map(s_StringBuilder, newline, sbDispose);
                             }
                             else if (newline.StartsWith("repeated"))
                             {
-                                Repeated(sb, newline, sbDispose);
+                                Repeated(s_StringBuilder, newline, sbDispose);
                             }
                             else
                             {
-                                Members(sb, newline, sbDispose);
+                                Members(s_StringBuilder, newline, sbDispose);
                             }
                         }
                     }
@@ -207,7 +207,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{s_CSName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
@@ -218,7 +218,7 @@ namespace ET
                 {
                     int index = newline.IndexOf(";", StringComparison.Ordinal);
                     newline = newline.Remove(index);
-                    string[] ss = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
+                    string[] ss = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries);
                     string type = ss[1];
                     type = ConvertType(type);
                     string name = ss[2];
@@ -231,7 +231,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{s_CSName}\" : \"{newline}\"\n");
                     throw;
                 }
             }
@@ -279,7 +279,7 @@ namespace ET
                 {
                     int index = newline.IndexOf(";", StringComparison.Ordinal);
                     newline = newline.Remove(index);
-                    string[] ss = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
+                    string[] ss = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries);
                     string type = ss[0];
                     string name = ss[1];
                     int n = int.Parse(ss[3]);
@@ -301,7 +301,7 @@ namespace ET
                 }
                 catch (Exception)
                 {
-                    Log.Warning($"ErrorLine => \"{csName}\" : \"{newline}\"\n");
+                    Log.Warning($"ErrorLine => \"{s_CSName}\" : \"{newline}\"\n");
                     throw;
                 }
             }

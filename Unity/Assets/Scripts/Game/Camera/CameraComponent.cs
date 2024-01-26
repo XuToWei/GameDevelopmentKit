@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
-namespace UnityGameFramework.Extension
+namespace Game
 {
     public sealed class CameraComponent : GameFrameworkComponent
     {

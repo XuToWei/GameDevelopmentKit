@@ -21,7 +21,7 @@ namespace ET.Client
         
         private static void JumpReplay(this UGFUILSRoomComponent self)
         {
-            int toFrame = int.Parse(self.jumpToCountInputField.text);
+            int toFrame = int.Parse(self.JumpToCountInputField.text);
             LSClientHelper.JumpReplay(self.Room(), toFrame);
         }
         
@@ -29,12 +29,12 @@ namespace ET.Client
         {
             LSReplayUpdater lsReplayUpdater = self.Room().GetComponent<LSReplayUpdater>();
             lsReplayUpdater.ChangeReplaySpeed();
-            self.speedText.text = $"X{lsReplayUpdater.ReplaySpeed}";
+            self.SpeedText.text = $"X{lsReplayUpdater.ReplaySpeed}";
         }
         
         private static void OnSaveReplay(this UGFUILSRoomComponent self)
         {
-            string name = self.saveNameInputField.text;
+            string name = self.SaveNameInputField.text;
 
             LSClientHelper.SaveReplay(self.Room(), name);
         }

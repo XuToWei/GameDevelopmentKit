@@ -14,27 +14,27 @@ namespace ET
 {
     public class CodeLoader : ICodeLoader
     {
-        private Assembly model;
-        private Assembly modelView;
+        private Assembly m_Model;
+        private Assembly m_ModelView;
 
         public async UniTask StartAsync()
         {
-            this.model = null;
-            this.modelView = null;
+            m_Model = null;
+            m_ModelView = null;
 
             if (Define.EnableHotfix && GameEntry.CodeRunner.EnableCodeBytesMode)
             {
-                byte[] assBytes_Model = await LoadCodeBytesAsync("Game.ET.Code.Model.dll.bytes");
-                byte[] pdbBytes_Model = await LoadCodeBytesAsync("Game.ET.Code.Model.pdb.bytes");
-                byte[] assBytes_ModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.dll.bytes");
-                byte[] pdbBytes_ModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.pdb.bytes");
-                this.model = Assembly.Load(assBytes_Model, pdbBytes_Model);
-                this.modelView = Assembly.Load(assBytes_ModelView, pdbBytes_ModelView);
+                byte[] assBytesModel = await LoadCodeBytesAsync("Game.ET.Code.Model.dll.bytes");
+                byte[] pdbBytesModel = await LoadCodeBytesAsync("Game.ET.Code.Model.pdb.bytes");
+                byte[] assBytesModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.dll.bytes");
+                byte[] pdbBytesModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.pdb.bytes");
+                m_Model = Assembly.Load(assBytesModel, pdbBytesModel);
+                m_ModelView = Assembly.Load(assBytesModelView, pdbBytesModelView);
                 
                 var hotfixAssemblies = await LoadHotfixAsync();
                 
                 World.Instance.AddSingleton<CodeTypes, Assembly[]>(new []
-                    {typeof (World).Assembly, typeof(Init).Assembly, this.model, this.modelView, hotfixAssemblies.Item1, hotfixAssemblies.Item2});
+                    {typeof (World).Assembly, typeof(Init).Assembly, m_Model, m_ModelView, hotfixAssemblies.Item1, hotfixAssemblies.Item2});
             }
             else
             {
@@ -44,14 +44,14 @@ namespace ET
                     string name = ass.GetName().Name;
                     if (name == "Game.ET.Code.Model")
                     {
-                        this.model = ass;
+                        m_Model = ass;
                     }
                     else if (name == "Game.ET.Code.ModelView")
                     {
-                        this.modelView = ass;
+                        m_ModelView = ass;
                     }
 
-                    if (this.model != null && this.modelView != null)
+                    if (m_Model != null && m_ModelView != null)
                     {
                         break;
                     }
@@ -59,7 +59,7 @@ namespace ET
                 World.Instance.AddSingleton<CodeTypes, Assembly[]>(assemblies);
             }
             
-            IStaticMethod start = new StaticMethod(this.model, "ET.Entry", "Start");
+            IStaticMethod start = new StaticMethod(m_Model, "ET.Entry", "Start");
             start.Run();
         }
 
@@ -67,7 +67,7 @@ namespace ET
         {
             var hotfixAssemblies = await LoadHotfixAsync();
             World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[]
-                { typeof(World).Assembly, typeof(Init).Assembly, this.model, this.modelView, hotfixAssemblies.Item1, hotfixAssemblies.Item2 });
+                { typeof(World).Assembly, typeof(Init).Assembly, m_Model, m_ModelView, hotfixAssemblies.Item1, hotfixAssemblies.Item2 });
             CodeTypes.Instance.CreateCode();
             EventSystem.Instance.Invoke(new OnCodeReload());
         }
@@ -78,12 +78,12 @@ namespace ET
             {
                 throw new GameFrameworkException("Client ET LoadHotfix only run when EnableHotfix!");
             }
-            byte[] assBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.dll.bytes");
-            byte[] pdbBytes_Hotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.pdb.bytes");
-            byte[] assBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.dll.bytes");
-            byte[] pdbBytes_HotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.pdb.bytes");
-            Assembly hotfix = Assembly.Load(assBytes_Hotfix, pdbBytes_Hotfix);
-            Assembly hotfixView = Assembly.Load(assBytes_HotfixView, pdbBytes_HotfixView);
+            byte[] assBytesHotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.dll.bytes");
+            byte[] pdbBytesHotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.pdb.bytes");
+            byte[] assBytesHotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.dll.bytes");
+            byte[] pdbBytesHotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.pdb.bytes");
+            Assembly hotfix = Assembly.Load(assBytesHotfix, pdbBytesHotfix);
+            Assembly hotfixView = Assembly.Load(assBytesHotfixView, pdbBytesHotfixView);
             return (hotfix, hotfixView);
         }
         

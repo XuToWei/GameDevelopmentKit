@@ -7,7 +7,7 @@ namespace Game.Editor
     [CanEditMultipleObjects]
     public class ExButtonInspector : ButtonEditor
     {
-        SerializedProperty m_OnPointerDownProperty;
+        private SerializedProperty m_OnPointerDownProperty;
 
         protected override void OnEnable()
         {

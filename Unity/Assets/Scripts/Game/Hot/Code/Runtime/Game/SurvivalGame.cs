@@ -6,7 +6,6 @@
 //------------------------------------------------------------
 
 using GameFramework;
-using GameFramework.DataTable;
 using UnityEngine;
 
 namespace Game.Hot

@@ -24,8 +24,8 @@ namespace ET.Client
         {
             LoginHelper.Login(
                 self.Root(), 
-                self.accountInputField.text, 
-                self.passwordInputField.text).Forget();
+                self.AccountInputField.text, 
+                self.PasswordInputField.text).Forget();
         }
     }
 }
