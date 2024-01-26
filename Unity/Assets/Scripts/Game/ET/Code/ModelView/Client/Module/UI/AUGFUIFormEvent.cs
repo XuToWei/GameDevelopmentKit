@@ -8,6 +8,7 @@ namespace ET
     {
         public virtual void OnReload(UGFUIForm uiForm)
         {
+            uiForm.GetParent<UGFUIComponent>().AllOpenUIForms.Add(uiForm);
         }
 
         public virtual void OnInit(UGFUIForm uiForm, object userData)

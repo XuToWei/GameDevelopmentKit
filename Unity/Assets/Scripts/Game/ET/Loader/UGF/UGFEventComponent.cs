@@ -8,8 +8,9 @@ namespace ET
     [ComponentOf]
     public sealed class UGFEventComponent : Singleton<UGFEventComponent>, ISingletonAwake
     {
-        private readonly Dictionary<int, IUGFUIFormEvent> m_UIFormEvents = new ();
-        private readonly Dictionary<string, IUGFEntityEvent> m_EntityEvents = new ();
+        private readonly Dictionary<int, IUGFUIFormEvent> m_UIFormEvents = new();
+        private readonly Dictionary<Type, IUGFUIWidgetEvent> m_UIWidgetEvents = new();
+        private readonly Dictionary<string, IUGFEntityEvent> m_EntityEvents = new();
 
         public bool TryGetUIFormEvent(int uiFormId, out IUGFUIFormEvent uiFormEvent)
         {
@@ -26,6 +27,11 @@ namespace ET
             return m_UIFormEvents[uiFormId];
         }
 
+        public IUGFUIWidgetEvent GetUIWidgetEvent(Type type)
+        {
+            return m_UIWidgetEvents[type];
+        }
+
         public IUGFEntityEvent GetEntityEvent(string entityEventTypeName)
         {
             return m_EntityEvents[entityEventTypeName];
@@ -34,8 +40,8 @@ namespace ET
         public void Awake()
         {
             this.m_UIFormEvents.Clear();
-            HashSet<Type> uiEventAttributes = CodeTypes.Instance.GetTypes(typeof(UGFUIFormEventAttribute));
-            foreach (Type type in uiEventAttributes)
+            HashSet<Type> uiFormEventAttributes = CodeTypes.Instance.GetTypes(typeof(UGFUIFormEventAttribute));
+            foreach (Type type in uiFormEventAttributes)
             {
                 object[] attrs = type.GetCustomAttributes(typeof(UGFUIFormEventAttribute), false);
                 UGFUIFormEventAttribute ugfUIFormEventAttribute = (UGFUIFormEventAttribute)attrs[0];
@@ -45,7 +51,14 @@ namespace ET
                     this.m_UIFormEvents.Add(uiFormId, ugfUIFormEvent);
                 }
             }
-            
+
+            HashSet<Type> uiWidgetEventAttributes = CodeTypes.Instance.GetTypes(typeof(UGFUIWidgetEventAttribute));
+            foreach (Type type in uiWidgetEventAttributes)
+            {
+                IUGFUIWidgetEvent ugfUIWidgetEvent = Activator.CreateInstance(type) as IUGFUIWidgetEvent;
+                this.m_UIWidgetEvents.Add(ugfUIWidgetEvent.GetType(), ugfUIWidgetEvent);
+            }
+
             this.m_EntityEvents.Clear();
             var types = CodeTypes.Instance.GetTypes();
             Type entityEventType = typeof(IUGFEntityEvent);

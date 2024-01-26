@@ -49,8 +49,12 @@ namespace ET
                     throw new GameFrameworkException($"UIFormId {this.m_UIFormId} doesn't exist UIFormEvent!");
                 }
                 this.m_UIFormId = formData.UIFormId;
-                this.m_UGFUIForm = formData.ParentEntity.AddChild<UGFUIForm, int, ETMonoUIForm>(this.m_UIFormId, this);
+                this.m_UGFUIForm = formData.ParentEntity.AddChild<UGFUIForm, int, ETMonoUIForm>(this.m_UIFormId, this, true);
                 this.m_UIFormEvent.OnInit(this.m_UGFUIForm, formData.UserData);
+                foreach (var VARIABLE in this.m_UGFUIForm.GetChild<UGFUIWidget>())
+                {
+                    
+                }
             }
             this.isOpen = true;
             this.m_UIFormEvent.OnOpen(this.m_UGFUIForm, formData.UserData);
