@@ -9,7 +9,7 @@ namespace ET
 {
     public static class GenerateUGFEntityId
     {
-        private static readonly string LubanEntityAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtentity.json");
+        private static readonly string s_LubanEntityAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtentity.json");
 
         public static void GenerateCode()
         {
@@ -41,7 +41,7 @@ namespace ET
                 throw new Exception($"Generate UGFEntityId code fail, code file is empty.");
             }
             
-            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(LubanEntityAsset));
+            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(s_LubanEntityAsset));
             List<DREntity> drEntities = new List<DREntity>();
             foreach (var childNode in jsonNode.Children)
             {

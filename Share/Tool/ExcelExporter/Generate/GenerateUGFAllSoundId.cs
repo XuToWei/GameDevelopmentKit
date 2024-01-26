@@ -7,11 +7,11 @@ using SimpleJSON;
 
 namespace ET
 {
-    public class GenerateUGFAllSoundId
+    public static class GenerateUGFAllSoundId
     {
-        private static readonly string LubanMusicAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtmusic.json");
-        private static readonly string LubanUISoundAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtuisound.json");
-        private static readonly string LubanSoundAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtsound.json");
+        private static readonly string s_LubanMusicAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtmusic.json");
+        private static readonly string s_LubanUISoundAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtuisound.json");
+        private static readonly string s_LubanSoundAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtsound.json");
 
         public static void GenerateCode()
         {
@@ -51,7 +51,7 @@ namespace ET
                 throw new Exception($"Generate UGFMusicId code fail, code file is empty.");
             }
             
-            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(LubanMusicAsset));
+            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(s_LubanMusicAsset));
             List<DRMusic> drMusics = new List<DRMusic>();
             foreach (var childNode in jsonNode.Children)
             {
@@ -113,7 +113,7 @@ namespace ET
                 throw new Exception($"Generate UGFUISoundId code fail, code file is empty.");
             }
             
-            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(LubanUISoundAsset));
+            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(s_LubanUISoundAsset));
             List<DRUISound> drUISounds = new List<DRUISound>();
             foreach (var childNode in jsonNode.Children)
             {
@@ -175,7 +175,7 @@ namespace ET
                 throw new Exception($"Generate UGFSoundId code fail, code file is empty.");
             }
             
-            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(LubanSoundAsset));
+            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(s_LubanSoundAsset));
             List<DRSound> drSounds = new List<DRSound>();
             foreach (var childNode in jsonNode.Children)
             {

@@ -7,9 +7,9 @@ using SimpleJSON;
 
 namespace ET
 {
-    public class GenerateUGFUIFormId
+    public static class GenerateUGFUIFormId
     {
-        private static readonly string LubanUIFormAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtuiform.json");
+        private static readonly string s_LubanUIFormAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtuiform.json");
 
         public static void GenerateCode()
         {
@@ -41,7 +41,7 @@ namespace ET
                 throw new Exception($"Generate UGFUIFormId code fail, code file is empty.");
             }
             
-            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(LubanUIFormAsset));
+            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(s_LubanUIFormAsset));
             List<DRUIForm> drUIForms = new List<DRUIForm>();
             foreach (var childNode in jsonNode.Children)
             {

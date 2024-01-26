@@ -9,6 +9,7 @@ namespace ET
         public override async UniTask<byte[]> Handle(NavmeshComponent.RecastFileLoader args)
         {
             await UniTask.CompletedTask;
+            // ReSharper disable once MethodHasAsyncOverload
             return File.ReadAllBytes(Path.Combine("../Config/Recast", args.Name));
         }
     }
