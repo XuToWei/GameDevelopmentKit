@@ -3,7 +3,7 @@ using UnityGameFramework.Runtime;
 
 namespace ET.Client
 {
-    [FriendOf(typeof(EntityComponent))]
+    [FriendOf(typeof(UGFEntityComponent))]
     public abstract class AUGFEntityEvent : IUGFEntityEvent
     {
         public virtual void OnReload(UGFEntity entity)
@@ -16,12 +16,12 @@ namespace ET.Client
 
         public virtual void OnShow(UGFEntity entity, object userData)
         {
-            entity.GetParent<EntityComponent>().AllShowEntities.Add(entity);
+            entity.GetParent<UGFEntityComponent>().AllShowEntities.Add(entity);
         }
 
         public virtual void OnHide(UGFEntity entity, bool isShutdown, object userData)
         {
-            entity.GetParent<EntityComponent>().AllShowEntities.Remove(entity);
+            entity.GetParent<UGFEntityComponent>().AllShowEntities.Remove(entity);
         }
 
         public virtual void OnAttached(UGFEntity entity, EntityLogic childEntity, Transform parentTransform, object userData)

@@ -6,7 +6,7 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    public abstract class ExUGuiForm : UGuiForm
+    public abstract class AExUGuiForm : AUGuiForm
     {
         private UIWidgetContainer m_UIWidgetContainer;
         private EventContainer m_EventContainer;

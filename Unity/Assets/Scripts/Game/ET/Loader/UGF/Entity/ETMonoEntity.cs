@@ -7,7 +7,7 @@ using GameFramework;
 namespace ET
 {
     [DisallowMultipleComponent]
-    public sealed class ETMonoEntity : BaseEntity
+    public sealed class ETMonoEntity : AEntity
     {
         private UGFEntity m_UGFEntity;
         private Type m_EntityEventType;

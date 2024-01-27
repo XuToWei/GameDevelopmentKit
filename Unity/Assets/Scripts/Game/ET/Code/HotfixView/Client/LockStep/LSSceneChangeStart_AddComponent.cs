@@ -11,7 +11,7 @@ namespace ET.Client
         {
             Room room = clientScene.GetComponent<Room>();
             room.AddComponent<UGFUIComponent>();
-            room.AddComponent<EntityComponent>();
+            room.AddComponent<UGFEntityComponent>();
             
             // 创建loading界面
             

@@ -5,7 +5,7 @@ namespace Game
     /// <summary>
     /// 用来动态加载复用的Item
     /// </summary>
-    public class ItemEntity : BaseEntity
+    public class ItemEntity : AEntity
     {
         private Transform m_OriginalTransform = null;
 

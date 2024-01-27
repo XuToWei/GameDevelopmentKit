@@ -7,13 +7,13 @@ namespace Game
     {
         public readonly List<UIWidget> m_UIWidgets = new List<UIWidget>();
         
-        public UGuiForm Owner
+        public AUGuiForm Owner
         {
             get;
             private set;
         }
         
-        public static UIWidgetContainer Create(UGuiForm owner)
+        public static UIWidgetContainer Create(AUGuiForm owner)
         {
             UIWidgetContainer uiWidgetContainer = ReferencePool.Acquire<UIWidgetContainer>();
             uiWidgetContainer.Owner = owner;

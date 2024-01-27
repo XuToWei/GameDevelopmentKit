@@ -5,7 +5,7 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    public abstract class UGuiForm : UIFormLogic
+    public abstract class AUGuiForm : UIFormLogic
     {
         public const int DepthFactor = 100;
 

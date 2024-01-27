@@ -20,7 +20,13 @@ namespace ET.Client
         [EntitySystem]
         private static void Destroy(this UGFUIComponent self)
         {
-                
+            foreach (UGFUIForm uiForm in self.AllOpenUIForms.ToArray())
+            {
+                if(uiForm == null)
+                    continue;
+                GameEntry.UI.CloseUIForm(uiForm.UIForm);
+            }
+            self.AllOpenUIForms.Clear();
         }
 
         public static async UniTask<UGFUIForm> OpenUIFormAsync(this UGFUIComponent self, int uiFormId, object userData = null)
@@ -34,7 +40,7 @@ namespace ET.Client
             }
             if (uiForm.Logic is not ETMonoUIForm etMonoUIForm)
             {
-                throw new Exception($"Open UI fail! UiFomId:{uiFormId}) is not ETMonoUIForm!");
+                throw new Exception($"Open UI fail! UIFomId:{uiFormId}) is not ETMonoUIForm!");
             }
             return etMonoUIForm.UGFUIForm;
         }
@@ -56,7 +62,6 @@ namespace ET.Client
                     needRemoves.Add(uiForm);
                 }
             }
-
             foreach (UGFUIForm uiForm in needRemoves)
             {
                 self.CloseUIForm(uiForm);
@@ -76,6 +81,7 @@ namespace ET.Client
             {
                 self.CloseUIForm(uiForm);
             }
+            self.AllOpenUIForms.Clear();
         }
     }
 }
