@@ -39,8 +39,11 @@
       "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "6a1fef4150e708d1a1ab6d36dbdae3b0f1782479"
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.modules.particlesystem": "1.0.0"
+      },
+      "hash": "9d1b6a81ee7a0bf3d3e23027131f6482b2428bcc"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -60,22 +63,24 @@
       "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "983c32c900bbda0efb1fcc214c759ae9eda42a26"
+      "dependencies": {
+        "com.unity.modules.imgui": "1.0.0"
+      },
+      "hash": "59ffc721bbf321f88db328dd5fb5fc048189a03a"
     },
     "com.cysharp.unitask": {
-      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.0",
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.3",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "56662924960a53695a640af80125f1cfd334d5ee"
+      "hash": "64792b672d35e43b3412fc74861f8bdbf41e3a6f"
     },
     "com.cysharp.zstring": {
-      "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString#2.4.4",
+      "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString#2.5.1",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "634ed94bdd67aac0cf044a0375e5c88cd48478a3"
+      "hash": "7629cf7ca8801fb25104b641fc0ac0457849d7c9"
     },
     "com.github-glitchenzo.nugetforunity": {
       "version": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
@@ -89,15 +94,6 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {}
-    },
-    "com.unity.ai.navigation": {
-      "version": "1.1.5",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.ai": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
       "version": "1.8.11",
@@ -228,7 +224,7 @@
     },
     "com.unity.test-framework": {
       "version": "1.1.33",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.6",

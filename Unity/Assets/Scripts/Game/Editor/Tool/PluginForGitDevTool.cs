@@ -7,33 +7,33 @@ namespace Game.Editor
     /// <summary>
     /// 方便导入导出处理收费插件在git上版权问题
     /// </summary>
-    public class PluginForGitDevTool
+    public static class PluginForGitDevTool
     {
         //需要被导出的文件或文件夹
-        private readonly string[] plugins_include = new string[]
+        private static readonly string[] s_IncludePlugins = new string[]
         {
             "Assets/Scripts/Library/EnhancedScroller",
             "Assets/Scripts/Library/SLATE Cinematic Sequencer",
             "Assets/Scripts/Library/SmartUiSelection",
             "Assets/Scripts/Library/StompyRobot",
-            "Assets/Scripts/Plugins/Demigiant",
-            "Assets/Scripts/Plugins/Sirenix",
+            "Assets/Plugins/Demigiant",
+            "Assets/Plugins/Sirenix",
         };
-        
-        
+
+        private static readonly string s_UnityPackageFile = "../Tools/UnityPlugin/Useful.unitypackage";
+        private static readonly string s_GitIgnoreFile = "Assets/.gitignore";
+
         [MenuItem("Game/For Git Dev/Export All Not Free Plugins", false, 999)]
         static void ExportAllNotFreePlugins()
         {
-            PluginForGitDevTool tool = new PluginForGitDevTool();
-            AssetDatabase.ExportPackage(tool.plugins_include, "../Tools/UnityPlugins/Useful.unitypackage", ExportPackageOptions.Recurse);
-            MakeGitIgnore(tool.plugins_include);
+            AssetDatabase.ExportPackage(s_IncludePlugins, s_UnityPackageFile, ExportPackageOptions.Recurse);
+            MakeGitIgnore(s_IncludePlugins);
         }
 
         [MenuItem("Game/For Git Dev/Make .gitignore For Not Free Plugins", false, 998)]
         static void MakeGitIgnoreForAllNotFreePlugins()
         {
-            PluginForGitDevTool tool = new PluginForGitDevTool();
-            MakeGitIgnore(tool.plugins_include);
+            MakeGitIgnore(s_IncludePlugins);
         }
         
         static void MakeGitIgnore(string[] pluginsInclude)
@@ -45,13 +45,11 @@ namespace Game.Editor
                 stringBuilder.AppendLine(str);
                 stringBuilder.AppendLine($"{str}.meta");
             }
-
-            string gitignoreFile = "Assets/.gitignore";
-            if (File.Exists(gitignoreFile))
+            if (File.Exists(s_GitIgnoreFile))
             {
-                File.Delete(gitignoreFile);
+                File.Delete(s_GitIgnoreFile);
             }
-            File.WriteAllText(gitignoreFile, stringBuilder.ToString());
+            File.WriteAllText(s_GitIgnoreFile, stringBuilder.ToString());
         }
     }
 }

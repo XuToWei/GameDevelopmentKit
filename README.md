@@ -43,8 +43,6 @@
 
 ***
 
-## 请注意！交流QQ群：949482664
-
 ### 该项目依赖以下收费插件（请自行购买安装）：
 
 - [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)
@@ -65,7 +63,7 @@
 
 - 1.安装 [.net8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)，服务器功能需要安装[MongoDB](https://www.mongodb.com/)
 
-- 2.打开Unity项目，等待Unity编译完成
+- 2.打开Unity项目，导入Tools/UnityPlugin/Useful.unitypackage，等待Unity编译完成
 
 - 3.打开Unity的Editor/Preferences菜单栏，按如下设置后（不要勾选'Registry packages'和'Build-in packages'），点击Regenerate project files按钮
 ![](Book/png/unity_step1.png)
