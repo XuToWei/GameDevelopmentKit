@@ -1,7 +1,4 @@
-using ET.Client;
-using UnityEngine;
-
-namespace ET
+namespace ET.Client
 {
     [FriendOf(typeof(UGFUIComponent))]
     public abstract class AUGFUIFormEvent : IUGFUIFormEvent

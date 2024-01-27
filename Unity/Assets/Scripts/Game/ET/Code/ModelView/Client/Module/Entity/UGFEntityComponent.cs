@@ -13,17 +13,5 @@ namespace ET.Client
     {
         //所有显示的Entity实体
         public readonly HashSet<EntityRef<UGFEntity>> AllShowEntities = new HashSet<EntityRef<UGFEntity>>();
-
-        public override void Dispose()
-        {
-            foreach (UGFEntity entity in AllShowEntities.ToArray())
-            {
-                if(entity == null)
-                    continue;
-                GameEntry.Entity.HideEntity(entity.Entity);
-            }
-            AllShowEntities.Clear();
-            base.Dispose();
-        }
     }
 }

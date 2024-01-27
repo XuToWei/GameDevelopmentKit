@@ -19,13 +19,7 @@ namespace ET.Client
         [EntitySystem]
         private static void Destroy(this UGFEntityComponent self)
         {
-            foreach (UGFEntity entity in self.AllShowEntities.ToArray())
-            {
-                if(entity == null)
-                    continue;
-                GameEntry.Entity.HideEntity(entity.Entity);
-            }
-            self.AllShowEntities.Clear();
+            self.HideAllEntities();
         }
 
         public static async UniTask<UGFEntity> ShowEntityAsync<T>(this UGFEntityComponent self, int entityId, object userData = null) where T : IUGFEntityEvent
@@ -72,7 +66,10 @@ namespace ET.Client
         {
             foreach (UGFEntity entity in self.AllShowEntities.ToArray())
             {
-                self.HideEntity(entity);
+                if (entity != null)
+                {
+                    self.HideEntity(entity);
+                }
             }
             self.AllShowEntities.Clear();
         }

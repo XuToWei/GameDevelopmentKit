@@ -20,13 +20,7 @@ namespace ET.Client
         [EntitySystem]
         private static void Destroy(this UGFUIComponent self)
         {
-            foreach (UGFUIForm uiForm in self.AllOpenUIForms.ToArray())
-            {
-                if(uiForm == null)
-                    continue;
-                GameEntry.UI.CloseUIForm(uiForm.UIForm);
-            }
-            self.AllOpenUIForms.Clear();
+            self.CloseAllUIForms();
         }
 
         public static async UniTask<UGFUIForm> OpenUIFormAsync(this UGFUIComponent self, int uiFormId, object userData = null)
@@ -79,7 +73,10 @@ namespace ET.Client
         {
             foreach (UGFUIForm uiForm in self.AllOpenUIForms.ToArray())
             {
-                self.CloseUIForm(uiForm);
+                if (uiForm != null)
+                {
+                    self.CloseUIForm(uiForm);
+                }
             }
             self.AllOpenUIForms.Clear();
         }

@@ -14,7 +14,8 @@ namespace ET
         {
             return Fiber.Instance != null? Fiber.Instance.Log : Logger.Instance.Log;
         }
-        
+
+        [Conditional("DEBUG")]
         [Conditional("ENABLE_LOG")]
         [Conditional("ENABLE_DEBUG_LOG")]
         [Conditional("ENABLE_DEBUG_AND_ABOVE_LOG")]
@@ -27,7 +28,8 @@ namespace ET
 
             GetLog().Debug(msg);
         }
-        
+
+        [Conditional("DEBUG")]
         [Conditional("ENABLE_LOG")]
         [Conditional("ENABLE_DEBUG_LOG")]
         [Conditional("ENABLE_DEBUG_AND_ABOVE_LOG")]
@@ -100,6 +102,7 @@ namespace ET
             StackTrace st = new(1, true);
             GetLog().Trace($"{message.ToStringAndClear()}\n{st.ToString()}");
         }
+
         [Conditional("DEBUG")]
         public static void Warning(ref System.Runtime.CompilerServices.DefaultInterpolatedStringHandler message)
         {
@@ -118,6 +121,7 @@ namespace ET
             }
             GetLog().Info(ref message);
         }
+
         [Conditional("DEBUG")]
         public static void Debug(ref System.Runtime.CompilerServices.DefaultInterpolatedStringHandler message)
         {
