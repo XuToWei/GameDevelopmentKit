@@ -5,7 +5,7 @@ using UnityGameFramework.Runtime;
 
 namespace Game.Hot
 {
-    public abstract class StarForceUIForm : HotUIForm
+    public abstract class StarForceUIForm : AHotUIForm
     {
         private const float FadeTime = 0.3f;
         
