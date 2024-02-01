@@ -18,15 +18,6 @@ namespace Game
         }
 
         /// <summary>
-        /// 获取配置组件。
-        /// </summary>
-        public static ConfigComponent Config
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// 获取数据结点组件。
         /// </summary>
         public static DataNodeComponent DataNode
@@ -182,7 +173,6 @@ namespace Game
         private static void InitBuiltinComponents()
         {
             Base = UnityGameFramework.Runtime.GameEntry.GetComponent<BaseComponent>();
-            Config = UnityGameFramework.Runtime.GameEntry.GetComponent<ConfigComponent>();
             DataNode = UnityGameFramework.Runtime.GameEntry.GetComponent<DataNodeComponent>();
             Debugger = UnityGameFramework.Runtime.GameEntry.GetComponent<DebuggerComponent>();
             Download = UnityGameFramework.Runtime.GameEntry.GetComponent<DownloadComponent>();

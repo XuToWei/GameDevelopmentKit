@@ -73,10 +73,10 @@ namespace ET
             // 命令行参数
             string[] args = "".Split(" ");
             Parser.Default.ParseArguments<Options>(args)
-                .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
-                .WithParsed((o) => World.Instance.AddSingleton(o));
+                    .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
+                    .WithParsed((o) => World.Instance.AddSingleton(o));
             Options.Instance.StartConfig = "Localhost";
-            
+
             World.Instance.AddSingleton<Logger, ILog>(new UnityLogger());
             World.Instance.AddSingleton<TimeInfo, ITimeNow>(new UnityTimeNow());
             World.Instance.AddSingleton<FiberManager>();

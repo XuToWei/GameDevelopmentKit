@@ -291,7 +291,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 436184}
   - {fileID: 455962}
   - {fileID: 404872}
   - {fileID: 472238}
@@ -558,55 +557,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SettingHelperTypeName: UnityGameFramework.Runtime.DefaultSettingHelper
   m_CustomSettingHelper: {fileID: 0}
---- !u!1 &137260
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 436184}
-  - component: {fileID: 11485274}
-  m_Layer: 0
-  m_Name: Config
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &436184
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137260}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 433714}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &11485274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e847b2b3e22e9b4792ca7ea6e1714c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EnableLoadConfigUpdateEvent: 0
-  m_EnableLoadConfigDependencyAssetEvent: 0
-  m_ConfigHelperTypeName: UnityGameFramework.Runtime.DefaultConfigHelper
-  m_CustomConfigHelper: {fileID: 0}
-  m_CachedBytesSize: 0
 --- !u!1 &139170
 GameObject:
   m_ObjectHideFlags: 0
