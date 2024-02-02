@@ -1,5 +1,6 @@
 using GameFramework.Debugger;
 using SRDebugger.Internal;
+using UnityEngine;
 
 namespace Game
 {
@@ -42,7 +43,13 @@ namespace Game
 
         public void OnDraw()
         {
-
+#if !DISABLE_SRDEBUGGER
+            if (GUILayout.Button("Show SRDebugger", GUILayout.Width(150f)))
+            {
+                SRDebug.Instance.ShowDebugPanel();
+                GameEntry.Debugger.ActiveWindow = false;
+            }
+#endif
         }
     }
 }
