@@ -47,7 +47,6 @@ namespace Game
             if (GUILayout.Button("Show SRDebugger", GUILayout.Width(150f)))
             {
                 SRDebug.Instance.ShowDebugPanel();
-                GameEntry.Debugger.ActiveWindow = false;
             }
 #endif
         }
