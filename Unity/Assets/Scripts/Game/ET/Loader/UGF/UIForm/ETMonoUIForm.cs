@@ -36,7 +36,7 @@ namespace ET
             {
                 UGFUIFormDispose();
                 m_UIFormId = formData.UIFormId;
-                m_UGFUIForm = formData.ParentEntity.AddChild<UGFUIForm, int, ETMonoUIForm>(m_UIFormId, this);
+                m_UGFUIForm = formData.ParentEntity.AddChild<UGFUIForm, int, ETMonoUIForm>(m_UIFormId, this, true);
                 UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnInit(m_UGFUIForm, formData.UserData);
                 if (m_UGFUIForm.UIWidgets != null)
                 {
@@ -66,11 +66,6 @@ namespace ET
                 m_UGFUIForm = default;
                 ugfUIForm.Dispose();
             }
-        }
-        
-        private void OnDestroy()
-        {
-            UGFUIFormDispose();
         }
 
         protected override void OnClose(bool isShutdown, object userData)
@@ -193,6 +188,7 @@ namespace ET
                     UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnRecycle(uiWidget);
                 }
             }
+            UGFUIFormDispose();
         }
     }
 }

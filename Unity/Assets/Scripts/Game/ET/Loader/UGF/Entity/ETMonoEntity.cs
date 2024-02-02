@@ -33,7 +33,7 @@ namespace ET
             {
                 UGFEntityDispose();
                 m_EntityEventType = entityData.EntityEventType;
-                m_UGFEntity = entityData.ParentEntity.AddChild<UGFEntity, Type, ETMonoEntity>(m_EntityEventType, this);
+                m_UGFEntity = entityData.ParentEntity.AddChild<UGFEntity, Type, ETMonoEntity>(m_EntityEventType, this, true);
                 UGFEventComponent.Instance.GetEntityEvent(m_EntityEventType).OnInit(m_UGFEntity, entityData.UserData);
             }
             IsShow = true;
@@ -49,11 +49,6 @@ namespace ET
                 m_UGFEntity = default;
                 ugfEntity.Dispose();
             }
-        }
-
-        private void OnDestroy()
-        {
-            UGFEntityDispose();
         }
 
         protected override void OnHide(bool isShutdown, object userData)
@@ -101,6 +96,7 @@ namespace ET
         {
             base.OnRecycle();
             UGFEventComponent.Instance.GetEntityEvent(m_EntityEventType).OnRecycle(m_UGFEntity);
+            UGFEntityDispose();
         }
     }
 }

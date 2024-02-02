@@ -6,13 +6,12 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    public abstract class AExUGuiForm : AUGuiForm
+    public abstract class AExEntity : AEntity
     {
-        private UIWidgetContainer m_UIWidgetContainer;
         private EventContainer m_EventContainer;
         private EntityContainer m_EntityContainer;
 
-        private void ClearUIForm()
+        private void ClearEntity()
         {
             if (m_EventContainer != null)
             {
@@ -24,115 +23,23 @@ namespace Game
                 ReferencePool.Release(m_EntityContainer);
                 m_EntityContainer = null;
             }
-            if (m_UIWidgetContainer != null)
-            {
-                ReferencePool.Release(m_UIWidgetContainer);
-                m_UIWidgetContainer = null;
-            }
-        }
-
-        protected override void OnInit(object userData)
-        {
-            base.OnInit(userData);
-            UIWidget[] uiWidgets = gameObject.GetComponentsInChildren<UIWidget>();
-            if (uiWidgets != null && uiWidgets.Length > 0)
-            {
-                for (int i = 0; i < uiWidgets.Length; i++)
-                {
-                    AddUIWidget(uiWidgets[i]);
-                }
-            }
-            m_UIWidgetContainer?.OnInit(userData);
         }
 
         protected override void OnRecycle()
         {
             base.OnRecycle();
-            m_UIWidgetContainer?.OnRecycle();
-            ClearUIForm();
+            ClearEntity();
         }
 
-        protected override void OnOpen(object userData)
+        protected override void OnHide(bool isShutdown, object userData)
         {
-            base.OnOpen(userData);
-            m_UIWidgetContainer?.OnOpen(userData);
-        }
-
-        protected override void OnClose(bool isShutdown, object userData)
-        {
-            m_UIWidgetContainer?.OnClose(isShutdown, userData);
             HideAllEntity();
             UnsubscribeAll();
             if (isShutdown)
             {
-                ClearUIForm();
+                ClearEntity();
             }
-            base.OnClose(isShutdown, userData);
-        }
-
-        protected override void OnPause()
-        {
-            base.OnPause();
-            m_UIWidgetContainer?.OnPause();
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-            m_UIWidgetContainer?.OnResume();
-        }
-
-        protected override void OnCover()
-        {
-            base.OnCover();
-            m_UIWidgetContainer?.OnCover();
-        }
-
-        protected override void OnReveal()
-        {
-            base.OnReveal();
-            m_UIWidgetContainer?.OnReveal();
-        }
-
-        protected override void OnRefocus(object userData)
-        {
-            base.OnRefocus(userData);
-            m_UIWidgetContainer?.OnRefocus(userData);
-        }
-
-        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-        {
-            base.OnUpdate(elapseSeconds, realElapseSeconds);
-            m_UIWidgetContainer?.OnUpdate(elapseSeconds, realElapseSeconds);
-        }
-
-        protected override void OnDepthChanged(int uiGroupDepth, int depthInUIGroup)
-        {
-            base.OnDepthChanged(uiGroupDepth, depthInUIGroup);
-            m_UIWidgetContainer?.OnDepthChanged(uiGroupDepth, depthInUIGroup);
-        }
-
-        public void AddUIWidget(UIWidget uiWidget)
-        {
-            if (m_UIWidgetContainer == null)
-            {
-                m_UIWidgetContainer = UIWidgetContainer.Create(this);
-            }
-            m_UIWidgetContainer.AddUIWidget(uiWidget);
-        }
-
-        public void RemoveUIWidget(UIWidget uiWidget)
-        {
-            if (m_UIWidgetContainer == null)
-                return;
-            m_UIWidgetContainer.RemoveUIWidget(uiWidget);
-        }
-
-        public void RemoveAllUIWidget()
-        {
-            if (m_UIWidgetContainer == null)
-                return;
-            m_UIWidgetContainer.RemoveAllUIWidget();
+            base.OnHide(isShutdown, userData);
         }
 
         public void Subscribe(int id, EventHandler<GameEventArgs> handler)
