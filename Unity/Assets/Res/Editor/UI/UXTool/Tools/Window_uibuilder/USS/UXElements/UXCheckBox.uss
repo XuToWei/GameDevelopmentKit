@@ -1,0 +1,10 @@
+.ux-checkbox {
+}
+
+.ux-checkbox-field {
+    cursor: link;
+}
+
+.ux-checkbox-field-disabled {
+    cursor: arrow;
+}

@@ -1,0 +1,1 @@
+{"managementChannelList":[{"ID":0,"Name":"HUD","LevelIDList":[0]},{"ID":1,"Name":"界面","LevelIDList":[1]},{"ID":2,"Name":"弹窗","LevelIDList":[2]}],"managementLevelList":[{"ID":0,"Index":0,"ChannelID":0,"PrefabDetailIDList":[]},{"ID":1,"Index":10,"ChannelID":1,"PrefabDetailIDList":[]},{"ID":2,"Index":20,"ChannelID":2,"PrefabDetailIDList":[]}],"tagColors":[],"range":10}

@@ -1,0 +1,10 @@
+.ux-slider {
+}
+
+.ux-slider-field {
+    cursor: link;
+}
+
+.ux-slider-field-disabled {
+    cursor: arrow;
+}

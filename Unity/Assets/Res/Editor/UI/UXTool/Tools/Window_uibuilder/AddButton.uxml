@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Button name="AddButton" style="height: 112px; width: 86px; align-items: center; justify-content: space-around; -unity-text-align: middle-center; background-color: rgb(255, 255, 255); color: rgb(56, 56, 56); border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; margin-left: 8px; margin-right: 6px; position: absolute;">
+        <ui:Label text="+" style="height: 48px; width: 65px; font-size: 50px; -unity-text-align: lower-center; color: rgb(56, 56, 56);" />
+    </ui:Button>
+</ui:UXML>

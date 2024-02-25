@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="title" style="width: auto; bottom: 0; right: 0; position: absolute; height: 40px; left: 0; top: auto; background-color: rgba(128, 128, 128, 255);">
+        <ui:Label text="ThunderFire UX UI Tool" name="name" style="position: absolute; right: 20px; bottom: 0; top: auto; width: 150px; -unity-font-style: bold-and-italic; font-size: 13px; -unity-text-align: middle-left; white-space: nowrap; height: 12px;" />
+    </ui:VisualElement>
+</ui:UXML>

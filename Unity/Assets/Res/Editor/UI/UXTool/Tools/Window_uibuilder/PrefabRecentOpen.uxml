@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="Root" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; width: auto; height: auto;">
+        <ui:ScrollView mode="Vertical" name="ScrollView" style="height: auto; flex-direction: column; width: auto; overflow: hidden; position: relative; left: 0; top: 0; right: 0;">
+            <ui:VisualElement style="flex-direction: row; align-items: stretch; justify-content: flex-start; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px;">
+                <ui:Button name="AddButton" style="height: 112px; width: 86px; align-items: center; justify-content: space-around; -unity-text-align: middle-center; background-color: rgb(255, 255, 255); color: rgb(56, 56, 56); border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; margin-left: 8px; margin-right: 6px;">
+                    <ui:Label text="+" style="height: 48px; width: 65px; font-size: 50px; -unity-text-align: lower-center; color: rgb(56, 56, 56);" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

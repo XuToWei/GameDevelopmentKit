@@ -1,0 +1,21 @@
+.ux-select {
+    cursor: link;
+}
+
+.ux-select-disabled {
+    cursor: arrow;
+}
+
+.ux-select__background {
+    background-color: white;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.ux-select__input {
+    color: #1d2129;
+}
+
+.ux-select__arrow {
+    /*background-image: resource("Assets/Res/Editor/UI/UXTool/Tools/Window_uibuilder/USS/Icons/arrow-down.png");*/
+    background-image: url("../Icons/arrow-down.png");
+}

@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Panel" style="position: absolute; width: auto; height: 30px; background-color: rgb(255, 255, 255); flex-direction: row; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; -unity-text-align: upper-left; justify-content: flex-start; align-items: stretch; left: 40%; margin-left: 0; margin-right: 0;">
+        <ui:Label text="已保存" display-tooltip-when-elided="true" name="Label" style="color: rgb(56, 56, 56); -unity-text-align: middle-center; -unity-font-style: normal; margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px; padding-left: 6px; padding-right: 6px; padding-top: 1px; padding-bottom: 1px; height: 28px; width: 125px; -unity-font: url(&apos;project://database/Assets/Res/Font/Default.otf?fileID=12800000&amp;guid=91ddddbb4ac95e144b11eec367d27826&amp;type=3#Default&apos;); -unity-font-definition: none; font-size: 16px;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -29,6 +29,7 @@ namespace Game.Editor
         
         public static void RefreshData()
         {
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             s_Dictionary.Clear();
             AllKeys = null;
             foreach (Language language in LocalizationReadyLanguage.Languages)
@@ -73,6 +74,7 @@ namespace Game.Editor
             AllKeys = s_Dictionary.Keys.ToArray();
             Localize.EditorLocalizationAllKey = AllKeys;
             Localize.EditorLocalizationReadyLanguage = LocalizationReadyLanguage.Languages;
+            Selection.activeGameObject = null;
         }
 
         public static string GetString(Language language, string key)
@@ -81,13 +83,7 @@ namespace Game.Editor
             {
                 return "<UNKNOWN>";
             }
-        
-            if (!lDict.TryGetValue(language, out var value))
-            {
-                return "<UNKNOWN>";
-            }
-        
-            return value;
+            return lDict.GetValueOrDefault(language, "<UNKNOWN>");
         }
     }
 }

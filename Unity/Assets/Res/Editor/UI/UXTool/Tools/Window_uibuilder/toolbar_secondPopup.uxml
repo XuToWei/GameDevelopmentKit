@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Bg" style="width: 140px; height: 60px; justify-content: space-between; position: absolute; background-color: rgba(51, 51, 51, 255); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(100, 100, 100, 255); border-right-color: rgba(100, 100, 100, 255); border-top-color: rgba(100, 100, 100, 255); border-bottom-color: rgba(100, 100, 100, 255); border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
+        <ui:VisualElement name="modelWindowMask" style="position: absolute; left: -10000px; top: -10000px; right: -10000px; bottom: -10000px;" />
+    </ui:VisualElement>
+</ui:UXML>

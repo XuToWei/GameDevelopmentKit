@@ -1,0 +1,13 @@
+.ux-button-primary.ux-button-guide {
+    background-color: #7300C7;
+    color: #ffffff;
+}
+
+
+.ux-button-primary.ux-button-guide:hover {
+    background-color: #8100de;
+}
+
+.ux-button-primary.ux-button-guide:active {
+    background-color: #6200a8;
+}

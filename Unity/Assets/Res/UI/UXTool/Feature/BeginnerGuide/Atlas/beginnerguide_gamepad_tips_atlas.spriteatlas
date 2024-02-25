@@ -1,0 +1,168 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: beginnerguide_gamepad_tips_atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 4b8fff1d67bef704299dc4c5054a8972, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: aed5b0806dfc5804c83c52f0c0d7f2b8, type: 3}
+  - {fileID: 21300000, guid: 01b87da0f9ab1aa4da5b0804825be083, type: 3}
+  - {fileID: 21300000, guid: 72148cd09c2371c47adf33359c0925b7, type: 3}
+  - {fileID: 21300000, guid: 70253711d0c59c941bcd50f929b1c04c, type: 3}
+  - {fileID: 21300000, guid: 86178d21ee98d23439869d0223e99541, type: 3}
+  - {fileID: 21300000, guid: 839e2641e990cad4e8bfdfdac37c5b79, type: 3}
+  - {fileID: 21300000, guid: fe9b056115b6ee64aaafc8b8a9385855, type: 3}
+  - {fileID: 21300000, guid: a84ea0710b923de4da480057bb57cd72, type: 3}
+  - {fileID: 21300000, guid: 16468be14555e6b49815741930dacef1, type: 3}
+  - {fileID: 21300000, guid: a77314322cf5d214f8f11d034a0e5dfa, type: 3}
+  - {fileID: 21300000, guid: d4c4df527d8b7184b94a679bdec19898, type: 3}
+  - {fileID: 21300000, guid: bdc796c2818186842aa38896cd86514a, type: 3}
+  - {fileID: 21300000, guid: 8b6866f234d6eee4f8a35cec279d6109, type: 3}
+  - {fileID: 21300000, guid: 40ce6803183529f4f8cb189d4c09c141, type: 3}
+  - {fileID: 21300000, guid: 3b7910331870913419f6e73a758d246e, type: 3}
+  - {fileID: 21300000, guid: 61f1ec53f624bdc47b0733a4e28743c0, type: 3}
+  - {fileID: 21300000, guid: c8238e53d1fac8b4cb254f4d6eef087b, type: 3}
+  - {fileID: 21300000, guid: 822d44e3e4c29b24b8f0c5ad4dc4e7f2, type: 3}
+  - {fileID: 21300000, guid: 2e9a3904c0f8c444a8756f9e97e09151, type: 3}
+  - {fileID: 21300000, guid: 59e4b6242a4df364b95b4f00426a8eab, type: 3}
+  - {fileID: 21300000, guid: 350877d497c139d46be852cf635a4c33, type: 3}
+  - {fileID: 21300000, guid: c2bc38357a60b454dabab66d850b2d98, type: 3}
+  - {fileID: 21300000, guid: 2be2915609f5656438eea96db8b37793, type: 3}
+  - {fileID: 21300000, guid: e6c8d6e6694015d4d8dac8c72319bef1, type: 3}
+  - {fileID: 21300000, guid: bf4f76576f8c34f48ac9e5d3295db6da, type: 3}
+  - {fileID: 21300000, guid: 6bb61da7c155dbe4c8ea5214984f07c6, type: 3}
+  - {fileID: 21300000, guid: 021a7cf71538dce478cc6c7d045f693d, type: 3}
+  - {fileID: 21300000, guid: 375b66080af62fd40ae443f01b729af2, type: 3}
+  - {fileID: 21300000, guid: 9b105248f33c7a34e8d6e9f5f209bf10, type: 3}
+  - {fileID: 21300000, guid: a57e4a78fa2c235448cc55f4f05671a2, type: 3}
+  - {fileID: 21300000, guid: 9ebd8488557a229498419fe251336d05, type: 3}
+  - {fileID: 21300000, guid: c1bf5d88e5d4ff247abb4e9e25996132, type: 3}
+  - {fileID: 21300000, guid: 94d28398aaf1dad4c8c2b147cba2ecb1, type: 3}
+  - {fileID: 21300000, guid: b2dfc0e8a8c638d4fbde378e24215db9, type: 3}
+  - {fileID: 21300000, guid: 457a2709b87f0d94fbc97b41cfa89fae, type: 3}
+  - {fileID: 21300000, guid: 0067c369e1d6c3f4e9ec4d20df4b4e61, type: 3}
+  - {fileID: 21300000, guid: ee3aae79703f46248a0b9b10bd42ccdc, type: 3}
+  - {fileID: 21300000, guid: 31f8f9898401e5240b6a19c03c0c046d, type: 3}
+  - {fileID: 21300000, guid: 17fe8e89dccbc164bb2aad7895be004d, type: 3}
+  - {fileID: 21300000, guid: 3109894aebd4d2f4cb1a579a5500cf5a, type: 3}
+  - {fileID: 21300000, guid: f2c93d6aa560477479438fcc0bd606a7, type: 3}
+  - {fileID: 21300000, guid: 5564ceda6f96abf439a97240fd7abb4a, type: 3}
+  - {fileID: 21300000, guid: ba6a7efaa30b4ed478cdd6c14656df32, type: 3}
+  - {fileID: 21300000, guid: e6a8850b6499a1f4cbed64b4e5ddae46, type: 3}
+  - {fileID: 21300000, guid: 9991b46b99751664f801fa2ca5f8bdef, type: 3}
+  - {fileID: 21300000, guid: 6a20488bc1db41d47bf65a05117a877d, type: 3}
+  - {fileID: 21300000, guid: 2b85caab422d3b44698e732df0d97c4b, type: 3}
+  - {fileID: 21300000, guid: 1009ccebe686bd549829ad70ae054eba, type: 3}
+  - {fileID: 21300000, guid: ba7bedebaa6c676469b3705842554cf6, type: 3}
+  - {fileID: 21300000, guid: c534ae0cab839b246b214aef20574059, type: 3}
+  - {fileID: 21300000, guid: 663e8d9c4af162a42b0291d124f08e23, type: 3}
+  - {fileID: 21300000, guid: 4e2080ec5b2634249afd0ee4e2310eff, type: 3}
+  - {fileID: 21300000, guid: 17b111fc72de6d34c8b80b10929c86eb, type: 3}
+  - {fileID: 21300000, guid: 07357b3d413da0c47b3fb28619106e9d, type: 3}
+  - {fileID: 21300000, guid: 3e9ef7dd787132643bb3be71dc2120bd, type: 3}
+  - {fileID: 21300000, guid: 047c406e53e7b5948ae4bf585ca68b79, type: 3}
+  - {fileID: 21300000, guid: 1253f56e46557bf43ab518af1bc81395, type: 3}
+  - {fileID: 21300000, guid: d2f2e5ce2a6eb6242a0378d368a023d1, type: 3}
+  - {fileID: 21300000, guid: 8777d02fab43d2b418a28320b701d898, type: 3}
+  - {fileID: 21300000, guid: 5586627f71c5495479611e0d5666da73, type: 3}
+  - {fileID: 21300000, guid: ef17659f7e6a1af49b4030e0ae1d89e2, type: 3}
+  - {fileID: 21300000, guid: d339ecdfaaab7004f8f057a91e014080, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - img_joystick_PS_Option
+  - img_joystick_xbox_leftstick
+  - img_joystick_xbox_RB
+  - img_joystick_pc_yuan
+  - img_joystick_PS_up
+  - img_joystick_xbox_RT
+  - img_joystick_PS_R2
+  - img_joystick_xbox_rightstick
+  - icon_guide_joystick_xbox
+  - img_joystick_PS5_R2
+  - img_joystick_PS_L2
+  - img_joystick_pc_LT
+  - img_joystick_PS5_leftstick
+  - img_joystick_xbox_LB
+  - img_joystick_PS5_up
+  - img_joystick_pc_LB
+  - img_joystick_PS5_A
+  - img_joystick_PS_leftstick
+  - img_joystick_PS_down
+  - img_joystick_PS_rightstick
+  - img_joystick_PS5_Y
+  - img_joystick_PS5_X
+  - img_joystick_PS5_L1
+  - img_joystick_PS5_B
+  - img_joystick_xbox_LT
+  - img_joystick_xbox_little-right
+  - img_joystick_PS5_L2
+  - img_joystick_xbox_left
+  - img_joystick_pc_yuan_stick
+  - img_joystick_PS_Y
+  - img_joystick_PS_B
+  - img_joystick_pc_A
+  - img_joystick_PS_X
+  - img_joystick_xbox_B
+  - img_joystick_PS5_option
+  - img_joystick_xbox_X
+  - img_joystick_PS5_down
+  - img_joystick_xbox_down
+  - img_joystick_PS5_right
+  - img_joystick_PS5_left
+  - icon_guide_joystick_pc
+  - img_joystick_pc_RT
+  - img_joystick_PS5_R1
+  - img_joystick_pc_X
+  - img_joystick_xbox_little_left
+  - icon_guide_joystick_ps5
+  - img_joystick_PS_A
+  - img_joystick_PS5_rightstick
+  - img_joystick_xbox_A
+  - img_joystick_PS_R1
+  - img_joystick_xbox_right
+  - img_joystick_pc_RB
+  - img_joystick_xbox_top
+  - img_joystick_pc_Y
+  - img_joystick_PS5_select
+  - img_joystick_PS_L1
+  - icon_guide_joystick_ps
+  - img_joystick_pc_B
+  - img_joystick_PS_right
+  - img_joystick_PS_left
+  - img_joystick_PS_Share
+  - img_joystick_xbox_Y
+  m_RenderDataMap: {}
+  m_Tag: beginnerguide_gamepad_tips_atlas
+  m_IsVariant: 0

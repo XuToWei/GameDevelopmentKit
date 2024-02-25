@@ -39,13 +39,19 @@ namespace ET.Server
                         //Json: luban导出json
                         //Check: 只检查，不导出
                         //ShowCmd: 显示cmd
-                        ExcelExporter.Export();
+                        ExcelExporter.ExportAll();
                         return 0;
                     }
                     case AppType.Proto2CS:
                     {
                         Options.Instance.Console = 1;
                         Proto2CS.Export();
+                        return 0;
+                    }
+                    case AppType.LocalizationExporter:
+                    {
+                        Options.Instance.Console = 1;
+                        ExcelExporter.ExportLocalization();
                         return 0;
                     }
                 }

@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="position: relative; bottom: auto; right: auto; top: auto; left: auto; align-items: center; justify-content: space-around; width: 600px; height: 320px;">
+        <ui:VisualElement name="VisualElement" style="height: 81px; width: 585px; position: relative; top: auto; left: auto; justify-content: space-around; align-items: center; flex-direction: row;">
+            <ui:VisualElement style="height: 80px; width: 270px; background-image: url(&apos;../Res/Icon/About_icon.png&apos;);" />
+            <ui:VisualElement style="height: 79px; width: 211px; align-items: flex-start; justify-content: space-around;">
+                <ui:Label text="Thunder UX/UI Tool" style="font-size: 22px;" />
+                <ui:Label text="版本 0.0.1" style="font-size: 8px; top: auto; bottom: 5px;" />
+                <ui:Label text="2022 ThunderFire-all rights reserved." style="font-size: 8px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-direction: row; align-items: center; justify-content: space-around; height: 35px; width: 197px;">
+            <ui:VisualElement name="confirmSelector" style="width: 77px; height: 29px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgb(27, 150, 233); border-right-color: rgb(27, 150, 233); border-top-color: rgb(27, 150, 233); border-bottom-color: rgb(27, 150, 233);">
+                <ui:VisualElement name="confirm" class="confirm" style="background-color: rgb(36, 99, 193); border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; width: 73px; height: 29px;">
+                    <ui:Label text="Label" name="text" style="color: rgb(255, 255, 255); height: 25px; width: 73px; -unity-text-align: middle-center; white-space: normal; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-color: rgb(190, 15, 15); border-right-color: rgb(190, 15, 15); border-top-color: rgb(190, 15, 15); border-bottom-color: rgb(190, 15, 15); font-size: 14px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="cancelSelector" style="width: 77px; height: 29px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgb(27, 150, 233); border-right-color: rgb(27, 150, 233); border-top-color: rgb(27, 150, 233); border-bottom-color: rgb(27, 150, 233);">
+                <ui:VisualElement name="cancel" class="confirm" style="background-color: rgb(142, 142, 142); border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; width: 73px; height: 25px;">
+                    <ui:Label text="Label" name="text" style="color: rgb(241, 241, 241); height: 25px; width: 73px; -unity-text-align: middle-center; white-space: nowrap; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; font-size: 14px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

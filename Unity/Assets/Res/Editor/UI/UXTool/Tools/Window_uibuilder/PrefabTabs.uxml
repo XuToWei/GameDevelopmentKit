@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Tabs" style="height: auto; position: absolute; top: 20px; right: 160px; left: 0; background-color: rgb(48, 48, 48);">
+        <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" mode="Horizontal" name="TabsList" />
+    </ui:VisualElement>
+</ui:UXML>

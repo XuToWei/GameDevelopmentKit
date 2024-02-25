@@ -1,0 +1,19 @@
+.ux-divider {
+    
+}
+
+.ux-divider-horizontal {
+    width: 100%;
+    margin: 20px 0;
+    height: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: gray;
+}
+
+.ux-divider-vertical {
+    width: 0;
+    height: 20px;
+    margin: 0 12px;
+    border-left-width: 1px;
+    border-left-color: gray;
+}

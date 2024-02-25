@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="container" class="c" style="position: relative; height: 155px; align-items: center; justify-content: space-around; width: 298px;">
+        <Style src="PrefabAndLabel_popup.uss" />
+        <ui:VisualElement name="textfield" class="textfield" style="align-items: stretch; flex-direction: column; justify-content: space-between; width: 202px; height: 46px; position: absolute; top: 29px;">
+            <ui:Label text="Label" name="textlabel" class="textlabel" style="-unity-text-align: lower-left; white-space: normal; color: rgb(255, 255, 255); height: 15px; width: 97px; font-size: 14px; position: absolute; top: 0;" />
+            <ui:VisualElement name="textinputSelector" style="width: 205px; height: 29px; flex-direction: column; align-items: flex-start; justify-content: flex-start; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(27, 150, 233); border-right-color: rgb(27, 150, 233); border-top-color: rgb(27, 150, 233); border-bottom-color: rgb(27, 150, 233); position: absolute; bottom: 0;">
+                <ui:VisualElement name="textinputcContainer" style="width: 201px; height: 25px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; flex-direction: row; align-items: center; justify-content: center; background-color: rgb(255, 255, 255);">
+                    <ui:IMGUIContainer name="textinput" class="textinput" style="width: 195px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; background-color: rgb(255, 255, 255); justify-content: center; align-items: center; height: 16px; position: absolute; top: 3px; left: 3px; overflow: hidden;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-direction: row; height: 29px; width: 182px; justify-content: space-between; align-items: center; position: absolute; top: 99px;">
+            <ui:VisualElement name="confirmSelector" style="width: 77px; height: 29px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgb(27, 150, 233); border-right-color: rgb(27, 150, 233); border-top-color: rgb(27, 150, 233); border-bottom-color: rgb(27, 150, 233);">
+                <ui:VisualElement name="confirm" class="confirm" style="background-color: rgb(36, 99, 193); border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; width: 73px; height: 29px;">
+                    <ui:Label text="Label" name="text" style="color: rgb(255, 255, 255); height: 25px; width: 73px; -unity-text-align: middle-center; white-space: normal; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-color: rgb(190, 15, 15); border-right-color: rgb(190, 15, 15); border-top-color: rgb(190, 15, 15); border-bottom-color: rgb(190, 15, 15); font-size: 14px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="cancelSelector" style="width: 77px; height: 29px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgb(27, 150, 233); border-right-color: rgb(27, 150, 233); border-top-color: rgb(27, 150, 233); border-bottom-color: rgb(27, 150, 233);">
+                <ui:VisualElement name="cancel" class="confirm" style="background-color: rgb(142, 142, 142); border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; width: 73px; height: 25px;">
+                    <ui:Label text="Label" name="text" style="color: rgb(241, 241, 241); height: 25px; width: 73px; -unity-text-align: middle-center; white-space: nowrap; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; font-size: 14px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Root" style="position: relative; left: auto; top: auto; right: auto; bottom: auto; width: 650px; height: 430px; translate: 0 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;">
+        <ui:VisualElement name="TopContainer" style="position: absolute; left: 0; top: 0; right: 0; height: 40px;">
+            <ui:Label text="Label" name="Title" style="position: relative; justify-content: center; align-items: center; top: 8px; -unity-text-align: upper-center; color: rgb(255, 255, 255); font-size: 20px;" />
+            <ui:VisualElement name="SplitLine" style="height: 1px; bottom: 0; position: absolute; left: 0; top: auto; right: 0; background-color: rgb(0, 0, 0);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="MidContainer" style="position: absolute; left: 0; top: 40px; right: 0; height: auto; bottom: 40px;">
+            <ui:VisualElement name="LeftContainer" style="position: absolute; width: 120px; top: 0; bottom: 0; -unity-background-image-tint-color: rgb(255, 255, 255); background-color: rgb(128, 128, 128);" />
+            <ui:VisualElement name="RightContainer" style="position: absolute; width: auto; top: 0; bottom: 0; -unity-background-image-tint-color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0); left: 120px; right: 0;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="BottomContainer" style="position: absolute; left: 0; top: auto; right: 0; height: 40px; bottom: 0;">
+            <ui:VisualElement name="SplitLine" style="height: 1px; bottom: auto; position: absolute; left: 0; top: 0; right: 0; background-color: rgb(0, 0, 0);" />
+            <ui:VisualElement name="ButtonContainer" class="align-self-center" style="width: 200px; position: absolute; bottom: 5px; top: 5px; align-items: auto; left: 237px;">
+                <ui:Button text="Button" name="ConfirmBtn" style="width: 80px; top: 0; bottom: 0; position: absolute;" />
+                <ui:Button text="Button" name="CancelBtn" style="width: 80px; top: 0; bottom: 0; position: absolute; right: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

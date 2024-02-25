@@ -1,0 +1,123 @@
+{
+    "friendlyName": "Apple iPhone 14/15 Pro Max",
+    "version": 1,
+    "screens": [
+        {
+            "width": 1290,
+            "height": 2796,
+            "navigationBarHeight": 0,
+            "dpi": 460.0,
+            "orientations": [
+                {
+                    "orientation": 1,
+                    "safeArea": {
+                        "serializedVersion": "2",
+                        "x": 0.0,
+                        "y": 177.0,
+                        "width": 1290.0,
+                        "height": 2517.0
+                    }
+                },
+				{
+                    "orientation": 3,
+                    "safeArea": {
+                        "serializedVersion": "2",
+                        "x": 177.0,
+                        "y": 0.0,
+                        "width": 2517.0,
+                        "height": 1290.0
+                    }
+                }
+            ],
+            "presentation": {
+                "overlayPath": "iPhone 14 Pro Max.png",
+                "borderSize": {
+                    "x": 80.0,
+                    "y": 72.0,
+                    "z": 80.0,
+                    "w": 70.0
+                }
+            }
+        }
+    ],
+    "systemInfo": {
+        "deviceModel": "iPhone11,8",
+        "deviceType": 1,
+        "operatingSystem": "iOS 12.0",
+        "operatingSystemFamily": 0,
+        "processorCount": 6,
+        "processorFrequency": 0,
+        "processorType": "arm64e",
+        "supportsAccelerometer": true,
+        "supportsAudio": true,
+        "supportsGyroscope": true,
+        "supportsLocationService": true,
+        "supportsVibration": true,
+        "systemMemorySize": 2813,
+        "unsupportedIdentifier": "n/a",
+        "graphicsDependentData": [
+            {
+                "graphicsDeviceType": 16,
+                "graphicsMemorySize": 1024,
+                "graphicsDeviceName": "Apple A12 GPU",
+                "graphicsDeviceVendor": "Apple",
+                "graphicsDeviceID": 0,
+                "graphicsDeviceVendorID": 0,
+                "graphicsUVStartsAtTop": true,
+                "graphicsDeviceVersion": "Metal",
+                "graphicsShaderLevel": 50,
+                "graphicsMultiThreaded": true,
+                "renderingThreadingMode": 0,
+                "hasHiddenSurfaceRemovalOnGPU": true,
+                "hasDynamicUniformArrayIndexingInFragmentShaders": true,
+                "supportsShadows": true,
+                "supportsRawShadowDepthSampling": true,
+                "supportsMotionVectors": true,
+                "supports3DTextures": true,
+                "supports2DArrayTextures": true,
+                "supports3DRenderTextures": true,
+                "supportsCubemapArrayTextures": true,
+                "copyTextureSupport": 31,
+                "supportsComputeShaders": true,
+                "supportsGeometryShaders": false,
+                "supportsTessellationShaders": true,
+                "supportsInstancing": true,
+                "supportsHardwareQuadTopology": false,
+                "supports32bitsIndexBuffer": true,
+                "supportsSparseTextures": false,
+                "supportedRenderTargetCount": 8,
+                "supportsSeparatedRenderTargetsBlend": true,
+                "supportedRandomWriteTargetCount": 8,
+                "supportsMultisampledTextures": 1,
+                "supportsMultisampleAutoResolve": false,
+                "supportsTextureWrapMirrorOnce": 0,
+                "usesReversedZBuffer": true,
+                "npotSupport": 2,
+                "maxTextureSize": 16384,
+                "maxCubemapSize": 16384,
+                "maxComputeBufferInputsVertex": 8,
+                "maxComputeBufferInputsFragment": 8,
+                "maxComputeBufferInputsGeometry": 0,
+                "maxComputeBufferInputsDomain": 8,
+                "maxComputeBufferInputsHull": 8,
+                "maxComputeBufferInputsCompute": 8,
+                "maxComputeWorkGroupSize": 1024,
+                "maxComputeWorkGroupSizeX": 1024,
+                "maxComputeWorkGroupSizeY": 1024,
+                "maxComputeWorkGroupSizeZ": 1024,
+                "supportsAsyncCompute": false,
+                "supportsGraphicsFence": true,
+                "supportsAsyncGPUReadback": true,
+                "supportsRayTracing": false,
+                "supportsSetConstantBuffer": true,
+                "hasMipMaxLevel": true,
+                "supportsMipStreaming": true,
+                "usesLoadStoreActions": true,
+                "supportedTextureFormats": [1, 2, 3, 4, 5],
+                "supportedRenderTextureFormats": [1, 2, 3, 4, 5],
+                "ldrGraphicsFormat": 59,
+                "hdrGraphicsFormat": 74
+            }
+        ]
+    }
+}

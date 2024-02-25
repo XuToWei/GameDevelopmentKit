@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="Root" style="height: 30px;">
+        <uie:EnumField label="Enum" value="Center" name="ValueField" style="top: 0; bottom: 0; left: 0; width: auto; right: 0; height: 30px; color: rgba(217, 217, 217, 0);" />
+    </ui:VisualElement>
+</ui:UXML>

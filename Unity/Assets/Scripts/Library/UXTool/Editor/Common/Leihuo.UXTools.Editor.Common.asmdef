@@ -1,0 +1,20 @@
+{
+    "name": "Leihuo.UXTools.Editor.Common",
+    "rootNamespace": "",
+    "references": [
+        "GUID:603cf9f7b75565840aa8cf5576088a59",
+        "GUID:185999e4d3aadab45bf0f7ee77382397",
+        "GUID:3fcf00d7a3c894e46a955a792eefb4da"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

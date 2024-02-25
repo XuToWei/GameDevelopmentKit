@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Panel" style="position: absolute; width: auto; height: 30px; background-color: rgb(255, 255, 255); flex-direction: row;">
+        <ui:Label text="Label1754" display-tooltip-when-elided="true" name="Label" style="color: rgb(56, 56, 56); -unity-text-align: middle-center; -unity-font-style: bold; margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px; padding-left: 6px; padding-right: 6px; padding-top: 1px; padding-bottom: 1px;" />
+        <ui:Button text="Preview" display-tooltip-when-elided="true" name="PreviewBtn" style="position: relative; top: auto; left: auto; width: 60px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px;" />
+        <ui:Button text="Save" display-tooltip-when-elided="true" name="SaveBtn" style="position: relative; top: auto; left: auto; right: auto; width: 60px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px;" />
+        <ui:Button text="Close" display-tooltip-when-elided="true" name="CloseBtn" style="position: relative; top: auto; left: auto; right: auto; width: 60px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px;" />
+    </ui:VisualElement>
+</ui:UXML>

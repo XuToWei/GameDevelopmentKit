@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="VisualElement" style="position: absolute;">
+        <ui:Image name="Button" style="width: 79px; height: 97px; margin-left: 8px; margin-right: 8px;" />
+        <ui:Label text="Label" name="Label" style="width: 91px; -unity-text-align: upper-center; overflow: visible; white-space: normal; height: 15px; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
+    </ui:VisualElement>
+</ui:UXML>

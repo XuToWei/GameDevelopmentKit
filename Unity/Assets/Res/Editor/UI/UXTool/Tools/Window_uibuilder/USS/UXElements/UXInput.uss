@@ -1,0 +1,16 @@
+﻿.ux-input {
+}
+
+.ux-input-field {
+    background-color: white;
+    color: #1d2129;
+    font-size: 12px;
+}
+
+.ux-input-field-error {
+    background-color: #fdcdc5;
+}
+
+.ux-input-field-disabled {
+    cursor: arrow;
+}

@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="height: 140px; width: 300px; margin-bottom: 10px; margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ui:Label text="Label" name="DeleteText" style="font-size: 14px; margin-top: 5px; margin-right: 0; margin-left: 15px; width: 291px;" />
+        <ui:VisualElement style="flex-direction: row; width: 216px; margin-top: 40px; margin-right: 0; margin-left: 15px;">
+            <ui:Toggle name="IsDeleteLocal" style="width: 20px; flex-direction: column; align-items: flex-end; justify-content: space-around; height: 19px;" />
+            <ui:Label text="Label" name="DeleteLocal" style="width: 167px; height: 20px; flex-direction: column; font-size: 14px; justify-content: space-between; align-items: flex-start; -unity-text-align: middle-left; margin-left: 5px;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-direction: row; align-items: center; justify-content: space-around; height: 27px; width: 268px; position: relative; margin-top: 10px;">
+            <ui:VisualElement name="ConfirmSelector" style="width: 77px; height: 20px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-left-color: rgb(36, 99, 193); border-right-color: rgb(36, 99, 193); border-top-color: rgb(36, 99, 193); border-bottom-color: rgb(36, 99, 193);">
+                <ui:VisualElement name="Confirm" class="confirm" style="height: 20px; width: 73px; background-color: rgb(39, 99, 193); flex-direction: column; align-items: center; justify-content: center; border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px;">
+                    <ui:Label text="Label" name="Text" style="-unity-font-style: bold; color: rgb(255, 255, 255); font-size: 14px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="CancelSelector" style="width: 77px; height: 20px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgb(36, 99, 193); border-right-color: rgb(36, 99, 193); border-top-color: rgb(36, 99, 193); border-bottom-color: rgb(36, 99, 193);">
+                <ui:VisualElement name="Cancel" class="confirm" style="height: 20px; width: 73px; background-color: rgb(142, 142, 142); align-items: center; justify-content: center; border-top-left-radius: 6px; border-bottom-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px;">
+                    <ui:Label text="Label" name="Text" style="-unity-font-style: normal; color: rgb(0, 0, 0); font-size: 14px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

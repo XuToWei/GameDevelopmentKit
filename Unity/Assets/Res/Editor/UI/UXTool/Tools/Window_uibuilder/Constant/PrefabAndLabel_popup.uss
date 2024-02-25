@@ -1,0 +1,67 @@
+.container {
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+    left: 1px;
+    right: -11px;
+    bottom: -2px;
+    height: 177px;
+}
+
+.tf {
+    width: 279px;
+}
+
+.bt {
+    height: 29px;
+    width: 87px;
+}
+
+.tag {
+    width: 279px;
+}
+
+.popupContainer {
+    height: 20px;
+    width: 333px;
+}
+
+.textfield {
+    height: 20px;
+    width: 285px;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: row;
+}
+
+.textinput {
+    height: 20px;
+    width: 215px;
+}
+
+.textlabel {
+    height: 20px;
+    width: 65px;
+}
+
+.icon {
+    left: 10px;
+    width: 20px;
+    height: 20px;
+    top: 10px;
+    background-image: url('/Assets/Res/Editor/UI/UXTool/Tools/Res/Icon/ToolBar/setting.png');
+    position: absolute;
+}
+
+.confirm {
+    width: 87px;
+    height: 29px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    background-color: rgb(144, 144, 144);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

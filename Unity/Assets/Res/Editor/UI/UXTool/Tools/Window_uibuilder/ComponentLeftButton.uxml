@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement focusable="false" name="button" style="background-color: rgb(255, 255, 255); border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; -unity-font-style: normal; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); -unity-text-align: upper-left; height: 27px; margin-top: 7px; margin-bottom: 0; margin-right: 11px; margin-left: 11px; justify-content: center; align-items: center; width: 170px; font-size: 14px; min-width: 170px; min-height: 27px;">
+        <ui:Label text="text" name="text" style="color: rgb(0, 0, 0); -unity-text-align: upper-center; font-size: 14px; -unity-font-style: normal; white-space: normal; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; align-items: center; flex-wrap: wrap; width: 154px;" />
+    </ui:VisualElement>
+</ui:UXML>
