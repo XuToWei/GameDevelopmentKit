@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Linq;
 
@@ -110,8 +111,18 @@ public class LocalizationHelper
         SetLanguage((LanguageType)type);
     }
 
-    public static string GetLanguage(string key, LanguageType languageType, string defaultText = "")
+    public static string GetString(LanguageType languageType, string key, string defaultString)
     {
-        return defaultText;
+        if (getStringFunc != null)
+        {
+            return getStringFunc(languageType, key, defaultString);
+        }
+        return defaultString;
+    }
+
+    private static Func<LanguageType, string, string, string> getStringFunc;
+    public static void InitGetStringFunc(Func<LanguageType, string, string, string> func)
+    {
+        getStringFunc = func;
     }
 }

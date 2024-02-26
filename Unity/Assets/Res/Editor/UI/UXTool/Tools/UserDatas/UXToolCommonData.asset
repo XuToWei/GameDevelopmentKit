@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 0782a7d7b0862b341b1167b494e3b87c, type: 3}
   m_Name: UXToolCommonData
-  m_EditorClassIdentifier: Leihuo.UXTools.Editor:ThunderFireUITool:UXToolCommonData
+  m_EditorClassIdentifier: 
   CustomUnityWindowTitle: 

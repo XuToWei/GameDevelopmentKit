@@ -67,7 +67,7 @@ namespace UnityEngine.UI
             }
             if (language >= 0 && id != "" && !ignoreLocalization)
             {
-                text = LocalizationHelper.GetLanguage(id, language, need_replace);
+                text = LocalizationHelper.GetString(language, id, need_replace);
             }
         }
     }

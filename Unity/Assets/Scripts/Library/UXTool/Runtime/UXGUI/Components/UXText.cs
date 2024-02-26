@@ -441,7 +441,7 @@ namespace UnityEngine.UI
             }
             if (language >= 0 && id != "" && !ignoreLocalization)
             {
-                text = LocalizationHelper.GetLanguage(id, language, need_replace);
+                text = LocalizationHelper.GetString(language, id, need_replace);
             }
         }
 
@@ -504,7 +504,7 @@ namespace UnityEngine.UI
                         rt.anchorMax = ((RectTransform)transform1).anchorMax;
                         rt.anchorMin = ((RectTransform)transform1).anchorMin;
                     }
-                    m_ImagesPool.Add(go.GetComponent<Image>());
+                    m_ImagesPool.Add(image);
                 }
 
                 var spritePath = match.Groups[1].Value;

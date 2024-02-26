@@ -8,8 +8,14 @@ using UnityEngine;
 
 namespace ThunderFireUITool
 {
+    [UXInitialize(9999)]
     public static partial class EditorLocalizationTool
     {
+        static EditorLocalizationTool()
+        {
+            LocalizationHelper.InitGetStringFunc(GetString);
+        }
+        
         public static string[] AllKeys
         {
             get;
