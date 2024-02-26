@@ -23,7 +23,8 @@
         "ZString",
         "MemoryPack",
         "UniTaskExtension",
-        "EnhancedScroller"
+        "EnhancedScroller",
+        "Leihuo.UXTools.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

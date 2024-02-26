@@ -12,13 +12,9 @@ namespace UnityGameFramework.Extension
         [Serializable]
         public class LoadTextureObject : IReference
         {
-#if ODIN_INSPECTOR
             [ShowInInspector]
-#endif
             public ISetTexture2dObject Texture2dObject { get; private set;}
-#if ODIN_INSPECTOR
             [ShowInInspector]
-#endif
             public Texture2D Texture2D { get; private set; }
 #if UNITY_EDITOR
             public bool IsSelect { get; set; }
@@ -47,7 +43,5 @@ namespace UnityGameFramework.Extension
                 Texture2D = null;
             }
         }
-
-       
     }
 }

@@ -1,9 +1,6 @@
 using System;
 using GameFramework;
-
-#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
-#endif
 
 namespace UnityGameFramework.Extension
 {
@@ -12,13 +9,9 @@ namespace UnityGameFramework.Extension
         [Serializable]
         public sealed class LoadSpriteObject : IReference
         {
-#if ODIN_INSPECTOR
             [ShowInInspector]
-#endif
             public ISetSpriteObject SpriteObject { get; private set; }
-#if ODIN_INSPECTOR
             [ShowInInspector]
-#endif
             public SpriteCollection Collection { get; private set; }
 #if UNITY_EDITOR
             public bool IsSelect { get; set; }

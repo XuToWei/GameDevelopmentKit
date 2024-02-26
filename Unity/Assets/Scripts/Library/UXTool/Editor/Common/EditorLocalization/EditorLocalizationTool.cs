@@ -13,7 +13,7 @@ namespace ThunderFireUITool
     {
         static EditorLocalizationTool()
         {
-            LocalizationHelper.InitGetStringFunc(GetString);
+            LocalizationHelper.SetEditorGetStringFunc(GetString);
         }
         
         public static string[] AllKeys

@@ -13,8 +13,6 @@ namespace UnityGameFramework.Extension
                 SpriteCollection collection = AssetDatabase.LoadAssetAtPath<SpriteCollection>(path);
                 collection.Pack();
             }
-
-            AssetDatabase.SaveAssets();
         }
     }
 }

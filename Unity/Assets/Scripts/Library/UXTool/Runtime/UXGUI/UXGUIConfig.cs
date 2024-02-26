@@ -23,9 +23,10 @@ public static class UXGUIConfig
     public static readonly string ScriptsRootPath = "Assets/Scripts/Library/UXTool/";
     public static readonly string EditorRootPath = "Assets/Res/Editor/UI/UXTool/";
 #endif
-    
+
     public static readonly string RootPath = "Assets/Res/UI/UXTool/";
     public static readonly string GUIPath = RootPath + "GUI/";
+    public static readonly string UXToolAssetCollectionPath = RootPath + "UXToolAssetCollection.asset";
 
     public static readonly string UXImageDefaultMatPath = GUIPath + "Material/UXImage.mat";
     public static readonly string UXTextDefaultMatPath = GUIPath + "Material/UXImage.mat";

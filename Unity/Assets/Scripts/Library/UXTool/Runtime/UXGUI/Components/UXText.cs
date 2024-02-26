@@ -422,6 +422,19 @@ namespace UnityEngine.UI
             ChangeLanguage(LocalizationHelper.GetLanguage());
         }
 
+        protected override void OnDestroy()
+        {
+            if (m_LoadedSprites.Count > 0)
+            {
+                foreach (Sprite sprite in m_LoadedSprites)
+                {
+                    ResourceManager.Unload(sprite);
+                }
+                m_LoadedSprites.Clear();
+            }
+            base.OnDestroy();
+        }
+
         public void ChangeLanguage(LocalizationHelper.LanguageType language)
         {
             if (language == LocalizationHelper.LanguageType.NoWord && !ignoreLocalization)
@@ -457,9 +470,10 @@ namespace UnityEngine.UI
             return rootObject;
         }
 
+        private readonly List<Sprite> m_LoadedSprites = new List<Sprite>();
         private readonly List<int> m_ImagesVertexIndex = new List<int>();
         private readonly List<Image> m_ImagesPool = new List<Image>();
-        private static readonly Regex s_Regex =
+        private static readonly Regex s_Regex = 
             new Regex(@"<quad name=(.+?) width=(\d*\.?\d+%?) height=(\d*\.?\d+%?) />", RegexOptions.Singleline);
 
         public void UpdateQuadImage(string updatedText)
@@ -517,9 +531,14 @@ namespace UnityEngine.UI
                     {
                         if (img != null)
                         {
+                            m_LoadedSprites.Add(sprite);
                             img.sprite = sprite;
                             img.rectTransform.sizeDelta = new Vector2(width, height);
                             img.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            ResourceManager.Unload(sprite);
                         }
                     });
                     // img.enabled = true;

@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using GameFramework;
 using GameFramework.ObjectPool;
-
-#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
-#endif
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -28,9 +25,7 @@ namespace UnityGameFramework.Extension
         /// 对象池自动释放时间间隔
         /// </summary>
         [SerializeField] private float m_AutoReleaseInterval = 60f;
-#if ODIN_INSPECTOR
         [ReadOnly] [ShowInInspector]
-#endif
         private LinkedList<LoadSpriteObject> m_LoadedSpriteObjectsLinkedList;
 
         private HashSet<string> m_SpriteCollectionBeingLoaded;
@@ -64,9 +59,7 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 回收无引用的 Image 对应图集。
         /// </summary>
-#if ODIN_INSPECTOR
         [Button("Release Unused")]
-#endif
         public void ReleaseUnused()
         {
             if (m_LoadedSpriteObjectsLinkedList == null)
@@ -84,7 +77,6 @@ namespace UnityGameFramework.Extension
                 }
                 current = next;
             }
-
             m_CheckCanReleaseTime = 0;
         }
     }

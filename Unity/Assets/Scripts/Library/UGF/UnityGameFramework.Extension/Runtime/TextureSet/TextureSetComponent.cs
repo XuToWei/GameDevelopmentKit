@@ -4,10 +4,7 @@ using GameFramework;
 using GameFramework.ObjectPool;
 using UnityEngine;
 using UnityGameFramework.Runtime;
-
-#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
-#endif
 
 namespace UnityGameFramework.Extension
 {
@@ -28,9 +25,7 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 保存加载的图片对象
         /// </summary>
-#if ODIN_INSPECTOR
         [ShowInInspector]
-#endif
         private LinkedList<LoadTextureObject> m_LoadTextureObjectsLinkedList;
 
         /// <summary>
@@ -81,9 +76,7 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 回收无引用的Texture。
         /// </summary>
-#if ODIN_INSPECTOR
         [Button("Release Unused")]
-#endif
         public void ReleaseUnused()
         {
             if (m_LoadTextureObjectsLinkedList == null)

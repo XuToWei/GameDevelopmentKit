@@ -22,7 +22,8 @@
         "MemoryPack",
         "UniTaskExtension",
         "SLATE",
-        "EnhancedScroller"
+        "EnhancedScroller",
+        "Leihuo.UXTools.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using System.Linq;
+using Cysharp.Threading.Tasks;
+using UnityGameFramework.Runtime;
 
 public interface ILocalization
 {
@@ -113,16 +115,35 @@ public class LocalizationHelper
 
     public static string GetString(LanguageType languageType, string key, string defaultString)
     {
-        if (getStringFunc != null)
+#if UNITY_EDITOR
+        if (s_LocalizationComponent != null)
         {
-            return getStringFunc(languageType, key, defaultString);
+            if(!string.Equals(s_BaseComponent.EditorLanguage, languageType))
+            {
+                throw new Exception($"UXTool设置语言 {languageType} 错误（编辑器语言为：{s_BaseComponent.EditorLanguage}）!");
+            }
         }
+        else
+        {
+            s_EditorGetStringFunc.Invoke(languageType, key, defaultString);
+        }
+#endif
         return defaultString;
     }
 
-    private static Func<LanguageType, string, string, string> getStringFunc;
-    public static void InitGetStringFunc(Func<LanguageType, string, string, string> func)
+    private static LocalizationComponent s_LocalizationComponent;
+#if UNITY_EDITOR
+    private static BaseComponent s_BaseComponent;
+    private static Func<LanguageType, string, string, string> s_EditorGetStringFunc;
+    public static void SetEditorGetStringFunc(Func<LanguageType, string, string, string> func)
     {
-        getStringFunc = func;
+        s_EditorGetStringFunc = func;
+    }
+#endif
+    public static async UniTask InitAsync()
+    {
+        await UniTask.CompletedTask;
+        s_LocalizationComponent = GameEntry.GetComponent<LocalizationComponent>();
+        s_BaseComponent = GameEntry.GetComponent<BaseComponent>();
     }
 }

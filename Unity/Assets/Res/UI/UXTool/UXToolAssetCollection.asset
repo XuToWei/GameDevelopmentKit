@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565cd1a4a1cf93c4bb9f25e0d9dae86a, type: 3}
+  m_Name: UXToolAssetCollection
+  m_EditorClassIdentifier: 
+  m_CollectionPattern: '*.*'
+  m_CollectionPaths:
+  - {fileID: 102900000, guid: 4dc0f66eebcb9404898c95065ffbdfc5, type: 3}
+  - {fileID: 102900000, guid: 8b773f8814eed104e972e457bb453592, type: 3}
