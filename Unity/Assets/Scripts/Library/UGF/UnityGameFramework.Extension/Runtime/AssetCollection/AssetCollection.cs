@@ -65,7 +65,7 @@ namespace UnityGameFramework.Extension
 
         public T GetAsset<T>(string path) where T : Object
         {
-            m_AssetDict.TryGetValue(Utility.Text.Format("{0}({1})", path, typeof(T).FullName), out Object obj);
+            m_AssetDict.TryGetValue(path, out Object obj);
             return (T)obj;
         }
     }
