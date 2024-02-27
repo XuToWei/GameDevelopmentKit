@@ -1,10 +1,11 @@
 // This is an automatically generated class by Share.Tool. Please do not modify it.
+
+using GameFramework.Localization;
+
 namespace ThunderFireUITool
 {
     public static partial class EditorLocalizationTool
     {
-        public const string ExporterExtensionName = "bytes";
-        
         public static LocalizationHelper.LanguageType[] ReadyLanguageTypes => new LocalizationHelper.LanguageType[]
         {
             LocalizationHelper.LanguageType.ChineseSimplified,

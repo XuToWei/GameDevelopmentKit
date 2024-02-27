@@ -12,7 +12,7 @@ using UnityEditor;
 namespace UnityGameFramework.Extension
 {
     [CreateAssetMenu(fileName = "AssetCollection", menuName = "UGF/AssetCollection")]
-    public class AssetCollection : ScriptableObject
+    public class AssetCollection : SerializedScriptableObject
     {
 #if UNITY_EDITOR
         [OnValueChanged("OnPathChange")]
@@ -59,7 +59,7 @@ namespace UnityGameFramework.Extension
             AssetDatabase.SaveAssets();
         }
 #endif
-        [OdinSerialize, Searchable, ShowInInspector]
+        [OdinSerialize, Searchable]
         [DictionaryDrawerSettings(KeyLabel = "Path", ValueLabel = "Object", IsReadOnly = true)]
         private Dictionary<string, Object> m_AssetDict = new Dictionary<string, Object>();
 

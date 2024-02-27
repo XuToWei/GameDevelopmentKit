@@ -40,7 +40,6 @@ namespace UnityEngine.UI
 #endif
             stopwatch.Stop();
             Debug.Log($"Export Localization cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
-            LocalizationTool.RefreshData();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
         private static string MergePath(string origin_path, string new_path)

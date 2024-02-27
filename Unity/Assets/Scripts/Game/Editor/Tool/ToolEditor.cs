@@ -24,7 +24,6 @@ namespace Game.Editor
 #endif
             stopwatch.Stop();
             UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
-            LocalizationTool.RefreshData();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
         
@@ -44,7 +43,6 @@ namespace Game.Editor
 #endif
             stopwatch.Stop();
             UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
-            LocalizationTool.RefreshData();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
         

@@ -75,6 +75,26 @@ MonoBehaviour:
     filterType: 2
     searchPatterns: '*.*'
   - valid: 1
+    name: UI.UIPreset
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UIPreset
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: UI.UXTool
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UXTool
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
     name: Scene
     variant: 
     fileSystem: 

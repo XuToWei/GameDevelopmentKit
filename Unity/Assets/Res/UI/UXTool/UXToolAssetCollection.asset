@@ -12,6 +12,1920 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 565cd1a4a1cf93c4bb9f25e0d9dae86a, type: 3}
   m_Name: UXToolAssetCollection
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: -944628639613478452, guid: 8d42b919fb94e5f4f998957f2ac1ff81, type: 3}
+    - {fileID: 4900000, guid: c6e5d00057c459640b5d6d14026d13f6, type: 3}
+    - {fileID: 4900000, guid: 54e50a6ecae1b70438e1c50bdbf55e39, type: 3}
+    - {fileID: 4343727234628468602, guid: 51f24366ebe0c784292b93d66dbc2953, type: 2}
+    - {fileID: 8029058313460966628, guid: 9a7e5f9d69f95dc4593996b20425e542, type: 3}
+    - {fileID: 8029058313460966628, guid: 022955a1cd3806c42a0dd8276a685c53, type: 3}
+    - {fileID: 914736836547434619, guid: f1ce3d78eca75ac4585a48e26a1c9e54, type: 3}
+    - {fileID: 914736836547434619, guid: 62622811396e3d645b24aecdc2aec75c, type: 3}
+    - {fileID: 8029058313460966628, guid: 69535882c3a640945a975f2a4438825d, type: 3}
+    - {fileID: 8029058313460966628, guid: 022ca0278bad06c44bdb83acae8ff0bc, type: 3}
+    - {fileID: 7910067429847304816, guid: e49b337fff7724145b8baf823e6da1fa, type: 3}
+    - {fileID: 7910067429847304816, guid: 84f01b41076e54f429838619462e9a37, type: 3}
+    - {fileID: 470181647751531769, guid: 17b4b96214cae7a469bef91b74a00a4f, type: 3}
+    - {fileID: 470181647751531769, guid: d89500895cb2dd34fb68b0590b7339aa, type: 3}
+    - {fileID: 470181647751531769, guid: 35415cf1cfcf76348b7610861935cc33, type: 3}
+    - {fileID: 470181647751531769, guid: 81523fb22b1b6ca43bd34af552ed6f82, type: 3}
+    - {fileID: 470181647751531769, guid: 148d249999a2d6e4ea7c73b2a8d490a0, type: 3}
+    - {fileID: 470181647751531769, guid: 04a51275db702354395ae5b64b914973, type: 3}
+    - {fileID: 470181647751531769, guid: 6bd5badd6531c384082aa69d2524bb95, type: 3}
+    - {fileID: 470181647751531769, guid: c9813d46d59b6fc488d2df43cec8e152, type: 3}
+    - {fileID: 129291512494320572, guid: cb9dc182bed8c52428dfa0309bd9ccc1, type: 3}
+    - {fileID: 129291512494320572, guid: 14961014bd33abd4a818582f9c84ba81, type: 3}
+    - {fileID: 9100000, guid: ea52d03e4ad273945844b8c7eae6a8c4, type: 2}
+    - {fileID: 7400000, guid: e4e4e84c4dc3870418a08777475cf6b5, type: 2}
+    - {fileID: 7400000, guid: 237bd69835dcdba469d42326c4f3813f, type: 2}
+    - {fileID: 9100000, guid: 0240f7f08e046d04e9c3086a48e58ecf, type: 2}
+    - {fileID: 7400000, guid: 927853b6f24bb6c49ae06752fad056be, type: 2}
+    - {fileID: 9100000, guid: 5c1e9879b9467eb4c8d04581c5bdff55, type: 2}
+    - {fileID: 7400000, guid: ae1d5970989b0a849ada21f113c42f99, type: 2}
+    - {fileID: 9100000, guid: fbd12d1b2c9fb0945a8a9e4ff9775374, type: 2}
+    - {fileID: 9100000, guid: 6d51a7bff799de24eaf771981bc6127d, type: 2}
+    - {fileID: 7400000, guid: 1f9dea015ca3a64498326b23e91f8cf6, type: 2}
+    - {fileID: 9100000, guid: c0a75707a93b25649a46b20ecf25667c, type: 2}
+    - {fileID: 7400000, guid: d45af112b406ea749953c385dfdb7245, type: 2}
+    - {fileID: 9100000, guid: 0bf95b0cbca885c4cad5d9babd2c03a2, type: 2}
+    - {fileID: 7400000, guid: e3e153d6a5950c946b86ea8b7887eb73, type: 2}
+    - {fileID: 9100000, guid: 7d7519d6f12d2ee42ace9b3f15502ce8, type: 2}
+    - {fileID: 9100000, guid: d8f4bf1fcba31e242a3e35991ef53ed0, type: 2}
+    - {fileID: 7400000, guid: d43bb19cd6eb0fa42b8151fe89431b80, type: 2}
+    - {fileID: 7400000, guid: 90bbee64859e4e14f8f5eec8db43b621, type: 2}
+    - {fileID: 7400000, guid: f5a85bf9d9006a44e9aae59c2350c247, type: 2}
+    - {fileID: 9100000, guid: 8606e6199e167534bb7a3ad3ed615c2d, type: 2}
+    - {fileID: 7400000, guid: d9548529e4fff6c4ebd2150fdedcc237, type: 2}
+    - {fileID: 9100000, guid: bdf7d870b31097a418a22687c9dd808e, type: 2}
+    - {fileID: 9100000, guid: f7a0edd8631d02a4482c8ccc87322d35, type: 2}
+    - {fileID: 7400000, guid: 5b4ce86811f14bb41978e323934a08a7, type: 2}
+    - {fileID: 7400000, guid: e3cc6d6e2b1013745958915ce2f0d0a4, type: 2}
+    - {fileID: 9100000, guid: 5322de890c0399a41af975436009b7d7, type: 2}
+    - {fileID: 21300000, guid: 4f272325ab7fc91408b7b77b4cae932c, type: 3}
+    - {fileID: 21300000, guid: 63f1652d458177346b601aa5d17d524e, type: 3}
+    - {fileID: 21300000, guid: 3d35d566fece421448c5f52a6f72cce7, type: 3}
+    - {fileID: 21300000, guid: ee27a57b3c2516c4dbf2d5f67ad9a8ab, type: 3}
+    - {fileID: 21300000, guid: 03b0038fb3e26ca4fbd5a9ab04f935a2, type: 3}
+    - {fileID: 21300000, guid: c04a43e354d20344caeb357e8a131ed6, type: 3}
+    - {fileID: 21300000, guid: 6fc0da2a4efae454ba85d25d8aa13740, type: 3}
+    - {fileID: 21300000, guid: e94a05065db18fe428057500ab8f574b, type: 3}
+    - {fileID: 21300000, guid: a5d9d0e22ef24e54f889295f42c5fc22, type: 3}
+    - {fileID: 21300000, guid: 9ef39b1d990f66b41ba4e5bdf5741b1b, type: 3}
+    - {fileID: 21300000, guid: 24ceddd13de2037439f8f856dd8d2811, type: 3}
+    - {fileID: 21300000, guid: 8a93490fcc960d3448b484c619fd55ac, type: 3}
+    - {fileID: 21300000, guid: f42e655327facdd4dad6dcfb4bc6c093, type: 3}
+    - {fileID: 21300000, guid: 9ae493a32dae67e4ab45dd0fbb4824ac, type: 3}
+    - {fileID: 21300000, guid: 114d57cbe6103c24ba03dd555f31d2bf, type: 3}
+    - {fileID: 21300000, guid: 919546e3dacf13c4c9e26b7393c796fc, type: 3}
+    - {fileID: 21300000, guid: d71461c8a67b23043b8da2b34c19d316, type: 3}
+    - {fileID: 21300000, guid: 02f7c91eb3902ae40a86fda557478f4d, type: 3}
+    - {fileID: 21300000, guid: f2c93d6aa560477479438fcc0bd606a7, type: 3}
+    - {fileID: 21300000, guid: 1253f56e46557bf43ab518af1bc81395, type: 3}
+    - {fileID: 21300000, guid: 6a20488bc1db41d47bf65a05117a877d, type: 3}
+    - {fileID: 21300000, guid: 16468be14555e6b49815741930dacef1, type: 3}
+    - {fileID: 21300000, guid: c1bf5d88e5d4ff247abb4e9e25996132, type: 3}
+    - {fileID: 21300000, guid: d2f2e5ce2a6eb6242a0378d368a023d1, type: 3}
+    - {fileID: 21300000, guid: 61f1ec53f624bdc47b0733a4e28743c0, type: 3}
+    - {fileID: 21300000, guid: bdc796c2818186842aa38896cd86514a, type: 3}
+    - {fileID: 21300000, guid: 4e2080ec5b2634249afd0ee4e2310eff, type: 3}
+    - {fileID: 21300000, guid: 5564ceda6f96abf439a97240fd7abb4a, type: 3}
+    - {fileID: 21300000, guid: e6a8850b6499a1f4cbed64b4e5ddae46, type: 3}
+    - {fileID: 21300000, guid: 07357b3d413da0c47b3fb28619106e9d, type: 3}
+    - {fileID: 21300000, guid: 70253711d0c59c941bcd50f929b1c04c, type: 3}
+    - {fileID: 21300000, guid: 9b105248f33c7a34e8d6e9f5f209bf10, type: 3}
+    - {fileID: 21300000, guid: c8238e53d1fac8b4cb254f4d6eef087b, type: 3}
+    - {fileID: 21300000, guid: e6c8d6e6694015d4d8dac8c72319bef1, type: 3}
+    - {fileID: 21300000, guid: ee3aae79703f46248a0b9b10bd42ccdc, type: 3}
+    - {fileID: 21300000, guid: 2be2915609f5656438eea96db8b37793, type: 3}
+    - {fileID: 21300000, guid: 021a7cf71538dce478cc6c7d045f693d, type: 3}
+    - {fileID: 21300000, guid: 3109894aebd4d2f4cb1a579a5500cf5a, type: 3}
+    - {fileID: 21300000, guid: 8b6866f234d6eee4f8a35cec279d6109, type: 3}
+    - {fileID: 21300000, guid: 457a2709b87f0d94fbc97b41cfa89fae, type: 3}
+    - {fileID: 21300000, guid: ba6a7efaa30b4ed478cdd6c14656df32, type: 3}
+    - {fileID: 21300000, guid: a77314322cf5d214f8f11d034a0e5dfa, type: 3}
+    - {fileID: 21300000, guid: 17fe8e89dccbc164bb2aad7895be004d, type: 3}
+    - {fileID: 21300000, guid: 1009ccebe686bd549829ad70ae054eba, type: 3}
+    - {fileID: 21300000, guid: 3e9ef7dd787132643bb3be71dc2120bd, type: 3}
+    - {fileID: 21300000, guid: 3b7910331870913419f6e73a758d246e, type: 3}
+    - {fileID: 21300000, guid: c2bc38357a60b454dabab66d850b2d98, type: 3}
+    - {fileID: 21300000, guid: 350877d497c139d46be852cf635a4c33, type: 3}
+    - {fileID: 21300000, guid: 2b85caab422d3b44698e732df0d97c4b, type: 3}
+    - {fileID: 21300000, guid: 9ebd8488557a229498419fe251336d05, type: 3}
+    - {fileID: 21300000, guid: 2e9a3904c0f8c444a8756f9e97e09151, type: 3}
+    - {fileID: 21300000, guid: 047c406e53e7b5948ae4bf585ca68b79, type: 3}
+    - {fileID: 21300000, guid: d4c4df527d8b7184b94a679bdec19898, type: 3}
+    - {fileID: 21300000, guid: 5586627f71c5495479611e0d5666da73, type: 3}
+    - {fileID: 21300000, guid: 822d44e3e4c29b24b8f0c5ad4dc4e7f2, type: 3}
+    - {fileID: 21300000, guid: aed5b0806dfc5804c83c52f0c0d7f2b8, type: 3}
+    - {fileID: 21300000, guid: c534ae0cab839b246b214aef20574059, type: 3}
+    - {fileID: 21300000, guid: fe9b056115b6ee64aaafc8b8a9385855, type: 3}
+    - {fileID: 21300000, guid: 8777d02fab43d2b418a28320b701d898, type: 3}
+    - {fileID: 21300000, guid: 59e4b6242a4df364b95b4f00426a8eab, type: 3}
+    - {fileID: 21300000, guid: ef17659f7e6a1af49b4030e0ae1d89e2, type: 3}
+    - {fileID: 21300000, guid: 86178d21ee98d23439869d0223e99541, type: 3}
+    - {fileID: 21300000, guid: 94d28398aaf1dad4c8c2b147cba2ecb1, type: 3}
+    - {fileID: 21300000, guid: a57e4a78fa2c235448cc55f4f05671a2, type: 3}
+    - {fileID: 21300000, guid: ba7bedebaa6c676469b3705842554cf6, type: 3}
+    - {fileID: 21300000, guid: b2dfc0e8a8c638d4fbde378e24215db9, type: 3}
+    - {fileID: 21300000, guid: 31f8f9898401e5240b6a19c03c0c046d, type: 3}
+    - {fileID: 21300000, guid: 40ce6803183529f4f8cb189d4c09c141, type: 3}
+    - {fileID: 21300000, guid: 375b66080af62fd40ae443f01b729af2, type: 3}
+    - {fileID: 21300000, guid: 01b87da0f9ab1aa4da5b0804825be083, type: 3}
+    - {fileID: 21300000, guid: 6bb61da7c155dbe4c8ea5214984f07c6, type: 3}
+    - {fileID: 21300000, guid: 9991b46b99751664f801fa2ca5f8bdef, type: 3}
+    - {fileID: 21300000, guid: bf4f76576f8c34f48ac9e5d3295db6da, type: 3}
+    - {fileID: 21300000, guid: 72148cd09c2371c47adf33359c0925b7, type: 3}
+    - {fileID: 21300000, guid: 663e8d9c4af162a42b0291d124f08e23, type: 3}
+    - {fileID: 21300000, guid: a84ea0710b923de4da480057bb57cd72, type: 3}
+    - {fileID: 21300000, guid: 839e2641e990cad4e8bfdfdac37c5b79, type: 3}
+    - {fileID: 21300000, guid: 17b111fc72de6d34c8b80b10929c86eb, type: 3}
+    - {fileID: 21300000, guid: 0067c369e1d6c3f4e9ec4d20df4b4e61, type: 3}
+    - {fileID: 21300000, guid: d339ecdfaaab7004f8f057a91e014080, type: 3}
+    - {fileID: 4800000, guid: 5f9b1b4c0a9ccfc44b08f56ccf6cf66c, type: 3}
+    - {fileID: 2100000, guid: 96b34642febcb6c4f88d68e6cbfa331b, type: 2}
+    - {fileID: 4800000, guid: 2a2ffdccc4fac024e94d5fe57c2b78c4, type: 3}
+    - {fileID: 21300000, guid: 7e2d9312c5afda3438f3e420470bf02d, type: 3}
+    - {fileID: 4800000, guid: edca3104d046db9439c1f4594ad5e602, type: 3}
+    - {fileID: 2100000, guid: 477cf74b16d89a94291cf1ff97f0dfa8, type: 2}
+    - {fileID: 2100000, guid: c191c1fcf2d859f4db51f61449931949, type: 2}
+    - {fileID: 6000227227188715879, guid: 1eada7f8ac95f194c9b326abfb153080, type: 3}
+    - {fileID: 6558069355534824036, guid: 6bc106e2e539dda44af3453fe97cd0d0, type: 3}
+    - {fileID: 2707679194146590816, guid: 8cbf73a62f872e741af7cceda911c264, type: 3}
+    - {fileID: 3428840382407381761, guid: fb1f428dbf5a5a647b1b69e59ee6ebdf, type: 3}
+    - {fileID: 3982828584482176792, guid: 38f6322242a881141bfc1a69a80a65c5, type: 3}
+    - {fileID: 21300000, guid: b9975f2be09eab4449a3f00368f0da41, type: 3}
+    - {fileID: 4900000, guid: fef68d1dd70201b4bb76246e05dbcf8d, type: 3}
+    - {fileID: 2100000, guid: 704d81d298f93a94ab5fc27fefbf9548, type: 2}
+    - {fileID: 4800000, guid: c0f160151303ae64a83cc17646239b3d, type: 3}
+    - {fileID: 10900000, guid: b7f34b340a55be04ea4833a16a6b9468, type: 3}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_AssetDict
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[UnityEngine.Object,
+        UnityEngine.CoreModule]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 145
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/InputMapping.inputactions
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/UIColorConfig/ui_color_config.json
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/UIColorConfig/ui_gradient_config.json
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Atlas/beginnerguide_gamepad_tips_atlas.spriteatlas
+    - Name: $v
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/clickPrefab_forefinger.prefab
+    - Name: $v
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/clickPrefab_thumb.prefab
+    - Name: $v
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/dragPrefab_forefinger.prefab
+    - Name: $v
+      Entry: 10
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/dragPrefab_thumb.prefab
+    - Name: $v
+      Entry: 10
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/longclickPrefab_forefinger.prefab
+    - Name: $v
+      Entry: 10
+      Data: 8
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/longclickPrefab_thumb.prefab
+    - Name: $v
+      Entry: 10
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/rotate_forefinger.prefab
+    - Name: $v
+      Entry: 10
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/rotate_thumb.prefab
+    - Name: $v
+      Entry: 10
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/slideDown_forefinger.prefab
+    - Name: $v
+      Entry: 10
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/slideDown_thumb.prefab
+    - Name: $v
+      Entry: 10
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/slideLeft_forefinger.prefab
+    - Name: $v
+      Entry: 10
+      Data: 14
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/slideLeft_thumb.prefab
+    - Name: $v
+      Entry: 10
+      Data: 15
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/slideRight_forefinger.prefab
+    - Name: $v
+      Entry: 10
+      Data: 16
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/slideRight_thumb.prefab
+    - Name: $v
+      Entry: 10
+      Data: 17
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/slideUp_forefinger.prefab
+    - Name: $v
+      Entry: 10
+      Data: 18
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Gesture/slideUp_thumb.prefab
+    - Name: $v
+      Entry: 10
+      Data: 19
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Template/GuideTemplate_GamePad.prefab
+    - Name: $v
+      Entry: 10
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Template/GuideTemplate_Gesture.prefab
+    - Name: $v
+      Entry: 10
+      Data: 21
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/GamePad/GamePadContainer.controller
+    - Name: $v
+      Entry: 10
+      Data: 22
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/GamePad/GamePadGuide.anim
+    - Name: $v
+      Entry: 10
+      Data: 23
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/click.anim
+    - Name: $v
+      Entry: 10
+      Data: 24
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/clickPrefab.controller
+    - Name: $v
+      Entry: 10
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/longclick.anim
+    - Name: $v
+      Entry: 10
+      Data: 26
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/longclickPrefab.controller
+    - Name: $v
+      Entry: 10
+      Data: 27
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/rotate.anim
+    - Name: $v
+      Entry: 10
+      Data: 28
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/rotate.controller
+    - Name: $v
+      Entry: 10
+      Data: 29
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/slideDown.controller
+    - Name: $v
+      Entry: 10
+      Data: 30
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/slideDown_loop.anim
+    - Name: $v
+      Entry: 10
+      Data: 31
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/slideLeft.controller
+    - Name: $v
+      Entry: 10
+      Data: 32
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/slideLeft_loop.anim
+    - Name: $v
+      Entry: 10
+      Data: 33
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/slideRight.controller
+    - Name: $v
+      Entry: 10
+      Data: 34
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/slideRight_loop.anim
+    - Name: $v
+      Entry: 10
+      Data: 35
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/slideUp.controller
+    - Name: $v
+      Entry: 10
+      Data: 36
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/slideUpDown.controller
+    - Name: $v
+      Entry: 10
+      Data: 37
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/slideUpDown_loop.anim
+    - Name: $v
+      Entry: 10
+      Data: 38
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/slideUp_loop.anim
+    - Name: $v
+      Entry: 10
+      Data: 39
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/updrag.anim
+    - Name: $v
+      Entry: 10
+      Data: 40
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/Gesture/updragPrefab.controller
+    - Name: $v
+      Entry: 10
+      Data: 41
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/HighLight/arrowLine.anim
+    - Name: $v
+      Entry: 10
+      Data: 42
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/HighLight/ArrowLineWidget.controller
+    - Name: $v
+      Entry: 10
+      Data: 43
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/HighLight/highLight.controller
+    - Name: $v
+      Entry: 10
+      Data: 44
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/HighLight/highlight_loop.anim
+    - Name: $v
+      Entry: 10
+      Data: 45
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/HighLight/TargetStroke.anim
+    - Name: $v
+      Entry: 10
+      Data: 46
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Animation/HighLight/TargetStroke.controller
+    - Name: $v
+      Entry: 10
+      Data: 47
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/angle_line.png
+    - Name: $v
+      Entry: 10
+      Data: 48
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/arrow.png
+    - Name: $v
+      Entry: 10
+      Data: 49
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/changan_01.png
+    - Name: $v
+      Entry: 10
+      Data: 50
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/changan_02.png
+    - Name: $v
+      Entry: 10
+      Data: 51
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/changan_03.png
+    - Name: $v
+      Entry: 10
+      Data: 52
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/CircleFill.png
+    - Name: $v
+      Entry: 10
+      Data: 53
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/circle_large.png
+    - Name: $v
+      Entry: 10
+      Data: 54
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/circle_small.png
+    - Name: $v
+      Entry: 10
+      Data: 55
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/forefinger.png
+    - Name: $v
+      Entry: 10
+      Data: 56
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/img_outline.png
+    - Name: $v
+      Entry: 10
+      Data: 57
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/img_wenzibg2.png
+    - Name: $v
+      Entry: 10
+      Data: 58
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/line.png
+    - Name: $v
+      Entry: 10
+      Data: 59
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/line_left.png
+    - Name: $v
+      Entry: 10
+      Data: 60
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/line_right.png
+    - Name: $v
+      Entry: 10
+      Data: 61
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/press_slide.png
+    - Name: $v
+      Entry: 10
+      Data: 62
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/rectangle02.png
+    - Name: $v
+      Entry: 10
+      Data: 63
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/round.png
+    - Name: $v
+      Entry: 10
+      Data: 64
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_atlas/thumb.png
+    - Name: $v
+      Entry: 10
+      Data: 65
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/icon_guide_joystick_pc.png
+    - Name: $v
+      Entry: 10
+      Data: 66
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/icon_guide_joystick_ps.png
+    - Name: $v
+      Entry: 10
+      Data: 67
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/icon_guide_joystick_ps5.png
+    - Name: $v
+      Entry: 10
+      Data: 68
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/icon_guide_joystick_xbox.png
+    - Name: $v
+      Entry: 10
+      Data: 69
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_pc_A.png
+    - Name: $v
+      Entry: 10
+      Data: 70
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_pc_B.png
+    - Name: $v
+      Entry: 10
+      Data: 71
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_pc_LB.png
+    - Name: $v
+      Entry: 10
+      Data: 72
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_pc_LT.png
+    - Name: $v
+      Entry: 10
+      Data: 73
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_pc_RB.png
+    - Name: $v
+      Entry: 10
+      Data: 74
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_pc_RT.png
+    - Name: $v
+      Entry: 10
+      Data: 75
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_pc_X.png
+    - Name: $v
+      Entry: 10
+      Data: 76
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_pc_Y.png
+    - Name: $v
+      Entry: 10
+      Data: 77
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_pc_yuan.png
+    - Name: $v
+      Entry: 10
+      Data: 78
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_pc_yuan_stick.png
+    - Name: $v
+      Entry: 10
+      Data: 79
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_A.png
+    - Name: $v
+      Entry: 10
+      Data: 80
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_B.png
+    - Name: $v
+      Entry: 10
+      Data: 81
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_down.png
+    - Name: $v
+      Entry: 10
+      Data: 82
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_L1.png
+    - Name: $v
+      Entry: 10
+      Data: 83
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_L2.png
+    - Name: $v
+      Entry: 10
+      Data: 84
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_left.png
+    - Name: $v
+      Entry: 10
+      Data: 85
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_leftstick.png
+    - Name: $v
+      Entry: 10
+      Data: 86
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_option.png
+    - Name: $v
+      Entry: 10
+      Data: 87
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_R1.png
+    - Name: $v
+      Entry: 10
+      Data: 88
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_R2.png
+    - Name: $v
+      Entry: 10
+      Data: 89
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_right.png
+    - Name: $v
+      Entry: 10
+      Data: 90
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_rightstick.png
+    - Name: $v
+      Entry: 10
+      Data: 91
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_select.png
+    - Name: $v
+      Entry: 10
+      Data: 92
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_up.png
+    - Name: $v
+      Entry: 10
+      Data: 93
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_X.png
+    - Name: $v
+      Entry: 10
+      Data: 94
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS5_Y.png
+    - Name: $v
+      Entry: 10
+      Data: 95
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_A.png
+    - Name: $v
+      Entry: 10
+      Data: 96
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_B.png
+    - Name: $v
+      Entry: 10
+      Data: 97
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_down.png
+    - Name: $v
+      Entry: 10
+      Data: 98
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_L1.png
+    - Name: $v
+      Entry: 10
+      Data: 99
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_L2.png
+    - Name: $v
+      Entry: 10
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_left.png
+    - Name: $v
+      Entry: 10
+      Data: 101
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_leftstick.png
+    - Name: $v
+      Entry: 10
+      Data: 102
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_Option.png
+    - Name: $v
+      Entry: 10
+      Data: 103
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_R1.png
+    - Name: $v
+      Entry: 10
+      Data: 104
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_R2.png
+    - Name: $v
+      Entry: 10
+      Data: 105
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_right.png
+    - Name: $v
+      Entry: 10
+      Data: 106
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_rightstick.png
+    - Name: $v
+      Entry: 10
+      Data: 107
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_Share.png
+    - Name: $v
+      Entry: 10
+      Data: 108
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_up.png
+    - Name: $v
+      Entry: 10
+      Data: 109
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_X.png
+    - Name: $v
+      Entry: 10
+      Data: 110
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_PS_Y.png
+    - Name: $v
+      Entry: 10
+      Data: 111
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_A.png
+    - Name: $v
+      Entry: 10
+      Data: 112
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_B.png
+    - Name: $v
+      Entry: 10
+      Data: 113
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_down.png
+    - Name: $v
+      Entry: 10
+      Data: 114
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_LB.png
+    - Name: $v
+      Entry: 10
+      Data: 115
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_left.png
+    - Name: $v
+      Entry: 10
+      Data: 116
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_leftstick.png
+    - Name: $v
+      Entry: 10
+      Data: 117
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_little-right.png
+    - Name: $v
+      Entry: 10
+      Data: 118
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_little_left.png
+    - Name: $v
+      Entry: 10
+      Data: 119
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_LT.png
+    - Name: $v
+      Entry: 10
+      Data: 120
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_RB.png
+    - Name: $v
+      Entry: 10
+      Data: 121
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_right.png
+    - Name: $v
+      Entry: 10
+      Data: 122
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_rightstick.png
+    - Name: $v
+      Entry: 10
+      Data: 123
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_RT.png
+    - Name: $v
+      Entry: 10
+      Data: 124
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_top.png
+    - Name: $v
+      Entry: 10
+      Data: 125
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_X.png
+    - Name: $v
+      Entry: 10
+      Data: 126
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Image/beginnerguide_gamepad_tips_atlas/img_joystick_xbox_Y.png
+    - Name: $v
+      Entry: 10
+      Data: 127
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Material/HighLight/CircleGuide.shader
+    - Name: $v
+      Entry: 10
+      Data: 128
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Material/HighLight/CircleMaterial.mat
+    - Name: $v
+      Entry: 10
+      Data: 129
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Material/HighLight/Ellipse.shader
+    - Name: $v
+      Entry: 10
+      Data: 130
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Material/HighLight/LOGO.png
+    - Name: $v
+      Entry: 10
+      Data: 131
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Material/HighLight/RectGuide.shader
+    - Name: $v
+      Entry: 10
+      Data: 132
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Material/HighLight/RectMaterial.mat
+    - Name: $v
+      Entry: 10
+      Data: 133
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Material/HighLight/TuoyuanMaterial.mat
+    - Name: $v
+      Entry: 10
+      Data: 134
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Prefab/Widget/GamePadWidget.prefab
+    - Name: $v
+      Entry: 10
+      Data: 135
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Prefab/Widget/GestureWidget.prefab
+    - Name: $v
+      Entry: 10
+      Data: 136
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Prefab/Widget/HighLightWidget.prefab
+    - Name: $v
+      Entry: 10
+      Data: 137
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Prefab/Widget/TargetStrokeWidget.prefab
+    - Name: $v
+      Entry: 10
+      Data: 138
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/Feature/BeginnerGuide/Prefab/Widget/TextWidget.prefab
+    - Name: $v
+      Entry: 10
+      Data: 139
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/GUI/need_replace.png
+    - Name: $v
+      Entry: 10
+      Data: 140
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/GUI/thai_dict.txt
+    - Name: $v
+      Entry: 10
+      Data: 141
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/GUI/Material/UXImage.mat
+    - Name: $v
+      Entry: 10
+      Data: 142
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/GUI/Shader/UXImage.shader
+    - Name: $v
+      Entry: 10
+      Data: 143
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/GUI/Shader/ShaderLibrary/SDFUtils.cginc
+    - Name: $v
+      Entry: 10
+      Data: 144
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   m_CollectionPattern: '*.*'
   m_CollectionPaths:
   - {fileID: 102900000, guid: 4dc0f66eebcb9404898c95065ffbdfc5, type: 3}

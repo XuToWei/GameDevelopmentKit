@@ -17,7 +17,7 @@ namespace Game.Editor
         public static void ReGenerateProjectFiles()
         {
             Unity.CodeEditor.CodeEditor.CurrentEditor.SyncAll();
-            Debug.Log("ReGenerateProjectFiles finished.");
+            // Debug.Log("ReGenerateProjectFiles finished.");
         }
         
         public static void BuildPkg(Platform platform)

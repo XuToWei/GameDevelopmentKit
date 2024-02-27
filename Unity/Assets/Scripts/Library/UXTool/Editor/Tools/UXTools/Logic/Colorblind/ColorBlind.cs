@@ -68,9 +68,14 @@ public class ColorBlind : Editor
 
     private static ColorBlindnessEffect AddorGetComponent()
     {
-        var effect = Camera.main.GetComponent<ColorBlindnessEffect>();
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            mainCamera = FindObjectOfType<Camera>();
+        }
+        var effect = mainCamera.GetComponent<ColorBlindnessEffect>();
         if(effect != null) return effect;
-        effect = Camera.main.gameObject.AddComponent<ColorBlindnessEffect>();
+        effect = mainCamera.gameObject.AddComponent<ColorBlindnessEffect>();
         effect.colorAlterationShader = Shader.Find("UXTool/Color Blindness Effect");
         return effect;
     }

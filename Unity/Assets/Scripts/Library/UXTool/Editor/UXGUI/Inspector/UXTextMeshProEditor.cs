@@ -216,9 +216,11 @@ namespace UnityEngine.UI
                         GUI.enabled = true;
                     }
                     EditorGUILayout.BeginHorizontal();
-                    GUI.enabled = false;
-                    EditorGUILayout.PropertyField(localizationID, new GUIContent("key"));
-                    GUI.enabled = true;
+                    SearchableLocalizationKey.PropertyField(localizationID, new GUIContent("key"), () =>
+                    {
+                        ShowObj();
+                        ChangeAvailables();
+                    });
                     if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_复制), GUILayout.MaxWidth(50)))
                     {
                         GUIUtility.systemCopyBuffer = localizationID.stringValue;
@@ -256,13 +258,11 @@ namespace UnityEngine.UI
                         GUI.enabled = true;
                     }
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.PropertyField(previewID, new GUIContent("key"));
-                    if (EditorGUI.EndChangeCheck())
+                    SearchableLocalizationKey.PropertyField(previewID, new GUIContent("key"), () =>
                     {
                         ShowObj();
                         ChangeAvailables();
-                    }
+                    });
                     if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_复制), GUILayout.MaxWidth(50)))
                     {
                         GUIUtility.systemCopyBuffer = previewID.stringValue;

@@ -12,7 +12,6 @@ namespace Game.Editor
 
         protected override void OnEnable()
         {
-            LocalizationTool.TryRefreshData();
             base.OnEnable();
             m_Localize_TMP_Text = (LocalizeTMPText)target;
             if (!LocalizationReadyLanguage.Languages.Contains(m_Localize_TMP_Text.EditorLocalizationLanguage))

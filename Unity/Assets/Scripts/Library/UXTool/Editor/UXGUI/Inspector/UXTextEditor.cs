@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 using ThunderFireUITool;
 using UnityEditorInternal;
 
@@ -212,7 +211,6 @@ namespace UnityEngine.UI
                         UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.Localization);
                         if (localizationID.stringValue == "")
                         {
-                            localizationID.stringValue = System.Guid.NewGuid().ToString().Substring(0, 8);
                             textList.Clear();
                         }
                         else
@@ -229,12 +227,11 @@ namespace UnityEngine.UI
                 if (EditorGUI.EndChangeCheck() && !ignoreLocalization.boolValue)// && (textList.Count != 0 || localizationID.stringValue == ""))
                 {
                     ShowObj();
-                    localizationID.stringValue = System.Guid.NewGuid().ToString().Substring(0, 8);
                     textList.Clear();
                 }
                 if (!ignoreLocalization.boolValue)
                 {
-                    if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_打开静态文本表格)))
+                    if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_打开文本表格)))
                     {
                         if (!Application.isPlaying)
                         {
@@ -253,9 +250,18 @@ namespace UnityEngine.UI
                     }
                     EditorGUILayout.EndFoldoutHeaderGroup();
                     EditorGUILayout.BeginHorizontal();
-                    GUI.enabled = false;
-                    EditorGUILayout.PropertyField(localizationID, new GUIContent("key"));
-                    GUI.enabled = true;
+                    // EditorGUI.BeginChangeCheck();
+                    // EditorGUILayout.PropertyField(localizationID, new GUIContent("key"));
+                    // if (EditorGUI.EndChangeCheck())
+                    // {
+                    //     ShowObj();
+                    //     ChangeAvailables();
+                    // }
+                    SearchableLocalizationKey.PropertyField(localizationID, new GUIContent("key"), () =>
+                    {
+                        ShowObj();
+                        ChangeAvailables();
+                    });
                     if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_复制), GUILayout.MaxWidth(50)))
                     {
                         GUIUtility.systemCopyBuffer = localizationID.stringValue;
@@ -284,7 +290,7 @@ namespace UnityEngine.UI
 
                 if (!ignoreLocalization.boolValue)
                 {
-                    if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_打开动态文本表格)))
+                    if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_打开文本表格)))
                     {
                         UXTextTable.OpenTextTable();
                     }
@@ -298,13 +304,11 @@ namespace UnityEngine.UI
                         GUI.enabled = true;
                     }
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.PropertyField(previewID, new GUIContent("key"));
-                    if (EditorGUI.EndChangeCheck())
+                    SearchableLocalizationKey.PropertyField(previewID, new GUIContent("key"), () =>
                     {
                         ShowObj();
                         ChangeAvailables();
-                    }
+                    });
                     if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_复制), GUILayout.MaxWidth(50)))
                     {
                         GUIUtility.systemCopyBuffer = previewID.stringValue;
