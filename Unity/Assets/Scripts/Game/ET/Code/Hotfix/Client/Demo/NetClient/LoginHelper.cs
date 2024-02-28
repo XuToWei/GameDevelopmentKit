@@ -6,9 +6,9 @@ namespace ET.Client
     {
         public static async UniTask Login(Scene root, string account, string password)
         {
-            root.RemoveComponent<ClientSenderComponent>();
-            ClientSenderComponent clientSenderComponent = root.AddComponent<ClientSenderComponent>();
-
+            var clientSenderComponent = root.GetComponent<ClientSenderComponent>();
+            if (clientSenderComponent != null)
+                await clientSenderComponent.DisposeClientSender();            clientSenderComponent = root.AddComponent<ClientSenderComponent>();
             long playerId = await clientSenderComponent.LoginAsync(account, password);
 
             root.GetComponent<PlayerComponent>().MyId = playerId;

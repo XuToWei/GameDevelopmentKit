@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace ET
 {
-    public abstract class MessageSessionHandler<Message>: IMessageSessionHandler where Message : MessageObject
+    public abstract class MessageSessionHandler<Message>: HandlerObject, IMessageSessionHandler where Message : MessageObject
     {
         protected abstract UniTask Run(Session session, Message message);
 
@@ -40,8 +40,7 @@ namespace ET
         }
     }
     
-    
-    public abstract class MessageSessionHandler<Request, Response>: IMessageSessionHandler where Request : MessageObject, IRequest where Response : MessageObject, IResponse
+    public abstract class MessageSessionHandler<Request, Response>: HandlerObject, IMessageSessionHandler where Request : MessageObject, IRequest where Response : MessageObject, IResponse
     {
         protected abstract UniTask Run(Session session, Request request, Response response);
 

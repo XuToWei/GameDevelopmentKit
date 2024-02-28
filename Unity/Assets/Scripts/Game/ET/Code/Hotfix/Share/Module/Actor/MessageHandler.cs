@@ -3,8 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace ET
 {
-    [EnableClass]
-    public abstract class MessageHandler<E, Message>: IMHandler where E : Entity where Message : class, IMessage
+    public abstract class MessageHandler<E, Message>: HandlerObject, IMHandler where E : Entity where Message : class, IMessage
     {
         protected abstract UniTask Run(E entity, Message message);
 
@@ -41,10 +40,7 @@ namespace ET
         }
     }
     
-    
-    
-    [EnableClass]
-    public abstract class MessageHandler<E, Request, Response>: IMHandler where E : Entity where Request : MessageObject, IRequest where Response : MessageObject, IResponse
+    public abstract class MessageHandler<E, Request, Response>: HandlerObject, IMHandler where E : Entity where Request : MessageObject, IRequest where Response : MessageObject, IResponse
     {
         protected abstract UniTask Run(E unit, Request request, Response response);
 

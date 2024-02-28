@@ -3,8 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    [EnableClass]
-    public abstract class MessageLocationHandler<E, Message>: IMHandler where E : Entity where Message : class, ILocationMessage
+    public abstract class MessageLocationHandler<E, Message>: HandlerObject, IMHandler where E : Entity where Message : class, ILocationMessage
     {
         protected abstract UniTask Run(E entity, Message message);
 
@@ -43,8 +42,7 @@ namespace ET.Server
     
     
     
-    [EnableClass]
-    public abstract class MessageLocationHandler<E, Request, Response>: IMHandler where E : Entity where Request : MessageObject, ILocationRequest where Response : MessageObject, ILocationResponse
+    public abstract class MessageLocationHandler<E, Request, Response>: HandlerObject, IMHandler where E : Entity where Request : MessageObject, ILocationRequest where Response : MessageObject, ILocationResponse
     {
         protected abstract UniTask Run(E unit, Request request, Response response);
 

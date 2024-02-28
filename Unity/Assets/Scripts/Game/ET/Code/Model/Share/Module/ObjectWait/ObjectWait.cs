@@ -47,7 +47,7 @@ namespace ET
             void SetResult();
         }
 
-        private class ResultCallback<K>: IDestroyRun where K : struct, IWaitType
+        private class ResultCallback<K>: Object, IDestroyRun where K : struct, IWaitType
         {
             private AutoResetUniTaskCompletionSourcePlus<K> tcs;
 

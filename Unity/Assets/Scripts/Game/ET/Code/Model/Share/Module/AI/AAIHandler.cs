@@ -8,7 +8,7 @@ namespace ET
     }
     
     [AIHandler]
-    public abstract class AAIHandler
+    public abstract class AAIHandler: HandlerObject
     {
         // 检查是否满足条件
         public abstract int Check(AIComponent aiComponent, DRAIConfig aiConfig);
