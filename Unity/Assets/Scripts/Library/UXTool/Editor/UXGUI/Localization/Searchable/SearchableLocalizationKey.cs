@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using ThunderFireUITool;
 using ThunderFireUnityEx;
 using UnityEditor;
@@ -7,7 +6,7 @@ using UnityEngine;
 
 public class SearchableLocalizationKey
 {
-    private static readonly int s_IdHash = "SearchableLocalizationKey".GetHashCode();
+    private static readonly int s_IdHash = typeof(SearchableLocalizationKey).GetHashCode();
 
     public static void PropertyField(SerializedProperty property, GUIContent label, Action onKeyChange)
     {
@@ -18,16 +17,7 @@ public class SearchableLocalizationKey
         label = EditorGUI.BeginProperty(position, label, property);
         position = EditorGUI.PrefixLabel(position, id, label);
 
-        GUIContent buttonText;
-        // If the enum has changed, a blank entry
-        if (!EditorLocalizationTool.AllKeys.Contains(property.stringValue))
-        {
-            buttonText = new GUIContent();
-        }
-        else
-        {
-            buttonText = new GUIContent(property.stringValue);
-        }
+        GUIContent buttonText = new GUIContent(property.stringValue);
 
         if (DropdownButton(id, position, buttonText))
         {
@@ -37,7 +27,7 @@ public class SearchableLocalizationKey
                 property.serializedObject.ApplyModifiedProperties();
                 onKeyChange?.Invoke();
             }
-            position.x += 2;
+            position.x += 1;
             SearchablePopup.Show(position, EditorLocalizationTool.AllKeys, EditorLocalizationTool.AllKeys.IndexOf(property.stringValue), OnSelect);
         }
 

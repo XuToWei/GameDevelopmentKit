@@ -198,7 +198,7 @@ namespace UnityEngine.UI
                 }
                 if (!ignoreLocalization.boolValue)
                 {
-                    if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_打开静态文本表格)))
+                    if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_打开文本表格)))
                     {
                         if (!Application.isPlaying)
                         {
@@ -244,7 +244,7 @@ namespace UnityEngine.UI
 
                 if (!ignoreLocalization.boolValue)
                 {
-                    if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_打开动态文本表格)))
+                    if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_打开文本表格)))
                     {
                         UXTextTable.OpenTextTable();
                     }

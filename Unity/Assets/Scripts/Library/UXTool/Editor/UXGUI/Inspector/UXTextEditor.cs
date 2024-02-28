@@ -250,13 +250,6 @@ namespace UnityEngine.UI
                     }
                     EditorGUILayout.EndFoldoutHeaderGroup();
                     EditorGUILayout.BeginHorizontal();
-                    // EditorGUI.BeginChangeCheck();
-                    // EditorGUILayout.PropertyField(localizationID, new GUIContent("key"));
-                    // if (EditorGUI.EndChangeCheck())
-                    // {
-                    //     ShowObj();
-                    //     ChangeAvailables();
-                    // }
                     SearchableLocalizationKey.PropertyField(localizationID, new GUIContent("key"), () =>
                     {
                         ShowObj();
