@@ -5,11 +5,10 @@ using System.Collections.Generic;
 
 namespace ET
 {
-// using
-    [ResponseType(nameof(NetClient2Main_Login))]
-    [Message(Message_ET_Client.Main2NetClient_Login)]
+    // protofile : ET-ClientServer/ClientMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/ClientMessage.proto
+    [Message(Message_ET_Client.Main2NetClient_Login)]
+    [ResponseType(nameof(NetClient2Main_Login))]
     public partial class Main2NetClient_Login: MessageObject, IRequest
     {
         public static Main2NetClient_Login Create(bool isFromPool = false) 
@@ -21,8 +20,14 @@ namespace ET
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
         public int OwnerFiberId { get; set; }
+        /// <summary>
+        /// 账号
+        /// </summary>
         [MemoryPackOrder(2)]
         public string Account { get; set; }
+        /// <summary>
+        /// 密码
+        /// </summary>
         [MemoryPackOrder(3)]
         public string Password { get; set; }
         public override void Dispose() 
@@ -36,9 +41,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.NetClient2Main_Login)]
+    // protofile : ET-ClientServer/ClientMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/ClientMessage.proto
+    [Message(Message_ET_Client.NetClient2Main_Login)]
     public partial class NetClient2Main_Login: MessageObject, IResponse
     {
         public static NetClient2Main_Login Create(bool isFromPool = false) 
@@ -65,10 +70,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(G2C_Match))]
-    [Message(Message_ET_Client.C2G_Match)]
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.C2G_Match)]
+    [ResponseType(nameof(G2C_Match))]
     public partial class C2G_Match: MessageObject, ISessionRequest
     {
         public static C2G_Match Create(bool isFromPool = false) 
@@ -86,9 +91,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.G2C_Match)]
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.G2C_Match)]
     public partial class G2C_Match: MessageObject, ISessionResponse
     {
         public static G2C_Match Create(bool isFromPool = false) 
@@ -112,10 +117,12 @@ namespace ET
         }
     }
 
-// 匹配成功，通知客户端切换场景
-    [Message(Message_ET_Client.Match2G_NotifyMatchSuccess)]
+    /// <summary>
+    /// 匹配成功，通知客户端切换场景
+    /// </summary>
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.Match2G_NotifyMatchSuccess)]
     public partial class Match2G_NotifyMatchSuccess: MessageObject, IMessage
     {
         public static Match2G_NotifyMatchSuccess Create(bool isFromPool = false) 
@@ -125,7 +132,9 @@ namespace ET
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
-// 房间的ActorId
+        /// <summary>
+        /// 房间的ActorId
+        /// </summary>
         [MemoryPackOrder(1)]
         public ActorId ActorId { get; set; }
         public override void Dispose() 
@@ -137,10 +146,12 @@ namespace ET
         }
     }
 
-// 客户端通知房间切换场景完成
-    [Message(Message_ET_Client.C2Room_ChangeSceneFinish)]
+    /// <summary>
+    /// 客户端通知房间切换场景完成
+    /// </summary>
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.C2Room_ChangeSceneFinish)]
     public partial class C2Room_ChangeSceneFinish: MessageObject, IRoomMessage
     {
         public static C2Room_ChangeSceneFinish Create(bool isFromPool = false) 
@@ -158,9 +169,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.LockStepUnitInfo)]
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.LockStepUnitInfo)]
     public partial class LockStepUnitInfo: MessageObject
     {
         public static LockStepUnitInfo Create(bool isFromPool = false) 
@@ -184,10 +195,12 @@ namespace ET
         }
     }
 
-// 房间通知客户端进入战斗
-    [Message(Message_ET_Client.Room2C_Start)]
+    /// <summary>
+    /// 房间通知客户端进入战斗
+    /// </summary>
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.Room2C_Start)]
     public partial class Room2C_Start: MessageObject, IMessage
     {
         public static Room2C_Start Create(bool isFromPool = false) 
@@ -208,9 +221,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.FrameMessage)]
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.FrameMessage)]
     public partial class FrameMessage: MessageObject, IMessage
     {
         public static FrameMessage Create(bool isFromPool = false) 
@@ -234,9 +247,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.OneFrameInputs)]
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.OneFrameInputs)]
     public partial class OneFrameInputs: MessageObject, IMessage
     {
         public static OneFrameInputs Create(bool isFromPool = false) 
@@ -255,9 +268,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.Room2C_AdjustUpdateTime)]
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.Room2C_AdjustUpdateTime)]
     public partial class Room2C_AdjustUpdateTime: MessageObject, IMessage
     {
         public static Room2C_AdjustUpdateTime Create(bool isFromPool = false) 
@@ -275,9 +288,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.C2Room_CheckHash)]
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.C2Room_CheckHash)]
     public partial class C2Room_CheckHash: MessageObject, IRoomMessage
     {
         public static C2Room_CheckHash Create(bool isFromPool = false) 
@@ -301,9 +314,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.Room2C_CheckHashFail)]
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.Room2C_CheckHashFail)]
     public partial class Room2C_CheckHashFail: MessageObject, IMessage
     {
         public static Room2C_CheckHashFail Create(bool isFromPool = false) 
@@ -324,9 +337,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.G2C_Reconnect)]
+    // protofile : ET-ClientServer/LockStepOuter.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/LockStepOuter.proto
+    [Message(Message_ET_Client.G2C_Reconnect)]
     public partial class G2C_Reconnect: MessageObject, IMessage
     {
         public static G2C_Reconnect Create(bool isFromPool = false) 
@@ -350,9 +363,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.HttpGetRouterResponse)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.HttpGetRouterResponse)]
     public partial class HttpGetRouterResponse: MessageObject
     {
         public static HttpGetRouterResponse Create(bool isFromPool = false) 
@@ -373,9 +386,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.RouterSync)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.RouterSync)]
     public partial class RouterSync: MessageObject
     {
         public static RouterSync Create(bool isFromPool = false) 
@@ -396,10 +409,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(M2C_TestResponse))]
-    [Message(Message_ET_Client.C2M_TestRequest)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2M_TestRequest)]
+    [ResponseType(nameof(M2C_TestResponse))]
     public partial class C2M_TestRequest: MessageObject, ILocationRequest
     {
         public static C2M_TestRequest Create(bool isFromPool = false) 
@@ -420,9 +433,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_TestResponse)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_TestResponse)]
     public partial class M2C_TestResponse: MessageObject, IResponse
     {
         public static M2C_TestResponse Create(bool isFromPool = false) 
@@ -449,10 +462,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(G2C_EnterMap))]
-    [Message(Message_ET_Client.C2G_EnterMap)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2G_EnterMap)]
+    [ResponseType(nameof(G2C_EnterMap))]
     public partial class C2G_EnterMap: MessageObject, ISessionRequest
     {
         public static C2G_EnterMap Create(bool isFromPool = false) 
@@ -470,9 +483,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.G2C_EnterMap)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.G2C_EnterMap)]
     public partial class G2C_EnterMap: MessageObject, ISessionResponse
     {
         public static G2C_EnterMap Create(bool isFromPool = false) 
@@ -486,7 +499,9 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-// 自己unitId
+        /// <summary>
+        /// 自己的UnitId
+        /// </summary>
         [MemoryPackOrder(3)]
         public long MyId { get; set; }
         public override void Dispose() 
@@ -500,9 +515,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.MoveInfo)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.MoveInfo)]
     public partial class MoveInfo: MessageObject
     {
         public static MoveInfo Create(bool isFromPool = false) 
@@ -526,9 +541,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.UnitInfo)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.UnitInfo)]
     public partial class UnitInfo: MessageObject
     {
         public static UnitInfo Create(bool isFromPool = false) 
@@ -565,9 +580,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_CreateUnits)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_CreateUnits)]
     public partial class M2C_CreateUnits: MessageObject, IMessage
     {
         public static M2C_CreateUnits Create(bool isFromPool = false) 
@@ -585,9 +600,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_CreateMyUnit)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_CreateMyUnit)]
     public partial class M2C_CreateMyUnit: MessageObject, IMessage
     {
         public static M2C_CreateMyUnit Create(bool isFromPool = false) 
@@ -605,9 +620,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_StartSceneChange)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_StartSceneChange)]
     public partial class M2C_StartSceneChange: MessageObject, IMessage
     {
         public static M2C_StartSceneChange Create(bool isFromPool = false) 
@@ -628,9 +643,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_RemoveUnits)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_RemoveUnits)]
     public partial class M2C_RemoveUnits: MessageObject, IMessage
     {
         public static M2C_RemoveUnits Create(bool isFromPool = false) 
@@ -648,9 +663,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.C2M_PathfindingResult)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2M_PathfindingResult)]
     public partial class C2M_PathfindingResult: MessageObject, ILocationMessage
     {
         public static C2M_PathfindingResult Create(bool isFromPool = false) 
@@ -671,9 +686,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.C2M_Stop)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2M_Stop)]
     public partial class C2M_Stop: MessageObject, ILocationMessage
     {
         public static C2M_Stop Create(bool isFromPool = false) 
@@ -691,9 +706,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_PathfindingResult)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_PathfindingResult)]
     public partial class M2C_PathfindingResult: MessageObject, IMessage
     {
         public static M2C_PathfindingResult Create(bool isFromPool = false) 
@@ -717,9 +732,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_Stop)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_Stop)]
     public partial class M2C_Stop: MessageObject, IMessage
     {
         public static M2C_Stop Create(bool isFromPool = false) 
@@ -746,10 +761,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(G2C_Ping))]
-    [Message(Message_ET_Client.C2G_Ping)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2G_Ping)]
+    [ResponseType(nameof(G2C_Ping))]
     public partial class C2G_Ping: MessageObject, ISessionRequest
     {
         public static C2G_Ping Create(bool isFromPool = false) 
@@ -767,9 +782,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.G2C_Ping)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.G2C_Ping)]
     public partial class G2C_Ping: MessageObject, ISessionResponse
     {
         public static G2C_Ping Create(bool isFromPool = false) 
@@ -796,9 +811,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.G2C_Test)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.G2C_Test)]
     public partial class G2C_Test: MessageObject, ISessionMessage
     {
         public static G2C_Test Create(bool isFromPool = false) 
@@ -813,10 +828,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(M2C_Reload))]
-    [Message(Message_ET_Client.C2M_Reload)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2M_Reload)]
+    [ResponseType(nameof(M2C_Reload))]
     public partial class C2M_Reload: MessageObject, ISessionRequest
     {
         public static C2M_Reload Create(bool isFromPool = false) 
@@ -840,9 +855,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_Reload)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_Reload)]
     public partial class M2C_Reload: MessageObject, ISessionResponse
     {
         public static M2C_Reload Create(bool isFromPool = false) 
@@ -866,10 +881,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(R2C_Login))]
-    [Message(Message_ET_Client.C2R_Login)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2R_Login)]
+    [ResponseType(nameof(R2C_Login))]
     public partial class C2R_Login: MessageObject, ISessionRequest
     {
         public static C2R_Login Create(bool isFromPool = false) 
@@ -879,8 +894,14 @@ namespace ET
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
+        /// <summary>
+        /// 帐号
+        /// </summary>
         [MemoryPackOrder(1)]
         public string Account { get; set; }
+        /// <summary>
+        /// 密码
+        /// </summary>
         [MemoryPackOrder(2)]
         public string Password { get; set; }
         public override void Dispose() 
@@ -893,9 +914,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.R2C_Login)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.R2C_Login)]
     public partial class R2C_Login: MessageObject, ISessionResponse
     {
         public static R2C_Login Create(bool isFromPool = false) 
@@ -928,10 +949,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(G2C_LoginGate))]
-    [Message(Message_ET_Client.C2G_LoginGate)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2G_LoginGate)]
+    [ResponseType(nameof(G2C_LoginGate))]
     public partial class C2G_LoginGate: MessageObject, ISessionRequest
     {
         public static C2G_LoginGate Create(bool isFromPool = false) 
@@ -941,6 +962,9 @@ namespace ET
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
+        /// <summary>
+        /// 帐号
+        /// </summary>
         [MemoryPackOrder(1)]
         public long Key { get; set; }
         [MemoryPackOrder(2)]
@@ -955,9 +979,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.G2C_LoginGate)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.G2C_LoginGate)]
     public partial class G2C_LoginGate: MessageObject, ISessionResponse
     {
         public static G2C_LoginGate Create(bool isFromPool = false) 
@@ -984,9 +1008,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.G2C_TestHotfixMessage)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.G2C_TestHotfixMessage)]
     public partial class G2C_TestHotfixMessage: MessageObject, ISessionMessage
     {
         public static G2C_TestHotfixMessage Create(bool isFromPool = false) 
@@ -1004,10 +1028,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(M2C_TestRobotCase))]
-    [Message(Message_ET_Client.C2M_TestRobotCase)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2M_TestRobotCase)]
+    [ResponseType(nameof(M2C_TestRobotCase))]
     public partial class C2M_TestRobotCase: MessageObject, ILocationRequest
     {
         public static C2M_TestRobotCase Create(bool isFromPool = false) 
@@ -1028,9 +1052,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_TestRobotCase)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_TestRobotCase)]
     public partial class M2C_TestRobotCase: MessageObject, ILocationResponse
     {
         public static M2C_TestRobotCase Create(bool isFromPool = false) 
@@ -1057,9 +1081,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.C2M_TestRobotCase2)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2M_TestRobotCase2)]
     public partial class C2M_TestRobotCase2: MessageObject, ILocationMessage
     {
         public static C2M_TestRobotCase2 Create(bool isFromPool = false) 
@@ -1080,9 +1104,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_TestRobotCase2)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_TestRobotCase2)]
     public partial class M2C_TestRobotCase2: MessageObject, ILocationMessage
     {
         public static M2C_TestRobotCase2 Create(bool isFromPool = false) 
@@ -1103,10 +1127,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(M2C_TransferMap))]
-    [Message(Message_ET_Client.C2M_TransferMap)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2M_TransferMap)]
+    [ResponseType(nameof(M2C_TransferMap))]
     public partial class C2M_TransferMap: MessageObject, ILocationRequest
     {
         public static C2M_TransferMap Create(bool isFromPool = false) 
@@ -1124,9 +1148,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.M2C_TransferMap)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.M2C_TransferMap)]
     public partial class M2C_TransferMap: MessageObject, ILocationResponse
     {
         public static M2C_TransferMap Create(bool isFromPool = false) 
@@ -1150,10 +1174,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(G2C_Benchmark))]
-    [Message(Message_ET_Client.C2G_Benchmark)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.C2G_Benchmark)]
+    [ResponseType(nameof(G2C_Benchmark))]
     public partial class C2G_Benchmark: MessageObject, ISessionRequest
     {
         public static C2G_Benchmark Create(bool isFromPool = false) 
@@ -1171,9 +1195,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Client.G2C_Benchmark)]
+    // protofile : ET-ClientServer/OuterMessage.proto
     [MemoryPackable]
-    //protofile : ET-ClientServer/OuterMessage.proto
+    [Message(Message_ET_Client.G2C_Benchmark)]
     public partial class G2C_Benchmark: MessageObject, ISessionResponse
     {
         public static G2C_Benchmark Create(bool isFromPool = false) 

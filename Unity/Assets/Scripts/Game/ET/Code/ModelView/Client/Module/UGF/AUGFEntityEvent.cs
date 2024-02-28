@@ -3,6 +3,7 @@ using UnityGameFramework.Runtime;
 
 namespace ET.Client
 {
+    [EnableClass]
     [FriendOf(typeof(UGFEntityComponent))]
     public abstract class AUGFEntityEvent : IUGFEntityEvent
     {

@@ -11,6 +11,7 @@ using Luban;
 
 namespace ET
 {
+[ET.EnableClass]
 public sealed partial class DRUnitConfig : Luban.BeanBase
 {
     public DRUnitConfig(ByteBuf _buf) 

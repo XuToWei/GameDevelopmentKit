@@ -11,6 +11,7 @@ using Luban;
 
 namespace ET
 {
+[ET.EnableClass]
 public partial class DTUnitConfig : IDataTable
 {
     private readonly System.Collections.Generic.Dictionary<int, DRUnitConfig> _dataMap;

@@ -11,6 +11,7 @@ using Luban;
 
 namespace ET
 {
+[ET.EnableClass]
 public partial class DTStartZoneConfig : IDataTable
 {
     private readonly System.Collections.Generic.List<DRStartZoneConfig> _dataList;

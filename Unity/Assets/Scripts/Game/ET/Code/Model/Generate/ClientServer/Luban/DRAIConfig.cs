@@ -11,6 +11,7 @@ using Luban;
 
 namespace ET
 {
+[ET.EnableClass]
 public sealed partial class DRAIConfig : Luban.BeanBase
 {
     public DRAIConfig(ByteBuf _buf) 

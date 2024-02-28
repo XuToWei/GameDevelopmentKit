@@ -1,5 +1,6 @@
 namespace ET.Client
 {
+    [EnableClass]
     [FriendOf(typeof(UGFUIComponent))]
     public abstract class AUGFUIFormEvent : IUGFUIFormEvent
     {

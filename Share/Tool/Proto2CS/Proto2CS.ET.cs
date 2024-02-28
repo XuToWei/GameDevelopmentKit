@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ET
 {
@@ -53,30 +54,37 @@ namespace ET
                 
                 bool isMsgStart = false;
                 string msgName = string.Empty;
+                string responseType = "";
                 StringBuilder sbDispose = new StringBuilder();
+                Regex responseTypeRegex = ResponseTypeRegex();
                 foreach (string line in s.Split('\n'))
                 {
                     string newline = line.Trim();
-                    if (newline.StartsWith("package"))
+
+                    if (string.IsNullOrEmpty(newline))
                     {
                         continue;
                     }
 
-                    if (newline == "")
+                    if (responseTypeRegex.IsMatch(newline))
                     {
+                        responseType = responseTypeRegex.Replace(newline, string.Empty);
+                        responseType = responseType.Trim().Split(' ')[0].TrimEnd('\r', '\n');
                         continue;
                     }
 
-                    if (newline.StartsWith("//ResponseType"))
+                    if (!isMsgStart && newline.StartsWith("//"))
                     {
-                        string responseType = line.Split(" ")[1].TrimEnd('\r', '\n');
-                        s_StringBuilder.Append($"\t[ResponseType(nameof({responseType}))]\n");
-                        continue;
-                    }
-
-                    if (newline.StartsWith("//"))
-                    {
-                        s_StringBuilder.Append($"{newline}\n");
+                        if (newline.StartsWith("///"))
+                        {
+                            s_StringBuilder.Append("\t/// <summary>\n");
+                            s_StringBuilder.Append($"\t/// {newline.TrimStart('/', ' ')}\n");
+                            s_StringBuilder.Append("\t/// </summary>\n");
+                        }
+                        else
+                        {
+                            s_StringBuilder.Append($"\t// {newline.TrimStart('/', ' ')}\n");
+                        }
                         continue;
                     }
 
@@ -98,12 +106,18 @@ namespace ET
                             throw new Exception($"Proto_ET error : {protoFile}'s opcode is larger then max opcode:{OpcodeRangeDefine.MaxOpcode}!");
                         }
                         s_MsgOpcode.Add(new OpcodeInfo() { name = msgName, opcode = ++s_StartOpcode });
-                        
-                        s_StringBuilder.Append($"\t[Message({s_CSName}.{msgName})]\n");
+
+                        s_StringBuilder.Append($"\t// protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
                         s_StringBuilder.Append($"\t[MemoryPackable]\n");
-                        s_StringBuilder.Append($"\t//protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
+                        s_StringBuilder.Append($"\t[Message({s_CSName}.{msgName})]\n");
+                        if (!string.IsNullOrEmpty(responseType))
+                        {
+                            s_StringBuilder.Append($"\t[ResponseType(nameof({responseType}))]\n");
+                        }
+
                         s_StringBuilder.Append($"\tpublic partial class {msgName}: MessageObject");
-                        if (parentClass == "IActorMessage" || parentClass == "IActorRequest" || parentClass == "IActorResponse")
+
+                        if (parentClass is "IActorMessage" or "IActorRequest" or "IActorResponse")
                         {
                             s_StringBuilder.Append($", {parentClass}\n");
                         }
@@ -125,7 +139,6 @@ namespace ET
                         {
                             sbDispose.Clear();
                             s_StringBuilder.Append("\t{\n");
-
                             s_StringBuilder.Append($"\t\tpublic static {msgName} Create(bool isFromPool = false) \n\t\t{{ \n\t\t\treturn ObjectPool.Instance.Fetch(typeof({msgName}), isFromPool) as {msgName}; \n\t\t}}\n\n");
                             continue;
                         }
@@ -133,7 +146,8 @@ namespace ET
                         if (newline.StartsWith("}"))
                         {
                             isMsgStart = false;
-                            
+                            responseType = "";
+
                             // 加了no dispose则自己去定义dispose函数，不要自动生成
                             if (!newline.Contains("// no dispose"))
                             {
@@ -146,24 +160,37 @@ namespace ET
 
                         if (newline.Trim().StartsWith("//"))
                         {
-                            s_StringBuilder.Append($"{newline}\n");
+                            s_StringBuilder.Append("\t\t/// <summary>\n");
+                            s_StringBuilder.Append($"\t\t/// {newline.TrimStart('/', ' ')}\n");
+                            s_StringBuilder.Append("\t\t/// </summary>\n");
                             continue;
                         }
 
-                        if (newline.Trim() != "" && newline != "}")
+                        string memberStr;
+                        if (newline.Contains("//"))
                         {
-                            if (newline.StartsWith("map<"))
-                            {
-                                Map(s_StringBuilder, newline, sbDispose);
-                            }
-                            else if (newline.StartsWith("repeated"))
-                            {
-                                Repeated(s_StringBuilder, newline, sbDispose);
-                            }
-                            else
-                            {
-                                Members(s_StringBuilder, newline, sbDispose);
-                            }
+                            string[] lineSplit = newline.Split("//");
+                            memberStr = lineSplit[0].Trim();
+                            s_StringBuilder.Append("\t\t/// <summary>\n");
+                            s_StringBuilder.Append($"\t\t/// {lineSplit[1].Trim()}\n");
+                            s_StringBuilder.Append("\t\t/// </summary>\n");
+                        }
+                        else
+                        {
+                            memberStr = newline;
+                        }
+
+                        if (memberStr.StartsWith("map<"))
+                        {
+                            Map(s_StringBuilder, memberStr, sbDispose);
+                        }
+                        else if (memberStr.StartsWith("repeated"))
+                        {
+                            Repeated(s_StringBuilder, memberStr, sbDispose);
+                        }
+                        else
+                        {
+                            Members(s_StringBuilder, memberStr, sbDispose);
                         }
                     }
                 }
@@ -179,7 +206,9 @@ namespace ET
                 string csPath = $"{path}/{csName}.cs";
                 using FileStream txt = new FileStream(csPath, FileMode.Create, FileAccess.ReadWrite);
                 using StreamWriter sw = new StreamWriter(txt);
-                sw.Write(sb.ToString().Replace("\t", "    "));
+                sb.Replace("\t", "    ");
+                string result = sb.ToString().ReplaceLineEndings("\r\n");
+                sw.Write(result);
 
                 Log.Info($"proto2cs file : {csPath}");
             }
@@ -306,5 +335,8 @@ namespace ET
                 }
             }
         }
+        
+        [GeneratedRegex(@"//\s*ResponseType")]
+        private static partial Regex ResponseTypeRegex();
     }
 }

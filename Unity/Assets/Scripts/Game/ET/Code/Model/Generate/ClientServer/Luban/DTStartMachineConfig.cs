@@ -11,6 +11,7 @@ using Luban;
 
 namespace ET
 {
+[ET.EnableClass]
 public partial class DTStartMachineConfig : IDataTable
 {
     private readonly System.Collections.Generic.List<DRStartMachineConfig> _dataList;

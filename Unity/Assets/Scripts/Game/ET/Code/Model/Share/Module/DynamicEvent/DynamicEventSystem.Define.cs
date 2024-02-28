@@ -5,6 +5,7 @@ namespace ET
 {
     public sealed partial class DynamicEventSystem
     {
+        [EnableClass]
         private class DynamicEventInfo
         {
             public long Type { get; }

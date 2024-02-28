@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 namespace ET
 {
-    [ResponseType(nameof(ObjectQueryResponse))]
-    [Message(Message_ET_Server.ObjectQueryRequest)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectQueryRequest)]
+    [ResponseType(nameof(ObjectQueryResponse))]
     public partial class ObjectQueryRequest: MessageObject, IRequest
     {
         public static ObjectQueryRequest Create(bool isFromPool = false) 
@@ -32,10 +32,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(A2M_Reload))]
-    [Message(Message_ET_Server.M2A_Reload)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.M2A_Reload)]
+    [ResponseType(nameof(A2M_Reload))]
     public partial class M2A_Reload: MessageObject, IRequest
     {
         public static M2A_Reload Create(bool isFromPool = false) 
@@ -53,9 +53,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.A2M_Reload)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.A2M_Reload)]
     public partial class A2M_Reload: MessageObject, IResponse
     {
         public static A2M_Reload Create(bool isFromPool = false) 
@@ -79,10 +79,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(G2G_LockResponse))]
-    [Message(Message_ET_Server.G2G_LockRequest)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.G2G_LockRequest)]
+    [ResponseType(nameof(G2G_LockResponse))]
     public partial class G2G_LockRequest: MessageObject, IRequest
     {
         public static G2G_LockRequest Create(bool isFromPool = false) 
@@ -106,9 +106,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.G2G_LockResponse)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.G2G_LockResponse)]
     public partial class G2G_LockResponse: MessageObject, IResponse
     {
         public static G2G_LockResponse Create(bool isFromPool = false) 
@@ -132,10 +132,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(G2G_LockReleaseResponse))]
-    [Message(Message_ET_Server.G2G_LockReleaseRequest)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.G2G_LockReleaseRequest)]
+    [ResponseType(nameof(G2G_LockReleaseResponse))]
     public partial class G2G_LockReleaseRequest: MessageObject, IRequest
     {
         public static G2G_LockReleaseRequest Create(bool isFromPool = false) 
@@ -159,9 +159,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.G2G_LockReleaseResponse)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.G2G_LockReleaseResponse)]
     public partial class G2G_LockReleaseResponse: MessageObject, IResponse
     {
         public static G2G_LockReleaseResponse Create(bool isFromPool = false) 
@@ -185,10 +185,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(ObjectAddResponse))]
-    [Message(Message_ET_Server.ObjectAddRequest)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectAddRequest)]
+    [ResponseType(nameof(ObjectAddResponse))]
     public partial class ObjectAddRequest: MessageObject, IRequest
     {
         public static ObjectAddRequest Create(bool isFromPool = false) 
@@ -215,9 +215,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.ObjectAddResponse)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectAddResponse)]
     public partial class ObjectAddResponse: MessageObject, IResponse
     {
         public static ObjectAddResponse Create(bool isFromPool = false) 
@@ -241,10 +241,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(ObjectLockResponse))]
-    [Message(Message_ET_Server.ObjectLockRequest)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectLockRequest)]
+    [ResponseType(nameof(ObjectLockResponse))]
     public partial class ObjectLockRequest: MessageObject, IRequest
     {
         public static ObjectLockRequest Create(bool isFromPool = false) 
@@ -274,9 +274,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.ObjectLockResponse)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectLockResponse)]
     public partial class ObjectLockResponse: MessageObject, IResponse
     {
         public static ObjectLockResponse Create(bool isFromPool = false) 
@@ -300,10 +300,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(ObjectUnLockResponse))]
-    [Message(Message_ET_Server.ObjectUnLockRequest)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectUnLockRequest)]
+    [ResponseType(nameof(ObjectUnLockResponse))]
     public partial class ObjectUnLockRequest: MessageObject, IRequest
     {
         public static ObjectUnLockRequest Create(bool isFromPool = false) 
@@ -333,9 +333,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.ObjectUnLockResponse)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectUnLockResponse)]
     public partial class ObjectUnLockResponse: MessageObject, IResponse
     {
         public static ObjectUnLockResponse Create(bool isFromPool = false) 
@@ -359,10 +359,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(ObjectRemoveResponse))]
-    [Message(Message_ET_Server.ObjectRemoveRequest)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectRemoveRequest)]
+    [ResponseType(nameof(ObjectRemoveResponse))]
     public partial class ObjectRemoveRequest: MessageObject, IRequest
     {
         public static ObjectRemoveRequest Create(bool isFromPool = false) 
@@ -386,9 +386,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.ObjectRemoveResponse)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectRemoveResponse)]
     public partial class ObjectRemoveResponse: MessageObject, IResponse
     {
         public static ObjectRemoveResponse Create(bool isFromPool = false) 
@@ -412,10 +412,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(ObjectGetResponse))]
-    [Message(Message_ET_Server.ObjectGetRequest)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectGetRequest)]
+    [ResponseType(nameof(ObjectGetResponse))]
     public partial class ObjectGetRequest: MessageObject, IRequest
     {
         public static ObjectGetRequest Create(bool isFromPool = false) 
@@ -439,9 +439,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.ObjectGetResponse)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectGetResponse)]
     public partial class ObjectGetResponse: MessageObject, IResponse
     {
         public static ObjectGetResponse Create(bool isFromPool = false) 
@@ -471,10 +471,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(G2R_GetLoginKey))]
-    [Message(Message_ET_Server.R2G_GetLoginKey)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.R2G_GetLoginKey)]
+    [ResponseType(nameof(G2R_GetLoginKey))]
     public partial class R2G_GetLoginKey: MessageObject, IRequest
     {
         public static R2G_GetLoginKey Create(bool isFromPool = false) 
@@ -495,9 +495,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.G2R_GetLoginKey)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.G2R_GetLoginKey)]
     public partial class G2R_GetLoginKey: MessageObject, IResponse
     {
         public static G2R_GetLoginKey Create(bool isFromPool = false) 
@@ -527,9 +527,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.G2M_SessionDisconnect)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.G2M_SessionDisconnect)]
     public partial class G2M_SessionDisconnect: MessageObject, ILocationMessage
     {
         public static G2M_SessionDisconnect Create(bool isFromPool = false) 
@@ -547,9 +547,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.ObjectQueryResponse)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.ObjectQueryResponse)]
     public partial class ObjectQueryResponse: MessageObject, IResponse
     {
         public static ObjectQueryResponse Create(bool isFromPool = false) 
@@ -576,10 +576,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(M2M_UnitTransferResponse))]
-    [Message(Message_ET_Server.M2M_UnitTransferRequest)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.M2M_UnitTransferRequest)]
+    [ResponseType(nameof(M2M_UnitTransferResponse))]
     public partial class M2M_UnitTransferRequest: MessageObject, IRequest
     {
         public static M2M_UnitTransferRequest Create(bool isFromPool = false) 
@@ -606,9 +606,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.M2M_UnitTransferResponse)]
+    // protofile : ET-Server/InnerMessage.proto
     [MemoryPackable]
-    //protofile : ET-Server/InnerMessage.proto
+    [Message(Message_ET_Server.M2M_UnitTransferResponse)]
     public partial class M2M_UnitTransferResponse: MessageObject, IResponse
     {
         public static M2M_UnitTransferResponse Create(bool isFromPool = false) 
@@ -632,11 +632,13 @@ namespace ET
         }
     }
 
-// 请求匹配
-    [ResponseType(nameof(Match2G_Match))]
-    [Message(Message_ET_Server.G2Match_Match)]
+    /// <summary>
+    /// 请求匹配
+    /// </summary>
+    // protofile : ET-Server/LockStepInner.proto
     [MemoryPackable]
-    //protofile : ET-Server/LockStepInner.proto
+    [Message(Message_ET_Server.G2Match_Match)]
+    [ResponseType(nameof(Match2G_Match))]
     public partial class G2Match_Match: MessageObject, IRequest
     {
         public static G2Match_Match Create(bool isFromPool = false) 
@@ -657,9 +659,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.Match2G_Match)]
+    // protofile : ET-Server/LockStepInner.proto
     [MemoryPackable]
-    //protofile : ET-Server/LockStepInner.proto
+    [Message(Message_ET_Server.Match2G_Match)]
     public partial class Match2G_Match: MessageObject, IResponse
     {
         public static Match2G_Match Create(bool isFromPool = false) 
@@ -683,10 +685,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(Map2Match_GetRoom))]
-    [Message(Message_ET_Server.Match2Map_GetRoom)]
+    // protofile : ET-Server/LockStepInner.proto
     [MemoryPackable]
-    //protofile : ET-Server/LockStepInner.proto
+    [Message(Message_ET_Server.Match2Map_GetRoom)]
+    [ResponseType(nameof(Map2Match_GetRoom))]
     public partial class Match2Map_GetRoom: MessageObject, IRequest
     {
         public static Match2Map_GetRoom Create(bool isFromPool = false) 
@@ -707,9 +709,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.Map2Match_GetRoom)]
+    // protofile : ET-Server/LockStepInner.proto
     [MemoryPackable]
-    //protofile : ET-Server/LockStepInner.proto
+    [Message(Message_ET_Server.Map2Match_GetRoom)]
     public partial class Map2Match_GetRoom: MessageObject, IResponse
     {
         public static Map2Match_GetRoom Create(bool isFromPool = false) 
@@ -723,7 +725,9 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-// 房间的ActorId
+        /// <summary>
+        /// 房间的ActorId
+        /// </summary>
         [MemoryPackOrder(3)]
         public ActorId ActorId { get; set; }
         public override void Dispose() 
@@ -737,10 +741,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(Room2G_Reconnect))]
-    [Message(Message_ET_Server.G2Room_Reconnect)]
+    // protofile : ET-Server/LockStepInner.proto
     [MemoryPackable]
-    //protofile : ET-Server/LockStepInner.proto
+    [Message(Message_ET_Server.G2Room_Reconnect)]
+    [ResponseType(nameof(Room2G_Reconnect))]
     public partial class G2Room_Reconnect: MessageObject, IRequest
     {
         public static G2Room_Reconnect Create(bool isFromPool = false) 
@@ -761,9 +765,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.Room2G_Reconnect)]
+    // protofile : ET-Server/LockStepInner.proto
     [MemoryPackable]
-    //protofile : ET-Server/LockStepInner.proto
+    [Message(Message_ET_Server.Room2G_Reconnect)]
     public partial class Room2G_Reconnect: MessageObject, IResponse
     {
         public static Room2G_Reconnect Create(bool isFromPool = false) 
@@ -796,10 +800,10 @@ namespace ET
         }
     }
 
-    [ResponseType(nameof(Room2RoomManager_Init))]
-    [Message(Message_ET_Server.RoomManager2Room_Init)]
+    // protofile : ET-Server/LockStepInner.proto
     [MemoryPackable]
-    //protofile : ET-Server/LockStepInner.proto
+    [Message(Message_ET_Server.RoomManager2Room_Init)]
+    [ResponseType(nameof(Room2RoomManager_Init))]
     public partial class RoomManager2Room_Init: MessageObject, IRequest
     {
         public static RoomManager2Room_Init Create(bool isFromPool = false) 
@@ -820,9 +824,9 @@ namespace ET
         }
     }
 
-    [Message(Message_ET_Server.Room2RoomManager_Init)]
+    // protofile : ET-Server/LockStepInner.proto
     [MemoryPackable]
-    //protofile : ET-Server/LockStepInner.proto
+    [Message(Message_ET_Server.Room2RoomManager_Init)]
     public partial class Room2RoomManager_Init: MessageObject, IResponse
     {
         public static Room2RoomManager_Init Create(bool isFromPool = false) 

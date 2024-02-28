@@ -20,7 +20,7 @@ namespace ET
                 s_CSName = codeName;
                 s_CSOutDirs = outDirs;
                 s_StartOpcode = opcode;
-                
+
                 s_StringBuilder = new StringBuilder();
                 s_StringBuilder.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
                 s_StringBuilder.Append("\n");
@@ -51,14 +51,23 @@ namespace ET
                 {
                     string newline = line.Trim();
                     
-                    if (newline == "")
+                    if (string.IsNullOrEmpty(newline))
                     {
                         continue;
                     }
 
-                    if (newline.StartsWith("//"))
+                    if (!isMsgStart && newline.StartsWith("//"))
                     {
-                        s_StringBuilder.Append($"{newline}\n");
+                        if (newline.StartsWith("///"))
+                        {
+                            s_StringBuilder.Append("\t/// <summary>\n");
+                            s_StringBuilder.Append($"\t/// {newline.TrimStart('/', ' ')}\n");
+                            s_StringBuilder.Append("\t/// </summary>\n");
+                        }
+                        else
+                        {
+                            s_StringBuilder.Append($"\t// {newline.TrimStart('/', ' ')}\n");
+                        }
                         continue;
                     }
 
@@ -78,9 +87,9 @@ namespace ET
                         {
                             parentClass = ss[1].Trim();
                         }
-                        
+
+                        s_StringBuilder.Append($"\t// protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
                         s_StringBuilder.Append($"\t[Serializable, ProtoContract(Name = @\"{msgName}\")]\n");
-                        s_StringBuilder.Append($"\t//protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
                         s_StringBuilder.Append($"\tpublic partial class {msgName}");
                         if (string.IsNullOrEmpty(parentClass))
                         {
@@ -107,14 +116,14 @@ namespace ET
 
                     if (isMsgStart)
                     {
-                        if (newline == "{")
+                        if (newline.StartsWith("{"))
                         {
                             s_StringBuilder.Append("\t{\n");
                             s_StringBuilder.Append($"\t\tpublic override int Id => {++s_StartOpcode};\n");
                             continue;
                         }
 
-                        if (newline == "}")
+                        if (newline.StartsWith("}"))
                         {
                             isMsgStart = false;
                             disposeSb.Append("\t\t}\n");
@@ -126,24 +135,37 @@ namespace ET
 
                         if (newline.Trim().StartsWith("//"))
                         {
-                            s_StringBuilder.Append($"{newline}\n");
+                            s_StringBuilder.Append("\t\t/// <summary>\n");
+                            s_StringBuilder.Append($"\t\t/// {newline.TrimStart('/', ' ')}\n");
+                            s_StringBuilder.Append("\t\t/// </summary>\n");
                             continue;
                         }
 
-                        if (newline.Trim() != "" && newline != "}")
+                        string memberStr;
+                        if (newline.Contains("//"))
                         {
-                            if (newline.StartsWith("map<"))
-                            {
-                                Map(s_StringBuilder, newline, disposeSb);
-                            }
-                            else if (newline.StartsWith("repeated"))
-                            {
-                                Repeated(s_StringBuilder, newline, disposeSb);
-                            }
-                            else
-                            {
-                                Members(s_StringBuilder, newline, disposeSb);
-                            }
+                            string[] lineSplit = newline.Split("//");
+                            memberStr = lineSplit[0].Trim();
+                            s_StringBuilder.Append("\t\t/// <summary>\n");
+                            s_StringBuilder.Append($"\t\t/// {lineSplit[1].Trim()}\n");
+                            s_StringBuilder.Append("\t\t/// </summary>\n");
+                        }
+                        else
+                        {
+                            memberStr = newline;
+                        }
+
+                        if (newline.StartsWith("map<"))
+                        {
+                            Map(s_StringBuilder, newline, disposeSb);
+                        }
+                        else if (newline.StartsWith("repeated"))
+                        {
+                            Repeated(s_StringBuilder, newline, disposeSb);
+                        }
+                        else
+                        {
+                            Members(s_StringBuilder, newline, disposeSb);
                         }
                     }
                 }

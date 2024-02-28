@@ -42,6 +42,7 @@ namespace ET
             public class GenConfig
             {
                 public bool active { get; set; }
+                public string customTemplate { get; set; }
                 public List<string> cmds { get; set; }
             }
 
@@ -109,13 +110,14 @@ namespace ET
 
                     int lastIndex = dir.LastIndexOf(Path.DirectorySeparatorChar) + 1;
                     string dirName = dir.Substring(lastIndex, dir.Length - lastIndex);
+                    string customTemplate = string.IsNullOrEmpty(genConfig.customTemplate)? "Default" : genConfig.customTemplate;
                     for (int j = 0; j < genConfig.cmds.Count; j++)
                     {
                         var cmdInfo = new CmdInfo();
                         var cmd = s_LubanCommandHeaderTemplate + genConfig.cmds[j];
                         cmd = cmd
                                 .Replace("%GEN_CLIENT%", Path.GetFullPath(Path.Combine(Define.WorkDir, GEN_CLIENT)))
-                                .Replace("%CUSTOM_TEMPLATE_DIR%", Path.GetFullPath(Path.Combine(Define.WorkDir, CUSTOM_TEMPLATE_DIR)))
+                                .Replace("%CUSTOM_TEMPLATE_DIR%", Path.GetFullPath(Path.Combine(Define.WorkDir, $"{CUSTOM_TEMPLATE_DIR}/{customTemplate}")))
                                 .Replace("%CONF_ROOT%", dir)
                                 .Replace("%UNITY_ASSETS%", Path.GetFullPath(Path.Combine(Define.WorkDir, Define.UNITY_ASSETS_PATH)))
                                 .Replace("%ROOT%", Path.GetFullPath(Path.Combine(Define.WorkDir, Define.ROOT_PATH)))

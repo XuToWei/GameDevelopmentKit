@@ -11,6 +11,7 @@ using Luban;
 
 namespace ET
 {
+[ET.EnableClass]
 public sealed partial class DROneConfig : Luban.BeanBase
 {
     public DROneConfig(ByteBuf _buf) 

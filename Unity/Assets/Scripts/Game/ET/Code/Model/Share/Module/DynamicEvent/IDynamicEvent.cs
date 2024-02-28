@@ -14,6 +14,7 @@ namespace ET
         public UniTask Handle(Entity entity, T arg);
     }
 
+    [EnableClass]
     public abstract class ADynamicEvent<A, B> : IDynamicEvent<B> where A : Entity where B : struct
     {
         public Type ArgType => typeof(B);
