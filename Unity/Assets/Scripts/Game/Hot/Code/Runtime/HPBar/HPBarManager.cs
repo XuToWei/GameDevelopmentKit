@@ -31,9 +31,9 @@ namespace Game.Hot
 
         public async UniTask PreloadAsync()
         {
-            m_HPBarItemAssetObj = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetUIItemAsset("HPBarItem"));
+            m_HPBarItemAssetObj = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetUIPrefabAsset("HPBarItem"));
             m_HPBarItemTemplate = m_HPBarItemAssetObj.GetComponent<HPBarItem>();
-            m_HPBarInstancesAssetObj = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetUIItemAsset("HPBarInstances"));
+            m_HPBarInstancesAssetObj = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetUIPrefabAsset("HPBarInstances"));
             m_HPBarInstanceRoot = Object.Instantiate(m_HPBarInstancesAssetObj.transform, GameEntry.CodeRunner.transform);
             m_CachedCanvas = m_HPBarInstanceRoot.GetComponent<Canvas>();
             m_InstancePoolCapacity = 16;

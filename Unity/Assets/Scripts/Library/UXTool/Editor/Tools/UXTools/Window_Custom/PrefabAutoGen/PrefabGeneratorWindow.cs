@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// ×Ô¶¯Ê¶±ğÉè¼ÆÍ¼²¢Æ´½ÓPrefab Ô¤ÀÀ°æ
+/// è‡ªåŠ¨è¯†åˆ«è®¾è®¡å›¾å¹¶æ‹¼æ¥Prefab é¢„è§ˆç‰ˆ
 /// </summary>
 public class PrefabGeneratorWindow : EditorWindow
 {
@@ -22,11 +22,11 @@ public class PrefabGeneratorWindow : EditorWindow
 
     private static PrefabGeneratorWindow m_window;
 
-    private static string projectPath = Application.dataPath;
-    private static string pythonScriptPath = projectPath + "/Tools/ImageMatch/main.exe";
-    private static string designImgPath = "/Test/Test4/_Design.png";
-    private static string templateFolderPath = "/Test/Test4/";
-    private static string prefabPath = "/Test/AutoGen.prefab";
+    // private static string projectPath = Application.dataPath;
+    // private static string pythonScriptPath = projectPath + "/Tools/ImageMatch/main.exe";
+    // private static string designImgPath = "/Test/Test4/_Design.png";
+    // private static string templateFolderPath = "/Test/Test4/";
+    // private static string prefabPath = "/Test/AutoGen.prefab";
 
     private static string result;
 
@@ -50,7 +50,7 @@ public class PrefabGeneratorWindow : EditorWindow
         int height = 300;
         m_window = GetWindow<PrefabGeneratorWindow>();
         m_window.minSize = new Vector2(width, height);
-        m_window.titleContent.text = "×Ô¶¯Éú³É";
+        m_window.titleContent.text = "è‡ªåŠ¨ç”Ÿæˆ";
         m_window.InitData();
         m_window.InitUI();
     }
@@ -83,8 +83,8 @@ public class PrefabGeneratorWindow : EditorWindow
         pathInput_3 = labelFromUXML.Q<IMGUIContainer>("pathInput_3");
         pathSelectButton_3 = labelFromUXML.Q<UnityEngine.UIElements.Button>("pathSelectbutton_3");
 
-        string confirmString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_È·¶¨);
-        string cancelString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_È¡Ïû);
+        string confirmString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_ç¡®å®š);
+        string cancelString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_å–æ¶ˆ);
         confirmBtn.Q<Label>("text").text = confirmString;
         cancelBtn.Q<Label>("text").text = cancelString;
 
@@ -118,7 +118,7 @@ public class PrefabGeneratorWindow : EditorWindow
         confirmBtn2.style.width = 100;
         confirmBtn2.style.left = -100;
         confirmBtn2.style.bottom = 0;
-        confirmBtn2.text = "¾É°æÉú³É";
+        confirmBtn2.text = "æ—§ç‰ˆç”Ÿæˆ";
 
         confirmBtn2.clicked += () =>
         {
@@ -137,11 +137,11 @@ public class PrefabGeneratorWindow : EditorWindow
         string path = "";
         if (button != pathSelectButton_2)
         {
-            path = EditorUtility.OpenFilePanel(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Ñ¡ÔñÂ·¾¶), folderPath, "");
+            path = EditorUtility.OpenFilePanel(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_é€‰æ‹©è·¯å¾„), folderPath, "");
         }
         else
         {
-            path = EditorUtility.OpenFolderPanel(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Ñ¡ÔñÂ·¾¶), folderPath, "");
+            path = EditorUtility.OpenFolderPanel(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_é€‰æ‹©è·¯å¾„), folderPath, "");
         }
         if (path != "")
         {
@@ -166,9 +166,9 @@ public class PrefabGeneratorWindow : EditorWindow
             else
             {
                 EditorUtility.DisplayDialog("messageBox",
-                    EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Ä¿Â¼²»ÔÚAssetsÏÂTip),
-                    EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_È·¶¨),
-                    EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_È¡Ïû));
+                    EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_ç›®å½•ä¸åœ¨Assetsä¸‹Tip),
+                    EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_ç¡®å®š),
+                    EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_å–æ¶ˆ));
             }
         }
     }
@@ -191,7 +191,7 @@ public class PrefabGeneratorWindow : EditorWindow
 
 
     /// <summary>
-    /// ´¦ÀíPythonÔËĞĞ½á¹û,´´½¨Prefab
+    /// å¤„ç†Pythonè¿è¡Œç»“æœ,åˆ›å»ºPrefab
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>

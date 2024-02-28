@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: UIResCheckSetting
   m_EditorClassIdentifier: 
   imageFolderPath: Assets/Res/UI/UISprite
-  atlasFolderPath: Assets/Res/UI/Atlas
+  atlasFolderPath: Assets/Res/UI/UIAtlas
   prefabFolderPath: Assets/Res/UI/UIPrefab
-  animFolderPath: Assets/Res/UI/Animation
+  animFolderPath: Assets/Res/UI/UIAnimation
   defaultFontPath: Assets/Res/Font/Default.otf
   atlasLimit: 4
   imageLimit: 13

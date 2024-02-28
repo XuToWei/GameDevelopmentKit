@@ -44,7 +44,7 @@ namespace ThunderFireUITool
 #endif
         }
 
-        private bool UseCustomUnityWindowTitle = false;
+        // private bool UseCustomUnityWindowTitle = false;
         public string CustomUnityWindowTitle = "";
     }
 }

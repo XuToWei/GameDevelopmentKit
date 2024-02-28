@@ -4,8 +4,46 @@
         <name>R3</name>
     </assembly>
     <members>
+        <member name="F:R3.AwaitOperation.Sequential">
+            <summary>All values are queued, and the next value waits for the completion of the asynchronous method.</summary>
+        </member>
+        <member name="F:R3.AwaitOperation.Drop">
+            <summary>Drop new value when async operation is running.</summary>
+        </member>
+        <member name="F:R3.AwaitOperation.Switch">
+            <summary>If the previous asynchronous method is running, it is cancelled and the next asynchronous method is executed.</summary>
+        </member>
+        <member name="F:R3.AwaitOperation.Parallel">
+            <summary>All values are sent immediately to the asynchronous method.</summary>
+        </member>
+        <member name="F:R3.AwaitOperation.SequentialParallel">
+            <summary>All values are sent immediately to the asynchronous method, but the results are queued and passed to the next operator in order.</summary>
+        </member>
+        <member name="F:R3.AwaitOperation.ThrottleFirstLast">
+            <summary>Send the first value and the last value while the asynchronous method is running.</summary>
+        </member>
         <member name="M:R3.ObservableExtensions.ObserveOnCurrentSynchronizationContext``1(R3.Observable{``0})">
             <summary>ObserveOn SynchronizationContext.Current</summary>
+        </member>
+        <member name="M:R3.ObservableExtensions.SelectAwait``2(R3.Observable{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{``1}},R3.AwaitOperation,System.Boolean,System.Boolean,System.Int32)">
+            <param name="maxConcurrent">This option is only valid for AwaitOperation.Parallel and AwaitOperation.SequentialParallel. It sets the number of concurrent executions. If set to -1, there is no limit.</param>
+        </member>
+        <member name="M:R3.ObservableExtensions.SubscribeAwait``1(R3.Observable{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask},R3.AwaitOperation,System.Boolean,System.Boolean,System.Int32)">
+            <param name="maxConcurrent">This option is only valid for AwaitOperation.Parallel and AwaitOperation.SequentialParallel. It sets the number of concurrent executions. If set to -1, there is no limit.</param>
+        </member>
+        <member name="M:R3.ObservableExtensions.SubscribeAwait``1(R3.Observable{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask},System.Action{R3.Result},R3.AwaitOperation,System.Boolean,System.Boolean,System.Int32)">
+            <param name="maxConcurrent">This option is only valid for AwaitOperation.Parallel and AwaitOperation.SequentialParallel. It sets the number of concurrent executions. If set to -1, there is no limit.</param>
+        </member>
+        <member name="M:R3.ObservableExtensions.SubscribeAwait``1(R3.Observable{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask},System.Action{System.Exception},System.Action{R3.Result},R3.AwaitOperation,System.Boolean,System.Boolean,System.Int32)">
+            <param name="maxConcurrent">This option is only valid for AwaitOperation.Parallel and AwaitOperation.SequentialParallel. It sets the number of concurrent executions. If set to -1, there is no limit.</param>
+        </member>
+        <member name="M:R3.ObservableExtensions.Trampoline``1(R3.Observable{``0})">
+            <summary>
+            Similar as ObserveOn(CurrentThreadScheduler) in dotnet/reactive, place the execution order of recursive calls after the call is completed.
+            </summary>
+        </member>
+        <member name="M:R3.ObservableExtensions.WhereAwait``1(R3.Observable{``0},System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{System.Boolean}},R3.AwaitOperation,System.Boolean,System.Boolean,System.Int32)">
+            <param name="maxConcurrent">This option is only valid for AwaitOperation.Parallel and AwaitOperation.SequentialParallel. It sets the number of concurrent executions. If set to -1, there is no limit.</param>
         </member>
         <member name="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute">
             <summary>

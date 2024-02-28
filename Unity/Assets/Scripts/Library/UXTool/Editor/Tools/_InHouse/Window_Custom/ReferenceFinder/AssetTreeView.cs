@@ -32,7 +32,7 @@ namespace ThunderFireUITool
         public AssetViewItem assetRoot;
 
         private GUIStyle stateGUIStyle = new GUIStyle { richText = true, alignment = TextAnchor.MiddleCenter };
-        private string ignorePath = "Canvas (Environment)/";
+        // private string ignorePath = "Canvas (Environment)/";
 
         //列信息
         enum MyColumns

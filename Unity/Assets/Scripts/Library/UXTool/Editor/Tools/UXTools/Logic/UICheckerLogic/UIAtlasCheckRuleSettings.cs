@@ -28,9 +28,9 @@ namespace ThunderFireUITool
         }
 
         public string imageFolderPath = "Assets/Res/UI/UISprite";
-        public string atlasFolderPath = "Assets/Res/UI/Atlas";
+        public string atlasFolderPath = "Assets/Res/UI/UIAtlas";
         public string prefabFolderPath = "Assets/Res/UI/UIPrefab";
-        public string animFolderPath = "Assets/Res/UI/Animation";
+        public string animFolderPath = "Assets/Res/UI/UIAnimation";
         public string defaultFontPath = "Assets/Res/Font/Default.otf";
 
         public int atlasLimit = 4;

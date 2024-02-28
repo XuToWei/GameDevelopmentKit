@@ -34,7 +34,7 @@ public partial class CustomUnityWindowHelper
     [DllImport("user32.dll", EntryPoint = "SetWindowText", CharSet = CharSet.Auto)]
     public extern static int SetWindowText(int hwnd, string lpString);
 
-    private bool haveMainWindow = false;
+    // private bool haveMainWindow = false;
     public IntPtr hwnd = IntPtr.Zero;
     private IntPtr mainWindowHandle = IntPtr.Zero;
     private int processId = 0;
@@ -151,7 +151,7 @@ public partial class CustomUnityWindowHelper
 
         bool visible = IsWindowVisible(handleRef);
         
-        //ÅĞ¶Ï´°¿Ú±êÌâÊÇ·ñº¬ÓĞ"Unity 20", mainWindowÊÇÓĞµÄ messageBoxÄ¿Ç°¿´¶¼Ã»ÓĞ
+        //åˆ¤æ–­çª—å£æ ‡é¢˜æ˜¯å¦å«æœ‰"Unity 20", mainWindowæ˜¯æœ‰çš„ messageBoxç›®å‰çœ‹éƒ½æ²¡æœ‰
         GetWindowText(handle.ToInt32(), windowTitleBuffer, windowTitleBuffer.Capacity);
         
         string title = windowTitleBuffer.ToString();

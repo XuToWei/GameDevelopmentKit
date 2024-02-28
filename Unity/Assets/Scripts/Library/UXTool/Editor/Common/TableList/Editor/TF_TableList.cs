@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
+using Sirenix.OdinInspector.Editor.ActionResolvers;
 using Sirenix.OdinInspector.Editor.Drawers;
 using Sirenix.Utilities;
 using Sirenix.Utilities.Editor;
@@ -170,17 +171,17 @@ namespace TF_TableList
                 action.MemberName = attribute.MemberName;
                 action.Parent = Property.ParentValues[0];
                 action.Place = attribute.Place;
-                var methodInfo = Property.ParentType
-                    .FindMember()
-                    .IsMethod()
-                    .IsInstance()
-                    .HasParameters<TableActionContext>()
-                    .ReturnsVoid()
-                    .IsNamed(attribute.MemberName)
-                    .GetMember<MethodInfo>(out action.ErrorMessage);
-                if (action.ErrorMessage == null)
+                var actionResolver = ActionResolver.Get(Property, attribute.MemberName, new NamedValue()
                 {
-                    action.methodInfo = methodInfo;
+                    Type = typeof(TableActionContext)
+                });
+                if (actionResolver.HasError)
+                {
+                    action.ErrorMessage = actionResolver.ErrorMessage;
+                }
+                else
+                {
+                    action.methodInfo = actionResolver.Action.GetMethodInfo();
                 }
                 TableActions.Add(action);
             }
@@ -195,17 +196,18 @@ namespace TF_TableList
                 callback.MemberName = attribute.MemberName;
                 callback.Parent = Property.ParentValues[0];
                 callback.Delayed = attribute.Delayed;
-                var methodInfo = Property.ParentType
-                    .FindMember()
-                    .IsMethod()
-                    .IsInstance()
-                    .HasParameters<TableRowSelectContext>()
-                    .ReturnsVoid()
-                    .IsNamed(attribute.MemberName)
-                    .GetMember<MethodInfo>(out callback.ErrorMessage);
-                if (callback.ErrorMessage == null)
+                
+                var actionResolver = ActionResolver.Get(Property, attribute.MemberName, new NamedValue()
                 {
-                    callback.methodInfo = methodInfo;
+                    Type = typeof(TableRowSelectContext)
+                });
+                if (actionResolver.HasError)
+                {
+                    callback.ErrorMessage = actionResolver.ErrorMessage;
+                }
+                else
+                {
+                    callback.methodInfo = actionResolver.Action.GetMethodInfo();
                 }
                 RowSelectCallBacks.Add(callback);
             }
@@ -714,7 +716,7 @@ namespace TF_TableList
                         var index = x + this.colOffset - skip;
                         this.columns.Insert(Math.Min(index, this.columns.Count), newCol);
 
-                        GUIHelper.RequestRepaint(3);
+                        GUIHelper.RequestRepaint();
                     }
                 }
             }
