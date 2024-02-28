@@ -259,10 +259,10 @@ namespace ET
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("namespace ThunderFireUITool");
                 stringBuilder.AppendLine("{");
-                stringBuilder.AppendLine($"    public const string ExporterExtensionName = {extensionName}");
-                stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("    public static partial class EditorLocalizationTool");
                 stringBuilder.AppendLine("    {");
+                stringBuilder.AppendLine($"        public const string ExporterExtensionName = \"{extensionName}\";");
+                stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        public static LocalizationHelper.LanguageType[] ReadyLanguageTypes => new LocalizationHelper.LanguageType[]");
                 stringBuilder.AppendLine("        {");
                 foreach (Language language in readyLanguages)
