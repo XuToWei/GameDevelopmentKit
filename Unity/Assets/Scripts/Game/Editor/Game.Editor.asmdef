@@ -26,7 +26,8 @@
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
         "ZString",
-        "SLATE"
+        "SLATE",
+        "Leihuo.UXTools.Runtime"
     ],
     "includePlatforms": [
         "Editor"

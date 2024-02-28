@@ -10,9 +10,25 @@ namespace Game
         public static Dictionary<string, Type> BindNameTypeDict = new Dictionary<string, Type>()
         {
             { "UIWidget", typeof(UIWidget) },
+            // TMP
             { "TMPText", typeof(TMPro.TMP_Text) },
             { "TMPInputField", typeof(TMPro.TMP_InputField) },
-            { "TMPProText", typeof(TMPro.TextMeshProUGUI) },
+            { "TextMeshProUGUI", typeof(TMPro.TextMeshProUGUI) },
+            { "TextMeshPro", typeof(TMPro.TextMeshPro) },
+            // UXTool
+            { "UXImage", typeof(UnityEngine.UI.UXImage) },
+            { "UXText", typeof(UnityEngine.UI.UXText) },
+            { "UXTextMeshPro", typeof(UnityEngine.UI.UXTextMeshPro) },
+            { "UXToggle", typeof(UnityEngine.UI.UXToggle) },
+            { "UXToggleGroup", typeof(UnityEngine.UI.UXToggleGroup) },
+            { "UXScrollRect", typeof(UnityEngine.UI.UXScrollRect) },
+            { "UXRolling", typeof(UXRolling) },
+            { "UIValueAdapter", typeof(UIValueAdapter) },
+            { "LXRolling", typeof(LXRolling) },
+            { "UIStateAnimator", typeof(UIStateAnimator) },
+            { "UIAdapter", typeof(UIAdapter) },
+            { "IgnoreUIAdapter", typeof(IgnoreUIAdapter) },
+            { "UIAdapterScaleScreenRate", typeof(UIAdapterScaleScreenRate) },
         };
     }
 }
