@@ -10,7 +10,7 @@ rd/s /q %DESTINATION%\Scene
 rd/s /q %DESTINATION%\Sound
 rd/s /q %DESTINATION%\Texture
 rd/s /q %DESTINATION%\UI\UIForm
-rd/s /q %DESTINATION%\UI\UIItem
+rd/s /q %DESTINATION%\UI\UIPrefab
 rd/s /q %DESTINATION%\UI\UISound
 rd/s /q %DESTINATION%\UI\UISprite
 
