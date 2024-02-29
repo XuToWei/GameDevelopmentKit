@@ -8,7 +8,10 @@ namespace ET.Client
         {
             var clientSenderComponent = root.GetComponent<ClientSenderComponent>();
             if (clientSenderComponent != null)
-                await clientSenderComponent.DisposeClientSender();            clientSenderComponent = root.AddComponent<ClientSenderComponent>();
+            {
+                await clientSenderComponent.DisposeClientSender();
+            }
+            clientSenderComponent = root.AddComponent<ClientSenderComponent>();
             long playerId = await clientSenderComponent.LoginAsync(account, password);
 
             root.GetComponent<PlayerComponent>().MyId = playerId;
