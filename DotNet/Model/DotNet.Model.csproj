@@ -39,6 +39,9 @@
         <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Generate\ClientServer\**\*.cs"> 
             <Link>Generate\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
+        <Compile Include="..\..\Unity\Assets\Scripts\Game\ET\Code\Model\Generate\LubanPartial\**\*.cs">
+            <Link>Generate\LubanPartial\%(RecursiveDir)%(FileName)%(Extension)</Link>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Share\Analyzer\Share.Analyzer.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />

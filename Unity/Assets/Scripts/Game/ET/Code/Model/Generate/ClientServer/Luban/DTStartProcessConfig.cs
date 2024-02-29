@@ -11,7 +11,6 @@ using Luban;
 
 namespace ET
 {
-[ET.EnableClass]
 public partial class DTStartProcessConfig : IDataTable
 {
     private readonly System.Collections.Generic.List<DRStartProcessConfig> _dataList;

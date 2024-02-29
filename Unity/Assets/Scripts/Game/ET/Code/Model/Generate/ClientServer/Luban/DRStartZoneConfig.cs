@@ -11,7 +11,6 @@ using Luban;
 
 namespace ET
 {
-[ET.EnableClass]
 public sealed partial class DRStartZoneConfig : Luban.BeanBase
 {
     public DRStartZoneConfig(ByteBuf _buf) 

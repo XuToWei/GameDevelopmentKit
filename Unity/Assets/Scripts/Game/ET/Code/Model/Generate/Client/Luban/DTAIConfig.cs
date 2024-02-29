@@ -11,7 +11,6 @@ using Luban;
 
 namespace ET
 {
-[ET.EnableClass]
 public partial class DTAIConfig : IDataTable
 {
     private readonly System.Collections.Generic.Dictionary<int, DRAIConfig> _dataMap;

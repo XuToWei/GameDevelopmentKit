@@ -1,4 +1,6 @@
 using System.Collections.Immutable;
+using System.IO;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -49,6 +51,13 @@ namespace ET.Analyzer
             }
 
             if (namedTypeSymbol.HasAttributeInTypeAndBaseTyes(Definition.EnableClassAttribute))
+            {
+                return;
+            }
+            
+            //针对配置相对目录做屏蔽
+            string filePath = context.Node.SyntaxTree.FilePath.Replace('\\', '/').Replace("//", "/");
+            if (AnalyzerGlobalSetting.EnableClassIgnoreDirNames.Any(dir => filePath.Contains(dir.Replace('\\', '/').Replace("//", "/"))))
             {
                 return;
             }

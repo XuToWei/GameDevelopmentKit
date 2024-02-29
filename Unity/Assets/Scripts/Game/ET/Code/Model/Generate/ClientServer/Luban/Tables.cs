@@ -11,7 +11,6 @@ using Luban;
 
 namespace ET
 {
-[ET.EnableClass]
 public partial class Tables
 {
     public DTStartMachineConfig DTStartMachineConfig { private set; get; }

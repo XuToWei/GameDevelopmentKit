@@ -11,7 +11,6 @@ using Luban;
 
 namespace ET
 {
-[ET.EnableClass]
 public sealed partial class DRStartMachineConfig : Luban.BeanBase
 {
     public DRStartMachineConfig(ByteBuf _buf) 

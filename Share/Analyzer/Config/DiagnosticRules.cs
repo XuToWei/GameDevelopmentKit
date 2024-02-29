@@ -471,9 +471,9 @@ namespace ET.Analyzer
     {
         private const string Title = "Model/ModelView程序集禁止声明非实体类";
 
-        private const string MessageFormat = "Model/ModelView程序集禁止声明非Object类:{0}, 除非加上[EnableClass]";
+        private const string MessageFormat = "Model/ModelView程序集禁止声明非Object类:{0}, 除非加上[EnableClass]或在AnalyzerGlobalSetting.EnableClassIgnoreDirNames中添加忽略目录";
 
-        private const string Description = "Model/ModelView程序集禁止声明非实体类, 除非加上[EnableClass] Attribute.";
+        private const string Description = "Model/ModelView程序集禁止声明非实体类, 除非加上[EnableClass] Attribute或在AnalyzerGlobalSetting.EnableClassIgnoreDirNames中添加忽略目录.";
 
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.DisableNormalClassDeclaratonInModelAssemblyAnalyzerRuleId,

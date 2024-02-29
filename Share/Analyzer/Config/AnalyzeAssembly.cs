@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace ET.Analyzer
+﻿namespace ET.Analyzer
 {
     public static class AnalyzeAssembly
     {
