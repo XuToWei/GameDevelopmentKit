@@ -10,12 +10,14 @@ namespace ET
     {
         public static class Proto2CS_ET
         {
+            private static readonly Regex s_ResponseTypeRegex = new Regex(@"//\s*ResponseType");
+
             private static readonly List<OpcodeInfo> s_MsgOpcode = new List<OpcodeInfo>();
             private static string s_CSName;
             private static List<string> s_CSOutDirs;
             private static int s_StartOpcode;
             private static StringBuilder s_StringBuilder;
-            
+
             public static void Start(string codeName, List<string> outDirs, int opcode, string nameSpace)
             {
                 s_CSName = codeName;
@@ -56,7 +58,6 @@ namespace ET
                 string msgName = string.Empty;
                 string responseType = "";
                 StringBuilder sbDispose = new StringBuilder();
-                Regex responseTypeRegex = ResponseTypeRegex();
                 foreach (string line in s.Split('\n'))
                 {
                     string newline = line.Trim();
@@ -66,9 +67,9 @@ namespace ET
                         continue;
                     }
 
-                    if (responseTypeRegex.IsMatch(newline))
+                    if (s_ResponseTypeRegex.IsMatch(newline))
                     {
-                        responseType = responseTypeRegex.Replace(newline, string.Empty);
+                        responseType = s_ResponseTypeRegex.Replace(newline, string.Empty);
                         responseType = responseType.Trim().Split(' ')[0].TrimEnd('\r', '\n');
                         continue;
                     }
@@ -335,8 +336,5 @@ namespace ET
                 }
             }
         }
-        
-        [GeneratedRegex(@"//\s*ResponseType")]
-        private static partial Regex ResponseTypeRegex();
     }
 }

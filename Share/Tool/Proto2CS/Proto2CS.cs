@@ -17,8 +17,8 @@ namespace ET
     {
         private static readonly string WorkDir = Path.GetFullPath("../Bin");
         private const string PROTO_ROOT_DIR = "../Design/Proto";
-        private static readonly char[] s_SplitChars = [' ', '\t'];
-        
+        private static readonly char[] s_SplitChars = new[] { ' ', '\t' };
+
         private class GenConfig
         {
             public string protoDir { get; set; }
