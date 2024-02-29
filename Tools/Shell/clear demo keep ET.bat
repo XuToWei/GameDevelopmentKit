@@ -80,6 +80,8 @@ rd/s /q %DESTINATION%\Scripts\Game\Hot
 del %DESTINATION%\Scripts\Game\Hot.meta
 del %DESTINATION%\Res\Editor\Config\ResourceRuleEditor_GameHot.asset
 del %DESTINATION%\Res\Editor\Config\ResourceRuleEditor_GameHot.asset.meta
+rd/s /q %DESTINATION%\Scripts\Library\protobuf-net
+del %DESTINATION%\Scripts\Library\protobuf-net.meta
 
 set DESTINATION=..\..\Design
 
