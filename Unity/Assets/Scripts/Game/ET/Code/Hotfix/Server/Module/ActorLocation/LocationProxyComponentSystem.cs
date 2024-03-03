@@ -49,7 +49,7 @@ namespace ET.Server
         public static async UniTask Remove(this LocationProxyComponent self, int type, long key)
         {
             Fiber fiber = self.Fiber();
-            Log.Info($"location proxy add {key}, {TimeInfo.Instance.ServerNow()}");
+            Log.Info($"location proxy remove {key}, {TimeInfo.Instance.ServerNow()}");
 
             ObjectRemoveRequest objectRemoveRequest = ObjectRemoveRequest.Create();
             objectRemoveRequest.Type = type;
