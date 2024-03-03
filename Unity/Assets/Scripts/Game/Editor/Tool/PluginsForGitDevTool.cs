@@ -7,7 +7,7 @@ namespace Game.Editor
     /// <summary>
     /// 方便导入导出处理收费插件在git上版权问题
     /// </summary>
-    public static class PluginForGitDevTool
+    public static class PluginsForGitDevTool
     {
         //需要被导出的文件或文件夹
         private static readonly string[] s_IncludePlugins = new string[]
@@ -20,7 +20,7 @@ namespace Game.Editor
             "Assets/Plugins/Sirenix",
         };
 
-        private static readonly string s_UnityPackageFile = "../Tools/UnityPlugin/Useful.unitypackage";
+        private static readonly string s_UnityPackageFile = "../Tools/UnityPlugins/Useful.unitypackage";
         private static readonly string s_GitIgnoreFile = "Assets/.gitignore";
 
         [MenuItem("Game/For Git Dev/Export All Not Free Plugins", false, 999)]
