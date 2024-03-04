@@ -1,0 +1,13 @@
+{
+    "name": "com.jetbrains.riderflow",
+    "displayName": "JetBrains RiderFlow",
+    "description": "JetBrains RiderFlow is a productivity-boosting plugin for Unity.\n\nRiderFlow helps you manage scene hierarchies, find usages of GameObjects, save camera presets, store bookmarks, refactor GameObjects, and edit Unity scripts in the built-in editor, based on Rider’s smart C# editor",
+    "version": "2023.1.0-21",
+    "unity": "2019.4",
+    "keywords": [
+    "jetbrains",
+    "rider",
+    "RiderFlow"
+    ],
+    "category": "Editor"
+}

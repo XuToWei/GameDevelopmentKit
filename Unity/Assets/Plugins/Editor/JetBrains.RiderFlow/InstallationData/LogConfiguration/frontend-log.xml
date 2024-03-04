@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+  <!-- Appenders -->
+
+  <appender name="dbgview" class="JetBrains.Util.Logging.DebugOutputLogEventListener" />
+
+
+  <!--    You can use "pattern" attribute to format log messages. Parameters are substituted        -->
+  <!--    instead of "<percent-sign><character>" substrings. For example log level                  -->
+  <!--    will be substituted instead of "%L", message instead of "%M".                             -->
+  <!--                                                                            -->
+  <!--    Characters after % and their roles:            -->
+  <!--      'd'] Date. Accepts optional int parameter in curly braces. For example, %d{hh:mm:ss}. -->
+  <!--      'm'] Original message-->
+  <!--      'M'] Message (includes exception with stack trace if present, includes sensitive data like paths or user names)-->
+  <!--      'e'] Short exception      -->
+  <!--      'E'] Long exception      -->
+  <!--      'n'] New line-->
+  <!--      'L'] Level -->
+  <!--      'l'] Level's first character -->
+  <!--      'c'] Category (i.e. namespace). Accepts optional int parameter in curly braces. For example, if we log event with category "A.B.C.D" and format "%c{2}", only "C.D" will be logged.      -->
+  <!--      't'] Thread id-->
+  <!--      'T'] Thread name-->
+  <!--      'p'] PID-->
+  <!--      'P'] Process name-->
+  <!--      'X'] Message Diagnostic Context: if you specify "%X{key}" than "LoggerContext.GlobalContext[key]" will be logged if present -->
+  <!--      -->
+  <!--    Also, you can specify <minWidth>.<maxWidth> for substituted parameters (in chars). If substituted value-->
+  <!--    is less than <minWidth>, text is justified right. For left justification specify "-" sign before <minWidth>.-->
+  <!--    For example, "%-5.20c" means: print category with 5 chars min (if category is shorter, justify left) and 20 chars max.-->
+
+  <appender name="file_verbose" class="JetBrains.Util.Logging.FileLogEventListener" pattern="%d{HH:mm:ss.fff} |%l| %-30c{1}| %-18T | %M%n">
+
+    <!--Log file path. You can use following substitutions: -->
+    <!--  {pid}    = Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture) -->
+    <!--  {pname}  = Process.GetCurrentProcess().ProcessName -->
+    <!--  {pdate}  = Process.GetCurrentProcess().StartTime.ToLocalTime().ToString("yyyy-MM-dd__HH-mm-ss") -->
+    <!--  {temp}   = FileSystemDefinition.GetTempPath().FullPath -->
+    <!--  {domain} = AppDomain.CurrentDomain.FriendlyName -->
+    <!--  {date}   = DateTime.Now.ToLocalTime().ToString("yyyy-MM-dd__HH-mm-ss") -->
+    <!--  {env.ENV_VAR} =  <resolves environment variable> -->
+    <arg>{env.FRONTEND_LOG_FILE}/{pid}.frontend.log</arg>
+
+    <!--true: append, false: no append-->
+    <arg>true</arg>
+
+    <!--log rotation: 6 rotated files 50M each-->
+    <arg>50M:6</arg>
+  </appender>
+
+  <!--<appender name="file_verbose_append" class="JetBrains.Util.Logging.FileLogEventListener">-->
+  <!--<arg>{env.FRONTEND_LOG_FILE}/frontend-append.log</arg>-->
+  <!--<arg>true</arg>-->
+  <!--<arg>5M:6</arg>-->
+  <!--</appender>-->
+
+  <appender name="file_protocol" class="JetBrains.Util.Logging.FileLogEventListener" pattern="%n%d{HH:mm:ss.fff} | %c{1} | %m%n">
+    <arg>{env.FRONTEND_LOG_FILE}/{pid}.frontend-protocol.log</arg>
+    <!--no append-->
+    <arg>false</arg>
+    <arg>50M:6</arg>
+  </appender>
+
+
+  <appender name="a_message_box" class="JetBrains.Util.Logging.MessageBoxLogEventListener">
+    <arg>AttachByMessageBoxListener</arg>
+  </appender>
+
+
+  <!--  Root logger -->
+  <root level="VERBOSE">
+    <!-- Uncomment it to support logging into dbgview. Disabled by default because it's beeing seen under profiler.-->
+    <!--<appender-ref>dbgview</appender-ref>-->
+
+    <!-- Uncomment it to see message box when rider starts and attach debugger-->
+    <!--<appender-ref>a_message_box</appender-ref>-->
+
+    <appender-ref>file_verbose</appender-ref>
+    <!--<appender-ref>file_verbose_append</appender-ref>-->
+  </root>
+
+  <!--    Change level to 'TRACE' to enable logging -->
+  <logger name="protocol" level="VERBOSE" additivity="false">
+    <!--<appender-ref>dbgview</appender-ref>-->
+    <appender-ref>file_protocol</appender-ref>
+  </logger>
+
+  <!--<logger name="JetBrains.RiderFlow" level="TRACE" />-->
+
+</configuration>

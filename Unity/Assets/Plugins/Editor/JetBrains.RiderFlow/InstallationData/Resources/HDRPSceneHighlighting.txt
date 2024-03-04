@@ -1,0 +1,213 @@
+﻿Shader "Hidden/RiderFlowHDRPSceneHighlighting"
+{
+    Properties {}
+
+    SubShader
+    {
+        Tags
+        {
+            "RenderType" = "Opaque"
+        }
+
+        Pass
+        {
+            Tags
+            {
+                "LightMode"="MyPass"
+            }
+
+            HLSLPROGRAM
+            #pragma vertex VertexMain
+            #pragma fragment FragmentMain
+
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/PostProcessing/Shaders/RTUpscale.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/RenderPass/CustomPass/CustomPassRenderers.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/VertMesh.hlsl"
+ 
+            struct Attributes
+            {
+                uint vertexID : SV_VertexID;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float2 texcoord   : TEXCOORD0;
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            CBUFFER_START(UnityPerMaterial)
+            float4 _BaseMap_ST;
+            CBUFFER_END
+
+
+            TEXTURE2D(_BaseMap2);
+            SAMPLER(sampler_BaseMap2);
+
+            CBUFFER_START(UnityPerMaterial)
+            float4 _BaseMap2_ST;
+            CBUFFER_END
+
+            PackedVaryingsType  VertexMain(AttributesMesh inputMesh)
+            {
+                VaryingsType varyingsType;
+                varyingsType.vmesh = VertMesh(inputMesh);
+                return PackVaryingsType(varyingsType);
+            }
+
+            sampler2D _MainTex;
+
+            float4 FragmentMain(Varyings i) : SV_TARGET
+            {
+                return float4(1, 0, 0, 1);
+            }
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Tags
+            {
+                "LightMode"="MyPass"
+            }
+
+
+            HLSLPROGRAM
+            #pragma vertex VertexMain
+            #pragma fragment FragmentMain
+
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/PostProcessing/Shaders/RTUpscale.hlsl"
+
+            struct Attributes
+            {
+                uint vertexID : SV_VertexID;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float2 texcoord   : TEXCOORD0;
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            CBUFFER_START(UnityPerMaterial)
+            float4 _BaseMap_ST;
+            CBUFFER_END
+
+
+            TEXTURE2D(_BaseMap2);
+            SAMPLER(sampler_BaseMap2);
+
+            CBUFFER_START(UnityPerMaterial)
+            float4 _BaseMap2_ST;
+            CBUFFER_END
+
+            Varyings VertexMain(Attributes input)
+            {
+                Varyings output;
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+                output.positionCS = GetFullScreenTriangleVertexPosition(input.vertexID);
+                output.texcoord = GetFullScreenTriangleTexCoord(input.vertexID);
+                return output;
+            }
+
+
+            float4 FragmentMain(Varyings input) : SV_Target
+            {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+
+                float4 col = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.texcoord);
+                float4 col2 = SAMPLE_TEXTURE2D(_BaseMap2, sampler_BaseMap2, input.texcoord);
+
+                if (col.x == 0.0f && col.y == 0.0f && col.z == 0.0f && col.w == 0.0f)
+                {
+                    float d = 0.299 * col2.x + 0.587 * col2.y + 0.184 * col2.z;
+                    return float4(d, d, d, 1);
+                }
+                return col2 * float4(1, 0, 0, 1);
+            }
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Tags
+            {
+                "LightMode"="MyPass"
+            }
+
+
+            HLSLPROGRAM
+            #pragma vertex VertexMain
+            #pragma fragment FragmentMain
+
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
+
+            struct Attributes
+            {
+                uint vertexID : SV_VertexID;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float2 texcoord   : TEXCOORD0;
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            CBUFFER_START(UnityPerMaterial)
+            float4 _BaseMap_ST;
+            CBUFFER_END
+
+
+            TEXTURE2D(_BaseMap2);
+            SAMPLER(sampler_BaseMap2);
+
+            CBUFFER_START(UnityPerMaterial)
+            float4 _BaseMap2_ST;
+            CBUFFER_END
+
+            Varyings VertexMain(Attributes input)
+            {
+                Varyings output;
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+                output.positionCS = GetFullScreenTriangleVertexPosition(input.vertexID);
+                output.texcoord = GetFullScreenTriangleTexCoord(input.vertexID);
+                return output;
+            }
+
+
+            half4 FragmentMain(Varyings o) : SV_TARGET
+            {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+                half4 col = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, o.texcoord);
+                return col;
+
+            }
+            ENDHLSL
+        }
+    }
+}

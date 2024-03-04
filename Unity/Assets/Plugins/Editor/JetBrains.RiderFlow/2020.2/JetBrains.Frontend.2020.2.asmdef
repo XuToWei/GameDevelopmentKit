@@ -1,0 +1,23 @@
+{
+    "name": "JetBrains.Frontend.2020.2",
+    "rootNamespace": "JetBrains.RiderFlow.Since2020_2",
+    "references": [
+        "GUID:851cac727340a4b85a384cbad297a1aa"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.RiderFlow.Repacked.dll",
+        "JetBrains.Lifetimes.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_2020"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
