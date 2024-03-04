@@ -111,6 +111,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.editoriterationprofiler": {
+      "version": "https://github.com/Unity-Technologies/com.unity.editoriterationprofiler.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "02a50237af74cc628b971f02987eba048076b902"
+    },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
       "depth": 1,
