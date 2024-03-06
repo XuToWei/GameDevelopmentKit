@@ -12,6 +12,12 @@ namespace Game
         private bool m_Available = false;
         private bool m_Visible = false;
 
+        public bool IsOpen
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// 获取或设置界面是否可见。
         /// </summary>
@@ -49,6 +55,30 @@ namespace Game
         }
 
         /// <summary>
+        /// 打开UIWidget。
+        /// </summary>
+        /// <param name="userData">用户自定义数据。</param>
+        public void Open(object userData)
+        {
+            if (!IsOpen)
+            {
+                OnOpen(userData);
+            }
+        }
+
+        /// <summary>
+        /// 关闭UIWidget。
+        /// </summary>
+        /// <param name="userData">用户自定义数据。</param>
+        public void Close(object userData)
+        {
+            if (IsOpen)
+            {
+                OnClose(false, userData);
+            }
+        }
+
+        /// <summary>
         /// 界面初始化。
         /// </summary>
         /// <param name="userData">用户自定义数据。</param>
@@ -75,6 +105,7 @@ namespace Game
         {
             m_Available = true;
             Visible = true;
+            IsOpen = true;
         }
 
         /// <summary>
@@ -84,6 +115,7 @@ namespace Game
         /// <param name="userData">用户自定义数据。</param>
         protected internal virtual void OnClose(bool isShutdown, object userData)
         {
+            IsOpen = false;
             Visible = false;
             m_Available = false;
         }

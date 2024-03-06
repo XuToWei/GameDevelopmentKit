@@ -39,10 +39,9 @@ namespace Game
             {
                 for (int i = 0; i < uiWidgets.Length; i++)
                 {
-                    AddUIWidget(uiWidgets[i]);
+                    AddUIWidget(uiWidgets[i], userData);
                 }
             }
-            m_UIWidgetContainer?.OnInit(userData);
         }
 
         protected override void OnRecycle()
@@ -55,7 +54,6 @@ namespace Game
         protected override void OnOpen(object userData)
         {
             base.OnOpen(userData);
-            m_UIWidgetContainer?.OnOpen(userData);
         }
 
         protected override void OnClose(bool isShutdown, object userData)
@@ -112,27 +110,27 @@ namespace Game
             m_UIWidgetContainer?.OnDepthChanged(uiGroupDepth, depthInUIGroup);
         }
 
-        public void AddUIWidget(UIWidget uiWidget)
+        public void AddUIWidget(UIWidget uiWidget, object userData)
         {
             if (m_UIWidgetContainer == null)
             {
                 m_UIWidgetContainer = UIWidgetContainer.Create(this);
             }
-            m_UIWidgetContainer.AddUIWidget(uiWidget);
+            m_UIWidgetContainer.AddUIWidget(uiWidget, userData);
         }
 
-        public void RemoveUIWidget(UIWidget uiWidget)
+        public void RemoveUIWidget(UIWidget uiWidget, object userData)
         {
             if (m_UIWidgetContainer == null)
                 return;
-            m_UIWidgetContainer.RemoveUIWidget(uiWidget);
+            m_UIWidgetContainer.RemoveUIWidget(uiWidget, userData);
         }
 
-        public void RemoveAllUIWidget()
+        public void RemoveAllUIWidget(object userData)
         {
             if (m_UIWidgetContainer == null)
                 return;
-            m_UIWidgetContainer.RemoveAllUIWidget();
+            m_UIWidgetContainer.RemoveAllUIWidget(userData);
         }
 
         public void Subscribe(int id, EventHandler<GameEventArgs> handler)

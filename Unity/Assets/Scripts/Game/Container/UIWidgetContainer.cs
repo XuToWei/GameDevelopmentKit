@@ -20,7 +20,7 @@ namespace Game
             return uiWidgetContainer;
         }
 
-        public void AddUIWidget(UIWidget uiWidget)
+        public void AddUIWidget(UIWidget uiWidget, object userData)
         {
             if (uiWidget == null)
             {
@@ -31,18 +31,30 @@ namespace Game
                 throw new GameFrameworkException(Utility.Text.Format("Can't duplicate add UIWidget : '{0}'!", uiWidget.CachedTransform.name));
             }
             m_UIWidgets.Add(uiWidget);
+            uiWidget.OnInit(userData);
         }
 
-        public void RemoveUIWidget(UIWidget uiWidget)
+        public void RemoveUIWidget(UIWidget uiWidget, object userData)
         {
             if (!m_UIWidgets.Remove(uiWidget))
             {
                 throw new GameFrameworkException(Utility.Text.Format("UIWidget : '{0}' not in container.", uiWidget.CachedTransform.name));
             }
+            if (uiWidget.IsOpen)
+            {
+                uiWidget.OnClose(false, userData);
+            }
         }
 
-        public void RemoveAllUIWidget()
+        public void RemoveAllUIWidget(object userData)
         {
+            foreach (var uiWidget in m_UIWidgets)
+            {
+                if (uiWidget.IsOpen)
+                {
+                    uiWidget.OnClose(false, userData);
+                }
+            }
             m_UIWidgets.Clear();
         }
 
@@ -50,18 +62,6 @@ namespace Game
         {
             m_UIWidgets.Clear();
             Owner = null;
-        }
-
-         /// <summary>
-        /// 界面初始化。
-        /// </summary>
-        /// <param name="userData">用户自定义数据。</param>
-        public void OnInit(object userData)
-        {
-            foreach (var uiWidget in m_UIWidgets)
-            {
-                uiWidget.OnInit(userData);
-            }
         }
 
         /// <summary>
@@ -76,18 +76,6 @@ namespace Game
         }
 
         /// <summary>
-        /// 界面打开。
-        /// </summary>
-        /// <param name="userData">用户自定义数据。</param>
-        public void OnOpen(object userData)
-        {
-            foreach (var uiWidget in m_UIWidgets)
-            {
-                uiWidget.OnOpen(userData);
-            }
-        }
-
-        /// <summary>
         /// 界面关闭。
         /// </summary>
         /// <param name="isShutdown">是否是关闭界面管理器时触发。</param>
@@ -96,7 +84,10 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                uiWidget.OnClose(isShutdown, userData);
+                if (uiWidget.IsOpen)
+                {
+                    uiWidget.OnClose(isShutdown, userData);
+                }
             }
         }
 
@@ -107,7 +98,10 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                uiWidget.OnPause();
+                if (uiWidget.IsOpen)
+                {
+                    uiWidget.OnPause();
+                }
             }
         }
 
@@ -118,7 +112,10 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                uiWidget.OnResume();
+                if (uiWidget.IsOpen)
+                {
+                    uiWidget.OnResume();
+                }
             }
         }
 
@@ -129,7 +126,10 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                uiWidget.OnCover();
+                if (uiWidget.IsOpen)
+                {
+                    uiWidget.OnCover();
+                }
             }
         }
 
@@ -140,7 +140,10 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                uiWidget.OnReveal();
+                if (uiWidget.IsOpen)
+                {
+                    uiWidget.OnReveal();
+                }
             }
         }
 
@@ -152,7 +155,10 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                uiWidget.OnRefocus(userData);
+                if (uiWidget.IsOpen)
+                {
+                    uiWidget.OnRefocus(userData);
+                }
             }
         }
 
@@ -165,7 +171,10 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                uiWidget.OnUpdate(elapseSeconds, realElapseSeconds);
+                if (uiWidget.IsOpen)
+                {
+                    uiWidget.OnUpdate(elapseSeconds, realElapseSeconds);
+                }
             }
         }
 
@@ -178,19 +187,10 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                uiWidget.OnUpdate(uiGroupDepth, depthInUIGroup);
-            }
-        }
-
-        /// <summary>
-        /// 设置界面的可见性。
-        /// </summary>
-        /// <param name="visible">界面的可见性。</param>
-        public void InternalSetVisible(bool visible)
-        {
-            foreach (var uiWidget in m_UIWidgets)
-            {
-                uiWidget.InternalSetVisible(visible);
+                if (uiWidget.IsOpen)
+                {
+                    uiWidget.OnDepthChanged(uiGroupDepth, depthInUIGroup);
+                }
             }
         }
     }
