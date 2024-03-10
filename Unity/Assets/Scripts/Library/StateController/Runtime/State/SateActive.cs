@@ -2,13 +2,9 @@ using UnityEngine;
 
 namespace StateController
 {
-    public class SateActive : BaseSate
+    public class SateActive : BaseBooleanLogicState
     {
         private GameObject m_GameObject;
-        private void Awake()
-        {
-            m_GameObject = gameObject;
-        }
 
         protected override void OnSateChanged(bool logicResult)
         {
