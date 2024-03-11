@@ -7,7 +7,7 @@ namespace StateController
 {
     [Serializable]
     public sealed class SubStateController
-    {
+    { 
         [SerializeField]
         private string m_ControllerName;
         [SerializeField, ReadOnly]
@@ -44,42 +44,16 @@ namespace StateController
 #if UNITY_EDITOR
         internal List<string> StateNames => m_StateNames;
 
-        [LabelText("Add New State Name")]
-        [ValidateInput("ValidateInputNewStateName")]
-        internal string m_NewStateName;
-
-        [ShowIf("CheckCanAddStateName")]
-        internal void AddStateName()
+        internal void AddState(BaseSate sate)
         {
-            m_StateNames.Add(m_NewStateName);
-            m_NewStateName = string.Empty;
+            if (m_Sates.Contains(sate))
+                return;
+            m_Sates.Add(sate);
         }
 
-        internal bool ValidateInputNewStateName(string newStateName, ref string errorMsg)
+        internal void RemoveState(BaseSate sate)
         {
-            if (m_StateNames.Contains(newStateName))
-            {
-                errorMsg = $"State name '{newStateName}' already exist!";
-                return false;
-            }
-            return true;
-        }
-
-        internal bool CheckCanAddStateName()
-        {
-            if (string.IsNullOrEmpty(m_NewStateName))
-                return false;
-            if (m_StateNames.Contains(m_NewStateName))
-                return false;
-            return true;
-        }
-
-        internal void EditorRefresh()
-        {
-            foreach (var sate in m_Sates)
-            {
-                sate.EditorRefresh();
-            }
+            m_Sates.Remove(sate);
         }
 #endif
     }

@@ -291,7 +291,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1868934321}
-  - {fileID: 1407310940}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &939754385
@@ -307,12 +306,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Controllers:
-  - m_ControllerName: 11
-    m_StateNames: []
-    m_Sates: []
-  - m_ControllerName: 1112
-    m_StateNames: []
-    m_Sates: []
+  - m_ControllerName: 3
+    m_StateNames:
+    - 11
+    - 22
+    - 33
+    m_Sates:
+    - {fileID: 1868934322}
 --- !u!1 &1317485629
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,148 +431,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!1 &1407310939
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1407310940}
-  - component: {fileID: 1407310941}
-  m_Layer: 0
-  m_Name: GameObject (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1407310940
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1407310939}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 939754384}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1407310941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1407310939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5333972ccfde32d499ef5cf8faa3fdcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: m_SubStateController1
-      Entry: 7
-      Data: 0|StateController.SubStateController, Assembly-CSharp
-    - Name: m_ControllerName
-      Entry: 6
-      Data: 
-    - Name: m_StateNames
-      Entry: 6
-      Data: 
-    - Name: m_Sates
-      Entry: 7
-      Data: 1|System.Collections.Generic.List`1[[StateController.BaseSate, Assembly-CSharp]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_StateDataDict1
-      Entry: 7
-      Data: 2|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Boolean,
-        mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 3|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_BooleanLogicType
-      Entry: 3
-      Data: 0
-    - Name: m_SubStateController2
-      Entry: 7
-      Data: 4|StateController.SubStateController, Assembly-CSharp
-    - Name: m_ControllerName
-      Entry: 6
-      Data: 
-    - Name: m_StateNames
-      Entry: 6
-      Data: 
-    - Name: m_Sates
-      Entry: 7
-      Data: 5|System.Collections.Generic.List`1[[StateController.BaseSate, Assembly-CSharp]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_StateDataDict2
-      Entry: 7
-      Data: 6|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Boolean,
-        mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
 --- !u!1 &1868934320
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,6 +440,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1868934321}
+  - component: {fileID: 1868934322}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -604,6 +463,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 939754384}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1868934322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868934320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5333972ccfde32d499ef5cf8faa3fdcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Controller1:
+    m_ControllerName: 3
+    m_StateNames:
+    - 11
+    - 22
+    - 33
+    m_Sates:
+    - {fileID: 1868934322}
+  m_StateData1: 010101
+  m_BooleanLogicType: 0
+  m_Controller2:
+    m_ControllerName: 
+    m_StateNames: []
+    m_Sates: []
+  m_StateData2: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace StateController
     public sealed class StateController : MonoBehaviour
     {
         [SerializeField]
-        [LabelText("All Controllers")]
+        [LabelText("Controller Info")]
         [PropertyOrder(99)]
         [ShowInInspector]
         [ReadOnly]
@@ -39,6 +40,8 @@ namespace StateController
         }
 
 #if UNITY_EDITOR
+        internal List<SubStateController> Controllers => m_Controllers;
+
         private const string ADD_NAME = "Add Controller";
 
         [BoxGroup(ADD_NAME)]
@@ -61,9 +64,11 @@ namespace StateController
             subStateController.ControllerName = m_NewControllerName;
             m_Controllers.Add(subStateController);
             m_NewControllerName = string.Empty;
+            EditorRefresh();
         }
 
         private const string SELECT_NAME = "Select Controller";
+
         [BoxGroup(SELECT_NAME)]
         [LabelText("Controller Name")]
         [PropertyOrder(20)]
@@ -71,31 +76,21 @@ namespace StateController
         [ValueDropdown("GetControllerNames")]
         [OnValueChanged("OnSelectedController")]
         private string m_SelectedControllerName = string.Empty;
-        
-        [BoxGroup(SELECT_NAME)]
-        [GUIColor(1,1,0)]
-        [Button("Remove Controller")]
-        [PropertyOrder(23)]
-        [EnableIf("IsSelectedController")]
-        private void RemoveSelectedController()
-        {
-            m_Controllers.Remove(m_SelectedController);
-            m_SelectedController = null;
-            m_SelectedControllerName = string.Empty;
-        }
 
-        [BoxGroup(SELECT_NAME)]
+        private SubStateController m_SelectedController;
+
+        [BoxGroup(SELECT_NAME + "/State")]
         [LabelText("State Name")]
-        [PropertyOrder(24)]
+        [PropertyOrder(21)]
         [ShowInInspector]
         [EnableIf("IsSelectedController")]
         [ValidateInput("ValidateInputNewStateName")]
         private string m_NewStateName;
 
-        [BoxGroup(SELECT_NAME)]
+        [BoxGroup(SELECT_NAME + "/State")]
         [GUIColor(0,1,0)]
         [Button("Add State Name")]
-        [PropertyOrder(25)]
+        [PropertyOrder(22)]
         [EnableIf("IsSelectedController")]
         private void AddStateName()
         {
@@ -106,20 +101,33 @@ namespace StateController
             m_SelectedStateNames.Add(m_NewStateName);
             m_SelectedController.StateNames.Add(m_NewStateName);
             m_NewStateName = string.Empty;
+            EditorRefresh();
         }
 
-        [BoxGroup(SELECT_NAME)]
+        [BoxGroup(SELECT_NAME + "/State")]
+        [LabelText("State Names")]
+        [PropertyOrder(23)]
+        [ShowInInspector]
+        [ReadOnly]
+        [EnableIf("IsSelectedController")]
+        [OnValueChanged("OnSelectedStateNamesChange")]
+        [ListDrawerSettings(DefaultExpandedState = true,
+            OnBeginListElementGUI = "OnStateNameBeginGUI",
+            OnEndListElementGUI = "OnStateNameEndGUI")]
+        private readonly List<string> m_SelectedStateNames = new List<string>();
+
+        [BoxGroup(SELECT_NAME + "/Rename Controller")]
         [LabelText("Controller Name")]
-        [PropertyOrder(26)]
+        [PropertyOrder(24)]
         [ShowInInspector]
         [EnableIf("IsSelectedController")]
         [ValidateInput("ValidateRenameControllerName")]
         private string m_RenameControllerName;
 
-        [BoxGroup(SELECT_NAME)]
+        [BoxGroup(SELECT_NAME + "/Rename Controller")]
         [GUIColor(0,1,0)]
         [Button("Rename")]
-        [PropertyOrder(27)]
+        [PropertyOrder(25)]
         [EnableIf("IsSelectedController")]
         private void RenameSelectedControllerName()
         {
@@ -141,23 +149,25 @@ namespace StateController
         }
 
         [BoxGroup(SELECT_NAME)]
-        [LabelText("State Names")]
-        [PropertyOrder(28)]
-        [ShowInInspector]
-        [ReadOnly]
+        [GUIColor(1,1,0)]
+        [Button("Remove Controller")]
+        [PropertyOrder(30)]
         [EnableIf("IsSelectedController")]
-        [OnValueChanged("OnSelectedStateNamesChange")]
-        [ListDrawerSettings(OnBeginListElementGUI = "OnStateNameBeginGUI", OnEndListElementGUI = "OnStateNameEndGUI")]
-        private readonly List<string> m_SelectedStateNames = new List<string>();
-
-        private SubStateController m_SelectedController;
+        private void RemoveSelectedController()
+        {
+            m_Controllers.Remove(m_SelectedController);
+            m_SelectedController = null;
+            m_SelectedControllerName = string.Empty;
+            m_RenameControllerName = string.Empty;
+            m_SelectedStateNames.Clear();
+            EditorRefresh();
+        }
 
         private bool ValidateInputNewControllerName(string controllerName, ref string errorMsg)
         {
             if (string.IsNullOrEmpty(controllerName))
             {
-                errorMsg = "A controller name can't be empty!";
-                return false;
+                return true;
             }
             foreach (var subStateController in m_Controllers)
             {
@@ -195,7 +205,7 @@ namespace StateController
         }
 
         private readonly List<string> m_ControllerNames = new List<string>();
-        private List<string> GetControllerNames()
+        public List<string> GetControllerNames()
         {
             m_ControllerNames.Clear();
             foreach (var controller in m_Controllers)
@@ -268,11 +278,12 @@ namespace StateController
 
         private void OnStateNameEndGUI(int selectionIndex)
         {
-            GUI.enabled = true;
+            GUI.enabled = m_SelectedController.SelectedName != m_SelectedStateNames[selectionIndex];
             if (GUILayout.Button("Apply"))
             {
                 m_SelectedController.SelectedName = m_SelectedStateNames[selectionIndex];
             }
+            GUI.enabled = true;
             if (GUILayout.Button("X"))
             {
                 m_SelectedStateNames.RemoveAt(selectionIndex);
@@ -291,11 +302,11 @@ namespace StateController
             }
         }
 
-        internal void EditorRefresh()
+        private void EditorRefresh()
         {
-            foreach (var controller in m_Controllers)
+            foreach (var sate in GetComponentsInChildren<BaseSate>(true))
             {
-                controller.EditorRefresh();
+                sate.EditorRefresh();
             }
         }
 
