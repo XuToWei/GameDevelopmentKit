@@ -119,7 +119,6 @@ namespace StateController
         [ShowInInspector]
         [ValueDropdown("GetAllDataNames")]
         [OnValueChanged("OnSelectedData")]
-        [SerializeField]
         private string m_SelectedDataName = string.Empty;
         private StateControllerData m_SelectedData;
 
