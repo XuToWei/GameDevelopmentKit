@@ -6,14 +6,14 @@ using UnityEngine;
 namespace StateController
 {
     [Serializable]
-    public sealed class SubStateController
+    public sealed class StateControllerData
     { 
         [SerializeField]
-        private string m_ControllerName;
+        private string m_Name;
         [SerializeField, ReadOnly]
         private List<string> m_StateNames = new List<string>();
         [SerializeField, ReadOnly]
-        private List<BaseSate> m_Sates = new List<BaseSate>();
+        private List<BaseState> m_Sates = new List<BaseState>();
 
         private string m_SelectedName;
 
@@ -30,31 +30,19 @@ namespace StateController
                 m_SelectedName = value;
                 foreach (var state in m_Sates)
                 {
-                    state.Refresh();
+                    state.OnRefresh();
                 }
             }
         }
 
-        public string ControllerName
-        {
-            get => m_ControllerName;
-            internal set => m_ControllerName = value;
-        }
-
 #if UNITY_EDITOR
+        internal string Name
+        {
+            get => m_Name;
+            set => m_Name = value;
+        }
         internal List<string> StateNames => m_StateNames;
-
-        internal void AddState(BaseSate sate)
-        {
-            if (m_Sates.Contains(sate))
-                return;
-            m_Sates.Add(sate);
-        }
-
-        internal void RemoveState(BaseSate sate)
-        {
-            m_Sates.Remove(sate);
-        }
+        internal List<BaseState> States => m_Sates;
 #endif
     }
 }

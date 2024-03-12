@@ -5,90 +5,103 @@ using UnityEngine;
 namespace StateController
 {
     [ExecuteAlways]
-    public abstract class BaseBooleanLogicState : BaseSate
+    public abstract class BaseBooleanLogicState : BaseState
     {
-        private const string CONTROLLER_1 = "Controller1";
-        private const string CONTROLLER_2 = "Controller2";
+        private const string DATA_1 = "Data1";
+        private const string DATA_2 = "Data2";
 
         [SerializeField]
-        [HideInInspector]
-        private SubStateController m_Controller1;
+        [HorizontalGroup(DATA_1)]
+        [LabelText("Data Name")]
+        [PropertyOrder(10)]
+        [ValueDropdown("GetDataNames1")]
+        [OnValueChanged("OnSelectedData1")]
+        private string m_DataName1;
 
         [SerializeField]
-        [BoxGroup(CONTROLLER_1)]
+        [HorizontalGroup(DATA_1)]
         [LabelText("State Names")]
         [PropertyOrder(11)]
-        [ShowInInspector]
-        [EnableIf("IsSelectedController1")]
+        [ShowIf("IsSelectedData1")]
         [ListDrawerSettings(DefaultExpandedState = true,
             HideAddButton = true, HideRemoveButton = true,
             DraggableItems = false,
-            OnBeginListElementGUI = "OnStateNameBeginGUI1",
-            OnEndListElementGUI = "OnStateNameEndGUI1")]
-        private List<bool> m_StateData1 = new List<bool>();
+            OnBeginListElementGUI = "OnStateDataBeginGUI1",
+            OnEndListElementGUI = "OnStateDataEndGUI1")]
+        private List<bool> m_StateDatas1 = new List<bool>();
 
         [SerializeField, PropertyOrder(20)]
         private BooleanLogicType m_BooleanLogicType;
 
         [SerializeField]
-        [HideInInspector]
-        private SubStateController m_Controller2;
+        [BoxGroup(DATA_2)]
+        [LabelText("Data Name")]
+        [PropertyOrder(30)]
+        [ValueDropdown("GetDataNames2")]
+        [OnValueChanged("OnSelectedData2")]
+        private string m_DataName2;
 
         [SerializeField]
-        [BoxGroup(CONTROLLER_2)]
+        [BoxGroup(DATA_2)]
         [LabelText("State Names")]
         [PropertyOrder(31)]
-        [ShowInInspector]
-        [ShowIf("CanShowController2")]
-        [EnableIf("IsSelectedController2")]
+        [ShowIf("CanShowData2")]
+        [EnableIf("IsSelectedData2")]
         [ListDrawerSettings(DefaultExpandedState = true,
             HideAddButton = true, HideRemoveButton = true,
             DraggableItems = false,
-            OnBeginListElementGUI = "OnStateNameBeginGUI2",
-            OnEndListElementGUI = "OnStateNameEndGUI2")]
-        private List<bool> m_StateData2 = new List<bool>();
+            OnBeginListElementGUI = "OnStateDataBeginGUI2",
+            OnEndListElementGUI = "OnStateDataEndGUI2")]
+        private List<bool> m_StateDatas2 = new List<bool>();
 
         private string m_CurStateName1;
         private string m_CurStateName2;
         private Dictionary<string, bool> m_StateDataDict1;
         private Dictionary<string, bool> m_StateDataDict2;
+        private StateControllerData m_Data1;
+        private StateControllerData m_Data2;
 
-        protected virtual void Awake()
+        internal override void OnInit(StateController controller)
         {
-            if (m_Controller1 != null)
+            m_Data1 = controller.GetData(m_DataName1);
+            if (m_Data1 != null)
             {
                 m_StateDataDict1 = new Dictionary<string, bool>();
-                for (int i = 0; i < m_Controller1.StateNames.Count; i++)
+                for (int i = 0; i <m_Data1.StateNames.Count; i++)
                 {
-                    m_StateDataDict1.Add(m_Controller1.StateNames[i], m_StateData1[i]);
+                    m_StateDataDict1.Add(m_Data1.StateNames[i], m_StateDatas1[i]);
                 }
             }
-            if (m_BooleanLogicType != BooleanLogicType.None && m_Controller2 != null)
+            if (m_BooleanLogicType != BooleanLogicType.None)
             {
-                m_StateDataDict2 = new Dictionary<string, bool>();
-                for (int i = 0; i < m_Controller2.StateNames.Count; i++)
+                m_Data2 = controller.GetData(m_DataName2);
+                if (m_Data2 != null)
                 {
-                    m_StateDataDict2.Add(m_Controller2.StateNames[i], m_StateData2[i]);
+                    m_StateDataDict2 = new Dictionary<string, bool>();
+                    for (int i = 0; i < m_Data2.StateNames.Count; i++)
+                    {
+                        m_StateDataDict2.Add(m_Data2.StateNames[i], m_StateDatas2[i]);
+                    }
                 }
             }
         }
 
-        internal override void Refresh()
+        internal override void OnRefresh()
         {
             if (m_BooleanLogicType == BooleanLogicType.None)
             {
-                if (!string.IsNullOrEmpty(m_CurStateName1) && m_Controller1.SelectedName == m_CurStateName1)
+                if (!string.IsNullOrEmpty(m_CurStateName1) && m_Data1.SelectedName == m_CurStateName1)
                     return;
-                m_CurStateName1 = m_Controller1.SelectedName;
+                m_CurStateName1 = m_Data1.SelectedName;
                 OnSateChanged(m_StateDataDict1[m_CurStateName1]);
             }
             else
             {
                 if (!string.IsNullOrEmpty(m_CurStateName1) && !string.IsNullOrEmpty(m_CurStateName2) && 
-                    m_Controller1.SelectedName == m_CurStateName1 && m_Controller2.SelectedName == m_CurStateName2)
+                    m_Data1.SelectedName == m_CurStateName1 && m_Data2.SelectedName == m_CurStateName2)
                     return;
-                m_CurStateName1 = m_Controller1.SelectedName;
-                m_CurStateName2 = m_Controller2.SelectedName;
+                m_CurStateName1 = m_Data1.SelectedName;
+                m_CurStateName2 = m_Data2.SelectedName;
                 bool logicResult = false;
                 switch (m_BooleanLogicType)
                 {
@@ -104,194 +117,174 @@ namespace StateController
         }
 
         protected abstract void OnSateChanged(bool logicResult);
-        
+
 #if UNITY_EDITOR
-        [BoxGroup(CONTROLLER_1)]
-        [LabelText("Controller Name")]
-        [PropertyOrder(10)]
-        [ShowInInspector]
-        [ValueDropdown("GetControllerNames1")]
-        [OnValueChanged("OnSelectedController1")]
-        private string m_ControllerName1 = string.Empty;
-        
-        [BoxGroup(CONTROLLER_2)]
-        [LabelText("Controller Name")]
-        [PropertyOrder(30)]
-        [ShowInInspector]
-        [ShowIf("CanShowController2")]
-        [ValueDropdown("GetControllerNames2")]
-        [OnValueChanged("OnSelectedController2")]
-        private string m_ControllerName2 = string.Empty;
-
-        private bool IsSelectedController1()
+        internal override void Editor_OnRefresh()
         {
-            return m_Controller1 != null;
+            RefreshData1();
+            RefreshData2();
         }
 
-        private bool IsSelectedController2()
+        internal override void Editor_OnDataReanme(string oldDataName, string newDataName)
         {
-            return m_Controller2 != null && m_BooleanLogicType != BooleanLogicType.None;
+            if (m_DataName1 == oldDataName)
+            {
+                m_DataName1 = newDataName;
+            }
+            else if (m_DataName1 == oldDataName)
+            {
+                m_DataName2 = newDataName;
+            }
         }
 
-        private bool CanShowController2()
+        internal override void Editor_OnRemoveStateAt(int index)
+        {
+            
+        }
+
+        private bool IsSelectedData1()
+        {
+            return m_Data1 != null;
+        }
+
+        private bool IsSelectedData2()
+        {
+            return m_Data2 != null && m_BooleanLogicType != BooleanLogicType.None;
+        }
+
+        private bool CanShowData2()
         {
             return m_BooleanLogicType != BooleanLogicType.None;
         }
 
-        private List<string> GetControllerNames1()
+        private List<string> GetDataNames1()
         {
-            return m_StateController.GetControllerNames();
+            return Controller.GetAllDataNames();
         }
         
-        private List<string> GetControllerNames2()
+        private List<string> GetDataNames2()
         {
-            var names = m_StateController.GetControllerNames();
-            names.Remove(m_Controller1.ControllerName);
+            var names = Controller.GetAllDataNames();
+            names.Remove(m_DataName1);
             return names;
         }
 
-        private void RefreshController1()
+        private void RefreshData1()
         {
-            if (m_Controller1 != null)
+            m_Data1 = Controller.Editor_GetData(m_DataName1);
+            if (m_Data1 != null)
             {
-                if (m_StateDataDict1 == null)
+                for (int i = m_StateDatas1.Count; i < m_Data1.StateNames.Count; i++)
                 {
-                    m_StateDataDict1 = new Dictionary<string, bool>();
+                    m_StateDatas1.Add(default);
                 }
-                m_StateDataDict1.Clear();
-                for (int i = 0; i < m_Controller1.StateNames.Count; i++)
+                for (int i = m_Data1.States.Count - 1; i >=0; i--)
                 {
-                    m_StateDataDict1.Add(m_Controller1.StateNames[i], m_StateData1[i]);
+                    if (m_Data1.States[i] == null)
+                    {
+                        m_Data1.States.RemoveAt(i);
+                    }
                 }
             }
             else
             {
-                if (m_StateDataDict1 != null)
-                {
-                    m_StateDataDict1.Clear();
-                }
+                m_StateDatas1.Clear();
             }
         }
         
-        private void RefreshController2()
+        private void RefreshData2()
         {
-            if (m_Controller2 != null)
+            m_Data2 = Controller.Editor_GetData(m_DataName2);
+            if (m_Data2 != null)
             {
-                if (m_StateDataDict2 == null)
+                for (int i = m_StateDatas2.Count; i < m_Data2.StateNames.Count; i++)
                 {
-                    m_StateDataDict2 = new Dictionary<string, bool>();
+                    m_StateDatas2.Add(default);
                 }
-                m_StateDataDict2.Clear();
-                for (int i = 0; i < m_Controller2.StateNames.Count; i++)
+                for (int i = m_Data2.States.Count - 1; i >=0; i--)
                 {
-                    m_StateDataDict2.Add(m_Controller2.StateNames[i], m_StateData2[i]);
-                }
-            }
-            else
-            {
-                if (m_StateDataDict2 != null)
-                {
-                    m_StateDataDict2.Clear();
-                }
-            }
-        }
-
-        private void OnSelectedController1()
-        {
-            SubStateController controller1 = null;
-            foreach (var controller in m_StateController.Controllers)
-            {
-                if (controller.ControllerName == m_ControllerName1)
-                {
-                    controller1 = controller;
-                    controller1.AddState(this);
-                }
-            }
-            if (controller1 == null && m_Controller1 != null)
-            {
-                m_Controller1.RemoveState(this);
-            }
-            else
-            {
-                m_Controller1 = controller1;
-            }
-            if (m_ControllerName1 == m_ControllerName2)
-            {
-                if (m_Controller2 != null)
-                {
-                    m_Controller2.RemoveState(this);
-                }
-                m_ControllerName2 = string.Empty;
-                m_Controller2 = null;
-            }
-            RefreshController1();
-            RefreshController2();
-        }
-
-        private void OnSelectedController2()
-        {
-            foreach (var controller in m_StateController.Controllers)
-            {
-                if (controller.ControllerName != m_ControllerName1 && controller.ControllerName == m_ControllerName2)
-                {
-                    if (m_Controller2 != null)
+                    if (m_Data2.States[i] == null)
                     {
-                        m_Controller2.RemoveState(this);
+                        m_Data2.States.RemoveAt(i);
                     }
-                    m_Controller2 = controller;
-                    m_Controller2.AddState(this);
+                }
+            }
+            else
+            {
+                m_StateDatas2.Clear();
+            }
+        }
+
+        private void OnSelectedData1()
+        {
+            var controller = Controller;
+            if (m_Data1 != null)
+            {
+                m_Data1.States.Remove(this);
+                controller.States.Remove(this);
+            }
+            m_Data1 = controller.Editor_GetData(m_DataName1);
+            if (m_Data1 != null)
+            {
+                m_Data1.States.Add(this);
+                controller.States.Remove(this);
+            }
+            if (m_DataName1 == m_DataName2)
+            {
+                if (m_Data2 != null)
+                {
+                    m_Data2.States.Remove(this);
+                    controller.States.Remove(this);
+                }
+                m_DataName2 = string.Empty;
+                m_Data2 = null;
+                RefreshData2();
+            }
+            RefreshData1();
+        }
+
+        private void OnSelectedData2()
+        {
+            foreach (var dateName in Controller.GetAllDataNames())
+            {
+                if (dateName != m_DataName1 && dateName == m_DataName2)
+                {
+                    if (m_Data2 != null)
+                    {
+                        m_Data2.States.Remove(this);
+                    }
+                    m_Data2 = Controller.Editor_GetData(dateName);
+                    if (m_Data2 != null)
+                    {
+                        m_Data2.States.Add(this);
+                        Controller.States.Remove(this);
+                    }
+                    RefreshData2();
                     return;
                 }
             }
-            RefreshController2();
         }
         
-        private void OnStateNameBeginGUI1(int selectionIndex)
+        private void OnStateDataBeginGUI1(int selectionIndex)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(m_Controller1.StateNames[selectionIndex]);
+            GUILayout.Label(m_Data1.StateNames[selectionIndex]);
         }
 
-        private void OnStateNameEndGUI1(int selectionIndex)
+        private void OnStateDataEndGUI1(int selectionIndex)
         {
             GUILayout.EndHorizontal();
         }
 
-        private void OnStateNameBeginGUI2(int selectionIndex)
+        private void OnStateDataBeginGUI2(int selectionIndex)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(m_Controller2.StateNames[selectionIndex]);
+            GUILayout.Label(m_Data2.StateNames[selectionIndex]);
         }
 
-        private void OnStateNameEndGUI2(int selectionIndex)
+        private void OnStateDataEndGUI2(int selectionIndex)
         {
             GUILayout.EndHorizontal();
-        }
-
-        internal override void EditorRefresh()
-        {
-            if (m_Controller1 != null)
-            {
-                for (int i = m_StateData1.Count; i < m_Controller1.StateNames.Count; i++)
-                {
-                    m_StateData1.Add(default);
-                }
-                for (int i = m_Controller1.StateNames.Count; i < m_StateData1.Count; i++)
-                {
-                    m_StateData1.RemoveAt(i);
-                }
-            }
-            if (m_Controller2 != null)
-            {
-                for (int i = m_StateData2.Count; i < m_Controller2.StateNames.Count; i++)
-                {
-                    m_StateData2.Add(default);
-                }
-                for (int i = m_Controller2.StateNames.Count; i < m_StateData2.Count; i++)
-                {
-                    m_StateData2.RemoveAt(i);
-                }
-            }
         }
 #endif
     }

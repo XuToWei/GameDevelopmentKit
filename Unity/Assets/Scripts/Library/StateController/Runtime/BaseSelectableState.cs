@@ -1,44 +1,65 @@
 using System.Collections.Generic;
 using System.Linq;
-using Sirenix.Serialization;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace StateController
 {
-    public abstract class BaseSelectableState<T> : BaseSate where T : BaseStateData
+    public abstract class BaseSelectableState<T> : BaseState where T : BaseStateData
     {
-        [FormerlySerializedAs("m_StateControllerData")] [SerializeField]
-        internal SubStateController m_Controller;
-        [OdinSerialize]
-        private Dictionary<string, T> m_StateDataDict;
+        [SerializeField]
+        private string m_DataName;
+        [SerializeField]
+        private List<T> m_StateDatas;
 
         private string m_CurStateName;
+        private Dictionary<string, T> m_StateDataDict;
+        private StateControllerData m_Data;
 
-        internal override void Refresh()
+        internal override void OnInit(StateController controller)
         {
-            if (m_CurStateName == m_Controller.SelectedName)
+            m_Data = controller.GetData(m_DataName);
+            if (m_Data != null)
+            {
+                m_StateDataDict = new Dictionary<string, T>();
+                for (int i = 0; i < m_Data.StateNames.Count; i++)
+                {
+                    m_StateDataDict.Add(m_Data.StateNames[i], m_StateDatas[i]);
+                }
+            }
+        }
+
+        internal override void OnRefresh()
+        {
+            if (m_CurStateName == this.m_Data.SelectedName)
                 return;
-            m_CurStateName = m_Controller.SelectedName;
-            m_StateDataDict[m_Controller.SelectedName].Apply();
+            m_CurStateName = this.m_Data.SelectedName;
+            m_StateDataDict[this.m_Data.SelectedName].Apply();
         }
 
 #if UNITY_EDITOR
-        internal override void EditorRefresh()
+        internal override void Editor_OnRefresh()
         {
-            if (m_Controller != null)
+            if (this.m_Data != null)
             {
                 foreach (var sateName in m_StateDataDict.Keys.ToList())
                 {
-                    if (!m_Controller.StateNames.Contains(sateName))
+                    if (!this.m_Data.StateNames.Contains(sateName))
                     {
                         m_StateDataDict.Remove(sateName);
                     }
                 }
-                foreach (var sateName in m_Controller.StateNames)
+                foreach (var sateName in this.m_Data.StateNames)
                 {
                     m_StateDataDict.TryAdd(sateName, default);
                 }
+            }
+        }
+
+        internal override void Editor_OnDataReanme(string oldDataName, string newDataName)
+        {
+            if (m_DataName == oldDataName)
+            {
+                m_DataName = newDataName;
             }
         }
 #endif
