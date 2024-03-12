@@ -1,7 +1,10 @@
+using System;
+
 namespace StateController
 {
+    [Serializable]
     public abstract class BaseStateData
     {
-        protected internal abstract void Apply();
+        
     }
 }

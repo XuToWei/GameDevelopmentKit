@@ -9,16 +9,19 @@ namespace StateController
         internal abstract void OnInit(StateController controller);
         internal abstract void OnRefresh();
 
-        internal virtual void OnEnable()
+        internal virtual void Awake()
         {
 #if UNITY_EDITOR
-            if (Controller == null)
+            if (Application.isPlaying)
+                return;
+            var controller = Controller;
+            if (controller == null)
             {
                 throw new Exception($"State '{gameObject.name}' must require a parent component 'StateController'!");
             }
-            if (!Controller.States.Contains(this))
+            if (!controller.States.Contains(this))
             {
-                Controller.States.Add(this);
+                controller.Editor_Refresh();
             }
 #endif
         }
@@ -26,8 +29,8 @@ namespace StateController
 #if UNITY_EDITOR
         internal StateController Controller => GetComponentInParent<StateController>(true);
         internal abstract void Editor_OnRefresh();
-        internal abstract void Editor_OnDataReanme(string oldDataName, string newDataName);
-        internal abstract void Editor_OnRemoveStateAt(int index);
+        internal abstract void Editor_OnDataRename(string oldDataName, string newDataName);
+        internal abstract void Editor_OnDataRemoveState(string dataName, int index);
 #endif
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace StateController
         [SerializeField]
         private List<StateControllerData> m_ControllerDatas = new List<StateControllerData>();
 
-        [HideInInspector]
+        [ShowInInspector]
         [SerializeField]
         private List<BaseState> m_States = new List<BaseState>();
 
@@ -30,6 +31,10 @@ namespace StateController
                 state.OnInit(this);
             }
 #if UNITY_EDITOR
+            if (m_ControllerDatas.Count > 0)
+            {
+                m_SelectedDataName = m_ControllerDatas[0].Name;
+            }
             Editor_Refresh();
 #endif
         }
@@ -51,9 +56,11 @@ namespace StateController
 
 #if UNITY_EDITOR
         internal List<BaseState> States => m_States;
-        private void Editor_Refresh()
+        internal void Editor_Refresh()
         {
-            foreach (var sate in GetComponentsInChildren<BaseState>(true))
+            m_States.Clear();
+            GetComponentsInChildren(true, m_States);
+            foreach (var sate in m_States)
             {
                 sate.Editor_OnRefresh();
             }
@@ -70,71 +77,67 @@ namespace StateController
             }
             return null;
         }
+        
+        
+        [PropertyOrder(1)]
+        [NonSerialized]
+        [NonReorderable]
+        [ShowInInspector]
+        private string m_NewDataName2;
 
-        [HorizontalGroup("Split", 0.5f, PaddingRight = 15)]
-        [BoxGroup("Split/Left"), LabelWidth(15)]
-        public int L;
-        
-        [BoxGroup("Split/Right"), LabelWidth(15)]
-        public int M;
-        
-        [BoxGroup("Split/Left"), LabelWidth(15)]
-        public int N;
-        
-        [BoxGroup("Split/Right"), LabelWidth(15)]
-        public int O;
-        
-        private const string ADD_NAME = "Add Data";
-
-        [HorizontalGroup(ADD_NAME)]
-        [BoxGroup("Split/Right"), LabelWidth(15)]
-        [LabelText("Data Name")]
+        [BoxGroup("Add Data")]
+        [LabelText("New Data Name")]
         [PropertyOrder(10)]
         [ShowInInspector]
-        [ValidateInput("ValidateInputNewDataName")]
+        [InfoBox("Data name already exists!", 
+            InfoMessageType.Warning,
+            "ShowNewDataNameInfo")]
         private string m_NewDataName;
-        
-        [HorizontalGroup(ADD_NAME)]
+
+        [BoxGroup("Add Data")]
         [GUIColor(0, 1, 0)]
-        [Button("Add")]
+        [Button("Add Data")]
         [PropertyOrder(11)]
-        [EnableIf("CheckCanAddControllerData")]
-        private void AddControllerData()
+        [EnableIf("CheckCanAddData")]
+        private void AddNewData()
         {
-            if (!CheckCanAddControllerData())
+            if (!CheckCanAddData())
                 return;
             StateControllerData stateControllerData = new StateControllerData();
             stateControllerData.Name = m_NewDataName;
             m_ControllerDatas.Add(stateControllerData);
+            m_SelectedDataName = m_NewDataName;
+            OnSelectedData();
+            m_RenameDataName = m_NewDataName;
             m_NewDataName = string.Empty;
             Editor_Refresh();
         }
 
-        private const string SELECT_NAME = "Select Data";
-
-        [BoxGroup(SELECT_NAME)]
+        [BoxGroup("Select Data")]
         [LabelText("Data Name")]
         [PropertyOrder(20)]
         [ShowInInspector]
         [ValueDropdown("GetAllDataNames")]
         [OnValueChanged("OnSelectedData")]
+        [SerializeField]
         private string m_SelectedDataName = string.Empty;
-
         private StateControllerData m_SelectedData;
 
-        [BoxGroup(SELECT_NAME + "/State")]
+        [BoxGroup("Select Data/State")]
         [LabelText("State Name")]
         [PropertyOrder(21)]
         [ShowInInspector]
-        [EnableIf("IsSelectedController")]
-        [ValidateInput("ValidateInputNewStateName")]
+        [EnableIf("IsSelectedData")]
+        [InfoBox("State name already exists!", 
+            InfoMessageType.Warning,
+            "ShowNewStateNameInfo")]
         private string m_NewStateName;
 
-        [BoxGroup(SELECT_NAME + "/State")]
+        [BoxGroup("Select Data/State")]
         [GUIColor(0,1,0)]
         [Button("Add State Name")]
         [PropertyOrder(22)]
-        [EnableIf("IsSelectedController")]
+        [EnableIf("IsSelectedData")]
         private void AddStateName()
         {
             if (string.IsNullOrEmpty(m_NewStateName))
@@ -147,12 +150,12 @@ namespace StateController
         }
 
         private readonly List<string> m_EmptyListString = new List<string>();
-        [BoxGroup(SELECT_NAME + "/State")]
+        [BoxGroup("Select Data/State")]
         [LabelText("State Names")]
         [PropertyOrder(23)]
         [ShowInInspector]
         [ReadOnly]
-        [EnableIf("IsSelectedController")]
+        [EnableIf("IsSelectedData")]
         [ListDrawerSettings(DefaultExpandedState = true,
             OnBeginListElementGUI = "OnStateNameBeginGUI",
             OnEndListElementGUI = "OnStateNameEndGUI")]
@@ -169,15 +172,12 @@ namespace StateController
         }
         
         private readonly List<BaseState> m_EmptyListState = new List<BaseState>();
-        [BoxGroup(SELECT_NAME + "/State")]
+        [BoxGroup("Select Data/State")]
         [LabelText("State Children")]
         [PropertyOrder(24)]
         [ShowInInspector]
         [ReadOnly]
-        [EnableIf("IsSelectedController")]
-        [ListDrawerSettings(DefaultExpandedState = true,
-            OnBeginListElementGUI = "OnStateNameBeginGUI",
-            OnEndListElementGUI = "OnStateNameEndGUI")]
+        [EnableIf("IsSelectedData")]
         private List<BaseState> m_SelectedStates
         {
             get
@@ -190,20 +190,22 @@ namespace StateController
             }
         }
 
-        [BoxGroup(SELECT_NAME + "/Rename Controller")]
-        [LabelText("Controller Name")]
+        [BoxGroup("Select Data/Rename Data")]
+        [LabelText("Data Name")]
         [PropertyOrder(25)]
         [ShowInInspector]
-        [EnableIf("IsSelectedController")]
-        [ValidateInput("ValidateInputRenameDataName")]
+        [EnableIf("IsSelectedData")]
+        [InfoBox("Data name already exists!", 
+            InfoMessageType.Warning,
+            "ShowRenameDataNameInfo")]
         private string m_RenameDataName;
 
-        [BoxGroup(SELECT_NAME + "/Rename Controller")]
+        [BoxGroup("Select Data/Rename Data")]
         [GUIColor(0,1,0)]
-        [Button("Rename")]
+        [Button("Rename Data")]
         [PropertyOrder(26)]
-        [EnableIf("IsSelectedController")]
-        private void RenameSelectedControllerName()
+        [EnableIf("CheckCanRenameData")]
+        private void RenameSelectedDataName()
         {
             if (string.IsNullOrEmpty(m_RenameDataName))
                 return;
@@ -220,18 +222,18 @@ namespace StateController
             }
             foreach (var state in m_States)
             {
-                state.Editor_OnDataReanme(m_SelectedDataName, m_RenameDataName);
+                state.Editor_OnDataRename(m_SelectedDataName, m_RenameDataName);
             }
             m_SelectedData.Name = m_RenameDataName;
             m_SelectedDataName = m_RenameDataName;
         }
 
-        [BoxGroup(SELECT_NAME)]
+        [BoxGroup("Select Data")]
         [GUIColor(1,1,0)]
-        [Button("Remove Controller")]
+        [Button("Remove Data")]
         [PropertyOrder(30)]
-        [EnableIf("IsSelectedController")]
-        private void RemoveSelectedController()
+        [EnableIf("IsSelectedData")]
+        private void RemoveSelectedData()
         {
             m_ControllerDatas.Remove(m_SelectedData);
             m_SelectedData = null;
@@ -240,24 +242,21 @@ namespace StateController
             Editor_Refresh();
         }
 
-        private bool ValidateInputNewDataName(string dataName, ref string errorMsg)
+        private bool ShowNewDataNameInfo()
         {
-            if (string.IsNullOrEmpty(dataName))
-            {
-                return true;
-            }
+            if (string.IsNullOrEmpty(m_NewDataName))
+                return false;
             foreach (var subStateController in m_ControllerDatas)
             {
-                if (subStateController.Name == dataName)
+                if (subStateController.Name == m_NewDataName)
                 {
-                    errorMsg = $"A controller name '{dataName}' already exists!";
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
-        private bool CheckCanAddControllerData()
+        private bool CheckCanAddData()
         {
             if (string.IsNullOrEmpty(m_NewDataName))
                 return false;
@@ -269,7 +268,7 @@ namespace StateController
             return true;
         }
 
-        private bool IsSelectedController()
+        private bool IsSelectedData()
         {
             if (string.IsNullOrEmpty(m_SelectedDataName))
                 return false;
@@ -307,36 +306,51 @@ namespace StateController
             }
         }
 
-        private bool ValidateInputNewStateName(string stateName, ref string errMsg)
+        private bool ShowNewStateNameInfo()
         {
             if (m_SelectedData == null)
-                return true;
-            if (string.IsNullOrEmpty(stateName))
-                return true;
-            if (m_SelectedData.StateNames.Contains(stateName))
-            {
-                errMsg = $"A state name '{stateName}' already exists!";
                 return false;
+            if (string.IsNullOrEmpty(m_NewStateName))
+                return false;
+            if (m_SelectedData.StateNames.Contains(m_NewStateName))
+            {
+                return true;
             }
-            return true;
+            return false;
         }
 
-        private bool ValidateInputRenameDataName(string dateName, ref string errMsg)
+        private bool ShowRenameDataNameInfo()
         {
-            if (m_SelectedData == null || m_SelectedData.Name == dateName)
-                return true;
-            if (string.IsNullOrEmpty(dateName))
-            {
-                errMsg = "Controller name can't be empty!";
+            if (m_SelectedData == null || m_SelectedData.Name == m_RenameDataName)
                 return false;
-            }
+            if (string.IsNullOrEmpty(m_RenameDataName))
+                return false;
             foreach (var data in m_ControllerDatas)
             {
                 if(data == m_SelectedData)
                     continue;
-                if (data.Name == dateName)
+                if (data.Name == m_RenameDataName)
                 {
-                    errMsg = $"A controller name '{dateName}' already exists!";
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool CheckCanRenameData()
+        {
+            if (!IsSelectedData())
+                return false;
+            if (m_SelectedData == null || m_SelectedData.Name == m_RenameDataName)
+                return false;
+            if (string.IsNullOrEmpty(m_RenameDataName))
+                return false;
+            foreach (var data in m_ControllerDatas)
+            {
+                if(data == m_SelectedData)
+                    continue;
+                if (data.Name == m_RenameDataName)
+                {
                     return false;
                 }
             }
@@ -358,11 +372,11 @@ namespace StateController
             GUI.enabled = true;
             if (GUILayout.Button("X"))
             {
-                m_SelectedData.StateNames.RemoveAt(selectionIndex);
                 foreach (var state in m_SelectedData.States)
                 {
-                    state.Editor_OnRemoveStateAt(selectionIndex);
+                    state.Editor_OnDataRemoveState(m_SelectedData.Name, selectionIndex);
                 }
+                m_SelectedData.StateNames.RemoveAt(selectionIndex);
             }
             GUILayout.EndHorizontal();
         }

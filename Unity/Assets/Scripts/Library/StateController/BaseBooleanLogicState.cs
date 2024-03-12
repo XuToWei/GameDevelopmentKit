@@ -4,23 +4,19 @@ using UnityEngine;
 
 namespace StateController
 {
-    [ExecuteAlways]
     public abstract class BaseBooleanLogicState : BaseState
     {
-        private const string DATA_1 = "Data1";
-        private const string DATA_2 = "Data2";
-
         [SerializeField]
-        [HorizontalGroup(DATA_1)]
+        [BoxGroup("Data1")]
         [LabelText("Data Name")]
         [PropertyOrder(10)]
         [ValueDropdown("GetDataNames1")]
         [OnValueChanged("OnSelectedData1")]
-        private string m_DataName1;
+        private string m_DataName1 = string.Empty;
 
         [SerializeField]
-        [HorizontalGroup(DATA_1)]
-        [LabelText("State Names")]
+        [BoxGroup("Data1")]
+        [LabelText("State Datas")]
         [PropertyOrder(11)]
         [ShowIf("IsSelectedData1")]
         [ListDrawerSettings(DefaultExpandedState = true,
@@ -34,19 +30,20 @@ namespace StateController
         private BooleanLogicType m_BooleanLogicType;
 
         [SerializeField]
-        [BoxGroup(DATA_2)]
+        [BoxGroup("Data2")]
         [LabelText("Data Name")]
         [PropertyOrder(30)]
+        [EnableIf("CanShowData2")]
         [ValueDropdown("GetDataNames2")]
         [OnValueChanged("OnSelectedData2")]
-        private string m_DataName2;
+        private string m_DataName2 = string.Empty;
 
         [SerializeField]
-        [BoxGroup(DATA_2)]
-        [LabelText("State Names")]
+        [BoxGroup("Data2")]
+        [LabelText("State Datas")]
         [PropertyOrder(31)]
-        [ShowIf("CanShowData2")]
-        [EnableIf("IsSelectedData2")]
+        [EnableIf("CanShowData2")]
+        [ShowIf("IsSelectedData2")]
         [ListDrawerSettings(DefaultExpandedState = true,
             HideAddButton = true, HideRemoveButton = true,
             DraggableItems = false,
@@ -93,7 +90,7 @@ namespace StateController
                 if (!string.IsNullOrEmpty(m_CurStateName1) && m_Data1.SelectedName == m_CurStateName1)
                     return;
                 m_CurStateName1 = m_Data1.SelectedName;
-                OnSateChanged(m_StateDataDict1[m_CurStateName1]);
+                OnStateChanged(m_StateDataDict1[m_CurStateName1]);
             }
             else
             {
@@ -112,11 +109,11 @@ namespace StateController
                         logicResult = m_StateDataDict1[m_CurStateName1] || m_StateDataDict2[m_CurStateName2];
                         break;
                 }
-                OnSateChanged(logicResult);
+                OnStateChanged(logicResult);
             }
         }
 
-        protected abstract void OnSateChanged(bool logicResult);
+        protected abstract void OnStateChanged(bool logicResult);
 
 #if UNITY_EDITOR
         internal override void Editor_OnRefresh()
@@ -125,7 +122,7 @@ namespace StateController
             RefreshData2();
         }
 
-        internal override void Editor_OnDataReanme(string oldDataName, string newDataName)
+        internal override void Editor_OnDataRename(string oldDataName, string newDataName)
         {
             if (m_DataName1 == oldDataName)
             {
@@ -137,9 +134,24 @@ namespace StateController
             }
         }
 
-        internal override void Editor_OnRemoveStateAt(int index)
+        internal override void Editor_OnDataRemoveState(string dataName, int index)
         {
-            
+            if (m_DataName1 == dataName)
+            {
+                m_StateDatas1.RemoveAt(index);
+                if (m_StateDataDict1 != null)
+                {
+                    m_StateDataDict1.Remove(m_Data1.StateNames[index]);
+                }
+            }
+            else if (m_DataName2 == dataName)
+            {
+                m_StateDatas2.RemoveAt(index);
+                if (m_StateDataDict2 != null)
+                {
+                    m_StateDataDict2.Remove(m_Data2.StateNames[index]);
+                }
+            }
         }
 
         private bool IsSelectedData1()
@@ -178,7 +190,11 @@ namespace StateController
                 {
                     m_StateDatas1.Add(default);
                 }
-                for (int i = m_Data1.States.Count - 1; i >=0; i--)
+                for (int i = m_StateDatas1.Count - 1; i >= m_Data1.StateNames.Count; i--)
+                {
+                    m_StateDatas1.RemoveAt(i);
+                }
+                for (int i = m_Data1.States.Count - 1; i >= 0; i--)
                 {
                     if (m_Data1.States[i] == null)
                     {
@@ -191,7 +207,7 @@ namespace StateController
                 m_StateDatas1.Clear();
             }
         }
-        
+
         private void RefreshData2()
         {
             m_Data2 = Controller.Editor_GetData(m_DataName2);
@@ -201,7 +217,11 @@ namespace StateController
                 {
                     m_StateDatas2.Add(default);
                 }
-                for (int i = m_Data2.States.Count - 1; i >=0; i--)
+                for (int i = m_StateDatas2.Count - 1; i >= m_Data2.StateNames.Count; i--)
+                {
+                    m_StateDatas2.RemoveAt(i);
+                }
+                for (int i = m_Data2.States.Count - 1; i >= 0; i--)
                 {
                     if (m_Data2.States[i] == null)
                     {
@@ -268,22 +288,28 @@ namespace StateController
         private void OnStateDataBeginGUI1(int selectionIndex)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(m_Data1.StateNames[selectionIndex]);
         }
 
         private void OnStateDataEndGUI1(int selectionIndex)
         {
+            bool enable = GUI.enabled;
+            GUI.enabled = false;
+            GUILayout.TextField(m_Data1.StateNames[selectionIndex]);
+            GUI.enabled = enable;
             GUILayout.EndHorizontal();
         }
 
         private void OnStateDataBeginGUI2(int selectionIndex)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(m_Data2.StateNames[selectionIndex]);
         }
 
         private void OnStateDataEndGUI2(int selectionIndex)
         {
+            bool enable = GUI.enabled;
+            GUI.enabled = false;
+            GUILayout.TextField(m_Data2.StateNames[selectionIndex]);
+            GUI.enabled = enable;
             GUILayout.EndHorizontal();
         }
 #endif
