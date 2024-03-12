@@ -50,6 +50,5 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
         <PackageReference Include="UniTask" Version="2.5.3" />
         <PackageReference Include="ZString" Version="2.5.1" Aliases="ZStringAlias" />
-        <PackageReference Include="R3" Version="1.0.4" />
     </ItemGroup>
 </Project>
