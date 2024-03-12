@@ -93,7 +93,7 @@ namespace StateController
                 {
                     m_StateDatas.RemoveAt(i);
                 }
-                for (int i = m_Data.States.Count - 1; i >=0; i--)
+                for (int i = m_Data.States.Count - 1; i >= 0; i--)
                 {
                     if (m_Data.States[i] == null)
                     {
@@ -129,7 +129,7 @@ namespace StateController
             if (m_Data != null)
             {
                 m_Data.States.Add(this);
-                controller.States.Remove(this);
+                controller.States.Add(this);
             }
             RefreshData();
         }

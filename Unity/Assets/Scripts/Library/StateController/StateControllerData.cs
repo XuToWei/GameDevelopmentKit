@@ -43,6 +43,20 @@ namespace StateController
         }
         internal List<string> StateNames => m_StateNames;
         internal List<BaseState> States => m_Sates;
+
+        internal void Editor_OnRefresh()
+        {
+            // for (int i = m_Sates.Count - 1; i >= 1; i--)
+            // {
+            //     for (int j = i - 1; j >= 0; j--)
+            //     {
+            //         if (m_Sates[i] == m_Sates[j])
+            //         {
+            //             m_Sates.RemoveAt(j);
+            //         }
+            //     }
+            // }
+        }
 #endif
     }
 }

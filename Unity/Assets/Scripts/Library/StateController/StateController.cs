@@ -31,10 +31,11 @@ namespace StateController
                 state.OnInit(this);
             }
 #if UNITY_EDITOR
-            if (m_ControllerDatas.Count > 0)
+            if (string.IsNullOrEmpty(m_SelectedDataName) && m_ControllerDatas.Count > 0)
             {
                 m_SelectedDataName = m_ControllerDatas[0].Name;
             }
+            OnSelectedData();
             Editor_Refresh();
 #endif
         }
@@ -60,6 +61,10 @@ namespace StateController
         {
             m_States.Clear();
             GetComponentsInChildren(true, m_States);
+            foreach (var data in m_ControllerDatas)
+            {
+                data.Editor_OnRefresh();
+            }
             foreach (var sate in m_States)
             {
                 sate.Editor_OnRefresh();
@@ -119,6 +124,7 @@ namespace StateController
         [ShowInInspector]
         [ValueDropdown("GetAllDataNames")]
         [OnValueChanged("OnSelectedData")]
+        [SerializeField]
         private string m_SelectedDataName = string.Empty;
         private StateControllerData m_SelectedData;
 
@@ -176,6 +182,7 @@ namespace StateController
         [PropertyOrder(24)]
         [ShowInInspector]
         [ReadOnly]
+        [ListDrawerSettings(DefaultExpandedState = true)]
         [EnableIf("IsSelectedData")]
         private List<BaseState> m_SelectedStates
         {
