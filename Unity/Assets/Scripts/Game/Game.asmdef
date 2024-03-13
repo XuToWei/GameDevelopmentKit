@@ -23,7 +23,8 @@
         "UniTaskExtension",
         "SLATE",
         "EnhancedScroller",
-        "Leihuo.UXTools.Runtime"
+        "Leihuo.UXTools.Runtime",
+        "StateController"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
