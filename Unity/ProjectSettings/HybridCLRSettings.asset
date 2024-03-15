@@ -52,6 +52,11 @@ MonoBehaviour:
   - UnityGameFramework.Extension
   - UniTask
   - ZString
+  - Leihuo.UXTools.Runtime
+  - UniTaskExtension
+  - StompyRobot.SRDebugger
+  - SLATE
+  - EnhancedScroller
   - Game
   - MemoryPack
   - MongoDB.Bson

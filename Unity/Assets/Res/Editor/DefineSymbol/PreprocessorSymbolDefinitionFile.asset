@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: PreprocessorSymbolDefinitionFile
   m_EditorClassIdentifier: 
   scriptSymbolDefinitions:
-  - symbol: 
+  - symbol: STATE_CONTROLLER_CODE_BIND
     enabled: 1
-    targetGroup: 1
-    isValid: 0
+    targetGroup: -1
+    isValid: 1
   symbolsToRemoveOnSave: []
-  symbolsToAddOnSave: []
+  symbolsToAddOnSave:
+  - STATE_CONTROLLER_CODE_BIND
