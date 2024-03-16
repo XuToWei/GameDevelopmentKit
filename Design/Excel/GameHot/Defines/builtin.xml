@@ -1,5 +1,5 @@
 <module name="">
-    <enum name="AudioType">
+    <enum name="AudioType" group="*">
         <var name="UNKNOWN" value="0"/>
         <var name="ACC" value="1"/>
         <var name="AIFF" value="2"/>
