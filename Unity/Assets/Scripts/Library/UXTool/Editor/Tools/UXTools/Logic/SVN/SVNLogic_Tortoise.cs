@@ -63,6 +63,11 @@ namespace ThunderFireUITool
         {
             Commit(GetSelectedAssetPaths(), true);
         }
+        
+        public static void UpdateSelected()
+        {
+            Update(GetSelectedAssetPaths(), true);
+        }
 
         public static void CommitAll()
         {
