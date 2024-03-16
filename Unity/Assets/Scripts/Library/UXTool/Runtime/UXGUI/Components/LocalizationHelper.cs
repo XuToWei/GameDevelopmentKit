@@ -132,8 +132,8 @@ public class LocalizationHelper
     }
 
     private static LocalizationComponent s_LocalizationComponent;
-#if UNITY_EDITOR
     private static BaseComponent s_BaseComponent;
+#if UNITY_EDITOR
     private static Func<LanguageType, string, string, string> s_EditorGetStringFunc;
     public static void SetEditorGetStringFunc(Func<LanguageType, string, string, string> func)
     {
