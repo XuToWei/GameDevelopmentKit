@@ -7,6 +7,7 @@
 
 using GameFramework;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -423,10 +424,14 @@ namespace UnityGameFramework.Editor.ResourceTools
                         if (sourceAsset == null)
                         {
                             string fullPath = AssetDatabase.GUIDToAssetPath(asset.Guid);
+                            assetName = m_Controller.AssetSorter == AssetSorterType.Path ? fullPath : (m_Controller.AssetSorter == AssetSorterType.Name ? new FileInfo(fullPath).Name : asset.Guid);
                             if (!AssetDatabase.IsValidFolder(fullPath) && !string.IsNullOrEmpty(fullPath) && fullPath.StartsWith("Packages"))
                             {
-                                assetName = fullPath;
                                 assetIcon = AssetDatabase.GetCachedIcon(fullPath);
+                                if (assetIcon == null)
+                                {
+                                    assetIcon = m_MissingSourceAssetIcon;
+                                }
                             }
                         }
                         EditorGUILayout.BeginHorizontal();

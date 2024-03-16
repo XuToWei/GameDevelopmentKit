@@ -35,21 +35,31 @@ MonoBehaviour:
     filterType: 0
     searchPatterns: '*.*'
   - valid: 1
-    name: UI.UIForm
+    name: UI.UIForm.Demo
     variant: 
     fileSystem: 
     groups: 
-    assetsDirectoryPath: Assets/Res/UI/UIForm
+    assetsDirectoryPath: Assets/Res/UI/UIForm/Demo
     loadType: 0
     packed: 0
     filterType: 1
     searchPatterns: '*.*'
   - valid: 1
-    name: UI.UIItem
+    name: UI.UIForm.LockStep
     variant: 
     fileSystem: 
     groups: 
-    assetsDirectoryPath: Assets/Res/UI/UIItem
+    assetsDirectoryPath: Assets/Res/UI/UIForm/Demo
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
+    name: UI.UIPrefab
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/UIPrefab
     loadType: 0
     packed: 0
     filterType: 2
@@ -75,16 +85,6 @@ MonoBehaviour:
     filterType: 2
     searchPatterns: '*.*'
   - valid: 1
-    name: UI.UIPreset
-    variant: 
-    fileSystem: 
-    groups: 
-    assetsDirectoryPath: Assets/Res/UI/UIPreset
-    loadType: 0
-    packed: 0
-    filterType: 0
-    searchPatterns: '*.*'
-  - valid: 1
     name: UI.UXTool
     variant: 
     fileSystem: 
@@ -93,7 +93,7 @@ MonoBehaviour:
     loadType: 0
     packed: 0
     filterType: 0
-    searchPatterns: '*.*'
+    searchPatterns: '*.prefab,*.anim,*.controller,*.inputactions,*shader,*.mat,*png,*json,*.txt'
   - valid: 1
     name: Scene
     variant: 
@@ -112,7 +112,7 @@ MonoBehaviour:
     assetsDirectoryPath: Assets/Res/Localization/ChineseSimplified
     loadType: 0
     packed: 0
-    filterType: 2
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: GameHot
@@ -154,7 +154,7 @@ MonoBehaviour:
     packed: 0
     filterType: 0
     searchPatterns: '*.*'
-  - valid: 0
+  - valid: 1
     name: ET.ClientServer
     variant: 
     fileSystem: GameData
@@ -164,7 +164,7 @@ MonoBehaviour:
     packed: 0
     filterType: 0
     searchPatterns: '*.*'
-  - valid: 1
+  - valid: 0
     name: ET.Client
     variant: 
     fileSystem: GameData

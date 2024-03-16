@@ -1,7 +1,7 @@
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 
-namespace UnityGameFramework.Extension
+namespace UnityGameFramework.Extension.Editor
 {
     public class AssetCollectionPreprocessBuildHandle : IPreprocessBuildWithReport
     {

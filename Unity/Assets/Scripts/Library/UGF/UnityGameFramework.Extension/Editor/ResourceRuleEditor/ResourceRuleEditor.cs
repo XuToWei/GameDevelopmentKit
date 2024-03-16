@@ -419,7 +419,6 @@ namespace UnityGameFramework.Extension.Editor
             {
                 Load();
             }
-
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptTypeFilter);
             m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptLabelFilter);
             AnalysisResourceFilters();
@@ -444,7 +443,6 @@ namespace UnityGameFramework.Extension.Editor
                 m_CurrentConfigPath = configPath;
                 Load();
             }
-
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptTypeFilter);
             m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptLabelFilter);
             AnalysisResourceFilters();
@@ -484,7 +482,6 @@ namespace UnityGameFramework.Extension.Editor
             {
                 return true;
             }
-
             return false;
         }
 
@@ -504,12 +501,10 @@ namespace UnityGameFramework.Extension.Editor
         {
             m_ResourceCollection = new ResourceCollection();
             List<string> signedAssetBundleList = new List<string>();
-
             foreach (ResourceRule resourceRule in m_Configuration.rules)
             {
                 if (resourceRule.variant == "")
                     resourceRule.variant = null;
-
                 if (resourceRule.valid)
                 {
                     switch (resourceRule.filterType)
@@ -527,7 +522,6 @@ namespace UnityGameFramework.Extension.Editor
                             }
                         }
                         break;
-
                         case ResourceFilterType.Children:
                         {
                             string[] patterns = resourceRule.searchPatterns.Split(';', ',', '|');
@@ -538,13 +532,10 @@ namespace UnityGameFramework.Extension.Editor
                                 {
                                     if (file.Extension.Contains("meta"))
                                         continue;
-
                                     string relativeAssetName = file.FullName.Substring(Application.dataPath.Length + 1);
                                     string relativeAssetNameWithoutExtension = GameFramework.Utility.Path.GetRegularPath(relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
-
                                     string assetName = Path.Combine("Assets", relativeAssetName);
                                     string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-
                                     if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                                     {
                                         ApplyResourceFilter(ref signedAssetBundleList, resourceRule, relativeAssetNameWithoutExtension, assetGUID);
@@ -553,7 +544,6 @@ namespace UnityGameFramework.Extension.Editor
                             }
                         }
                         break;
-
                         case ResourceFilterType.ChildrenFoldersOnly:
                         {
                             DirectoryInfo[] assetDirectories = new DirectoryInfo(resourceRule.assetsDirectoryPath).GetDirectories();
@@ -565,7 +555,6 @@ namespace UnityGameFramework.Extension.Editor
                             }
                         } 
                         break;
-
                         case ResourceFilterType.ChildrenFilesOnly:
                         {
                             DirectoryInfo[] assetDirectories = new DirectoryInfo(resourceRule.assetsDirectoryPath).GetDirectories();
@@ -579,13 +568,10 @@ namespace UnityGameFramework.Extension.Editor
                                     {
                                         if (file.Extension.Contains("meta"))
                                             continue;
-
                                         string relativeAssetName = file.FullName.Substring(Application.dataPath.Length + 1);
                                         string relativeAssetNameWithoutExtension = GameFramework.Utility.Path.GetRegularPath(relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
-
                                         string assetName = Path.Combine("Assets", relativeAssetName);
                                         string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-
                                         if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                                         {
                                             ApplyResourceFilter(ref signedAssetBundleList, resourceRule, relativeAssetNameWithoutExtension, assetGUID);
@@ -605,7 +591,6 @@ namespace UnityGameFramework.Extension.Editor
             if (!signedResourceList.Contains(Path.Combine(resourceRule.assetsDirectoryPath, resourceName)))
             {
                 signedResourceList.Add(Path.Combine(resourceRule.assetsDirectoryPath, resourceName));
-
                 foreach (GFResource oldResource in GetResources())
                 {
                     if (oldResource.Name == resourceName && string.IsNullOrEmpty(oldResource.Variant))
@@ -614,21 +599,19 @@ namespace UnityGameFramework.Extension.Editor
                         break;
                     }
                 }
-
                 if (!HasResource(resourceName, resourceRule.variant))
                 {
                     if (string.IsNullOrEmpty(resourceRule.fileSystem))
                     {
                         resourceRule.fileSystem = null;
                     }
-
                     AddResource(resourceName, resourceRule.variant, resourceRule.fileSystem, resourceRule.loadType, resourceRule.packed, resourceRule.groups.Split(';', ',', '|'));
                 }
-
                 switch (resourceRule.filterType)
                 {
                     case ResourceFilterType.Root:
                     case ResourceFilterType.ChildrenFoldersOnly:
+                    {
                         string[] patterns = resourceRule.searchPatterns.Split(';', ',', '|');
                         if (childDirectoryPath == "")
                         {
@@ -642,25 +625,21 @@ namespace UnityGameFramework.Extension.Editor
                             {
                                 if (file.Extension.Contains("meta"))
                                     continue;
-
                                 string assetName = Path.Combine("Assets", file.FullName.Substring(Application.dataPath.Length + 1));
-
                                 string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-
                                 if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
                                 {
                                     AssignAsset(assetGUID, resourceName, resourceRule.variant);
                                 }
                             }
                         }
-
+                    }
                         break;
-
                     case ResourceFilterType.Children:
                     case ResourceFilterType.ChildrenFilesOnly:
                     {
                         AssignAsset(singleAssetGUID, resourceName, resourceRule.variant);
-                    }
+                    } 
                         break;
                 }
             }

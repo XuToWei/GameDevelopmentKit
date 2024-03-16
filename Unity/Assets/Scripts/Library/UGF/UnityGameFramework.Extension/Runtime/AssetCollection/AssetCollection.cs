@@ -17,16 +17,17 @@ namespace UnityGameFramework.Extension
 #if UNITY_EDITOR
         [OnValueChanged("OnPathChange")]
         [SerializeField]
-        private string m_CollectionPattern;
+        private string m_CollectionPatterns;
         [SerializeField]
-        [OnValueChanged("OnPathChange", includeChildren: true)]
+        [OnValueChanged("OnPathChange", IncludeChildren = true)]
         [AssetsOnly]
         private List<DefaultAsset> m_CollectionPaths = new List<DefaultAsset>();
 
+        private string[] m_SearchPatterns;
         private void OnPathChange()
         {
+            m_SearchPatterns = (string.IsNullOrEmpty(m_CollectionPatterns) ? "*.*" : m_CollectionPatterns).Split(';', ',', '|');
             m_CollectionPaths = m_CollectionPaths.Distinct().ToList();
-            Pack();
         }
 
         [Button("RefreshCollection")]
@@ -38,20 +39,24 @@ namespace UnityGameFramework.Extension
                 if(pathAsset == null || !ProjectWindowUtil.IsFolder(pathAsset.GetInstanceID()))
                     continue;
                 string path = AssetDatabase.GetAssetPath(pathAsset);
-                string pattern = string.IsNullOrEmpty(m_CollectionPattern) ? "*.*" : m_CollectionPattern;
-                string[] files = Directory.GetFiles(path, pattern, SearchOption.AllDirectories)
-                    .Where(filePath => !filePath.EndsWith(".meta")).Select(Utility.Path.GetRegularPath).ToArray();
-                foreach (string file in files)
+                foreach (var pattern in m_SearchPatterns)
                 {
-                    Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(file);
-                    if (sprite != null)
+                    if(string.IsNullOrEmpty(pattern))
+                        continue;
+                    string[] files = Directory.GetFiles(path, pattern, SearchOption.AllDirectories)
+                        .Where(filePath => !filePath.EndsWith(".meta")).Select(Utility.Path.GetRegularPath).ToArray();
+                    foreach (string file in files)
                     {
-                        m_AssetDict.Add(file, sprite);
-                    }
-                    else
-                    {
-                        Object obj = AssetDatabase.LoadMainAssetAtPath(file);
-                        m_AssetDict.Add(file, obj);
+                        Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(file);
+                        if (sprite != null)
+                        {
+                            m_AssetDict.Add(file, sprite);
+                        }
+                        else
+                        {
+                            Object obj = AssetDatabase.LoadMainAssetAtPath(file);
+                            m_AssetDict.Add(file, obj);
+                        }
                     }
                 }
             }

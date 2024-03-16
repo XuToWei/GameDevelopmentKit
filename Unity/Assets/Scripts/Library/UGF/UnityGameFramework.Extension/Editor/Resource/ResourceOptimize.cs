@@ -209,6 +209,11 @@ namespace UnityGameFramework.Extension.Editor
                     // 忽略对场景的依赖
                     continue;
                 }
+                if (AssetDatabase.IsValidFolder(dependencyAssetName))
+                {
+                    // 忽略对目录的依赖（部分编辑数据）
+                    continue;
+                }
 
                 Stamp stamp = new Stamp(hostAsset.Name, dependencyAssetName);
                 if (m_AnalyzedStamps.Contains(stamp))

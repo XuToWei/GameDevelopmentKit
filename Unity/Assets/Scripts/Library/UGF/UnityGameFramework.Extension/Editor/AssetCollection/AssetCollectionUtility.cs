@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UnityGameFramework.Extension
+namespace UnityGameFramework.Extension.Editor
 {
     public class AssetCollectionUtility : MonoBehaviour
     {

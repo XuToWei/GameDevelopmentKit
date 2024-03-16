@@ -45,11 +45,11 @@ MonoBehaviour:
     filterType: 1
     searchPatterns: '*.*'
   - valid: 1
-    name: UI.UIItem
+    name: UI.UIPrefab
     variant: 
     fileSystem: 
     groups: 
-    assetsDirectoryPath: Assets/Res/UI/UIItem
+    assetsDirectoryPath: Assets/Res/UI/UIPrefab
     loadType: 0
     packed: 0
     filterType: 1
@@ -75,16 +75,6 @@ MonoBehaviour:
     filterType: 2
     searchPatterns: '*.*'
   - valid: 1
-    name: UI.UIPreset
-    variant: 
-    fileSystem: 
-    groups: 
-    assetsDirectoryPath: Assets/Res/UI/UIPreset
-    loadType: 0
-    packed: 0
-    filterType: 0
-    searchPatterns: '*.*'
-  - valid: 1
     name: UI.UXTool
     variant: 
     fileSystem: 
@@ -93,7 +83,7 @@ MonoBehaviour:
     loadType: 0
     packed: 0
     filterType: 0
-    searchPatterns: '*.*'
+    searchPatterns: '*.prefab,*.anim,*.controller,*.inputactions,*shader,*.mat,*png,*json,*.txt'
   - valid: 1
     name: Scene
     variant: 
@@ -112,7 +102,7 @@ MonoBehaviour:
     assetsDirectoryPath: Assets/Res/Localization/ChineseSimplified
     loadType: 0
     packed: 0
-    filterType: 2
+    filterType: 1
     searchPatterns: '*.*'
   - valid: 1
     name: HybridCLR
