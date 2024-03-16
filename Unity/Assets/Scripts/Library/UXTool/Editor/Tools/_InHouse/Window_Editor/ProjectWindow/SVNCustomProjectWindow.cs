@@ -5,7 +5,9 @@ using UnityEditor;
 
 namespace ThunderFireUITool
 {
+#if SVN
     [UXInitialize(100)]
+#endif
     public class SVNCustomProjectWindow
     {
         private static Texture2D svnOperationIcon;
@@ -23,8 +25,10 @@ namespace ThunderFireUITool
 
         static SVNCustomProjectWindow()
         {
+#if SVN
             EditorApplication.projectWindowItemOnGUI -= DrawSVNOperationIcon;
             EditorApplication.projectWindowItemOnGUI += DrawSVNOperationIcon;
+#endif
         }
 
         private static void DrawSVNOperationIcon(string guid, Rect selectionRect)

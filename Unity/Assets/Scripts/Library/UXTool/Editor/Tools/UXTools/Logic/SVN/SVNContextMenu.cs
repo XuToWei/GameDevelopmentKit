@@ -16,13 +16,17 @@ namespace ThunderFireUITool
 #if UNITY_EDITOR_WIN
     public static class SVNContextMenus
     {
-        // [MenuItem("Assets/SVN/Commit", false, -900)]
+#if SVN
+        [MenuItem("Assets/SVN/Commit", false, -900)]
+#endif
         public static void Commit()
         {
             TortoiseSVNLogic.CommitSelected();
         }
-        
-        // [MenuItem("Assets/SVN/Update", false, -899)]
+
+#if SVN
+        [MenuItem("Assets/SVN/Update", false, -899)]
+#endif
         public static void Update()
         {
             TortoiseSVNLogic.UpdateSelected();
