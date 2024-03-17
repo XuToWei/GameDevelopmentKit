@@ -98,3 +98,5 @@
 [UniTask](https://github.com/Cysharp/UniTask)
 
 [UGFExtensions](https://github.com/FingerCaster/UGFExtensions)
+
+[SocoTools](https://github.com/crossous/SocoTools)
