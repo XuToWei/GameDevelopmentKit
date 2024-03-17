@@ -25,7 +25,8 @@
         "EnhancedScroller",
         "Leihuo.UXTools.Runtime",
         "StateController",
-        "Animancer"
+        "Animancer",
+        "SocoTool"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
