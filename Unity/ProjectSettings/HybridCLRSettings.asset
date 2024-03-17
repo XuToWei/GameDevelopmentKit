@@ -57,6 +57,7 @@ MonoBehaviour:
   - StompyRobot.SRDebugger
   - SLATE
   - EnhancedScroller
+  - Animancer
   - Game
   - MemoryPack
   - MongoDB.Bson

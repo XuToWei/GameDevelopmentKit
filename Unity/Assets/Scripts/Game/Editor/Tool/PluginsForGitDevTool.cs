@@ -18,6 +18,7 @@ namespace Game.Editor
             "Assets/Scripts/Library/StompyRobot",
             "Assets/Plugins/Demigiant",
             "Assets/Plugins/Sirenix",
+            "Assets/Plugins/Animancer",
         };
 
         private static readonly string s_UnityPackageFile = "../Tools/UnityPlugins/Useful.unitypackage";

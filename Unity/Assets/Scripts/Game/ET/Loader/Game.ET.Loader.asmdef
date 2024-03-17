@@ -16,7 +16,8 @@
         "UniTaskExtension",
         "EnhancedScroller",
         "Leihuo.UXTools.Runtime",
-        "StateController"
+        "StateController",
+        "Animancer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
