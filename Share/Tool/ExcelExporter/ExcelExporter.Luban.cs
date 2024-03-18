@@ -148,9 +148,17 @@ namespace ET
                             cmd += " -f";
                         }
 
-                        if (!cmd.Contains("-x l10n.textProviderFile"))
+                        if (!cmd.Contains("l10n.provider"))
                         {
-                            cmd += $" -x l10n.textProviderFile={s_LocalizationExcelFile.Replace('\\', '/')}";
+                            cmd += $" -x l10n.provider=default";
+                        }
+                        if (!cmd.Contains("l10n.textFile.path"))
+                        {
+                            cmd += $" -x l10n.textFile.path={s_LocalizationExcelFile.Replace('\\', '/')}";
+                        }
+                        if (!cmd.Contains("l10n.textFile.keyFieldName"))
+                        {
+                            cmd += $" -x l10n.textFile.keyFieldName=key";
                         }
 
                         cmd = Regex.Replace(cmd, @"\s+(?=-)", " ");
