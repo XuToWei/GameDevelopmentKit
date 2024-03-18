@@ -21,8 +21,9 @@ namespace Soco.ShaderVariantsStripper
             Global,
             Local
         }
-
+#if UNITY_EDITOR
         private AccessLevel _accessLevel = AccessLevel.Global;
+#endif
         private int _selectedKeywordIndex;
         private string _inputKeyword;
         
