@@ -33,7 +33,7 @@ namespace Soco.ShaderVariantsStripper
 
         //ShaderCompilerData
         private UnityEngine.Rendering.ShaderKeywordSet shaderKeywordSet;
-        private UnityEngine.Rendering.PlatformKeywordSet platformKeywordSet;
+        // private UnityEngine.Rendering.PlatformKeywordSet platformKeywordSet;
 
         private List<string> _shaderKeywordList;
 
@@ -66,7 +66,7 @@ namespace Soco.ShaderVariantsStripper
                 passType = shaderSnippetData.passType,
                 passName = shaderSnippetData.passName,
                 shaderKeywordSet = data.shaderKeywordSet,
-                platformKeywordSet = data.platformKeywordSet,
+                // platformKeywordSet = data.platformKeywordSet,
                 inStripCallback = true
             };
         }
@@ -78,9 +78,9 @@ namespace Soco.ShaderVariantsStripper
                 shaderKeywordSet.Enable(keyword);
             else
             {
-                if (shaderKeywordList.FindIndex(k => k == keyword.GetKeywordName()) < 0)
+                if (shaderKeywordList.FindIndex(k => k == keyword.name) < 0)
                 {
-                    shaderKeywordList.Add(keyword.GetKeywordName());
+                    shaderKeywordList.Add(keyword.name);
                     shaderKeywordList.Sort();
                 }
             }
@@ -91,7 +91,7 @@ namespace Soco.ShaderVariantsStripper
             if (inStripCallback)
                 shaderKeywordSet.Disable(keyword);
             else
-                shaderKeywordList.Remove(keyword.GetKeywordName());
+                shaderKeywordList.Remove(keyword.name);
         }
 
         public void DisableKeyword(string keyword)
@@ -109,7 +109,7 @@ namespace Soco.ShaderVariantsStripper
             if (inStripCallback)
                 return shaderKeywordSet.IsEnabled(keyword);
             else
-                return shaderKeywordList.FindIndex(k => k == keyword.GetKeywordName()) >= 0;
+                return shaderKeywordList.FindIndex(k => k == keyword.name) >= 0;
         }
 
         public bool IsKeywordEnabled(string keyword, Shader shader = null)
@@ -124,7 +124,7 @@ namespace Soco.ShaderVariantsStripper
         public string[] GetShaderKeywords()
         {
             if (inStripCallback)
-                return (from sk in shaderKeywordSet.GetShaderKeywords() select sk.GetKeywordName()).ToArray();
+                return (from sk in shaderKeywordSet.GetShaderKeywords() select sk.name).ToArray();
             else
                 return shaderKeywordList.ToArray();
         }

@@ -14,8 +14,9 @@ namespace Soco.ShaderVariantsStripper
         
         public string keywordA;
         public string keywordB;
-        
+#if UNITY_EDITOR
         private AccessLevel _accessLevel = AccessLevel.Global;
+#endif
         private int _selectedKeywordIndex;
         private string _inputKeyword;
         
