@@ -254,14 +254,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d0b39466ec356e5d245f22f352adc630210ee3ab"
+      "hash": "7996bc5ce5ad4c3584de303c80f1d35a89e0154c"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "78025e4a708b8ccd9537944fc37a1d6c80f735e4"
+      "hash": "8ee03d19cfe1d001840906223f8a508ad9087aa7"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
