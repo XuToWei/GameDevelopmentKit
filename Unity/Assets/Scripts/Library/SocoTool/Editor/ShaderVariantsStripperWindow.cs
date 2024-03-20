@@ -351,7 +351,7 @@ namespace Soco.ShaderVariantsStripper
             #endregion
 
             #region 右半部分
-            int rightWidth = (int)(position.width - cLeftWidth - cMiddleWidth - 10);
+            int rightWidth = (int)(position.width - cLeftWidth - cMiddleWidth - 20);
             EditorGUILayout.BeginVertical(mBlackStyle, GUILayout.MinWidth(rightWidth), GUILayout.MinHeight(position.height - cBorderWidth * 2));
             if (mConfig != null)
             {
@@ -439,8 +439,7 @@ namespace Soco.ShaderVariantsStripper
                         if (conditionPair.condition == null)
                             conditionList.RemoveAt(i);
 
-                        if (GUILayout.Button(conditionPair.condition.Overview(), GUILayout.Width(rightWidth - 3 * 50 - 25),
-                                GUILayout.Height(50)))
+                        if (GUILayout.Button(conditionPair.condition.Overview(), GUILayout.Width(rightWidth - 3 * 50 - 40), GUILayout.Height(50)))
                         {
                             ShaderVariantsStripperConditionWindow.Window.mCondition = conditionPair.condition;
                             ShaderVariantsStripperConditionOnGUIContext context = new ShaderVariantsStripperConditionOnGUIContext()
