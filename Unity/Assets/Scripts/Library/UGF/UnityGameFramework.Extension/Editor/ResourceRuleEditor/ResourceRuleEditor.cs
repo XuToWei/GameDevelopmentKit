@@ -521,7 +521,7 @@ namespace UnityGameFramework.Extension.Editor
                                 ApplyResourceFilter(ref signedAssetBundleList, resourceRule, resourceRule.name);
                             }
                         }
-                        break;
+                            break;
                         case ResourceFilterType.Children:
                         {
                             string[] patterns = resourceRule.searchPatterns.Split(';', ',', '|');
@@ -543,7 +543,7 @@ namespace UnityGameFramework.Extension.Editor
                                 }
                             }
                         }
-                        break;
+                            break;
                         case ResourceFilterType.ChildrenFoldersOnly:
                         {
                             DirectoryInfo[] assetDirectories = new DirectoryInfo(resourceRule.assetsDirectoryPath).GetDirectories();
@@ -553,8 +553,8 @@ namespace UnityGameFramework.Extension.Editor
 
                                 ApplyResourceFilter(ref signedAssetBundleList, resourceRule, GameFramework.Utility.Path.GetRegularPath(relativeDirectoryName), string.Empty, directory.FullName);
                             }
-                        } 
-                        break;
+                        }
+                            break;
                         case ResourceFilterType.ChildrenFilesOnly:
                         {
                             DirectoryInfo[] assetDirectories = new DirectoryInfo(resourceRule.assetsDirectoryPath).GetDirectories();
@@ -639,7 +639,7 @@ namespace UnityGameFramework.Extension.Editor
                     case ResourceFilterType.ChildrenFilesOnly:
                     {
                         AssignAsset(singleAssetGUID, resourceName, resourceRule.variant);
-                    } 
+                    }
                         break;
                 }
             }

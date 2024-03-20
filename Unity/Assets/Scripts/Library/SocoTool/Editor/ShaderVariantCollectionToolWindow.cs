@@ -45,12 +45,22 @@ namespace Soco.ShaderVariantsCollection
             {
                 if (mCollectionMapper == null || mCollectionMapper.mCollection != mCollectionFile)
                 {
-                    mCollectionMapper = new ShaderVariantCollectionMapper(mCollectionFile);
+                    mCollectionMapper = ScriptableObject.CreateInstance<ShaderVariantCollectionMapper>();
+                    mCollectionMapper.Init(mCollectionFile);
                     if(mShaderViewSelectedShader != null)
                         CollectPassKeywordMap(collectionMapper.GetShaderVariants(mShaderViewSelectedShader));
                 }
 
                 return mCollectionMapper;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (mCollectionMapper != null)
+            {
+                ScriptableObject.DestroyImmediate(mCollectionMapper);
+                mCollectionMapper = null;
             }
         }
         
@@ -1101,11 +1111,11 @@ namespace Soco.ShaderVariantsCollection
             {
                 AssetDatabase.CreateAsset(newConfig, scriptDirectoryPath +"\\Default ShaderVariantCollection Tool Config.asset");
                 AssetDatabase.SaveAssets();
-
                 mConfig = newConfig;
             }
             else
             {
+                ScriptableObject.DestroyImmediate(newConfig);
                 mConfig = AssetDatabase.LoadAssetAtPath<ShaderVariantCollectionToolConfig>(
                     AssetDatabase.GUIDToAssetPath(findResultGUID[0]));
             }

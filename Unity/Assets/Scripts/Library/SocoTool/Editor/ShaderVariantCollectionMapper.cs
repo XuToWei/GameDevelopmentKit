@@ -62,10 +62,10 @@ namespace Soco.ShaderVariantsCollection
             InitShaderUtilMethod();
         }
         
-        public ShaderVariantCollectionMapper(ShaderVariantCollection collection)
-        {
-            Init(collection);
-        }
+        // public ShaderVariantCollectionMapper(ShaderVariantCollection collection)
+        // {
+        //     Init(collection);
+        // }
 
         internal static  ShaderVariantCollection.ShaderVariant PropToVariantObject(Shader shader, SerializedProperty variantInfo)
         {

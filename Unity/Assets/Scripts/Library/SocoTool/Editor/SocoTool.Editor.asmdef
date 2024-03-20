@@ -2,7 +2,9 @@
     "name": "SocoTool.Editor",
     "rootNamespace": "",
     "references": [
-        "SocoTool"
+        "SocoTool",
+        "UnityGameFramework.Extension.Editor",
+        "UnityGameFramework.Editor"
     ],
     "includePlatforms": [
         "Editor"

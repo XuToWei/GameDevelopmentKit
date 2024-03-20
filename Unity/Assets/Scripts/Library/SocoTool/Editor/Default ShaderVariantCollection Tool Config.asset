@@ -12,5 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 491da43ca4f2726408ce6730fde031b9, type: 3}
   m_Name: Default ShaderVariantCollection Tool Config
   m_EditorClassIdentifier: 
-  mKeys: []
-  mValues: []
+  mKeys:
+  - Soco.ShaderVariantsCollection.IMaterialCollector, SocoTool.Editor, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - Soco.ShaderVariantsCollection.IMaterialFilter, SocoTool.Editor, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - Soco.ShaderVariantsCollection.IVariantFilter, SocoTool.Editor, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - Soco.ShaderVariantsCollection.IExecutable, SocoTool.Editor, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  mValues:
+  - list:
+    - obj: {fileID: 8450595871656514127}
+      use: 1
+  - list: []
+  - list: []
+  - list: []
+--- !u!114 &8450595871656514127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aba044736fd08a49ac5a39da416a640, type: 3}
+  m_Name: MaterialCollection_ProjectDependRes
+  m_EditorClassIdentifier: 
