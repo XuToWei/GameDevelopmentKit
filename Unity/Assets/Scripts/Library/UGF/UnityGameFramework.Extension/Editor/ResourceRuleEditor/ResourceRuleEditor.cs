@@ -33,8 +33,8 @@ namespace UnityGameFramework.Extension.Editor
         static void Open()
         {
             ResourceRuleEditor window = GetWindow<ResourceRuleEditor>(true, "Resource Rule Editor", true);
-            window.minSize = new Vector2(1471f, 420f);
-            window.maxSize = new Vector2(1471f, 1000f);
+            window.minSize = new Vector2(1550f, 420f);
+            window.maxSize = new Vector2(1550f, 1000f);
         }
         
         [MenuItem("Game Framework/Resource Tools/Refresh Activate Resource Collection", false, 51)]
@@ -50,8 +50,8 @@ namespace UnityGameFramework.Extension.Editor
             if (config != null)
             {
                 ResourceRuleEditor window = GetWindow<ResourceRuleEditor>(true, "Resource Rule Editor", true);
-                window.minSize = new Vector2(1471f, 420f);
-                window.maxSize = new Vector2(1471f, 1000f);
+                window.minSize = new Vector2(1550f, 420f);
+                window.maxSize = new Vector2(1550f, 1000f);
                 window.m_CurrentConfigPath = AssetDatabase.GetAssetPath(config);
                 window.Load();
                 return true;
@@ -303,7 +303,7 @@ namespace UnityGameFramework.Extension.Editor
             const float GAP = 5;
             Rect rect = new Rect(GAP, 3, 40, 18);
             Rect configLabel = new Rect(rect.x, rect.y, 75, rect.height);
-            EditorGUI.LabelField(configLabel, "RulesConfig:");
+            EditorGUI.LabelField(configLabel, "Rule Config:");
             Rect configs = new Rect(configLabel.xMax + GAP, rect.y, 200, rect.height);
             m_CurrentConfigIndex = EditorGUI.Popup(configs, m_CurrentConfigIndex, m_ConfigNames);
             if (m_CurrentConfigPath != m_AllConfigPaths[m_CurrentConfigIndex])
@@ -314,7 +314,7 @@ namespace UnityGameFramework.Extension.Editor
             }
             
             Rect isActivateLabel = new Rect(configs.xMax + GAP, rect.y, 60, rect.height);
-            EditorGUI.LabelField(isActivateLabel, "isActivate:");
+            EditorGUI.LabelField(isActivateLabel, "Active:");
             
             GUI.enabled = false;
             Rect isActivate = new Rect(isActivateLabel.xMax + GAP, rect.y, 20, rect.height);
@@ -322,7 +322,7 @@ namespace UnityGameFramework.Extension.Editor
             GUI.enabled = true;
             
             Rect activate = new Rect(isActivate.xMax + GAP, rect.y, 100, rect.height);
-            if (GUI.Button(activate, "Activate This"))
+            if (GUI.Button(activate, "Active This"))
             {
                 foreach (var configPath in m_AllConfigPaths)
                 {
