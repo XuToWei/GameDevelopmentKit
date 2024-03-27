@@ -19,14 +19,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "67c487f521087a3887e6c8817dff3cd264aa4f20"
+      "hash": "6c679cc3ab76197f557791c51922603a5d9716b1"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "0a9cf7a1809a289ca7bedecee594cdf256e26935"
+      "hash": "b870d64b5704a764fd03aaccb11f2dbe652b1756"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git",
@@ -261,7 +261,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "18ea176c855f5f6124ca145ad998ed2564319b0c"
+      "hash": "7c24d6d99577a846771039bec091da3c1a6d4efd"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",

@@ -15,11 +15,10 @@ namespace UnityGameFramework.Extension
     public class AssetCollection : SerializedScriptableObject
     {
 #if UNITY_EDITOR
-        [OnValueChanged("OnPathChange")]
         [SerializeField]
         private string m_CollectionPatterns;
         [SerializeField]
-        [OnValueChanged("OnPathChange", IncludeChildren = true)]
+        [OnValueChanged("OnPathChange", IncludeChildren = true, InvokeOnInitialize = true)]
         [AssetsOnly]
         private List<DefaultAsset> m_CollectionPaths = new List<DefaultAsset>();
 
