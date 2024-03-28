@@ -46,7 +46,7 @@ namespace Game.Editor
         public static void AddHotfixAssemblyDefinition(string fileName)
         {
             fileName += ".asmdef";
-            string guid = AssetDatabase.FindAssets("t:asmdef").First(a => AssetDatabase.GUIDToAssetPath(a).EndsWith(fileName));
+            string guid = AssetDatabase.FindAssets("t:asmdef").FirstOrDefault(a => AssetDatabase.GUIDToAssetPath(a).EndsWith(fileName));
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
             AssemblyDefinitionAsset asset = AssetDatabase.LoadAssetAtPath<AssemblyDefinitionAsset>(assetPath);
             if (asset == null)
@@ -63,7 +63,7 @@ namespace Game.Editor
         public static void RemoveHotfixAssemblyDefinition(string fileName)
         {
             fileName += ".asmdef";
-            string guid = AssetDatabase.FindAssets("t:asmdef").First(a => AssetDatabase.GUIDToAssetPath(a).EndsWith(fileName));
+            string guid = AssetDatabase.FindAssets("t:asmdef").FirstOrDefault(a => AssetDatabase.GUIDToAssetPath(a).EndsWith(fileName));
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
             AssemblyDefinitionAsset asset = AssetDatabase.LoadAssetAtPath<AssemblyDefinitionAsset>(assetPath);
             if (asset == null)
