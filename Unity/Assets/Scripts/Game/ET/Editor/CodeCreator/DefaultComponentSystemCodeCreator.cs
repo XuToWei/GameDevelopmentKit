@@ -48,15 +48,17 @@ namespace ET.Editor
             void GenerateCS(string templateFile, string codeFile)
             {
                 if (File.Exists(codeFile))
-                    return;
+                {
+                    throw new Exception($"{codeFile} already exist!");
+                }
                 if (!File.Exists(templateFile))
                 {
-                    throw new Exception($"{templateFile} is not exist!");
+                    throw new Exception($"{templateFile} does not exist!");
                 }
                 string dirName = Path.GetDirectoryName(codeFile);
                 if (string.IsNullOrEmpty(dirName))
                 {
-                    throw new Exception($"{dirName} is not exist!");
+                    throw new Exception($"{dirName} does not exist!");
                 }
                 if (!Directory.Exists(dirName))
                 {

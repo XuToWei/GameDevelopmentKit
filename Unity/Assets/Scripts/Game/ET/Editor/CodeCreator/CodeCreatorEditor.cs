@@ -8,6 +8,8 @@ namespace ET.Editor
 {
     internal sealed class CodeCreatorEditor : EditorWindow
     {
+        private const string CurCodeCreatorIndexSaveKey = "ETCodeCreator_CurCodeCreatorIndex";
+
         private readonly List<ICodeCreator> m_CodeCreatorInstances = new List<ICodeCreator>();
         private string[] m_CodeCreatorTypeNames;
         private int m_CurCodeCreatorIndex;
@@ -36,6 +38,7 @@ namespace ET.Editor
             }
             this.m_CodeCreatorTypeNames = typeNames.ToArray();
 
+            this.m_CurCodeCreatorIndex = EditorPrefs.GetInt(CurCodeCreatorIndexSaveKey, 0);
             if (this.m_CurCodeCreatorIndex >= this.m_CodeCreatorTypeNames.Length)
             {
                 this.m_CurCodeCreatorIndex = 0;
@@ -49,8 +52,13 @@ namespace ET.Editor
                 EditorGUILayout.LabelField("No Available Code Creator!");
                 return;
             }
-            
-            this.m_CurCodeCreatorIndex = EditorGUILayout.Popup("Code Creator Type", this.m_CurCodeCreatorIndex, this.m_CodeCreatorTypeNames);
+
+            int index = this.m_CurCodeCreatorIndex;
+            this.m_CurCodeCreatorIndex = EditorGUILayout.Popup("Code Creator Type", index, this.m_CodeCreatorTypeNames);
+            if (index != this.m_CurCodeCreatorIndex)
+            {
+                EditorPrefs.SetInt(CurCodeCreatorIndexSaveKey, this.m_CurCodeCreatorIndex);
+            }
 
             this.m_CodeCreatorInstances[this.m_CurCodeCreatorIndex].OnGUI();
             
@@ -58,7 +66,7 @@ namespace ET.Editor
             
             EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(this.m_CodeName) || this.m_CodeName.Contains(" "));
             {
-                if (GUILayout.Button("Generate Code!"))
+                if (GUILayout.Button("Generate Code"))
                 {
                     this.m_CodeCreatorInstances[this.m_CurCodeCreatorIndex].GenerateCode(this.m_CodeName);
                     AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
