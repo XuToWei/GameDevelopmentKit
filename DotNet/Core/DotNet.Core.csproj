@@ -28,7 +28,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="..\..\Unity\Assets\Scripts\Library\ET\Runtime\Core\**\*.cs">
+        <Compile Include="..\..\Unity\Assets\Scripts\Library\ET\Core\Runtime\**\*.cs">
             <Link>Core\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
     </ItemGroup>

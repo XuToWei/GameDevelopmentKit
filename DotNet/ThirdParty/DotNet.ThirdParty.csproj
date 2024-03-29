@@ -27,7 +27,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="..\..\Unity\Assets\Scripts\Library\ET\Runtime\ThirdParty\**\*.cs">
+        <Compile Include="..\..\Unity\Assets\Scripts\Library\ET\ThirdParty\Runtime\**\*.cs">
             <Link>ET/%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         <Compile Include="..\..\Unity\Assets\Scripts\Library\LubanLib\Runtime\**\*.cs">

@@ -1,11 +1,8 @@
 {
-    "name": "ET",
-    "rootNamespace": "ET",
+    "name": "ET.ThirdParty",
+    "rootNamespace": "",
     "references": [
-        "Unity.Mathematics",
-        "UniTask",
-        "MemoryPack",
-        "UniTaskExtension"
+        "MemoryPack"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -13,9 +10,7 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [
-        "UNITY_ET"
-    ],
+    "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
 }

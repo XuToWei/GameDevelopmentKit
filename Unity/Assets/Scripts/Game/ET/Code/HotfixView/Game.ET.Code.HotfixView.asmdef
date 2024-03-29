@@ -2,7 +2,8 @@
     "name": "Game.ET.Code.HotfixView",
     "rootNamespace": "ET",
     "references": [
-        "ET",
+        "ET.Core",
+        "ET.ThirdParty",
         "Game.ET.Code.Model",
         "Game.ET.Code.Hotfix",
         "Game.ET.Code.ModelView",

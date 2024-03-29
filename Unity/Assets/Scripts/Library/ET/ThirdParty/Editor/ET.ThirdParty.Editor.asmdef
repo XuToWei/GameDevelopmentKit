@@ -1,9 +1,8 @@
 {
-    "name": "ET.Editor",
-    "rootNamespace": "ET",
+    "name": "ET.ThirdParty.Editor",
+    "rootNamespace": "",
     "references": [
-        "ET",
-        "Unity.Mathematics"
+        "ET.ThirdParty"
     ],
     "includePlatforms": [
         "Editor"
@@ -13,9 +12,7 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [
-        "UNITY_ET"
-    ],
+    "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
 }

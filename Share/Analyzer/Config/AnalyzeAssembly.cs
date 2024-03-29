@@ -6,7 +6,7 @@
         public const string DotNet_Model = "Model";
         public const string DotNet_Hotfix = "Hotfix";
 
-        public const string Unity_ET_Runtime = "ET.Runtime";
+        public const string Unity_ET_Core = "ET.Core";
         public const string Unity_ET_Code_Model = "Game.ET.Code.Model";
         public const string Unity_ET_Code_Hotfix = "Game.ET.Code.Hotfix";
         public const string Unity_ET_Code_ModelView = "Game.ET.Code.ModelView";
@@ -33,7 +33,7 @@
         public static readonly string[] All =
         {
             DotNet_Core, DotNet_Model, DotNet_Hotfix, 
-            Unity_ET_Runtime, Unity_ET_Code_Model, Unity_ET_Code_Hotfix, Unity_ET_Code_ModelView, Unity_ET_Code_HotfixView,
+            Unity_ET_Core, Unity_ET_Code_Model, Unity_ET_Code_Hotfix, Unity_ET_Code_ModelView, Unity_ET_Code_HotfixView,
         };
 
         public static readonly string[] ServerModelHotfix =

@@ -1,27 +1,22 @@
 {
-    "name": "Game.ET.Code.Model",
+    "name": "ET.Core",
     "rootNamespace": "ET",
     "references": [
-        "ET.Core",
-        "ET.ThirdParty",
-        "Game.ET.Loader",
         "Unity.Mathematics",
-        "LubanLib",
         "UniTask",
-        "ZString",
         "MemoryPack",
-        "UniTaskExtension"
+        "UniTaskExtension",
+        "ET.ThirdParty"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [
-        "UNITY_ET",
-        "!UNITY_HOTFIX || UNITY_COMPILE || UNITY_EDITOR"
+        "UNITY_ET"
     ],
     "versionDefines": [],
-    "noEngineReferences": true
+    "noEngineReferences": false
 }

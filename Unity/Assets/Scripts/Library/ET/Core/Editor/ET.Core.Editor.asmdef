@@ -1,15 +1,9 @@
 {
-    "name": "Game.ET.Code.Editor",
+    "name": "ET.Core.Editor",
     "rootNamespace": "ET",
     "references": [
         "ET.Core",
-        "ET.Core.Editor",
-        "ET.ThirdParty",
-        "Game.ET.Editor",
-        "Game.ET.Code.Hotfix",
-        "Game.ET.Code.HotfixView",
-        "Game.ET.Code.Model",
-        "Game.ET.Code.ModelView"
+        "Unity.Mathematics"
     ],
     "includePlatforms": [
         "Editor"
@@ -20,8 +14,7 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [
-        "UNITY_ET",
-        "!UNITY_HOTFIX || UNITY_EDITOR"
+        "UNITY_ET"
     ],
     "versionDefines": [],
     "noEngineReferences": false

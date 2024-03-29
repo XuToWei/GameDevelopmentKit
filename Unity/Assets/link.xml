@@ -57,7 +57,8 @@
     <assembly fullname="MemoryPack" preserve="all" />
     <assembly fullname="MongoDB.Bson" preserve="all" />
     <assembly fullname="CommandLine" preserve="all" />
-    <assembly fullname="ET" preserve="all" />
+    <assembly fullname="ET.Core" preserve="all" />
+    <assembly fullname="ET.ThirdParty" preserve="all" />
     <assembly fullname="Game.ET.Loader" preserve="all" />
     <!--UNITY_HOTFIX_ET_END-->
 
