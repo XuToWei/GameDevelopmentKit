@@ -87,8 +87,9 @@ namespace UnityGameFramework.Extension
                     {
                         core.TrySetResult(null);
                     }
+                    return false;
                 }
-                return false;
+                return true;
             }
             
             void ReturnAction()
