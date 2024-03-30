@@ -51,7 +51,7 @@ namespace UnityGameFramework.Extension
                 {
                     return true;
                 }
-                if (delayOneFrame)
+                if (delayOneFrame)//等待一帧GF的Event.Fire，确保能接收到事件处理后继续（PlayerLoopTiming.LastUpdate）
                 {
                     delayOneFrame = false;
                     return true;
