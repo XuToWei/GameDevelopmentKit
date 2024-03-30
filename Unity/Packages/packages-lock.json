@@ -60,18 +60,18 @@
       "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
     },
     "com.cysharp.unitask": {
-      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.3",
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "64792b672d35e43b3412fc74861f8bdbf41e3a6f"
+      "hash": "d057074f177b078e29f10dd511b54df48a8806ea"
     },
     "com.cysharp.zstring": {
-      "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString#2.5.1",
+      "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "7629cf7ca8801fb25104b641fc0ac0457849d7c9"
+      "hash": "3156134075b89a162fe95350a2e92a4c85ccca59"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
