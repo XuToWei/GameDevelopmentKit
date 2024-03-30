@@ -18,27 +18,26 @@ namespace UnityGameFramework.Extension
         [SerializeField]
         private string m_CollectionPatterns;
         [SerializeField]
-        [OnValueChanged("OnPathChange", IncludeChildren = true, InvokeOnInitialize = true)]
+        [OnValueChanged("OnPathChange", IncludeChildren = true)]
         [AssetsOnly]
         private List<DefaultAsset> m_CollectionPaths = new List<DefaultAsset>();
 
-        private string[] m_SearchPatterns;
         private void OnPathChange()
         {
-            m_SearchPatterns = (string.IsNullOrEmpty(m_CollectionPatterns) ? "*.*" : m_CollectionPatterns).Split(';', ',', '|');
             m_CollectionPaths = m_CollectionPaths.Distinct().ToList();
         }
 
         [Button("RefreshCollection")]
         public void Pack()
         {
+            var searchPatterns = (string.IsNullOrEmpty(m_CollectionPatterns) ? "*.*" : m_CollectionPatterns).Split(';', ',', '|');
             m_AssetDict.Clear();
             foreach (DefaultAsset pathAsset in m_CollectionPaths)
             {
                 if(pathAsset == null || !ProjectWindowUtil.IsFolder(pathAsset.GetInstanceID()))
                     continue;
                 string path = AssetDatabase.GetAssetPath(pathAsset);
-                foreach (var pattern in m_SearchPatterns)
+                foreach (var pattern in searchPatterns)
                 {
                     if(string.IsNullOrEmpty(pattern))
                         continue;
