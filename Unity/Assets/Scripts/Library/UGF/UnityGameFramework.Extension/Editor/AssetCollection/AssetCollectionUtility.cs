@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace UnityGameFramework.Extension.Editor
 {
-    public class AssetCollectionUtility : MonoBehaviour
+    public static class AssetCollectionUtility
     {
+        [MenuItem("Game Framework/Refresh AssetCollection", false, 2)]
         public static void RefreshAssetCollection()
         {
             string[] guids = AssetDatabase.FindAssets("t:AssetCollection");

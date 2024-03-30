@@ -4,6 +4,7 @@ namespace UnityGameFramework.Extension
 {
     public static class SpriteCollectionUtility
     {
+        [MenuItem("Game Framework/Refresh SpriteCollection", false, 1)]
         public static void RefreshSpriteCollection()
         {
             string[] guids = AssetDatabase.FindAssets("t:SpriteCollection");

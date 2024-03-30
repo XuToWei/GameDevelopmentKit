@@ -13,13 +13,13 @@ namespace Game.Editor
     {
         public static readonly string BuildPkgFolder = Path.GetFullPath("../Temp/Pkg");
 
-        [InitializeOnLoadMethod]
+        // [InitializeOnLoadMethod]
         public static void ReGenerateProjectFiles()
         {
             Unity.CodeEditor.CodeEditor.CurrentEditor.SyncAll();
-            // Debug.Log("ReGenerateProjectFiles finished.");
+            Debug.Log("ReGenerateProjectFiles finished.");
         }
-        
+
         public static void BuildPkg(Platform platform)
         {
             BuildTarget buildTarget = BuildTarget.NoTarget;

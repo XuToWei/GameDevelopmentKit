@@ -2,7 +2,7 @@ using UnityEditor;
 
 namespace UnityGameFramework.Extension.Editor
 {
-    [InitializeOnLoad]
+    // [InitializeOnLoad]
     public static class AssetCollectionInitializeOnLoad
     {
         static AssetCollectionInitializeOnLoad()

@@ -2,7 +2,7 @@ using UnityEditor;
 
 namespace UnityGameFramework.Extension
 {
-    [InitializeOnLoad]
+    // [InitializeOnLoad]
     public static class SpriteCollectionInitializeOnLoad
     {
         static SpriteCollectionInitializeOnLoad()

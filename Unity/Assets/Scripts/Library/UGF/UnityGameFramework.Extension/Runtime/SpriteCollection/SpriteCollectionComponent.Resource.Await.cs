@@ -47,7 +47,7 @@ namespace UnityGameFramework.Extension
                 return;
             }
 
-            m_SpriteCollectionPool.Register(SpriteCollectionItemObject.Create(setSpriteObject.CollectionPath, collection,m_ResourceComponent), false);
+            m_SpriteCollectionPool.Register(SpriteCollectionItemObject.Create(setSpriteObject.CollectionPath, collection, m_ResourceComponent), false);
             m_SpriteCollectionBeingLoaded.Remove(setSpriteObject.CollectionPath);
             
             if(m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out HashSet<ISetSpriteObject> awaitSets))

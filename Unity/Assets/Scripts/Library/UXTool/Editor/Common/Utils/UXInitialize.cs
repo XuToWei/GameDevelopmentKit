@@ -36,17 +36,14 @@ public class UXInitialize
     static List<(Type type, int order)> FindAllInitializerTypes()
     {
         var calls = new List<(Type type, int order)>();
-        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        var typeCollection = TypeCache.GetTypesWithAttribute<UXInitializeAttribute>();
+        foreach (var type in typeCollection)
         {
-            foreach (var type in assembly.GetTypes())
-            {
-                var attrs = type.GetCustomAttributes(typeof(UXInitializeAttribute), false);
-                if (attrs.Length == 0)
-                    continue;
-
-                var attr = attrs[0] as UXInitializeAttribute;
-                calls.Add((type, attr.order));
-            }
+            var attrs = type.GetCustomAttributes(typeof(UXInitializeAttribute), false);
+            if (attrs.Length == 0)
+                continue;
+            var attr = (UXInitializeAttribute)attrs[0];
+            calls.Add((type, attr.order));
         }
         return calls;
     }
