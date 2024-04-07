@@ -13,11 +13,15 @@ namespace Game.Editor
         [Toolbar(OnGUISide.Left, 100)]
         static void OnToolbarGUI()
         {
-            if (GUILayout.Button(m_ButtonGUIContent))
+            EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
             {
-                BuildSceneSetting.AllScenes();
-                SceneHelper.StartScene(EntryUtility.EntryScenePath);
+                if (GUILayout.Button(m_ButtonGUIContent))
+                {
+                    BuildSceneSetting.AllScenes();
+                    SceneHelper.StartScene(EntryUtility.EntryScenePath);
+                }
             }
+            EditorGUI.EndDisabledGroup();
         }
     }
 
@@ -28,9 +32,9 @@ namespace Game.Editor
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void OnBeforeSceneLoad()
         {
-            if (PlayerPrefs.HasKey(UnityEditorSceneToOpenKey))
+            if (EditorPrefs.HasKey(UnityEditorSceneToOpenKey))
             {
-                string scenePath = PlayerPrefs.GetString(UnityEditorSceneToOpenKey);
+                string scenePath = EditorPrefs.GetString(UnityEditorSceneToOpenKey);
                 if (!SceneManager.GetActiveScene().path.Equals(scenePath))
                 {
                     SceneManager.LoadScene(scenePath);
@@ -41,9 +45,9 @@ namespace Game.Editor
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void OnAfterSceneLoad()
         {
-            if (PlayerPrefs.HasKey(UnityEditorSceneToOpenKey))
+            if (EditorPrefs.HasKey(UnityEditorSceneToOpenKey))
             {
-                PlayerPrefs.DeleteKey(UnityEditorSceneToOpenKey);
+                EditorPrefs.DeleteKey(UnityEditorSceneToOpenKey);
             }
         }
 
@@ -53,7 +57,7 @@ namespace Game.Editor
             {
                 return;
             }
-            PlayerPrefs.SetString(UnityEditorSceneToOpenKey, scenePathName);
+            EditorPrefs.SetString(UnityEditorSceneToOpenKey, scenePathName);
             EditorApplication.isPlaying = true;
         }
     }

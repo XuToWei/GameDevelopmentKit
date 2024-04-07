@@ -50,6 +50,8 @@ namespace ThunderFireUITool
             if (obj == PlayModeStateChange.EnteredPlayMode)
             {
                 Hide();
+                if (Camera.main == null && UnityEngine.Object.FindObjectOfType<Camera>() == null)
+                    return;
                 Show();
             }
             else if (obj == PlayModeStateChange.EnteredEditMode)
