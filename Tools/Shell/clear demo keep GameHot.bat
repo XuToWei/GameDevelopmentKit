@@ -1,7 +1,6 @@
 set DESTINATION=..\..\Unity\Assets\Res
 
 rd/s /q %DESTINATION%\Art
-rd/s /q %DESTINATION%\Font
 rd/s /q %DESTINATION%\Material
 rd/s /q %DESTINATION%\Mesh
 rd/s /q %DESTINATION%\Music
