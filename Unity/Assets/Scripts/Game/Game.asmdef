@@ -26,7 +26,8 @@
         "Leihuo.UXTools.Runtime",
         "StateController",
         "Animancer",
-        "SocoTool"
+        "SocoTool",
+        "R3.Unity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

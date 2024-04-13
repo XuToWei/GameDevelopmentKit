@@ -18,7 +18,8 @@
         "EnhancedScroller",
         "Leihuo.UXTools.Runtime",
         "StateController",
-        "Animancer"
+        "Animancer",
+        "R3.Unity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
