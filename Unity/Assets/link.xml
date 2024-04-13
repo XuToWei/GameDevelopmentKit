@@ -35,6 +35,7 @@
     <assembly fullname="SLATE" preserve="all" />
     <assembly fullname="EnhancedScroller" preserve="all" />
     <assembly fullname="Animancer" preserve="all" />
+    <assembly fullname="R3.Unity" preserve="all" />
     
     <assembly fullname="Game" preserve="all" />
     <!--UNITY_HOTFIX_END-->

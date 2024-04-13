@@ -58,6 +58,7 @@ MonoBehaviour:
   - SLATE
   - EnhancedScroller
   - Animancer
+  - R3.Unity
   - Game
   - MemoryPack
   - MongoDB.Bson

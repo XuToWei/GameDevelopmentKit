@@ -19,7 +19,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "6c679cc3ab76197f557791c51922603a5d9716b1"
+      "hash": "2697eb5a90cc44f226cd4ca4ad7ea1259ab38f56"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
@@ -43,7 +43,7 @@
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "25a9cdb4007f5fc05692576bf27d65063de0b4cd"
+      "hash": "6d8dee0b0628aab66753bc3d72f1cd6575a854b8"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
