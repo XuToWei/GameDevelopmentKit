@@ -65,12 +65,12 @@
 
 - 1.安装 [.net8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)，服务器功能需要安装[MongoDB](https://www.mongodb.com/)
 
-- 2.打开Unity（2022.3.15）项目，导入Tools/UnityPlugins/Useful.unitypackage，等待Unity编译完成
+- 2.打开Unity(2022.3.15)项目，导入Tools/UnityPlugins/Useful.unitypackage，等待Unity编译完成
 
 - 3.打开Unity的Editor/Preferences菜单栏，按如下设置后（不要勾选'Registry packages'和'Build-in packages'），点击Regenerate project files按钮
 ![](Book/png/unity_step1.png)
 
-- 4.打开 Kit.sln 编译（导表，资源服务器，代码分析等功能需要用到）
+- 4.使用IDE打开Kit.sln编译（导表，资源服务器，代码分析等功能需要用到）
 
 - 5.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
 
