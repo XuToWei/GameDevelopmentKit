@@ -43,22 +43,6 @@
 
 14.[一键打包](Book/%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85.md)，上传资源服务器，方便开发期间出包测试
 
-***
-
-### 该项目依赖以下收费插件（请自行购买安装）：
-
-- [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)
-
-- [SLATE Cinematic Sequencer](https://assetstore.unity.com/packages/tools/animation/slate-cinematic-sequencer-56558)
-
-- [SmartUiSelection](https://assetstore.unity.com/packages/tools/gui/smart-ui-selection-for-unity-124328)
-
-- [SRDebugger](https://assetstore.unity.com/packages/tools/gui/srdebugger-console-tools-on-device-27688)
-
-- [DOTween Pro](https://assetstore.unity.com/packages/tools/visual-scripting/dotween-pro-32416)
-
-- [EnhancedScroller](https://assetstore.unity.com/packages/tools/gui/enhancedscroller-36378)
-
 # 运行步骤
 
 ### Unity Editor
@@ -100,3 +84,19 @@
 [UGFExtensions](https://github.com/FingerCaster/UGFExtensions)
 
 [SocoTools](https://github.com/crossous/SocoTools)
+
+***
+
+### 该项目依赖以下收费插件（请自行购买安装）：
+
+- [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)
+
+- [SLATE Cinematic Sequencer](https://assetstore.unity.com/packages/tools/animation/slate-cinematic-sequencer-56558)
+
+- [SmartUiSelection](https://assetstore.unity.com/packages/tools/gui/smart-ui-selection-for-unity-124328)
+
+- [SRDebugger](https://assetstore.unity.com/packages/tools/gui/srdebugger-console-tools-on-device-27688)
+
+- [DOTween Pro](https://assetstore.unity.com/packages/tools/visual-scripting/dotween-pro-32416)
+
+- [EnhancedScroller](https://assetstore.unity.com/packages/tools/gui/enhancedscroller-36378)
