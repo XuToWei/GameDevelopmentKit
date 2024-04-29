@@ -20,7 +20,7 @@ namespace Game.Hot
             Log.Info("Game.Hot.Code Load Config!");
             
             await HotEntry.HPBar.PreloadAsync();
-            await LoadFontAsync("MainFont");
+            await LoadFontAsync("Default");
             
             ChangeState<ProcedureGame>(procedureOwner);
         }

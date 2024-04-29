@@ -6,7 +6,7 @@ namespace Game
     {
         public static string GetFontAsset(string assetName)
         {
-            return Utility.Text.Format("Assets/Res/Font/{0}.ttf", assetName);
+            return Utility.Text.Format("Assets/Res/Font/{0}.otf", assetName);
         }
 
         public static string GetSceneAsset(string assetName)
@@ -14,9 +14,9 @@ namespace Game
             return Utility.Text.Format("Assets/Res/Scene/{0}.unity", assetName);
         }
         
-        public static string GetLocalizationAsset(string assetName, string extensionName)
+        public static string GetLocalizationAsset(string assetName)
         {
-            return Utility.Text.Format("Assets/GameMain/Localization/{0}/Localization.{}", GameEntry.Localization.Language);
+            return Utility.Text.Format("Assets/GameMain/Localization/{0}/{1}", GameEntry.Localization.Language, assetName);
         }
 
         public static string GetMusicAsset(string assetName)
