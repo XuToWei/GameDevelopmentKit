@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 
 namespace UnityGameFramework.Extension
@@ -57,7 +57,7 @@ namespace UnityGameFramework.Extension
         {
             TimeTask timeTask = ReferencePool.Acquire<TimeTask>();
             timeTask.TimeoutMs = DateTimeHelper.GetTimestamp() + (long) timeout.TotalMilliseconds;
-            timeTask.DelayTask = new TaskCompletionSource<bool>();
+            timeTask.DelayTask = AutoResetUniTaskCompletionSource<bool>.Create();
             timeTask.m_TimerType = TimerType.Task;
             timeTask.TaskStatus = TimeTaskStatus.Wait;
             return timeTask;
@@ -86,7 +86,7 @@ namespace UnityGameFramework.Extension
         {
             TimeTask timeTask = ReferencePool.Acquire<TimeTask>();
             timeTask.TimeoutMs = timeoutMs;
-            timeTask.DelayTask = new TaskCompletionSource<bool>();
+            timeTask.DelayTask = AutoResetUniTaskCompletionSource<bool>.Create();
             timeTask.m_TimerType = TimerType.Task;
             timeTask.TaskStatus = TimeTaskStatus.Wait;
             return timeTask;
@@ -135,8 +135,8 @@ namespace UnityGameFramework.Extension
                             action.Invoke(true);
                             break;
                         case TimerType.Task:
-                            TaskCompletionSource<bool> tcs = (TaskCompletionSource<bool>) DelayTask;
-                            tcs.SetResult(true);
+                            AutoResetUniTaskCompletionSource<bool> tcs = (AutoResetUniTaskCompletionSource<bool>) DelayTask;
+                            tcs.TrySetResult(true);
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -173,8 +173,8 @@ namespace UnityGameFramework.Extension
                         action.Invoke(false);
                         break;
                     case TimerType.Task:
-                        TaskCompletionSource<bool> tcs = (TaskCompletionSource<bool>) DelayTask;
-                        tcs.SetResult(false);
+                        AutoResetUniTaskCompletionSource<bool> tcs = (AutoResetUniTaskCompletionSource<bool>) DelayTask;
+                        tcs.TrySetResult(false);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 namespace UnityGameFramework.Extension
 {
@@ -19,7 +19,7 @@ namespace UnityGameFramework.Extension
         /// <param name="timeout">过期时间，相对时间</param>
         /// <param name="cancelAction">取消任务令牌</param>
         /// <returns>添加成功返回true，如果任务已过期会立即执行，然后返回false</returns>
-        Task<bool> AddTask(TimeSpan timeout, Action cancelAction = default);
+        UniTask<bool> AddTask(TimeSpan timeout, Action cancelAction = default);
         ITimeTask AddTask(TimeSpan timeout, Action<bool> action);
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace UnityGameFramework.Extension
         /// <param name="cancelAction">取消任务令牌</param>
         /// <returns></returns>
         /// <returns>添加成功返回true，如果任务已过期会立即执行，然后返回false</returns>
-        Task<bool>  AddTask(long timeoutMs, Action cancelAction = default);
+        UniTask<bool>  AddTask(long timeoutMs, Action cancelAction = default);
         ITimeTask AddTask(long timeoutMs,Action<bool> action);
 
         /// <summary>

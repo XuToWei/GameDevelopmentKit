@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using UnityEngine;
 using UnityGameFramework.Runtime;
@@ -26,7 +26,7 @@ namespace UnityGameFramework.Extension
         /// <param name="timeout">过期时间，相对时间</param>
         /// <param name="cancelAction">任务取消令牌</param>
         /// <returns></returns>
-        public Task<bool> AddTaskAsync(TimeSpan timeout, Action cancelAction = default)
+        public UniTask<bool> AddTaskAsync(TimeSpan timeout, Action cancelAction = default)
         {
             return m_Timer.AddTask(timeout, cancelAction);
         }
@@ -49,7 +49,7 @@ namespace UnityGameFramework.Extension
         /// <param name="timeoutMs">过期时间戳，绝对时间</param>
         /// <param name="cancelAction">任务取消令牌</param>
         /// <returns></returns>
-        public Task<bool> AddTaskAsync(long timeoutMs, Action cancelAction = default)
+        public UniTask<bool> AddTaskAsync(long timeoutMs, Action cancelAction = default)
         {
             return m_Timer.AddTask(timeoutMs, cancelAction);
         }
@@ -142,13 +142,13 @@ namespace UnityGameFramework.Extension
         /// </summary>
         /// <param name="count">延迟帧数</param>
         /// <returns></returns>
-        public async Task AddFrameTaskAsync(int count = 1)
+        public async UniTask AddFrameTaskAsync(int count = 1)
         {
-            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            AutoResetUniTaskCompletionSource<bool> tcs = AutoResetUniTaskCompletionSource<bool>.Create();
 
             void CallBack()
             {
-                tcs.SetResult(true);
+                tcs.TrySetResult(true);
             }
 
             AddFrameTask(CallBack, count);

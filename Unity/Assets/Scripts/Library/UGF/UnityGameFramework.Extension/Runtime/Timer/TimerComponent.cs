@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using UnityEngine;
 using UnityGameFramework.Runtime;
@@ -281,9 +281,9 @@ namespace UnityGameFramework.Extension
             {
                 case TimerType.OnceWait:
                 {
-                    TaskCompletionSource<bool> tcs = timer.Callback as TaskCompletionSource<bool>;
+                    AutoResetUniTaskCompletionSource<bool> tcs = timer.Callback as AutoResetUniTaskCompletionSource<bool>;
                     RemoveTimer(timer.ID);
-                    tcs?.SetResult(true);
+                    tcs?.TrySetResult(true);
                     break;
                 }
                 case TimerType.Once:
@@ -495,7 +495,7 @@ namespace UnityGameFramework.Extension
         /// <param name="time">定时时间</param>
         /// <param name="cancelAction">取消任务函数</param>
         /// <returns></returns>
-        public async Task<bool> OnceTimerAsync(long time, Action cancelAction = null)
+        public async UniTask<bool> OnceTimerAsync(long time, Action cancelAction = null)
         {
             long nowTime = TimerTimeUtility.Now();
             if (time <= 0)
@@ -503,7 +503,7 @@ namespace UnityGameFramework.Extension
                 return true;
             }
 
-            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            AutoResetUniTaskCompletionSource<bool> tcs = AutoResetUniTaskCompletionSource<bool>.Create();
             Timer timer = Timer.Create(time, nowTime, TimerType.OnceWait, tcs);
             m_Timers.Add(timer.ID, timer);
             int timerId = timer.ID;
@@ -513,7 +513,7 @@ namespace UnityGameFramework.Extension
             void CancelAction()
             {
                 RemoveTimer(timerId);
-                tcs.SetResult(false);
+                tcs.TrySetResult(false);
             }
 
             bool result;
@@ -540,7 +540,7 @@ namespace UnityGameFramework.Extension
         /// 可等待的帧定时器
         /// </summary>
         /// <returns>定时器 ID</returns>
-        public async Task<bool> FrameAsync(Action cancelAction = null)
+        public async UniTask<bool> FrameAsync(Action cancelAction = null)
         {
             return await OnceTimerAsync(1, cancelAction);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using DelayQueue;
 
 namespace UnityGameFramework.Extension
@@ -62,7 +63,7 @@ namespace UnityGameFramework.Extension
         /// <param name="timeout">过期时间，相对时间</param>
         /// <param name="cancelAction"></param>
         /// <returns></returns>
-        public Task<bool> AddTask(TimeSpan timeout,  Action cancelAction = default)
+        public UniTask<bool> AddTask(TimeSpan timeout,  Action cancelAction = default)
         {
             var timeoutMs = DateTimeHelper.GetTimestamp() + (long) timeout.TotalMilliseconds;
             return AddTask(timeoutMs, cancelAction);
@@ -87,7 +88,7 @@ namespace UnityGameFramework.Extension
         /// <param name="timeoutMs">过期时间戳，绝对时间</param>
         /// <param name="cancelAction"></param>
         /// <returns></returns>
-        public async Task<bool> AddTask(long timeoutMs, Action cancelAction = default)
+        public async UniTask<bool> AddTask(long timeoutMs, Action cancelAction = default)
         {
             var task = TimeTask.Create(timeoutMs);
             AddTask(task);
@@ -107,7 +108,7 @@ namespace UnityGameFramework.Extension
                 {
                     cancelAction += CancelAction;
                 }
-                result = await (Task<bool>) task.DelayTask;
+                result = await ((AutoResetUniTaskCompletionSource<bool>)task.DelayTask).Task;
             }
             finally
             {
