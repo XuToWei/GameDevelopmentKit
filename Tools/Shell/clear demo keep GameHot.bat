@@ -21,12 +21,17 @@ rd/s /q %DESTINATION%\Entity\EntityData
 rd/s /q %DESTINATION%\Entity\EntityLogic
 rd/s /q %DESTINATION%\Game
 rd/s /q %DESTINATION%\HPBar
-rd/s /q %DESTINATION%\Module
 rd/s /q %DESTINATION%\Scene
 rd/s /q %DESTINATION%\UI
 rd/s /q %DESTINATION%\Utility
 
 del %DESTINATION%\HPBar.meta
+del %DESTINATION%\Entity\EntityExtension.cs
+del %DESTINATION%\Procedure\ProcedurePreload.cs
+del %DESTINATION%\Procedure\ProcedureMenu.cs
+del %DESTINATION%\Procedure\ProcedureMain.cs
+del %DESTINATION%\Procedure\ProcedureGame.cs
+del %DESTINATION%\Procedure\ProcedureChangeScene.cs
 
 set DESTINATION=..\..\Unity\Assets
 
