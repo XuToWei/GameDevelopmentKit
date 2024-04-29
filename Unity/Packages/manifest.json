@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.alelievr.node-graph-processor": "https://github.com/alelievr/NodeGraphProcessor.git?path=Assets/com.alelievr.NodeGraphProcessor",
     "com.baracuda.preprocessor-symbol-definition-files": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
     "com.code-philosophy.hybridclr": "https://github.com/focus-creative-games/hybridclr_unity.git",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git",

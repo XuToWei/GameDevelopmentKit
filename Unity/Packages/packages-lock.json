@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.alelievr.node-graph-processor": {
-      "version": "https://github.com/alelievr/NodeGraphProcessor.git?path=Assets/com.alelievr.NodeGraphProcessor",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "bc71d48ba9dfc7e7062779d6d12b9ef269e521b1"
-    },
     "com.baracuda.preprocessor-symbol-definition-files": {
       "version": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
       "depth": 0,
