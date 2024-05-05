@@ -72,21 +72,6 @@
 
 ***
 
-# 引用库 致谢
-[UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
-
-[ET](https://github.com/egametang/ET)（版本：[8.1](https://github.com/egametang/ET/commit/5ba6eb6ee26a641a82eb09f61ffdcb3ae969674a)）
-
-[Luban](https://github.com/focus-creative-games/luban)
-
-[UniTask](https://github.com/Cysharp/UniTask)
-
-[UGFExtensions](https://github.com/FingerCaster/UGFExtensions)
-
-[SocoTools](https://github.com/crossous/SocoTools)
-
-***
-
 ### 该项目依赖以下收费插件（请自行购买安装）：
 
 - [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)
@@ -100,3 +85,18 @@
 - [DOTween Pro](https://assetstore.unity.com/packages/tools/visual-scripting/dotween-pro-32416)
 
 - [EnhancedScroller](https://assetstore.unity.com/packages/tools/gui/enhancedscroller-36378)
+
+***
+
+# 引用库 致谢
+[UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
+
+[ET](https://github.com/egametang/ET)（版本：[8.1](https://github.com/egametang/ET/commit/bfe29831895d3f2cc93d68d43dec7f62b8550756)）
+
+[Luban](https://github.com/focus-creative-games/luban)
+
+[UniTask](https://github.com/Cysharp/UniTask)
+
+[UGFExtensions](https://github.com/FingerCaster/UGFExtensions)
+
+[SocoTools](https://github.com/crossous/SocoTools)

@@ -23,6 +23,7 @@ del %DESTINATION%\Unity\Assets\Scripts\Editor\Helper\ShellHelper.cs
 del %DESTINATION%\Unity\Assets\Scripts\Editor\Helper\DockDefine.cs
 del %DESTINATION%\Unity\Assets\Scripts\Editor\Helper\EditorLogHelper.cs
 del %DESTINATION%\Unity\Assets\Scripts\Editor\Helper\EditorResHelper.cs
+del %DESTINATION%\Unity\Assets\Scripts\Loader\UnityLogger.cs
 del %DESTINATION%\Unity\Assets\Plugins\Share.SourceGenerator.dll
 del %DESTINATION%\Unity\Assets\Plugins\Share.SourceGenerator.dll.meta
 
@@ -48,6 +49,7 @@ copy %SOURCE%\Unity\Assets\Scripts\Library\ET\Core\Editor\Helper\ShellHelper.cs 
 copy %SOURCE%\Unity\Assets\Scripts\Game\ET\Editor\Helper\DockDefine.cs %DESTINATION%\Unity\Assets\Scripts\Editor\Helper\DockDefine.cs
 copy %SOURCE%\Unity\Assets\Scripts\Game\ET\Editor\Helper\EditorLogHelper.cs %DESTINATION%\Unity\Assets\Scripts\Editor\Helper\EditorLogHelper.cs
 copy %SOURCE%\Unity\Assets\Scripts\Game\ET\Editor\Helper\EditorResHelper.cs %DESTINATION%\Unity\Assets\Scripts\Editor\Helper\EditorResHelper.cs
+copy %SOURCE%\Unity\Assets\Scripts\Game\ET\Loader\UnityLogger.cs %DESTINATION%\Unity\Assets\Scripts\Loader\UnityLogger.cs
 copy %SOURCE%\Unity\Assets\Plugins\Share.SourceGenerator.dll %DESTINATION%\Unity\Assets\Plugins\Share.SourceGenerator.dll
 copy %SOURCE%\Unity\Assets\Plugins\Share.SourceGenerator.dll.meta %DESTINATION%\Unity\Assets\Plugins\Share.SourceGenerator.dll.meta
 
