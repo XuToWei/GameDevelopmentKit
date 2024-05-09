@@ -106,12 +106,6 @@ namespace ET
             {
                 throw new Exception($"actor inner process diff: {actorId.Process} {fiber.Process}");
             }
-
-            if (actorId.Fiber == fiber.Id)
-            {
-                self.HandleMessage(fiber, new MessageInfo() {ActorId = actorId, MessageObject = message});
-                return true;
-            }
             
             return MessageQueue.Instance.Send(fiber.Address, actorId, message);
         }
@@ -142,18 +136,16 @@ namespace ET
                 throw new Exception($"actor inner process diff: {actorId.Process} {fiber.Process}");
             }
             
-            var tcs = AutoResetUniTaskCompletionSource<IResponse>.Create();
-
             Type requestType = request.GetType();
-            MessageSenderStruct messageSenderStruct = new(actorId, requestType, needException);
-            self.requestCallback.Add(rpcId, messageSenderStruct);
-
             IResponse response;
             if (!self.SendInner(actorId, (MessageObject)request))  // 纤程不存在
             {
                 response = MessageHelper.CreateResponse(requestType, rpcId, ErrorCore.ERR_NotFoundActor);
                 return response;
             }
+            
+            MessageSenderStruct messageSenderStruct = new(actorId, requestType, needException);
+            self.requestCallback.Add(rpcId, messageSenderStruct);
             
             async UniTask Timeout()
             {
