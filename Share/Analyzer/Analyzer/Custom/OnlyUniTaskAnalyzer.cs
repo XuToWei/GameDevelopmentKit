@@ -1,15 +1,16 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace ET.Analyzer
+namespace ET.Analyzer.Custom
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class AsyncMethodReturnTypeAnalyzer: DiagnosticAnalyzer
+    public class OnlyUniTaskAnalyzer: DiagnosticAnalyzer
     {
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(AsyncMethodReturnTypeAnalyzerRule.Rule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+                ImmutableArray.Create(OnlyUniTaskAnalyzerRule.Rule);
         
         public override void Initialize(AnalysisContext context)
         {
@@ -21,10 +22,10 @@ namespace ET.Analyzer
             context.EnableConcurrentExecution();
             context.RegisterSyntaxNodeAction(this.Analyzer, SyntaxKind.MethodDeclaration,SyntaxKind.LocalFunctionStatement);
         }
-
+        
         private void Analyzer(SyntaxNodeAnalysisContext context)
         {
-            if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, Custom.CustomAnalyzeAssembly.All))
+            if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.All))
             {
                 return;
             }
@@ -40,17 +41,29 @@ namespace ET.Analyzer
                 methodSymbol = context.SemanticModel.GetDeclaredSymbol(localFunctionStatementSyntax) as IMethodSymbol;
 
             }
-            if (methodSymbol == null)
+            if (methodSymbol == null || methodSymbol.ReturnsVoid)
             {
                 return;
             }
             
-            if (methodSymbol.IsAsync && methodSymbol.ReturnsVoid)
+            var returnType = methodSymbol.ReturnType;
+            var namespaceName = returnType.ContainingNamespace.ToString();
+            if (methodSymbol.IsAsync)
             {
-                Diagnostic diagnostic = Diagnostic.Create(AsyncMethodReturnTypeAnalyzerRule.Rule, context.Node.GetLocation());
-                context.ReportDiagnostic(diagnostic);
+                if (namespaceName != "Cysharp.Threading.Tasks" || !returnType.Name.StartsWith("UniTask"))
+                {
+                    Diagnostic diagnostic = Diagnostic.Create(OnlyUniTaskAnalyzerRule.Rule, context.Node.GetLocation());
+                    context.ReportDiagnostic(diagnostic);
+                }
+            }
+            else
+            {
+                if (namespaceName == "System.Threading.Tasks" && returnType.Name.StartsWith("Task"))
+                {
+                    Diagnostic diagnostic = Diagnostic.Create(OnlyUniTaskAnalyzerRule.Rule, context.Node.GetLocation());
+                    context.ReportDiagnostic(diagnostic);
+                }
             }
         }
     }
 }
-

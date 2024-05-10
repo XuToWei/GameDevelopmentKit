@@ -13,37 +13,37 @@
         public const string Unity_ET_Code_HotfixView = "Game.ET.Code.HotfixView";
 
         public static readonly string[] AllHotfix =
-        {
+        [
             DotNet_Hotfix,
-            Unity_ET_Code_Hotfix, Unity_ET_Code_HotfixView,
-        };
+            Unity_ET_Code_Hotfix, Unity_ET_Code_HotfixView
+        ];
 
         public static readonly string[] AllModel =
-        {
+        [
             DotNet_Model,
-            Unity_ET_Code_Model, Unity_ET_Code_ModelView,
-        };
+            Unity_ET_Code_Model, Unity_ET_Code_ModelView
+        ];
 
         public static readonly string[] AllModelHotfix =
-        {
+        [
             DotNet_Model, DotNet_Hotfix, 
-            Unity_ET_Code_Model, Unity_ET_Code_Hotfix, Unity_ET_Code_ModelView, Unity_ET_Code_HotfixView,
-        };
+            Unity_ET_Code_Model, Unity_ET_Code_Hotfix, Unity_ET_Code_ModelView, Unity_ET_Code_HotfixView
+        ];
         
         public static readonly string[] All =
-        {
+        [
             DotNet_Core, DotNet_Model, DotNet_Hotfix, 
-            Unity_ET_Core, Unity_ET_Code_Model, Unity_ET_Code_Hotfix, Unity_ET_Code_ModelView, Unity_ET_Code_HotfixView,
-        };
+            Unity_ET_Core, Unity_ET_Code_Model, Unity_ET_Code_Hotfix, Unity_ET_Code_ModelView, Unity_ET_Code_HotfixView
+        ];
 
         public static readonly string[] ServerModelHotfix =
-        {
-            DotNet_Model,DotNet_Hotfix,
-        };
+        [
+            DotNet_Model,DotNet_Hotfix
+        ];
 
         public static readonly string[] AllLogicModel =
-        {
-            DotNet_Model, Unity_ET_Code_Model,
-        };
+        [
+            DotNet_Model, Unity_ET_Code_Model
+        ];
     }
 }

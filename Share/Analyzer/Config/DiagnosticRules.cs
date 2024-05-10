@@ -4,11 +4,11 @@ namespace ET.Analyzer
 {
     public static class ETTaskInSyncMethodAnalyzerRule
     {
-        private const string Title = "ETTask方法调用在非异步方法体内使用错误";
+        private const string Title = "UniTask方法调用在非异步方法体内使用错误";
 
-        private const string MessageFormat = "方法: {0} 在非异步方法体内使用时需要添加.Coroutine()后缀";
+        private const string MessageFormat = "方法: {0} 在非异步方法体内使用时需要添加.Forget()后缀";
 
-        private const string Description = "ETTask方法调用在非异步方法体内使用错误.";
+        private const string Description = "UniTask方法调用在非异步方法体内使用错误.";
 
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.ETTaskInSyncMethodAnalyzerRuleId,
@@ -22,11 +22,11 @@ namespace ET.Analyzer
 
     public static class ETTaskInAsyncMethodAnalyzerRule
     {
-        private const string Title = "ETTask方法调用在异步方法体内使用错误";
+        private const string Title = "UniTask方法调用在异步方法体内使用错误";
 
-        private const string MessageFormat = "方法: {0} 在异步方法体内使用时需要添加await前缀 或 .Coroutine()后缀";
+        private const string MessageFormat = "方法: {0} 在异步方法体内使用时需要添加await前缀 或 .Forget()后缀";
 
-        private const string Description = "ETTask方法调用在异步方法体内使用错误.";
+        private const string Description = "UniTask方法调用在异步方法体内使用错误.";
 
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.ETTaskInAsyncMethodAnalyzerRuleId,
@@ -271,11 +271,11 @@ namespace ET.Analyzer
 
     public static class AsyncMethodReturnTypeAnalyzerRule
     {
-        private const string Title = "禁止声明返回值为void的异步方法";
+        private const string Title = "禁止声明返回值为void的异步方法，请使用UniTaskVoid";
 
-        private const string MessageFormat = "禁止声明返回值为void的异步方法";
+        private const string MessageFormat = "禁止声明返回值为void的异步方法，请使用UniTaskVoid";
 
-        private const string Description = "禁止声明返回值为void的异步方法.";
+        private const string Description = "禁止声明返回值为void的异步方法，请使用UniTaskVoid.";
 
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.AsyncMethodReturnTypeAnalyzerRuleId,

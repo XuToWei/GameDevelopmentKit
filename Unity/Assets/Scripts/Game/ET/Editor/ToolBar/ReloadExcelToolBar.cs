@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using ToolbarExtension;
 using UnityEditor;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace ET.Editor
                         return;
                     s_IsReloading = true;
 
-                    async void ReloadAsync()
+                    async UniTaskVoid ReloadAsync()
                     {
                         try
                         {
@@ -34,7 +35,7 @@ namespace ET.Editor
                         }
                     }
 
-                    ReloadAsync();
+                    ReloadAsync().Forget();
                 }
             }
             EditorGUI.EndDisabledGroup();
