@@ -34,6 +34,15 @@ namespace ET
 
         partial void PostInit()
         {
+            this.Gates.Clear();
+            this.ProcessScenes.Clear();
+            this.ClientScenesByName.Clear();
+            this.LocationConfig = null;
+            this.Realms.Clear();
+            this.Routers.Clear();
+            this.Maps.Clear();
+            this.Match = null;
+            this.Benchmark = null;
             foreach (var startSceneConfig in this.DataList)
             {
                 if (!string.Equals(startSceneConfig.StartConfig, Options.Instance.StartConfig))
