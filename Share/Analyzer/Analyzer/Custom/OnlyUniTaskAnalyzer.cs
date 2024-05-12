@@ -47,7 +47,11 @@ namespace ET.Analyzer.Custom
             }
             
             var returnType = methodSymbol.ReturnType;
-            var namespaceName = returnType.ContainingNamespace.ToString();
+            string namespaceName = "";
+            if (returnType.ContainingNamespace != null)
+            {
+                namespaceName = returnType.ContainingNamespace.ToString();
+            }
             if (methodSymbol.IsAsync)
             {
                 if (namespaceName != "Cysharp.Threading.Tasks" || !returnType.Name.StartsWith("UniTask"))
