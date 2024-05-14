@@ -93,7 +93,7 @@ MonoBehaviour:
     loadType: 0
     packed: 0
     filterType: 0
-    searchPatterns: '*.prefab,*.anim,*.controller,*.inputactions,*shader,*.mat,*png,*json,*.txt'
+    searchPatterns: '*.prefab,*.anim,*.controller,*.inputactions,*shader,*.mat,*png,*json,*.txt,*.asset'
   - valid: 1
     name: Scene
     variant: 

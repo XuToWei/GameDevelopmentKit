@@ -5,7 +5,6 @@
       <Resource Name="Config" FileSystem="GameData" LoadType="0" Packed="False" />
       <Resource Name="Entity" LoadType="0" Packed="False" />
       <Resource Name="ET.ClientServer" FileSystem="GameData" LoadType="0" Packed="False" />
-      <Resource Name="ET.Code" FileSystem="GameData" LoadType="0" Packed="False" />
       <Resource Name="GameHot" FileSystem="GameData" LoadType="0" Packed="False" />
       <Resource Name="HybridCLR" LoadType="0" Packed="False" />
       <Resource Name="Luban" FileSystem="GameData" LoadType="0" Packed="False" />
@@ -56,14 +55,10 @@
       <Asset Guid="172ab742804613d4f99fee07a3878843" ResourceName="Luban" />
       <Asset Guid="17b111fc72de6d34c8b80b10929c86eb" ResourceName="UI.UXTool" />
       <Asset Guid="17b4b96214cae7a469bef91b74a00a4f" ResourceName="UI.UXTool" />
-      <Asset Guid="17f5310d3dec45741a7fb12f6c9e9c48" ResourceName="ET.Code" />
       <Asset Guid="17fe8e89dccbc164bb2aad7895be004d" ResourceName="UI.UXTool" />
-      <Asset Guid="19a9ef0c9c4190e4282ffd701c7c67fc" ResourceName="ET.Code" />
       <Asset Guid="1abfbe65a6e3c034cb43df1cff7317cb" ResourceName="Luban" />
-      <Asset Guid="1e33ec0dba09da8489e42b4f71f869d4" ResourceName="GameHot" />
       <Asset Guid="1eada7f8ac95f194c9b326abfb153080" ResourceName="UI.UXTool" />
       <Asset Guid="1f9dea015ca3a64498326b23e91f8cf6" ResourceName="UI.UXTool" />
-      <Asset Guid="1fc2de2941d57bb4e92cb70f9818bc50" ResourceName="ET.Code" />
       <Asset Guid="236433a27ce40a7429b87d14d8fa3035" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="237bd69835dcdba469d42326c4f3813f" ResourceName="UI.UXTool" />
       <Asset Guid="24ca310f92a6796408f1db7647ec4e55" ResourceName="Res/UI/UISprite/Common" />
@@ -93,6 +88,7 @@
       <Asset Guid="4e2080ec5b2634249afd0ee4e2310eff" ResourceName="UI.UXTool" />
       <Asset Guid="4eb028c2d41731848b73b8784a0ec0f1" ResourceName="ET.ClientServer" />
       <Asset Guid="4f272325ab7fc91408b7b77b4cae932c" ResourceName="UI.UXTool" />
+      <Asset Guid="522a790cad1f9a442b489d57c0aee1a8" ResourceName="UI.UXTool" />
       <Asset Guid="5322de890c0399a41af975436009b7d7" ResourceName="UI.UXTool" />
       <Asset Guid="54e50a6ecae1b70438e1c50bdbf55e39" ResourceName="UI.UXTool" />
       <Asset Guid="5564ceda6f96abf439a97240fd7abb4a" ResourceName="UI.UXTool" />
@@ -126,7 +122,6 @@
       <Asset Guid="738bdf56857a65f479c367c7b62c4ad7" ResourceName="Entity" />
       <Asset Guid="7c257456f05a75841b93e90bdd63bbf9" ResourceName="Res/Localization/ChineseSimplified/Localization" />
       <Asset Guid="7c4bd903827c81443b0bee2fa408efcd" ResourceName="ET.ClientServer" />
-      <Asset Guid="7c82a4361420a82498f407f0015222b7" ResourceName="GameHot" />
       <Asset Guid="7d5f7699d6d1d48e485ac71126e12061" ResourceName="Entity" />
       <Asset Guid="7d7519d6f12d2ee42ace9b3f15502ce8" ResourceName="UI.UXTool" />
       <Asset Guid="7e2d9312c5afda3438f3e420470bf02d" ResourceName="UI.UXTool" />
@@ -152,7 +147,6 @@
       <Asset Guid="927853b6f24bb6c49ae06752fad056be" ResourceName="UI.UXTool" />
       <Asset Guid="943f3c476130c4f4f8ae55ef3ccd38ba" ResourceName="Res/Prefab/Skeleton/Texture/Skeleton_D" />
       <Asset Guid="94d28398aaf1dad4c8c2b147cba2ecb1" ResourceName="UI.UXTool" />
-      <Asset Guid="95d323882a151f14e9215c0371eac34d" ResourceName="ET.Code" />
       <Asset Guid="96b34642febcb6c4f88d68e6cbfa331b" ResourceName="UI.UXTool" />
       <Asset Guid="96d83c7380035564ba399a83d77e7f91" ResourceName="ET.ClientServer" />
       <Asset Guid="9991b46b99751664f801fa2ca5f8bdef" ResourceName="UI.UXTool" />
@@ -182,19 +176,16 @@
       <Asset Guid="b124cd64fafb18b4880a1461b91bf3c1" ResourceName="GameHot" />
       <Asset Guid="b1494958bf9856a479bec1767c02878e" ResourceName="Res/Prefab/Skeleton/Materials/skeleton_D" />
       <Asset Guid="b2dfc0e8a8c638d4fbde378e24215db9" ResourceName="UI.UXTool" />
-      <Asset Guid="b34830a358f78ad43b40622d268fc412" ResourceName="ET.Code" />
       <Asset Guid="b420ab0d7cecc4691b5ccbe3a60049de" ResourceName="ET.ClientServer" />
       <Asset Guid="b9975f2be09eab4449a3f00368f0da41" ResourceName="UI.UXTool" />
       <Asset Guid="ba6a7efaa30b4ed478cdd6c14656df32" ResourceName="UI.UXTool" />
       <Asset Guid="ba7bedebaa6c676469b3705842554cf6" ResourceName="UI.UXTool" />
-      <Asset Guid="bcc692d7ec0d6bc44b9ef601f7c78fb1" ResourceName="ET.Code" />
       <Asset Guid="bdc796c2818186842aa38896cd86514a" ResourceName="UI.UXTool" />
       <Asset Guid="bdf7d870b31097a418a22687c9dd808e" ResourceName="UI.UXTool" />
       <Asset Guid="bf4f76576f8c34f48ac9e5d3295db6da" ResourceName="UI.UXTool" />
       <Asset Guid="c04a43e354d20344caeb357e8a131ed6" ResourceName="UI.UXTool" />
       <Asset Guid="c0a75707a93b25649a46b20ecf25667c" ResourceName="UI.UXTool" />
       <Asset Guid="c0f160151303ae64a83cc17646239b3d" ResourceName="UI.UXTool" />
-      <Asset Guid="c15f52d0a8ba77442b6b212a763f3b2a" ResourceName="ET.Code" />
       <Asset Guid="c191c1fcf2d859f4db51f61449931949" ResourceName="UI.UXTool" />
       <Asset Guid="c1bf5d88e5d4ff247abb4e9e25996132" ResourceName="UI.UXTool" />
       <Asset Guid="c2bc38357a60b454dabab66d850b2d98" ResourceName="UI.UXTool" />
@@ -208,7 +199,6 @@
       <Asset Guid="cadd0764941c8b646ae79b51d0ea8285" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="cb9dc182bed8c52428dfa0309bd9ccc1" ResourceName="UI.UXTool" />
       <Asset Guid="cd590f301d3662040841baada9b1dfb4" ResourceName="Luban" />
-      <Asset Guid="d0c9e524431407f4a9c890961698255c" ResourceName="ET.Code" />
       <Asset Guid="d2f2e5ce2a6eb6242a0378d368a023d1" ResourceName="UI.UXTool" />
       <Asset Guid="d339ecdfaaab7004f8f057a91e014080" ResourceName="UI.UXTool" />
       <Asset Guid="d43bb19cd6eb0fa42b8151fe89431b80" ResourceName="UI.UXTool" />
