@@ -12,8 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f84dac6a330c478988ed9b2576369bfe, type: 3}
   m_Name: VersionInfoEditorData
   m_EditorClassIdentifier: 
-  m_Active: 
+  m_Active: Normal
   m_ActiveIndex: 0
-  m_VersionInfos: []
+  m_VersionInfos:
+  - m_Key: Normal
+    m_Value:
+      m_ForceUpdateGame: 
+      m_LatestGameVersion: 
+      m_InternalGameVersion: 
+      m_ServerPath: 127.0.0.1:8088
+      m_ResourceVersion: 
+      m_Platform: 
+      m_VersionListLength: 
+      m_InternalResourceVersion: 
+      m_VersionListHashCode: 
+      m_VersionListCompressedLength: 
+      m_VersionListCompressedHashCode: 
   m_IsGenerateToFullPath: 1
-  m_OutPath: G:/MyFiles/Study/GameDevelopmentKit/Temp/Version/WindowsVersion.txt
+  m_OutPath: 
