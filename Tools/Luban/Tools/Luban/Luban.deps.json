@@ -26,6 +26,7 @@
           "Luban.PHP": "1.0.0",
           "Luban.Protobuf": "1.0.0",
           "Luban.Python": "1.0.0",
+          "Luban.Rust": "1.0.0",
           "Luban.Schema.Builtin": "1.0.0",
           "Luban.Typescript": "1.0.0",
           "YamlDotNet.NetCore": "1.0.0"
@@ -527,6 +528,14 @@
           "Luban.Python.dll": {}
         }
       },
+      "Luban.Rust/1.0.0": {
+        "dependencies": {
+          "Luban.Core": "1.0.0"
+        },
+        "runtime": {
+          "Luban.Rust.dll": {}
+        }
+      },
       "Luban.Schema.Builtin/1.0.0": {
         "dependencies": {
           "Luban.Core": "1.0.0",
@@ -929,6 +938,11 @@
       "sha512": ""
     },
     "Luban.Python/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Luban.Rust/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
