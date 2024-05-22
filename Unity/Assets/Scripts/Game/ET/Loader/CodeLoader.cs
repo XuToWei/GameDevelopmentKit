@@ -39,6 +39,8 @@ namespace ET
             else
             {
                 Assembly[] assemblies = Utility.Assembly.GetAssemblies();
+                Assembly hotfix = null;
+                Assembly hotfixView = null;
                 foreach (Assembly ass in assemblies)
                 {
                     string name = ass.GetName().Name;
@@ -50,13 +52,22 @@ namespace ET
                     {
                         m_ModelView = ass;
                     }
+                    else if (name == "Game.ET.Code.Hotfix")
+                    {
+                        hotfix = ass;
+                    }
+                    else if (name == "Game.ET.Code.HotfixView")
+                    {
+                        hotfixView = ass;
+                    }
 
-                    if (m_Model != null && m_ModelView != null)
+                    if (m_Model != null && m_ModelView != null && hotfix != null && hotfixView != null)
                     {
                         break;
                     }
                 }
-                World.Instance.AddSingleton<CodeTypes, Assembly[]>(assemblies);
+                World.Instance.AddSingleton<CodeTypes, Assembly[]>(new []
+                    {typeof (World).Assembly, typeof(Init).Assembly, m_Model, m_ModelView, hotfix, hotfixView});
             }
             
             IStaticMethod start = new StaticMethod(m_Model, "ET.Entry", "Start");
