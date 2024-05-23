@@ -58,6 +58,11 @@ namespace ET
             formData.Release();
         }
 
+        private void OnDestroy()
+        {
+            UGFUIFormDispose();
+        }
+
         private void UGFUIFormDispose()
         {
             if (m_UGFUIForm != default && !m_UGFUIForm.IsDisposed)
@@ -188,7 +193,6 @@ namespace ET
                     UGFEventComponent.Instance.GetUIWidgetEvent(uiWidget.WidgetEventType).OnRecycle(uiWidget);
                 }
             }
-            UGFUIFormDispose();
         }
     }
 }

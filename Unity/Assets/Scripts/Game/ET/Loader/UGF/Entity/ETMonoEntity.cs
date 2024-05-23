@@ -41,6 +41,11 @@ namespace ET
             entityData.Release();
         }
 
+        private void OnDestroy()
+        {
+            UGFEntityDispose();
+        }
+
         private void UGFEntityDispose()
         {
             if (m_UGFEntity != default && !m_UGFEntity.IsDisposed)
@@ -96,7 +101,6 @@ namespace ET
         {
             base.OnRecycle();
             UGFEventComponent.Instance.GetEntityEvent(m_EntityEventType).OnRecycle(m_UGFEntity);
-            UGFEntityDispose();
         }
     }
 }
