@@ -12,7 +12,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "95922aec1ed8eb385caa68b7662e9caa9f9685c6"
+      "hash": "170f13082e93d9f1224ad76422ec6735e616d68f"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
@@ -256,7 +256,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "658a71084552c58431d7763844a8a46d3af1b5cb"
+      "hash": "c28a19977efab552373b83a8025f8c3b01a4f24c"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
