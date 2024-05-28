@@ -256,7 +256,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e07d41df0c5b8dfed8a4d73e0b283abb6f718685"
+      "hash": "658a71084552c58431d7763844a8a46d3af1b5cb"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
