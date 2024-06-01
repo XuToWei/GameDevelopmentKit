@@ -12,7 +12,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "170f13082e93d9f1224ad76422ec6735e616d68f"
+      "hash": "ef1b78caae7e195498df20b6e4096a8afcb4d06f"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
@@ -36,7 +36,7 @@
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "6d8dee0b0628aab66753bc3d72f1cd6575a854b8"
+      "hash": "e8c98732016d7cdba47eb0d283977abd1012741c"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -73,7 +73,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3156134075b89a162fe95350a2e92a4c85ccca59"
+      "hash": "434fd232ee1c1bea78d81650eeb872208fe32989"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -256,14 +256,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "c28a19977efab552373b83a8025f8c3b01a4f24c"
+      "hash": "13006a2d23c8964b61ef57c57287b3b7d9b5a89c"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "7c24d6d99577a846771039bec091da3c1a6d4efd"
+      "hash": "fb90022dabdcae1c58f422428d328aa1115d2d8c"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
