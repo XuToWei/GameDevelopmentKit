@@ -118,16 +118,20 @@ public class LocalizationHelper
 #if UNITY_EDITOR
         if (s_LocalizationComponent != null)
         {
-            if(!string.Equals(s_BaseComponent.EditorLanguage, languageType))
+            if(!string.Equals(s_BaseComponent.EditorLanguage.ToString(), languageType.ToString()))
             {
                 throw new Exception($"UXTool设置语言 {languageType} 错误（编辑器语言为：{s_BaseComponent.EditorLanguage}）!");
             }
         }
         else
         {
-            s_EditorGetStringFunc.Invoke(languageType, key, defaultString);
+            return s_EditorGetStringFunc.Invoke(languageType, key, defaultString);
         }
 #endif
+        if (s_LocalizationComponent.HasRawString(key))
+        {
+            return s_LocalizationComponent.GetRawString(key);
+        }
         return defaultString;
     }
 
