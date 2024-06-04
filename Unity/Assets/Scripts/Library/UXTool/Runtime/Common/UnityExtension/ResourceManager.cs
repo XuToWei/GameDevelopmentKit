@@ -17,8 +17,15 @@ public class ResourceManager
 
     public static void Clear()
     {
+        AssetCollection preloadAsset = s_PreloadAsset;
         s_ResourceComponent = null;
         s_PreloadAsset = null;
+
+        ResourceComponent resourceComponent = GameEntry.GetComponent<ResourceComponent>();
+        if (resourceComponent != null && preloadAsset != null)
+        {
+            resourceComponent.UnloadAsset(preloadAsset);
+        }
     }
 
     /// <summary>

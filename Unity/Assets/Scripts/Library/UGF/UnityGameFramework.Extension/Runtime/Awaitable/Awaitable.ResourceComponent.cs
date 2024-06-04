@@ -35,22 +35,22 @@ namespace UnityGameFramework.Extension
             bool isFinished = false;
             bool isError = false;
             string errorMessage = null;
-            void LoadAssetSuccessCallback(string assetName, object asset, float duration, object userData)
+            void LoadAssetSuccessCallback(string _, object asset, float duration, object userData)
             {
                 isFinished = true;
                 assetResult = asset;
             }
-            void LoadAssetFailureCallback(string assetName, LoadResourceStatus status, string errorMsg, object userData)
+            void LoadAssetFailureCallback(string _, LoadResourceStatus status, string errorMsg, object userData)
             {
                 isFinished = true;
                 isError = true;
                 errorMessage = errorMsg;
             }
-            void LoadAssetUpdateCallback(string assetName, float progress, object userData)
+            void LoadAssetUpdateCallback(string _, float progress, object userData)
             {
                 updateEvent.Invoke(progress);
             }
-            void LoadAssetDependencyAssetCallback(string assetName, string dependencyAssetName, int loadedCount, int totalCount, object userData)
+            void LoadAssetDependencyAssetCallback(string _, string dependencyAssetName, int loadedCount, int totalCount, object userData)
             {
                 dependencyAssetEvent.Invoke(dependencyAssetName);
             }
@@ -93,7 +93,7 @@ namespace UnityGameFramework.Extension
                     {
                         resourceComponent.UnloadAsset(assetResult);
                         core.TrySetException(new GameFrameworkException(Utility.Text.Format(
-                            "Load asset failure load type is {0} but asset type is {1}.", asset.GetType(), typeof(T))));
+                            "Load asset failure load type is {0} but asset type is {1}.", assetResult.GetType(), typeof(T))));
                     }
                     else
                     {

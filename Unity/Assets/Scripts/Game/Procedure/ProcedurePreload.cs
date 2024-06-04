@@ -35,6 +35,12 @@ namespace Game
             ChangeState<ProcedurePreset>(procedureOwner);
         }
 
+        protected override void OnDestroy(ProcedureOwner procedureOwner)
+        {
+            UXTool.Clear();
+            base.OnDestroy(procedureOwner);
+        }
+
 #if UNITY_EDITOR
         private void Check()
         {

@@ -150,4 +150,10 @@ public class LocalizationHelper
         s_LocalizationComponent = GameEntry.GetComponent<LocalizationComponent>();
         s_BaseComponent = GameEntry.GetComponent<BaseComponent>();
     }
+
+    public static void Clear()
+    {
+        s_LocalizationComponent = null;
+        s_BaseComponent = null;
+    }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Cysharp.Threading.Tasks;
 // using UnityEngine.SceneManagement;
 // using UnityEditor.SceneManagement;
 using ThunderFireUITool;
@@ -25,7 +26,12 @@ namespace UnityEngine.UI
         }
 
         [MenuItem(ThunderFireUIToolConfig.Menu_Localization + "/将文本表格转换 (Convert Text Table)", false, 54)]
-        private static async void ConvertTextTable()
+        public static void ConvertTextTable()
+        {
+            ConvertTextTableAsync().Forget();
+        }
+
+        private static async UniTaskVoid ConvertTextTableAsync()
         {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
             const string tools = "./Tool";
@@ -42,6 +48,7 @@ namespace UnityEngine.UI
             Debug.Log($"Export Localization cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
+
         private static string MergePath(string origin_path, string new_path)
         {
             if (new_path == "") return origin_path;

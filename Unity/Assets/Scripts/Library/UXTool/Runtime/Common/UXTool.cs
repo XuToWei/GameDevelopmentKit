@@ -7,4 +7,10 @@ public static class UXTool
         await ResourceManager.InitAsync();
         await LocalizationHelper.InitAsync();
     }
+
+    public static void Clear()
+    {
+        ResourceManager.Clear();
+        LocalizationHelper.Clear();
+    }
 }

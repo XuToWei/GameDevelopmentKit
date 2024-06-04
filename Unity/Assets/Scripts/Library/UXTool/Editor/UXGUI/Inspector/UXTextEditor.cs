@@ -231,6 +231,7 @@ namespace UnityEngine.UI
                 }
                 if (!ignoreLocalization.boolValue)
                 {
+                    EditorGUILayout.BeginHorizontal();
                     if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_打开文本表格)))
                     {
                         if (!Application.isPlaying)
@@ -239,6 +240,11 @@ namespace UnityEngine.UI
                         }
                         UXTextTable.OpenTextTable();
                     }
+                    if (GUILayout.Button("Convert Text Table"))
+                    {
+                        UXTextTable.ConvertTextTable();
+                    }
+                    EditorGUILayout.EndHorizontal();
                     foldout = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_表格使用提示));
                     if (foldout)
                     {
@@ -283,10 +289,16 @@ namespace UnityEngine.UI
 
                 if (!ignoreLocalization.boolValue)
                 {
+                    EditorGUILayout.BeginHorizontal();
                     if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_打开文本表格)))
                     {
                         UXTextTable.OpenTextTable();
                     }
+                    if (GUILayout.Button("Convert Text Table"))
+                    {
+                        UXTextTable.ConvertTextTable();
+                    }
+                    EditorGUILayout.EndHorizontal();
                     foldout = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_表格使用提示));
                     if (foldout)
                     {
