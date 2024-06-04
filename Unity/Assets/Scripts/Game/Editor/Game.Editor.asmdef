@@ -29,7 +29,8 @@
         "SLATE",
         "Leihuo.UXTools.Runtime",
         "SocoTool.Editor",
-        "SocoTool"
+        "SocoTool",
+        "Leihuo.UXTools.Editor.Common"
     ],
     "includePlatforms": [
         "Editor"

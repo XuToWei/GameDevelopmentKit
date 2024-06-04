@@ -47,6 +47,14 @@ namespace UnityEngine.UI
             stopwatch.Stop();
             Debug.Log($"Export Localization cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            EditorLocalizationTool.Clear();
+            var activeObject = Selection.activeObject;
+            if (activeObject != null)
+            {
+                Selection.activeObject = null;
+                await UniTask.DelayFrame(2);
+                Selection.activeObject = activeObject;
+            }
         }
 
         private static string MergePath(string origin_path, string new_path)

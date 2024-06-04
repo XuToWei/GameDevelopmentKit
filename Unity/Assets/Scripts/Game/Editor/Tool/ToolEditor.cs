@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Cysharp.Threading.Tasks;
+using ThunderFireUITool;
 using UnityEditor;
 
 namespace Game.Editor
@@ -12,19 +13,27 @@ namespace Game.Editor
             async UniTaskVoid RunAsync()
             {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-            const string tools = "./Tool";
+                const string tools = "./Tool";
 #else
                 const string tools = ".\\Tool.exe";
 #endif
                 Stopwatch stopwatch = Stopwatch.StartNew();
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-            await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1", "../Bin/");
+                await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1", "../Bin/");
 #else
                 await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=GB2312", "../Bin/");
 #endif
                 stopwatch.Stop();
                 UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
                 AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+                EditorLocalizationTool.Clear();
+                var activeObject = Selection.activeObject;
+                if (activeObject != null)
+                {
+                    Selection.activeObject = null;
+                    await UniTask.DelayFrame(2);
+                    Selection.activeObject = activeObject;
+                }
             }
             RunAsync().Forget();
         }
@@ -35,19 +44,27 @@ namespace Game.Editor
             async UniTaskVoid RunAsync()
             {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-            const string tools = "./Tool";
+                const string tools = "./Tool";
 #else
                 const string tools = ".\\Tool.exe";
 #endif
                 Stopwatch stopwatch = Stopwatch.StartNew();
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-            await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=Json", "../Bin/");
+                await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=Json", "../Bin/");
 #else
                 await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=Json,GB2312", "../Bin/");
 #endif
                 stopwatch.Stop();
                 UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
                 AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+                EditorLocalizationTool.Clear();
+                var activeObject = Selection.activeObject;
+                if (activeObject != null)
+                {
+                    Selection.activeObject = null;
+                    await UniTask.DelayFrame(2);
+                    Selection.activeObject = activeObject;
+                }
             }
             RunAsync().Forget();
         }

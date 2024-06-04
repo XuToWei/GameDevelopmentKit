@@ -111,5 +111,12 @@ namespace ThunderFireUITool
             TryRefreshData();
             return s_Dictionary.GetValueOrDefault(key);
         }
+
+        public static void Clear()
+        {
+            s_Dictionary.Clear();
+            s_AssetFileInfos.Clear();
+            m_AllKeys = Array.Empty<string>();
+        }
     }
 }
