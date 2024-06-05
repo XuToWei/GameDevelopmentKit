@@ -59,14 +59,14 @@
       "dependencies": {
         "com.unity.modules.imgui": "1.0.0"
       },
-      "hash": "0025cec067a0f6c28a40673ac7ef12ad4336e631"
+      "hash": "d0ee86f6bb8b7e2809f1dd317c62d5d610356c92"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d057074f177b078e29f10dd511b54df48a8806ea"
+      "hash": "fbe0bf85155f42f8832205f7b3ac3df571ada33e"
     },
     "com.cysharp.zstring": {
       "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
@@ -263,7 +263,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3f9a54edc3a6ad7cc8e63bc7fc52e34a5747f08b"
+      "hash": "ca08dd8f7f221715e7e6d2dfc86b4e835b0a2431"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
