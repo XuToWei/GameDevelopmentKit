@@ -113,9 +113,9 @@ namespace ET
             self.OnDestroy();
         }
 
-        public static void AddUIWidget<T>(this UGFUIForm self, Transform transform, object userData = default) where T : IUGFUIWidgetEvent
+        public static UGFUIWidget AddUIWidget<T>(this UGFUIForm self, Transform transform, object userData = default) where T : IUGFUIWidgetEvent
         {
-            self.AddUIWidget<T>(transform, userData);
+            return self.AddUIWidget<T>(transform, userData);
         }
 
         public static void RemoveUIWidget(this UGFUIForm self, UGFUIWidget ugfUIWidget)
