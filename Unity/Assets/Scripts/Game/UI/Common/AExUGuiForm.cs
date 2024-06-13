@@ -130,6 +130,12 @@ namespace Game
             m_UIWidgetContainer.RemoveAllUIWidget();
         }
 
+        /// <summary>
+        /// 打开UIWidget，不刷新Depth，一般在UIForm的OnOpen中调用
+        /// </summary>
+        /// <param name="auiWidget"></param>
+        /// <param name="userData"></param>
+        /// <exception cref="GameFrameworkException"></exception>
         public void OpenUIWidget(AUIWidget auiWidget, object userData = default)
         {
             if (m_UIWidgetContainer == null)
@@ -137,6 +143,21 @@ namespace Game
                 throw new GameFrameworkException("Container is empty!");
             }
             m_UIWidgetContainer.OpenUIWidget(auiWidget, userData);
+        }
+
+        /// <summary>
+        /// 动态打开UIWidget，刷新Depth
+        /// </summary>
+        /// <param name="auiWidget"></param>
+        /// <param name="userData"></param>
+        /// <exception cref="GameFrameworkException"></exception>
+        public void DynamicOpenUIWidget(AUIWidget auiWidget, object userData = default)
+        {
+            if (m_UIWidgetContainer == null)
+            {
+                throw new GameFrameworkException("Container is empty!");
+            }
+            m_UIWidgetContainer.DynamicOpenUIWidget(auiWidget, userData);
         }
 
         public void CloseUIWidget(AUIWidget uiWidget, object userData, bool isShutdown = false)

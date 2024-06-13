@@ -6,9 +6,8 @@ namespace Game
     public sealed class UIWidgetContainer : IReference
     {
         private readonly List<AUIWidget> m_UIWidgets = new List<AUIWidget>();
-
         public List<AUIWidget> UIWidgets => m_UIWidgets;
-        
+
         public AUGuiForm Owner
         {
             get;
@@ -62,6 +61,12 @@ namespace Game
             }
         }
 
+        /// <summary>
+        /// 打开UIWidget，不刷新Depth，一般在UIForm的OnOpen中调用
+        /// </summary>
+        /// <param name="uiWidget"></param>
+        /// <param name="userData"></param>
+        /// <exception cref="GameFrameworkException"></exception>
         public void OpenUIWidget(AUIWidget uiWidget, object userData)
         {
             if (uiWidget == null)
@@ -77,6 +82,17 @@ namespace Game
                 throw new GameFrameworkException(Utility.Text.Format("Can't open UIWidget, UIWidget '{0}' is already opened!", uiWidget.name));
             }
             uiWidget.OnOpen(userData);
+            uiWidget.OnDepthChanged(Owner.UIForm.UIGroup.Depth, Owner.UIForm.DepthInUIGroup);
+        }
+
+        /// <summary>
+        /// 动态打开UIWidget，刷新Depth
+        /// </summary>
+        /// <param name="uiWidget"></param>
+        /// <param name="userData"></param>
+        public void DynamicOpenUIWidget(AUIWidget uiWidget, object userData)
+        {
+            OpenUIWidget(uiWidget, userData);
             uiWidget.OnDepthChanged(Owner.UIForm.UIGroup.Depth, Owner.UIForm.DepthInUIGroup);
         }
 
