@@ -5,11 +5,11 @@ namespace ET
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class DynamicEventAttribute: BaseAttribute
     {
-        public long Type {get; }
+        public SceneType SceneType {get; }
 
-        public DynamicEventAttribute(long type = 0)
+        public DynamicEventAttribute(SceneType sceneType = SceneType.All)
         {
-            this.Type = type;
+            this.SceneType = sceneType;
         }
     }
 }

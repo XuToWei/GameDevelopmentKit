@@ -8,12 +8,12 @@ namespace ET
         [EnableClass]
         private class DynamicEventInfo
         {
-            public long Type { get; }
+            public SceneType SceneType { get; }
             public IDynamicEvent DynamicEvent { get; }
 
-            public DynamicEventInfo(long type, IDynamicEvent iDynamicEvent)
+            public DynamicEventInfo(SceneType sceneType, IDynamicEvent iDynamicEvent)
             {
-                this.Type = type;
+                this.SceneType = sceneType;
                 this.DynamicEvent = iDynamicEvent;
             }
         }
@@ -34,7 +34,7 @@ namespace ET
                     {
                         DynamicEventAttribute dynamicEventAttribute = (DynamicEventAttribute)attr;
                         IDynamicEvent obj = (IDynamicEvent)Activator.CreateInstance(type);
-                        DynamicEventInfo dynamicEventInfo = new DynamicEventInfo(dynamicEventAttribute.Type, obj);
+                        DynamicEventInfo dynamicEventInfo = new DynamicEventInfo(dynamicEventAttribute.SceneType, obj);
                         if (!this.AllEventInfos.TryGetValue(dynamicEventInfo.DynamicEvent.ArgType, out List<DynamicEventInfo> dynamicEventInfos))
                         {
                             dynamicEventInfos = new List<DynamicEventInfo>();

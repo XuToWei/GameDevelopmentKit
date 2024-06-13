@@ -49,22 +49,32 @@ namespace ET
 
         public void Publish<A>(A arg) where A : struct
         {
-            Publish(0, arg);
+            Publish(SceneType.All, arg);
         }
 
         public UniTask PublishAsync<A>(A arg) where A : struct
         {
-            return PublishAsync(0, arg);
+            return PublishAsync(SceneType.All, arg);
         }
 
-        public void Publish<A>(long type, A arg) where A : struct
+        public void Publish<A>(Scene scene, A arg) where A : struct
+        {
+            Publish(scene.SceneType, arg);
+        }
+
+        public UniTask PublishAsync<A>(Scene scene, A arg) where A : struct
+        {
+            return PublishAsync(scene.SceneType, arg);
+        }
+
+        public void Publish<A>(SceneType sceneType, A arg) where A : struct
         {
             Type argType = typeof(A);
             if (DynamicEventTypeSystem.Instance.AllEventInfos.TryGetValue(argType, out List<DynamicEventInfo> dynamicEventInfos))
             {
                 foreach (DynamicEventInfo dynamicEventInfo in dynamicEventInfos)
                 {
-                    if (type != dynamicEventInfo.Type)
+                    if (!sceneType.HasSameFlag(dynamicEventInfo.SceneType))
                     {
                         continue;
                     }
@@ -83,15 +93,15 @@ namespace ET
             }
         }
 
-        public async UniTask PublishAsync<A>(long type, A arg) where A : struct
+        public async UniTask PublishAsync<A>(SceneType sceneType, A arg) where A : struct
         {
-            using ListComponent<UniTask> taskList = ListComponent<UniTask>.Create();
             Type argType = typeof(A);
             if (DynamicEventTypeSystem.Instance.AllEventInfos.TryGetValue(argType, out List<DynamicEventInfo> dynamicEventInfos))
             {
+                using ListComponent<UniTask> taskList = ListComponent<UniTask>.Create();
                 foreach (DynamicEventInfo dynamicEventInfo in dynamicEventInfos)
                 {
-                    if (type != dynamicEventInfo.Type)
+                    if (!sceneType.HasSameFlag(dynamicEventInfo.SceneType))
                     {
                         continue;
                     }
@@ -107,15 +117,18 @@ namespace ET
                         }
                     }
                 }
-            }
-
-            try
-            {
-                await UniTask.WhenAll(taskList);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
+                if (taskList.Count < 1)
+                {
+                    return;
+                }
+                try
+                {
+                    await UniTask.WhenAll(taskList);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
             }
         }
     }
