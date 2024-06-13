@@ -33,10 +33,8 @@ public class GuideHighLightButton : Button
                 if (current != t.gameObject && current.transform.parent != t.gameObject.transform)
                 {
                     //RaycastAll后ugui会自己排序，如果你只想响应透下去的最近的一个响应，这里ExecuteEvents.Execute后直接break就行。
-                    if (ExecuteEvents.Execute(t.gameObject, eventData, ExecuteEvents.pointerClickHandler))
-                    {
-                        break;
-                    }
+                    ExecuteEvents.ExecuteHierarchy(t.gameObject, eventData, ExecuteEvents.pointerClickHandler);
+                    break;
                 }
             }
             m_RaycastResults.Clear();
