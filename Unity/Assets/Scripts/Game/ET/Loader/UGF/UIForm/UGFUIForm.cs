@@ -20,6 +20,7 @@ namespace ET
         public bool IsOpen => this.m_ETMonoUIForm.IsOpen;
         [BsonIgnore]
         private ETMonoUIForm m_ETMonoUIForm;
+        private HashSetComponent<Transform> m_UIWidgetTransforms;
         public ListComponent<EntityRef<UGFUIWidget>> UIWidgets { get; private set; }
 
         internal void OnAwake(int uiFormId, ETMonoUIForm ugfETUIForm)
@@ -37,6 +38,8 @@ namespace ET
             m_ETMonoUIForm = default;
             UIForm = default;
             Transform = default;
+            m_UIWidgetTransforms?.Dispose();
+            m_UIWidgetTransforms = null;
             UIWidgets?.Dispose();
             UIWidgets = null;
             if (etMonoUIForm != default && etMonoUIForm.IsOpen)
@@ -45,19 +48,52 @@ namespace ET
             }
         }
 
-        internal void AddUIWidget<T>(Transform transform) where T : IUGFUIWidgetEvent
+        internal UGFUIWidget AddUIWidget<T>(Transform transform, object userData) where T : IUGFUIWidgetEvent
         {
+            if (m_UIWidgetTransforms == null)
+            {
+                m_UIWidgetTransforms = HashSetComponent<Transform>.Create();
+            }
+            else if (m_UIWidgetTransforms.Contains(transform))
+            {
+                return null;
+            }
+            m_UIWidgetTransforms.Add(transform);
             UGFUIWidget ugfUIWidget = AddChild<UGFUIWidget, Transform, Type>(transform, typeof(T),true);
             if (UIWidgets == null)
             {
                 UIWidgets = ListComponent<EntityRef<UGFUIWidget>>.Create();
             }
             UIWidgets.Add(ugfUIWidget);
+            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventType).OnInit(ugfUIWidget, userData);
+            return ugfUIWidget;
         }
 
         internal void RemoveUIWidget(UGFUIWidget ugfUIWidget)
         {
+            m_UIWidgetTransforms.Remove(ugfUIWidget.Transform);
             UIWidgets.Remove(ugfUIWidget);
+        }
+
+        internal void OpenUIWidget(UGFUIWidget ugfUIWidget, object userData)
+        {
+            ugfUIWidget.IsOpen = true;
+            ugfUIWidget.Visible = true;
+            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventType).OnOpen(ugfUIWidget, userData);
+        }
+
+        internal void DynamicOpenUIWidget(UGFUIWidget ugfUIWidget, object userData)
+        {
+            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventType).OnOpen(ugfUIWidget, userData);
+            UGFUIForm ugfUIForm = ugfUIWidget.GetParent<UGFUIForm>();
+            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventType).OnDepthChanged(ugfUIWidget, ugfUIForm.UIForm.UIGroup.Depth, ugfUIForm.UIForm.DepthInUIGroup);
+        }
+
+        internal void CloseUIWidget(UGFUIWidget ugfUIWidget, object userData, bool isShutdown)
+        {
+            ugfUIWidget.Visible = false;
+            ugfUIWidget.IsOpen = false;
+            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventType).OnClose(ugfUIWidget, isShutdown, userData);
         }
     }
     
@@ -77,14 +113,29 @@ namespace ET
             self.OnDestroy();
         }
 
-        public static void AddUIWidget<T>(this UGFUIForm self, Transform transform) where T : IUGFUIWidgetEvent
+        public static void AddUIWidget<T>(this UGFUIForm self, Transform transform, object userData = default) where T : IUGFUIWidgetEvent
         {
-            self.AddUIWidget<T>(transform);
+            self.AddUIWidget<T>(transform, userData);
         }
 
         public static void RemoveUIWidget(this UGFUIForm self, UGFUIWidget ugfUIWidget)
         {
             self.RemoveUIWidget(ugfUIWidget);
+        }
+
+        public static void OpenUIWidget(this UGFUIForm self, UGFUIWidget ugfUIWidget, object userData = default)
+        {
+            self.OpenUIWidget(ugfUIWidget, userData);
+        }
+
+        public static void DynamicOpenUIWidget(this UGFUIForm self, UGFUIWidget ugfUIWidget, object userData = default)
+        {
+            self.DynamicOpenUIWidget(ugfUIWidget, userData);
+        }
+
+        public static void CloseUIWidget(this UGFUIForm self, UGFUIWidget ugfUIWidget, object userData = default, bool isShutdown = false)
+        {
+            self.CloseUIWidget(ugfUIWidget, userData, isShutdown);
         }
     }
 }

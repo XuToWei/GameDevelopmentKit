@@ -44,6 +44,10 @@ namespace Game
         {
             base.OnRecycle();
             m_UIWidgetContainer?.OnRecycle();
+        }
+
+        private void OnDestroy()
+        {
             RemoveAllUIWidget();
             ClearUIForm();
         }
@@ -160,7 +164,7 @@ namespace Game
             m_UIWidgetContainer.DynamicOpenUIWidget(auiWidget, userData);
         }
 
-        public void CloseUIWidget(AUIWidget uiWidget, object userData, bool isShutdown = false)
+        public void CloseUIWidget(AUIWidget uiWidget, object userData = default, bool isShutdown = false)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -169,7 +173,7 @@ namespace Game
             m_UIWidgetContainer.CloseUIWidget(uiWidget, userData, isShutdown);
         }
 
-        public void CloseAllUIWidgets(object userData, bool isShutdown = false)
+        public void CloseAllUIWidgets(object userData = default, bool isShutdown = false)
         {
             if (m_UIWidgetContainer == null)
             {

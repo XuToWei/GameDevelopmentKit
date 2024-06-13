@@ -14,8 +14,10 @@ namespace Game
 
         public bool IsOpen
         {
-            get;
-            private set;
+            get
+            {
+                return m_Available;
+            }
         }
 
         /// <summary>
@@ -81,7 +83,6 @@ namespace Game
         {
             m_Available = true;
             Visible = true;
-            IsOpen = true;
         }
 
         /// <summary>
@@ -91,7 +92,6 @@ namespace Game
         /// <param name="userData">用户自定义数据。</param>
         protected internal virtual void OnClose(bool isShutdown, object userData)
         {
-            IsOpen = false;
             Visible = false;
             m_Available = false;
         }

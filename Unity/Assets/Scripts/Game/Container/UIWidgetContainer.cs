@@ -82,7 +82,6 @@ namespace Game
                 throw new GameFrameworkException(Utility.Text.Format("Can't open UIWidget, UIWidget '{0}' is already opened!", uiWidget.name));
             }
             uiWidget.OnOpen(userData);
-            uiWidget.OnDepthChanged(Owner.UIForm.UIGroup.Depth, Owner.UIForm.DepthInUIGroup);
         }
 
         /// <summary>
@@ -96,7 +95,7 @@ namespace Game
             uiWidget.OnDepthChanged(Owner.UIForm.UIGroup.Depth, Owner.UIForm.DepthInUIGroup);
         }
 
-        public void CloseUIWidget(AUIWidget uiWidget, object userData, bool isShutdown = false)
+        public void CloseUIWidget(AUIWidget uiWidget, object userData, bool isShutdown)
         {
             if (uiWidget == null)
             {
@@ -113,7 +112,7 @@ namespace Game
             uiWidget.OnClose(isShutdown, userData);
         }
 
-        public void CloseAllUIWidgets(object userData, bool isShutdown = false)
+        public void CloseAllUIWidgets(object userData, bool isShutdown)
         {
             if (m_UIWidgets.Count > 0)
             {
