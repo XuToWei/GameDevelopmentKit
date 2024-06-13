@@ -23,7 +23,6 @@ namespace ET
 
         protected override void OnShow(object userData)
         {
-            base.OnShow(userData);
             ETMonoEntityData entityData = (ETMonoEntityData)userData;
             if (entityData.ParentEntity == null)
             {
@@ -36,6 +35,7 @@ namespace ET
                 m_UGFEntity = entityData.ParentEntity.AddChild<UGFEntity, Type, ETMonoEntity>(m_EntityEventType, this, true);
                 UGFEventComponent.Instance.GetEntityEvent(m_EntityEventType).OnInit(m_UGFEntity, entityData.UserData);
             }
+            base.OnShow(userData);
             IsShow = true;
             UGFEventComponent.Instance.GetEntityEvent(m_EntityEventType).OnShow(m_UGFEntity, entityData.UserData);
             entityData.Release();
@@ -58,8 +58,8 @@ namespace ET
 
         protected override void OnHide(bool isShutdown, object userData)
         {
-            UGFEventComponent.Instance.GetEntityEvent(m_EntityEventType).OnHide(m_UGFEntity, isShutdown, userData);
             IsShow = false;
+            UGFEventComponent.Instance.GetEntityEvent(m_EntityEventType).OnHide(m_UGFEntity, isShutdown, userData);
             if (isShutdown)
             {
                 UGFEntityDispose();

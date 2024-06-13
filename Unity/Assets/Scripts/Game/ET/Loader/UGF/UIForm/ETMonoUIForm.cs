@@ -26,7 +26,6 @@ namespace ET
 
         protected override void OnOpen(object userData)
         {
-            base.OnOpen(userData);
             ETMonoUIFormData formData = (ETMonoUIFormData)userData;
             if (formData.ParentEntity == null)
             {
@@ -39,6 +38,7 @@ namespace ET
                 m_UGFUIForm = formData.ParentEntity.AddChild<UGFUIForm, int, ETMonoUIForm>(m_UIFormId, this, true);
                 UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnInit(m_UGFUIForm, formData.UserData);
             }
+            base.OnOpen(userData);
             IsOpen = true;
             UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnOpen(m_UGFUIForm, formData.UserData);
             formData.Release();
@@ -61,6 +61,7 @@ namespace ET
 
         protected override void OnClose(bool isShutdown, object userData)
         {
+            IsOpen = false;
             if (m_UGFUIForm.UIWidgets != null)
             {
                 foreach (UGFUIWidget uiWidget in m_UGFUIForm.UIWidgets)
@@ -69,7 +70,6 @@ namespace ET
                 }
             }
             UGFEventComponent.Instance.GetUIFormEvent(m_UIFormId).OnClose(m_UGFUIForm, isShutdown, userData);
-            IsOpen = false;
             if (isShutdown)
             {
                 UGFUIFormDispose();
