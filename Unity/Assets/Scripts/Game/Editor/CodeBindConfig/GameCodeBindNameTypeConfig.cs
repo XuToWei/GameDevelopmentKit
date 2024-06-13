@@ -9,7 +9,7 @@ namespace Game
         [CodeBindNameType]
         public static Dictionary<string, Type> BindNameTypeDict = new Dictionary<string, Type>()
         {
-            { "UIWidget", typeof(UIWidget) },
+            { "UIWidget", typeof(AUIWidget) },
             // TMP
             { "TMPText", typeof(TMPro.TMP_Text) },
             { "TMPInputField", typeof(TMPro.TMP_InputField) },

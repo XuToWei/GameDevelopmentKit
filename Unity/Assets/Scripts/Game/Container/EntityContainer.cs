@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
@@ -24,22 +25,23 @@ namespace Game
                 eventArgs.OnFailureCallback = onFailureCallback;
                 return eventArgs;
             }
-            
+
             public override void Clear()
             {
                 OnSuccessCallback = default;
                 OnFailureCallback = default;
             }
         }
-        
+
         private readonly HashSet<int> m_EntitySerialIds = new HashSet<int>();
-        
+        private CancellationTokenSource m_CancellationTokenSource;
+
         public object Owner
         {
             get;
             private set;
         }
-        
+
         public static EntityContainer Create(object owner)
         {
             EntityContainer entityContainer = ReferencePool.Acquire<EntityContainer>();
@@ -48,15 +50,16 @@ namespace Game
             GameEntry.Event.Subscribe(ShowEntityFailureEventArgs.EventId, entityContainer.OnShowEntityFail);
             return entityContainer;
         }
-        
+
         public void Clear()
         {
-            HideAllEntity();
+            m_EntitySerialIds.Clear();
+            m_CancellationTokenSource = null;
             Owner = null;
             GameEntry.Event.Unsubscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
             GameEntry.Event.Unsubscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFail);
         }
-        
+
         private void OnShowEntitySuccess(object sender, GameEventArgs e)
         {
             ShowEntitySuccessEventArgs ne = e as ShowEntitySuccessEventArgs;
@@ -115,7 +118,11 @@ namespace Game
 
         public UniTask<Entity> ShowEntityAsync(int entityTypeId, object userData)
         {
-            return GameEntry.Entity.ShowEntityAsync(entityTypeId, typeof(ItemEntity), userData);
+            if (m_CancellationTokenSource == null)
+            {
+                m_CancellationTokenSource = new CancellationTokenSource();
+            }
+            return GameEntry.Entity.ShowEntityAsync(entityTypeId, typeof(ItemEntity), userData, m_CancellationTokenSource.Token);
         }
 
         public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData) where T : EntityLogic
@@ -125,16 +132,28 @@ namespace Game
 
         public UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData)
         {
-            return GameEntry.Entity.ShowEntityAsync(entityTypeId, logicType, userData);
+            if (m_CancellationTokenSource == null)
+            {
+                m_CancellationTokenSource = new CancellationTokenSource();
+            }
+            return GameEntry.Entity.ShowEntityAsync(entityTypeId, logicType, userData, m_CancellationTokenSource.Token);
         }
 
         public void HideAllEntity()
         {
-            foreach (int serialId in m_EntitySerialIds)
+            if (m_EntitySerialIds.Count > 0)
             {
-                GameEntry.Entity.HideEntity(serialId);
+                foreach (int serialId in m_EntitySerialIds)
+                {
+                    GameEntry.Entity.HideEntity(serialId);
+                }
+                m_EntitySerialIds.Clear();
             }
-            m_EntitySerialIds.Clear();
+            if (m_CancellationTokenSource != null)
+            {
+                m_CancellationTokenSource.Cancel();
+                m_CancellationTokenSource = null;
+            }
         }
 
         public void HideEntity(int serialId)

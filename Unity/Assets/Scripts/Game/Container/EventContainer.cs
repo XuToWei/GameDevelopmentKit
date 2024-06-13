@@ -14,6 +14,19 @@ namespace Game
             private set;
         }
 
+        public static EventContainer Create(object owner)
+        {
+            EventContainer eventContainer = ReferencePool.Acquire<EventContainer>();
+            eventContainer.Owner = owner;
+            return eventContainer;
+        }
+
+        public void Clear()
+        {
+            m_EventHandlerDict.Clear();
+            Owner = null;
+        }
+
         public void Subscribe(int id, EventHandler<GameEventArgs> handler)
         {
             if (handler == null)
@@ -35,29 +48,17 @@ namespace Game
 
         public void UnsubscribeAll()
         {
-            if (m_EventHandlerDict == null)
-                return;
-            foreach (var item in m_EventHandlerDict)
+            if (m_EventHandlerDict.Count > 0)
             {
-                foreach (var eventHandler in item.Value)
+                foreach (var item in m_EventHandlerDict)
                 {
-                    GameEntry.Event.Unsubscribe(item.Key, eventHandler);
+                    foreach (var eventHandler in item.Value)
+                    {
+                        GameEntry.Event.Unsubscribe(item.Key, eventHandler);
+                    }
                 }
+                m_EventHandlerDict.Clear();
             }
-            m_EventHandlerDict.Clear();
-        }
-
-        public static EventContainer Create(object owner)
-        {
-            EventContainer eventContainer = ReferencePool.Acquire<EventContainer>();
-            eventContainer.Owner = owner;
-            return eventContainer;
-        }
-
-        public void Clear()
-        {
-            m_EventHandlerDict.Clear();
-            Owner = null;
         }
     }
 }

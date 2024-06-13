@@ -5,14 +5,16 @@ namespace Game
 {
     public sealed class UIWidgetContainer : IReference
     {
-        public readonly List<UIWidget> m_UIWidgets = new List<UIWidget>();
+        private readonly List<AUIWidget> m_UIWidgets = new List<AUIWidget>();
+
+        public List<AUIWidget> UIWidgets => m_UIWidgets;
         
         public AUGuiForm Owner
         {
             get;
             private set;
         }
-        
+
         public static UIWidgetContainer Create(AUGuiForm owner)
         {
             UIWidgetContainer uiWidgetContainer = ReferencePool.Acquire<UIWidgetContainer>();
@@ -20,7 +22,13 @@ namespace Game
             return uiWidgetContainer;
         }
 
-        public void AddUIWidget(UIWidget uiWidget, object userData)
+        public void Clear()
+        {
+            m_UIWidgets.Clear();
+            Owner = null;
+        }
+
+        public void AddUIWidget(AUIWidget uiWidget, object userData)
         {
             if (uiWidget == null)
             {
@@ -34,34 +42,73 @@ namespace Game
             uiWidget.OnInit(userData);
         }
 
-        public void RemoveUIWidget(UIWidget uiWidget, object userData)
+        public void RemoveUIWidget(AUIWidget uiWidget)
         {
+            if (uiWidget == null)
+            {
+                throw new GameFrameworkException("Can't remove empty!");
+            }
             if (!m_UIWidgets.Remove(uiWidget))
             {
                 throw new GameFrameworkException(Utility.Text.Format("UIWidget : '{0}' not in container.", uiWidget.CachedTransform.name));
             }
+        }
+
+        public void RemoveAllUIWidget()
+        {
+            if (m_UIWidgets.Count > 0)
+            {
+                m_UIWidgets.Clear();
+            }
+        }
+
+        public void OpenUIWidget(AUIWidget uiWidget, object userData)
+        {
+            if (uiWidget == null)
+            {
+                throw new GameFrameworkException("Can't open empty!");
+            }
+            if (!m_UIWidgets.Contains(uiWidget))
+            {
+                throw new GameFrameworkException(Utility.Text.Format("Can't open UIWidget, UIWidget '{0}' not in the container '{1}'!", uiWidget.name, Owner.Name));
+            }
             if (uiWidget.IsOpen)
             {
-                uiWidget.OnClose(false, userData);
+                throw new GameFrameworkException(Utility.Text.Format("Can't open UIWidget, UIWidget '{0}' is already opened!", uiWidget.name));
             }
+            uiWidget.OnOpen(userData);
+            uiWidget.OnDepthChanged(Owner.UIForm.UIGroup.Depth, Owner.UIForm.DepthInUIGroup);
         }
 
-        public void RemoveAllUIWidget(object userData)
+        public void CloseUIWidget(AUIWidget uiWidget, object userData, bool isShutdown = false)
         {
-            foreach (var uiWidget in m_UIWidgets)
+            if (uiWidget == null)
             {
-                if (uiWidget.IsOpen)
+                throw new GameFrameworkException("Can't open empty!");
+            }
+            if (!m_UIWidgets.Contains(uiWidget))
+            {
+                throw new GameFrameworkException(Utility.Text.Format("Can't open UIWidget, UIWidget '{0}' not in the container '{1}'!", uiWidget.name, Owner.Name));
+            }
+            if (!uiWidget.IsOpen)
+            {
+                throw new GameFrameworkException(Utility.Text.Format("Can't close UIWidget, UIWidget '{0}' is not opened!", uiWidget.name));
+            }
+            uiWidget.OnClose(isShutdown, userData);
+        }
+
+        public void CloseAllUIWidgets(object userData, bool isShutdown = false)
+        {
+            if (m_UIWidgets.Count > 0)
+            {
+                foreach (var uiWidget in m_UIWidgets)
                 {
-                    uiWidget.OnClose(false, userData);
+                    if (uiWidget.IsOpen)
+                    {
+                        uiWidget.OnClose(isShutdown, userData);
+                    }
                 }
             }
-            m_UIWidgets.Clear();
-        }
-
-        public void Clear()
-        {
-            m_UIWidgets.Clear();
-            Owner = null;
         }
 
         /// <summary>

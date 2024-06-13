@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
@@ -8,9 +9,12 @@ namespace Game
 {
     public abstract class AExUGuiForm : AUGuiForm
     {
+        private CancellationTokenSource m_CancellationTokenSource;
+        
         private UIWidgetContainer m_UIWidgetContainer;
         private EventContainer m_EventContainer;
         private EntityContainer m_EntityContainer;
+        private ResourceContainer m_ResourceContainer;
 
         private void ClearUIForm()
         {
@@ -29,18 +33,10 @@ namespace Game
                 ReferencePool.Release(m_UIWidgetContainer);
                 m_UIWidgetContainer = null;
             }
-        }
-
-        protected override void OnInit(object userData)
-        {
-            base.OnInit(userData);
-            UIWidget[] uiWidgets = gameObject.GetComponentsInChildren<UIWidget>();
-            if (uiWidgets != null && uiWidgets.Length > 0)
+            if (m_ResourceContainer != null)
             {
-                for (int i = 0; i < uiWidgets.Length; i++)
-                {
-                    AddUIWidget(uiWidgets[i], userData);
-                }
+                ReferencePool.Release(m_ResourceContainer);
+                m_ResourceContainer = null;
             }
         }
 
@@ -48,12 +44,8 @@ namespace Game
         {
             base.OnRecycle();
             m_UIWidgetContainer?.OnRecycle();
+            RemoveAllUIWidget();
             ClearUIForm();
-        }
-
-        protected override void OnOpen(object userData)
-        {
-            base.OnOpen(userData);
         }
 
         protected override void OnClose(bool isShutdown, object userData)
@@ -61,8 +53,11 @@ namespace Game
             m_UIWidgetContainer?.OnClose(isShutdown, userData);
             HideAllEntity();
             UnsubscribeAll();
+            UnloadAllAssets();
+            CloseAllUIWidgets(userData, isShutdown);
             if (isShutdown)
             {
+                RemoveAllUIWidget();
                 ClearUIForm();
             }
             base.OnClose(isShutdown, userData);
@@ -110,27 +105,56 @@ namespace Game
             m_UIWidgetContainer?.OnDepthChanged(uiGroupDepth, depthInUIGroup);
         }
 
-        public void AddUIWidget(UIWidget uiWidget, object userData)
+        public void AddUIWidget(AUIWidget auiWidget, object userData = default)
         {
             if (m_UIWidgetContainer == null)
             {
                 m_UIWidgetContainer = UIWidgetContainer.Create(this);
             }
-            m_UIWidgetContainer.AddUIWidget(uiWidget, userData);
+            m_UIWidgetContainer.AddUIWidget(auiWidget, userData);
         }
 
-        public void RemoveUIWidget(UIWidget uiWidget, object userData)
+        public void RemoveUIWidget(AUIWidget auiWidget)
+        {
+            if (m_UIWidgetContainer == null)
+            {
+                throw new GameFrameworkException("Container is empty!");
+            }
+            m_UIWidgetContainer.RemoveUIWidget(auiWidget);
+        }
+
+        public void RemoveAllUIWidget()
         {
             if (m_UIWidgetContainer == null)
                 return;
-            m_UIWidgetContainer.RemoveUIWidget(uiWidget, userData);
+            m_UIWidgetContainer.RemoveAllUIWidget();
         }
 
-        public void RemoveAllUIWidget(object userData)
+        public void OpenUIWidget(AUIWidget auiWidget, object userData = default)
         {
             if (m_UIWidgetContainer == null)
-                return;
-            m_UIWidgetContainer.RemoveAllUIWidget(userData);
+            {
+                throw new GameFrameworkException("Container is empty!");
+            }
+            m_UIWidgetContainer.OpenUIWidget(auiWidget, userData);
+        }
+
+        public void CloseUIWidget(AUIWidget uiWidget, object userData, bool isShutdown = false)
+        {
+            if (m_UIWidgetContainer == null)
+            {
+                throw new GameFrameworkException("Container is empty!");
+            }
+            m_UIWidgetContainer.CloseUIWidget(uiWidget, userData, isShutdown);
+        }
+
+        public void CloseAllUIWidgets(object userData, bool isShutdown = false)
+        {
+            if (m_UIWidgetContainer == null)
+            {
+                throw new GameFrameworkException("Container is empty!");
+            }
+            m_UIWidgetContainer.CloseAllUIWidgets(userData, isShutdown);
         }
 
         public void Subscribe(int id, EventHandler<GameEventArgs> handler)
@@ -229,6 +253,29 @@ namespace Game
             if (m_EntityContainer == null)
                 return;
             m_EntityContainer.HideEntity(entity);
+        }
+
+        public async UniTask<T> LoadAssetAsync<T>(string assetName) where T : UnityEngine.Object
+        {
+            if (m_ResourceContainer == null)
+            {
+                m_ResourceContainer = ResourceContainer.Create(m_CancellationTokenSource.Token);
+            }
+            return await m_ResourceContainer.LoadAssetAsync<T>(assetName);
+        }
+        
+        public void UnloadAsset(UnityEngine.Object asset)
+        {
+            if (m_ResourceContainer == null)
+                return;
+            m_ResourceContainer.UnloadAsset(asset);
+        }
+
+        public void UnloadAllAssets()
+        {
+            if (m_ResourceContainer == null)
+                return;
+            m_ResourceContainer.UnloadAllAssets();
         }
     }
 }

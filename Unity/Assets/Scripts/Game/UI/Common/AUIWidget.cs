@@ -6,7 +6,7 @@ namespace Game
 {
     [CodeBind]
     [DisallowMultipleComponent]
-    public abstract class UIWidget: MonoBehaviour
+    public abstract class AUIWidget : MonoBehaviour
     {
         private Transform m_CachedTransform = null;
         private bool m_Available = false;
@@ -51,30 +51,6 @@ namespace Game
             get
             {
                 return m_CachedTransform;
-            }
-        }
-
-        /// <summary>
-        /// 打开UIWidget。
-        /// </summary>
-        /// <param name="userData">用户自定义数据。</param>
-        public void Open(object userData)
-        {
-            if (!IsOpen)
-            {
-                OnOpen(userData);
-            }
-        }
-
-        /// <summary>
-        /// 关闭UIWidget。
-        /// </summary>
-        /// <param name="userData">用户自定义数据。</param>
-        public void Close(object userData)
-        {
-            if (IsOpen)
-            {
-                OnClose(false, userData);
             }
         }
 
@@ -180,7 +156,7 @@ namespace Game
         /// 设置界面的可见性。
         /// </summary>
         /// <param name="visible">界面的可见性。</param>
-        protected internal virtual void InternalSetVisible(bool visible)
+        protected virtual void InternalSetVisible(bool visible)
         {
             gameObject.SetActive(visible);
         }
