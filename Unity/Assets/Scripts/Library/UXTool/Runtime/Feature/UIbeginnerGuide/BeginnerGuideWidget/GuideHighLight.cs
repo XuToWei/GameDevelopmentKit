@@ -76,6 +76,7 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
     public void SetType(GuideFinishType type)
     {
         this.guideFinishType = type;
+        childObject.transform.GetComponent<GuideHighLightButton>().clickPassThrough = this.guideFinishType == GuideFinishType.Strong;
     }
 
     private void SetRectHighLightArea()
