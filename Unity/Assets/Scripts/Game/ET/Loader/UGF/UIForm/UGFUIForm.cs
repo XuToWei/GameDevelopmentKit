@@ -56,7 +56,7 @@ namespace ET
             }
             else if (m_UIWidgetTransforms.Contains(transform))
             {
-                return null;
+                throw new Exception($"Add UIWidget fail, {transform.name} is in the UGFUIForm:'{Transform.name}'!");
             }
             m_UIWidgetTransforms.Add(transform);
             UGFUIWidget ugfUIWidget = AddChild<UGFUIWidget, Transform, Type>(transform, typeof(T),true);

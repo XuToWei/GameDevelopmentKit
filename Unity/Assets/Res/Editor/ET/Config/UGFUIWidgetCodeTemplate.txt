@@ -1,0 +1,11 @@
+﻿using UnityEngine;
+
+namespace ET.Client
+{
+    [EnableMethod]
+    [ComponentOf(typeof(UGFUIWidget))]
+    public partial class UGFUIWidget#NAME# : Entity, IAwake<Transform>, IDestroy
+    {
+        
+    }
+}

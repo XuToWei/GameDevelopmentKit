@@ -1,0 +1,24 @@
+﻿using UnityEngine;
+
+namespace ET.Client
+{
+    [FriendOf(typeof(UGFUIWidget#NAME#))]
+    public static partial class UGFUIWidget#NAME#System
+    {
+        [UGFUIWidgetEvent]
+        private class UGFUIWidget#NAME#Event : AUGFUIWidgetEvent
+        {
+            public override void OnInit(UGFUIWidget uiWidget, object userData)
+            {
+                base.OnInit(uiForm, userData);
+                UGFUIWidget#NAME# uiWidget#NAME# = uiWidget.AddComponent<UGFUIWidget#NAME#, Transform>(uiWidget.Transform);
+            }
+            
+            public override void OnOpen(UGFUIWidget uiWidget, object userData)
+            {
+                base.OnOpen(uiWidget, userData);
+                
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+﻿//using CodeBind;
+using UnityEngine;
+
+namespace ET.Client
+{
+    [EntitySystemOf(typeof(UGFUIWidget#NAME#))]
+    [FriendOf(typeof(UGFUIWidget#NAME#))]
+    public static partial class UGFUI#NAME#System
+    {
+        [EntitySystem]
+        private static void Awake(this UGFUIWidget#NAME# self, Transform uiWidgetTransform)
+        {
+            //self.InitBind(uiWidgetTransform);
+        }
+        
+        [EntitySystem]
+        private static void Destroy(this UGFUIWidget#NAME# self)
+        {
+            //self.ClearBind();
+        }
+    }
+}
