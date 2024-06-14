@@ -14,12 +14,15 @@ namespace ET.Client
                 base.OnInit(uiForm, userData);
                 var uiLogin = uiForm.AddComponent<UGFUILoginComponent, Transform>(uiForm.Transform);
                 uiLogin.LoginButton.SetAsync(uiLogin.OnLogin);
+                uiLogin.uiWidgetTest = uiForm.AddUIWidget<UGFUIWidgetTestEvent>(uiLogin.TestWidgetTransform);
+                
             }
             
             public override void OnOpen(UGFUIForm uiForm, object userData)
             {
                 base.OnOpen(uiForm, userData);
-                
+                var uiLogin = uiForm.GetComponent<UGFUILoginComponent>();
+                uiForm.OpenUIWidget(uiLogin.uiWidgetTest);
             }
         }
     }

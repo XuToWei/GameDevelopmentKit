@@ -1,20 +1,21 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace ET.Client
 {
     [UGFUIWidgetEvent]
-    public class UGFUIWidget#NAME#Event : AUGFUIWidgetEvent
+    public class UGFUIWidgetTestEvent : AUGFUIWidgetEvent
     {
         public override void OnInit(UGFUIWidget uiWidget, object userData)
         {
             base.OnInit(uiWidget, userData);
-            UGFUIWidget#NAME# uiWidget#NAME# = uiWidget.AddComponent<UGFUIWidget#NAME#, Transform>(uiWidget.Transform);
+            uiWidget.AddComponent<UGFUIWidgetTest, Transform>(uiWidget.Transform);
         }
-        
+            
         public override void OnOpen(UGFUIWidget uiWidget, object userData)
         {
             base.OnOpen(uiWidget, userData);
-            
+            UGFUIWidgetTest uiWidgetTest = uiWidget.GetComponent<UGFUIWidgetTest>();
+            uiWidgetTest.TestTextUXText.text = "UIWidget测试成功!";
         }
     }
 }
