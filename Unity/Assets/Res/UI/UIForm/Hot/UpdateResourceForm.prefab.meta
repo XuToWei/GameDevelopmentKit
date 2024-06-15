@@ -2,9 +2,8 @@ fileFormatVersion: 2
 guid: 8aabda888f205d649bc5a6b18b05c125
 labels:
 - ResourceExclusive
-timeCreated: 1504076581
-licenseType: Pro
-NativeFormatImporter:
+PrefabImporter:
+  externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 

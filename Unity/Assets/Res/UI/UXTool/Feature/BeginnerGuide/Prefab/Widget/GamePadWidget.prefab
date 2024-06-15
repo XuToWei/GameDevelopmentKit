@@ -8821,7 +8821,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serialize: {fileID: 1022402115014984503}
-  inputActionAsset: {fileID: -944628639613478452, guid: 8d42b919fb94e5f4f998957f2ac1ff81, type: 3}
 --- !u!114 &3997970788264149791
 MonoBehaviour:
   m_ObjectHideFlags: 0

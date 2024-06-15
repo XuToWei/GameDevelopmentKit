@@ -7,7 +7,7 @@ namespace Game.Editor
     {
         private static readonly string[] s_AssetFolders = new string[] { "Assets/Res" };
         
-        [Tooltip("清理prefab中多余无效的序列化数据")]
+        [Tooltip("可以清理prefab中多余无效的序列化数据")]
         [MenuItem("Game/Asset Tool/重新序列化所有prefab")]
         public static void GamePrefabOptimization()
         {
@@ -25,6 +25,8 @@ namespace Game.Editor
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+
+            Debug.Log("Force reserialize all prefab is done!");
         }
 
         [MenuItem("Game/Asset Tool/清理所有粒子系统的无效Mesh引用")]
@@ -48,6 +50,8 @@ namespace Game.Editor
             }
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+
+            Debug.Log("Clear all particle system's invalid mesh is done!");
         }
 
         [MenuItem("Game/Asset Tool/清理Material中废弃属性")]
