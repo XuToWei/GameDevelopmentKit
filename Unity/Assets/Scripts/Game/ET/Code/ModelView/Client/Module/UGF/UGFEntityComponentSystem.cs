@@ -48,10 +48,10 @@ namespace ET.Client
         public static void HideEntity<T>(this UGFEntityComponent self) where T : IUGFEntityEvent
         {
             using HashSetComponent<UGFEntity> needRemoves = new HashSetComponent<UGFEntity>();
-            Type eventType = typeof(T);
+            long eventTypeLongHashCode = typeof(T).FullName.GetLongHashCode();
             foreach (UGFEntity entity in self.AllShowEntities)
             {
-                if (entity.EntityEventType == eventType)
+                if (entity.EntityEventTypeLongHashCode == eventTypeLongHashCode)
                 {
                     needRemoves.Add(entity);
                 }

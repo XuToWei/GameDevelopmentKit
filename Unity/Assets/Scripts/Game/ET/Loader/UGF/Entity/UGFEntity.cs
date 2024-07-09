@@ -5,21 +5,21 @@ using UnityEngine;
 namespace ET
 {
     [ChildOf]
-    public sealed class UGFEntity : Entity, IAwake<Type, ETMonoEntity>, IDestroy
+    public sealed class UGFEntity : Entity, IAwake<long, ETMonoEntity>, IDestroy
     {
         [BsonIgnore]
         public UnityGameFramework.Runtime.Entity Entity { get; private set; }
-        public Type EntityEventType { get; private set; }
+        public long EntityEventTypeLongHashCode { get; private set; }
         [BsonIgnore]
         public Transform Transform { get; private set; }
         public bool IsShow => ETMonoEntity.IsShow;
         [BsonIgnore]
         public ETMonoEntity ETMonoEntity { get; private set; }
         
-        internal void OnAwake(Type entityEventType, ETMonoEntity etMonoEntity)
+        internal void OnAwake(long entityEventTypeLongHashCode, ETMonoEntity etMonoEntity)
         {
             ETMonoEntity = etMonoEntity;
-            EntityEventType = entityEventType;
+            EntityEventTypeLongHashCode = entityEventTypeLongHashCode;
             Transform = etMonoEntity.CachedTransform;
             Entity = etMonoEntity.Entity;
         }
@@ -27,7 +27,7 @@ namespace ET
         internal void OnDestroy()
         {
             ETMonoEntity = default;
-            EntityEventType = default;
+            EntityEventTypeLongHashCode = default;
             Transform = default;
             Entity = default;
         }
@@ -38,9 +38,9 @@ namespace ET
     public static partial class UGFEntitySystem
     {
         [EntitySystem]
-        private static void Awake(this UGFEntity self, Type entityEventTyp, ETMonoEntity etMonoEntity)
+        private static void Awake(this UGFEntity self, long entityEventTypLongHashCode, ETMonoEntity etMonoEntity)
         {
-            self.OnAwake(entityEventTyp, etMonoEntity);
+            self.OnAwake(entityEventTypLongHashCode, etMonoEntity);
         }
 
         [EntitySystem]

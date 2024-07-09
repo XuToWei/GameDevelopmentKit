@@ -9,22 +9,22 @@ namespace ET
     public sealed class UGFEventComponent : Singleton<UGFEventComponent>, ISingletonAwake
     {
         private readonly Dictionary<int, IUGFUIFormEvent> m_UIFormEvents = new();
-        private readonly Dictionary<Type, IUGFUIWidgetEvent> m_UIWidgetEvents = new();
-        private readonly Dictionary<Type, IUGFEntityEvent> m_EntityEvents = new();
+        private readonly Dictionary<long, IUGFUIWidgetEvent> m_UIWidgetEvents = new();
+        private readonly Dictionary<long, IUGFEntityEvent> m_EntityEvents = new();
 
         public bool TryGetUIFormEvent(int uiFormId, out IUGFUIFormEvent uiFormEvent)
         {
             return m_UIFormEvents.TryGetValue(uiFormId, out uiFormEvent);
         }
 
-        public bool TryGetUIWidgetEvent(Type uiWidgetEventType, out IUGFUIWidgetEvent uiWidgetEvent)
+        public bool TryGetUIWidgetEvent(long uiWidgetEventTypeLongHashCode, out IUGFUIWidgetEvent uiWidgetEvent)
         {
-            return m_UIWidgetEvents.TryGetValue(uiWidgetEventType, out uiWidgetEvent);
+            return m_UIWidgetEvents.TryGetValue(uiWidgetEventTypeLongHashCode, out uiWidgetEvent);
         }
 
-        public bool TryGetEntityEvent(Type entityEventType, out IUGFEntityEvent entityEvent)
+        public bool TryGetEntityEvent(long entityEventTypeLongHashCode, out IUGFEntityEvent entityEvent)
         {
-            return m_EntityEvents.TryGetValue(entityEventType, out entityEvent);
+            return m_EntityEvents.TryGetValue(entityEventTypeLongHashCode, out entityEvent);
         }
 
         public IUGFUIFormEvent GetUIFormEvent(int uiFormId)
@@ -32,14 +32,14 @@ namespace ET
             return m_UIFormEvents[uiFormId];
         }
 
-        public IUGFUIWidgetEvent GetUIWidgetEvent(Type uiWidgetEventType)
+        public IUGFUIWidgetEvent GetUIWidgetEvent(long uiWidgetEventTypeLongHashCode)
         {
-            return m_UIWidgetEvents[uiWidgetEventType];
+            return m_UIWidgetEvents[uiWidgetEventTypeLongHashCode];
         }
 
-        public IUGFEntityEvent GetEntityEvent(Type entityEventType)
+        public IUGFEntityEvent GetEntityEvent(long entityEventTypeLongHashCode)
         {
-            return m_EntityEvents[entityEventType];
+            return m_EntityEvents[entityEventTypeLongHashCode];
         }
 
         public void Awake()
@@ -61,7 +61,7 @@ namespace ET
             foreach (Type type in uiWidgetEventAttributes)
             {
                 IUGFUIWidgetEvent ugfUIWidgetEvent = Activator.CreateInstance(type) as IUGFUIWidgetEvent;
-                m_UIWidgetEvents.Add(type, ugfUIWidgetEvent);
+                m_UIWidgetEvents.Add(type.FullName.GetLongHashCode(), ugfUIWidgetEvent);
             }
 
             m_EntityEvents.Clear();
@@ -74,7 +74,7 @@ namespace ET
                     continue;
                 }
                 IUGFEntityEvent ugfEntityEvent = Activator.CreateInstance(type) as IUGFEntityEvent;
-                m_EntityEvents.Add(type, ugfEntityEvent);
+                m_EntityEvents.Add(type.FullName.GetLongHashCode(), ugfEntityEvent);
             }
         }
     }
