@@ -124,6 +124,7 @@ namespace UnityGameFramework.Extension.Editor
                     if (ruleEditorData.isActivate)
                     {
                         ruleEditorData.isActivate = false;
+                        EditorUtility.SetDirty(ruleEditorData);
                         AssetDatabase.SaveAssets();
                     }
                 }
@@ -160,6 +161,7 @@ namespace UnityGameFramework.Extension.Editor
                         if (!m_Configuration.isActivate)
                         {
                             m_Configuration.isActivate = true;
+                            EditorUtility.SetDirty(m_Configuration);
                             AssetDatabase.SaveAssets();
                         }
                     }
@@ -326,9 +328,12 @@ namespace UnityGameFramework.Extension.Editor
             {
                 foreach (var configPath in m_AllConfigPaths)
                 {
-                    LoadAssetAtPath<ResourceRuleEditorData>(configPath).isActivate = false;
+                    var data = LoadAssetAtPath<ResourceRuleEditorData>(configPath);
+                    data.isActivate = false;
+                    EditorUtility.SetDirty(data);
                 }
                 m_Configuration.isActivate = true;
+                EditorUtility.SetDirty(m_Configuration);
                 AssetDatabase.SaveAssets();
             }
             
@@ -408,6 +413,7 @@ namespace UnityGameFramework.Extension.Editor
             else
             {
                 EditorUtility.SetDirty(m_Configuration);
+                AssetDatabase.SaveAssets();
             }
         }
 
