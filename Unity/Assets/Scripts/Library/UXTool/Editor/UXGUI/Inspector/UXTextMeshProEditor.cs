@@ -10,7 +10,6 @@ namespace UnityEngine.UI
     public class UXTextMeshProEditor : TMPro.EditorUtilities.TMP_EditorPanelUI
     {
         private SerializedProperty localizationType;
-        private SerializedProperty text;
         private SerializedProperty ignoreLocalization;
         private SerializedProperty localizationID;
         private SerializedProperty previewID;
@@ -23,13 +22,11 @@ namespace UnityEngine.UI
         private GameObject cloneObj;
         private bool initialHide;
         private string need_replace;
-        private string origin_text;
         private bool foldout = false;
 
         protected override void OnEnable()
         {
             localizationType = serializedObject.FindProperty("m_localizationType");
-            text = serializedObject.FindProperty("m_text");
             ignoreLocalization = serializedObject.FindProperty("m_ignoreLocalization");
             localizationID = serializedObject.FindProperty("m_localizationID");
             previewID = serializedObject.FindProperty("m_previewID");
@@ -39,7 +36,6 @@ namespace UnityEngine.UI
             lastToggleIndex = -1;
             need_replace = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_未填充文本);
             textList = new List<string>();
-            origin_text = text.stringValue;
             ChangeAvailables();
 
             customList = new ReorderableList(textList, typeof(string), false, true, false, false);
@@ -67,6 +63,7 @@ namespace UnityEngine.UI
                         SceneVisibilityManager.instance.Hide(targetObject.gameObject, true);
                         targetObject.ignoreLocalization = true;
                         cloneObj = Instantiate(targetObject.gameObject, targetObject.transform.position, targetObject.transform.rotation, targetObject.transform);
+                        cloneObj.name = "Preview(DontSave)";
                         cloneObj.transform.localScale = new Vector3(1, 1, 1);
                         RectTransform cloneRect = cloneObj.GetComponent<RectTransform>();
                         cloneRect.anchorMax = new Vector2(1, 1);
@@ -75,7 +72,8 @@ namespace UnityEngine.UI
                         cloneRect.offsetMin = new Vector2(0, 0);
                         targetObject.ignoreLocalization = false;
                         cloneObj.GetComponent<UXTextMeshPro>().text = textList[index];
-                        cloneObj.hideFlags = HideFlags.HideAndDontSave;
+                        cloneObj.hideFlags = HideFlags.DontSave | HideFlags.NotEditable;
+                        SceneVisibilityManager.instance.Show(cloneObj, true);
                     }
                     else
                     {
@@ -177,7 +175,6 @@ namespace UnityEngine.UI
                     {
                         if (localizationID.stringValue == "")
                         {
-                            localizationID.stringValue = System.Guid.NewGuid().ToString().Substring(0, 8);
                             textList.Clear();
                         }
                         else
@@ -185,16 +182,6 @@ namespace UnityEngine.UI
                             ChangeAvailables();
                         }
                     }
-                }
-                if (text.stringValue != origin_text && !ignoreLocalization.boolValue)
-                {
-                    ShowObj();
-                    localizationID.stringValue = System.Guid.NewGuid().ToString().Substring(0, 8);
-                    for (int i = 0; i < textList.Count; i++)
-                    {
-                        textList[i] = need_replace;
-                    }
-                    origin_text = text.stringValue;
                 }
                 if (!ignoreLocalization.boolValue)
                 {
