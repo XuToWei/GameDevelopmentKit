@@ -263,7 +263,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "31c7424c1e4e5d795983c71a29de42c4bb9d47f6"
+      "hash": "3d49ceda44cfb1dff08ecc6447cbb64729919c38"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
