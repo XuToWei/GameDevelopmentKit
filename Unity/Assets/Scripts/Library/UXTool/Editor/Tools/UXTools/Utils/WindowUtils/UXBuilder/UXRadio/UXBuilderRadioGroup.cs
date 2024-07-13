@@ -8,16 +8,16 @@ using UnityEngine.UIElements;
 
 namespace ThunderFireUITool
 {
-    
+
     public class UXBuilderRadioGroupStruct
     {
         public string className = "UXRadioGroup";
         public UXStyle style = new UXStyle();
-        
+
         // public bool allowClear = true;
         public bool disabled = false;
 
-        public List<string> options = new List<string>(){""};
+        public List<string> options = new List<string>() { "" };
 
         public Action<int> onChange = val => { };
     }
@@ -36,57 +36,57 @@ namespace ThunderFireUITool
         {
             return _mComponent;
         }
-        
+
         public UXBuilderRadioGroup SetComponents(UXBuilderRadioGroupStruct component)
         {
             VisualElement parent = this.hierarchy.parent;
             if (parent == null) return this;
             _mComponent = component;
-            var a = Create(parent,_mComponent);
+            var a = Create(parent, _mComponent);
             a.PlaceBehind(this);
             parent.Remove(this);
             return a;
         }
-        
+
         public UXBuilderRadioGroup(List<string> choices)
             : base((string)null, choices)
         {
         }
-        
+
         public void SetOptions(List<string> options)
         {
             _mUXRadioGroup.choices = options;
         }
-        
+
         public static UXBuilderRadioGroup Create(VisualElement root, UXBuilderRadioGroupStruct component)
         {
             _mComponent = component;
-            
+
             _mUXRadioGroup = new UXBuilderRadioGroup(component.options);
 
             var styleSheet =
                 AssetDatabase.LoadAssetAtPath<StyleSheet>(ThunderFireUIToolConfig.UIBuilderPath +
                                                           "USS/UXElements/UXRadioGroup.uss");
             _mUXRadioGroup.styleSheets.Add(styleSheet);
-            
+
             _mUXRadioGroup.AddToClassList("ux-radio-group");
             _mUXRadioGroup.name = component.className;
-            StyleCopy.IStyleToUXStyle(_mStyle,_mUXRadioGroup.style);
+            StyleCopy.IStyleToUXStyle(_mStyle, _mUXRadioGroup.style);
 
             _mUXRadioGroup.Q<VisualElement>(null, "unity-base-field__input").AddToClassList("ux-radio-group-field");
             _mUXRadioGroup.Query<VisualElement>(null, "unity-radio-button__input")
                 .ForEach(element => element.AddToClassList("ux-radio-cursor"));
-            
+
             _mUXRadioGroup.Query<RadioButton>().ForEach(button => button.AddToClassList("ux-radio"));
             _mUXRadioGroup.Query<Label>().ForEach(button => button.AddToClassList("ux-radio-label"));
 
             InitComponent(component);
-            
+
             root.Add(_mUXRadioGroup);
-            
+
             return _mUXRadioGroup;
         }
-        
+
         private static void InitComponent(UXBuilderRadioGroupStruct component)
         {
             InitDisabled(component.disabled);
@@ -110,7 +110,7 @@ namespace ThunderFireUITool
             }
             StyleCopy.UXStyleToIStyle(_mUXRadioGroup.style, _mStyle);
         }
-        
+
         private static void InitDisabled(bool disabled)
         {
             if (disabled)
@@ -119,9 +119,9 @@ namespace ThunderFireUITool
                     .ForEach(element => element.AddToClassList("ux-radio-cursor-disabled"));
             }
 
-            _mUXRadioGroup.SetEnabled(!disabled);;
+            _mUXRadioGroup.SetEnabled(!disabled); ;
         }
-        
+
 
         private static void InitOnChange(Action<int> action)
         {

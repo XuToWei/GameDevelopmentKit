@@ -11,9 +11,9 @@ public class GuideSelfDefined : GuideWidgetBase
         if (guideSelfDefinedData != null)
         {
             gameObject.SetActive(guideSelfDefinedData.active);
-            
+
             guideSelfDefinedData.ApplyTransformData(transform);
-            
+
             GetComponent<Text>().text = guideSelfDefinedData.text;
 
         }

@@ -72,7 +72,7 @@ public class GuideGestureData : GuideWidgetData
 
     public void EditorInit()
     {
-        if(gestureType== GestureType.ThumbDrag||gestureType==GestureType.ForeFingerDrag)
+        if (gestureType == GestureType.ThumbDrag || gestureType == GestureType.ForeFingerDrag)
         {
             ShowDragEditorController();
         }
@@ -85,7 +85,7 @@ public class GuideGestureData : GuideWidgetData
 
         if (startPosControllerTrans == null || endPosControllerTrans == null)
         {
-            GameObject controllerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{UXGUIConfig.EditorRootPath}Feature/BeginnerGuide/Prefab/PosController.prefab");
+            GameObject controllerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Res/Editor/UXTool/Feature/BeginnerGuide/Prefab/PosController.prefab");
 
             dragStartPosController = Instantiate(controllerPrefab, transform);
             dragEndPosController = Instantiate(controllerPrefab, transform);

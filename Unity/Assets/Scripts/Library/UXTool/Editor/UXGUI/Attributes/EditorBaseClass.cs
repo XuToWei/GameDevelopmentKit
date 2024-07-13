@@ -1,4 +1,4 @@
-﻿public class EditorBaseClass
+public class EditorBaseClass
 {
 
 }

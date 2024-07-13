@@ -113,7 +113,7 @@ namespace ThunderFireUITool
                     {
                         PrefabRecentWindow.GetInstance().RefreshWindow();
                     }
-                    PrefabTabs.RefreshTabs(false,0);
+                    PrefabTabs.RefreshTabs(false, 0);
                     m_window.Close();
                 }
                 else

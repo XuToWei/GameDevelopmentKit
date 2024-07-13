@@ -17,7 +17,7 @@ public class UXBuilderFormSettingEditor : Editor
     {
         SerializedProperty prop = serializedObject.FindProperty("List");
         reorderableList = new ReorderableList(serializedObject, prop, true, true, true, true);
-        
+
         //设置单个元素的高度
         reorderableList.elementHeightCallback = index => DrawHeight(prop, index);
         // optionsProperties.Clear();
@@ -27,7 +27,7 @@ public class UXBuilderFormSettingEditor : Editor
             {
                 DrawElement(prop, rect, index);
             };
-        
+
         //头部
         reorderableList.drawHeaderCallback = (rect) =>
             EditorGUI.LabelField(rect, prop.displayName);

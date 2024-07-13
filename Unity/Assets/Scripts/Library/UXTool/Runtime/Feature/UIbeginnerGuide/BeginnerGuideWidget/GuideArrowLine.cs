@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum LineType{
+public enum LineType
+{
     NoLines,
     OneLine,
     TwoLine
@@ -24,12 +25,14 @@ public class GuideArrowLine : GuideWidgetBase
             arrowLineData.ApplyTransformData(transform);
             lineType = arrowLineData.lineType;
             SetChild();
-            if(arrowLineData.smallArrowData!=""){
-                Transform obj; 
-                if(arrowLineData.lineType==LineType.OneLine){
+            if (arrowLineData.smallArrowData != "")
+            {
+                Transform obj;
+                if (arrowLineData.lineType == LineType.OneLine)
+                {
                     obj = oneLineArrow.transform;
                 }
-                else obj=twoLineArrow.transform;
+                else obj = twoLineArrow.transform;
                 SmallArrowData arrowData = obj.GetComponent<SmallArrowData>();
                 arrowData.Load(arrowLineData.smallArrowData);
                 arrowData.ApplyTransformData(obj);
@@ -49,7 +52,8 @@ public class GuideArrowLine : GuideWidgetBase
         arrow.SetActive(false);
         oneLine.SetActive(false);
         twoLine.SetActive(false);
-        switch (lineType){
+        switch (lineType)
+        {
             case LineType.NoLines:
                 arrow.SetActive(true);
                 break;
@@ -64,15 +68,17 @@ public class GuideArrowLine : GuideWidgetBase
 
     public override void Show()
     {
-        
+
     }
 
     public override void Stop()
     {
-       
+
     }
-    public void changeAct(int i, int j){
-        switch (i){
+    public void changeAct(int i, int j)
+    {
+        switch (i)
+        {
             case 0:
                 arrow.SetActive(true);
                 break;
@@ -83,7 +89,8 @@ public class GuideArrowLine : GuideWidgetBase
                 twoLine.SetActive(true);
                 break;
         }
-        switch (j){
+        switch (j)
+        {
             case 0:
                 arrow.SetActive(false);
                 break;

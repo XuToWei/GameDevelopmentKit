@@ -31,6 +31,7 @@ namespace ThunderFireUITool
 
             CreateLocationLinesData.Create();
             PrefabOpenedSetting.Create();
+            RecentFilesSetting.Create();
 
             QuickBackgroundData.Create();
             PrefabTabsData.Create();

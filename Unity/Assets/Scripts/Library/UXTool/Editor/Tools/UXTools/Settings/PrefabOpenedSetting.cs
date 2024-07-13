@@ -40,6 +40,18 @@ namespace ThunderFireUITool
             OnValueChanged();
         }
 
+        public void Remove(int index)
+        {
+            Debug.Log("remove: " + index);
+            if (index >= 0)
+            {   // ensure item found
+                List.RemoveAt(index);
+            }
+            //List.Remove(label);
+            JsonAssetManager.SaveAssets(this);
+            OnValueChanged();
+        }
+
         public void ResortLast(string label)
         {
             var index = List.FindIndex(i => i == label);

@@ -14,11 +14,11 @@ namespace ThunderFireUITool
         {
             Button btn = new Button();
             btn.style.position = Position.Absolute;
-            if(width > 0)
+            if (width > 0)
             {
                 btn.style.width = width;
             }
-            if(height > 0)
+            if (height > 0)
             {
                 btn.style.height = height;
             }
@@ -33,7 +33,7 @@ namespace ThunderFireUITool
             if (clickAction != null)
             {
                 btn.clicked += clickAction;
-            }  
+            }
             return btn;
         }
 

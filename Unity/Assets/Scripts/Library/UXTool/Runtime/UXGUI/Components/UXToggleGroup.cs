@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
@@ -10,7 +10,7 @@ namespace UnityEngine.UI
     public class UXToggleGroup : UIBehaviour
     {
 
-    	[SerializeField] private bool m_AllowSwitchOff = false;
+        [SerializeField] private bool m_AllowSwitchOff = false;
         public bool allowSwitchOff { get { return m_AllowSwitchOff; } set { m_AllowSwitchOff = value; } }
 
         private List<UXToggle> m_Toggles = new List<UXToggle>();
@@ -45,8 +45,8 @@ namespace UnityEngine.UI
             // disable all toggles in the group
             for (var i = 0; i < m_Toggles.Count; i++)
             {
-            	// Debug.Log("m_Toggles[i].id:"+m_Toggles[i].id);
-            	// Debug.Log("selectId:"+selectId);
+                // Debug.Log("m_Toggles[i].id:"+m_Toggles[i].id);
+                // Debug.Log("selectId:"+selectId);
                 m_Toggles[i].isOn = m_Toggles[i].id == selectId;
             }
         }
@@ -88,8 +88,8 @@ namespace UnityEngine.UI
             }
             return ret;
         }
-        
-		// Comment: 确定当前toggle是被enable再调用这个接口
+
+        // Comment: 确定当前toggle是被enable再调用这个接口
         public void SetAllTogglesOff()
         {
             bool oldAllowSwitchOff = m_AllowSwitchOff;

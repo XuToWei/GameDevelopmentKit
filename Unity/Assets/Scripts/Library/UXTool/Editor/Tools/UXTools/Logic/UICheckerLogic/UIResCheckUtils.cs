@@ -70,7 +70,7 @@ namespace ThunderFireUITool
             }
         }
 
-        [MenuItem(ThunderFireUIToolConfig.Menu_ResourceCheck+ "/Prefab 引用资源检查 (All UIPrefab ResCheck)", false, ThunderFireUIToolConfig.Menu_ResourceCheckIndex + 5)]
+        [MenuItem(ThunderFireUIToolConfig.Menu_ResourceCheck + "/Prefab 引用资源检查 (All UIPrefab ResCheck)", false, ThunderFireUIToolConfig.Menu_ResourceCheckIndex + 5)]
         static void CheckAllPrefab()
         {
             UIMultiPrefabCheckWindow window = UIMultiPrefabCheckWindow.ShowWindow();
@@ -87,7 +87,7 @@ namespace ThunderFireUITool
             return window;
         }
 
-        [MenuItem(ThunderFireUIToolConfig.Menu_ResourceCheck+ "/导出Prefab的图集依赖 (Export UIPrefab Atlas Ref)", false, ThunderFireUIToolConfig.Menu_ResourceCheckIndex + 7)]
+        [MenuItem(ThunderFireUIToolConfig.Menu_ResourceCheck + "/导出Prefab的图集依赖 (Export UIPrefab Atlas Ref)", false, ThunderFireUIToolConfig.Menu_ResourceCheckIndex + 7)]
         public static void ExportAtlasDependencies()
         {
             // 记录每个atlas包含sprite的guid

@@ -27,7 +27,7 @@ namespace ThunderFireUITool
         public static void CutTextElement(TextElement label)
         {
             var parent = label;
-            var scrollView = new ScrollView(){style = { width = 200000, height = 0 }};
+            var scrollView = new ScrollView() { style = { width = 200000, height = 0 } };
             scrollView.style.visibility = Visibility.Hidden;
             parent.Add(scrollView);
             var newLabel = new TextElement
@@ -47,7 +47,7 @@ namespace ThunderFireUITool
                 text = label.text,
             };
             scrollView.Add(newLabel);
-            var list = new List<VisualElement>(){label, newLabel, parent, scrollView};
+            var list = new List<VisualElement>() { label, newLabel, parent, scrollView };
             newLabel.RegisterCallback<GeometryChangedEvent, List<VisualElement>>(MyCutEvent, list);
         }
 

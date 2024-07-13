@@ -25,7 +25,7 @@ namespace ThunderFireUITool
         {
             return UXBuilderCheckBox.Create(v, s);
         }
-        
+
         public static UXBuilderSelect Select(VisualElement v, UXBuilderSelectStruct s)
         {
             return UXBuilderSelect.Create(v, s);
@@ -75,7 +75,7 @@ namespace ThunderFireUITool
         {
             return UXBuilderTabs.Create(v, s);
         }
-        
+
         public static UXBuilderDivider Divider(VisualElement v, UXBuilderDividerStruct s)
         {
             return UXBuilderDivider.Create(v, s);

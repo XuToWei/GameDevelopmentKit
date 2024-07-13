@@ -32,7 +32,7 @@ public static class PrefabStageUtils
     {
         PrefabStage.prefabStageOpened -= action;
     }
-    
+
     public static void AddSavingEvent(Action<GameObject> action)
     {
         PrefabStage.prefabSaving += action;

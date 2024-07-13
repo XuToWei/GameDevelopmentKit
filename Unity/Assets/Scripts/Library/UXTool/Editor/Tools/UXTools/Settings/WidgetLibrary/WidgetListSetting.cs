@@ -1,7 +1,10 @@
 #if UNITY_EDITOR
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
+using UnityEngine;
 
 namespace ThunderFireUITool
 {
@@ -14,8 +17,9 @@ namespace ThunderFireUITool
         [MenuItem(ThunderFireUIToolConfig.Menu_CreateAssets + "/" + ThunderFireUIToolConfig.WidgetLibrary + "/WidgetListSettings", false, -50)]
         public static void Create()
         {
+
             var setting = JsonAssetManager.CreateAssets<WidgetListSetting>(ThunderFireUIToolConfig.WidgetListPath);
-            var guids = AssetDatabase.FindAssets("t:Prefab", new string[] { "Assets/Res/UI/UIPreset" });
+            var guids = AssetDatabase.FindAssets("t:Prefab", new string[] { "Assets/Res/UI/UIPrefab", "Assets/Res/UI/UISprite" });
             foreach (var guid in guids)
             {
                 if (!setting.List.Contains(guid))

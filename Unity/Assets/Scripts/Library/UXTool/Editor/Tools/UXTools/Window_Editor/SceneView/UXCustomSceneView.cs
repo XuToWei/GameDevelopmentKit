@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,14 +35,14 @@ namespace ThunderFireUITool
         {
             var index = Templist.FindIndex(i => i == method);
             if (index >= 0)
-            {   
+            {
                 Templist.RemoveAt(index);
             }
         }
 
         static public void OnSceneGUI(SceneView sceneView)
         {
-            foreach(Action<SceneView> method in list)
+            foreach (Action<SceneView> method in list)
             {
                 method.Invoke(sceneView);
             }

@@ -20,10 +20,10 @@ public class UXBuilderFormSettingStructDrawer : PropertyDrawer
         using (new EditorGUI.PropertyScope(position, label, property))
         {
             EditorGUIUtility.labelWidth = position.width * 0.2f;
-            
+
             position.height = EditorGUIUtility.singleLineHeight;
-            
-            Rect rect = new Rect(position) {};
+
+            Rect rect = new Rect(position) { };
 
             componentTypeProperty = property.FindPropertyRelative("componentType");
             labelProperty = property.FindPropertyRelative("label");
@@ -33,7 +33,7 @@ public class UXBuilderFormSettingStructDrawer : PropertyDrawer
             minValueProperty = property.FindPropertyRelative("minValue");
             maxValueProperty = property.FindPropertyRelative("maxValue");
             // optionsProperty = property.FindPropertyRelative("options");
-            
+
             EditorGUI.PropertyField(rect, componentTypeProperty, new GUIContent("Component"));
             rect = new Rect(position) { y = rect.y + EditorGUIUtility.singleLineHeight + 2 };
             labelProperty.stringValue = EditorGUI.TextField(rect, labelProperty.displayName, labelProperty.stringValue);
@@ -86,5 +86,5 @@ public class UXBuilderFormSettingStructDrawer : PropertyDrawer
     //     }
     //     return 65;
     // }
-    
+
 }

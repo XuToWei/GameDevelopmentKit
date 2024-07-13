@@ -123,7 +123,7 @@ namespace ThunderFireUITool
             }
         }
 
-		[System.Serializable]
+        [System.Serializable]
         public class AnimData
         {
             [TF_TableListColumnName("动画"), ReadOnly, TableColumnWidth(150)]
@@ -248,20 +248,20 @@ namespace ThunderFireUITool
                 if (isSprite) return ruleColor;
                 else return unRuleColor;
             }
-        }					 
+        }
         private void Clear()
         {
             allAtlasDatas.Clear();
             atlasDatas.Clear();
             imageDatas.Clear();
         }
-																										
+
         //private static string greenColorFlag = "<color=#BEEB9C>";
         //private static string redColorFlag = "<color=#E05B5B>";
         //private static string ColorFlagEnd = "</color>";
         private static string atlasCountString = "Atlas数量:   ";
         private static string imageCountString = "Image数量:   ";
-		private static string animCountString = "Anim数量:   ";					private static GUIStyle countStyle;
+        private static string animCountString = "Anim数量:   "; private static GUIStyle countStyle;
         private static string ruleString = "合规";
         private static string unRuleString = "不合规";
 
@@ -293,7 +293,7 @@ namespace ThunderFireUITool
                 }
                 EditorGUILayout.EndHorizontal();
             }
-            
+
             switch (showType)
             {
                 case ShowType.Atlas:
@@ -317,7 +317,7 @@ namespace ThunderFireUITool
                 default:
                     break;
             }
-			
+
             EditorGUILayout.BeginHorizontal();
             searchStr = GUILayout.TextField(searchStr);
             if (GUILayout.Button("搜索", GUILayout.Height(20), GUILayout.Width(100)))
@@ -436,7 +436,7 @@ namespace ThunderFireUITool
             }
         }
 
-		private static void CheckAnim()
+        private static void CheckAnim()
         {
             showType = ShowType.Anim;
             UIAnimCheckTool.BeginAnimCheck();

@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using ThunderFireUITool;
@@ -17,7 +17,7 @@ public class ColorBlind : Editor
 {
     public static void ToColorBlindMode(ColorBlindType colorType)
     {
-        switch(colorType)
+        switch (colorType)
         {
             case ColorBlindType.Red:
                 ToRed();
@@ -56,9 +56,9 @@ public class ColorBlind : Editor
 
     public static ColorBlindType GetColorMode(string colorName)
     {
-        foreach(ColorBlindType type in ColorBlindType.GetValues(typeof(ColorBlindType)))
+        foreach (ColorBlindType type in ColorBlindType.GetValues(typeof(ColorBlindType)))
         {
-            if(colorName == type.ToString())
+            if (colorName == type.ToString())
             {
                 return type;
             }
@@ -87,7 +87,7 @@ public class ColorBlind : Editor
         //var m = FindMaterial();
         //m.SetInt("type",1);
     }
-    
+
     //[MenuItem("ThunderFireUXTool/Color/Green")]
     public static void ToGreen()
     {
@@ -95,7 +95,7 @@ public class ColorBlind : Editor
         //var m = FindMaterial();
         //m.SetInt("type",2);
     }
-    
+
     //[MenuItem("ThunderFireUXTool/Color/Blue")]
     public static void ToBlue()
     {
@@ -103,7 +103,7 @@ public class ColorBlind : Editor
         //var m = FindMaterial();
         //m.SetInt("type",3);
     }
-    
+
     //[MenuItem("ThunderFireUXTool/Color/Normal")]
     public static void ToNormal()
     {

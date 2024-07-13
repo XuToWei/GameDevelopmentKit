@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using UXTools.Editor.Common.Data;
 
 namespace ThunderFireUITool
 {
@@ -15,6 +16,7 @@ namespace ThunderFireUITool
         public static string AboutText;
         public static string CloseText;
         private static VisualElement AboutUXML;
+        private ToolGlobalData _globalData;
 
         [MenuItem(ThunderFireUIToolConfig.Menu_About, false, -150)]
         public static void OpenWindow()
@@ -44,6 +46,7 @@ namespace ThunderFireUITool
 
         private void OnEnable()
         {
+            _globalData = JsonAssetManager.GetAssets<ToolGlobalData>();
             DrawUI();
         }
 
@@ -83,7 +86,7 @@ namespace ThunderFireUITool
                     unityTextAlign = TextAnchor.MiddleCenter,
                     fontSize = 14,
                 },
-                text = "V 0.9.4"
+                text = $"V {_globalData?.Version}"
             });
 
 

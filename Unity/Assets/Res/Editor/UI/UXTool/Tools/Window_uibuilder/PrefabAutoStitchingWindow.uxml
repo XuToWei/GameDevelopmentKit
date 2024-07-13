@@ -1,0 +1,35 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Root" style="left: 0; top: 0; right: 0; bottom: 0; position: absolute; align-items: center; justify-content: flex-start;">
+        <ui:VisualElement name="AssembleToolPathContainer" class="textfield" style="width: 375px; align-items: center; flex-direction: column; justify-content: flex-start; height: 90px; left: auto; position: absolute; top: 10px;">
+            <ui:VisualElement name="TitleContainer" style="flex-grow: 1; flex-direction: row; width: 375px; height: 25px; max-height: none;">
+                <ui:Label text="适配器" name="AssembleToolPathLabel" enable-rich-text="true" style="-unity-text-align: middle-left; height: 21px; width: 97px; font-size: 16px; color: rgb(238, 238, 238); white-space: nowrap; right: auto; left: 0; text-overflow: ellipsis; -unity-font-style: bold;" />
+                <ui:Button text="选择适配器" display-tooltip-when-elided="true" name="AssembleToolPathSelectButton" style="position: absolute; top: auto; left: auto; right: 0; width: 100px; height: 25px;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="pathInputSelector" style="height: 33px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; position: relative; right: auto; width: 375px;">
+                <ui:VisualElement name="pathInputContainer" style="width: 100%; height: 33px; flex-direction: row; align-items: center; justify-content: flex-start; background-color: rgb(255, 255, 255); border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; left: auto; right: 0;">
+                    <ui:IMGUIContainer name="AssembleToolPathInput" focusable="false" class="textinput" style="width: 375px; background-color: rgb(255, 255, 255); border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; height: 25px; justify-content: flex-end; align-items: flex-start; position: relative; top: auto; left: auto; overflow: hidden; visibility: visible; display: flex; opacity: 1;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label tabindex="-1" text="If there is no executable file in the default path, extract from the compressed file in the default path." parse-escape-sequences="true" display-tooltip-when-elided="true" name="assembleToolInfoLabel" style="top: auto; left: auto; width: 375px; height: 25px; -unity-text-align: middle-left; color: rgb(255, 255, 255); white-space: normal; font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="DesignImageContainer" style="position: absolute; top: 115px; left: auto; height: 180px; width: 375px; flex-grow: 0; flex-wrap: nowrap; align-items: center; justify-content: space-between;">
+            <ui:VisualElement name="SelectDesignButtonContainer" style="position: relative; width: 375px; height: 25px; top: auto; flex-direction: row; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
+                <ui:Label text="设计稿" display-tooltip-when-elided="true" name="DesignLabel" style="position: relative; top: auto; left: auto; height: 25px; -unity-text-align: middle-left; -unity-font-style: bold; font-size: 16px; color: rgb(238, 238, 238);" />
+                <ui:Button text="选择设计稿" display-tooltip-when-elided="true" name="SelectDesignButton" style="position: absolute; top: auto; left: auto; right: 0; width: 100px; height: 25px;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="DesignImage" style="position: relative; left: auto; width: 375px; height: 150px; top: auto; background-color: rgb(72, 72, 72); background-image: none; -unity-background-scale-mode: scale-to-fit;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="SeparateImagesContainer" style="height: 150px; width: 375px; position: absolute; top: 300px; left: auto;">
+            <ui:Label text="切图" display-tooltip-when-elided="true" name="SeparateImageLabel" style="height: 25px; -unity-font-style: bold; font-size: 16px; color: rgb(238, 238, 238);" />
+            <ui:ListView focusable="true" header-title="切图" name="IconListView" style="width: 375px; top: auto; height: 100px; position: relative; left: auto; background-color: rgb(72, 72, 72);" />
+            <ui:VisualElement name="ListControllerContainer" style="position: relative; height: 20px; flex-direction: row; justify-content: flex-end;">
+                <ui:Button text="+" display-tooltip-when-elided="true" name="AddPathButton" style="width: 20px;" />
+                <ui:Button text="-" display-tooltip-when-elided="true" name="RemovePathButton" style="width: 20px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="ButtonContainer" style="width: 375px; height: 30px; top: 470px; bottom: auto; position: absolute; left: auto; flex-direction: row; align-items: center; justify-content: space-around;">
+            <ui:Button text="确定" display-tooltip-when-elided="true" name="SubmitButton" style="width: 100px;" />
+            <ui:Button text="清空" display-tooltip-when-elided="true" name="ClearButton" style="width: 100px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

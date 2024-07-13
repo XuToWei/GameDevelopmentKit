@@ -31,20 +31,27 @@ namespace ThunderFireUITool
             {
                 style = new UXStyle()
                 {
-                    paddingBottom = 20, paddingLeft = 5, paddingTop = 20, paddingRight = 5,
-                    alignItems = Align.Center, justifyContent = Justify.Center
+                    paddingBottom = 20,
+                    paddingLeft = 5,
+                    paddingTop = 20,
+                    paddingRight = 5,
+                    alignItems = Align.Center,
+                    justifyContent = Justify.Center
                 }
             });
             var row = UXBuilder.Row(div, new UXBuilderRowStruct()
             {
-                align = Align.Center, justify = Justify.Center, style = new UXStyle() { marginBottom = 15 }
+                align = Align.Center,
+                justify = Justify.Center,
+                style = new UXStyle() { marginBottom = 15 }
             });
             UXBuilder.Text(row, new UXBuilderTextStruct()
             {
                 text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Prefab名称),
                 style = new UXStyle()
                 {
-                    width = Length.Percent(28), marginRight = Length.Percent(2)
+                    width = Length.Percent(28),
+                    marginRight = Length.Percent(2)
                 }
             });
             var input = UXBuilder.Input(row, new UXBuilderInputStruct()
@@ -56,17 +63,20 @@ namespace ThunderFireUITool
                 onChange = s => m_name = s
             });
             input.value = m_name;
-            
+
             row = UXBuilder.Row(div, new UXBuilderRowStruct()
             {
-                align = Align.Center, justify = Justify.Center, style = new UXStyle() { marginBottom = 15 }
+                align = Align.Center,
+                justify = Justify.Center,
+                style = new UXStyle() { marginBottom = 15 }
             });
             UXBuilder.Text(row, new UXBuilderTextStruct()
             {
                 text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Prefab储存位置),
                 style = new UXStyle()
                 {
-                    width = Length.Percent(28), marginRight = Length.Percent(2)
+                    width = Length.Percent(28),
+                    marginRight = Length.Percent(2)
                 }
             });
             var upload = UXBuilder.Upload(row, new UXBuilderPathUploadStruct()
@@ -77,32 +87,34 @@ namespace ThunderFireUITool
                 },
                 inputStyle = new UXStyle()
                 {
-                    width = Length.Percent(80), marginLeft = Length.Percent(0)
+                    width = Length.Percent(80),
+                    marginLeft = Length.Percent(0)
                 },
                 onChange = s => m_path = s,
                 openPath = ""
             });
             // upload.value = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_新建模板);
-            
+
             row = UXBuilder.Row(div, new UXBuilderRowStruct()
             {
-                justify = Justify.Center, align = Align.Center,
+                justify = Justify.Center,
+                align = Align.Center,
             });
             UXBuilder.Button(row, new UXBuilderButtonStruct()
             {
                 type = ButtonType.Primary,
                 text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_确定),
                 OnClick = AddNewPrefab,
-                style = new UXStyle(){ width = Length.Percent(30), height = 25, fontSize = 14 }
+                style = new UXStyle() { width = Length.Percent(30), height = 25, fontSize = 14 }
             });
             UXBuilder.Button(row, new UXBuilderButtonStruct()
             {
                 text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_取消),
                 OnClick = CloseWindow,
-                style = new UXStyle(){ width = Length.Percent(30), height = 25, fontSize = 14, marginLeft = 20}
+                style = new UXStyle() { width = Length.Percent(30), height = 25, fontSize = 14, marginLeft = 20 }
             });
         }
-        
+
         private void CloseWindow()
         {
             if (m_window != null)
@@ -110,12 +122,12 @@ namespace ThunderFireUITool
                 m_window.Close();
             }
         }
-        
+
         public static RecentCreateWindow GetInstance()
         {
             return m_window;
         }
-        
+
         private void AddNewPrefab()
         {
             GameObject panel = new GameObject("");
@@ -129,7 +141,7 @@ namespace ThunderFireUITool
             string path = m_path;
             if (Directory.Exists(path))
             {
-                if(string.IsNullOrEmpty(panel.name))
+                if (string.IsNullOrEmpty(panel.name))
                 {
                     EditorUtility.DisplayDialog("messageBox",
                         EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_请输入组件类型名称),

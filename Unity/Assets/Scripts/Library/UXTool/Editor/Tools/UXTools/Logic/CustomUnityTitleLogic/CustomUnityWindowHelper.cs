@@ -34,12 +34,11 @@ public partial class CustomUnityWindowHelper
     [DllImport("user32.dll", EntryPoint = "SetWindowText", CharSet = CharSet.Auto)]
     public extern static int SetWindowText(int hwnd, string lpString);
 
-    // private bool haveMainWindow = false;
     public IntPtr hwnd = IntPtr.Zero;
     private IntPtr mainWindowHandle = IntPtr.Zero;
     private int processId = 0;
     private static string originTitle = "";
-    
+
     private static StringBuilder windowTitleBuffer = new StringBuilder(256);
 
 
@@ -61,14 +60,14 @@ public partial class CustomUnityWindowHelper
     public void SetTitle(string customTitle)
     {
         //hwnd = Process.GetCurrentProcess().MainWindowHandle;
-        if(hwnd == IntPtr.Zero)
+        if (hwnd == IntPtr.Zero)
         {
             hwnd = GetMainWindowHandle(Process.GetCurrentProcess().Id);
         }
 
         if (hwnd == IntPtr.Zero) return;
 
-        if(string.IsNullOrEmpty(customTitle))
+        if (string.IsNullOrEmpty(customTitle))
         {
             SetWindowText(hwnd.ToInt32(), originTitle);
         }
@@ -96,9 +95,9 @@ public partial class CustomUnityWindowHelper
         string targetName = BuildPipeline.GetBuildTargetName(EditorUserBuildSettings.activeBuildTarget);
         bool codeCoverageEnabled = Coverage.enabled;
 
-            var title = Application.platform == RuntimePlatform.OSXEditor
-            ? $"{activeSceneName} - {projectName}"
-            : $"{projectName} - {activeSceneName}";
+        var title = Application.platform == RuntimePlatform.OSXEditor
+        ? $"{activeSceneName} - {projectName}"
+        : $"{projectName} - {activeSceneName}";
 
         // FUTURE: [CODE COVERAGE] and the build target info do not belong in the title bar. they
         // are there now because we want them to be always-visible to user, which normally would be a) buildconfig
@@ -150,10 +149,10 @@ public partial class CustomUnityWindowHelper
         bool hasParent = GetParent(handleRef) != IntPtr.Zero;
 
         bool visible = IsWindowVisible(handleRef);
-        
+
         //判断窗口标题是否含有"Unity 20", mainWindow是有的 messageBox目前看都没有
         GetWindowText(handle.ToInt32(), windowTitleBuffer, windowTitleBuffer.Capacity);
-        
+
         string title = windowTitleBuffer.ToString();
 
         return !hasOwner && !hasParent && visible && title.Contains("Unity");

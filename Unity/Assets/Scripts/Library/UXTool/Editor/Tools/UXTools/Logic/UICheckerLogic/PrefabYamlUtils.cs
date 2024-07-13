@@ -31,7 +31,7 @@ namespace ThunderFireUITool
 
         private static string GetUGUIType(string guid)
         {
-            if(GuidToUGUIType.ContainsKey(guid))
+            if (GuidToUGUIType.ContainsKey(guid))
             {
                 return GuidToUGUIType[guid];
             }

@@ -51,12 +51,26 @@ namespace ThunderFireUITool
             TextInput.style.backgroundColor = Color.white;
             VisualElement Confirm = labelFromUXML.Q<VisualElement>("confirm");
             VisualElement Cancel = labelFromUXML.Q<VisualElement>("cancel");
+            var ConfirmSelector = labelFromUXML.Q<VisualElement>("confirmSelector");
             TextLabel.text = prefabLabelDes;
             GUIStyle style = new GUIStyle();
             style.normal.textColor = Color.black;
             style.fontSize = 15;
             //TextInput.onGUIHandler += () => { currentName = GUI.TextField(new Rect(2.5f, 2.5f, 201, 20), currentName, style); };
-            TextInput.onGUIHandler += () => { currentName = EditorGUILayout.TextField(currentName, style); };
+            TextInput.onGUIHandler += () =>
+            {
+                currentName = EditorGUILayout.TextField(currentName, style).Trim();
+                if (string.IsNullOrEmpty(currentName))
+                {
+                    ConfirmSelector.SetEnabled(false);
+                    Confirm.SetEnabled(false);
+                }
+                else
+                {
+                    ConfirmSelector.SetEnabled(true);
+                    Confirm.SetEnabled(true);
+                }
+            };
             SelectorItem textinputS = new SelectorItem(labelFromUXML.Q<VisualElement>("textinputSelector"), TextInput);
             //EditorUIUtil.CreateUIEButton(Confirm, Submit);
             //EditorUIUtil.CreateUIEButton(Cancel, closeWindow);

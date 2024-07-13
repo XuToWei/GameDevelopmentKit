@@ -1,13 +1,13 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 
 public abstract class AssetsCheckerBase
 {
-	public abstract bool Check(string folederPath);
+    public abstract bool Check(string folederPath);
 }
 
-public class AssetsCheckerSample :AssetsCheckerBase
+public class AssetsCheckerSample : AssetsCheckerBase
 {
-	public override bool Check(string folederPath)
+    public override bool Check(string folederPath)
     {
         return true;
     }

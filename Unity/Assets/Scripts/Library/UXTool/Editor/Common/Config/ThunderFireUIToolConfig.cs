@@ -72,6 +72,10 @@ namespace ThunderFireUITool
         public static readonly string QuickBackgroundDataPath = UserDataPath + "QuickBackgroundData.json";
         //功能开关数据
         public static readonly string SwitchSettingPath = UserDataPath + "SwitchSetting.json";
+        //最近选中文件数据
+        public static readonly string FilesRecentSelectedPath = UserDataPath + "FilesRecentlySelectedData.json";
+        //工具全局数据
+        public static readonly string GlobalDataPath = $"{UXEditorCommonPath}ToolGlobalData/ToolGlobalData.json";
         #endregion
 
         #region Res Check Setting
@@ -100,11 +104,14 @@ namespace ThunderFireUITool
         public const string Localization = "本地化 (Localization)";
         public const string UIColor = "颜色配置 (UIColorConfig)";
         public const string BackGround = "创建背景图 (Create QuickBackground)";
-        public const string GenPrefab = "自动生成Prefab (AutoGen Prefab)";
+        public const string AutoStitching = "自动拼接工具 (AutoStitchingTool)";
 
+        public const string RecentlySelected = "最近选中文件 (Recently Selected)";
         public const string RecentlyOpened = "最近打开 (Recently Opened)";
         public const string PrefabTabs = "Prefab页签 (Prefab Tabs)";
-        public const string ResourceCheck = "资源检查 (ResourceTools)";
+        public const string ResourceCheck = "资源检查工具 (ResourceCheckTools)";
+        public const string ComponentCheck = "脚本检查工具 (ComponentCheckTool)";
+
 
         public const string Menu_About = MenuName + About;  //-150
         public const string Menu_WelcomePage = MenuName + WelcomePage;  //-149
@@ -119,11 +126,12 @@ namespace ThunderFireUITool
 
         public const string Menu_ToolBar = MenuName + ToolBar;  //101
 
-        public const string Menu_RecentlyOpened = MenuName + RecentlyOpened;    //151
-        public const string Menu_BackGround = MenuName + BackGround;    //152
-        public const string Menu_AutoGenPrefab = MenuName + GenPrefab;    //152
-
-        public const string Menu_ResourceCheck = MenuName + ResourceCheck;  //153  154
+        public const string Menu_BackGround = MenuName + BackGround;    //151
+        public const string Menu_AutoAssemblePrefab = MenuName + AutoStitching;    //152
+        public const string Menu_RecentlyOpened = MenuName + RecentlyOpened;    //153
+        public const string Menu_RecentlySelected = MenuName + RecentlySelected; // 154
+        public const string Menu_ResourceCheck = MenuName + ResourceCheck;  //160
+        public const string Menu_ComponentCheck = MenuName + ComponentCheck;  //161
         public const int Menu_ResourceCheckIndex = 170;
 
         public const string Menu_UXToolLocalization = "UXToolLocalization";

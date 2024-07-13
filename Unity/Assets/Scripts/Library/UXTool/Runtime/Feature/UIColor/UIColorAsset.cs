@@ -19,7 +19,7 @@ public class UIColor
     }
 }
 
-[CreateAssetMenu(fileName = "ui_color_config", menuName = "UXTools/UI Color Asset")]
+[CreateAssetMenu(fileName = "ui_color_config", menuName = "UXTool/UI Color Asset")]
 public class UIColorAsset : ScriptableObject
 {
     [SerializeField]

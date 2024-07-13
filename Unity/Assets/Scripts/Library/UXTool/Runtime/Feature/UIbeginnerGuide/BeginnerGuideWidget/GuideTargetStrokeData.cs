@@ -23,7 +23,7 @@ public class GuideTargetStrokeData : GuideWidgetData
     public TargetType targetType;
     public GameObject targetGameObject;
     public bool playAnimator;
-    
+
     public override string Serialize()
     {
         UpdateTransformData();

@@ -78,7 +78,7 @@ public class GuideLastPage : VisualElement
                 GuideWindow.GetInstance().DrawPage(veParent);
             }
         });
-        
+
     }
 
     private void DrawRowToggles(VisualElement veParent)

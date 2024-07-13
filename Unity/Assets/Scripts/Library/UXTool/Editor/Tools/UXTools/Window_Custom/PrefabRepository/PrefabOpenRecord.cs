@@ -12,7 +12,6 @@ namespace ThunderFireUITool
             {
                 var prefabStage = PrefabStageUtils.GetCurrentPrefabStage();
                 string guid = AssetDatabase.AssetPathToGUID(prefabStage.GetAssetPath());
-                //Debug.Log(guid);
                 if (SwitchSetting.CheckValid(SwitchSetting.SwitchType.RecentlyOpened))
                 {
                     var RecentOpened = JsonAssetManager.GetAssets<PrefabOpenedSetting>();

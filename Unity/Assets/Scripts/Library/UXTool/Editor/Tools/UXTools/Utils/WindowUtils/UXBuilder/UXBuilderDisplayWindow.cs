@@ -7,7 +7,7 @@ namespace ThunderFireUITool
     public class UXBuilderDisplayWindow : EditorWindow
     {
         private static UXBuilderDisplayWindow _mWindow;
-        
+
         // [MenuItem("ThunderFireUXTool/UXBuilder展示(UXBuilder Display)", false, 56)]
         public static void OpenWindow()
         {
@@ -20,7 +20,7 @@ namespace ThunderFireUITool
             _mWindow.position = new Rect((Screen.currentResolution.width - width) / 2,
                 (Screen.currentResolution.height - height) / 2, width, height);
         }
-        
+
         private void OnEnable()
         {
             VisualElement root = rootVisualElement;

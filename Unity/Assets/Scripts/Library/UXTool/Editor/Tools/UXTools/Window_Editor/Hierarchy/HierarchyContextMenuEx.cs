@@ -22,13 +22,13 @@ namespace ThunderFireUITool
         [MenuItem("GameObject/Combine", false, -1)]
         static public void Combine(MenuCommand menuCommand)
         {
-            if(!InCombineProcess)
+            if (!InCombineProcess)
             {
                 List<RectTransform> rects = Utils.GetAllSelectionRectTransform();
                 CombineWidgetLogic.GenCombineRootRect(rects);
                 InCombineProcess = true;
             }
-            
+
         }
     }
 }

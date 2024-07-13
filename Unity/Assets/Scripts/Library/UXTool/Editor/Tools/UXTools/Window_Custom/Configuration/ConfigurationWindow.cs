@@ -105,6 +105,13 @@ namespace ThunderFireUITool
             }
         }
 
+        [UnityEditor.Callbacks.DidReloadScripts(0)]
+        private static void OnScriptReload()
+        {
+            if (HasOpenInstances<ConfigurationWindow>())
+                c_window = GetWindow<ConfigurationWindow>();
+        }
+
         private void OnEnable()
         {
             InitWindowData();
@@ -117,7 +124,10 @@ namespace ThunderFireUITool
         private PopupField<string> LanguageEnumField;
         private Toggle[] switchToggles;
         private TextField projectNameTextField;
-
+        private IntegerField maxFilesField;
+        private IntegerField maxPrefabsField;
+        private TextElement errorLabel;
+        private TextElement errorPrefabLabel;
 
         private ConfigurationOption GeneralOption;
         private ConfigurationOption StorageOption;
@@ -137,7 +147,6 @@ namespace ThunderFireUITool
             LanguageType = localizationSetting.LocalType;
 
             int max = Enum.GetValues(typeof(SwitchSetting.SwitchType)).Cast<int>().Max();
-
             switchToggles = new Toggle[max + 1];
             for (int i = 0; i < switchToggles.Length; i++)
             {
@@ -146,7 +155,7 @@ namespace ThunderFireUITool
             }
 
             commonData = AssetDatabase.LoadAssetAtPath<UXToolCommonData>(ThunderFireUIToolConfig.UXToolCommonDataPath);
-            if(commonData == null)
+            if (commonData == null)
             {
                 commonData = UXToolCommonData.Create();
             }
@@ -182,22 +191,52 @@ namespace ThunderFireUITool
             leftContainerRefresh();
             GeneralOption.isSelect();
             rightContainer.Clear();
-            VisualElement Container = new VisualElement();
-            Container.style.position = Position.Absolute;
-            Container.style.alignSelf = Align.Center;
-            Container.style.bottom = 5;
-            Container.style.top = 5;
-            Container.style.width = 400;
-            rightContainer.Add(Container);
 
-            TextElement nameLabel = new TextElement();
-            nameLabel.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_语言);
-            nameLabel.style.position = Position.Absolute;
-            nameLabel.style.left = 0;
-            nameLabel.style.fontSize = 13;
-            nameLabel.style.top = 5;
-            nameLabel.style.color = Color.white;
-            Container.Add(nameLabel);
+            VisualElement container = UXBuilder.Div(rightContainer, new UXBuilderDivStruct()
+            {
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    alignSelf = Align.Center,
+                    bottom = 5,
+                    top = 5,
+                    width = 400,
+                }
+            });
+
+            AddGeneralSetting(container);
+
+            AddFilesCountLimit(container);
+
+        }
+
+        private void AddGeneralSetting(VisualElement container)
+        {
+            TextElement generalTitleLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
+            {
+                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_通用),
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    left = -40,
+                    fontSize = 16,
+                    top = 0,
+                    color = Color.white,
+                }
+            });
+
+            TextElement nameLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
+            {
+                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_语言),
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    left = 0,
+                    fontSize = 13,
+                    top = 40,
+                    color = Color.white,
+                }
+            });
 
             var list = new List<string>();
             list.Add("简体中文");
@@ -210,35 +249,144 @@ namespace ThunderFireUITool
             LanguageEnumField.style.width = 137;
             LanguageEnumField.style.height = 25;
             LanguageEnumField.style.right = 0;
-            Container.Add(LanguageEnumField);
+            LanguageEnumField.style.top = 40;
+            container.Add(LanguageEnumField);
 
-
-            TextElement projectNameLabel = new TextElement();
-            projectNameLabel.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_自定义项目名称);
-            projectNameLabel.style.position = Position.Absolute;
-            projectNameLabel.style.left = 0;
-            projectNameLabel.style.fontSize = 13;
-            projectNameLabel.style.top = 55;
-            projectNameLabel.style.color = Color.white;
-            Container.Add(projectNameLabel);
+            TextElement projectNameLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
+            {
+                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_自定义项目名称),
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    left = 0,
+                    fontSize = 13,
+                    top = 70,
+                    color = Color.white,
+                }
+            });
 
             projectNameTextField = new TextField();
             projectNameTextField.style.position = Position.Absolute;
             projectNameTextField.style.width = 137;
             projectNameTextField.style.height = 25;
-            projectNameTextField.style.top = 55;
+            projectNameTextField.style.top = 70;
             projectNameTextField.style.right = 0;
 
-            if(commonData != null)
+            if (commonData != null)
             {
                 projectNameTextField.value = commonData.CustomUnityWindowTitle;
             }
-            
+
             projectNameTextField.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
                 projectNameTextField.value = evt.newValue;
             });
-            Container.Add(projectNameTextField);
+            container.Add(projectNameTextField);
+        }
+
+
+        private void AddFilesCountLimit(VisualElement container)
+        {
+            TextElement limitTitleLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
+            {
+                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_面板设置),
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    left = -40,
+                    fontSize = 16,
+                    top = 115,
+                    color = Color.white,
+                }
+            });
+
+            TextElement maxPrefabsLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
+            {
+                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_最近打开模板数上限),
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    left = 0,
+                    fontSize = 13,
+                    top = 155,
+                    color = Color.white,
+                    maxWidth = 270,
+                }
+            });
+
+            maxPrefabsField = new IntegerField();
+            maxPrefabsField.style.position = Position.Absolute;
+            maxPrefabsField.style.width = 137;
+            maxPrefabsField.style.height = 25;
+            maxPrefabsField.style.top = 155;
+            maxPrefabsField.style.right = 0;
+            if (commonData != null)
+            {
+                maxPrefabsField.value = commonData.MaxRecentOpenedPrefabs;
+            }
+
+            container.Add(maxPrefabsField);
+            errorPrefabLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
+            {
+                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_显示上限必须大于0),
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    color = Color.red,
+                    maxWidth = 137,
+                    display = DisplayStyle.None,
+                    fontSize = 13,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    top = 180,
+                    right = 1,
+
+                }
+            });
+
+
+            TextElement maxFilesLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
+            {
+                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_最近选中文件数上限),
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    left = 0,
+                    fontSize = 13,
+                    top = 210,
+                    color = Color.white,
+                    maxWidth = 250,
+                }
+            });
+
+            maxFilesField = new IntegerField();
+            maxFilesField.style.position = Position.Absolute;
+            maxFilesField.style.width = 137;
+            maxFilesField.style.height = 25;
+            maxFilesField.style.top = 210;
+            maxFilesField.style.right = 0;
+            if (commonData != null)
+            {
+                maxFilesField.value = commonData.MaxRecentSelectedFiles;
+            }
+
+            container.Add(maxFilesField);
+
+            errorLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
+            {
+                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_显示上限必须大于0),
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    color = Color.red,
+                    maxWidth = 137,
+                    display = DisplayStyle.None,
+                    fontSize = 13,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    top = 235,
+                    right = 1,
+
+                }
+            });
         }
 
         private void leftContainerRefresh()
@@ -259,40 +407,79 @@ namespace ThunderFireUITool
         }
 
 
-        private void AddSwitchToggle(int x, string text, ref Toggle toggle)
+        Dictionary<string, List<(string, int)>> GetSwitchCategories()
         {
-            toggle.style.position = Position.Absolute;
-            toggle.style.left = 40;
-            toggle.style.top = 25 * x + 15;
-            rightContainer.Add(toggle);
-            TextElement label = new TextElement();
+            // 这里的字典key为分类名称，value为该分类下的所有开关的本地化以及SwitchSetting对应的SwitchType序号
+            return new Dictionary<string, List<(string, int)>>()
+            {
+                { "基础common", new List<(string , int)> {
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_对齐吸附), 1),
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_右键选择列表), 2),
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_快速复制), 3),
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_移动快捷键), 4)
+                }},
+                { "操作记录", new List<(string , int)> {
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_最近打开面板记录), 0),
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_最近选中面板记录), 11)
+                }},
+                { "其他", new List<(string , int)> {
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Prefab多开), 5),
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Scene中分辨率调整), 6),
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Prefab资源检查), 7),
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_参考背景图片), 8),
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_自动将Texture转为Sprite), 9),
+                    (EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_手柄引导开关), 10)
+                }}
+            };
+        }
+
+        private void AddSwitchToggle(VisualElement container, string text, ref Toggle toggle)
+        {
+            VisualElement row = new VisualElement();
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.marginTop = 5;
+            row.style.marginBottom = 5;
+            row.style.marginLeft = 40;
+
+            toggle.style.marginRight = 10;
+            row.Add(toggle);
+
+            Label label = new Label();
             label.text = text;
-            label.style.position = Position.Absolute;
-            label.style.left = 62;
-            label.style.top = 25 * x + 14;
+
             label.style.fontSize = 13;
             label.style.color = Color.white;
-            label.style.maxWidth = 450;
-            rightContainer.Add(label);
+
+            row.Add(label);
+            container.Add(row);
         }
         private void SwitchOnClick()
         {
             leftContainerRefresh();
             SwitchOption.isSelect();
             rightContainer.Clear();
+            ScrollView scrollView = new ScrollView();
+            scrollView.style.flexGrow = 1;
+            rightContainer.Add(scrollView);
 
-            AddSwitchToggle(0, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_最近打开面板记录), ref switchToggles[0]);
-            AddSwitchToggle(1, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_对齐吸附), ref switchToggles[1]);
-            AddSwitchToggle(2, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_右键选择列表), ref switchToggles[2]);
-            AddSwitchToggle(3, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_快速复制), ref switchToggles[3]);
-            AddSwitchToggle(4, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_移动快捷键), ref switchToggles[4]);
-            AddSwitchToggle(5, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Prefab多开), ref switchToggles[5]);
-            AddSwitchToggle(6, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Scene中分辨率调整), ref switchToggles[6]);
-            AddSwitchToggle(7, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_Prefab资源检查), ref switchToggles[7]);
-            AddSwitchToggle(8, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_参考背景图片), ref switchToggles[8]);
-            AddSwitchToggle(9, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_自动将Texture转为Sprite), ref switchToggles[9]);
-            AddSwitchToggle(10, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_手柄引导开关), ref switchToggles[10]);
+            var categories = GetSwitchCategories();
 
+            foreach (var category in categories)
+            {
+                // 添加分类标题
+                Label header = new Label(category.Key);
+                header.style.fontSize = 16;
+                header.style.color = Color.white;
+                header.style.marginLeft = 20;
+                scrollView.Add(header);
+
+                // 添加该分类下的所有开关
+                for (int i = 0; i < category.Value.Count; i++)
+                {
+                    var (localization, toggleIndex) = category.Value[i];
+                    AddSwitchToggle(scrollView, localization, ref switchToggles[toggleIndex]);
+                }
+            }
         }
 
         private void ConfirmOnClick()
@@ -308,9 +495,30 @@ namespace ThunderFireUITool
                 SceneViewToolBar.CloseEditor();
                 SceneViewToolBar.OpenEditor();
             }
-            if(commonData != null)
+            if (commonData != null)
             {
                 commonData.CustomUnityWindowTitle = projectNameTextField.value;
+                if (maxPrefabsField.value >= 1)
+                {
+                    commonData.MaxRecentOpenedPrefabs = maxPrefabsField.value;
+                    errorPrefabLabel.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    errorPrefabLabel.style.display = DisplayStyle.Flex;
+                    return;
+                }
+                if (maxFilesField.value >= 1)
+                {
+                    commonData.MaxRecentSelectedFiles = maxFilesField.value;
+                    errorLabel.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    errorLabel.style.display = DisplayStyle.Flex;
+                    return;
+                }
+
                 commonData.Save();
             }
 

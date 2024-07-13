@@ -16,6 +16,6 @@
 }
 
 .ux-select__arrow {
-    /*background-image: resource("Assets/Res/Editor/UI/UXTool/Tools/Window_uibuilder/USS/Icons/arrow-down.png");*/
+    /*background-image: resource("Assets/UXTools/Res/UX-GUI-Editor-Tools/Assets/Editor/Window_uibuilder/USS/Icons/arrow-down.png");*/
     background-image: url("../Icons/arrow-down.png");
 }

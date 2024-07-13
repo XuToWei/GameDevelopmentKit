@@ -16,10 +16,10 @@ namespace ThunderFireUITool
         public UXTabsPosition position = UXTabsPosition.Left;
         public Action<string, VisualElement> onTabClick = (string val, VisualElement content) => { };
 
-        public List<string> titles = new List<string>(){"Tab1", "Tab2"};
+        public List<string> titles = new List<string>() { "Tab1", "Tab2" };
         public string defaultTitle = "";
     }
-    
+
     public class UXBuilderTabs : VisualElement
     {
         private static UXBuilderTabs _mUXTabs;
@@ -28,62 +28,62 @@ namespace ThunderFireUITool
         private static VisualElement leftContainer;
         private static ScrollView labelScroll;
         private static ScrollView widgetScroll;
-        
+
         private static UXStyle _mStyle = new UXStyle();
-        
+
         private static UXBuilderTabsStruct _mComponent = new UXBuilderTabsStruct();
-        
-        
+
+
         public UXBuilderTabsStruct GetComponents()
         {
             return _mComponent;
         }
-        
+
         public VisualElement GetRightContainer()
         {
             return rightContainer;
         }
-        
+
         public VisualElement GetLeftContainer()
         {
             return leftContainer;
         }
-        
+
         public VisualElement GetLabelScroll()
         {
             return labelScroll;
         }
-        
+
         public VisualElement GetWidgetScroll()
         {
             return widgetScroll;
         }
-        
+
         public UXBuilderTabs SetComponents(UXBuilderTabsStruct component)
         {
             VisualElement parent = this.hierarchy.parent;
             if (parent == null) return this;
             _mComponent = component;
-            var a = Create(parent,_mComponent);
+            var a = Create(parent, _mComponent);
             a.PlaceBehind(this);
             parent.Remove(this);
             return a;
         }
-        
+
         public static UXBuilderTabs Create(VisualElement root, UXBuilderTabsStruct component)
         {
             _mComponent = component;
-            
+
             _mUXTabs = new UXBuilderTabs();
-            
+
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ThunderFireUIToolConfig.UIBuilderPath + "USS/UXElements/UXTabs.uss");
             _mUXTabs.styleSheets.Add(styleSheet);
-            
+
             _mUXTabs.AddToClassList("ux-tabs");
 
             _mUXTabs.name = component.className;
-            StyleCopy.IStyleToUXStyle(_mStyle,_mUXTabs.style);
-            
+            StyleCopy.IStyleToUXStyle(_mStyle, _mUXTabs.style);
+
             switch (component.position)
             {
                 case UXTabsPosition.Left:
@@ -99,7 +99,7 @@ namespace ThunderFireUITool
 
             return _mUXTabs;
         }
-        
+
         private static void InitComponent(UXBuilderTabsStruct component)
         {
             // InitDisabled(component.disabled);
@@ -107,7 +107,7 @@ namespace ThunderFireUITool
             // InitError(component.error);
             InitStyle(component.style);
         }
-        
+
         private static void InitStyle(UXStyle style)
         {
             if (style == _mStyle) return;
@@ -135,7 +135,7 @@ namespace ThunderFireUITool
             leftContainer = UXBuilder.Col(row, new UXBuilderColStruct()
             {
                 span = 5,
-                style = new UXStyle() { borderTopWidth = 10, height = Length.Percent(100), maxWidth = 180}
+                style = new UXStyle() { borderTopWidth = 10, height = Length.Percent(100), maxWidth = 180 }
             });
 
             labelScroll = UXBuilder.ScrollView(leftContainer, new UXBuilderScrollViewStruct());
@@ -145,7 +145,7 @@ namespace ThunderFireUITool
             {
                 span = 1,
                 style = new UXStyle()
-                { height = Length.Percent(100), alignItems = Align.Center, maxWidth = 20}
+                { height = Length.Percent(100), alignItems = Align.Center, maxWidth = 20 }
             });
             UXBuilder.Div(dragLine, new UXBuilderDivStruct()
             {
@@ -162,7 +162,7 @@ namespace ThunderFireUITool
                 span = 18,
                 style = new UXStyle() { height = Length.Percent(100) }
             });
-            
+
 
             widgetScroll = UXBuilder.ScrollView(rightContainer,
                 new UXBuilderScrollViewStruct() { style = new UXStyle() { marginTop = 20, whiteSpace = WhiteSpace.NoWrap } });
@@ -174,14 +174,14 @@ namespace ThunderFireUITool
                 ? component.titles[0]
                 : component.defaultTitle;
             DrawTab(component, selected);
-            if(component.titles.Contains(selected))
+            if (component.titles.Contains(selected))
                 component.onTabClick(selected, rightContainer);
 
         }
-        
+
         private static void DrawElementTop(UXBuilderTabsStruct component)
         {
-            
+
         }
 
         private static void DrawTab(UXBuilderTabsStruct component, string selectedTitle)
@@ -212,9 +212,9 @@ namespace ThunderFireUITool
                 var btn = UXBuilder.Button(content, new UXBuilderButtonStruct()
                 {
                     type = selectedTitle == tmp ? ButtonType.Primary : ButtonType.Default,
-                    OnClick = ()=>
+                    OnClick = () =>
                     {
-                        if(component.titles.Contains(tmp))
+                        if (component.titles.Contains(tmp))
                             component.onTabClick(tmp, rightContainer);
                         labelScroll.Clear();
                         DrawTab(component, tmp);

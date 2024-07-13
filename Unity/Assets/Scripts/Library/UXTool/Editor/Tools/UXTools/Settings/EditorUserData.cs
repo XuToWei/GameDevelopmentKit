@@ -13,10 +13,10 @@ public class EditorUserData : ScriptableObject
     public Vector3 scale = Vector3.one;
     public Vector2 size = default;
     //Size = GetComponent<RectTransform>().sizeDelta;
-    public Color color =Color.white;
+    public Color color = Color.white;
     public Sprite sprite = default;
 
     public string trans;
     public string img;
-    
+
 }

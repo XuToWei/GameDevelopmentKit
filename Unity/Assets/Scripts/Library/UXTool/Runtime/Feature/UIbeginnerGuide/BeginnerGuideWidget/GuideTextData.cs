@@ -18,7 +18,7 @@ public class GuideTextData : GuideWidgetData
     public string guideTextTitle;
 
     public TextBgStyle textBgStyle;
-    
+
     public override string Serialize()
     {
         UpdateTransformData();
@@ -31,7 +31,7 @@ public class GuideTextData : GuideWidgetData
             guideTextTitle = GetComponent<GuideText>().withTitleTitle.GetComponent<Text>().text;
             guideTextContent = GetComponent<GuideText>().withTitleContent.GetComponent<Text>().text;
         }
-        
+
         string data = JsonUtility.ToJson(this);
         return data;
     }

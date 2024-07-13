@@ -99,7 +99,7 @@ namespace ThunderFireUITool
                 }
             };
 
-        EditorApplication.hierarchyWindowItemOnGUI += HandleHierarchyWindowItemOnGUI;
+            EditorApplication.hierarchyWindowItemOnGUI += HandleHierarchyWindowItemOnGUI;
         }
 
 
