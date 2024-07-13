@@ -17,6 +17,7 @@
       <Resource Name="Res/Scene/Map1" LoadType="0" Packed="False" />
       <Resource Name="Res/Scene/Map2" LoadType="0" Packed="False" />
       <Resource Name="Res/Scene/Menu" LoadType="0" Packed="False" />
+      <Resource Name="Res/UI/UIPrefab/Button" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UISprite/Common" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UISprite/Icon" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UISprite/Logo" LoadType="0" Packed="False" />
@@ -57,6 +58,7 @@
       <Asset Guid="17b4b96214cae7a469bef91b74a00a4f" ResourceName="UI.UXTool" />
       <Asset Guid="17fe8e89dccbc164bb2aad7895be004d" ResourceName="UI.UXTool" />
       <Asset Guid="1abfbe65a6e3c034cb43df1cff7317cb" ResourceName="Luban" />
+      <Asset Guid="1e33ec0dba09da8489e42b4f71f869d4" ResourceName="GameHot" />
       <Asset Guid="1eada7f8ac95f194c9b326abfb153080" ResourceName="UI.UXTool" />
       <Asset Guid="1f9dea015ca3a64498326b23e91f8cf6" ResourceName="UI.UXTool" />
       <Asset Guid="236433a27ce40a7429b87d14d8fa3035" ResourceName="Res/UI/UISprite/Common" />
@@ -66,6 +68,7 @@
       <Asset Guid="2a2ffdccc4fac024e94d5fe57c2b78c4" ResourceName="UI.UXTool" />
       <Asset Guid="2b85caab422d3b44698e732df0d97c4b" ResourceName="UI.UXTool" />
       <Asset Guid="2be2915609f5656438eea96db8b37793" ResourceName="UI.UXTool" />
+      <Asset Guid="2e25b09d3937c014a8e1f59f5a87c5b6" ResourceName="Res/UI/UIPrefab/Button" />
       <Asset Guid="2e9a3904c0f8c444a8756f9e97e09151" ResourceName="UI.UXTool" />
       <Asset Guid="3109894aebd4d2f4cb1a579a5500cf5a" ResourceName="UI.UXTool" />
       <Asset Guid="31f8f9898401e5240b6a19c03c0c046d" ResourceName="UI.UXTool" />
@@ -77,6 +80,7 @@
       <Asset Guid="3b7910331870913419f6e73a758d246e" ResourceName="UI.UXTool" />
       <Asset Guid="3be3fac3611f4584695662c4889f722d" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="3d35d566fece421448c5f52a6f72cce7" ResourceName="UI.UXTool" />
+      <Asset Guid="3dfc56ac974e73f4c960abf1fe503a07" ResourceName="Res/UI/UIPrefab/Button" />
       <Asset Guid="3e9ef7dd787132643bb3be71dc2120bd" ResourceName="UI.UXTool" />
       <Asset Guid="3ec74aa98d7b1ba4599726fc79459c3c" ResourceName="Luban" />
       <Asset Guid="3f54fcfdac53aec42ae18a6a1c6d8cb1" ResourceName="Res/UI/UISprite/Common" />
@@ -122,10 +126,12 @@
       <Asset Guid="738bdf56857a65f479c367c7b62c4ad7" ResourceName="Entity" />
       <Asset Guid="7c257456f05a75841b93e90bdd63bbf9" ResourceName="Res/Localization/ChineseSimplified/Localization" />
       <Asset Guid="7c4bd903827c81443b0bee2fa408efcd" ResourceName="ET.ClientServer" />
+      <Asset Guid="7c82a4361420a82498f407f0015222b7" ResourceName="GameHot" />
       <Asset Guid="7d5f7699d6d1d48e485ac71126e12061" ResourceName="Entity" />
       <Asset Guid="7d7519d6f12d2ee42ace9b3f15502ce8" ResourceName="UI.UXTool" />
       <Asset Guid="7e2d9312c5afda3438f3e420470bf02d" ResourceName="UI.UXTool" />
       <Asset Guid="7f5aee8da226edf4991598327cb32ce0" ResourceName="Res/UI/UISprite/Logo" />
+      <Asset Guid="8132ea8fface6ca4eb0224667a2aa887" ResourceName="Res/UI/UIPrefab/Button" />
       <Asset Guid="81523fb22b1b6ca43bd34af552ed6f82" ResourceName="UI.UXTool" />
       <Asset Guid="822d44e3e4c29b24b8f0c5ad4dc4e7f2" ResourceName="UI.UXTool" />
       <Asset Guid="834bfaee90a9d4e04b1e8c1ca22cc88e" ResourceName="Entity" />
@@ -138,9 +144,11 @@
       <Asset Guid="8777d02fab43d2b418a28320b701d898" ResourceName="UI.UXTool" />
       <Asset Guid="8a93490fcc960d3448b484c619fd55ac" ResourceName="UI.UXTool" />
       <Asset Guid="8b6866f234d6eee4f8a35cec279d6109" ResourceName="UI.UXTool" />
+      <Asset Guid="8be6035f3e8a8cd428b6248241c9524d" ResourceName="Res/UI/UIPrefab/Button" />
       <Asset Guid="8cbf73a62f872e741af7cceda911c264" ResourceName="UI.UXTool" />
       <Asset Guid="8cf749fdfa5edc3478d16893efeaa0eb" ResourceName="Entity" />
       <Asset Guid="8d42b919fb94e5f4f998957f2ac1ff81" ResourceName="UI.UXTool" />
+      <Asset Guid="8f0857f85ecc988498c47eece7afdccd" ResourceName="Res/UI/UIPrefab/Button" />
       <Asset Guid="90bbee64859e4e14f8f5eec8db43b621" ResourceName="UI.UXTool" />
       <Asset Guid="9143e2b62ad50488482f9b73672fc331" ResourceName="Entity" />
       <Asset Guid="919546e3dacf13c4c9e26b7393c796fc" ResourceName="UI.UXTool" />
@@ -219,6 +227,7 @@
       <Asset Guid="e5ca26c53b6ab8a46b52817008d7c7fa" ResourceName="Res/UI/UISprite/Icon" />
       <Asset Guid="e6a8850b6499a1f4cbed64b4e5ddae46" ResourceName="UI.UXTool" />
       <Asset Guid="e6c8d6e6694015d4d8dac8c72319bef1" ResourceName="UI.UXTool" />
+      <Asset Guid="e819383de8407be41994bfd010084173" ResourceName="Res/UI/UIPrefab/Button" />
       <Asset Guid="e82837c9099f69a48b48fc44eb8d119d" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="e830964cdb85ff3429bca484c16bab44" ResourceName="UI.UISound" />
       <Asset Guid="e85864330b68dde498dcb6e8711815d3" ResourceName="Res/UI/UISprite/Common" />

@@ -12,7 +12,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ef1b78caae7e195498df20b6e4096a8afcb4d06f"
+      "hash": "909e96ca7c808cf9be733b881382fabb49523d0b"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
@@ -263,7 +263,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3d49ceda44cfb1dff08ecc6447cbb64729919c38"
+      "hash": "84fd2f8de57a34dc1cf2c67b11b4fe5d19906b0b"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
