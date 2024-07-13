@@ -32,9 +32,6 @@ public partial struct vec3
 
     public  void ResolveRef(Tables tables)
     {
-        
-        
-        
         PostResolveRef();
     }
 

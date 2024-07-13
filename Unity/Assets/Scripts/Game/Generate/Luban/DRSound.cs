@@ -68,14 +68,6 @@ public sealed partial class DRSound : Luban.BeanBase
 
     public  void ResolveRef(TablesComponent tables)
     {
-        
-        
-        
-        
-        
-        
-        
-        
         PostResolveRef();
     }
 

@@ -63,13 +63,6 @@ public sealed partial class DRUnitConfig : Luban.BeanBase
 
     public  void ResolveRef(Tables tables)
     {
-        
-        
-        
-        
-        
-        
-        
         PostResolveRef();
     }
 

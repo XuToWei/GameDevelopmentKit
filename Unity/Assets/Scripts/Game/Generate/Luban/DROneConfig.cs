@@ -33,7 +33,6 @@ public sealed partial class DROneConfig : Luban.BeanBase
 
     public  void ResolveRef(TablesComponent tables)
     {
-        
         PostResolveRef();
     }
 

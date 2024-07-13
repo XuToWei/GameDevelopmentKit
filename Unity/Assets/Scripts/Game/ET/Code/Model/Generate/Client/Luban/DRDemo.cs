@@ -35,8 +35,6 @@ public sealed partial class DRDemo : Luban.BeanBase
 
     public  void ResolveRef(Tables tables)
     {
-        
-        
         PostResolveRef();
     }
 

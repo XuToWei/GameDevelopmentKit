@@ -48,10 +48,6 @@ public sealed partial class DREntity : Luban.BeanBase
 
     public  void ResolveRef(TablesComponent tables)
     {
-        
-        
-        
-        
         PostResolveRef();
     }
 

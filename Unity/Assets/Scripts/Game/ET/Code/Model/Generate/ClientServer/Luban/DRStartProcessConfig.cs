@@ -48,10 +48,6 @@ public sealed partial class DRStartProcessConfig : Luban.BeanBase
 
     public  void ResolveRef(Tables tables)
     {
-        
-        
-        
-        
         PostResolveRef();
     }
 

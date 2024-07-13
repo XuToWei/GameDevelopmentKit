@@ -43,9 +43,6 @@ public sealed partial class DRScene : Luban.BeanBase
 
     public  void ResolveRef(TablesComponent tables)
     {
-        
-        
-        
         PostResolveRef();
     }
 

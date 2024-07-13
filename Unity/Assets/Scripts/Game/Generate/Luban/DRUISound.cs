@@ -48,10 +48,6 @@ public sealed partial class DRUISound : Luban.BeanBase
 
     public  void ResolveRef(TablesComponent tables)
     {
-        
-        
-        
-        
         PostResolveRef();
     }
 
