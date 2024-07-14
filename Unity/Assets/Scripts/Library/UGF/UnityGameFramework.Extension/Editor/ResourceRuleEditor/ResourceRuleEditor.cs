@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using GameFramework;
 using UnityEngine;
 using UnityEditor;
@@ -16,6 +17,9 @@ namespace UnityGameFramework.Extension.Editor
     /// </summary>
     public class ResourceRuleEditor : EditorWindow
     {
+        private static readonly Regex ResourceNameRegex = new Regex(@"^([A-Za-z0-9\._-]+/)*[A-Za-z0-9\._-]+$");
+        private static readonly Regex ResourceVariantRegex = new Regex(@"^[a-z0-9_-]+$");
+
         private readonly string m_NormalConfigurationPath = "Assets/Res/Editor/Config/ResourceRuleEditor.asset";
         private ResourceRuleEditorData m_Configuration;
         private ResourceCollection m_ResourceCollection;
@@ -41,6 +45,38 @@ namespace UnityGameFramework.Extension.Editor
         public static void RefreshActivateResourceCollection()
         {
             ResourceRuleEditorUtility.RefreshResourceCollection();
+        }
+
+        private bool CheckRule()
+        {
+            bool isSuccess = true;
+            for (int i = 0; i < m_Configuration.rules.Count; i++)
+            {
+                ResourceRule rule = m_Configuration.rules[i];
+                if(!rule.valid)
+                    continue;
+                if (string.IsNullOrEmpty(rule.name))
+                {
+                    Debug.LogError(Utility.Text.Format("Rule (index '{0}') name can't be empty.", i));
+                    isSuccess = false;
+                }
+                if (!string.IsNullOrEmpty(rule.name) && !ResourceNameRegex.IsMatch(rule.name))
+                {
+                    Debug.LogError(Utility.Text.Format("Rule (index '{0}') name '{1}' is not math.", i, rule.name));
+                    isSuccess = false;
+                }
+                if (!string.IsNullOrEmpty(rule.variant) && !ResourceVariantRegex.IsMatch(rule.variant))
+                {
+                    Debug.LogError(Utility.Text.Format("Rule (index '{0}') variant '{1}' is not math.", i, rule.variant));
+                    isSuccess = false;
+                }
+                if (!Directory.Exists(rule.assetsDirectoryPath))
+                {
+                    Debug.LogError(Utility.Text.Format("Rule (index '{0}') asset directory '{1}' is not exist.", i, rule.assetsDirectoryPath));
+                    isSuccess = false;
+                }
+            }
+            return isSuccess;
         }
 
         [OnOpenAsset]
@@ -412,6 +448,10 @@ namespace UnityGameFramework.Extension.Editor
             }
             else
             {
+                if (!CheckRule())
+                {
+                    return;
+                }
                 EditorUtility.SetDirty(m_Configuration);
                 AssetDatabase.SaveAssets();
             }
@@ -424,6 +464,10 @@ namespace UnityGameFramework.Extension.Editor
             if (m_Configuration == null)
             {
                 Load();
+            }
+            if (!CheckRule())
+            {
+                return;
             }
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptTypeFilter);
             m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptLabelFilter);
