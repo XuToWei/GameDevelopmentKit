@@ -48,7 +48,7 @@ namespace ThunderFireUITool
         private List<AssetItemBase> _filterItems = new List<AssetItemBase>();
 
         //查找资源引用信息
-        [MenuItem("Assets/==查找依赖的资源== (Find Dependence)", priority = -801)]
+        [MenuItem("Assets/查找依赖的资源 (Find Dependence)", priority = -801)]
         private static void FindDepend()
         {
             _mWindow = GetWindow<DependenceFinderWindow>();
@@ -58,7 +58,7 @@ namespace ThunderFireUITool
             _mWindow.RefreshWindow();
         }
 
-        [MenuItem("Assets/==查找依赖的资源== (Find Dependence)", true)]
+        [MenuItem("Assets/查找依赖的资源 (Find Dependence)", true)]
         private static bool FindDependValidation()
         {
             var obj = Selection.activeObject;
