@@ -13,7 +13,7 @@ namespace ThunderFireUITool
         public static readonly string UXGUIPath = $"{AssetsRootPath}GUI/";
 
         public static readonly string UXEditorFeaturePath = $"{EditorAssetsRootPath}Feature/";
-        public static readonly string UXFeaturePath = $"{AssetsRootPath}Runtime/Feature/";
+        public static readonly string UXFeaturePath = $"{AssetsRootPath}Feature/";
 
         #region Editor Res
         public static readonly string IconPath = UXEditorToolsPath + "Res/Icon/";
