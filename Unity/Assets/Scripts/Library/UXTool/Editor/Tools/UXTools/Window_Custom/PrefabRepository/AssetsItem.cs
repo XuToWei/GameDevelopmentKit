@@ -35,6 +35,7 @@ namespace ThunderFireUITool
 
         public AssetsItem(FileInfo info, bool isPrefabRecent, Action refresh = null, float scale = 1)
         {
+            EditorGUIUtility.FindTexture("");
             //Debug.Log("AssetsItem");
             style.width = scale == 0 ? Length.Percent(100) : size_w * scale;
             // style.height = size_h;

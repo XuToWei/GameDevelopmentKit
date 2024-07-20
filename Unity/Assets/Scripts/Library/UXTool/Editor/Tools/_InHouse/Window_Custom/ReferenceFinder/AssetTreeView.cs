@@ -32,7 +32,6 @@ namespace ThunderFireUITool
         public AssetViewItem assetRoot;
 
         private GUIStyle stateGUIStyle = new GUIStyle { richText = true, alignment = TextAnchor.MiddleCenter };
-        // private string ignorePath = "Canvas (Environment)/";
 
         //列信息
         enum MyColumns
@@ -65,7 +64,7 @@ namespace ThunderFireUITool
         protected override void DoubleClickedItem(int id)
         {
             var item = (AssetViewItem)FindItem(id, rootItem);
-            
+
             if (item != null)
             {
                 var assetObject = AssetDatabase.LoadAssetAtPath(item.data.path, typeof(UnityEngine.Object));
@@ -95,11 +94,11 @@ namespace ThunderFireUITool
                             Debug.Log($"共计 <color=red>[{referenceInfos.Count}]</color> 个节点引用 <color=red>[{assetViewItem.data.name}]</color> ");
 
                             ReferenceInfo.referenceGoTransList.Clear();
-                            
+
 
                             ReferenceInfo.referenceGoTransList.AddRange(go.GetComponentsInChildren<Transform>(true).Where(trans => goFileIds.Contains(GetLocalIdentfierInFile(trans.gameObject).ToString())));
 
-                            if(ReferenceInfo.referenceGoTransList.Count > 0)
+                            if (ReferenceInfo.referenceGoTransList.Count > 0)
                             {
                                 EditorGUIUtility.PingObject(ReferenceInfo.referenceGoTransList[0].gameObject);
                                 Selection.activeGameObject = ReferenceInfo.referenceGoTransList[0].gameObject;
@@ -125,10 +124,10 @@ namespace ThunderFireUITool
 
         public void GetRefCount()
         {
-            foreach(AssetViewItem item in GetRows())
+            foreach (AssetViewItem item in GetRows())
             {
                 item.data.count = ReferenceInfo.data.GetRefCount(item.data, (item.parent as AssetViewItem)?.data);
-            }      
+            }
         }
         public void SortExpandItem()
         {
@@ -140,7 +139,7 @@ namespace ThunderFireUITool
             foreach (var i in expandItemList)
             {
                 var item = (AssetViewItem)FindItem(i, rootItem);
-                foreach(AssetViewItem child in item.children)
+                foreach (AssetViewItem child in item.children)
                 {
                     child.data.count = ReferenceInfo.data.GetRefCount(child.data, (child.parent as AssetViewItem)?.data);
                 }

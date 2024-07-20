@@ -183,7 +183,7 @@ namespace ThunderFireUnityEx
             bool hasT = false;
             for (int i = 0; i < components.Length; i++)
             {
-                if(components[i].GetType().FullName == typeof(T).FullName)
+                if (components[i].GetType().FullName == typeof(T).FullName)
                 {
                     hasT = true;
                 }

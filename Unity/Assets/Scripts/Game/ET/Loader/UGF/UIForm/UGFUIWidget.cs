@@ -5,11 +5,11 @@ using UnityEngine;
 namespace ET
 {
     [ChildOf(typeof(UGFUIForm))]
-    public sealed class UGFUIWidget : Entity, IAwake<Transform, Type>, IDestroy
+    public sealed class UGFUIWidget : Entity, IAwake<Transform, long>, IDestroy
     {
         [BsonIgnore]
         public Transform Transform { get; private set; }
-        public Type WidgetEventType { get; private set; }
+        public long WidgetEventTypeLongHashCode { get; private set; }
 
         public bool IsOpen { get; internal set; }
 
@@ -39,16 +39,16 @@ namespace ET
             }
         }
 
-        internal void OnAwake(Transform transform, Type widgetEventType)
+        internal void OnAwake(Transform transform, long widgetEventTypeLongHashCode)
         {
             Transform = transform;
-            WidgetEventType = widgetEventType;
+            WidgetEventTypeLongHashCode = widgetEventTypeLongHashCode;
         }
 
         internal void OnDestroy()
         {
             Transform = default;
-            WidgetEventType = default;
+            WidgetEventTypeLongHashCode = default;
             IsOpen = false;
             m_Visible = false;
         }
@@ -59,9 +59,9 @@ namespace ET
     public static partial class UGFUIWidgetSystem
     {
         [EntitySystem]
-        private static void Awake(this UGFUIWidget self, Transform transform, Type widgetEventType)
+        private static void Awake(this UGFUIWidget self, Transform transform, long widgetEventTypeLongHashCode)
         {
-            self.OnAwake(transform, widgetEventType);
+            self.OnAwake(transform, widgetEventTypeLongHashCode);
         }
     
         [EntitySystem]

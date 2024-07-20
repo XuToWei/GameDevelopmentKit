@@ -135,7 +135,7 @@ namespace ThunderFireUITool
 
         }
 
-        [MenuItem(ThunderFireUIToolConfig.Menu_BackGround, false, 152)]
+        [MenuItem(ThunderFireUIToolConfig.Menu_BackGround, false, 151)]
         public static void CreateBackGround()
         {
             if (!SwitchSetting.CheckValid(SwitchSetting.SwitchType.QuickBackground)) return;

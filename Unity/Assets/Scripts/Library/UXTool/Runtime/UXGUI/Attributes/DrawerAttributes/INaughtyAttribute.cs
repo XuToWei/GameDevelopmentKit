@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace NaughtyAttributes
 {
-	public interface INaughtyAttribute
-	{
-	}
+    public interface INaughtyAttribute
+    {
+    }
 }

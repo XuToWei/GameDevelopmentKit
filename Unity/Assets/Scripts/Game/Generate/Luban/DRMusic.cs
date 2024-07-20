@@ -43,9 +43,6 @@ public sealed partial class DRMusic : Luban.BeanBase
 
     public  void ResolveRef(TablesComponent tables)
     {
-        
-        
-        
         PostResolveRef();
     }
 

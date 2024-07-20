@@ -8,9 +8,9 @@ namespace ThunderFireUITool.UXForm
         public int offset = 0;
         public int span = 24;
     }
-    
+
     public class UXBuilderForm
     {
-        
+
     }
 }

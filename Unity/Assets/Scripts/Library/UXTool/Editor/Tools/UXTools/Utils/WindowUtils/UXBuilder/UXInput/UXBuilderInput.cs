@@ -10,37 +10,37 @@ namespace ThunderFireUITool
     {
         public string className = "UXInput";
         public UXStyle style = new UXStyle();
-        
+
         // public bool allowClear = true;
         public bool disabled = false;
         public bool error = false;
         public bool password = false;
         public bool readOnly = false;
         public int maxLength = -1;
-        
+
         public Action<string> onChange = (string str) => { };
         // public Action onClear = () => { };
     }
-    
+
     public class UXBuilderInput : TextField
     {
         private static UXBuilderInput _mUXInput;
         private static VisualElement _mUXInputField;
         private static UXStyle _mStyle = new UXStyle();
-        
+
         private static UXBuilderInputStruct _mComponent = new UXBuilderInputStruct();
 
         public UXBuilderInputStruct GetComponents()
         {
             return _mComponent;
         }
-        
+
         public UXBuilderInput SetComponents(UXBuilderInputStruct component)
         {
             VisualElement parent = this.hierarchy.parent;
             if (parent == null) return this;
             _mComponent = component;
-            var a = Create(parent,_mComponent);
+            var a = Create(parent, _mComponent);
             a.PlaceBehind(this);
             parent.Remove(this);
             return a;
@@ -49,20 +49,20 @@ namespace ThunderFireUITool
         public static UXBuilderInput Create(VisualElement root, UXBuilderInputStruct component)
         {
             _mComponent = component;
-            
+
             _mUXInput = new UXBuilderInput();
-            
+
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ThunderFireUIToolConfig.UIBuilderPath + "USS/UXElements/UXInput.uss");
             _mUXInput.styleSheets.Add(styleSheet);
-            
+
             _mUXInput.AddToClassList("ux-input");
             _mUXInputField = _mUXInput.Q<VisualElement>("unity-text-input");
             _mUXInputField.AddToClassList("ux-input-field");
             _mUXInput.name = component.className;
-            StyleCopy.IStyleToUXStyle(_mStyle,_mUXInput.style);
+            StyleCopy.IStyleToUXStyle(_mStyle, _mUXInput.style);
             InitComponent(component);
             root.Add(_mUXInput);
-            
+
             return _mUXInput;
         }
 
@@ -76,7 +76,7 @@ namespace ThunderFireUITool
             InitError(component.error);
             InitStyle(component.style);
         }
-        
+
         private static void InitStyle(UXStyle style)
         {
             if (style == _mStyle) return;
@@ -103,7 +103,7 @@ namespace ThunderFireUITool
                 }
             }
         }
-        
+
         private static void InitMaxLength(int maxLength)
         {
             _mUXInput.maxLength = maxLength;
@@ -113,11 +113,11 @@ namespace ThunderFireUITool
         {
             _mUXInput.isReadOnly = readOnly;
         }
-        
+
         private static void InitDisabled(bool disabled)
         {
             if (disabled) _mUXInputField.AddToClassList("ux-input-field-disabled");
-            _mUXInput.SetEnabled(!disabled);;
+            _mUXInput.SetEnabled(!disabled); ;
         }
 
         private static void InitPassword(bool password)
@@ -140,6 +140,6 @@ namespace ThunderFireUITool
                 action(evt.newValue);
             });
         }
-        
+
     }
 }

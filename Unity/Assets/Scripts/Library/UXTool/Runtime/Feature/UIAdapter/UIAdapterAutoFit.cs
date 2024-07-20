@@ -56,14 +56,14 @@ public class UIAdapterAutoFit : MonoBehaviour
         rectTrans.anchorMax = anchor;
         Vector2 oldSelfLocalPos = rectTrans.localPosition;
         rectTrans.position = canvasRect.position;
-        //¼ÆËãÖĞĞÄµãµÄÆ«ÒÆ
+        //è®¡ç®—ä¸­å¿ƒç‚¹çš„åç§»
         float centerOffset_x = oldSelfLocalPos.x - rectTrans.localPosition.x;
         rectTrans.localPosition = oldSelfLocalPos;
 
         float scale = 1;
-        //ÓÒ±ß½ç
+        //å³è¾¹ç•Œ
         CompareBorder(orginWidth * (1 - rectTrans.pivot.x), canvasRect.rect.width / 2f - centerOffset_x, ref scale);
-        //×ó±ß½ç
+        //å·¦è¾¹ç•Œ
         CompareBorder(orginWidth * rectTrans.pivot.x, canvasRect.rect.width / 2f + centerOffset_x, ref scale);
         rectTrans.sizeDelta = new Vector2(orginWidth * scale, orginHeight * scale);
 

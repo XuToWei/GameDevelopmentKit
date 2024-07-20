@@ -1,7 +1,8 @@
 using System.Diagnostics;
+using System.IO;
 
 /// <summary>
-/// ¼òµ¥µÄUnity Python ½»»¥
+/// ç®€å•çš„Unity Python äº¤äº’
 /// </summary>
 public static class PythonUtils
 {
@@ -13,7 +14,7 @@ public static class PythonUtils
 
     public static void ReceivePython_Script(object sender, DataReceivedEventArgs e)
     {
-        // ½á¹û²»Îª¿Õ²Å´òÓ¡
+        // ç»“æœä¸ä¸ºç©ºæ‰æ‰“å°
         if (string.IsNullOrEmpty(e.Data) == false)
         {
             UnityEngine.Debug.Log(e.Data);
@@ -21,19 +22,19 @@ public static class PythonUtils
     }
 
     /// <summary>
-    /// Unity µ÷ÓÃ Python
+    /// Unity è°ƒç”¨ Python
     /// </summary>
-    /// <param name="pyScriptPath">python ½Å±¾Â·¾¶</param>
-    /// <param name="handler">½á¹û´¦ÀíÎ¯ÍĞ</param>
-    /// <param name="argvs">python º¯Êı²ÎÊı</param>
+    /// <param name="pyScriptPath">python è„šæœ¬è·¯å¾„</param>
+    /// <param name="handler">ç»“æœå¤„ç†å§”æ‰˜</param>
+    /// <param name="argvs">python å‡½æ•°å‚æ•°</param>
     public static void CallPythonBase(string pyScriptPath, DataReceivedEventHandler handler, params string[] argvs)
     {
         Process process = new Process();
 
-        // python µÄ½âÊÍÆ÷Î»ÖÃ python.exe
-        process.StartInfo.FileName = @"C:\DevelopTools\Python\Python38\python.exe";
+        // python çš„è§£é‡Šå™¨ä½ç½® python.exe
+        process.StartInfo.FileName = @"";
 
-        pyScriptPath = @"C:\Project_Compony\UXTools\UXTools2022\UXTools\Assets\Tools\ImageMatch\main.py";
+        pyScriptPath = @"";
         if (argvs != null)
         {
             foreach (string item in argvs)
@@ -44,19 +45,19 @@ public static class PythonUtils
         UnityEngine.Debug.Log(pyScriptPath);
 
         process.StartInfo.UseShellExecute = false;
-        process.StartInfo.Arguments = pyScriptPath;     // Â·¾¶+²ÎÊı
+        process.StartInfo.Arguments = pyScriptPath;     // è·¯å¾„+å‚æ•°
         process.StartInfo.RedirectStandardError = true;
         process.StartInfo.RedirectStandardInput = true;
         process.StartInfo.RedirectStandardOutput = true;
-        process.StartInfo.CreateNoWindow = true;        // ²»ÏÔÊ¾Ö´ĞĞ´°¿Ú
+        process.StartInfo.CreateNoWindow = true;        // ä¸æ˜¾ç¤ºæ‰§è¡Œçª—å£
 
-        // ¿ªÊ¼Ö´ĞĞ£¬»ñÈ¡Ö´ĞĞÊä³ö£¬Ìí¼Ó½á¹ûÊä³öÎ¯ÍĞ
+        // å¼€å§‹æ‰§è¡Œï¼Œè·å–æ‰§è¡Œè¾“å‡ºï¼Œæ·»åŠ ç»“æœè¾“å‡ºå§”æ‰˜
         process.Start();
         process.BeginOutputReadLine();
         process.OutputDataReceived += handler;
         process.WaitForExit();
     }
-    public static void CallPython_MatchDesignImage(string pyScriptPath, DataReceivedEventHandler receivedFunc ,string designImgPath, string templateFolderPath)
+    public static void CallPython_MatchDesignImage(string pyScriptPath, DataReceivedEventHandler receivedFunc, string designImgPath, string templateFolderPath)
     {
         DataReceivedEventHandler handler = new DataReceivedEventHandler(receivedFunc);
         CallPythonBase(pyScriptPath, handler, designImgPath, templateFolderPath);
@@ -64,7 +65,7 @@ public static class PythonUtils
 }
 
 /// <summary>
-/// ¼òµ¥µÄUnity ExeÓ¦ÓÃ³ÌĞò ½»»¥
+/// ç®€å•çš„Unity Exeåº”ç”¨ç¨‹åº äº¤äº’
 /// </summary>
 public static class ExeUtils
 {
@@ -76,7 +77,7 @@ public static class ExeUtils
 
     public static void ReceiveExeResponse(object sender, DataReceivedEventArgs e)
     {
-        // ½á¹û²»Îª¿Õ²Å´òÓ¡
+        // ç»“æœä¸ä¸ºç©ºæ‰æ‰“å°
         if (string.IsNullOrEmpty(e.Data) == false)
         {
             UnityEngine.Debug.Log(e.Data);
@@ -84,24 +85,23 @@ public static class ExeUtils
     }
 
     /// <summary>
-    /// Unity µ÷ÓÃ ExeÓ¦ÓÃ³ÌĞò
+    /// Unity è°ƒç”¨ Exeåº”ç”¨ç¨‹åº
     /// </summary>
-    /// <param name="exePath">exe Â·¾¶</param>
-    /// <param name="handler">½á¹û´¦ÀíÎ¯ÍĞ</param>
-    /// <param name="argvs">²ÎÊı</param>
+    /// <param name="exePath">exe è·¯å¾„</param>
+    /// <param name="handler">ç»“æœå¤„ç†å§”æ‰˜</param>
+    /// <param name="argvs">å‚æ•°</param>
     public static void CallExeBase(string exePath, DataReceivedEventHandler handler, params string[] argvs)
     {
         Process process = new Process();
 
-        exePath = @"C:\Project_Compony\UXTools\UXTools2022\UXTools\Assets\Tools\ImageMatch\main.exe";
-        process.StartInfo.FileName = exePath;
+        process.StartInfo.FileName = Path.GetFullPath(exePath);
 
         string argumentsStr = "";
         if (argvs != null)
         {
             foreach (string item in argvs)
             {
-                argumentsStr += " " + item;
+                argumentsStr += " " + Path.GetFullPath(item);
             }
         }
         UnityEngine.Debug.Log(argumentsStr);
@@ -111,9 +111,9 @@ public static class ExeUtils
         process.StartInfo.RedirectStandardError = true;
         process.StartInfo.RedirectStandardInput = true;
         process.StartInfo.RedirectStandardOutput = true;
-        process.StartInfo.CreateNoWindow = true;    // ²»ÏÔÊ¾Ö´ĞĞ´°¿Ú
+        process.StartInfo.CreateNoWindow = true;    // ä¸æ˜¾ç¤ºæ‰§è¡Œçª—å£
 
-        // ¿ªÊ¼Ö´ĞĞ£¬»ñÈ¡Ö´ĞĞÊä³ö£¬Ìí¼Ó½á¹ûÊä³öÎ¯ÍĞ
+        // å¼€å§‹æ‰§è¡Œï¼Œè·å–æ‰§è¡Œè¾“å‡ºï¼Œæ·»åŠ ç»“æœè¾“å‡ºå§”æ‰˜
         process.Start();
         process.BeginOutputReadLine();
         process.OutputDataReceived += handler;

@@ -73,7 +73,7 @@ namespace ThunderFireUITool
 
         //Data
         private List<string> labelList;
-        private List<AssetsItem> asstesItems = new List<AssetsItem>();
+        private List<AssetItemPrefabRepository> asstesItems = new List<AssetItemPrefabRepository>();
         private List<FileInfo> prefabInfoList;
         public string filtration = "All";
         private bool RightContainerDragIn = false;//判断拖拽操作是否是拖进来
@@ -81,12 +81,13 @@ namespace ThunderFireUITool
         private GameObject LoadPrefab = null;
         private Texture texture;
         private VisualTreeAsset visualTree;
-        private List<AssetsItem> fliterItems = new List<AssetsItem>();
+        private List<AssetItemPrefabRepository> fliterItems = new List<AssetItemPrefabRepository>();
+        private bool _isSortByDict;
 
         private void OnEnable()
         {
             InitWindowUI();
-            InitWindowData(false);
+            InitWindowData();
             EditorApplication.hierarchyWindowItemOnGUI += (int instanceID, Rect selectionRect) =>
             {
                 if (Event.current.type == EventType.MouseDrag)
@@ -108,23 +109,23 @@ namespace ThunderFireUITool
         }
 
 
-        private void InitWindowData(bool issortbydict)
+        private void InitWindowData()
         {
             labelList = JsonAssetManager.GetAssets<WidgetLabelsSettings>().labelList;
 
             asstesItems.Clear();
 
             prefabInfoList = PrefabUtils.GetWidgetList();
-            if(!issortbydict)
+            if (!_isSortByDict)
             {
                 prefabInfoList.Sort((f1, f2) => f1.Name.CompareTo(f2.Name));
             }
             for (int i = 0; i < prefabInfoList.Count; i++)
             {
 #if UNITY_2020_3_OR_NEWER
-                AssetsItem item = new AssetsItem(prefabInfoList[i], false, () => EditorApplication.delayCall += RefreshWindow, slider.value / slider.highValue);
+                AssetItemPrefabRepository item = new AssetItemPrefabRepository(prefabInfoList[i], false, () => EditorApplication.delayCall += RefreshWindow, slider.value / slider.highValue);
 #else
-                AssetsItem item = new AssetsItem(prefabInfoList[i], false, () => EditorApplication.delayCall += RefreshWindow);
+                AssetItemPrefabRepository item = new AssetItemPrefabRepository(prefabInfoList[i], false, () => EditorApplication.delayCall += RefreshWindow);
 #endif
                 asstesItems.Add(item);
             }
@@ -147,7 +148,7 @@ namespace ThunderFireUITool
                     borderTopWidth = 10,
                     height = Length.Percent(100),
                     width = 204,
-                    backgroundColor = new Color(26f / 255f, 26f / 255f, 26f / 255f)
+                    backgroundColor = new Color(49f / 255f, 49f / 255f, 49f / 255f)
                 }
             });
 
@@ -157,7 +158,7 @@ namespace ThunderFireUITool
             {
                 style =
                 {
-                    paddingTop = 36, paddingLeft = 36, paddingRight = 36, paddingBottom = 36,
+                    //paddingTop = 36, paddingLeft = 36, paddingRight = 36, paddingBottom = 36,
                     height = Length.Percent(100),
                 }
             };
@@ -179,7 +180,7 @@ namespace ThunderFireUITool
                     position = Position.Absolute,
                     width = 50,
                     right = 20,
-                    top = -30
+                    top = 5
                 },
                 onChange = OnSliderValueChanged
             });
@@ -189,7 +190,8 @@ namespace ThunderFireUITool
             {
                 OnClick = () =>
                 {
-                    RefreshRightPrefabContainer(false);
+                    _isSortByDict = false;
+                    RefreshRightPrefabContainer();
                     //EditorApplication.delayCall += RefreshWindow;
                 },
                 style = new UXStyle()
@@ -198,7 +200,7 @@ namespace ThunderFireUITool
                     width = 120,
                     height = 30,
                     right = 100,
-                    top = -30,
+                    top = 5,
                     fontSize = 12,
                 },
                 text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_名称排序),
@@ -208,7 +210,8 @@ namespace ThunderFireUITool
             {
                 OnClick = () =>
                 {
-                    RefreshRightPrefabContainer(true);
+                    _isSortByDict = true;
+                    RefreshRightPrefabContainer();
                     //EditorApplication.delayCall += RefreshWindow;
                 },
                 style = new UXStyle()
@@ -217,7 +220,7 @@ namespace ThunderFireUITool
                     width = 120,
                     height = 30,
                     right = 220,
-                    top = -30,
+                    top = 5,
                     fontSize = 12,
                 },
                 text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_时间排序),
@@ -238,6 +241,10 @@ namespace ThunderFireUITool
             ve.style.flexDirection = FlexDirection.Row;
             ve.style.flexWrap = Wrap.Wrap;
             ve.style.overflow = Overflow.Visible;
+            var viewport = widgetScroll.contentViewport;
+            viewport.style.marginLeft = 36;
+            viewport.style.marginTop = 36;
+            viewport.style.marginRight = 10;
             widgetScroll.RegisterCallback<MouseDownEvent>(evt =>
             {
                 if (clickFlag)
@@ -267,11 +274,6 @@ namespace ThunderFireUITool
             {
                 slider.value = 0;
             }
-            widgetScroll.contentContainer.style.flexDirection = slider.value == 0 ? FlexDirection.Column : FlexDirection.Row;
-#if UNITY_2021_3_OR_NEWER
-            widgetScroll.mode = slider.value == 0 ? ScrollViewMode.Vertical : ScrollViewMode.Horizontal;
-#endif
-            ChangeScrollView();
             RefreshRightPrefabContainer();
 #endif
         }
@@ -301,7 +303,8 @@ namespace ThunderFireUITool
                 type = ButtonType.Default,
                 OnClick = () =>
                 {
-                    RefreshRightPrefabContainer(false,"All");
+                    _isSortByDict = false;
+                    RefreshRightPrefabContainer("All");
                     EditorApplication.delayCall += RefreshWindow;
                 },
                 style = new UXStyle()
@@ -330,7 +333,8 @@ namespace ThunderFireUITool
                     type = ButtonType.Default,
                     OnClick = () =>
                     {
-                        RefreshRightPrefabContainer(false,tmp);
+                        _isSortByDict = false;
+                        RefreshRightPrefabContainer(tmp);
                         EditorApplication.delayCall += RefreshWindow;
                     },
                     style = new UXStyle()
@@ -382,10 +386,10 @@ namespace ThunderFireUITool
         /// 根据当前所选类型更新右侧Prefab列表
         /// </summary>
         /// <param name="type"></param>
-        private void RefreshRightPrefabContainer(bool issortbydict=false,string type = null)
+        private void RefreshRightPrefabContainer(string type = null)
         {
             //Debug.Log("RefreshRightPrefabContainer");
-            InitWindowData(issortbydict);
+            InitWindowData();
             //Debug.Log("RefreshRightPrefabContainer");
             if (type != null)
             {
@@ -399,7 +403,7 @@ namespace ThunderFireUITool
             }
             else
             {
-                fliterItems = asstesItems.Where(item => item.labels.Contains(filtration)).ToList();
+                fliterItems = asstesItems.Where(item => item.Labels.Contains(filtration)).ToList();
             }
 
             if (fliterItems.Count == 0) return;
@@ -417,8 +421,8 @@ namespace ThunderFireUITool
                     RightContainerDrag = true;//拖拽起始点在右容器
                     DragAndDrop.PrepareStartDrag();
                     DragAndDrop.StartDrag("prefab");
-                    LoadPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(fliterItems[tmp].path);
-                    string guid = AssetDatabase.AssetPathToGUID(fliterItems[tmp].path);
+                    LoadPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(fliterItems[tmp].FilePath);
+                    string guid = AssetDatabase.AssetPathToGUID(fliterItems[tmp].FilePath);
                     texture = Utils.GetAssetsPreviewTexture(guid);
                     Object[] obj = { LoadPrefab };
                     DragAndDrop.objectReferences = obj;
@@ -454,11 +458,11 @@ namespace ThunderFireUITool
             menu.AddItem(new GUIContent(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_修改信息)), false, () =>
             {
                 PrefabLabelModifyWindow.OpenWindow(label, (currentName) => EditorApplication.delayCall += () =>
-                  {
-                      if (filtration == label)
-                          filtration = currentName;
-                      RefreshWindow();
-                  });
+                {
+                    if (filtration == label)
+                        filtration = currentName;
+                    RefreshWindow();
+                });
             });
 
             menu.AddItem(new GUIContent(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_删除)), false, () =>
@@ -477,7 +481,7 @@ namespace ThunderFireUITool
 
         private void OnAddLabelSuccess(string newLabel)
         {
-            InitWindowData(false);
+            InitWindowData();
             EditorApplication.delayCall += RefreshWindow;
         }
         #endregion

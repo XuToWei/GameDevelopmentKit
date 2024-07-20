@@ -34,10 +34,6 @@ public partial struct vec4
 
     public  void ResolveRef(Tables tables)
     {
-        
-        
-        
-        
         PostResolveRef();
     }
 

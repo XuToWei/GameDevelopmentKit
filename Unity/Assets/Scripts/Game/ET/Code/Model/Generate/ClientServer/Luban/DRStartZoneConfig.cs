@@ -53,11 +53,6 @@ public sealed partial class DRStartZoneConfig : Luban.BeanBase
 
     public  void ResolveRef(Tables tables)
     {
-        
-        
-        
-        
-        
         PostResolveRef();
     }
 

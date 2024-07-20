@@ -17,5 +17,12 @@ namespace ET.Client
             UGFUIWidgetTest uiWidgetTest = uiWidget.GetComponent<UGFUIWidgetTest>();
             uiWidgetTest.TestTextUXText.text = "UIWidget测试成功!";
         }
+
+        public override void OnReload(UGFUIWidget uiWidget)
+        {
+            base.OnReload(uiWidget);
+            UGFUIWidgetTest uiWidgetTest = uiWidget.GetComponent<UGFUIWidgetTest>();
+            uiWidgetTest.TestTextUXText.text = "UIWidget Reload测试成功!";
+        }
     }
 }

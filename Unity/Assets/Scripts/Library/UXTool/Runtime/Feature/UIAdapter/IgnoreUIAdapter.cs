@@ -28,7 +28,7 @@ public class IgnoreUIAdapter : MonoBehaviour
         LastSafeArea = safeArea;
 
         UnityEngine.Profiling.Profiler.BeginSample($"UXTool UIAdapter Ignore {gameObject.name}");
-        rectTrans = GetComponent<RectTransform>();        
+        rectTrans = GetComponent<RectTransform>();
         if (UIScreenAdapter == null)
         {
             UIScreenAdapter = GetComponentInParent<UIAdapter>();

@@ -5,7 +5,7 @@ namespace ET
 {
     public sealed class ETMonoEntityData : IReference
     {
-        public Type EntityEventType
+        public long EntityEventTypeLongHashCode
         {
             get;
             private set;
@@ -25,7 +25,7 @@ namespace ET
         
         public void Clear()
         {
-            this.EntityEventType = default;
+            this.EntityEventTypeLongHashCode = default;
             this.ParentEntity = default;
             this.UserData = default;
         }
@@ -33,7 +33,7 @@ namespace ET
         public static ETMonoEntityData Acquire(Type entityEventType, Entity parentEntity, object userData)
         {
             ETMonoEntityData entityData = ReferencePool.Acquire<ETMonoEntityData>();
-            entityData.EntityEventType = entityEventType;
+            entityData.EntityEventTypeLongHashCode = entityEventType.FullName.GetLongHashCode();
             entityData.ParentEntity = parentEntity;
             entityData.UserData = userData;
             return entityData;

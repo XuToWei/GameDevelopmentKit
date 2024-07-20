@@ -16,8 +16,7 @@ namespace ThunderFireUITool
         private static PrefabRecentWindow r_window;
         public static bool clickFlag = false;
 
-        [MenuItem(ThunderFireUIToolConfig.Menu_RecentlyOpened, false, 151)]
-
+        [MenuItem(ThunderFireUIToolConfig.Menu_RecentlyOpened, false, 153)]
         public static void OpenWindow()
         {
             int width = 732 + 12 + 13;
@@ -50,15 +49,20 @@ namespace ThunderFireUITool
         private PrefabOpenedSetting list;
         private ScrollView scroll;
         private List<string> List;
-        private List<AssetsItem> assetsItems = new List<AssetsItem>();
+        private List<AssetItemPrefabRepository> assetsItems = new List<AssetItemPrefabRepository>();
         private List<FileInfo> prefabInfoList;
         private GameObject LoadPrefab = null;
+        private UXBuilderSlider slider;
+        //private UXBuilderButton btn;
+        private float currentSliderValue;
         Texture texture = null;
+        private UXToolCommonData commonData;
+        private int maxRecentOpenedPrefab;
         private void OnEnable()
         {
             if (!SwitchSetting.CheckValid(SwitchSetting.SwitchType.RecentlyOpened)) return;
-            InitWindowData();
             InitWindowUI();
+            InitWindowData();
             EditorApplication.delayCall += RefreshWindow;
             EditorApplication.hierarchyWindowItemOnGUI += (int instanceID, Rect selectionRect) =>
             {
@@ -75,13 +79,31 @@ namespace ThunderFireUITool
 
             List = list.List;
 
+            commonData = AssetDatabase.LoadAssetAtPath<UXToolCommonData>(ThunderFireUIToolConfig.UXToolCommonDataPath);
+            if (commonData != null)
+            {
+                maxRecentOpenedPrefab = commonData.MaxRecentOpenedPrefabs;
+            }
+            else
+            {
+                maxRecentOpenedPrefab = 15;
+            }
+
             assetsItems.Clear();
 
             prefabInfoList = GetPrefabList();
             for (int i = 0; i < prefabInfoList.Count; i++)
             {
-                AssetsItem item = new AssetsItem(prefabInfoList[i], true);
-                assetsItems.Add(item);
+                if (i < maxRecentOpenedPrefab)
+                {
+#if UNITY_2020_3_OR_NEWER
+                    AssetItemPrefabRepository item = new AssetItemPrefabRepository(prefabInfoList[i], true, () => EditorApplication.delayCall += RefreshWindow, slider.value / slider.highValue);
+#else
+                AssetItemPrefabRepository item = new AssetItemPrefabRepository(prefabInfoList[i], true, () => EditorApplication.delayCall += RefreshWindow);
+#endif
+                    assetsItems.Add(item);
+                }
+
             }
         }
 
@@ -96,7 +118,104 @@ namespace ThunderFireUITool
             {
                 style = new UXStyle() { height = Length.Percent(100) }
             });
+            ChangeScrollView();
 
+#if UNITY_2020_3_OR_NEWER
+            slider = UXBuilder.Slider(leftContainer, new UXBuilderSliderStruct()
+            {
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    width = 50,
+                    right = 20,
+                    top = -30
+                },
+                onChange = OnSliderValueChanged
+            });
+            slider.value = slider.highValue;
+            currentSliderValue = slider.highValue;
+#endif
+        }
+
+        public void RefreshWindow()
+        {
+            InitWindowData();
+            scroll.Clear();
+
+            // btn = UXBuilder.Button(scroll, new UXBuilderButtonStruct()
+            // {
+            //     OnClick = RecentCreateWindow.OpenWindow,
+            //     style = new UXStyle()
+            //     {
+            //         width = 156,
+            //         height = 156,
+            //         marginTop = Length.Percent(0),
+            //         marginLeft = Length.Percent(0),
+            //         marginBottom = 12,
+            //         marginRight = 12,
+            //         alignItems = Align.Center,
+            //         justifyContent = Justify.Center,
+            //         fontSize = 50,
+            //         color = Color.white,
+            //     },
+            //     text = "+",
+            // });
+            // btn.tooltip = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_新建模板);
+            //changeButtonSize(currentSliderValue);
+
+            if (assetsItems.Count == 0) return;
+            for (int i = 0; i < assetsItems.Count; i++)
+            {
+                int tmp = i;
+
+                assetsItems[i].RegisterCallback((MouseDownEvent e) =>
+                {
+                    for (int j = 0; j < assetsItems.Count; j++)
+                        assetsItems[j].SetSelected(false);
+                    assetsItems[tmp].SetSelected(true);
+                    DragAndDrop.PrepareStartDrag();
+                    DragAndDrop.StartDrag("prefab");
+                    LoadPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetsItems[tmp].FilePath);
+                    string guid = AssetDatabase.AssetPathToGUID(assetsItems[tmp].FilePath);
+                    texture = Utils.GetAssetsPreviewTexture(guid);
+                    UnityEngine.Object[] obj = { LoadPrefab };
+                    DragAndDrop.objectReferences = obj;
+                    UXCustomSceneView.ClearDelegate();
+                    UXCustomSceneView.AddDelegate(CustomScene);
+                });
+                scroll.Add(assetsItems[i]);
+            }
+            Repaint();
+        }
+
+        private void OnSliderValueChanged(float x)
+        {
+            currentSliderValue = x;
+#if UNITY_2020_3_OR_NEWER
+            if (x / slider.highValue < 0.2f)
+            {
+                slider.value = 0;
+            }
+            scroll.contentContainer.style.flexDirection = slider.value == 0 ? FlexDirection.Column : FlexDirection.Row;
+#if UNITY_2021_3_OR_NEWER
+            scroll.mode = slider.value == 0 ? ScrollViewMode.Vertical : ScrollViewMode.Horizontal;
+#endif
+
+            ChangeScrollView();
+            RefreshWindow();
+#endif
+        }
+
+        // private void changeButtonSize(float x)
+        // {
+        //     btn.style.width = slider.value == 0 ? 20 : 156 * (x / 100);
+        //     btn.style.height = slider.value == 0 ? 20 : 156 * (x / 100);
+        //     btn.style.fontSize = slider.value == 0 ? 10 : 50 * (x / 100);
+        // }
+
+        private void ChangeScrollView()
+        {
+            if (scroll != null) leftContainer.Remove(scroll);
             scroll = UXBuilder.ScrollView(leftContainer, new UXBuilderScrollViewStruct()
             {
                 style = new UXStyle() { width = Length.Percent(100) }
@@ -120,57 +239,6 @@ namespace ThunderFireUITool
                 }
             });
         }
-
-        public void RefreshWindow()
-        {
-            InitWindowData();
-            scroll.Clear();
-
-            var btn = UXBuilder.Button(scroll, new UXBuilderButtonStruct()
-            {
-                OnClick = RecentCreateWindow.OpenWindow,
-                style = new UXStyle()
-                {
-                    width = 156,
-                    height = 156,
-                    marginTop = Length.Percent(0),
-                    marginLeft = Length.Percent(0),
-                    marginBottom = 12,
-                    marginRight = 12,
-                    alignItems = Align.Center,
-                    justifyContent = Justify.Center,
-                    fontSize = 50,
-                    color = Color.white,
-                },
-                text = "+",
-            });
-            btn.tooltip = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_新建模板);
-
-            if (assetsItems.Count == 0) return;
-            for (int i = 0; i < assetsItems.Count; i++)
-            {
-                int tmp = i;
-
-                assetsItems[i].RegisterCallback((MouseDownEvent e) =>
-                {
-                    for (int j = 0; j < assetsItems.Count; j++)
-                        assetsItems[j].SetSelected(false);
-                    assetsItems[tmp].SetSelected(true);
-                    DragAndDrop.PrepareStartDrag();
-                    DragAndDrop.StartDrag("prefab");
-                    LoadPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetsItems[tmp].path);
-                    string guid = AssetDatabase.AssetPathToGUID(assetsItems[tmp].path);
-                    texture = Utils.GetAssetsPreviewTexture(guid);
-                    UnityEngine.Object[] obj = { LoadPrefab };
-                    DragAndDrop.objectReferences = obj;
-                    UXCustomSceneView.ClearDelegate();
-                    UXCustomSceneView.AddDelegate(CustomScene);
-                });
-                scroll.Add(assetsItems[i]);
-            }
-            Repaint();
-        }
-
 
 
         private void ReLayoutLeftContainer()

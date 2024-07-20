@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 using ThunderFireUITool;
 using UnityEditorInternal;
 
@@ -227,7 +228,6 @@ namespace UnityEngine.UI
                 if (EditorGUI.EndChangeCheck() && !ignoreLocalization.boolValue)// && (textList.Count != 0 || localizationID.stringValue == ""))
                 {
                     ShowObj();
-                    textList.Clear();
                 }
                 if (!ignoreLocalization.boolValue)
                 {

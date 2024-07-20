@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -23,7 +23,7 @@ namespace ThunderFireUITool
                 {
                     GoSelected();
                 }
-                
+
             });
 
             body.RegisterCallback((MouseLeaveEvent e) =>
@@ -32,7 +32,7 @@ namespace ThunderFireUITool
                 {
                     UnSelected();
                 }
-                
+
             });
 
             body.RegisterCallback((MouseDownEvent e) =>

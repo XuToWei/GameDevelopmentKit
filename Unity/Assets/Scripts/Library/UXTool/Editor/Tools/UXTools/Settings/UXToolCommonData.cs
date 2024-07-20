@@ -34,6 +34,11 @@ namespace ThunderFireUITool
             AssetDatabase.Refresh();
 #if UNITY_EDITOR_WIN
             CustomUnityWindowLogic.DoUpdateTitleFunc();
+            RecentSelectRecord.UpdateRecentFiles();
+            if (PrefabRecentWindow.GetInstance() != null)
+            {
+                PrefabRecentWindow.GetInstance().RefreshWindow();
+            }
 #endif
         }
 
@@ -41,11 +46,17 @@ namespace ThunderFireUITool
         {
 #if UNITY_EDITOR_WIN
             CustomUnityWindowLogic.DoUpdateTitleFunc();
+            RecentSelectRecord.UpdateRecentFiles();
+            if (PrefabRecentWindow.GetInstance() != null)
+            {
+                PrefabRecentWindow.GetInstance().RefreshWindow();
+            }
 #endif
         }
 
-        // private bool UseCustomUnityWindowTitle = false;
         public string CustomUnityWindowTitle = "";
+        public int MaxRecentSelectedFiles = 15;
+        public int MaxRecentOpenedPrefabs = 15;
     }
 }
 #endif

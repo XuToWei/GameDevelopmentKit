@@ -1,4 +1,4 @@
-﻿public class UXSingleton<T> where T : class, new()
+public class UXSingleton<T> where T : class, new()
 {
     protected static T _Instance;
 

@@ -24,7 +24,7 @@ public class UIAdapter : MonoBehaviour
 
         float aspectRatio = screenWidth / screenHeight;
         Rect safeArea = Screen.safeArea;
-        if(Application.isPlaying)
+        if (Application.isPlaying)
         {
             //是否长屏
             if (aspectRatio > designAspectRatio)
@@ -43,7 +43,7 @@ public class UIAdapter : MonoBehaviour
                 }
             }
         }
-        
+
         return safeArea;
     }
 

@@ -485,13 +485,13 @@ namespace ThunderFireUITool
             return tex;
         }
 
-        public static Texture UpdatePreviewTexture(string guid,int previewSize = 79)
+        public static Texture UpdatePreviewTexture(string guid, int previewSize = 79)
         {
             var tex = GenAssetsPreviewTexture(guid, previewSize);
             if (tex != null)
                 m_PreviewDict[guid] = tex;
 
-            return tex; 
+            return tex;
         }
 
         public static Texture GetAssetsNewPreviewTexture(string guid, int previewSize = 79)

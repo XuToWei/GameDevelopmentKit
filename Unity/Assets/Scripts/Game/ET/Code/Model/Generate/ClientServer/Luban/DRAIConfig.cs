@@ -58,12 +58,6 @@ public sealed partial class DRAIConfig : Luban.BeanBase
 
     public  void ResolveRef(Tables tables)
     {
-        
-        
-        
-        
-        
-        
         PostResolveRef();
     }
 

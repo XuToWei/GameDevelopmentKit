@@ -11,58 +11,58 @@ namespace ThunderFireUITool
     {
         public string className = "UXRadio";
         public UXStyle style = new UXStyle();
-        
+
         public bool disabled = false;
 
         public Action<bool> onChange = (bool val) => { };
     }
-    
+
     public class UXBuilderRadio : RadioButton
     {
         private static UXBuilderRadio _mUXRadio;
         private static VisualElement _mUXRadioField;
         private static UXStyle _mStyle = new UXStyle();
-        
+
         private static UXBuilderRadioStruct _mComponent = new UXBuilderRadioStruct();
 
         public UXBuilderRadioStruct GetComponents()
         {
             return _mComponent;
         }
-        
+
         public UXBuilderRadio SetComponents(UXBuilderRadioStruct component)
         {
             VisualElement parent = this.hierarchy.parent;
             if (parent == null) return this;
             _mComponent = component;
-            var a = Create(parent,_mComponent);
+            var a = Create(parent, _mComponent);
             a.PlaceBehind(this);
             parent.Remove(this);
             return a;
         }
-        
+
         public static UXBuilderRadio Create(VisualElement root, UXBuilderRadioStruct component)
         {
             _mComponent = component;
-            
+
             _mUXRadio = new UXBuilderRadio();
-            
+
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ThunderFireUIToolConfig.UIBuilderPath + "USS/UXElements/UXRadio.uss");
             _mUXRadio.styleSheets.Add(styleSheet);
 
-            _mUXRadioField = _mUXRadio.Q<VisualElement>(null,"unity-radio-button__input");
-            
+            _mUXRadioField = _mUXRadio.Q<VisualElement>(null, "unity-radio-button__input");
+
             _mUXRadio.AddToClassList("ux-radio");
             _mUXRadioField.AddToClassList("ux-radio-field");
-            
+
             _mUXRadio.name = component.className;
-            StyleCopy.IStyleToUXStyle(_mStyle,_mUXRadio.style);
+            StyleCopy.IStyleToUXStyle(_mStyle, _mUXRadio.style);
             InitComponent(component);
             root.Add(_mUXRadio);
 
             return _mUXRadio;
         }
-        
+
         private static void InitComponent(UXBuilderRadioStruct component)
         {
             InitDisabled(component.disabled);
@@ -96,11 +96,11 @@ namespace ThunderFireUITool
                 action(evt.newValue);
             });
         }
-        
+
         private static void InitDisabled(bool disabled)
         {
             if (disabled) _mUXRadioField.AddToClassList("ux-radio-field-disabled");
-            _mUXRadio.SetEnabled(!disabled);;
+            _mUXRadio.SetEnabled(!disabled); ;
         }
     }
 }

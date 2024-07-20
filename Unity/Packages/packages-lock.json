@@ -12,7 +12,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ef1b78caae7e195498df20b6e4096a8afcb4d06f"
+      "hash": "909e96ca7c808cf9be733b881382fabb49523d0b"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
@@ -36,7 +36,7 @@
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "e8c98732016d7cdba47eb0d283977abd1012741c"
+      "hash": "686fff869000bdac0cb5b2ab6b1f3ed925839521"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -44,6 +44,13 @@
       "source": "git",
       "dependencies": {},
       "hash": "33356da2c43fa28397192baee70910c978e3169f"
+    },
+    "com.coffee.upm-git-extension": {
+      "version": "https://github.com/mob-sakai/UpmGitExtension.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8fc54a2cdf0c2169dd26852ea0fe202e11158f43"
     },
     "com.cysharp.memorypack": {
       "version": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack#1.10.0",
@@ -66,7 +73,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "fbe0bf85155f42f8832205f7b3ac3df571ada33e"
+      "hash": "cdf88c6a6ac8c9b7e6e5d3c0a360a4af29641c24"
     },
     "com.cysharp.zstring": {
       "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
@@ -112,7 +119,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.28",
+      "version": "3.0.31",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -256,14 +263,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2d6e6a1c90d6f1ae0139416db85659c7a27735d0"
+      "hash": "b5ee88c3eaa3b63e66c1c63f81b174f94055b1a2"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ca08dd8f7f221715e7e6d2dfc86b4e835b0a2431"
+      "hash": "84fd2f8de57a34dc1cf2c67b11b4fe5d19906b0b"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",

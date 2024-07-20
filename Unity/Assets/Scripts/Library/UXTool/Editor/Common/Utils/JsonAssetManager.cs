@@ -41,6 +41,8 @@ public class JsonAssetManager
             { "HierarchyManagementSetting",             ThunderFireUIToolConfig.HierarchyManagementSettingPath },
             { "HierarchyManagementEditorData",          ThunderFireUIToolConfig.HierarchyManagemenEditorDataPath },
             { "HierarchyManagementData",                ThunderFireUIToolConfig.HierarchyManagementDataPath },
+            { "RecentFilesSetting",                     ThunderFireUIToolConfig.FilesRecentSelectedPath},
+            { "ToolGlobalData",                         ThunderFireUIToolConfig.GlobalDataPath},
         };
     }
 

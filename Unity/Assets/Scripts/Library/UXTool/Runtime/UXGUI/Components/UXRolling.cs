@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public  enum UXRollingDirection
+public enum UXRollingDirection
 {
-    RollingLeft, 
+    RollingLeft,
     RollingRight
 }
 
 //这个比较通用, 直接代码里做动画了, 就不搞animation了, 滚动距离在animation里也不是很好判断
-public class UXRolling: MonoBehaviour
+public class UXRolling : MonoBehaviour
 {
     public bool repeat = true;
     [Range(0.2f, 2f)]
@@ -43,7 +43,7 @@ public class UXRolling: MonoBehaviour
             Debug.Log("需要一个RectMask2D遮罩裁切文字");
         }
 #endif
-        if(!rolling)
+        if (!rolling)
             ResetScreen();
     }
 
@@ -74,7 +74,7 @@ public class UXRolling: MonoBehaviour
 
     private void OnDestroy()
     {
-        if(text != null)
+        if (text != null)
         {
             text.OnTextWidthChanged -= OnTextChanged;
         }
@@ -110,8 +110,8 @@ public class UXRolling: MonoBehaviour
             {
                 dir = Vector3.left;
             }
-            
-        
+
+
             if (rollingDirection == UXRollingDirection.RollingRight)
             {
                 dir = Vector3.right;

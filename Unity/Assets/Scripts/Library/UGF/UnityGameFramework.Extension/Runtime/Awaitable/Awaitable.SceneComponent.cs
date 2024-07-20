@@ -58,7 +58,7 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 卸载场景（可等待）
         /// </summary>
-        public static UniTask UnLoadSceneAsync(this SceneComponent sceneComponent, string sceneAssetName)
+        public static UniTask UnloadSceneAsync(this SceneComponent sceneComponent, string sceneAssetName)
         {
 #if UNITY_EDITOR
             TipsSubscribeEvent();

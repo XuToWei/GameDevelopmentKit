@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Game;
 using UnityGameFramework.Extension;
 using GameEntry = Game.GameEntry;
 
@@ -19,12 +20,12 @@ namespace ET
 
         public static async UniTask LoadSceneAsync(string sceneAssetName)
         {
-            await GameEntry.Scene.LoadSceneAsync(sceneAssetName);
+            await GameEntry.Scene.LoadSceneAsync(sceneAssetName, Constant.AssetPriority.SceneAsset);
         }
 
-        public static async UniTask UnLoadSceneAsync(string sceneAssetName)
+        public static async UniTask UnloadSceneAsync(string sceneAssetName)
         {
-            await GameEntry.Scene.UnLoadSceneAsync(sceneAssetName);
+            await GameEntry.Scene.UnloadSceneAsync(sceneAssetName);
         }
     }
 }

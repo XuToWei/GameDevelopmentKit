@@ -63,7 +63,7 @@ namespace ThunderFireUITool
             style.normal.textColor = Color.black;
             style.fontSize = 14;
             //TextInput.onGUIHandler += () => { currentName = GUI.TextField(new Rect(2.5f, 2.5f, 201, 20), currentName, style); };
-            TextInput.onGUIHandler += () => { currentName = EditorGUILayout.TextField(currentName, style); };
+            TextInput.onGUIHandler += () => { currentName = EditorGUILayout.TextField(currentName, style).Trim(); };
             SelectorItem textinputS = new SelectorItem(labelFromUXML.Q<VisualElement>("textinputSelector"), TextInput);
             Confirm.Q<Label>("text").text = OKText;
             Cancel.Q<Label>("text").text = CancelText;

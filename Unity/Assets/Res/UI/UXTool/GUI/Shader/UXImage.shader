@@ -1,11 +1,18 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "UX/UXImage"
+Shader "UXImage"
 {
     Properties
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
+        _AlphaTex ("Alpha Texture", 2D) = "white" {}
+
+        [Toggle(IS_CALALPHA)] _IsCalAlpha ("_IsCalAlpha", float) = 0
+        _SelfUV ("_SelfUV", Vector) = (0,0,1,1)
+        _AlphaUV ("_AlphaUV", Vector) = (0,0,1,1)
+
         _Color ("Tint", Color) = (1,1,1,1)
+        
 
         _StencilComp ("Stencil Comparison", Float) = 8
         _Stencil ("Stencil ID", Float) = 0
@@ -86,7 +93,7 @@ Shader "UX/UXImage"
             #pragma multi_compile_local _ GAMMA_TO_LINEAR
             #pragma multi_compile_local _ ENABLE_GREY
             #pragma multi_compile_local _ RADIUS_CORNER
-            
+            #pragma multi_compile_local _ IS_CALALPHA
             struct appdata_t
             {
                 float4 vertex   : POSITION;
@@ -105,6 +112,9 @@ Shader "UX/UXImage"
                 UNITY_VERTEX_OUTPUT_STEREO
             };
             sampler2D _MainTex;
+            sampler2D _AlphaTex;
+            float4 _SelfUV;
+            float4 _AlphaUV;
             fixed4 _Color;
             fixed4 _TextureSampleAdd;
             float4 _ClipRect;
@@ -208,7 +218,17 @@ Shader "UX/UXImage"
                 
                 return mixAlpha(color, alpha);
                 #endif
+                #ifdef IS_CALALPHA
+                //todo
+                float needCalSign = step(_SelfUV.x, IN.texcoord.x)*step(IN.texcoord.x,_SelfUV.z)
+                                *step(_SelfUV.y, IN.texcoord.y)*step(IN.texcoord.y ,_SelfUV.w);
+                float xrate = (IN.texcoord.x - _SelfUV.x)/(_SelfUV.z-_SelfUV.x);
+                float yrate = (IN.texcoord.y - _SelfUV.y)/(_SelfUV.w-_SelfUV.y);
+                float2 alphauvs = float2(xrate*(_AlphaUV.z-_AlphaUV.x)+_AlphaUV.x, yrate*(_AlphaUV.w-_AlphaUV.y)+_AlphaUV.y);
+                fixed4 alphaColor = tex2D(_AlphaTex, alphauvs);
+                color.a *= alphaColor.a;
 
+                #endif
                 return color;
             }
         ENDCG

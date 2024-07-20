@@ -560,7 +560,7 @@ namespace ArabicSupport
         }
 
         /// <summary>
-        /// 拆出的方法，处理阿拉伯语字符串，仅做字符形式替换，不调整顺序
+        /// 鎷嗗嚭鐨勬柟娉曪紝澶勭悊闃挎媺浼瀛楃涓诧紝浠呭仛瀛楃褰㈠紡鏇挎崲锛屼笉璋冩暣椤哄簭
         /// </summary>
         public static string FixArabicChars(string str)
         {

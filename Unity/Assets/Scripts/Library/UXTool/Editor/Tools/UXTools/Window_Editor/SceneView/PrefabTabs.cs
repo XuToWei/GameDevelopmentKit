@@ -71,13 +71,13 @@ namespace ThunderFireUITool
             var prefabStage = PrefabStageUtils.GetCurrentPrefabStage();
             if (prefabStage == null)
             {
-                RefreshTabs(false,0);
+                RefreshTabs(false, 0);
                 return;
             }
             OpenTab(AssetDatabase.AssetPathToGUID(prefabStage.GetAssetPath()), false);
         }
 
-        public static void RefreshTabs(bool isclose,int width)
+        public static void RefreshTabs(bool isclose, int width)
         {
             if (prefabTabsPanel == null) return;
 #if UNITY_2021_3_OR_NEWER
@@ -93,7 +93,7 @@ namespace ThunderFireUITool
                 string path = AssetDatabase.GUIDToAssetPath(item);
                 if (path != "" && File.Exists(path))
                 {
-                    var tab = new PrefabSingleTab(new FileInfo(path), item, m_tabs.Count, isclose , width);
+                    var tab = new PrefabSingleTab(new FileInfo(path), item, m_tabs.Count, isclose, width);
                     if (item == m_selectedTab)
                     {
                         tab.visual.style.backgroundColor = new Color(95f / 255, 95f / 255, 95f / 255, 1);
@@ -138,7 +138,7 @@ namespace ThunderFireUITool
                 m_tabs.Add(guid);
                 width = Math.Min(Math.Max(m_minwidth, (int)sceneView.position.width / m_tabs.Count), m_maxwidth);
             }
-            RefreshTabs(false,0);
+            RefreshTabs(false, 0);
         }
 
         private static void FirstLayoutCallback(GeometryChangedEvent evt, VisualElement v)
@@ -170,7 +170,7 @@ namespace ThunderFireUITool
                 }
                 m_tabs.Remove(guid);
             }
-            RefreshTabs(true,width);
+            RefreshTabs(true, width);
         }
     }
 }

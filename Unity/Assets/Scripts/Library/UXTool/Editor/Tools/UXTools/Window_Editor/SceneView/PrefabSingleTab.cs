@@ -26,14 +26,14 @@ namespace ThunderFireUITool
             Label label = visual.Q<Label>("Label");
             Button close = visual.Q<Button>("Close");
             int nowwidth = m_maxwidth;
-            if(isclose)
+            if (isclose)
             {
                 label.style.width = width;
                 nowwidth = width;
             }
             else
             {
-                label.style.width = Math.Min(Math.Max(m_minwidth,prewidth),m_maxwidth);
+                label.style.width = Math.Min(Math.Max(m_minwidth, prewidth), m_maxwidth);
                 nowwidth = Math.Min(Math.Max(m_minwidth, prewidth), m_maxwidth);
             }
             close.style.left = label.style.right;
@@ -57,23 +57,23 @@ namespace ThunderFireUITool
 
         private void OnHoverChange(EventBase e)
         {
-            if(m_guid == PrefabTabs.SelectedGuid) return;
-            if(e.eventTypeId == MouseEnterEvent.TypeId())
+            if (m_guid == PrefabTabs.SelectedGuid) return;
+            if (e.eventTypeId == MouseEnterEvent.TypeId())
             {
                 visual.style.backgroundColor = new Color(78f / 255, 78f / 255, 78f / 255, 1);
             }
-            else if(e.eventTypeId == MouseLeaveEvent.TypeId())
+            else if (e.eventTypeId == MouseLeaveEvent.TypeId())
             {
                 visual.style.backgroundColor = new Color(60f / 255, 60f / 255, 60f / 255, 1);
             }
         }
         private void OnHoverClose(EventBase e, VisualElement close)
         {
-            if(e.eventTypeId == MouseEnterEvent.TypeId())
+            if (e.eventTypeId == MouseEnterEvent.TypeId())
             {
                 close.style.backgroundColor = new Color(60f / 255, 60f / 255, 60f / 255, 1);
             }
-            else if(e.eventTypeId == MouseLeaveEvent.TypeId())
+            else if (e.eventTypeId == MouseLeaveEvent.TypeId())
             {
                 close.style.backgroundColor = new Color(60f / 255, 60f / 255, 60f / 255, 0);
             }
@@ -88,9 +88,9 @@ namespace ThunderFireUITool
             PrefabTabs.CloseTab(m_guid, true);
         }
 
-        private string SetTextWithEllipsis(int count,string name)
+        private string SetTextWithEllipsis(int count, string name)
         {
-            if(name.Length <= count)
+            if (name.Length <= count)
             {
                 return name;
             }

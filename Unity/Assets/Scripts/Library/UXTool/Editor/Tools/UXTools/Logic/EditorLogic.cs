@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,14 +11,14 @@ namespace ThunderFireUITool
 {
     //UXTools中负责管理常驻Logic的manager,生命周期和SceneViewToolBar相同
     //常驻Logic: 拥有Update功能或者需要存储内存数据的Logic
-    public class EditorLogic 
+    public class EditorLogic
     {
         public void Init()
         {
             //Snap Logic
             LocationLineLogic.Instance.Init();
             LocationLine.Init();
-            if(!SwitchSetting.CheckValid(SwitchSetting.SwitchType.AlignSnap)) return;
+            if (!SwitchSetting.CheckValid(SwitchSetting.SwitchType.AlignSnap)) return;
             EdgeSnapLineLogic.Instance.Init();
             IntervalLineLogic.Instance.Init();
 

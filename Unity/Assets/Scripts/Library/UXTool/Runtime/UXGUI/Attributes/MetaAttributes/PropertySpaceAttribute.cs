@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace NaughtyAttributes
 {
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-	public class PropertySpaceAttribute : PropertyAttribute
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    public class PropertySpaceAttribute : PropertyAttribute
     {
-		public int SpaceBefore;
-		public int SpaceAfter;
-		public PropertySpaceAttribute()
-		{
+        public int SpaceBefore;
+        public int SpaceAfter;
+        public PropertySpaceAttribute()
+        {
             this.SpaceBefore = 8;
             this.SpaceAfter = 0;
         }

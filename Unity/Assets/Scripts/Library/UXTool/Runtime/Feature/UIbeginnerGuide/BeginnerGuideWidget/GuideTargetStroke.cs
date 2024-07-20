@@ -12,15 +12,15 @@ public class GuideTargetStroke : GuideWidgetBase
         GuideTargetStrokeData targetStrokeData = data as GuideTargetStrokeData;
         if (targetStrokeData != null)
         {
-            targetStrokeData.ApplyTransformData(transform); 
-            if (targetStrokeData.targetType == TargetType.Target && target != null) 
+            targetStrokeData.ApplyTransformData(transform);
+            if (targetStrokeData.targetType == TargetType.Target && target != null)
             {
-                transform.position = target.transform.position; 
-                transform.eulerAngles= target.transform.eulerAngles;
+                transform.position = target.transform.position;
+                transform.eulerAngles = target.transform.eulerAngles;
                 transform.localScale = target.transform.localScale;
                 transform.GetComponent<RectTransform>().sizeDelta = target.GetComponent<RectTransform>().sizeDelta;
-            } 
-            square.SetActive(targetStrokeData.strokeType == StrokeType.Square); 
+            }
+            square.SetActive(targetStrokeData.strokeType == StrokeType.Square);
             circle.SetActive(targetStrokeData.strokeType == StrokeType.Circle);
             square.GetComponent<Animator>().enabled = targetStrokeData.playAnimator;
             circle.GetComponent<Animator>().enabled = targetStrokeData.playAnimator;

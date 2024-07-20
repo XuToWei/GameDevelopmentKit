@@ -6,7 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class GuideHighLightData : GuideWidgetData
 {
-    public HighLightType highLightType; 
+    public HighLightType highLightType;
     public bool isVague;
     public bool UseCustomTarget;
     public Vector3 childPos;
@@ -14,7 +14,7 @@ public class GuideHighLightData : GuideWidgetData
     public Vector3 childRot;
     public Vector2 childSize;
     public RectTransform target;
-    
+
     public override string Serialize()
     {
         childPos = transform.GetChild(0).localPosition;

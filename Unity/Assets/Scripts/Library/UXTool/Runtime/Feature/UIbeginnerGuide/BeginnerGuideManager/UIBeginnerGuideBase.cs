@@ -9,7 +9,8 @@ public enum GuideFinishType
     Middle, //中引导,黑幕镂空,点击任意区域结束
     Weak    //弱引导,无黑幕，设定时间过后自动结束
 }
-public enum GuideTemplate{
+public enum GuideTemplate
+{
     t0,
     t1,
     // t2,
@@ -40,7 +41,7 @@ public class UIBeginnerGuideBase : MonoBehaviour
 
     public virtual void Show()
     {
-        
+
     }
 
     public virtual void Finish()

@@ -63,13 +63,6 @@ public sealed partial class DRStartSceneConfig : Luban.BeanBase
 
     public  void ResolveRef(Tables tables)
     {
-        
-        
-        
-        
-        
-        
-        
         PostResolveRef();
     }
 

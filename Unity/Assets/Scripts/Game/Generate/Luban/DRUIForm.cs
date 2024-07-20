@@ -53,11 +53,6 @@ public sealed partial class DRUIForm : Luban.BeanBase
 
     public  void ResolveRef(TablesComponent tables)
     {
-        
-        
-        
-        
-        
         PostResolveRef();
     }
 

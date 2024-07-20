@@ -18,12 +18,12 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
     private bool isVague = false;
     private bool UseCustomTarget;
     private RectTransform target;
-    
+
     private Vector3 center;     // 镂空区域的中心
     private float width;        // 镂空区域的宽
     private float height;       // 镂空区域的高
     private Canvas canvas;
-    
+
     public GameObject childObject;
     public Material rectMaterial;
     public Material circleMaterial;
@@ -76,7 +76,6 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
     public void SetType(GuideFinishType type)
     {
         this.guideFinishType = type;
-        childObject.transform.GetComponent<GuideHighLightButton>().clickPassThrough = this.guideFinishType == GuideFinishType.Strong;
     }
 
     private void SetRectHighLightArea()
@@ -109,27 +108,29 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
     }
     public void finish()
     {
-         //延迟5秒执行
+        //延迟5秒执行
         UIBeginnerGuideManager.Instance.FinishGuide(guideID);
     }
     public void SetTarget(GameObject go)
     {
-        if(go==null){
-            target = childObject.GetComponent<RectTransform>();
-        }
-        else{
-        if (UseCustomTarget)
+        if (go == null)
         {
-            childObject.transform.position = go.transform.position;
-            childObject.transform.eulerAngles = go.transform.eulerAngles;
-            childObject.GetComponent<RectTransform>().sizeDelta = new Vector2(go.GetComponent<RectTransform>().rect.width, go.GetComponent<RectTransform>().rect.height);
-            childObject.transform.localScale = go.transform.localScale;
-            target = go.GetComponent<RectTransform>();
+            target = childObject.GetComponent<RectTransform>();
         }
         else
         {
-            target = childObject.GetComponent<RectTransform>();
-        }
+            if (UseCustomTarget)
+            {
+                childObject.transform.position = go.transform.position;
+                childObject.transform.eulerAngles = go.transform.eulerAngles;
+                childObject.GetComponent<RectTransform>().sizeDelta = new Vector2(go.GetComponent<RectTransform>().rect.width, go.GetComponent<RectTransform>().rect.height);
+                childObject.transform.localScale = go.transform.localScale;
+                target = go.GetComponent<RectTransform>();
+            }
+            else
+            {
+                target = childObject.GetComponent<RectTransform>();
+            }
         }
         //Debug.Log(target.position);
         InitTarget();

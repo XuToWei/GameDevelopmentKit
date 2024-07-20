@@ -71,7 +71,7 @@ namespace ThunderFireUITool
             // style.opacity = copiedStyle.opacity;
             // style.display = copiedStyle.display;
             // style.visibility = copiedStyle.visibility;
-            
+
             Type type = typeof(IStyle);
             PropertyInfo[] properties = type.GetProperties();
             foreach (var property in properties)
@@ -79,7 +79,7 @@ namespace ThunderFireUITool
                 property.SetValue(style, property.GetValue(copiedStyle));
             }
         }
-        
+
         public static void UXStyleToIStyle(IStyle style, UXStyle copiedStyle)
         {
             Type type = typeof(IStyle);

@@ -1,4 +1,4 @@
-﻿using ArabicSupport;
+using ArabicSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,14 +39,14 @@ namespace UnityEngine.UI
             }
         }
 
-        public UXTextLocaleProcesser_Arabic(UXText text):base(text)
+        public UXTextLocaleProcesser_Arabic(UXText text) : base(text)
         {
             LocalizationType = LocalizationHelper.LanguageType.Arabic;
         }
 
         public override void ModifyLocaleTextSettings()
         {
-            switch(LocaleText.alignment)
+            switch (LocaleText.alignment)
             {
                 case TextAnchor.MiddleLeft:
                     LocaleText.alignment = TextAnchor.MiddleRight;
@@ -68,7 +68,7 @@ namespace UnityEngine.UI
         public override string GenLocaleRenderedString(string text)
         {
             OriginString = text;
-            if(!ContainsArabicLetters(text))
+            if (!ContainsArabicLetters(text))
             {
                 return text;
             }
@@ -166,14 +166,14 @@ namespace UnityEngine.UI
 
                 //if (!ContainsArabicLetters(match))
                 //{
-                    if (match.StartsWith(")") && match.EndsWith("("))
-                    {
-                        return "(" + match.Substring(1, match.Length - 2) + ")";
-                    }
-                    if (match.StartsWith(">") && match.EndsWith("<"))
-                    {
-                        return "<" + match.Substring(1, match.Length - 2) + ">";
-                    }
+                if (match.StartsWith(")") && match.EndsWith("("))
+                {
+                    return "(" + match.Substring(1, match.Length - 2) + ")";
+                }
+                if (match.StartsWith(">") && match.EndsWith("<"))
+                {
+                    return "<" + match.Substring(1, match.Length - 2) + ">";
+                }
                 //}
                 return match;
             });
@@ -255,7 +255,7 @@ namespace UnityEngine.UI
             }
             return false;
         }
-        
+
         private void FixRichTextEndSymbol()
         {
             m_ReversedFixedText = m_ReversedFixedText.Replace("<color/>", "</color>");
@@ -273,7 +273,7 @@ namespace UnityEngine.UI
         {
             Stack<int> richTextSymbolIndexStack = new Stack<int>();
             string[] newWords = new string[words.Length];
-            for(int i = 0; i < words.Length; i++)
+            for (int i = 0; i < words.Length; i++)
             {
                 if (IsRichTextSymbol(words[i], out string newWord))
                 {
@@ -330,7 +330,7 @@ namespace UnityEngine.UI
             });
             m_Reversed_NoRichSymbol_FixedText = result;
         }
-        
+
         //反向 <> 符号
         //把 >b< 改成 <b>
         private void ReverseRichTextSymbolBracket(ref string word)
@@ -393,7 +393,7 @@ namespace UnityEngine.UI
                         {
                             Debug.LogWarning("UXText LocaleProcesser_Arabic MergeNewLineAndRichTextSymbol /n Error: " + LocaleText.transform.PathFromRoot());
                             continue;
-                        } 
+                        }
                     }
                     //如果原字符串也是换行符, 原字符串index前进一位
                     char curReversedFixedTextChar = reversedFixedTextChars[reversedFixedTextCharIndex];
@@ -419,7 +419,7 @@ namespace UnityEngine.UI
                         {
                             inRichTextColor = true;
                             richTextColor = reversedFixedTextChars.GetRange(reversedFixedTextCharIndex, 15);
-                            
+
                             newChars.AddRange(richTextColor);
                             reversedFixedTextCharIndex = reversedFixedTextCharIndex + 15 + 1;
                         }
@@ -450,7 +450,7 @@ namespace UnityEngine.UI
             if (m_ReversedFixedText == null)
                 return;
             string[] reversedFixedLines = m_ReversedFixedText.Split('\n');
-            reversedFixedLines =  reversedFixedLines.Reverse().ToArray();
+            reversedFixedLines = reversedFixedLines.Reverse().ToArray();
             for (int lineIdx = 0; lineIdx < reversedFixedLines.Length; lineIdx++)
             {
                 string[] words = richTextSymbolAndBlankRegex.Split(reversedFixedLines[lineIdx]);

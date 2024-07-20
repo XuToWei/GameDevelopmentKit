@@ -59,13 +59,13 @@ namespace ET
                 throw new Exception($"Add UIWidget fail, {transform.name} is already in the UGFUIForm:'{Transform.name}'!");
             }
             m_UIWidgetTransforms.Add(transform);
-            UGFUIWidget ugfUIWidget = AddChild<UGFUIWidget, Transform, Type>(transform, typeof(T),true);
+            UGFUIWidget ugfUIWidget = AddChild<UGFUIWidget, Transform, long>(transform, typeof(T).FullName.GetLongHashCode(),true);
             if (UIWidgets == null)
             {
                 UIWidgets = ListComponent<EntityRef<UGFUIWidget>>.Create();
             }
             UIWidgets.Add(ugfUIWidget);
-            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventType).OnInit(ugfUIWidget, userData);
+            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventTypeLongHashCode).OnInit(ugfUIWidget, userData);
             return ugfUIWidget;
         }
 
@@ -79,21 +79,21 @@ namespace ET
         {
             ugfUIWidget.IsOpen = true;
             ugfUIWidget.Visible = true;
-            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventType).OnOpen(ugfUIWidget, userData);
+            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventTypeLongHashCode).OnOpen(ugfUIWidget, userData);
         }
 
         internal void DynamicOpenUIWidget(UGFUIWidget ugfUIWidget, object userData)
         {
-            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventType).OnOpen(ugfUIWidget, userData);
+            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventTypeLongHashCode).OnOpen(ugfUIWidget, userData);
             UGFUIForm ugfUIForm = ugfUIWidget.GetParent<UGFUIForm>();
-            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventType).OnDepthChanged(ugfUIWidget, ugfUIForm.UIForm.UIGroup.Depth, ugfUIForm.UIForm.DepthInUIGroup);
+            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventTypeLongHashCode).OnDepthChanged(ugfUIWidget, ugfUIForm.UIForm.UIGroup.Depth, ugfUIForm.UIForm.DepthInUIGroup);
         }
 
         internal void CloseUIWidget(UGFUIWidget ugfUIWidget, object userData, bool isShutdown)
         {
             ugfUIWidget.Visible = false;
             ugfUIWidget.IsOpen = false;
-            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventType).OnClose(ugfUIWidget, isShutdown, userData);
+            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventTypeLongHashCode).OnClose(ugfUIWidget, isShutdown, userData);
         }
     }
     

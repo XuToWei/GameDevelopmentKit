@@ -30,7 +30,7 @@ class CustomUnityWindowLogic
 
     static void OnPlaymodeStateChanged(PlayModeStateChange state)
     {
-        if(state == PlayModeStateChange.EnteredEditMode)
+        if (state == PlayModeStateChange.EnteredEditMode)
         {
             EditorApplication.delayCall += DoUpdateTitleFunc;
         }

@@ -57,6 +57,12 @@ namespace UnityEngine.UI
         private SerializedProperty m_CornerRadius;
         private SerializedProperty m_EnableRadiusCorner;
 
+        private SerializedProperty m_EnableDistortion;
+        private SerializedProperty m_BottomLeftDistortion;
+        private SerializedProperty m_BottomRightDistortion;
+        private SerializedProperty m_TopLeftDistortion;
+        private SerializedProperty m_TopRightDistortion;
+
         private ReorderableList m_CustomList;
         private List<Sprite> m_SpriteList;
         private bool[] m_ToggleValues;
@@ -201,6 +207,12 @@ namespace UnityEngine.UI
 
             m_EnableRadiusCorner = serializedObject.FindProperty("m_EnableRadiusCorner");
             m_CornerRadius = serializedObject.FindProperty("m_CornerRadius");
+
+            m_EnableDistortion = serializedObject.FindProperty("m_EnableDistortion");
+            m_BottomLeftDistortion = serializedObject.FindProperty("m_BottomLeftDistortion");
+            m_BottomRightDistortion = serializedObject.FindProperty("m_BottomRightDistortion");
+            m_TopLeftDistortion = serializedObject.FindProperty("m_TopLeftDistortion");
+            m_TopRightDistortion = serializedObject.FindProperty("m_TopRightDistortion");
 
 #if UNITY_2021_1_OR_NEWER
             m_bIsDriven = false;
@@ -1016,6 +1028,17 @@ namespace UnityEngine.UI
                     image.material.SetFloat(RadiusCorner, 0);
                     image.material.DisableKeyword("RADIUS_CORNER");
                 }
+            }
+
+            m_EnableDistortion.boolValue = EditorGUILayout.Toggle("扭曲", m_EnableDistortion.boolValue);
+            if (m_EnableDistortion.boolValue)
+            {
+                EditorGUI.indentLevel++;
+                m_BottomLeftDistortion.vector2Value = EditorGUILayout.Vector2Field("左下角", m_BottomLeftDistortion.vector2Value);
+                m_BottomRightDistortion.vector2Value = EditorGUILayout.Vector2Field("右下角", m_BottomRightDistortion.vector2Value);
+                m_TopLeftDistortion.vector2Value = EditorGUILayout.Vector2Field("左上角", m_TopLeftDistortion.vector2Value);
+                m_TopRightDistortion.vector2Value = EditorGUILayout.Vector2Field("右上角", m_TopRightDistortion.vector2Value);
+                EditorGUI.indentLevel--;
             }
         }
 

@@ -23,8 +23,9 @@ namespace UnityEngine.UI
         public string previewID
         {
             get { return m_previewID; }
-            set {
-                if(m_previewID != value)
+            set
+            {
+                if (m_previewID != value)
                 {
                     m_previewID = value;
                     ChangeLanguage(LocalizationHelper.GetLanguage());
@@ -60,7 +61,7 @@ namespace UnityEngine.UI
                 return;
             }
             string id = localizationType == LocalizationHelper.TextLocalizationType.RuntimeUse ? localizationID : m_previewID;
-            if(language == LocalizationHelper.LanguageType.ShowKey && !ignoreLocalization)
+            if (language == LocalizationHelper.LanguageType.ShowKey && !ignoreLocalization)
             {
                 text = id;
                 return;

@@ -36,7 +36,7 @@ public class GuideText : GuideWidgetBase
 
     public override void Show()
     {
-        
+
     }
 
     public override void Stop()

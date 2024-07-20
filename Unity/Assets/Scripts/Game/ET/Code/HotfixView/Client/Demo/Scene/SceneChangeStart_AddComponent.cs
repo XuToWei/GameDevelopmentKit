@@ -17,11 +17,11 @@ namespace ET.Client
                 // 切换到map场景
                 foreach (var sceneAssetName in GameEntry.Scene.GetLoadingSceneAssetNames())
                 {
-                    await GameEntry.Scene.UnLoadSceneAsync(sceneAssetName);
+                    await GameEntry.Scene.UnloadSceneAsync(sceneAssetName);
                 }
                 foreach (var sceneAssetName in GameEntry.Scene.GetLoadedSceneAssetNames())
                 {
-                    await GameEntry.Scene.UnLoadSceneAsync(sceneAssetName);
+                    await GameEntry.Scene.UnloadSceneAsync(sceneAssetName);
                 }
                 await GameEntry.Scene.LoadSceneAsync(AssetUtility.GetSceneAsset(currentScene.Name));
                 

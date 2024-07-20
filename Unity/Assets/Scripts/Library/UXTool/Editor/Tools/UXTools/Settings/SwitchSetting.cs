@@ -22,7 +22,8 @@ namespace ThunderFireUITool
             PrefabResourceCheck,
             QuickBackground,
             AutoConvertTex,
-            EnableGamePadBeginnerGuide
+            EnableGamePadBeginnerGuide,
+            RecentlySelected,
         }
 
         private static SwitchSetting m_instance;

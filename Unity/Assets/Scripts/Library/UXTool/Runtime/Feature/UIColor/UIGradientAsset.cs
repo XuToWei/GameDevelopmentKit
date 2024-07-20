@@ -21,7 +21,7 @@ public class UIGradient
 }
 
 
-[CreateAssetMenu(fileName = "ui_gradient_config", menuName = "UXTools/UI Gradient Asset")]
+[CreateAssetMenu(fileName = "ui_gradient_config", menuName = "UXTool/UI Gradient Asset")]
 public class UIGradientAsset : ScriptableObject
 {
     [SerializeField]
