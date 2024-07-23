@@ -8,18 +8,20 @@
       "hash": "93c7e64d2fa1b8ce1798f0cbce75034f63a45c04"
     },
     "com.code-philosophy.hybridclr": {
-      "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
+      "version": "https://github.com/focus-creative-games/hybridclr_unity.git#v6.3.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "909e96ca7c808cf9be733b881382fabb49523d0b"
+      "hash": "2d5f71f6b789edd3a46565ec83f02a1b5b047cf7"
     },
     "com.coffee.softmask-for-ugui": {
-      "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
+      "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git#2.0.0",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "b870d64b5704a764fd03aaccb11f2dbe652b1756"
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "0ada3f7e29e632877ebcb2a8f2d6f047cde70e3c"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git",
@@ -29,14 +31,14 @@
       "hash": "332340e7bc2f8257816dd28784607a1edf6b6c2a"
     },
     "com.coffee.ui-particle": {
-      "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
+      "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.9.0",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "686fff869000bdac0cb5b2ab6b1f3ed925839521"
+      "hash": "4dfcb9075e166fa53fee5decc51975bdc247cdad"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -60,13 +62,13 @@
       "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
     },
     "com.cysharp.r3": {
-      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
+      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.1.15",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.modules.imgui": "1.0.0"
       },
-      "hash": "d0ee86f6bb8b7e2809f1dd317c62d5d610356c92"
+      "hash": "6390256b56cf70408d1a7c342fae757e70acbf2c"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
@@ -251,6 +253,13 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.yasirkula.runtimeinspector": {
+      "version": "https://github.com/yasirkula/UnityRuntimeInspector.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "52ff3168983d48f012119f6c013d7b495c9f44a4"
+    },
     "jp.setchi.fancyscrollview": {
       "version": "https://github.com/setchi/FancyScrollView.git#upm",
       "depth": 0,
@@ -263,7 +272,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "b5ee88c3eaa3b63e66c1c63f81b174f94055b1a2"
+      "hash": "2c4e31f6a665d22cb5a1f056349c09c7e91b64f7"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",

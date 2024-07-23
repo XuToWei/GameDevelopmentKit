@@ -17,7 +17,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		"System.Runtime.CompilerServices.Unsafe.dll",
 		"System.dll",
 		"UniTask.dll",
-		"UniTaskExtension.dll",
+		"UniTask.Extension.dll",
 		"UnityEngine.CoreModule.dll",
 		"UnityGameFramework.Extension.dll",
 		"mscorlib.dll",

@@ -95,6 +95,16 @@ MonoBehaviour:
     filterType: 0
     searchPatterns: '*.prefab,*.anim,*.controller,*.inputactions,*shader,*.mat,*png,*json,*.txt,*.asset'
   - valid: 1
+    name: UI.RuntimeInspector
+    variant: 
+    fileSystem: 
+    groups: 
+    assetsDirectoryPath: Assets/Res/UI/RuntimeInspector
+    loadType: 0
+    packed: 0
+    filterType: 0
+    searchPatterns: '*.*'
+  - valid: 1
     name: Scene
     variant: 
     fileSystem: 

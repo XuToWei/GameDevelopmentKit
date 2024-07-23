@@ -1,8 +1,8 @@
 {
-    "name": "UniTaskExtension",
+    "name": "StateController.Extension",
     "rootNamespace": "",
     "references": [
-        "UniTask"
+        "GUID:b42020b6ece72f74683c8d485d39fa1c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

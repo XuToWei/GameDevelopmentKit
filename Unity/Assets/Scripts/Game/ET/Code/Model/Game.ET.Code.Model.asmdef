@@ -10,7 +10,7 @@
         "UniTask",
         "ZString",
         "MemoryPack",
-        "UniTaskExtension"
+        "UniTask.Extension"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

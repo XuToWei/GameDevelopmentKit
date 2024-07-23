@@ -48,6 +48,10 @@ namespace Game
             {
                 SRDebug.Instance.ShowDebugPanel();
             }
+            if (GUILayout.Button("Show RuntimeInspector", GUILayout.Width(150f)))
+            {
+                GameEntry.UI.OpenUIForm("Assets/Res/UI/RuntimeInspector/RuntimeInspectorForm.prefab", "RuntimeInspector");
+            }
 #endif
         }
     }

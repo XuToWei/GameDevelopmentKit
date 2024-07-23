@@ -176,9 +176,7 @@ namespace Game
         public void CloseAllUIWidgets(object userData = default, bool isShutdown = false)
         {
             if (m_UIWidgetContainer == null)
-            {
-                throw new GameFrameworkException("Container is empty!");
-            }
+                return;
             m_UIWidgetContainer.CloseAllUIWidgets(userData, isShutdown);
         }
 

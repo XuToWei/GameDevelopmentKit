@@ -5,8 +5,8 @@
         "Unity.Mathematics",
         "UniTask",
         "MemoryPack",
-        "UniTaskExtension",
-        "ET.ThirdParty"
+        "ET.ThirdParty",
+        "UniTask.Extension"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
