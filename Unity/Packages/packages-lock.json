@@ -8,20 +8,18 @@
       "hash": "93c7e64d2fa1b8ce1798f0cbce75034f63a45c04"
     },
     "com.code-philosophy.hybridclr": {
-      "version": "https://github.com/focus-creative-games/hybridclr_unity.git#v6.3.0",
+      "version": "https://github.com/focus-creative-games/hybridclr_unity.git#v6.4.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2d5f71f6b789edd3a46565ec83f02a1b5b047cf7"
+      "hash": "53f4f33bf04c982f23e9f2df8f1c676612f47cfb"
     },
     "com.coffee.softmask-for-ugui": {
-      "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git#2.0.0",
+      "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git#1.0.3",
       "depth": 0,
       "source": "git",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
-      },
-      "hash": "0ada3f7e29e632877ebcb2a8f2d6f047cde70e3c"
+      "dependencies": {},
+      "hash": "0a9cf7a1809a289ca7bedecee594cdf256e26935"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git",
@@ -31,14 +29,14 @@
       "hash": "332340e7bc2f8257816dd28784607a1edf6b6c2a"
     },
     "com.coffee.ui-particle": {
-      "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.9.0",
+      "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.8.1",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "4dfcb9075e166fa53fee5decc51975bdc247cdad"
+      "hash": "686fff869000bdac0cb5b2ab6b1f3ed925839521"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -62,13 +60,13 @@
       "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
     },
     "com.cysharp.r3": {
-      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.1.15",
+      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.1.16",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.modules.imgui": "1.0.0"
       },
-      "hash": "6390256b56cf70408d1a7c342fae757e70acbf2c"
+      "hash": "db0b22f8289ce8553cf47f6792f721d70264f9ac"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",

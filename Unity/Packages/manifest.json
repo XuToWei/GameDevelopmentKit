@@ -1,14 +1,14 @@
 {
   "dependencies": {
     "com.baracuda.preprocessor-symbol-definition-files": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
-    "com.code-philosophy.hybridclr": "https://github.com/focus-creative-games/hybridclr_unity.git#v6.3.0",
-    "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git#2.0.0",
+    "com.code-philosophy.hybridclr": "https://github.com/focus-creative-games/hybridclr_unity.git#v6.4.0",
+    "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git#1.0.3",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git",
-    "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.9.0",
+    "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.8.1",
     "com.coffee.unmask": "https://github.com/mob-sakai/UnmaskForUGUI.git",
     "com.coffee.upm-git-extension": "https://github.com/mob-sakai/UpmGitExtension.git",
     "com.cysharp.memorypack": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack#1.10.0",
-    "com.cysharp.r3": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.1.15",
+    "com.cysharp.r3": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.1.16",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.cysharp.zstring": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
     "com.unity.2d.sprite": "1.0.0",
