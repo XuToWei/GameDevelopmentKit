@@ -155,8 +155,10 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 7e2d9312c5afda3438f3e420470bf02d, type: 3}
     - {fileID: 4900000, guid: c6e5d00057c459640b5d6d14026d13f6, type: 3}
     - {fileID: 4900000, guid: 54e50a6ecae1b70438e1c50bdbf55e39, type: 3}
-    - {fileID: 4800000, guid: c0f160151303ae64a83cc17646239b3d, type: 3}
-    - {fileID: 2100000, guid: 704d81d298f93a94ab5fc27fefbf9548, type: 2}
+    - {fileID: 4800000, guid: 85bf385d20f84094e8640d446e72f03a, type: 3}
+    - {fileID: 4800000, guid: ef43a0db1f649274590f3d130c1f0ff3, type: 3}
+    - {fileID: 2100000, guid: 00cf0597250ef1d49b7946f79b3796dc, type: 2}
+    - {fileID: 2100000, guid: b44b5ab44e24caa4b80290b9fd405077, type: 2}
     - {fileID: 21300000, guid: b9975f2be09eab4449a3f00368f0da41, type: 3}
     - {fileID: 4900000, guid: fef68d1dd70201b4bb76246e05dbcf8d, type: 3}
     SerializedBytesString: 
@@ -177,7 +179,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 143
+      Data: 145
     - Name: 
       Entry: 7
       Data: 
@@ -1851,7 +1853,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Assets/Res/UI/UXTool/GUI/Shader/UXImage.shader
+      Data: Assets/Res/UI/UXTool/GUI/Shader/Outline.shader
     - Name: $v
       Entry: 10
       Data: 139
@@ -1863,7 +1865,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Assets/Res/UI/UXTool/GUI/Material/UXImage.mat
+      Data: Assets/Res/UI/UXTool/GUI/Shader/UXImage.shader
     - Name: $v
       Entry: 10
       Data: 140
@@ -1875,7 +1877,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Assets/Res/UI/UXTool/GUI/need_replace.png
+      Data: Assets/Res/UI/UXTool/GUI/Material/Outline.mat
     - Name: $v
       Entry: 10
       Data: 141
@@ -1887,10 +1889,34 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Assets/Res/UI/UXTool/GUI/thai_dict.txt
+      Data: Assets/Res/UI/UXTool/GUI/Material/UXImage.mat
     - Name: $v
       Entry: 10
       Data: 142
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/GUI/need_replace.png
+    - Name: $v
+      Entry: 10
+      Data: 143
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Assets/Res/UI/UXTool/GUI/thai_dict.txt
+    - Name: $v
+      Entry: 10
+      Data: 144
     - Name: 
       Entry: 8
       Data: 
