@@ -2,13 +2,18 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using UnityEngine.UI;
+
 
 namespace ThunderFireUITool
 {
-    public class UIComponentCheckResult
+    //带数据的TreeViewItem
+    public class UIComponentCheckResultViewItem : TreeViewItem
     {
         public GameObject prefabGo;
         public string prefabPath;
@@ -16,48 +21,28 @@ namespace ThunderFireUITool
         public List<long> nodeFileIds;
     }
 
-    //带数据的TreeViewItem
-    public class UIComponentCheckResultViewItem : TreeViewItem
+    public enum ResultColumns2
     {
-        public UIComponentCheckResult data;
+        Name,
+        Path,
+        Nodes,
+        Modify
     }
 
     //结果展示
-    public class UIComponentCheckResultTableView : TreeView
+    public class UIComponentCheckResultTableView : EditorUIUtils.UIIMTreeView<UIComponentCheckResultViewItem>
     {
-        //图标宽度
-        const float kIconWidth = 18f;
-        //列表高度
-        const float kRowHeights = 20f;
-        public UIComponentCheckResultViewItem root;
-
-        private GUIStyle cellStyle;
-
-        //列信息
-        enum ResultColumns
+        private FieldInfo selectedFieldInfo;
+        private UICommonScriptCheckWindow.ModificationMode currentModificationMode;
+        private Type selectedScriptType;
+        private int selectedOperation;
+        public enum modificationScriptOperations
         {
-            Name,
-            Path,
-            Nodes
+            Add,
+            Delete
         }
-
-        public UIComponentCheckResultTableView(TreeViewState state, MultiColumnHeader multicolumnHeader) : base(state, multicolumnHeader)
-        {
-            rowHeight = kRowHeights;
-            columnIndexForTreeFoldouts = 0;
-            showAlternatingRowBackgrounds = true;
-            showBorder = true;
-            customFoldoutYOffset = (kRowHeights - EditorGUIUtility.singleLineHeight) * 0.5f; // center foldout in the row since we also center content. See RowGUI
-            extraSpaceBeforeIconAndLabel = kIconWidth;
-
-            cellStyle = new GUIStyle();
-            cellStyle.alignment = TextAnchor.UpperCenter;
-            cellStyle.normal.textColor = Color.white;
-
-            root = new UIComponentCheckResultViewItem { id = 0, depth = -1, displayName = "Result" };
-            //初始化的时候需要在根节点下插入一个子节点，不然会报Children null的错误
-            root.AddChild(new UIComponentCheckResultViewItem { id = 1, depth = 0, displayName = "temp" });
-        }
+        public UIComponentCheckResultTableView() : base()
+        { }
 
         public static long GetLocalIdentfierInFile(UnityEngine.Object obj)
         {
@@ -69,56 +54,53 @@ namespace ThunderFireUITool
         }
 
         //生成ColumnHeader
-        public static MultiColumnHeaderState CreateDefaultMultiColumnHeaderState(float treeViewWidth)
+        public override List<MultiColumnHeaderState.Column> CreateDefaultMultiColumns()
         {
             var columns = new List<MultiColumnHeaderState.Column>
             {
-			    //图标+名称
-			    new MultiColumnHeaderState.Column
+                //图标+名称
+                new MultiColumnHeaderState.Column
                 {
                     headerContent = new GUIContent(UICommonScriptCheckWindow.CheckResult_NameString),
-                    headerTextAlignment = TextAlignment.Center,
-                    sortedAscending = false,
                     width = 200,
                     minWidth = 60,
-                    autoResize = false,
                     allowToggleVisibility = false,
-                    canSort = true,
-                    sortingArrowAlignment = TextAlignment.Right
                 },
-			    //路径
-			    new MultiColumnHeaderState.Column
+                //路径
+                new MultiColumnHeaderState.Column
                 {
                     headerContent = new GUIContent(UICommonScriptCheckWindow.CheckResult_PathString),
-                    headerTextAlignment = TextAlignment.Center,
-                    sortedAscending = false,
                     width = 660,
                     minWidth = 60,
-                    autoResize = false,
                     allowToggleVisibility = false,
-                    canSort = true,
-                    sortingArrowAlignment = TextAlignment.Right
                 },
-			    //符合条件的节点
-			    new MultiColumnHeaderState.Column
+                //符合条件的节点
+                new MultiColumnHeaderState.Column
                 {
                     headerContent = new GUIContent(UICommonScriptCheckWindow.CheckResult_ObjectListString),
-                    headerTextAlignment = TextAlignment.Center,
-                    sortedAscending = false,
-                    width = 60,
+                    width = 220,
                     minWidth = 60,
-                    autoResize = false,
+                    allowToggleVisibility = true,
+                    canSort = false
+                },
+                //修改节点
+                new MultiColumnHeaderState.Column
+                {
+                    headerContent = new GUIContent(UICommonScriptCheckWindow.ModifyString),
+                    width = 100,
+                    minWidth = 60,
                     allowToggleVisibility = true,
                     canSort = false
                 }
+                
             };
-            var state = new MultiColumnHeaderState(columns.ToArray());
-            return state;
+            return columns;
         }
+        
         //生成Tree
-        public void UpdateTree(List<UIComponentCheckResult> checkResults)
+        public void UpdateTree(List<UIComponentCheckResultViewItem> checkResults)
         {
-            root.children.Clear();
+            AssetRoot.children.Clear();
             int elementCount = 0;
             foreach (var result in checkResults)
             {
@@ -127,14 +109,17 @@ namespace ThunderFireUITool
                 {
                     id = elementCount,
                     depth = 0,
-                    data = result
+                    prefabGo = result.prefabGo,
+                    prefabPath = result.prefabPath,
+                    nodePaths = result.nodePaths,
+                    nodeFileIds = result.nodeFileIds
                 };
-                root.AddChild(rs);
+                AssetRoot.AddChild(rs);
             }
+
             Reload();
         }
-
-
+        
         //响应双击事件
         protected override void DoubleClickedItem(int id)
         {
@@ -142,7 +127,7 @@ namespace ThunderFireUITool
 
             if (item != null)
             {
-                var assetObject = AssetDatabase.LoadAssetAtPath(item.data.prefabPath, typeof(UnityEngine.Object));
+                var assetObject = AssetDatabase.LoadAssetAtPath(item.prefabPath, typeof(UnityEngine.Object));
                 if (assetObject is GameObject)
                 {
                     //是Prefab 打开prefab 并在Hierarchy中高亮引用资源的节点
@@ -157,7 +142,7 @@ namespace ThunderFireUITool
                         {
                             var fileId = GetLocalIdentfierInFile(trans.gameObject);
 
-                            if (item.data.nodeFileIds.Contains(fileId))
+                            if (item.nodeFileIds.Contains(fileId))
                             {
                                 UICommonScriptCheckWindow.checkResultGoTransList.Add(trans);
                             }
@@ -173,74 +158,77 @@ namespace ThunderFireUITool
                 }
             }
         }
-        protected override void ExpandedStateChanged()
-        {
-        }
-        protected override TreeViewItem BuildRoot()
-        {
-            SetupDepthsFromParentsAndChildren(root);
-            return root;
-        }
 
         protected override float GetCustomRowHeight(int row, TreeViewItem item)
         {
             UIComponentCheckResultViewItem e = item as UIComponentCheckResultViewItem;
-            if (e == null || e.data == null) return base.GetCustomRowHeight(row, item);
+            if (e == null ) return base.GetCustomRowHeight(row, item);
 
-            if (e.data.nodePaths.Count > 0)
+            if (e.nodePaths.Count > 0)
             {
-                return EditorGUIUtility.singleLineHeight * e.data.nodePaths.Count + 5;
+                return EditorGUIUtility.singleLineHeight * e.nodePaths.Count + 5;
             }
 
             return base.GetCustomRowHeight(row, item);
         }
 
-        protected override void RowGUI(RowGUIArgs args)
+        protected override void CellGUI(Rect cellRect, UIComponentCheckResultViewItem item, int columnIndex, RowGUIArgs args)
         {
-            var item = (UIComponentCheckResultViewItem)args.item;
-            if (item == null || item.data == null) return;
-
-            for (int i = 0; i < args.GetNumVisibleColumns(); ++i)
+            var cellStyle = new GUIStyle
             {
-                var rect = args.GetCellRect(i);
-                CellGUI(rect, item, (ResultColumns)args.GetColumn(i), ref args);
-            }
-        }
+                alignment = TextAnchor.UpperCenter,
+                normal =
+                {
+                    textColor = Color.white
+                }
+            };
 
-
-        //绘制列表中的每项内容
-        void CellGUI(Rect cellRect, UIComponentCheckResultViewItem item, ResultColumns column, ref RowGUIArgs args)
-        {
-            switch (column)
+            switch ((ResultColumns2)args.GetColumn(columnIndex))
             {
-                case ResultColumns.Name:
-                    {
-                        //CenterRectUsingSingleLineHeight(ref cellRect);
-                        cellRect.height = EditorGUIUtility.singleLineHeight;
-                        EditorGUI.ObjectField(cellRect, item.data.prefabGo, typeof(GameObject), false);
-                    }
+                case ResultColumns2.Name:
+                {
+                    //CenterRectUsingSingleLineHeight(ref cellRect);
+                    cellRect.height = EditorGUIUtility.singleLineHeight;
+                    EditorGUI.ObjectField(cellRect, item.prefabGo, typeof(GameObject), false);
+                }
                     break;
-                case ResultColumns.Path:
-                    {
-                        GUI.Label(cellRect, item.data.prefabPath, cellStyle);
-                    }
+                case ResultColumns2.Path:
+                {
+                    GUI.Label(cellRect, item.prefabPath, cellStyle);
+                }
                     break;
-                case ResultColumns.Nodes:
+                case ResultColumns2.Nodes:
+                {
+                    EditorGUILayout.BeginVertical();
+                    for (int i = 0; i < item.nodePaths.Count; i++)
                     {
-                        EditorGUILayout.BeginVertical();
-                        for (int i = 0; i < item.data.nodePaths.Count; i++)
+                        var rect = new Rect()
                         {
-                            var rect = new Rect()
-                            {
-                                x = cellRect.x,
-                                y = cellRect.y + EditorGUIUtility.singleLineHeight * i,
-                                width = cellRect.width,
-                                height = EditorGUIUtility.singleLineHeight
-                            };
-                            GUI.Label(rect, item.data.nodePaths[i], cellStyle);
-                        }
-                        EditorGUILayout.EndVertical();
+                            x = cellRect.x,
+                            y = cellRect.y + EditorGUIUtility.singleLineHeight * i,
+                            width = cellRect.width,
+                            height = EditorGUIUtility.singleLineHeight
+                        };
+                        GUI.Label(rect, item.nodePaths[i], cellStyle);
                     }
+
+                    EditorGUILayout.EndVertical();
+                }
+                    break;
+                case ResultColumns2.Modify:
+                {
+                    var buttonRect = new Rect()
+                        {
+                            x = cellRect.x,
+                            y = cellRect.y + (cellRect.height - EditorGUIUtility.singleLineHeight) / 2,
+                            width = cellRect.width,
+                            height = EditorGUIUtility.singleLineHeight
+                        };
+                    if (GUI.Button(buttonRect, UICommonScriptCheckWindow.ModifyString))
+                    {
+                        ModifySingleResult(item);
+                    }
+                }
                     break;
             }
         }
@@ -248,7 +236,7 @@ namespace ThunderFireUITool
         //根据资源信息获取资源图标
         private Texture2D GetIcon(string path)
         {
-            Object obj = AssetDatabase.LoadAssetAtPath(path, typeof(Object));
+            UnityEngine.Object obj = AssetDatabase.LoadAssetAtPath(path, typeof(UnityEngine.Object));
             if (obj != null)
             {
                 Texture2D icon = AssetPreview.GetMiniThumbnail(obj);
@@ -256,8 +244,182 @@ namespace ThunderFireUITool
                     icon = AssetPreview.GetMiniTypeThumbnail(obj.GetType());
                 return icon;
             }
+
             return null;
         }
+
+        public void ModifyAllResults(FieldInfo selectedFieldInfo)
+        {
+            foreach (var item in rootItem.children)
+            {
+                var resultItem = (UIComponentCheckResultViewItem)item;
+                if (resultItem != null)
+                {
+                    ModifyGameObject(resultItem, selectedFieldInfo);
+                }
+            }
+        }
+
+        public void ModifySelectedResults(FieldInfo selectedFieldInfo)
+        {
+            foreach (var item in GetSelection())
+            {
+                var resultItem = (UIComponentCheckResultViewItem)FindItem(item, rootItem);
+                if (resultItem != null)
+                {
+                    ModifyGameObject(resultItem, selectedFieldInfo);
+                }
+            }
+        }
+
+        private void ModifyGameObject(UIComponentCheckResultViewItem resultData, FieldInfo selectedFieldInfo)
+        {
+            var prefabRoot = resultData.prefabGo;
+            foreach (var nodeId in resultData.nodeFileIds)
+            {
+                var component = FindComponentByLocalId(prefabRoot, selectedFieldInfo.DeclaringType, nodeId);
+                if (component != null)
+                {
+                    ModifyFieldValue(component, selectedFieldInfo);
+                }
+            }
+            // 保存Prefab的修改
+            PrefabUtility.SavePrefabAsset(prefabRoot);
+        }
+
+        public void ModifySingleResult(UIComponentCheckResultViewItem resultItem)
+        {
+            switch (currentModificationMode)
+            {
+                case UICommonScriptCheckWindow.ModificationMode.ModifyScriptValue:
+                    ModifyGameObject(resultItem, selectedFieldInfo);
+                    break;
+                case UICommonScriptCheckWindow.ModificationMode.AddRemoveScript:
+                    AddRemoveScript(resultItem, selectedScriptType, selectedOperation);
+                    break;
+            }
+        }
+
+        public void SetSelectedField(FieldInfo fieldInfo)
+        {
+            selectedFieldInfo = fieldInfo;
+        }
+
+        public void SetModificationMode(UICommonScriptCheckWindow.ModificationMode mode)
+        {
+            currentModificationMode = mode;
+        }
+
+        public void SetSelectedScriptType(Type scriptType, int operationIndex)
+        {
+            selectedScriptType = scriptType;
+            selectedOperation = operationIndex;
+        }
+
+
+        private Component FindComponentByLocalId(GameObject root, Type componentType, long localId)
+        {
+            var allTransforms = root.GetComponentsInChildren<Transform>();
+            foreach (var trans in allTransforms)
+            {
+                if (UIComponentCheckResultTableView.GetLocalIdentfierInFile(trans.gameObject) == localId)
+                {
+                    return trans.GetComponent(componentType);
+                }
+            }
+            return null;
+        }
+        
+
+        private void ModifyFieldValue(Component component, FieldInfo field)
+        {
+            Type fieldType = field.FieldType;
+            if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                Type listElementType = fieldType.GetGenericArguments()[0];
+                if (listElementType == typeof(int))
+                {
+                    field.SetValue(component,UICommonScriptCheckWindow.modifyField.intListValue);
+                }
+                else if (listElementType == typeof(float))
+                {
+                    field.SetValue(component,UICommonScriptCheckWindow.modifyField.floatListValue);
+                }
+                else if (listElementType == typeof(Color))
+                {
+                    field.SetValue(component,UICommonScriptCheckWindow.modifyField.colorListValue);
+                }
+            }
+            else
+            {
+                var result = Convert.ChangeType(UICommonScriptCheckWindow.modifyField.result, fieldType);
+                field.SetValue(component,result); 
+            }
+            
+        }
+
+
+        public void AddRemoveScriptAllResults(Type scriptType, int operationIndex)
+        {
+            foreach (var item in rootItem.children)
+            {
+                var resultItem = (UIComponentCheckResultViewItem)item;
+                if (resultItem != null)
+                {
+                    AddRemoveScript(resultItem, scriptType, operationIndex);
+                }
+            }
+        }
+
+        public void AddRemoveScriptSelectedResults(Type scriptType, int operationIndex)
+        {
+            foreach (var item in GetSelection())
+            {
+                var resultItem = (UIComponentCheckResultViewItem)FindItem(item, rootItem);
+                if (resultItem != null)
+                {
+                    AddRemoveScript(resultItem, scriptType, operationIndex);
+                }
+            }
+        }
+
+        private void AddRemoveScript(UIComponentCheckResultViewItem resultData, Type scriptType, int operationIndex)
+        {
+            var prefabRoot = resultData.prefabGo;
+            var transforms = prefabRoot.GetComponentsInChildren<Transform>(true);
+            foreach (var nodeId in resultData.nodeFileIds)
+            {
+                var component = FindComponentByLocalId(prefabRoot, scriptType, nodeId);
+                if ((modificationScriptOperations)operationIndex == modificationScriptOperations.Add)
+                {
+                    
+                    foreach (var trans in transforms)
+                    {
+                        if (component == null && UIComponentCheckResultTableView.GetLocalIdentfierInFile(trans.gameObject) == nodeId)
+                        {
+                            var newComponent = trans.gameObject.AddComponent(scriptType);
+                            if (newComponent != null)
+                            {
+                                Debug.Log($"Added component {scriptType.Name} to {prefabRoot.name}");
+                            }
+                        }
+                        
+                    }
+                }
+                else if ((modificationScriptOperations)operationIndex == modificationScriptOperations.Delete)
+                {
+                    if (component != null)
+                    {
+                        UnityEngine.Object.DestroyImmediate(component, true);
+                        Debug.Log($"Removed component {scriptType.Name} from {prefabRoot.name}");
+                    }
+                }
+            }
+
+            PrefabUtility.SavePrefabAsset(prefabRoot);
+        }
+    
+
     }
 }
 #endif

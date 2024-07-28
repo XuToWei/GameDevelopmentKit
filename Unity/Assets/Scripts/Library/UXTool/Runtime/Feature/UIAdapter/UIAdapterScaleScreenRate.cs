@@ -4,11 +4,23 @@ public class UIAdapterScaleScreenRate : MonoBehaviour
 {
     public float rateMinWidth, rateMinHeight = 1, rateMaxWidth = 2040, rateMaxHeight = 1080;
 
-
     public float scaleVal = 0.9f;
     // Start is called before the first frame update
-    void Start()
+
+    private bool inited;
+    private Vector3 originScale;
+    void OnEnable()
     {
+        if (!inited)
+        {
+            var transform = GetComponent<RectTransform>();
+            if (transform != null)
+            {
+                originScale = transform.localScale;
+                inited = true;
+            }
+        }
+
         Rect safeArea = UIAdapter.GetSafeArea();
 
         float rate = 0;
@@ -27,7 +39,7 @@ public class UIAdapterScaleScreenRate : MonoBehaviour
         float rateMax = rateMaxWidth / rateMaxHeight;
         if (rate >= rateMin && rate <= rateMax)
         {
-            transform.localScale *= scaleVal;
+            transform.localScale = originScale * scaleVal;
         }
     }
 }

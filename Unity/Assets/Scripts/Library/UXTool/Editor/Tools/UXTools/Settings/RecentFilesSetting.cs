@@ -11,16 +11,16 @@ namespace ThunderFireUITool
     [Serializable]
     public class RecentFilesSetting
     {
-        public List<string> Paths = new List<string>();
+        public List<string> List = new List<string>();
         [MenuItem(ThunderFireUIToolConfig.Menu_CreateAssets + "/" + ThunderFireUIToolConfig.RecentlySelected + "/RecentFilesSetting", false, -45)]
         public static void Create()
         {
             JsonAssetManager.CreateAssets<RecentFilesSetting>(ThunderFireUIToolConfig.FilesRecentSelectedPath);
         }
 
-        public void Add(string path)
+        public void Add(string guid)
         {
-            Paths.Insert(0, path);
+            List.Insert(0, guid);
             JsonAssetManager.SaveAssets(this);
             OnValueChanged();
         }
@@ -29,18 +29,18 @@ namespace ThunderFireUITool
         {
             if (index >= 0)
             {
-                Paths.RemoveAt(index);
+                List.RemoveAt(index);
             }
             JsonAssetManager.SaveAssets(this);
             OnValueChanged();
         }
 
-        public void Remove(string path)
+        public void Remove(string guid)
         {
-            var index = Paths.FindIndex(i => i == path);
+            var index = List.FindIndex(i => i == guid);
             if (index >= 0)
             {
-                Paths.RemoveAt(index);
+                List.RemoveAt(index);
             }
             JsonAssetManager.SaveAssets(this);
             OnValueChanged();

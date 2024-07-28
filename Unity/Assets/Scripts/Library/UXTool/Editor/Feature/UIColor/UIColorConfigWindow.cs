@@ -1,4 +1,6 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using ThunderFireUITool;
 using UnityEditor;
 using UnityEngine;
@@ -16,6 +18,8 @@ public class UIColorConfigWindow : EditorWindow
 
     private string SaveString;
 
+    private string InfoString;
+
     [MenuItem(ThunderFireUIToolConfig.Menu_UIColor, false, 53)]
     public static void ShowObjectWindow()
     {
@@ -30,6 +34,7 @@ public class UIColorConfigWindow : EditorWindow
         names[0] = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_颜色);
         names[1] = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_渐变);
         SaveString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_保存);
+        InfoString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_颜色配置命名规定);
 
         colorConfigScriptObject = JsonAssetManager.GetAssets<UIColorAsset>();//AssetDatabase.LoadAssetAtPath<UIColorAsset>(UIColorConfig.ColorConfigPath + UIColorConfig.ColorConfigName + ".asset");
         gradientConfigScriptObject = JsonAssetManager.GetAssets<UIGradientAsset>();//AssetDatabase.LoadAssetAtPath<UIGradientAsset>(UIColorConfig.ColorConfigPath + UIColorConfig.GradientConfigName + ".asset");
@@ -48,6 +53,7 @@ public class UIColorConfigWindow : EditorWindow
     {
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
         select = GUILayout.Toolbar(select, names, GUILayout.Width(120), GUILayout.Height(25));
+        EditorGUILayout.LabelField(InfoString);
         //Debug.Log(select);
         if (select == 0)
         {
@@ -58,6 +64,7 @@ public class UIColorConfigWindow : EditorWindow
             gradientConfigEditor.OnInspectorGUI();
         }
         EditorGUILayout.EndScrollView();
+        
         if (GUILayout.Button(SaveString))
         {
             if (select == 0)
@@ -82,12 +89,13 @@ public class UIColorConfigWindow : EditorWindow
 
     private void SaveColor()
     {
-        if (colorConfigScriptObject.HasSameNameOrEmptyName())
+        var colorNames = new List<string>();
+        foreach (var defColor in colorConfigScriptObject.defList)
         {
-            EditorUtility.DisplayDialog("Warning", "Has Empty Name or Duplicated Name.",
-                EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_确定));
-            return;
+            colorNames.Add(defColor.ColorDefName);
         }
+        if(!NameValid(colorNames)) return;
+     
 
         JsonAssetManager.SaveAssets(colorConfigScriptObject);
         colorConfigScriptObject.GenColorDefScript();
@@ -95,15 +103,59 @@ public class UIColorConfigWindow : EditorWindow
 
     private void SaveGradient()
     {
-        if (gradientConfigScriptObject.HasSameNameOrEmptyName())
+        var gradientNames = new List<string>();
+        foreach (var defGradient in gradientConfigScriptObject.defList)
         {
-            EditorUtility.DisplayDialog("Warning", "Has Empty Name or Duplicated Name.",
-                EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_确定));
-            return;
+            gradientNames.Add(defGradient.ColorDefName);
         }
+        if (!NameValid(gradientNames)) return;
 
         JsonAssetManager.SaveAssets(gradientConfigScriptObject);
         gradientConfigScriptObject.GenGradientScript();
+    }
+
+    private bool NameValid(List<string> colorNames)
+    {
+        var recordNames = new List<string>();
+        var invalidNames = "";
+        var sameNames = "";
+        
+        foreach (var colorName in colorNames)
+        {
+            // 是否空值
+            if (string.IsNullOrEmpty(colorName))
+            {
+                invalidNames += colorName + "\n";
+                continue;
+            }
+            // 是否重复
+            if (recordNames.Contains(colorName))
+            {
+                sameNames += colorName + "\n";
+                continue;
+            }
+            // 是否合法
+            if (!Regex.IsMatch(colorName, "^[a-zA-Z0-9_]+$"))
+            {
+                invalidNames += colorName + "\n";
+                continue;
+            }
+            recordNames.Add(colorName);
+        }
+
+        if (string.IsNullOrEmpty(invalidNames) && string.IsNullOrEmpty(sameNames)) return true;
+
+        var info = "";
+        if (!string.IsNullOrEmpty(invalidNames))
+        {
+            info += $"{EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_颜色配置命名非法)}\n{invalidNames}\n";
+        }
+        if (!string.IsNullOrEmpty(sameNames))
+        {
+            info += $"{EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_颜色配置命名重复)}\n{sameNames}\n";
+        }
+        EditorUtility.DisplayDialog("Warning", $"{info}", EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_确定));
+        return false;
     }
 
 }

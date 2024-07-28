@@ -10,6 +10,38 @@ using System.Threading;
 using System.Text;
 using System.Text.RegularExpressions;
 using ThunderFireUITool;
+using UnityEditor.IMGUI.Controls;
+
+public class AssetDescription : TreeViewItem
+{
+    public AssetDescription(){}
+    public AssetDescription(AssetDescription data)
+    {
+        name = data.name;
+        path = data.path;
+        count = data.count;
+        assetDependencyHashString = data.assetDependencyHashString;
+        dependencies = data.dependencies;
+        references = data.references;
+        state = data.state;
+    }
+    
+    public string name = "";
+    public string path = "";
+    public int count = 0;
+    public string assetDependencyHashString;
+    public List<string> dependencies = new List<string>();
+    public List<string> references = new List<string>();
+    public AssetState state = AssetState.NORMAL;
+}
+
+public enum AssetState
+{
+    NORMAL,
+    CHANGED,
+    MISSING,
+    NODATA,
+}
 
 public class ReferenceFinderData
 {
@@ -17,6 +49,7 @@ public class ReferenceFinderData
 
     //缓存路径
     private const string CACHE_PATH = "Library/ReferenceFinderCache-2019-10-09";
+
     //资源引用信息字典
     public Dictionary<string, AssetDescription> assetDict = new Dictionary<string, AssetDescription>();
     private const int MinThreadCount = 8;
@@ -47,6 +80,7 @@ public class ReferenceFinderData
             {
                 i.Clear();
             }
+
             threadAssetDict.Clear();
             for (int i = 0; i < ThreadCount; i++)
             {
@@ -56,22 +90,25 @@ public class ReferenceFinderData
             bool allThreadFinish = false;
             for (int i = 0; i < ThreadCount; i++)
             {
-                ThreadStart method = () => ReadAssetInfo();
+                ThreadStart method = ReadAssetInfo;
                 Thread readThread = new Thread(method);
                 threadList.Add(readThread);
                 readThread.Start();
             }
+
             while (!allThreadFinish)
             {
-                if ((curReadAssetCount % 500 == 0) && EditorUtility.DisplayCancelableProgressBar("更新中", string.Format("处理 {0}", curReadAssetCount), (float)curReadAssetCount / totalCount))
+                if ((curReadAssetCount % 500 == 0) && EditorUtility.DisplayCancelableProgressBar("更新中", $"处理 {curReadAssetCount}", (float)curReadAssetCount / totalCount))
                 {
                     EditorUtility.ClearProgressBar();
                     foreach (var i in threadList)
                     {
                         i.Abort();
                     }
+
                     return;
                 }
+
                 allThreadFinish = true;
                 foreach (var i in threadList)
                 {
@@ -82,6 +119,7 @@ public class ReferenceFinderData
                     }
                 }
             }
+
             foreach (var dict in threadAssetDict)
             {
                 foreach (var j in dict)
@@ -96,6 +134,7 @@ public class ReferenceFinderData
                     }
                 }
             }
+
             //将信息写入缓存
             EditorUtility.DisplayCancelableProgressBar("更新中", "写入缓存", 1f);
             WriteToChache();
@@ -121,6 +160,7 @@ public class ReferenceFinderData
         {
             end = totalCount;
         }
+
         int readAssetCount = 0;
         for (int i = start; i < end; i++)
         {
@@ -129,6 +169,7 @@ public class ReferenceFinderData
                 curReadAssetCount += readAssetCount;
                 readAssetCount = 0;
             }
+
             GetAsset(basePath, allAssets[i]);
             readAssetCount++;
         }
@@ -146,6 +187,7 @@ public class ReferenceFinderData
 
     // 注意 所有meta文件都要读
     private static Regex guidRegex = new Regex("guid: ([a-z0-9]{32})", RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
     public void GetAsset(string dataPath, string assetPath)
     {
         string extLowerStr = Path.GetExtension(assetPath).ToLower();
@@ -172,8 +214,10 @@ public class ReferenceFinderData
                 {
                     fileStr = File.ReadAllText(fileName, Encoding.UTF8);
                 }
+
                 guids = guidRegex.Matches(fileStr);
             }
+
             int curListIndex = Thread.CurrentThread.ManagedThreadId % ThreadCount;
             var curDict = threadAssetDict[curListIndex];
             if (!curDict.ContainsKey(selfGuid) || curDict[selfGuid].assetDependencyHashString != lastModifyTime)
@@ -185,6 +229,7 @@ public class ReferenceFinderData
                         depend.Add(i.Groups[1].Value.ToLower());
                     }
                 }
+
                 AssetDescription ad = new AssetDescription();
                 ad.name = Path.GetFileNameWithoutExtension(assetPath);
                 ad.path = assetPath;
@@ -238,11 +283,13 @@ public class ReferenceFinderData
                     EditorUtility.ClearProgressBar();
                     return false;
                 }
+
                 serializedGuid = (List<string>)bf.Deserialize(fs);
                 serializedDependencyHash = (List<string>)bf.Deserialize(fs);
                 serializedDenpendencies = (List<int[]>)bf.Deserialize(fs);
                 EditorUtility.ClearProgressBar();
             }
+
             for (int i = 0; i < serializedGuid.Count; ++i)
             {
                 string path = AssetDatabase.GUIDToAssetPath(serializedGuid[i]);
@@ -255,21 +302,21 @@ public class ReferenceFinderData
                     assetDict.Add(serializedGuid[i], ad);
                 }
             }
+
             for (int i = 0; i < serializedGuid.Count; ++i)
             {
                 string guid = serializedGuid[i];
                 if (assetDict.ContainsKey(guid))
                 {
-                    var guids = serializedDenpendencies[i].
-                                Select(index => serializedGuid[index]).
-                                Where(g => assetDict.ContainsKey(g)).
-                                ToList();
+                    var guids = serializedDenpendencies[i].Select(index => serializedGuid[index]).Where(g => assetDict.ContainsKey(g)).ToList();
                     assetDict[guid].dependencies = guids;
                 }
             }
+
             UpdateReferenceInfo();
             return true;
         }
+
         return false;
     }
 
@@ -280,6 +327,7 @@ public class ReferenceFinderData
         {
             File.Delete(CACHE_PATH);
         }
+
         //Debug.Log("write cache");
         var serializedGuid = new List<string>();
         var serializedDependencyHash = new List<string>();
@@ -295,6 +343,7 @@ public class ReferenceFinderData
                 serializedGuid.Add(pair.Key);
                 serializedDependencyHash.Add(pair.Value.assetDependencyHashString);
             }
+
             foreach (var guid in serializedGuid)
             {
                 List<int> res = new List<int>();
@@ -305,9 +354,11 @@ public class ReferenceFinderData
                         res.Add(guidIndex[i]);
                     }
                 }
+
                 int[] indexes = res.ToArray();
                 serializedDenpendencies.Add(indexes);
             }
+
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(fs, serializedGuid);
             bf.Serialize(fs, serializedDependencyHash);
@@ -367,6 +418,7 @@ public class ReferenceFinderData
         {
             return "<color=yellow>没缓存</color>";
         }
+
         return "<color=green>缓存正常</color>";
     }
 
@@ -378,6 +430,7 @@ public class ReferenceFinderData
             Debug.Log("有循环引用,计数可能不准");
             return 0;
         }
+
         guidStack.Add(assetGUID);
         var total = 0;
         if (assetDict.TryGetValue(assetGUID, out var value))
@@ -409,6 +462,7 @@ public class ReferenceFinderData
                 }
             }
         }
+
         guidStack.RemoveAt(guidStack.Count - 1);
         return total;
     }
@@ -420,6 +474,7 @@ public class ReferenceFinderData
     {
         dictCache.Clear();
     }
+
     public int GetRefCount(AssetDescription desc, AssetDescription parentDesc)
     {
         var total = 0;
@@ -427,11 +482,12 @@ public class ReferenceFinderData
         {
             return total;
         }
+
         var rootGUID = AssetDatabase.AssetPathToGUID(desc.path);
         List<string> guidInStack = new List<string>();
         guidInStack.Add(rootGUID);
 
-        Dictionary<string, int> cachedRefCount = new Dictionary<string, int>();//比较费
+        Dictionary<string, int> cachedRefCount = new Dictionary<string, int>(); //比较费
         foreach (var refs in desc.references)
         {
             if (!cachedRefCount.ContainsKey(refs))
@@ -441,6 +497,7 @@ public class ReferenceFinderData
                 total += refCount;
             }
         }
+
         if (desc.references.Count == 0 && parentDesc != null)
         {
             var guid = AssetDatabase.AssetPathToGUID(desc.path);
@@ -450,6 +507,7 @@ public class ReferenceFinderData
                     total++;
             }
         }
+
         guidInStack.RemoveAt(guidInStack.Count - 1);
         //特判是不是ProjectSetting的icon
         if (!string.IsNullOrEmpty(settingIconPath))
@@ -464,25 +522,6 @@ public class ReferenceFinderData
 
         dictCache.Add((desc, parentDesc), total);
         return total;
-    }
-
-    public sealed class AssetDescription
-    {
-        public string name = "";
-        public string path = "";
-        public int count = 0;
-        public string assetDependencyHashString;
-        public List<string> dependencies = new List<string>();
-        public List<string> references = new List<string>();
-        public AssetState state = AssetState.NORMAL;
-    }
-
-    public enum AssetState
-    {
-        NORMAL,
-        CHANGED,
-        MISSING,
-        NODATA,
     }
 }
 #endif

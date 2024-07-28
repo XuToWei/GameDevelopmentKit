@@ -1,6 +1,6 @@
 //RuntimePlatform无法处理不同引擎情况的平台判断，比如PC的引擎没有PS5的枚举，通过宏来判断平台更为通用
 //https://docs.unity3d.com/Manual/PlatformDependentCompilation.html
-public class UXPlatform
+public partial class UXPlatform
 {
     public static bool IsEditor()
     {
@@ -95,15 +95,6 @@ public class UXPlatform
     public static bool IsConsole()
     {
         return IsPS4() || IsPS5() || IsXbox();
-    }
-
-    //平台大类
-    public enum PlatformType
-    {
-        Other = 0,
-        PC = 1,
-        Console = 2,
-        Mobile = 3,
     }
 
     public static PlatformType GetPlatformType()

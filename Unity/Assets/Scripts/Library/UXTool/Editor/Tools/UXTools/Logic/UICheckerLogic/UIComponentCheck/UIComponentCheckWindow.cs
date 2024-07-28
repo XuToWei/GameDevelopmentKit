@@ -16,7 +16,7 @@ namespace ThunderFireUITool
         [MenuItem(ThunderFireUIToolConfig.Menu_ComponentCheck, false, 161)]
         public static void OpenWindow()
         {
-            int width = 900;
+            int width = 1180;
             int height = 500;
             m_window = GetWindow<UICommonScriptCheckWindow>();
             m_window.minSize = new Vector2(width, height);
@@ -25,8 +25,16 @@ namespace ThunderFireUITool
             m_window.InitWindowData();
             m_window.InitWindowUI();
         }
+        
+        [UnityEditor.Callbacks.DidReloadScripts(0)]
+        private static void OnScriptReload()
+        {
+            if (!HasOpenInstances<UICommonScriptCheckWindow>()) return;
+            m_window = GetWindow<UICommonScriptCheckWindow>();
+            m_window.InitWindowData();
+            m_window.InitWindowUI();
+        }
 
-        private static GUIStyle hierarchyReferenceStyle;
         public static List<Transform> checkResultGoTransList = new List<Transform>();
         [SerializeField]
         private TreeViewState m_resultTreeViewState;
@@ -34,7 +42,7 @@ namespace ThunderFireUITool
 
 
         private List<UIComponentCheckFilterBase> m_filterList = new List<UIComponentCheckFilterBase>();
-        private List<UIComponentCheckResult> m_results;
+        private List<UIComponentCheckResultViewItem> m_results;
 
         public static string CheckOptionString; //筛选条件
         public static string CheckAddOptionString; //添加筛选条件
@@ -50,12 +58,38 @@ namespace ThunderFireUITool
         public static string CheckFieldString; //变量名称
         public static string FilterTipsString;//请选择可以添加到GameObject上的脚本
         public static string CompareOptionString; //变量比较选项
+        public static string ModifyValueString; // 修改值
+        public static string ModifyAllString; //全部修改
+        public static string ModifySelectedString; //修改选中
+        public static string ModifyString;//修改
+        public static string UnselectedFieldString; //未选择字段提示
+        public static string ModifyOption; //修改方式
+        public static string ModifyOperation; //修改操作
+        public static string ScriptSelect;//脚本选择
+        public static UIComponentCheckFilterCompareValueDrawer modifyField = new UIComponentCheckFilterCompareValueDrawer();
+        private object modifyValue;
+        private FieldInfo selectedFieldInfo;
+        private Type selectedFieldType;
+        public List<UIComponentCheckFilterBase> m_ckeckList = new List<UIComponentCheckFilterBase>();
+        private int selectedFieldIndex = 0;
+        private int selectedValueScriptIndex = 0;
+
+        public enum ModificationMode
+        {
+            ModifyScriptValue,
+            AddRemoveScript
+        }
+        public ModificationMode selectedModificationMode;
+        private int selectedScriptIndex;
+        private string[] scriptOptions;
+        private int selectedModificationOperationIndex;
+        private string[] modificationOperations = { "Add", "Delete" };
 
 
         private void InitWindowData()
         {
             m_filterList = new List<UIComponentCheckFilterBase>();
-            m_results = new List<UIComponentCheckResult>();
+            m_results = new List<UIComponentCheckResultViewItem>();
 
             CheckOptionString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_筛选条件);
             CheckAddOptionString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_添加筛选条件);
@@ -71,15 +105,18 @@ namespace ThunderFireUITool
             CheckFieldString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_变量名称);
             FilterTipsString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_检查脚本提示);
             CompareOptionString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_比较方式);
+            ModifyValueString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_修改值);
+            ModifyAllString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_全部修改);
+            ModifySelectedString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_修改选中);
+            ModifyString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_修改);
+            UnselectedFieldString = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_未选择字段);
+            ModifyOption = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_修改方式);
+            ModifyOperation = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_修改操作);
+            ScriptSelect = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_脚本选择);
 
             if (m_resultTreeView == null)
             {
-                //初始化TreeView
-                if (m_resultTreeViewState == null)
-                    m_resultTreeViewState = new TreeViewState();
-                var headerState = UIComponentCheckResultTableView.CreateDefaultMultiColumnHeaderState(position.width);
-                var multiColumnHeader = new MultiColumnHeader(headerState);
-                m_resultTreeView = new UIComponentCheckResultTableView(m_resultTreeViewState, multiColumnHeader);
+                m_resultTreeView = EditorUIUtils.CreateTreeView<UIComponentCheckResultTableView, UIComponentCheckResultViewItem>();
             }
             m_resultTreeView.Reload();
         }
@@ -91,19 +128,7 @@ namespace ThunderFireUITool
 
         private void OnEnable()
         {
-            hierarchyReferenceStyle = new GUIStyle()
-            {
-                padding =
-            {
-                left = EditorStyles.label.padding.left + 1,
-                top = EditorStyles.label.padding.top + 1
-            },
-                normal =
-                {
-                    textColor = Color.yellow
-                }
-            };
-
+            
             EditorApplication.hierarchyWindowItemOnGUI += HandleHierarchyWindowItemOnGUI;
         }
 
@@ -115,6 +140,18 @@ namespace ThunderFireUITool
 
         static void HandleHierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
         {
+            var hierarchyReferenceStyle = new GUIStyle()
+            {
+                padding =
+                {
+                    left = EditorStyles.label.padding.left + 1,
+                    top = EditorStyles.label.padding.top + 1
+                },
+                normal =
+                {
+                    textColor = Color.yellow
+                }
+            };
             GameObject obj = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
             if (obj != null)
             {
@@ -132,7 +169,10 @@ namespace ThunderFireUITool
         {
             DrawFilterList();
             DrawOptionBar();
-
+            if (m_filterList.Count > 0)
+            {
+                DrawModifyBar();
+            }
             //DrawResultListViewIMGUI();
             DrawResultListView();
         }
@@ -192,40 +232,121 @@ namespace ThunderFireUITool
         //使用TreeView画列表
         private void DrawResultListView()
         {
-
             Rect controlrect = EditorGUILayout.GetControlRect(true);
             Rect rect = new Rect(controlrect.x, controlrect.y, position.width, position.height - controlrect.y);
-            m_resultTreeView.OnGUI(rect);
+            m_resultTreeView?.OnGUI(rect);
         }
-        //IMGUI直接画列表，已经不用了
-        private void DrawResultListViewIMGUI()
+        private void DrawModifyBar()
         {
+            EditorGUIUtility.labelWidth = 100;
             EditorGUILayout.BeginHorizontal();
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-            foreach (UIComponentCheckResult result in m_results)
+            EditorGUILayout.LabelField(ModifyOption, GUILayout.Width(90));
+            selectedModificationMode = (ModificationMode)EditorGUILayout.EnumPopup(selectedModificationMode, GUILayout.Width(150));
+            EditorGUILayout.EndHorizontal();
+
+            switch (selectedModificationMode)
             {
-                EditorGUILayout.BeginHorizontal();
-
-                EditorGUILayout.BeginVertical();
-                EditorGUILayout.ObjectField(result.prefabGo, typeof(GameObject), false, GUILayout.Width(200));
-                EditorGUILayout.EndVertical();
-
-                EditorGUILayout.LabelField("", GUI.skin.verticalSlider, GUILayout.Height(100), GUILayout.Width(5));
-
-                EditorGUILayout.BeginVertical();
-                foreach (string gopath in result.nodePaths)
-                {
-                    EditorGUILayout.LabelField(gopath, GUILayout.Width(200));
-                }
-                EditorGUILayout.EndVertical();
-
-                EditorGUILayout.EndHorizontal();
-                EditorGUILayout.Space(5);
-                EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+                case ModificationMode.ModifyScriptValue:
+                    DrawModifyScriptValueUI();
+                    m_resultTreeView.SetModificationMode(ModificationMode.ModifyScriptValue);
+                    break;
+                case ModificationMode.AddRemoveScript:
+                    DrawAddRemoveScriptUI();
+                    m_resultTreeView.SetModificationMode(ModificationMode.AddRemoveScript);
+                    break;
             }
-            EditorGUILayout.EndScrollView();
+
+            EditorGUIUtility.labelWidth = 0;
+        }
+        private void DrawModifyScriptValueUI()
+        {
+            EditorGUILayout.BeginHorizontal();            
+
+            var filtersWithScripts = m_ckeckList
+                .OfType<UIComponentValueCheckFilter>()
+                .Where(filter => filter.m_selectMonoScript != null)
+                .ToList();
+
+            scriptOptions = filtersWithScripts
+                .Select(filter => filter.m_selectMonoScript.name)
+                .ToArray();
+
+            if (scriptOptions.Length > 0)
+            {
+
+                EditorGUILayout.LabelField(ScriptSelect, GUILayout.Width(90));
+                selectedValueScriptIndex = EditorGUILayout.Popup(selectedValueScriptIndex, scriptOptions, GUILayout.Width(150));
+
+                var selectedFilter = filtersWithScripts[selectedValueScriptIndex];
+                selectedFilter.UpdateComponentFieldList(selectedFilter.m_selectMonoScript);
+                string[] fieldNames = selectedFilter.m_fieldDic.Keys.ToArray();
+                selectedFieldIndex = EditorGUILayout.Popup(selectedFieldIndex, fieldNames, GUILayout.Width(150));
+                FieldInfo fieldInfo = selectedFilter.m_fieldDic[fieldNames[selectedFieldIndex]];
+
+                EditorGUILayout.LabelField(ModifyValueString, GUILayout.Width(90));
+                modifyValue = modifyField.DrawFieldValueInput(modifyValue, fieldInfo);
+                m_resultTreeView.SetSelectedField(fieldInfo);
+                if (GUILayout.Button(ModifyAllString, GUILayout.Width(110)))
+                {
+                    m_resultTreeView.ModifyAllResults(fieldInfo);
+                }
+                if (GUILayout.Button(ModifySelectedString, GUILayout.Width(110)))
+                {
+                    m_resultTreeView.ModifySelectedResults(fieldInfo);
+                }
+            }
+            
             EditorGUILayout.EndHorizontal();
         }
+
+        private void DrawAddRemoveScriptUI()
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            var filtersWithScripts = m_filterList
+                .Where(filter => filter.m_selectMonoScript != null)
+                .ToList();
+
+            scriptOptions = filtersWithScripts
+                .Select(filter => filter.m_selectMonoScript.name)
+                .ToArray();
+            
+            if (scriptOptions.Length > 0)
+            {
+                EditorGUILayout.LabelField(ScriptSelect, GUILayout.Width(90));
+                selectedScriptIndex = EditorGUILayout.Popup(selectedScriptIndex, scriptOptions, GUILayout.Width(150));
+                EditorGUILayout.LabelField(ModifyOperation, GUILayout.Width(90));
+                selectedModificationOperationIndex = EditorGUILayout.Popup(selectedModificationOperationIndex, modificationOperations, GUILayout.Width(150));
+                var selectedFilter = filtersWithScripts[selectedScriptIndex];
+                Type scriptType = selectedFilter.m_selectMonoScript.GetClass();
+                m_resultTreeView.SetSelectedScriptType(scriptType, selectedModificationOperationIndex);
+                if (GUILayout.Button(ModifyAllString, GUILayout.Width(110)))
+                {  
+                    m_resultTreeView.AddRemoveScriptAllResults(scriptType, selectedModificationOperationIndex);
+                }
+                if (GUILayout.Button(ModifySelectedString, GUILayout.Width(110)))
+                {
+                    m_resultTreeView.AddRemoveScriptSelectedResults(scriptType, selectedModificationOperationIndex);
+                }
+                
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+        private void ModifyAllResults()
+        {
+            m_resultTreeView.ModifyAllResults(selectedFieldInfo);
+        }
+        private void ModifySelectedResults()
+        {
+            m_resultTreeView.ModifySelectedResults(selectedFieldInfo);
+        }
+
+        public void SetSelectedField(FieldInfo fieldInfo)
+        {
+            selectedFieldInfo = fieldInfo;
+            selectedFieldType = fieldInfo.FieldType;
+        }
+
         #endregion
 
 
@@ -284,7 +405,7 @@ namespace ThunderFireUITool
 
                 if (resultGoPaths.Count > 0)
                 {
-                    UIComponentCheckResult checkResult = new UIComponentCheckResult();
+                    UIComponentCheckResultViewItem checkResult = new UIComponentCheckResultViewItem();
                     checkResult.prefabPath = prefabPath;
                     checkResult.prefabGo = prefab;
                     checkResult.nodePaths = resultGoPaths;
@@ -297,7 +418,7 @@ namespace ThunderFireUITool
         public void RemoveFilter(UIComponentCheckFilterBase filter)
         {
             m_filterList.Remove(filter);
-
+            m_ckeckList.Remove(filter);
             Repaint();
         }
 
@@ -313,6 +434,7 @@ namespace ThunderFireUITool
             {
                 var filter = new UIComponentValueCheckFilter(this);
                 m_filterList.Add(filter);
+                m_ckeckList.Add(filter);
             }
         }
 
@@ -322,6 +444,7 @@ namespace ThunderFireUITool
 
             foreach (var filter in m_filterList)
             {
+                if (!filter.m_selectMonoScript) continue;
                 result = filter.Filt(go);
                 if (result == false)
                     break;

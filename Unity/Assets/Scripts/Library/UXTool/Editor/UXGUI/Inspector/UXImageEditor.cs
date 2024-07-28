@@ -444,6 +444,11 @@ namespace UnityEngine.UI
             NativeSizeButtonGUI();
 
             FlipGUI();
+            UXImage uxImage = (UXImage)target;
+            if((uxImage.rectTransform.rect.width == 0 || uxImage.rectTransform.rect.height == 0) && uxImage.m_FlipMode != UXImage.FlipMode.None)
+            {
+                EditorGUILayout.HelpBox(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_镜像模式警告), MessageType.Warning);
+            }
             
             if (image.material != null && image.material.name.Contains("UXImage"))
             {

@@ -22,8 +22,8 @@ namespace ThunderFireUITool
         {
             if (SwitchSetting.CheckValid(SwitchSetting.SwitchType.RecentlySelected))
             {
-                var savePath = JsonAssetManager.GetAssets<RecentFilesSetting>();
-                var recentFilePaths = savePath.Paths;
+                var recentSelected = JsonAssetManager.GetAssets<RecentFilesSetting>();
+                var recentList = recentSelected.List;
                 commonData = AssetDatabase.LoadAssetAtPath<UXToolCommonData>(ThunderFireUIToolConfig.UXToolCommonDataPath);
                 if (commonData != null)
                 {
@@ -35,25 +35,26 @@ namespace ThunderFireUITool
                 }
                 foreach (Object obj in Selection.objects)
                 {
-                    string path = AssetDatabase.GetAssetPath(obj);
+                    //string path = AssetDatabase.GetAssetPath(obj);
+                    string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(obj));
                     GameObject go = obj as GameObject;
                     if (go != null && PrefabUtility.IsPartOfPrefabInstance(go))
                     {
                         Object sourcePrefab = PrefabUtility.GetCorrespondingObjectFromSource(go);
-                        path = AssetDatabase.GetAssetPath(sourcePrefab);
+                        guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(sourcePrefab));
                     }
-                    if (recentFilePaths.Contains(path))
+                    if (recentList.Contains(guid))
                     {
-                        savePath.Remove(path);
+                        recentSelected.Remove(guid);
                     }
-                    if (path != "" && !recentFilePaths.Contains(path))
+                    if (guid != "" && !recentList.Contains(guid))
                     {
-                        savePath.Add(path);
+                        recentSelected.Add(guid);
                     }
                 }
-                while (recentFilePaths.Count > maxRecentSelectedFiles)
+                while (recentList.Count > maxRecentSelectedFiles)
                 {
-                    savePath.Remove(recentFilePaths.Count - 1);
+                    recentSelected.Remove(recentList.Count - 1);
                 }
             }
 

@@ -40,13 +40,13 @@ namespace UnityEditor.UI
                 EditorGUILayout.HelpBox("Child's IsReverse driven by Child UXMask.", MessageType.Warning);
             }
             EditorGUILayout.PropertyField(m_IsReverseMask);
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(m_UseSpriteAlpha);
-            if (EditorGUI.EndChangeCheck())
-            {
-                // 在这里处理属性值的变化
-                (target as UXMask).UseSpriteAlpha = m_UseSpriteAlpha.boolValue;
-            }
+            // EditorGUI.BeginChangeCheck();
+            // EditorGUILayout.PropertyField(m_UseSpriteAlpha);
+            // if (EditorGUI.EndChangeCheck())
+            // {
+            //     // 在这里处理属性值的变化
+            //     (target as UXMask).UseSpriteAlpha = m_UseSpriteAlpha.boolValue;
+            // }
             serializedObject.ApplyModifiedProperties();
         }
     }

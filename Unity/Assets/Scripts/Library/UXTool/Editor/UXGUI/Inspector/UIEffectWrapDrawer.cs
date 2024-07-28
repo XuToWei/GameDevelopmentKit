@@ -35,16 +35,21 @@ namespace UnityEngine.UI
             }
             else if(targetType == EffectDrawerTargetType.UXText)
             {
-                hasOutline = go.HasComponent<Outline>();
+                hasOutline = false;
+                if(go.HasComponent<UXOutline>()){
+                    UXOutline us = go.TryGetComponent<UXOutline>();
+                    hasOutline = us.enabled;
+                }
             }
         }
 
         public static Rect ClacButtonRect(int index, Rect position)
         {
+            // Changed by GDK 60->70
             var buttonRect = new Rect(position)
             {
-                x = position.x + EditorGUIUtility.labelWidth + (index - 1) * (60+ 10) + 2,
-                width = 60
+                x = position.x + EditorGUIUtility.labelWidth + (index - 1) * (70 + 10) + 2,
+                width = 70
             };
             return buttonRect;
         }
@@ -97,7 +102,14 @@ namespace UnityEngine.UI
             }
             else if(targetType == EffectDrawerTargetType.UXText)
             {
-                target.TryAddComponent<Outline>();
+                UXOutline us = target.TryGetComponent<UXOutline>();
+                if (us != null)
+                {
+                    us.enabled = true;
+                }
+                else {
+                    target.TryAddComponent<UXOutline>();
+                }
             }
         }
         private static void RemoveOutLineComponent(GameObject target)
@@ -106,6 +118,11 @@ namespace UnityEngine.UI
             if (s != null)
             {
                 Object.DestroyImmediate(s);
+            }
+            UXOutline us = target.TryGetComponent<UXOutline>();
+            if (us != null)
+            {
+                us.enabled = false;
             }
         }
 

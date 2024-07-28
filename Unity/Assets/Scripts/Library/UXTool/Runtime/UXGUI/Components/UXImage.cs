@@ -710,6 +710,10 @@ namespace UnityEngine.UI
         }
         public void RemapVertex(ref UIVertex vertex, FlipMode flipMode, float Min1, float Max1, float Min2, float Max2)
         {
+            if(Min1 == Max1)
+            {
+                return;
+            }
             Vector2 position = vertex.position;
             float k = (Min2 - Max2) / (Min1 - Max1);
             float b = Min2 - Min1 * k;

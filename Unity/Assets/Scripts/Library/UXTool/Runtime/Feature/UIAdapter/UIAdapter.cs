@@ -15,8 +15,9 @@ public class UIAdapter : MonoBehaviour
     RectTransform Panel;
     Rect LastSafeArea = new Rect(0, 0, 0, 0);
 
-    public static float designAspectRatio = (float)1920 / 1080;
-
+    public static float designAspectRatio = 1.8f; // (float)1920 / 1080 = 1.777; (float)1334/750 = 1.778, 取个整
+    public static float longScreenSafeArea = 102;
+    public static float shortScreenSafeArea = 20;
     public static Rect GetSafeArea()
     {
         float screenWidth = Screen.width;
@@ -24,24 +25,30 @@ public class UIAdapter : MonoBehaviour
 
         float aspectRatio = screenWidth / screenHeight;
         Rect safeArea = Screen.safeArea;
-        if (Application.isPlaying)
-        {
-            //是否长屏
-            if (aspectRatio > designAspectRatio)
-            {
-                //有些机型左侧没有安全区,这里加个iOS右侧安全区默认值,方便交互统一设计
-                if (safeArea.x == 0)
-                {
-                    safeArea.x += 102;
-                    safeArea.width -= 102;
-                }
 
-                //有些机型右侧没有安全区,这里加个iOS右侧安全区默认值,方便交互统一设计
-                if (safeArea.width + safeArea.x == screenWidth)
-                {
-                    safeArea.width -= 102;
-                }
-            }
+        float defaultScreenSafeArea;
+        if (aspectRatio > designAspectRatio)
+        {
+            //长屏默认安全区
+            defaultScreenSafeArea = longScreenSafeArea;
+        }
+        else
+        {
+            //短屏默认安全区
+            defaultScreenSafeArea = shortScreenSafeArea;
+        }
+
+        //左侧没有安全区, 添加安全区默认值,方便交互统一设计
+        if (safeArea.x == 0 && Application.isPlaying)
+        {
+            safeArea.x += defaultScreenSafeArea;
+            safeArea.width -= defaultScreenSafeArea;
+        }
+
+        //右侧没有安全区,给右侧也加上安全区
+        if (safeArea.width + safeArea.x == screenWidth)
+        {
+            safeArea.width -= defaultScreenSafeArea;
         }
 
         return safeArea;
@@ -53,7 +60,21 @@ public class UIAdapter : MonoBehaviour
         oldAnchorMin = Panel.anchorMin;
         oldAnchorMax = Panel.anchorMax;
         Refresh();
+#if UNITY_EDITOR
+#if UNITY_2021_2_OR_NEWER
+        if(!UIDeviceSimulatorChangeController.UIAdapters.Contains(this))
+            UIDeviceSimulatorChangeController.UIAdapters.Add(this);
+#endif
+#endif
+    }
 
+    void OnDestroy(){
+#if UNITY_EDITOR
+#if UNITY_2021_2_OR_NEWER
+        if(UIDeviceSimulatorChangeController.UIAdapters.Contains(this))
+            UIDeviceSimulatorChangeController.UIAdapters.Remove(this);
+#endif
+#endif
     }
 
     public void Refresh()

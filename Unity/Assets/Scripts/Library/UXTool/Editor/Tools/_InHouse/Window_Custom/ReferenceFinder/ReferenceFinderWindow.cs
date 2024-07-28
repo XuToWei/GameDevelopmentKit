@@ -1,12 +1,11 @@
 #if UNITY_EDITOR
-using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.IMGUI.Controls;
-using System.Linq;
 using System.Text;
+
 namespace ThunderFireUITool
 {
     public class ReferenceInfo : EditorWindow
@@ -17,32 +16,35 @@ namespace ThunderFireUITool
         public static ReferenceFinderData data = new ReferenceFinderData();
         private static bool initializedData = false;
 
-        private bool isDepend = false;
+
         public bool needUpdateState = true;
 
         public bool needUpdateAssetTree = false;
+
         //更新排序不更新树时，不需要更新信息
         public bool needUpdateAssetTreeMessage = false;
+
         private bool initializedGUIStyle = false;
+
         //工具栏按钮样式
         private GUIStyle toolbarButtonGUIStyle;
+
         //工具栏样式
         private GUIStyle toolbarGUIStyle;
+
         //选中资源列表
         public List<string> selectedAssetGuid = new List<string>();
 
         public AssetTreeView m_AssetTreeView;
 
-        [SerializeField]
-        private TreeViewState m_TreeViewState;
+        [SerializeField] private TreeViewState m_TreeViewState;
 
         public static List<Transform> referenceGoTransList = new List<Transform>();
-        private static GUIStyle hierarchyReferenceStyle;
 
         private string docUrl = "https://confluence.leihuo.netease.com/pages/viewpage.action?pageId=21214849";
 
         //查找选中资源引用信息
-        [MenuItem("Assets/查找资源的引用 (Find Reference)", false, -801)]
+        [MenuItem("Assets/==查找资源的引用== (Find Reference)", false, -801)]
         static void FindRef()
         {
             InitDataIfNeeded();
@@ -84,20 +86,8 @@ namespace ThunderFireUITool
 
         private void OnEnable()
         {
-            isDepend = PlayerPrefs.GetInt(isDependPrefKey, 0) == 1;
-
-            hierarchyReferenceStyle = new GUIStyle()
-            {
-                padding =
-            {
-                left = EditorStyles.label.padding.left + 1,
-                top = EditorStyles.label.padding.top + 1
-            },
-                normal =
-                {
-                    textColor =Color.yellow
-                }
-            };
+            //var isDepend = PlayerPrefs.GetInt(isDependPrefKey, 0) == 1;
+            m_AssetTreeView = EditorUIUtils.CreateTreeView<AssetTreeView, AssetDescription>();
 
             EditorApplication.hierarchyWindowItemOnGUI += HandleHierarchyWindowItemOnGUI;
         }
@@ -111,6 +101,19 @@ namespace ThunderFireUITool
 
         static void HandleHierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
         {
+            var hierarchyReferenceStyle = new GUIStyle()
+            {
+                padding =
+                {
+                    left = EditorStyles.label.padding.left + 1,
+                    top = EditorStyles.label.padding.top + 1
+                },
+                normal =
+                {
+                    textColor = Color.yellow
+                }
+            };
+            
             GameObject obj = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
             if (obj != null)
             {
@@ -132,6 +135,7 @@ namespace ThunderFireUITool
                 {
                     data.CollectDependenciesInfo();
                 }
+
                 initializedData = true;
             }
         }
@@ -192,6 +196,7 @@ namespace ThunderFireUITool
                 string path = AssetDatabase.GetAssetPath(obj);
                 UpdateSelectedAsset(path);
             }
+
             needUpdateAssetTree = true;
             needUpdateAssetTreeMessage = true;
         }
@@ -218,7 +223,7 @@ namespace ThunderFireUITool
                             foreach (var guid in guids)
                             {
                                 if (!selectedAssetGuid.Contains(guid) &&
-                                        !Directory.Exists(AssetDatabase.GUIDToAssetPath(guid)))
+                                    !Directory.Exists(AssetDatabase.GUIDToAssetPath(guid)))
                                 {
                                     selectedAssetGuid.Add(guid);
                                 }
@@ -231,6 +236,7 @@ namespace ThunderFireUITool
                             selectedAssetGuid.Add(guid);
                         }
                     }
+
                     needUpdateAssetTree = true;
                     needUpdateAssetTreeMessage = true;
                 }
@@ -243,26 +249,10 @@ namespace ThunderFireUITool
             if (needUpdateAssetTree && selectedAssetGuid.Count != 0)
             {
                 var root = SelectedAssetGuidToRootItem(selectedAssetGuid);
-                if (m_AssetTreeView == null)
-                {
-                    //初始化TreeView
-                    if (m_TreeViewState == null)
-                        m_TreeViewState = new TreeViewState();
-                    var headerState = AssetTreeView.CreateDefaultMultiColumnHeaderState(position.width, isDepend);
-                    //var multiColumnHeader = new MultiColumnHeader(headerState);
-                    var multiColumnHeader = new ClickColumn(headerState);
-                    m_AssetTreeView = new AssetTreeView(m_TreeViewState, multiColumnHeader);
-                }
-                else
-                {
-                    //var headerState = AssetTreeView.CreateDefaultMultiColumnHeaderState(position.width, isDepend);
-                    //var multiColumnHeader = new ClickColumn(headerState);
-                    //m_AssetTreeView.multiColumnHeader = multiColumnHeader;
-                }
 
-                m_AssetTreeView.assetRoot = root;
+                m_AssetTreeView.AssetRoot = root;
                 //m_AssetTreeView.CollapseAll();
-                m_AssetTreeView.Reload();
+                //m_AssetTreeView.Reload();
                 needUpdateAssetTree = false;
 
 
@@ -271,7 +261,7 @@ namespace ThunderFireUITool
                 string prefabName = "";
                 string matName = "";
                 StringBuilder sb = new StringBuilder();
-                if (needUpdateAssetTreeMessage == true && artInfo.Count > 0)
+                if (needUpdateAssetTreeMessage && artInfo.Count > 0)
                 {
                     //更新引用数信息
                     m_AssetTreeView.GetRefCount();
@@ -283,18 +273,24 @@ namespace ThunderFireUITool
                             totalPrefab += kv.Value.count;
                             prefabName += kv.Value.name + "<--->";
                         }
+
                         if (kv.Value.type == "mat")
                         {
                             totalMat += kv.Value.count;
                             matName += kv.Value.name + "<--->";
                         }
-                        string tempInfo = $"name  <color=green>[{kv.Key}]</color>, type: <color=orange>[{kv.Value.type}]</color>, count: <color=red>[{kv.Value.count}]</color>";//"name:  " + kv.Key + "  type:  " + <color=orange>[{Time.frameCount}]</color>kv.Value.type + "  count:  " + kv.Value.count + "\r\n";
+
+                        string
+                            tempInfo =
+                                $"name  <color=green>[{kv.Key}]</color>, type: <color=orange>[{kv.Value.type}]</color>, count: <color=red>[{kv.Value.count}]</color>"; //"name:  " + kv.Key + "  type:  " + <color=orange>[{Time.frameCount}]</color>kv.Value.type + "  count:  " + kv.Value.count + "\r\n";
                         sb.AppendLine(tempInfo);
                     }
+
                     sb.Insert(0, $"Prefab总数  <color=red>[{totalPrefab}]</color>  Prefab详情  <color=green>[{prefabName}]</color> \r\n");
                     sb.Insert(0, $"Mat总数  <color=red>[{totalMat}]</color>  Mat详情  <color=green>[{matName}]</color>  \r\n");
                     Debug.Log(sb.ToString());
                 }
+
                 needUpdateAssetTreeMessage = false;
             }
         }
@@ -306,11 +302,8 @@ namespace ThunderFireUITool
             InitGUIStyleIfNeeded();
             DrawOptionBar();
             UpdateAssetTree();
-            if (m_AssetTreeView != null)
-            {
-                //绘制Treeview
-                m_AssetTreeView.OnGUI(new Rect(0, toolbarGUIStyle.fixedHeight, position.width, position.height - toolbarGUIStyle.fixedHeight));
-            }
+            //绘制Treeview
+            m_AssetTreeView?.OnGUI(new Rect(0, toolbarGUIStyle.fixedHeight, position.width, position.height - toolbarGUIStyle.fixedHeight));
         }
 
         //绘制上条
@@ -320,28 +313,33 @@ namespace ThunderFireUITool
             //刷新数据
             if (GUILayout.Button("点击更新本地库", toolbarButtonGUIStyle))
             {
-                data.CollectDependenciesInfo();
+                data.CollectDependenciesInfo(); 
                 needUpdateAssetTree = true;
                 EditorGUIUtility.ExitGUI();
             }
+
             //修改模式
-            bool PreIsDepend = isDepend;
-            isDepend = GUILayout.Toggle(isDepend, isDepend ? "依赖模式" : "引用模式", toolbarButtonGUIStyle, GUILayout.Width(100));
-            if (PreIsDepend != isDepend)
+            //bool PreIsDepend = m_AssetTreeView.IsDepend;
+            //m_AssetTreeView.IsDepend = GUILayout.Toggle(m_AssetTreeView.IsDepend, m_AssetTreeView.IsDepend ? "依赖模式" : "引用模式", toolbarButtonGUIStyle, GUILayout.Width(100));
+            
+            /*if (PreIsDepend != m_AssetTreeView.IsDepend)
             {
                 OnModelSelect();
-            }
+            }*/
+
             GUILayout.FlexibleSpace();
             //文档
             if (GUILayout.Button("使用说明", toolbarButtonGUIStyle))
             {
                 Application.OpenURL(docUrl);
             }
+
             //扩展
             if (GUILayout.Button("展开", toolbarButtonGUIStyle))
             {
                 if (m_AssetTreeView != null) m_AssetTreeView.ExpandAll();
             }
+
             //折叠
             if (GUILayout.Button("折叠", toolbarButtonGUIStyle))
             {
@@ -350,47 +348,50 @@ namespace ThunderFireUITool
 
             EditorGUILayout.EndHorizontal();
         }
+
         private string GetSelPath()
         {
             if (m_AssetTreeView == null)
                 return string.Empty;
-            if (m_AssetTreeView.assetRoot != null && m_AssetTreeView.assetRoot.children.Count > 0)
+            if (m_AssetTreeView.AssetRoot != null && m_AssetTreeView.AssetRoot.children.Count > 0)
             {
-                AssetViewItem item = m_AssetTreeView.assetRoot.children[0] as AssetViewItem;
-                string path = item.data.path;
+                AssetDescription item = m_AssetTreeView.AssetRoot.children[0] as AssetDescription;
+                string path = item.path;
                 string aa = "Assets";
                 int pos = path.IndexOf(aa);
                 return path.Substring(0, pos + aa.Length + 1);
             }
+
             return string.Empty;
         }
-        private void OnModelSelect()
+
+        /*private void OnModelSelect()
         {
             needUpdateAssetTree = true;
-            PlayerPrefs.SetInt(isDependPrefKey, isDepend ? 1 : 0);
-            var headerState = AssetTreeView.CreateDefaultMultiColumnHeaderState(position.width, isDepend);
-            var multiColumnHeader = new ClickColumn(headerState);
-            m_AssetTreeView.multiColumnHeader = multiColumnHeader;
+            // PlayerPrefs.SetInt(isDependPrefKey, m_AssetTreeView.IsDepend ? 1 : 0);
+            m_AssetTreeView = EditorUIUtils.CreateTreeView<AssetTreeView, AssetDescription>(m_AssetTreeView.state);
             UpdateAssetTree();
-        }
+        }*/
 
 
         //生成root相关
         private HashSet<string> updatedAssetSet = new HashSet<string>();
         private HashSet<string> ParentAssetIsAdd = new HashSet<string>();
+
         private HashSet<string> BrotherAssetIsAdd = new HashSet<string>();
+
         //通过选择资源列表生成TreeView的根节点
-        private AssetViewItem SelectedAssetGuidToRootItem(List<string> selectedAssetGuid)
+        private AssetDescription SelectedAssetGuidToRootItem(List<string> selectedAssetGuid)
         {
             updatedAssetSet.Clear();
             ParentAssetIsAdd.Clear();
             BrotherAssetIsAdd.Clear();
             int elementCount = 0;
-            var root = new AssetViewItem { id = elementCount, depth = -1, displayName = "Root", data = null };
+            var root = new AssetDescription { id = elementCount, depth = -1, displayName = "Root" };
             int depth = 0;
             foreach (var childGuid in selectedAssetGuid)
             {
-                AssetViewItem rs = null;
+                AssetDescription rs = null;
                 rs = CreateTree(childGuid, ref elementCount, depth);
                 root.AddChild(rs);
             }
@@ -399,14 +400,16 @@ namespace ThunderFireUITool
             return root;
         }
 
-        Dictionary<string, ListInfo> artInfo = new Dictionary<string, ListInfo>();  //记录输出给美术用
-                                                                                    //通过每个节点的数据生成子节点
-        private AssetViewItem CreateTree(string guid, ref int elementCount, int _depth)
+        Dictionary<string, ListInfo> artInfo = new Dictionary<string, ListInfo>(); //记录输出给美术用
+
+        //通过每个节点的数据生成子节点
+        private AssetDescription CreateTree(string guid, ref int elementCount, int _depth)
         {
             if (ParentAssetIsAdd.Contains(guid))
             {
                 return null;
             }
+
             if (needUpdateState && !updatedAssetSet.Contains(guid))
             {
                 data.UpdateAssetState(guid);
@@ -415,8 +418,16 @@ namespace ThunderFireUITool
 
             ++elementCount;
             var referenceData = data.assetDict[guid];
-            var root = new AssetViewItem { id = elementCount, displayName = referenceData.name, data = referenceData, depth = _depth };
-            var childGuids = isDepend ? referenceData.dependencies : referenceData.references;
+
+            var root = new AssetDescription(referenceData)
+            {
+                id = elementCount,
+                displayName = referenceData.name,
+                depth = _depth
+            };
+
+            // var childGuids = m_AssetTreeView.IsDepend ? referenceData.dependencies : referenceData.references;
+            var childGuids = referenceData.references;
             ParentAssetIsAdd.Add(guid);
             foreach (var childGuid in childGuids)
             {
@@ -424,6 +435,7 @@ namespace ThunderFireUITool
                 {
                     continue;
                 }
+
                 //Debug.Log(root.displayName + "---->>" + AssetDatabase.GUIDToAssetPath(childGuid));
                 if (needUpdateAssetTreeMessage == true)
                 {
@@ -443,6 +455,7 @@ namespace ThunderFireUITool
                             artInfo.Add(root.displayName, listInfo);
                         }
                     }
+
                     if (AssetDatabase.GUIDToAssetPath(childGuid).EndsWith(".prefab") && !AssetDatabase.GUIDToAssetPath(childGuid).Contains("_gen_render") && _depth < 2)
                     {
                         listInfo.type = "prefab";
@@ -461,13 +474,14 @@ namespace ThunderFireUITool
                 }
 
                 BrotherAssetIsAdd.Add(childGuid);
-                AssetViewItem rs = null;
+                AssetDescription rs = null;
                 rs = CreateTree(childGuid, ref elementCount, _depth + 1);
                 if (rs != null)
                 {
                     root.AddChild(rs);
                 }
             }
+
             foreach (var childGuid in childGuids)
             {
                 if (BrotherAssetIsAdd.Contains(childGuid))
@@ -488,7 +502,7 @@ namespace ThunderFireUITool
         public string name;
     }
 
-    public sealed class DragAreaGetObject
+    public sealed class DragAreaGetObject 
     {
         public static UnityEngine.Object[] GetOjbects(string meg = null)
         {
@@ -504,16 +518,17 @@ namespace ThunderFireUITool
                     DragAndDrop.AcceptDrag();
                     needReturn = true;
                 }
+
                 Event.current.Use();
                 if (needReturn)
                 {
                     return DragAndDrop.objectReferences;
                 }
             }
+
             return null;
         }
     }
-
 
 
     public sealed class ClickColumn : MultiColumnHeader
@@ -521,11 +536,11 @@ namespace ThunderFireUITool
         public delegate void SortInColumn();
 
         public static Dictionary<int, SortInColumn> SortWithIndex = new Dictionary<int, SortInColumn>()
-    {
-        {0, SortByName },
-        {1, SortByPath },
-        {3, SortByCount }
-    };
+        {
+            { 0, SortByName },
+            { 1, SortByPath },
+            { 3, SortByCount }
+        };
 
         public ClickColumn(MultiColumnHeaderState state) : base(state)
         {
@@ -561,7 +576,6 @@ namespace ThunderFireUITool
         {
             SortHelper.SortByCount();
         }
-
     }
 
     public enum SortType
@@ -578,35 +592,36 @@ namespace ThunderFireUITool
     public class SortConfig
     {
         public static Dictionary<SortType, SortType> SortTypeChangeByNameHandler = new Dictionary<SortType, SortType>()
-    {
-        {SortType.None, SortType.AscByName },
-        {SortType.AscByName, SortType.DescByName },
-        {SortType.DescByName, SortType.AscByName },
-    };
+        {
+            { SortType.None, SortType.AscByName },
+            { SortType.AscByName, SortType.DescByName },
+            { SortType.DescByName, SortType.AscByName },
+        };
 
         public static Dictionary<SortType, SortType> SortTypeChangeByPathHandler = new Dictionary<SortType, SortType>()
-    {
-        {SortType.None, SortType.AscByPath },
-        {SortType.AscByPath, SortType.DescByPath },
-        {SortType.DescByPath, SortType.AscByPath },
-    };
+        {
+            { SortType.None, SortType.AscByPath },
+            { SortType.AscByPath, SortType.DescByPath },
+            { SortType.DescByPath, SortType.AscByPath },
+        };
 
         public static Dictionary<SortType, SortType> SortTypeChangeByCountHandler = new Dictionary<SortType, SortType>()
-    {
-        {SortType.None, SortType.AscByCount },
-        {SortType.AscByCount, SortType.DescByCount },
-        {SortType.DescByCount, SortType.AscByCount },
-    };
+        {
+            { SortType.None, SortType.AscByCount },
+            { SortType.AscByCount, SortType.DescByCount },
+            { SortType.DescByCount, SortType.AscByCount },
+        };
+
         public static Dictionary<SortType, short> SortTypeGroup = new Dictionary<SortType, short>()
-    {
-        {SortType.None, 0 },
-        {SortType.AscByPath, 1 },
-        {SortType.DescByPath, 1 },
-        {SortType.AscByName, 2 },
-        {SortType.DescByName, 2 },
-        {SortType.AscByCount, 3 },
-        {SortType.DescByCount, 3 },
-    };
+        {
+            { SortType.None, 0 },
+            { SortType.AscByPath, 1 },
+            { SortType.DescByPath, 1 },
+            { SortType.AscByName, 2 },
+            { SortType.DescByName, 2 },
+            { SortType.AscByCount, 3 },
+            { SortType.DescByCount, 3 },
+        };
 
         public static short TypeByCountGroup = 3;
         public static short TypeByNameGroup = 2;
@@ -626,15 +641,16 @@ namespace ThunderFireUITool
         public static SortType CountType = SortType.None;
 
         public delegate int SortCompare(string lString, string rString);
+
         public static Dictionary<SortType, SortCompare> CompareFunction = new Dictionary<SortType, SortCompare>()
-    {
-        {SortType.AscByPath,  CompaerWithPath},
-        {SortType.DescByPath,  CompaerWithPathDesc},
-        {SortType.AscByName,  CompaerWithName},
-        {SortType.DescByName,  CompaerWithNameDesc},
-        {SortType.AscByCount,  CompaerWithCount},
-        {SortType.DescByCount,  CompaerWithCountDesc},
-    };
+        {
+            { SortType.AscByPath, CompaerWithPath },
+            { SortType.DescByPath, CompaerWithPathDesc },
+            { SortType.AscByName, CompaerWithName },
+            { SortType.DescByName, CompaerWithNameDesc },
+            { SortType.AscByCount, CompaerWithCount },
+            { SortType.DescByCount, CompaerWithCountDesc },
+        };
 
         public static void Init()
         {
@@ -656,6 +672,7 @@ namespace ThunderFireUITool
                     curSortType = handler[curSortType];
                 }
             }
+
             recoverType = curSortType;
         }
 
@@ -674,13 +691,14 @@ namespace ThunderFireUITool
             ChangeSortType(SortConfig.TypeByCountGroup, SortConfig.SortTypeChangeByCountHandler, ref CountType);
         }
 
-        public static void SortChild(ReferenceFinderData.AssetDescription data)
+        public static void SortChild(AssetDescription data)
         {
             //Debug.Log(curSortType);
             if (data == null)
             {
                 return;
             }
+
             if (sortedAsset.ContainsKey(data.path))
             {
                 if (sortedAsset[data.path] == curSortType)
@@ -700,6 +718,7 @@ namespace ThunderFireUITool
                         NormalSort(data.dependencies);
                         NormalSort(data.references);
                     }
+
                     sortedAsset[data.path] = curSortType;
                 }
             }
@@ -717,6 +736,7 @@ namespace ThunderFireUITool
             {
                 return;
             }
+
             if (sortedAsset.ContainsKey("rootSort"))
             {
                 if (sortedAsset["rootSort"] == curSortType)
@@ -734,6 +754,7 @@ namespace ThunderFireUITool
                     {
                         NormalSort(assetGuid);
                     }
+
                     sortedAsset["rootSort"] = curSortType;
                 }
             }
@@ -747,10 +768,7 @@ namespace ThunderFireUITool
         public static void NormalSort(List<string> strList)
         {
             SortCompare curCompare = CompareFunction[curSortType];
-            strList.Sort((l, r) =>
-            {
-                return curCompare(l, r);
-            });
+            strList.Sort((l, r) => { return curCompare(l, r); });
         }
 
         public static void FastSort(List<string> strList)

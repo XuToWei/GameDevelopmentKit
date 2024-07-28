@@ -1,0 +1,10 @@
+.ux-multi-column-treeview {
+    margin: 2px;
+    border-width: 1px;
+    border-color: black;
+}
+
+
+.ux-multi-column-treeview-header-label__custom{
+    -unity-text-align: middle-center;
+}

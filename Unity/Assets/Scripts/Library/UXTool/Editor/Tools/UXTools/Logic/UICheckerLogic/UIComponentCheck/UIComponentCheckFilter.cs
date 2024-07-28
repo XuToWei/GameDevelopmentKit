@@ -51,7 +51,9 @@ namespace ThunderFireUITool
         public FieldInfo m_selectFieldInfo;
 
         public int m_selectOptionIndex;
-        public string m_compareValue;
+        public object m_compareValue;
+
+        public UIComponentCheckFilterCompareValueDrawer checkValueField = new UIComponentCheckFilterCompareValueDrawer();
 
         public UIComponentCheckFilterBase(UICommonScriptCheckWindow window)
         {
@@ -68,7 +70,7 @@ namespace ThunderFireUITool
         {
             m_window.RemoveFilter(this);
         }
-        protected void UpdateComponentFieldList(MonoScript mono)
+        public void UpdateComponentFieldList(MonoScript mono)
         {
             GetComponentFieldList(m_selectMonoScriptType);
         }
@@ -210,7 +212,7 @@ namespace ThunderFireUITool
                 m_selectFieldInfo = m_fieldDic[m_fieldDic.Keys.ToArray()[m_selectFieldIndex]];
                 EditorGUIUtility.wideMode = true;
                 m_selectOptionIndex = EditorGUILayout.Popup(UICommonScriptCheckWindow.CompareOptionString, m_selectOptionIndex, IsNumbericType(m_selectFieldInfo.FieldType) ? filterNumbericValueOptions : filterUnNumbericValueOptions, GUILayout.Width(FiletrColoumWidth));
-                m_compareValue = UIComponentCheckFilterCompareValueDrawer.DrawFieldValueInput(m_compareValue, m_selectFieldInfo);
+                m_compareValue = checkValueField.DrawFieldValueInput(m_compareValue, m_selectFieldInfo);
             }
             else
             {
@@ -225,21 +227,14 @@ namespace ThunderFireUITool
         {
             var scriptObject = go.GetComponent(m_selectMonoScriptType);
             bool compareResult = false;
-            if(string.IsNullOrEmpty(m_compareValue))
-            {
-                return compareResult;
-            }
 
             if (scriptObject !=  null)
             {
-                Transform transform = scriptObject.GetComponent<Transform>();
-
-                var value = m_selectFieldInfo.GetValue(scriptObject);
                 Type fieldType = m_selectFieldInfo.FieldType;
-
+                var value = m_selectFieldInfo.GetValue(scriptObject);
                 if(IsNumbericType(fieldType))
                 {
-                    compareResult = CompareNumberic(value, m_compareValue, (FilterComponentValueOption)m_selectOptionIndex);
+                    compareResult = CompareNumberic(value, m_compareValue, fieldType, (FilterComponentValueOption)m_selectOptionIndex);
                 }
                 else
                 {
@@ -255,18 +250,47 @@ namespace ThunderFireUITool
         /// 非数值类型只能判断是否相等
         /// </summary>
         /// <returns></returns>
-        public bool CompareUnNumeric(object fieldValue, object compareValue, Type fieldType, FilterComponentValueOption option)
+        public bool CompareUnNumeric(object fieldValue, object compareObject, Type fieldType, FilterComponentValueOption option)
         {
             bool result = false;
-            string serializedValue = UIComponentCheckFilterCompareValueDrawer.SerializeFieldValue(fieldValue, fieldType);
-
+            var compareValue = Convert.ChangeType(compareObject, fieldType);
             switch (option)
             {
-                case FilterComponentValueOption.Equal:
-                    result = serializedValue.Equals(compareValue.ToString());
+                case FilterComponentValueOption.Equal:    
+                    if(fieldValue == null) 
+                        result = compareValue == null;
+                    else if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
+                    {
+                        result = CheckList(fieldValue, compareValue, fieldType);
+                    }
+                    else if (fieldType == typeof(Color))
+                    {
+                        Color32 fieldColor32 = ((Color)fieldValue);
+                        Color32 compareColor32 = ((Color)compareValue);
+                        result = fieldColor32.Equals(compareColor32);
+                    }
+                    else
+                    {
+                        result = (fieldValue.Equals(compareValue));
+                    }
+                    
                     break;
+
                 case FilterComponentValueOption.NotEqual:
-                    result = !serializedValue.Equals(compareValue.ToString());
+                    if(fieldValue == null) 
+                        result = !(compareValue == null);
+                    else if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
+                    {
+                        result = !(CheckList(fieldValue, compareValue, fieldType));
+                    }
+                    else if (fieldType == typeof(Color))
+                    {
+                        Color32 fieldColor32 = ((Color)fieldValue);
+                        Color32 compareColor32 = ((Color)compareValue);
+                        result = !(fieldColor32.Equals(compareColor32));
+                    }
+                    else
+                        result = !(fieldValue.Equals(compareValue));                    
                     break;
                 default:
                     break;
@@ -280,23 +304,52 @@ namespace ThunderFireUITool
         /// </summary>
         /// <returns></returns>
         /// 
-        private bool CompareNumberic(object fieldValue, object compareValue, FilterComponentValueOption option)
+        private bool CompareNumberic(object fieldValue, object compareObject, Type fieldType, FilterComponentValueOption option)
         {
-            if (fieldValue is int num1 && int.TryParse(compareValue.ToString(), out int num2))
+            if(compareObject == null)
+            {
+                return false;
+            }
+            var compareValue = Convert.ChangeType(compareObject, fieldType);
+            if (fieldValue is int num1 && compareValue is int num2)
             {
                 return CompareValues(num1, num2, option);
             }
-            if (fieldValue is long num1L && long.TryParse(compareValue.ToString(), out long num2L))
+            if (fieldValue is long num1L && compareValue is long num2L)
             {
                 return CompareValues(num1L, num2L, option);
             }
-            if (fieldValue is float num1F && float.TryParse(compareValue.ToString(), out float num2F))
+            if (fieldValue is float num1F && compareValue is float num2F)
             {
                 return CompareValues(num1F, num2F, option);
             }
-            if (fieldValue is double num1D && double.TryParse(compareValue.ToString(), out double num2D))
+            if (fieldValue is double num1D && compareValue is double num2D)
             {
                 return CompareValues(num1D, num2D, option);
+            }
+            if (fieldValue is decimal num1M && compareValue is decimal num2M)
+            {
+                return CompareValues(num1M, num2M, option);
+            }
+            if (fieldValue is byte num1B && compareValue is byte num2B)
+            {
+                return CompareValues(num1B, num2B, option);
+            }
+            if (fieldValue is uint num1U && compareValue is uint num2U)
+            {
+                return CompareValues(num1U, num2U, option);
+            }
+            if (fieldValue is ulong num1UL && compareValue is ulong num2UL)
+            {
+                return CompareValues(num1UL, num2UL, option);
+            }
+            if (fieldValue is ushort num1US && compareValue is ushort num2US)
+            {
+                return CompareValues(num1US, num2US, option);
+            }
+            if (fieldValue is sbyte num1SB && compareValue is sbyte num2SB)
+            {
+                return CompareValues(num1SB, num2SB, option);
             }
             return false;
         }        
@@ -324,9 +377,47 @@ namespace ThunderFireUITool
             return result;
         }
 
+        private bool CheckList(object fieldValue, object compareValue, Type fieldType)
+        {
+            var listType = fieldType.GetGenericArguments()[0];
+            if (listType == typeof(int))
+            {
+                return CompareLists<int>(fieldValue, compareValue);
+            }
+            if (listType == typeof(float))
+            {
+                return CompareLists<float>(fieldValue, compareValue);
+            }
+            if (listType == typeof(Color))
+            {
+                string field = string.Join(",", ((List<Color>)fieldValue).Select(v => ColorUtility.ToHtmlStringRGBA(v)));
+                string compare =string.Join(",", ((List<Color>)compareValue).Select(v => ColorUtility.ToHtmlStringRGBA(v)));
+                return(field.Equals(compare));
+            }
+            return false;
+        }
+
+        private bool CompareLists<T>(object l1, object l2)
+        {
+            if(l1 is List<T> list1 && l2 is List<T> list2)
+            {
+                if(list1 == null && list2 == null) return true;
+                if(list1 == null || list2 == null) return false;
+                if(list1.Count != list2.Count) return false;
+                for(int i = 0; i < list1.Count; i++)
+                {
+                    if(!list1[i].Equals(list2[i])) return false;
+                }
+                return true;
+            }
+            return false;
+            
+        }
+
         private bool IsNumbericType(Type type)
         {
             return type.IsPrimitive && type != typeof(bool) && type != typeof(char);
         }
+
     }
 }

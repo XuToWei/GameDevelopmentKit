@@ -4,34 +4,24 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using System.Collections.Generic;
 using System.Linq;
-
 using System.Reflection;
 
 namespace ThunderFireUITool
 {
     //带数据的TreeViewItem
-    public class AssetViewItem : TreeViewItem
-    {
-        public ReferenceFinderData.AssetDescription data;
-    }
 
     public struct ReferenceGoInfo
     {
-        public string goName;   //所在节点的名字
-        public string scriptName;   //所在脚本的名字
-        public string goFileId;   //所在节点的FileId
+        public string goName; //所在节点的名字
+        public string scriptName; //所在脚本的名字
+        public string goFileId; //所在节点的FileId
     }
 
     //资源引用树
-    public class AssetTreeView : TreeView
+    public class AssetTreeView : EditorUIUtils.UIIMTreeView<AssetDescription>
     {
-        //图标宽度
-        const float kIconWidth = 18f;
-        //列表高度
-        const float kRowHeights = 20f;
-        public AssetViewItem assetRoot;
-
-        private GUIStyle stateGUIStyle = new GUIStyle { richText = true, alignment = TextAnchor.MiddleCenter };
+        private readonly GUIStyle _stateGUIStyle = new GUIStyle { richText = true, alignment = TextAnchor.MiddleCenter };
+        //public bool IsDepend = false;
 
         //列信息
         enum MyColumns
@@ -41,16 +31,17 @@ namespace ThunderFireUITool
             State,
             RefCount
         }
-
-        public AssetTreeView(TreeViewState state, ClickColumn multicolumnHeader) : base(state, multicolumnHeader)
+        
+        public AssetTreeView() : base()
         {
-            rowHeight = kRowHeights;
-            columnIndexForTreeFoldouts = 0;
-            showAlternatingRowBackgrounds = true;
-            showBorder = false;
-            customFoldoutYOffset = (kRowHeights - EditorGUIUtility.singleLineHeight) * 0.5f; // center foldout in the row since we also center content. See RowGUI
-            extraSpaceBeforeIconAndLabel = kIconWidth;
+            // IsDepend = viewStruct.IsDepend;
+            /*if (args != null)
+            {
+                IsDepend = (bool)args[0];
+            }*/
         }
+
+
         private static long GetLocalIdentfierInFile(UnityEngine.Object obj)
         {
             PropertyInfo info = typeof(SerializedObject).GetProperty("inspectorMode", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -63,23 +54,23 @@ namespace ThunderFireUITool
         //响应双击事件
         protected override void DoubleClickedItem(int id)
         {
-            var item = (AssetViewItem)FindItem(id, rootItem);
+            var item = (AssetDescription)FindItem(id, rootItem);
 
             if (item != null)
             {
-                var assetObject = AssetDatabase.LoadAssetAtPath(item.data.path, typeof(UnityEngine.Object));
+                var assetObject = AssetDatabase.LoadAssetAtPath(item.path, typeof(UnityEngine.Object));
                 if (assetObject is GameObject)
                 {
                     //是Prefab 打开prefab 并高亮引用资源的节点
                     AssetDatabase.OpenAsset(assetObject);
-                    if (item.parent is AssetViewItem assetViewItem && assetViewItem.data != null)
+                    if (item.parent is AssetDescription assetViewItem && assetViewItem != null)
                     {
-                        var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetViewItem.data.path);
+                        var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetViewItem.path);
                         if (sprite == null) return;
                         var go = PrefabStageUtils.GetCurrentPrefabStage().prefabContentsRoot;
 
-                        string guid = AssetDatabase.AssetPathToGUID(assetViewItem.data.path);
-                        string prefabPath = item.data.path;
+                        string guid = AssetDatabase.AssetPathToGUID(assetViewItem.path);
+                        string prefabPath = item.path;
 
                         List<ReferenceGoInfo> referenceInfos = new List<ReferenceGoInfo>();
                         PrefabYamlUtils.FindGuidReference(prefabPath, guid, ref referenceInfos);
@@ -91,12 +82,14 @@ namespace ThunderFireUITool
                                 Debug.Log($"引用资源的节点: <color=red>[{info.goName}]</color>, 引用脚本: <color=red>[{info.scriptName}]</color> ");
                                 goFileIds.Add(info.goFileId);
                             }
-                            Debug.Log($"共计 <color=red>[{referenceInfos.Count}]</color> 个节点引用 <color=red>[{assetViewItem.data.name}]</color> ");
+
+                            Debug.Log($"共计 <color=red>[{referenceInfos.Count}]</color> 个节点引用 <color=red>[{assetViewItem.name}]</color> ");
 
                             ReferenceInfo.referenceGoTransList.Clear();
 
 
-                            ReferenceInfo.referenceGoTransList.AddRange(go.GetComponentsInChildren<Transform>(true).Where(trans => goFileIds.Contains(GetLocalIdentfierInFile(trans.gameObject).ToString())));
+                            ReferenceInfo.referenceGoTransList.AddRange(go.GetComponentsInChildren<Transform>(true)
+                                .Where(trans => goFileIds.Contains(GetLocalIdentfierInFile(trans.gameObject).ToString())));
 
                             if (ReferenceInfo.referenceGoTransList.Count > 0)
                             {
@@ -124,149 +117,116 @@ namespace ThunderFireUITool
 
         public void GetRefCount()
         {
-            foreach (AssetViewItem item in GetRows())
+            foreach (AssetDescription item in GetRows())
             {
-                item.data.count = ReferenceInfo.data.GetRefCount(item.data, (item.parent as AssetViewItem)?.data);
+                item.count = ReferenceInfo.data.GetRefCount(item, item.parent as AssetDescription);
             }
         }
+
         public void SortExpandItem()
         {
             if (SortHelper.curSortType == SortType.None)
             {
                 return;
             }
+
             var expandItemList = GetExpanded();
             foreach (var i in expandItemList)
             {
-                var item = (AssetViewItem)FindItem(i, rootItem);
-                foreach (AssetViewItem child in item.children)
+                var item = (AssetDescription)FindItem(i, rootItem);
+                foreach (AssetDescription child in item.children)
                 {
-                    child.data.count = ReferenceInfo.data.GetRefCount(child.data, (child.parent as AssetViewItem)?.data);
+                    child.count = ReferenceInfo.data.GetRefCount(child, (child.parent as AssetDescription));
                 }
-                SortHelper.SortChild(item.data);
+
+                SortHelper.SortChild(item);
             }
+
             ReferenceInfo curWindow = EditorWindow.GetWindow<ReferenceInfo>();
             curWindow.needUpdateAssetTree = true;
         }
 
-        //生成ColumnHeader
-        public static MultiColumnHeaderState CreateDefaultMultiColumnHeaderState(float treeViewWidth, bool isDepend)
+        protected override void CellGUI(Rect rect, AssetDescription item, int columnIndex, RowGUIArgs args)
+        {
+            CenterRectUsingSingleLineHeight(ref rect);
+            switch ((MyColumns)args.GetColumn(columnIndex))
+            {
+                case MyColumns.Name:
+                {
+                    var iconRect = rect;
+                    iconRect.x += GetContentIndent(item);
+                    iconRect.width = KIconWidth;
+                    if (iconRect.x < rect.xMax)
+                    {
+                        var icon = GetIcon(item.path);
+                        if (icon != null)
+                            GUI.DrawTexture(iconRect, icon, ScaleMode.ScaleToFit);
+                    }
+
+                    var nameRect = rect;
+                    nameRect.x += GetContentIndent(item) + KIconWidth;
+                    GUI.Label(nameRect, item.name);
+                }
+                    break;
+                case MyColumns.Path:
+                {
+                    GUI.Label(rect, item.path);
+                }
+                    break;
+                case MyColumns.State:
+                {
+                    GUI.Label(rect, ReferenceFinderData.GetInfoByState(item.state), _stateGUIStyle);
+                }
+                    break;
+                case MyColumns.RefCount:
+                {
+                    item.count = ReferenceInfo.data.GetRefCount(item, (item.parent as AssetDescription));
+                    GUI.Label(rect, item.count.ToString(), _stateGUIStyle);
+                }
+                    break;
+            }
+        }
+
+        public override List<MultiColumnHeaderState.Column> CreateDefaultMultiColumns()
         {
             var columns = new List<MultiColumnHeaderState.Column>
             {
-			//图标+名称
-			new MultiColumnHeaderState.Column
-            {
-                headerContent = new GUIContent("名字"),
-                headerTextAlignment = TextAlignment.Center,
-                sortedAscending = false,
-                width = 200,
-                minWidth = 60,
-                autoResize = false,
-                allowToggleVisibility = false,
-                canSort = true,
-                sortingArrowAlignment = TextAlignment.Right
-            },
-			//路径
-			new MultiColumnHeaderState.Column
-            {
-                headerContent = new GUIContent("路径"),
-                headerTextAlignment = TextAlignment.Center,
-                sortedAscending = false,
-                width = 360,
-                minWidth = 60,
-                autoResize = false,
-                allowToggleVisibility = false,
-                canSort = true,
-                sortingArrowAlignment = TextAlignment.Right
-            },
-			//状态
-			new MultiColumnHeaderState.Column
-            {
-                headerContent = new GUIContent("状态"),
-                headerTextAlignment = TextAlignment.Center,
-                sortedAscending = false,
-                width = 60,
-                minWidth = 60,
-                autoResize = false,
-                allowToggleVisibility = true,
-                canSort = false
-            },
-        };
-            if (!isDepend)
-            {
-                columns.Add(
-                   //引用数
-                   new MultiColumnHeaderState.Column
-                   {
-                       headerContent = new GUIContent("引用数"),
-                       headerTextAlignment = TextAlignment.Center,
-                       sortedAscending = false,
-                       width = 70,
-                       minWidth = 70,
-                       autoResize = true,
-                       allowToggleVisibility = true,
-                       canSort = true,
-                       sortingArrowAlignment = TextAlignment.Right
-                   });
-            }
-            var state = new MultiColumnHeaderState(columns.ToArray());
-            return state;
-        }
+                //图标+名称
+                new MultiColumnHeaderState.Column
+                {
+                    headerContent = new GUIContent("名字"),
+                    width = 200,
+                    minWidth = 60,
+                },
+                //路径
+                new MultiColumnHeaderState.Column
+                {
+                    headerContent = new GUIContent("路径"),
+                    width = 360,
+                    minWidth = 60,
+                },
+                //状态
+                new MultiColumnHeaderState.Column
+                {
+                    headerContent = new GUIContent("状态"),
+                    width = 60,
+                    minWidth = 60,
+                    canSort = false
+                },
+            };
+            // if (!IsDepend)
+            // {
+            columns.Add(
+                //引用数
+                new MultiColumnHeaderState.Column
+                {
+                    headerContent = new GUIContent("引用数"),
+                    width = 70,
+                    minWidth = 70,
+                });
+            // }
 
-        protected override TreeViewItem BuildRoot()
-        {
-            return assetRoot;
-        }
-
-        protected override void RowGUI(RowGUIArgs args)
-        {
-            var item = (AssetViewItem)args.item;
-            for (int i = 0; i < args.GetNumVisibleColumns(); ++i)
-            {
-                CellGUI(args.GetCellRect(i), item, (MyColumns)args.GetColumn(i), ref args);
-            }
-        }
-
-        //绘制列表中的每项内容
-        void CellGUI(Rect cellRect, AssetViewItem item, MyColumns column, ref RowGUIArgs args)
-        {
-            CenterRectUsingSingleLineHeight(ref cellRect);
-            switch (column)
-            {
-                case MyColumns.Name:
-                    {
-                        var iconRect = cellRect;
-                        iconRect.x += GetContentIndent(item);
-                        iconRect.width = kIconWidth;
-                        if (iconRect.x < cellRect.xMax)
-                        {
-                            var icon = GetIcon(item.data.path);
-                            if (icon != null)
-                                GUI.DrawTexture(iconRect, icon, ScaleMode.ScaleToFit);
-                        }
-                        args.rowRect = cellRect;
-                        base.RowGUI(args);
-                    }
-                    break;
-                case MyColumns.Path:
-                    {
-                        GUI.Label(cellRect, item.data.path);
-                    }
-                    break;
-                case MyColumns.State:
-                    {
-                        GUI.Label(cellRect, ReferenceFinderData.GetInfoByState(item.data.state), stateGUIStyle);
-                    }
-                    break;
-                case MyColumns.RefCount:
-                    {
-                        //GUI.Label(cellRect, ReferenceInfo.data.GetRefCount(item.data, (item.parent as AssetViewItem)?.data).ToString(), stateGUIStyle);
-                        item.data.count = ReferenceInfo.data.GetRefCount(item.data, (item.parent as AssetViewItem)?.data);
-                        GUI.Label(cellRect, item.data.count.ToString(), stateGUIStyle);
-                    }
-                    break;
-            }
+            return columns;
         }
 
         //根据资源信息获取资源图标
@@ -280,6 +240,7 @@ namespace ThunderFireUITool
                     icon = AssetPreview.GetMiniTypeThumbnail(obj.GetType());
                 return icon;
             }
+
             return null;
         }
     }

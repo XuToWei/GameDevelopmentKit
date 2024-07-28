@@ -40,8 +40,8 @@ namespace ThunderFireUITool
 
 
         //private int maxRecentSelectedFiles = 15;
-        private RecentFilesSetting savePath;
-        private List<string> recentFilePaths = new List<string>();
+        private RecentFilesSetting list;
+        private List<string> List = new List<string>();
         private List<AssetItemBase> assetsItems = new List<AssetItemBase>();
         private ScrollView scrollView;
         private UXBuilderSlider slider;
@@ -56,13 +56,14 @@ namespace ThunderFireUITool
 
         private void InitWindowData()
         {
-            savePath = JsonAssetManager.GetAssets<RecentFilesSetting>();
+            list = JsonAssetManager.GetAssets<RecentFilesSetting>();
 
-            recentFilePaths = savePath.Paths;
+            List = list.List;
             assetsItems.Clear();
-            foreach (string path in recentFilePaths)
+            foreach (string guid in List)
             {
                 AssetItemBase assetItem;
+                var path = AssetDatabase.GUIDToAssetPath(guid);
                 var fileInfo = new FileInfo(path);
                 var fileObj = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path);
                 if (fileObj is GameObject)

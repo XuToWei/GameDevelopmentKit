@@ -27,7 +27,7 @@ public class UIGradientAsset : ScriptableObject
     [SerializeField]
     [NaughtyAttributes.ShowInInspector]
     public List<UIGradient> defList = new List<UIGradient>(){
-        new UIGradient("渐变1", new Gradient(){
+        new UIGradient("Gradient1", new Gradient(){
             colorKeys = new GradientColorKey[3] {
         // Add your colour and specify the stop point
                 new GradientColorKey(new Color(1, 0, 0), 0),
@@ -40,7 +40,7 @@ public class UIGradientAsset : ScriptableObject
                 new GradientAlphaKey(198f/255f, 0.679f),
                 new GradientAlphaKey(1, 1)
             }
-        },"渐变1")
+        },"Gradient1")
     };
     public bool HasSameNameOrEmptyName()
     {

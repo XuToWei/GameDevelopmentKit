@@ -80,6 +80,12 @@ namespace ThunderFireUITool
         {
             return UXBuilderDivider.Create(v, s);
         }
+#if UNITY_2022_3_OR_NEWER
+        public static UXBuilderMultiColumnTreeView MultiColumnTreeView<T>(VisualElement v, UXBuilderMultiColumnTreeViewStruct s, IList<TreeViewItemData<T>> itemDatas)
+        {
+            return UXBuilderMultiColumnTreeView.Create(v, s, itemDatas);
+        }
+#endif
 
     }
 }

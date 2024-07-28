@@ -42,7 +42,6 @@ namespace ThunderFireUITool
 
         public void Remove(int index)
         {
-            Debug.Log("remove: " + index);
             if (index >= 0)
             {   // ensure item found
                 List.RemoveAt(index);
