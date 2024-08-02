@@ -1,4 +1,5 @@
-﻿Shader "L28/UI/Outline"
+﻿// changed by gdk
+Shader "UX/Outline"
 {
     Properties
     {
