@@ -55,7 +55,7 @@ namespace ET
             stringBuilder.AppendLine($"namespace {nameSpaceName}");
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine("    /// <summary>");
-            stringBuilder.AppendLine("    /// 界面编号。");
+            stringBuilder.AppendLine("    /// 界面编号");
             stringBuilder.AppendLine("    /// </summary>");
             stringBuilder.AppendLine($"    public static class {className}");
             stringBuilder.AppendLine("    {");
@@ -68,7 +68,7 @@ namespace ET
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
-                stringBuilder.AppendLine($"        /// {drUIForm.Desc}。");
+                stringBuilder.AppendLine($"        /// {drUIForm.Desc}");
                 stringBuilder.AppendLine("        /// </summary>");
                 stringBuilder.AppendLine($"        public const int {drUIForm.CSName} = {drUIForm.Id};");
             }

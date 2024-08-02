@@ -3,24 +3,24 @@
 namespace ET.Client
 {
     /// <summary>
-    /// 音乐编号。
+    /// 音乐编号
     /// </summary>
     public static class UGFMusicId
     {
         public const int Undefined = 0;
 
         /// <summary>
-        /// 菜单音乐。
+        /// 菜单音乐
         /// </summary>
         public const int Menu = 1;
 
         /// <summary>
-        /// 战斗音乐。
+        /// 战斗音乐
         /// </summary>
         public const int Background = 2;
 
         /// <summary>
-        /// 关于音乐。
+        /// 关于音乐
         /// </summary>
         public const int About = 3;
     }

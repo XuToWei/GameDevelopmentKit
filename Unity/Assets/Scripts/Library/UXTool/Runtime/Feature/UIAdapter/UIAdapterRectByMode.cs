@@ -7,15 +7,17 @@ using Sirenix.OdinInspector;
 #endif
 public class UIAdapterRectByMode : MonoBehaviour
 {
+    // changed by gdk
     // 编辑器下展示其及其子节点样式
-    private bool _showEffect = false;
+    // private bool _showEffect = false;
 
 #if ODIN_INSPECTOR
     [Button("展示该节点及其子节点PC样式"), ShowIf("@_showEffect == false && !UnityEngine.Application.isPlaying")]
 #endif
     private void SetAllPCData()
     {
-        _showEffect = true;
+        // changed by gdk
+        //_showEffect = true;
         var ls = GetComponentsInChildren<UIAdapterRectByMode>();
         Array.Reverse(ls);
         foreach (var item in ls)
@@ -30,7 +32,8 @@ public class UIAdapterRectByMode : MonoBehaviour
 #endif
     private void SetAllOriginData()
     {
-        _showEffect = false;
+        // changed by gdk
+        //_showEffect = false;
         var ls = GetComponentsInChildren<UIAdapterRectByMode>();
         Array.Reverse(ls);
         foreach (var item in ls)
@@ -69,7 +72,8 @@ public class UIAdapterRectByMode : MonoBehaviour
 
     private void SetPCData()
     {
-        _showEffect = true;
+        // changed by gdk
+        //_showEffect = true;
         if (_rectTransform == null) _rectTransform = GetComponent<RectTransform>();
         _rectTransform.anchorMax = anchorMax;
         _rectTransform.anchorMin = anchorMin;
@@ -82,7 +86,8 @@ public class UIAdapterRectByMode : MonoBehaviour
 
     private void SetOriginData()
     {
-        _showEffect = false;
+        // changed by gdk
+        //_showEffect = false;
         if (_rectTransform == null) _rectTransform = GetComponent<RectTransform>();
         _rectTransform.anchorMax = oriAnchorMax;
         _rectTransform.anchorMin = oriAnchorMin;
@@ -96,13 +101,15 @@ public class UIAdapterRectByMode : MonoBehaviour
     private void RecordOriginDataManual()
     {
         RecordOriginData();
-        _showEffect = false;
+        // changed by gdk
+        //_showEffect = false;
     }
 
     private void RecordPCDataManual()
     {
         RecordPCData();
-        _showEffect = true;
+        // changed by gdk
+        //_showEffect = true;
     }
 
     private void Awake()

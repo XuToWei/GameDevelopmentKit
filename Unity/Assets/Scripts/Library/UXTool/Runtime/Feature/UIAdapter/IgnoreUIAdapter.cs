@@ -69,11 +69,11 @@ public class IgnoreUIAdapter : MonoBehaviour
         {
             return;
         }
-
-        bool needResetParentScale = false;
+        // changed by gdk
+        //bool needResetParentScale = false;
         if (parentTrans.localScale == Vector3.zero)
         {
-            needResetParentScale = true;
+            //needResetParentScale = true;
             parentTrans.localScale = Vector3.one;
         }
 

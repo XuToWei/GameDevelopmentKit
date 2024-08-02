@@ -65,7 +65,7 @@ namespace ET
             stringBuilder.AppendLine($"namespace {nameSpaceName}");
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine("    /// <summary>");
-            stringBuilder.AppendLine("    /// 音乐编号。");
+            stringBuilder.AppendLine("    /// 音乐编号");
             stringBuilder.AppendLine("    /// </summary>");
             stringBuilder.AppendLine($"    public static class {className}");
             stringBuilder.AppendLine("    {");
@@ -78,7 +78,7 @@ namespace ET
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
-                stringBuilder.AppendLine($"        /// {drMusic.Desc}。");
+                stringBuilder.AppendLine($"        /// {drMusic.Desc}");
                 stringBuilder.AppendLine("        /// </summary>");
                 stringBuilder.AppendLine($"        public const int {drMusic.CSName} = {drMusic.Id};");
             }
