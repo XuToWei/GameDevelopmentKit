@@ -13,7 +13,17 @@ namespace Game
         {
             return Utility.Text.Format("Assets/Res/Scene/{0}.unity", assetName);
         }
-        
+
+        public static string GetShaderAsset(string shaderName)
+        {
+            return Utility.Text.Format("Assets/Res/Shader/{0}.shader", shaderName);
+        }
+
+        public static string GetShaderShaderVariantsAsset(string variantsName)
+        {
+            return Utility.Text.Format("Assets/Res/Shader/{0}.shadervariants", variantsName);
+        }
+
         public static string GetLocalizationAsset(string assetName)
         {
             return Utility.Text.Format("Assets/GameMain/Localization/{0}/{1}", GameEntry.Localization.Language, assetName);

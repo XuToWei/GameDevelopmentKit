@@ -8,11 +8,11 @@ namespace Game.Editor
         private static readonly string[] s_AssetFolders = new string[] { "Assets/Res" };
         
         [Tooltip("可以清理prefab中多余无效的序列化数据")]
-        [MenuItem("Game/Asset Tool/重新序列化所有prefab")]
+        [MenuItem("Game/Asset Tool/重新序列化所有Prefab")]
         public static void GamePrefabOptimization()
         {
             // 找到所有Prefab的GUID
-            string[] prefabGUIDs = AssetDatabase.FindAssets("t:Prefab",s_AssetFolders);
+            string[] prefabGUIDs = AssetDatabase.FindAssets("t:Prefab", s_AssetFolders);
             string[] prefabPaths = new string[prefabGUIDs.Length];
 
             for (int i = 0; i < prefabGUIDs.Length; i++)
@@ -27,6 +27,27 @@ namespace Game.Editor
             AssetDatabase.Refresh();
 
             Debug.Log("Force reserialize all prefab is done!");
+        }
+
+        [MenuItem("Game/Asset Tool/重新序列化所有Scene")]
+        public static void GameSceneOptimization()
+        {
+            // 找到所有Scene的GUID
+            string[] sceneGUIDs = AssetDatabase.FindAssets("t:Scene", s_AssetFolders);
+            string[] scenePaths = new string[sceneGUIDs.Length];
+
+            for (int i = 0; i < sceneGUIDs.Length; i++)
+            {
+                scenePaths[i] = AssetDatabase.GUIDToAssetPath(sceneGUIDs[i]);
+            }
+
+            // 强制重新序列化所有Scene
+            AssetDatabase.ForceReserializeAssets(scenePaths);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            Debug.Log("Force reserialize all scene is done!");
         }
 
         [MenuItem("Game/Asset Tool/清理所有粒子系统的无效Mesh引用")]
