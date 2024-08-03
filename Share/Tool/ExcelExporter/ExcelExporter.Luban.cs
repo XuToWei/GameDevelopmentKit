@@ -81,6 +81,20 @@ namespace ET
                 dirList.Sort();
                 dirs = dirList.ToArray();
 
+                for (int i = 0; i < dirs.Length; i++)
+                {
+                    string dir = Path.GetFullPath(dirs[i]);
+                    string genConfigFile = Path.Combine(dir, GEN_CONFIG_NAME);
+                    if (string.Equals(Directory.GetParent(genConfigFile).Name, "ET", StringComparison.Ordinal))
+                    {
+                        IsEnableET = true;
+                    }
+                    else if (string.Equals(Directory.GetParent(genConfigFile).Name, "GameHot", StringComparison.Ordinal))
+                    {
+                        IsEnableGameHot = true;
+                    }
+                }
+
                 List<CmdInfo> cmdInfos = new List<CmdInfo>();
                 for (int i = 0; i < dirs.Length; i++)
                 {
@@ -97,15 +111,6 @@ namespace ET
                     if (!genConfig.active)
                     {
                         continue;
-                    }
-
-                    if (string.Equals(Directory.GetParent(genConfigFile).Name, "ET", StringComparison.Ordinal))
-                    {
-                        IsEnableET = true;
-                    }
-                    else if (string.Equals(Directory.GetParent(genConfigFile).Name, "GameHot", StringComparison.Ordinal))
-                    {
-                        IsEnableGameHot = true;
                     }
 
                     int lastIndex = dir.LastIndexOf(Path.DirectorySeparatorChar) + 1;
@@ -252,6 +257,7 @@ namespace ET
                     GenerateUGFAllSoundId.GenerateCode();
                     GenerateUGFEntityId.GenerateCode();
                     GenerateUGFUIFormId.GenerateCode();
+                    GenerateUGFSceneId.GenerateCode();
                 }
 
                 if (isSuccess)

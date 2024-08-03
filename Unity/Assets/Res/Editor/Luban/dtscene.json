@@ -1,11 +1,15 @@
 [
   {
     "Id": 1,
+    "CSName": "Menu",
+    "Desc": "菜单场景",
     "AssetName": "Menu",
     "BackgroundMusicId": 1
   },
   {
     "Id": 2,
+    "CSName": "Main",
+    "Desc": "战斗场景",
     "AssetName": "Main",
     "BackgroundMusicId": 2
   }

@@ -87,11 +87,5 @@ namespace ET
                 Log.Info($"Generate code : {codeFile}!");
             }
         }
-
-        private static string GetEntityName(DREntity drEntity)
-        {
-            return drEntity.AssetName.EndsWith("Entity", StringComparison.OrdinalIgnoreCase)
-                    ? drEntity.AssetName.Substring(0, drEntity.AssetName.Length - 6) : drEntity.AssetName;
-        }
     }
 }
