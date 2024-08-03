@@ -1,5 +1,5 @@
 ﻿// changed by gdk
-Shader "UX/Outline"
+Shader "UI/Outline"
 {
     Properties
     {
