@@ -9,7 +9,7 @@ namespace Game.Hot
     /// <summary>
     /// 心跳测试
     /// </summary>
-    // protofile : UGF/GameHot.proto
+    // protofile : GameHot/GameHot.proto
     [Serializable, ProtoContract(Name = @"CSHeartBeatTest")]
     public partial class CSHeartBeatTest : CSPacketBase
     {
@@ -34,7 +34,7 @@ namespace Game.Hot
         }
     }
 
-    // protofile : UGF/GameHot.proto
+    // protofile : GameHot/GameHot.proto
     [Serializable, ProtoContract(Name = @"SCHeartBeatTest")]
     public partial class SCHeartBeatTest : SCPacketBase
     {
@@ -47,7 +47,7 @@ namespace Game.Hot
         }
     }
 
-    // protofile : UGF/GameHot2.proto
+    // protofile : GameHot/GameHot2.proto
     [Serializable, ProtoContract(Name = @"CSHeartBeatTest22")]
     public partial class CSHeartBeatTest22 : CSPacketBase
     {
@@ -60,7 +60,7 @@ namespace Game.Hot
         }
     }
 
-    // protofile : UGF/GameHot2.proto
+    // protofile : GameHot/GameHot2.proto
     [Serializable, ProtoContract(Name = @"SCHeartBeatTest22")]
     public partial class SCHeartBeatTest22 : SCPacketBase
     {

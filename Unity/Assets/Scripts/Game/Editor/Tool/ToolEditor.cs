@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using Cysharp.Threading.Tasks;
 using ThunderFireUITool;
@@ -19,7 +20,7 @@ namespace Game.Editor
 #endif
                 Stopwatch stopwatch = Stopwatch.StartNew();
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-                await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1", "../Bin/");
+                await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1", "../Bin/", environmentVars: new List<string>() { "/usr/local/share/dotnet" });
 #else
                 await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=GB2312", "../Bin/");
 #endif

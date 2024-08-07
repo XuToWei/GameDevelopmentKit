@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ET
 {
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectQueryRequest)]
     [ResponseType(nameof(ObjectQueryResponse))]
@@ -32,7 +32,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.M2A_Reload)]
     [ResponseType(nameof(A2M_Reload))]
@@ -53,7 +53,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.A2M_Reload)]
     public partial class A2M_Reload: MessageObject, IResponse
@@ -79,7 +79,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.G2G_LockRequest)]
     [ResponseType(nameof(G2G_LockResponse))]
@@ -106,7 +106,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.G2G_LockResponse)]
     public partial class G2G_LockResponse: MessageObject, IResponse
@@ -132,7 +132,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.G2G_LockReleaseRequest)]
     [ResponseType(nameof(G2G_LockReleaseResponse))]
@@ -159,7 +159,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.G2G_LockReleaseResponse)]
     public partial class G2G_LockReleaseResponse: MessageObject, IResponse
@@ -185,7 +185,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectAddRequest)]
     [ResponseType(nameof(ObjectAddResponse))]
@@ -215,7 +215,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectAddResponse)]
     public partial class ObjectAddResponse: MessageObject, IResponse
@@ -241,7 +241,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectLockRequest)]
     [ResponseType(nameof(ObjectLockResponse))]
@@ -274,7 +274,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectLockResponse)]
     public partial class ObjectLockResponse: MessageObject, IResponse
@@ -300,7 +300,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectUnLockRequest)]
     [ResponseType(nameof(ObjectUnLockResponse))]
@@ -333,7 +333,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectUnLockResponse)]
     public partial class ObjectUnLockResponse: MessageObject, IResponse
@@ -359,7 +359,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectRemoveRequest)]
     [ResponseType(nameof(ObjectRemoveResponse))]
@@ -386,7 +386,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectRemoveResponse)]
     public partial class ObjectRemoveResponse: MessageObject, IResponse
@@ -412,7 +412,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectGetRequest)]
     [ResponseType(nameof(ObjectGetResponse))]
@@ -439,7 +439,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectGetResponse)]
     public partial class ObjectGetResponse: MessageObject, IResponse
@@ -471,7 +471,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.R2G_GetLoginKey)]
     [ResponseType(nameof(G2R_GetLoginKey))]
@@ -495,7 +495,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.G2R_GetLoginKey)]
     public partial class G2R_GetLoginKey: MessageObject, IResponse
@@ -527,7 +527,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.G2M_SessionDisconnect)]
     public partial class G2M_SessionDisconnect: MessageObject, ILocationMessage
@@ -547,7 +547,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.ObjectQueryResponse)]
     public partial class ObjectQueryResponse: MessageObject, IResponse
@@ -576,7 +576,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.M2M_UnitTransferRequest)]
     [ResponseType(nameof(M2M_UnitTransferResponse))]
@@ -606,7 +606,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/InnerMessage.proto
+    // protofile : ET-ClientServer/InnerMessage.proto
     [MemoryPackable]
     [Message(Message_ET_Server.M2M_UnitTransferResponse)]
     public partial class M2M_UnitTransferResponse: MessageObject, IResponse
@@ -635,7 +635,7 @@ namespace ET
     /// <summary>
     /// 请求匹配
     /// </summary>
-    // protofile : ET-Server/LockStepInner.proto
+    // protofile : ET-ClientServer/LockStepInner.proto
     [MemoryPackable]
     [Message(Message_ET_Server.G2Match_Match)]
     [ResponseType(nameof(Match2G_Match))]
@@ -659,7 +659,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/LockStepInner.proto
+    // protofile : ET-ClientServer/LockStepInner.proto
     [MemoryPackable]
     [Message(Message_ET_Server.Match2G_Match)]
     public partial class Match2G_Match: MessageObject, IResponse
@@ -685,7 +685,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/LockStepInner.proto
+    // protofile : ET-ClientServer/LockStepInner.proto
     [MemoryPackable]
     [Message(Message_ET_Server.Match2Map_GetRoom)]
     [ResponseType(nameof(Map2Match_GetRoom))]
@@ -709,7 +709,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/LockStepInner.proto
+    // protofile : ET-ClientServer/LockStepInner.proto
     [MemoryPackable]
     [Message(Message_ET_Server.Map2Match_GetRoom)]
     public partial class Map2Match_GetRoom: MessageObject, IResponse
@@ -741,7 +741,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/LockStepInner.proto
+    // protofile : ET-ClientServer/LockStepInner.proto
     [MemoryPackable]
     [Message(Message_ET_Server.G2Room_Reconnect)]
     [ResponseType(nameof(Room2G_Reconnect))]
@@ -765,7 +765,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/LockStepInner.proto
+    // protofile : ET-ClientServer/LockStepInner.proto
     [MemoryPackable]
     [Message(Message_ET_Server.Room2G_Reconnect)]
     public partial class Room2G_Reconnect: MessageObject, IResponse
@@ -800,7 +800,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/LockStepInner.proto
+    // protofile : ET-ClientServer/LockStepInner.proto
     [MemoryPackable]
     [Message(Message_ET_Server.RoomManager2Room_Init)]
     [ResponseType(nameof(Room2RoomManager_Init))]
@@ -824,7 +824,7 @@ namespace ET
         }
     }
 
-    // protofile : ET-Server/LockStepInner.proto
+    // protofile : ET-ClientServer/LockStepInner.proto
     [MemoryPackable]
     [Message(Message_ET_Server.Room2RoomManager_Init)]
     public partial class Room2RoomManager_Init: MessageObject, IResponse
