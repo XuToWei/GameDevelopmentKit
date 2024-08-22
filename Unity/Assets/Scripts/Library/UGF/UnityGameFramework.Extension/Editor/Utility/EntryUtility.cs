@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using GameFramework.Resource;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityGameFramework.Runtime;
 
 namespace UnityGameFramework.Extension.Editor
 {
@@ -13,7 +15,7 @@ namespace UnityGameFramework.Extension.Editor
         
         public static Scene GetEntryScene()
         {
-            EditorSceneManager.OpenScene(EntryScenePath);
+            EditorSceneManager.OpenScene(EntryScenePath, OpenSceneMode.Additive);
             return SceneManager.GetSceneByPath(EntryScenePath);
         }
 
@@ -44,17 +46,9 @@ namespace UnityGameFramework.Extension.Editor
 
         public static ResourceMode GetEntryResourceMode()
         {
-            var content = System.IO.File.ReadAllText(EntryScenePath);
-            string targetString = "      propertyPath: m_ResourceMode\r\n      value: ";
-            int index = content.IndexOf(targetString, StringComparison.Ordinal);
-            if (index < 0)
-            {
-                targetString = "      propertyPath: m_ResourceMode\n      value: ";
-                index = content.IndexOf(targetString, StringComparison.Ordinal);
-            }
-            Debug.Assert(index >= 0);
-            index += targetString.Length;
-            ResourceMode resourceMode = Enum.Parse<ResourceMode>(content.Substring(index, 1));
+            ResourceComponent resourceComponent = GetEntrySceneComponent<ResourceComponent>();
+            FieldInfo resourceModeFieldInfo = typeof(ResourceComponent).GetField("m_ResourceMode", BindingFlags.Instance | BindingFlags.NonPublic);
+            ResourceMode resourceMode = (ResourceMode)resourceModeFieldInfo.GetValue(resourceComponent);
             return resourceMode;
         }
     }
