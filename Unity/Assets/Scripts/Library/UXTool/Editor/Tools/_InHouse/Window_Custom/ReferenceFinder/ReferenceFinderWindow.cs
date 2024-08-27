@@ -43,7 +43,8 @@ namespace ThunderFireUITool
 
         private string docUrl = "https://confluence.leihuo.netease.com/pages/viewpage.action?pageId=21214849";
 
-        //查找选中资源引用信息 Changed by GDK
+        //查找选中资源引用信息
+        // changed by gdk
         [MenuItem("Assets/查找资源的引用 (Find Reference)", false, -801)]
         static void FindRef()
         {

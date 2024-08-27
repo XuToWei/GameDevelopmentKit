@@ -163,7 +163,7 @@ namespace UnityEngine.UI
                 GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
                 CheckTextTableKey(filePath, obj);
             }
-            // Change by GDK
+            // changed by gdk
             Debug.Log("检查完毕！");
         }
     }
