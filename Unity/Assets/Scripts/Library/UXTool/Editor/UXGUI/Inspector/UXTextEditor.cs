@@ -86,8 +86,31 @@ namespace UnityEngine.UI
                 {
                     if (toggleValues[index])
                     {
-                        // changed by gdk
-                        SetLanguageText(index);
+                        if (lastToggleIndex == -1)
+                        {
+                            initialHide = SceneVisibilityManager.instance.IsHidden(targetObject.gameObject);
+                        }
+                        else
+                        {
+                            toggleValues[lastToggleIndex] = false;
+                        }
+                        lastToggleIndex = index;
+                        if (cloneObj != null)
+                        {
+                            DestroyImmediate(cloneObj);
+                        }
+                        SceneVisibilityManager.instance.Hide(targetObject.gameObject, true);
+                        targetObject.ignoreLocalization = true;
+                        cloneObj = Instantiate(targetObject.gameObject, targetObject.transform.position, targetObject.transform.rotation, targetObject.transform);
+                        cloneObj.transform.localScale = new Vector3(1, 1, 1);
+                        RectTransform cloneRect = cloneObj.GetComponent<RectTransform>();
+                        cloneRect.anchorMax = new Vector2(1, 1);
+                        cloneRect.anchorMin = new Vector2(0, 0);
+                        cloneRect.offsetMax = new Vector2(0, 0);
+                        cloneRect.offsetMin = new Vector2(0, 0);
+                        targetObject.ignoreLocalization = false;
+                        cloneObj.GetComponent<UXText>().text = textList[index];
+                        cloneObj.hideFlags = HideFlags.HideAndDontSave;
                     }
                     else
                     {
@@ -118,49 +141,6 @@ namespace UnityEngine.UI
                 GUI.contentColor = Color.white;
                 GUI.Label(new Rect(rect) { x = rect.x + rect.width - 20 }, "/" + EditorLocalizationTool.ReadyLanguageTypes.Length);
             };
-
-            // changed by gdk
-            RefreshDefaultLanguageText();
-        }
-
-        // changed by gdk
-        private void RefreshDefaultLanguageText()
-        {
-            if (textList.Count > 1)
-            {
-                toggleValues[0] = true;
-                SetLanguageText(0);
-            }
-        }
-
-        // changed by gdk
-        private void SetLanguageText(int index)
-        {
-            if (lastToggleIndex == -1)
-            {
-                initialHide = SceneVisibilityManager.instance.IsHidden(targetObject.gameObject);
-            }
-            else
-            {
-                toggleValues[lastToggleIndex] = false;
-            }
-            lastToggleIndex = index;
-            if (cloneObj != null)
-            {
-                DestroyImmediate(cloneObj);
-            }
-            SceneVisibilityManager.instance.Hide(targetObject.gameObject, true);
-            targetObject.ignoreLocalization = true;
-            cloneObj = Instantiate(targetObject.gameObject, targetObject.transform.position, targetObject.transform.rotation, targetObject.transform);
-            cloneObj.transform.localScale = new Vector3(1, 1, 1);
-            RectTransform cloneRect = cloneObj.GetComponent<RectTransform>();
-            cloneRect.anchorMax = new Vector2(1, 1);
-            cloneRect.anchorMin = new Vector2(0, 0);
-            cloneRect.offsetMax = new Vector2(0, 0);
-            cloneRect.offsetMin = new Vector2(0, 0);
-            targetObject.ignoreLocalization = false;
-            cloneObj.GetComponent<UXText>().text = textList[index];
-            cloneObj.hideFlags = HideFlags.HideAndDontSave;
         }
 
         private void OnDisable()
@@ -218,8 +198,6 @@ namespace UnityEngine.UI
                 localizationType.intValue = (int)type;
                 ChangeAvailables();
                 ShowObj();
-                // changed by gdk
-                RefreshDefaultLanguageText();
             }
 
             if (type == (int)LocalizationHelper.TextLocalizationType.RuntimeUse)
@@ -239,8 +217,6 @@ namespace UnityEngine.UI
                         else
                         {
                             ChangeAvailables();
-                            // changed by gdk
-                            RefreshDefaultLanguageText();
                         }
                     }
                 }
@@ -284,8 +260,6 @@ namespace UnityEngine.UI
                     {
                         ShowObj();
                         ChangeAvailables();
-                        // changed by gdk
-                        RefreshDefaultLanguageText();
                     });
                     if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_复制), GUILayout.MaxWidth(50)))
                     {
@@ -310,8 +284,6 @@ namespace UnityEngine.UI
                     if (!ignoreLocalization.boolValue && localizationID.stringValue != "")
                     {
                         ChangeAvailables();
-                        // changed by gdk
-                        RefreshDefaultLanguageText();
                     }
                 }
 
@@ -341,8 +313,6 @@ namespace UnityEngine.UI
                     {
                         ShowObj();
                         ChangeAvailables();
-                        // changed by gdk
-                        RefreshDefaultLanguageText();
                     });
                     if (GUILayout.Button(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_复制), GUILayout.MaxWidth(50)))
                     {
