@@ -8,11 +8,11 @@
       "hash": "93c7e64d2fa1b8ce1798f0cbce75034f63a45c04"
     },
     "com.code-philosophy.hybridclr": {
-      "version": "https://github.com/focus-creative-games/hybridclr_unity.git#v6.4.0",
+      "version": "https://github.com/focus-creative-games/hybridclr_unity.git#v6.7.1",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "53f4f33bf04c982f23e9f2df8f1c676612f47cfb"
+      "hash": "59bc259cc88898425620535d282192503ba99399"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git#1.0.3",
@@ -60,13 +60,13 @@
       "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
     },
     "com.cysharp.r3": {
-      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.1.16",
+      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.2.8",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.modules.imgui": "1.0.0"
       },
-      "hash": "db0b22f8289ce8553cf47f6792f721d70264f9ac"
+      "hash": "01da4b42df832539e83a908dce95105ac195f51c"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
@@ -252,11 +252,11 @@
       }
     },
     "com.yasirkula.runtimeinspector": {
-      "version": "https://github.com/yasirkula/UnityRuntimeInspector.git",
+      "version": "https://github.com/yasirkula/UnityRuntimeInspector.git#v1.7.2",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "52ff3168983d48f012119f6c013d7b495c9f44a4"
+      "hash": "b0980bb9a554d8d429cec645593b5c207c49163a"
     },
     "jp.setchi.fancyscrollview": {
       "version": "https://github.com/setchi/FancyScrollView.git#upm",
@@ -277,7 +277,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "84fd2f8de57a34dc1cf2c67b11b4fe5d19906b0b"
+      "hash": "98b196828ca715c2d2090aa61fd0d60742e010a9"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
