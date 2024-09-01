@@ -1,4 +1,6 @@
 
+import ByteBuf from '../bright/serialization/ByteBuf'
+
 {{~for enum in __enums~}}
 {{namespace_with_grace_begin enum.namespace}} 
 {{~if enum.comment != '' ~}}
@@ -61,25 +63,22 @@ end
 {{~end~}}
 export {{if bean.is_abstract_type}}abstract {{end}}class {{bean.name}}{{if bean.parent_def_type}} extends {{bean.parent_def_type.full_name}}{{end}} {
 {{~if bean.is_abstract_type~}}
-    static constructorFrom(_json_: any): {{bean.name}}{
-        switch (_json_["$type"]) {
+    static constructorFrom(_buf_: ByteBuf): {{bean.name}}{
+        switch (_buf_.ReadInt()) {
         {{~ for child in bean.hierarchy_not_abstract_children~}}
-            case '{{impl_data_type child bean}}': return new {{child.full_name}}(_json_)
+            case {{child.id}}: return new {{child.full_name}}(_buf_)
         {{~end~}}
             default: throw new Error()
         }
     }
 {{~end~}}
 
-    constructor(_json_: any) {
+    constructor(_buf_: ByteBuf) {
         {{~if bean.parent_def_type~}}
-        super(_json_)
+        super(_buf_)
         {{~end~}}
         {{~ for field in bean.export_fields ~}}
-        {{~if !field.ctype.is_nullable~}}
-        if (_json_.{{field.name}} === undefined) { throw new Error() }
-        {{~end~}}
-        {{deserialize ('this.' + format_field_name __code_style field.name) ( '_json_.' + field.name) field.ctype}}
+        {{deserialize ('this.' + format_field_name __code_style field.name) '_buf_' field.ctype}}
         {{~end~}}
     }
 
@@ -124,12 +123,12 @@ export class {{table.name}} {
     {{~if table.is_map_table ~}}
     private _dataMap: Map<{{declaring_type_name key_type}}, {{declaring_type_name value_type}}>
     private _dataList: {{declaring_type_name value_type}}[]
-    constructor(_json_: any) {
+    constructor(_buf_: ByteBuf) {
         this._dataMap = new Map<{{declaring_type_name key_type}}, {{declaring_type_name value_type}}>()
         this._dataList = []
-        for(var _json2_ of _json_) {
+        for(let n = _buf_.ReadInt(); n > 0; n--) {
             let _v: {{declaring_type_name value_type}}
-            {{deserialize '_v' '_json2_' value_type}}
+            {{deserialize '_v' '_buf_' value_type}}
             this._dataList.push(_v)
             this._dataMap.set(_v.{{format_field_name __code_style table.index_field.name}}, _v)
         }
@@ -138,7 +137,9 @@ export class {{table.name}} {
     getDataMap(): Map<{{declaring_type_name key_type}}, {{declaring_type_name value_type}}> { return this._dataMap; }
     getDataList(): {{declaring_type_name value_type}}[] { return this._dataList; }
 
-    get(key: {{declaring_type_name key_type}}): {{declaring_type_name value_type}} | undefined { return this._dataMap.get(key); }
+    get(key: {{declaring_type_name key_type}}): {{declaring_type_name value_type}} | undefined {
+        return this._dataMap.get(key); 
+    }
 
     resolve(tables:{{__name}}) {
         for(let  data of this._dataList)
@@ -149,11 +150,11 @@ export class {{table.name}} {
     {{~else if table.is_list_table ~}}
     private _dataList: {{declaring_type_name value_type}}[]
     
-    constructor(_json_: any) {
+    constructor(_buf_: ByteBuf) {
         this._dataList = []
-        for(var _json2_ of _json_) {
+        for(let n = _buf_.ReadInt(); n > 0; n--) {
             let _v: {{declaring_type_name value_type}}
-            {{deserialize '_v' '_json2_' value_type}}
+            {{deserialize '_v' '_buf_' value_type}}
             this._dataList.push(_v)
         }
     }
@@ -171,9 +172,9 @@ export class {{table.name}} {
     {{~else~}}
 
     private _data: {{declaring_type_name value_type}}
-    constructor(_json_: any) {
-        if (_json_.length != 1) throw new Error('table mode=one, but size != 1')
-        {{deserialize 'this._data' '_json_[0]' value_type}}
+    constructor(_buf_: ByteBuf) {
+        if (_buf_.ReadInt() != 1) throw new Error('table mode=one, but size != 1')
+        {{deserialize 'this._data' '_buf_' value_type}}
     }
 
     getData(): {{declaring_type_name value_type}} { return this._data; }
@@ -190,8 +191,7 @@ export class {{table.name}} {
     {{~end~}}
     {{~end~}}
 
-    resolve(tables:{{__name}})
-    {
+    resolve(tables:{{__name}}) {
         this._data.resolve(tables)
     }
     {{end}}
@@ -201,7 +201,7 @@ export class {{table.name}} {
 {{~end~}}
 
 
-type JsonLoader = (file: string) => any
+type ByteBufLoader = (file: string) => ByteBuf
 
 export class {{__name}} {
     {{~ for table in __tables ~}}
@@ -214,7 +214,15 @@ export class {{__name}} {
     get {{table.name}}(): {{table.full_name}}  { return this._{{table.name}};}
     {{~end~}}
 
-    constructor(loader: JsonLoader) {
+    static getTableNames(): string[] {
+        let names: string[] = [];
+        {{~for table in __tables ~}}
+        names.push('{{table.output_data_file}}');
+        {{~end~}}
+        return names;
+    }
+
+    constructor(loader: ByteBufLoader) {
         {{~for table in __tables ~}}
         this._{{table.name}} = new {{table.full_name}}(loader('{{table.output_data_file}}'))
         {{~end~}}

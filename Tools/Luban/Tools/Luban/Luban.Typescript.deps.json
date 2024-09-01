@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "Luban.Typescript/1.0.0": {
         "dependencies": {
+          "Luban.CSharp": "1.0.0",
           "Luban.Core": "1.0.0",
           "Luban.DataTarget.Builtin": "1.0.0"
         },
@@ -293,6 +294,17 @@
           "Luban.Core.dll": {}
         }
       },
+      "Luban.CSharp/1.0.0": {
+        "dependencies": {
+          "Luban.Core": "1.0.0",
+          "Luban.DataValidator.Builtin": "1.0.0",
+          "NLog": "5.2.2",
+          "Scriban": "5.7.0"
+        },
+        "runtime": {
+          "Luban.CSharp.dll": {}
+        }
+      },
       "Luban.DataLoader.Builtin/1.0.0": {
         "dependencies": {
           "ExcelDataReader": "3.6.0",
@@ -312,6 +324,14 @@
         },
         "runtime": {
           "Luban.DataTarget.Builtin.dll": {}
+        }
+      },
+      "Luban.DataValidator.Builtin/1.0.0": {
+        "dependencies": {
+          "Luban.Core": "1.0.0"
+        },
+        "runtime": {
+          "Luban.DataValidator.Builtin.dll": {}
         }
       }
     }
@@ -558,12 +578,22 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Luban.CSharp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "Luban.DataLoader.Builtin/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
     "Luban.DataTarget.Builtin/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Luban.DataValidator.Builtin/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
