@@ -123,7 +123,7 @@ namespace ET
                     return;
                 }
                 tcsList.Remove(tcs);
-                tcs.TrySetResult(new T() { Error = WaitTypeError.Timeout });
+                tcs.SetResult(new T() { Error = WaitTypeError.Timeout });
             }
             
             WaitTimeout().Forget();
@@ -150,7 +150,7 @@ namespace ET
 
             foreach(var tcs in tcsList)
             {
-                ((ResultCallback<T>) tcs).TrySetResult(obj);
+                ((ResultCallback<T>) tcs).SetResult(obj);
             }
             tcsList.Clear();
         }
