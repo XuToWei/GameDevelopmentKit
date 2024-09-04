@@ -27,7 +27,12 @@ namespace ET.Server
                 
                 // 强制调用一下mongo，避免mongo库被裁剪
                 MongoHelper.ToJson(1);
-                
+
+                if (Define.WorkDir.Contains(' '))
+                {
+                    throw new Exception("工作目录不能包含空格");
+                }
+
                 Log.Info($"server start........................ ");
                 switch (Options.Instance.AppType)
                 {
