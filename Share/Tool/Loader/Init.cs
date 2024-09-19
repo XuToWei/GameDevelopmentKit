@@ -30,7 +30,8 @@ namespace ET.Server
 
                 if (Define.WorkDir.Contains(' '))
                 {
-                    throw new Exception("工作目录不能包含空格");
+                    Log.Error("工作目录不能包含空格");
+                    return 1;
                 }
 
                 Log.Info($"server start........................ ");
