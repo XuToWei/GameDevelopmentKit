@@ -8,11 +8,11 @@
       "hash": "93c7e64d2fa1b8ce1798f0cbce75034f63a45c04"
     },
     "com.code-philosophy.hybridclr": {
-      "version": "https://github.com/focus-creative-games/hybridclr_unity.git#v6.7.1",
+      "version": "https://github.com/focus-creative-games/hybridclr_unity.git#v6.8.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "59bc259cc88898425620535d282192503ba99399"
+      "hash": "c24617d86428e2fbd82011871a034ac15601499d"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git#1.0.3",
@@ -160,7 +160,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.memoryprofiler": {
-      "version": "1.1.0",
+      "version": "1.1.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -270,14 +270,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2c4e31f6a665d22cb5a1f056349c09c7e91b64f7"
+      "hash": "66f693fd5eb2c23d1e22b2d5cc4895c0e42ee28f"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "98b196828ca715c2d2090aa61fd0d60742e010a9"
+      "hash": "916f1cf020dd3394eb66297268e06ea1b20e8e8f"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
