@@ -17,7 +17,11 @@ namespace UnityEngine.UI
         /// </summary>
         [SerializeField]
         private string m_localizationID = "";
-        public string localizationID { get { return m_localizationID; } }
+        public string localizationID
+        {
+            get { return m_localizationID; }
+            set { m_localizationID = value; }
+        }
         [SerializeField]
         private string m_previewID = "";
         public string previewID

@@ -2,7 +2,9 @@
     "name": "StateController.Extension",
     "rootNamespace": "",
     "references": [
-        "GUID:b42020b6ece72f74683c8d485d39fa1c"
+        "StateController",
+        "Leihuo.UXTools.Runtime",
+        "Leihuo.UXTools.Editor.Common"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
