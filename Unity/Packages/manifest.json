@@ -11,6 +11,7 @@
     "com.cysharp.r3": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.2.8",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.cysharp.zstring": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
+    "com.tuyoogame.yooasset": "https://github.com/tuyoogame/YooAsset.git?path=Assets/YooAsset",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.editoriterationprofiler": "https://github.com/Unity-Technologies/com.unity.editoriterationprofiler.git",
     "com.unity.ide.rider": "3.0.31",
@@ -56,5 +57,6 @@
     "com.unity.modules.vehicles": "1.0.0",
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.wind": "1.0.0"
-  }
+  },
+  "scopedRegistries": []
 }

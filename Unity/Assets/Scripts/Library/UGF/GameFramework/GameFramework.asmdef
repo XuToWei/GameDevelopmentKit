@@ -1,7 +1,9 @@
 {
     "name": "GameFramework",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "YooAsset"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,

@@ -82,6 +82,18 @@
       "dependencies": {},
       "hash": "434fd232ee1c1bea78d81650eeb872208fe32989"
     },
+    "com.tuyoogame.yooasset": {
+      "version": "https://github.com/tuyoogame/YooAsset.git?path=Assets/YooAsset",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.scriptablebuildpipeline": "2.1.3",
+        "com.unity.modules.assetbundle": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
+      },
+      "hash": "02ba98f120c659dab174a8043dee315c86313806"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
@@ -205,6 +217,13 @@
       "dependencies": {
         "com.unity.render-pipelines.core": "14.0.9"
       }
+    },
+    "com.unity.scriptablebuildpipeline": {
+      "version": "2.1.3",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
     },
     "com.unity.searcher": {
       "version": "4.9.2",
