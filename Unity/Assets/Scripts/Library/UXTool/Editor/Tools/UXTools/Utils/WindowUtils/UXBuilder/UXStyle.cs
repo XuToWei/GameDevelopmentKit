@@ -33,7 +33,9 @@ namespace ThunderFireUITool
         public StyleEnum<Position> position { get; set; }
         public StyleEnum<Align> alignSelf { get; set; }
         public StyleEnum<TextAnchor> unityTextAlign { get; set; }
+        public StyleEnum<TextGeneratorType> unityTextGenerator { get; set; }
         public StyleEnum<FontStyle> unityFontStyleAndWeight { get; set; }
+        public StyleEnum<EditorTextRenderingMode> unityEditorTextRenderingMode { get; set; }
         public StyleFont unityFont { get; set; }
         public StyleLength fontSize { get; set; }
         public StyleEnum<WhiteSpace> whiteSpace { get; set; }
