@@ -24,7 +24,7 @@ namespace Game
         public override void RefreshCellView()
         {
             base.RefreshCellView();
-            m_ItemRenderer(m_DataIndex, gameObject);
+            m_ItemRenderer?.Invoke(m_DataIndex, gameObject);
         }
     }
 }

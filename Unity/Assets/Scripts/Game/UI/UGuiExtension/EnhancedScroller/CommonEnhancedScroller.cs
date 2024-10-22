@@ -52,11 +52,10 @@ namespace Game
         public EnhancedScrollerCellView GetCellView(EnhancedScroller scroller, int dataIndex, int cellIndex)
         {
             CommonEnhancedScrollerCellView cellView = scroller.GetCellView(m_CellViewPrefab) as CommonEnhancedScrollerCellView;
-#if UNITY_EDITOR
             cellView.name = Utility.Text.Format("Cell {0}", dataIndex);
-#endif
             cellView.SetRenderer(itemRenderer);
             cellView.SetDataIndex(dataIndex);
+            itemRenderer?.Invoke(dataIndex, cellView.gameObject);
             return cellView;
         }
     }
