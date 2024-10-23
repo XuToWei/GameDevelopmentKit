@@ -1,5 +1,5 @@
 <linker>
-    <!--UNITY_HOTFIX_FIRST-->
+    <!--UNITY_HOTFIX_START-->
     <assembly fullname="mscorlib" preserve="all" />
     <assembly fullname="System" preserve="all" />
     <assembly fullname="System.Core" preserve="all" />
@@ -43,7 +43,7 @@
     <!--UNITY_!HOTFIX-
     -UNITY_!HOTFIX-->
 
-    <!--UNITY_ET_FIRST-->
+    <!--UNITY_ET_START-->
     
     <!--UNITY_ET_END-->
 
@@ -54,7 +54,7 @@
     <assembly fullname="Game.ET.Code.HotfixView" preserve="all" />
     -UNITY_!HOTFIX_ET-->
 
-    <!--UNITY_HOTFIX_ET_FIRST-->
+    <!--UNITY_HOTFIX_ET_START-->
     <assembly fullname="MemoryPack" preserve="all" />
     <assembly fullname="MongoDB.Bson" preserve="all" />
     <assembly fullname="CommandLine" preserve="all" />
@@ -66,13 +66,13 @@
     <!--UNITY_!HOTFIX_ET_CLIENT-
     -UNITY_!HOTFIX_ET_CLIENT-->
     
-    <!--UNITY_HOTFIX_ET_CLIENT_FIRST-->
+    <!--UNITY_HOTFIX_ET_CLIENT_START-->
     <!--UNITY_HOTFIX_ET_CLIENT_END-->
 
     <!--UNITY_!HOTFIX_ET_SERVER-
     -UNITY_!HOTFIX_ET_SERVER-->
     
-    <!--UNITY_HOTFIX_ET_SERVER_FIRST-->
+    <!--UNITY_HOTFIX_ET_SERVER_START-->
     <assembly fullname="MongoDB.Driver" preserve="all" />
     <!--UNITY_HOTFIX_ET_SERVER_END-->
 
