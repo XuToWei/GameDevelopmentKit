@@ -69,7 +69,7 @@ public sealed class DRAIConfig :  Luban.EditorBeanBase
             var _fieldJson = _json["NodeParams"];
             if (_fieldJson != null)
             {
-                if(!_fieldJson.IsArray) { throw new SerializationException(); } NodeParams = new System.Collections.Generic.List<int>(); foreach(JSONNode __e in _fieldJson.Children) { int __v;  if(!__e.IsNumber) { throw new SerializationException(); }  __v = __e;  NodeParams.Add(__v); }  
+                if(!_fieldJson.IsArray) { throw new SerializationException(); } NodeParams = new System.Collections.Generic.List<int>(); foreach(JSONNode __e0 in _fieldJson.Children) { int __v0;  if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0;  NodeParams.Add(__v0); }  
             }
         }
         
@@ -99,7 +99,7 @@ public sealed class DRAIConfig :  Luban.EditorBeanBase
         {
 
             if (NodeParams == null) { throw new System.ArgumentNullException(); }
-            { var __cjson = new JSONArray(); foreach(var _e in NodeParams) { __cjson["null"] = new JSONNumber(_e); } _json["NodeParams"] = __cjson; }
+            { var __cjson0 = new JSONArray(); _json["NodeParams"] = __cjson0; foreach(var _e0 in NodeParams) { JSONNode __v0; __v0 = new JSONNumber(_e0); __cjson0.Add(__v0); } }
         }
     }
 
@@ -148,3 +148,4 @@ public sealed class DRAIConfig :  Luban.EditorBeanBase
 }
 
 }
+
