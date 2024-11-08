@@ -250,6 +250,7 @@
 		public static readonly long Def_修改方式 = 4310897810911588879;
 		public static readonly long Def_修改操作 = 3710219796228948108;
 		public static readonly long Def_脚本选择 = 2433816456489052878;
+		public static readonly long Def_写入 = 8121613295325511752;
 		
     }
 }

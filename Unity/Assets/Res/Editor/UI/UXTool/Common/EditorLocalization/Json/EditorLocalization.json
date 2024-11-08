@@ -2221,5 +2221,14 @@
     "KR": "Script",
     "JAN": "Script",
     "znHans": "\u811a\u672c\u9009\u62e9"
+  },
+  {
+    "key": 8121613295325511752,
+    "description": "\u5199\u5165",
+    "zhCN": "\u5199\u5165",
+    "EN": "Write",
+    "KR": "\uc7a5\uc2b5",
+    "JAN": "\u66f8\u5165\u8f38\u307e",
+    "znHans": "\u5beb\u5165"
   }
 ]

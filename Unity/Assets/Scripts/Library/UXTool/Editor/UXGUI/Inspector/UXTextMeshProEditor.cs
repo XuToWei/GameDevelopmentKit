@@ -210,7 +210,14 @@ namespace UnityEngine.UI
                         GUI.enabled = true;
                     }
                     EditorGUILayout.BeginHorizontal();
-                    SearchableLocalizationKey.PropertyField(localizationID, new GUIContent("key"), () =>
+                    string oldKey = localizationID.stringValue;
+                    localizationID.stringValue = EditorGUILayout.TextField("key", oldKey);
+                    if (oldKey != localizationID.stringValue)
+                    {
+                        ShowObj();
+                        ChangeAvailables();
+                    }
+                    SearchableLocalizationKey.PropertyField(localizationID, () =>
                     {
                         ShowObj();
                         ChangeAvailables();
@@ -258,7 +265,14 @@ namespace UnityEngine.UI
                         GUI.enabled = true;
                     }
                     EditorGUILayout.BeginHorizontal();
-                    SearchableLocalizationKey.PropertyField(previewID, new GUIContent("key"), () =>
+                    string oldKey = previewID.stringValue;
+                    previewID.stringValue = EditorGUILayout.TextField("key", oldKey);
+                    if (oldKey != previewID.stringValue)
+                    {
+                        ShowObj();
+                        ChangeAvailables();
+                    }
+                    SearchableLocalizationKey.PropertyField(previewID, () =>
                     {
                         ShowObj();
                         ChangeAvailables();

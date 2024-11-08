@@ -10,7 +10,7 @@ public class SearchableLocalizationKey
 
     public static void PropertyField(SerializedProperty property, GUIContent label, Action onKeyChange)
     {
-        Rect position = GUILayoutUtility.GetRect(label, new GUIStyle());
+        Rect position = GUILayoutUtility.GetRect(label, EditorStyles.layerMaskField);
 
         int id = GUIUtility.GetControlID(s_IdHash, FocusType.Keyboard, position);
 
@@ -32,6 +32,27 @@ public class SearchableLocalizationKey
         }
 
         EditorGUI.EndProperty();
+    }
+
+    public static void PropertyField(SerializedProperty property, Action onKeyChange)
+    {
+        Rect position = GUILayoutUtility.GetRect(null, EditorStyles.layerMaskField);
+
+        int id = GUIUtility.GetControlID(s_IdHash, FocusType.Keyboard, position);
+
+        GUIContent buttonText = new GUIContent(property.stringValue);
+
+        if (DropdownButton(id, position, buttonText))
+        {
+            void OnSelect(int i)
+            {
+                property.stringValue = EditorLocalizationTool.AllKeys[i];
+                property.serializedObject.ApplyModifiedProperties();
+                onKeyChange?.Invoke();
+            }
+            position.x += 1;
+            SearchablePopup.Show(position, EditorLocalizationTool.AllKeys, EditorLocalizationTool.AllKeys.IndexOf(property.stringValue), OnSelect);
+        }
     }
 
     /// <summary>
