@@ -66,7 +66,8 @@ namespace ET.Editor
                 }
                 string template = File.ReadAllText(templateFile);
                 string codeStr = template.Replace("#NAME#", componentName);
-                codeStr = codeStr.Replace("#NAMESPACE#", GetNameSpace());
+                string nameSpace = GetNameSpace();
+                codeStr = codeStr.Replace("#NAMESPACE#", string.IsNullOrEmpty(nameSpace) ? String.Empty : $".{nameSpace}");
                 File.WriteAllText(codeFile, codeStr);
                 Debug.Log($"Generate cs:{codeFile}!");
             }
@@ -122,11 +123,11 @@ namespace ET.Editor
         {
             if (this.m_CodePathType == CodePathType.Client)
             {
-                return ".Client";
+                return "Client";
             }
             if (this.m_CodePathType == CodePathType.Server)
             {
-                return ".Server";
+                return "Server";
             }
             if (this.m_CodePathType == CodePathType.Share)
             {
@@ -134,7 +135,7 @@ namespace ET.Editor
             }
             if (this.m_CodePathType == CodePathType.View)
             {
-                return ".Client";
+                return "Client";
             }
             return string.Empty;
         }

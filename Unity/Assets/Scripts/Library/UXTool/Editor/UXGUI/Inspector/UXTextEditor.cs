@@ -263,7 +263,7 @@ namespace UnityEngine.UI
                         ShowObj();
                         ChangeAvailables();
                     }
-                    SearchableLocalizationKey.PropertyField(localizationID, () =>
+                    SearchableLocalizationKey.PropertyFieldWithOutProperty(localizationID, () =>
                     {
                         ShowObj();
                         ChangeAvailables();
@@ -323,7 +323,7 @@ namespace UnityEngine.UI
                         ShowObj();
                         ChangeAvailables();
                     }
-                    SearchableLocalizationKey.PropertyField(previewID, () =>
+                    SearchableLocalizationKey.PropertyFieldWithOutProperty(previewID, () =>
                     {
                         ShowObj();
                         ChangeAvailables();

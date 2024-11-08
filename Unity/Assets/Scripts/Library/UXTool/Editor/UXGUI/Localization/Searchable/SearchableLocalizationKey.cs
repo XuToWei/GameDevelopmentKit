@@ -8,9 +8,9 @@ public class SearchableLocalizationKey
 {
     private static readonly int s_IdHash = typeof(SearchableLocalizationKey).GetHashCode();
 
-    public static void PropertyField(SerializedProperty property, GUIContent label, Action onKeyChange)
+    public static void PropertyFieldWithLabel(SerializedProperty property, GUIContent label, Action onKeyChange)
     {
-        Rect position = GUILayoutUtility.GetRect(label, EditorStyles.layerMaskField);
+        Rect position = GUILayoutUtility.GetRect(label, EditorStyles.popup);
 
         int id = GUIUtility.GetControlID(s_IdHash, FocusType.Keyboard, position);
 
@@ -27,16 +27,15 @@ public class SearchableLocalizationKey
                 property.serializedObject.ApplyModifiedProperties();
                 onKeyChange?.Invoke();
             }
-            position.x += 1;
             SearchablePopup.Show(position, EditorLocalizationTool.AllKeys, EditorLocalizationTool.AllKeys.IndexOf(property.stringValue), OnSelect);
         }
 
         EditorGUI.EndProperty();
     }
 
-    public static void PropertyField(SerializedProperty property, Action onKeyChange)
+    public static void PropertyFieldWithProperty(SerializedProperty property, Action onKeyChange)
     {
-        Rect position = GUILayoutUtility.GetRect(null, EditorStyles.layerMaskField);
+        Rect position = GUILayoutUtility.GetRect(null, EditorStyles.popup);
 
         int id = GUIUtility.GetControlID(s_IdHash, FocusType.Keyboard, position);
 
@@ -50,7 +49,26 @@ public class SearchableLocalizationKey
                 property.serializedObject.ApplyModifiedProperties();
                 onKeyChange?.Invoke();
             }
-            position.x += 1;
+            SearchablePopup.Show(position, EditorLocalizationTool.AllKeys, EditorLocalizationTool.AllKeys.IndexOf(property.stringValue), OnSelect);
+        }
+    }
+    
+    public static void PropertyFieldWithOutProperty(SerializedProperty property, Action onKeyChange)
+    {
+        Rect position = GUILayoutUtility.GetRect(null, EditorStyles.popup, GUILayout.Width(20));
+
+        int id = GUIUtility.GetControlID(s_IdHash, FocusType.Keyboard, position);
+
+        GUIContent buttonText = new GUIContent("");
+
+        if (DropdownButton(id, position, buttonText))
+        {
+            void OnSelect(int i)
+            {
+                property.stringValue = EditorLocalizationTool.AllKeys[i];
+                property.serializedObject.ApplyModifiedProperties();
+                onKeyChange?.Invoke();
+            }
             SearchablePopup.Show(position, EditorLocalizationTool.AllKeys, EditorLocalizationTool.AllKeys.IndexOf(property.stringValue), OnSelect);
         }
     }
