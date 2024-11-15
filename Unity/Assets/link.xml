@@ -30,7 +30,7 @@
     <assembly fullname="UniTask" preserve="all" />
     <assembly fullname="ZString" preserve="all" />
     <assembly fullname="Leihuo.UXTools.Runtime" preserve="all" />
-    <assembly fullname="UniTaskExtension" preserve="all" />
+    <assembly fullname="UniTask.Extension" preserve="all" />
     <assembly fullname="StompyRobot.SRDebugger" preserve="all" />
     <assembly fullname="SLATE" preserve="all" />
     <assembly fullname="EnhancedScroller" preserve="all" />
