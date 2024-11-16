@@ -209,6 +209,7 @@ namespace ThunderFireUITool
         {
             //先获取Prefab中的Canvas(Environment)作为父节点,初始化出正确的引导遮罩大小
             GameObject go = GameObject.Instantiate(beginnerGuidePrefab, guideRoot.transform);
+            go.hideFlags = HideFlags.DontSave;
             //将父节点改为Prefab的根节点,因为prefab模式下Canvas(Environment)只能有一个子节点,不改的话创建的新手引导就会被刷掉了
             //go.transform.SetParent(guideRoot.transform);
             allChildsForDiff = go.GetComponentsInChildren<Transform>(true).ToList();

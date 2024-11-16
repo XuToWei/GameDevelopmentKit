@@ -30,8 +30,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
-    - _SliderX: 53.40233
-    - _SliderY: 53.402336
+    - _SliderX: 50
+    - _SliderY: 50
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
@@ -39,6 +39,6 @@ Material:
     - _StencilWriteMask: 255
     - _UseUIAlphaClip: 0
     m_Colors:
-    - _Center: {r: 459.99982, g: -95.00001, b: 0, a: 0}
+    - _Center: {r: 165, g: 7.5, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
