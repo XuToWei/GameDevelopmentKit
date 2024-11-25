@@ -35,6 +35,9 @@
     <assembly fullname="SLATE" preserve="all" />
     <assembly fullname="EnhancedScroller" preserve="all" />
     <assembly fullname="Animancer" preserve="all" />
+    <assembly fullname="uNode" preserve="all" />
+    <assembly fullname="uNode.Core" preserve="all" />
+    <assembly fullname="uNode.Integration.InputSystem" preserve="all" />
     <assembly fullname="R3.Unity" preserve="all" />
     
     <assembly fullname="Game" preserve="all" />

@@ -58,6 +58,9 @@ MonoBehaviour:
   - SLATE
   - EnhancedScroller
   - Animancer
+  - uNode
+  - uNode.Core
+  - uNode.Integration.InputSystem
   - R3.Unity
   - Game
   - MemoryPack
