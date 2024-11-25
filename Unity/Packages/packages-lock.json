@@ -8,11 +8,11 @@
       "hash": "93c7e64d2fa1b8ce1798f0cbce75034f63a45c04"
     },
     "com.code-philosophy.hybridclr": {
-      "version": "https://github.com/focus-creative-games/hybridclr_unity.git#v6.8.0",
+      "version": "https://github.com/focus-creative-games/hybridclr_unity.git#v7.0.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "c24617d86428e2fbd82011871a034ac15601499d"
+      "hash": "1f0053a3c91cbe041bbf9d1522e441bbb738d13c"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git#1.0.3",
