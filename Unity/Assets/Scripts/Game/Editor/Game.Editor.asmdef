@@ -30,7 +30,13 @@
         "Leihuo.UXTools.Runtime",
         "SocoTool.Editor",
         "SocoTool",
-        "Leihuo.UXTools.Editor.Common"
+        "Leihuo.UXTools.Editor.Common",
+        "uNode",
+        "uNode.Compiler",
+        "uNode.Core",
+        "uNode.Core.Editor",
+        "uNode.Editor",
+        "uNode.Integration.InputSystem"
     ],
     "includePlatforms": [
         "Editor"

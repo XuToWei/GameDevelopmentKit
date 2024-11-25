@@ -27,7 +27,10 @@
         "Animancer",
         "SocoTool",
         "R3.Unity",
-        "UniTask.Extension"
+        "UniTask.Extension",
+        "uNode",
+        "uNode.Core",
+        "uNode.Integration.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -16,6 +16,7 @@ namespace Game.Editor
             "Assets/Scripts/Library/SLATE Cinematic Sequencer",
             "Assets/Scripts/Library/SmartUiSelection",
             "Assets/Scripts/Library/StompyRobot",
+            "Assets/Scripts/Library/uNode",
             "Assets/Plugins/Demigiant",
             "Assets/Plugins/Sirenix",
             "Assets/Plugins/Animancer",
