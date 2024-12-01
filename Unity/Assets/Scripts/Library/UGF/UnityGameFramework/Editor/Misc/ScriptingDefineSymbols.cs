@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Build;
 
 namespace UnityGameFramework.Editor
 {
@@ -141,7 +142,7 @@ namespace UnityGameFramework.Editor
         /// <returns>平台的脚本宏定义。</returns>
         public static string[] GetScriptingDefineSymbols(BuildTargetGroup buildTargetGroup)
         {
-            return PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup).Split(';');
+            return PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(buildTargetGroup)).Split(';');
         }
 
         /// <summary>
@@ -151,7 +152,7 @@ namespace UnityGameFramework.Editor
         /// <param name="scriptingDefineSymbols">要设置的脚本宏定义。</param>
         public static void SetScriptingDefineSymbols(BuildTargetGroup buildTargetGroup, string[] scriptingDefineSymbols)
         {
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, string.Join(";", scriptingDefineSymbols));
+            PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(buildTargetGroup), string.Join(";", scriptingDefineSymbols));
         }
     }
 }

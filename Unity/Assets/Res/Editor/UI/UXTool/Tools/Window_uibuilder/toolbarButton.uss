@@ -30,7 +30,7 @@
     top: 10px;
     right: 10px;
     bottom: 10px;
-    background-image: url('/Assets/UXTools/Res/UX-GUI-Editor-Tools/Assets/Editor/Res/Icon/text.png');
+    background-image: url('/Assets/Res/Editor/UI/UXTool/Tools/Res/Icon/ToolBar/createText.png');
     align-items: center;
     justify-content: center;
     -unity-background-scale-mode: stretch-to-fill;

@@ -94,5 +94,9 @@ namespace ThunderFireUITool
         public StyleBackgroundSize backgroundSize { get; set; }
         public StyleFloat unitySliceScale { get; set; }
 #endif
+#if UNITY_6000_0_OR_NEWER
+        public StyleEnum<TextGeneratorType> unityTextGenerator { get; set; }
+        public StyleEnum<EditorTextRenderingMode> unityEditorTextRenderingMode { get; set; }
+#endif
     }
 }

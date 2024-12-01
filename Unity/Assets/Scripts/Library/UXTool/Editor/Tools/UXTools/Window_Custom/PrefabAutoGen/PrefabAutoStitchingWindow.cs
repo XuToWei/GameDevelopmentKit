@@ -458,7 +458,7 @@ public class PrefabAutoStitchingWindow : EditorWindow
 
     private static void GenPrefabRoot()
     {
-        GameObject canvasGo = Transform.FindObjectOfType<Canvas>()?.gameObject;
+        GameObject canvasGo = FindFirstObjectByType<Canvas>()?.gameObject;
         if (canvasGo == null)
         {
             canvasGo = new GameObject("Canvas");

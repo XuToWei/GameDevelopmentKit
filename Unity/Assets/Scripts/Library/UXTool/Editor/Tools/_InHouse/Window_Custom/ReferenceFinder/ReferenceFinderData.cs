@@ -10,6 +10,7 @@ using System.Threading;
 using System.Text;
 using System.Text.RegularExpressions;
 using ThunderFireUITool;
+using UnityEditor.Build;
 using UnityEditor.IMGUI.Controls;
 
 public class AssetDescription : TreeViewItem
@@ -266,7 +267,7 @@ public class ReferenceFinderData
     public bool ReadFromCache()
     {
         assetDict.Clear();
-        Texture2D[] t = PlayerSettings.GetIconsForTargetGroup(BuildTargetGroup.Android);
+        Texture2D[] t = PlayerSettings.GetIcons(NamedBuildTarget.Android, IconKind.Settings);
         settingIconPath = AssetDatabase.GetAssetPath(t[0]);
         ClearCache();
         if (File.Exists(CACHE_PATH))

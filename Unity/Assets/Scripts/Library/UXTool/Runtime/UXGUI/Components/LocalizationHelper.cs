@@ -63,7 +63,13 @@ public class LocalizationHelper
     /// </summary>
     private static void ChangeILocalization()
     {
-#if UNITY_2020_3_OR_NEWER
+#if UNITY_6000_0_OR_NEWER
+        ILocalization[] allObjects = UnityEngine.Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID).OfType<ILocalization>().ToArray();
+        foreach (var obj in allObjects)
+        {
+            obj.ChangeLanguage(GetLanguage());
+        }
+#elif UNITY_2020_3_OR_NEWER
         ILocalization[] allObjects = UnityEngine.Object.FindObjectsOfType<MonoBehaviour>(true).OfType<ILocalization>().ToArray();
         foreach (var obj in allObjects)
         {

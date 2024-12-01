@@ -84,15 +84,15 @@ namespace ThunderFireUITool
         {
             OnPointerEnterAction?.Invoke(e);
         }
-        private void OnPointerDown(PointerDownEvent e)
+        private new void OnPointerDown(PointerDownEvent e)
         {
             OnPointerDownAction?.Invoke(e);
         }
-        private void OnPointerMove(PointerMoveEvent e)
+        private new void OnPointerMove(PointerMoveEvent e)
         {
             OnPointerMoveAction?.Invoke(e);
         }
-        private void OnPointerUp(PointerUpEvent e)
+        private new void OnPointerUp(PointerUpEvent e)
         {
             OnPointerUpAction?.Invoke(e);
         }
@@ -198,7 +198,7 @@ namespace ThunderFireUITool
             }
             else
             {
-                allObjects = UnityEngine.Object.FindObjectsOfType<RectTransform>();
+                allObjects = UnityEngine.Object.FindObjectsByType<RectTransform>(FindObjectsSortMode.InstanceID);
             }
             foreach (RectTransform item in allObjects)
             {

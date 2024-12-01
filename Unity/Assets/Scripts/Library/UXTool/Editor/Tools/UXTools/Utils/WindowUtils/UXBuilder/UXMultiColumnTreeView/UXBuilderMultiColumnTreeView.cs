@@ -12,7 +12,7 @@ namespace ThunderFireUITool
         public const string ClassName = "UXMultiColumnTreeView";
         public readonly UXStyle Style = new UXStyle();
         public readonly Columns Columns = new Columns();
-        public const bool SortingEnabled = false;
+        public const ColumnSortingMode SortingEnabled = ColumnSortingMode.None;
         public readonly Action SortAction = null;
     }
 
@@ -51,7 +51,7 @@ namespace ThunderFireUITool
             _mUXMultiColumnTreeView.name = UXBuilderMultiColumnTreeViewStruct.ClassName;
             _mUXMultiColumnTreeView.showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly;
             _mUXMultiColumnTreeView.SetRootItems(itemDatas);
-            _mUXMultiColumnTreeView.sortingEnabled = true;
+            _mUXMultiColumnTreeView.sortingMode = ColumnSortingMode.Default;
             StyleCopy.IStyleToUXStyle(_mStyle, _mUXMultiColumnTreeView.style);
             InitComponent(component);
             
@@ -97,9 +97,9 @@ namespace ThunderFireUITool
                 .ForEach(element => element.AddToClassList("ux-multi-column-treeview-header-label__custom"));
         }
 
-        private static void InitSort(bool sortingEnabled, Action sortAction)
+        private static void InitSort(ColumnSortingMode sortingMode, Action sortAction)
         {
-            _mUXMultiColumnTreeView.sortingEnabled = sortingEnabled;
+            _mUXMultiColumnTreeView.sortingMode = sortingMode;
             _mUXMultiColumnTreeView.columnSortingChanged += sortAction;
         }
     }

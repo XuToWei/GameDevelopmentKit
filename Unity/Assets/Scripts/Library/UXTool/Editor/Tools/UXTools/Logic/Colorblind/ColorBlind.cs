@@ -66,12 +66,18 @@ public class ColorBlind : Editor
         return ColorBlindType.Normal;
     }
 
-    private static ColorBlindnessEffect AddorGetComponent()
+    private static ColorBlindnessEffect AddOrGetComponent()
     {
         Camera mainCamera = Camera.main;
         if (mainCamera == null)
         {
-            mainCamera = FindObjectOfType<Camera>();
+            mainCamera = FindFirstObjectByType<Camera>();
+            if (mainCamera == null)
+            {
+                var cameraGo = new GameObject("ColorBlind Camera");
+                cameraGo.hideFlags = HideFlags.DontSave;
+                mainCamera = cameraGo.AddComponent<Camera>();
+            }
         }
         var effect = mainCamera.GetComponent<ColorBlindnessEffect>();
         if(effect != null) return effect;
@@ -83,7 +89,7 @@ public class ColorBlind : Editor
     //[MenuItem("ThunderFireUXTool/Color/Red")]
     public static void ToRed()
     {
-        AddorGetComponent().mode = ColorModification.Protanopia;
+        AddOrGetComponent().mode = ColorModification.Protanopia;
         //var m = FindMaterial();
         //m.SetInt("type",1);
     }
@@ -91,7 +97,7 @@ public class ColorBlind : Editor
     //[MenuItem("ThunderFireUXTool/Color/Green")]
     public static void ToGreen()
     {
-        AddorGetComponent().mode = ColorModification.Deuteranopia;
+        AddOrGetComponent().mode = ColorModification.Deuteranopia;
         //var m = FindMaterial();
         //m.SetInt("type",2);
     }
@@ -99,7 +105,7 @@ public class ColorBlind : Editor
     //[MenuItem("ThunderFireUXTool/Color/Blue")]
     public static void ToBlue()
     {
-        AddorGetComponent().mode = ColorModification.Tritanopia;
+        AddOrGetComponent().mode = ColorModification.Tritanopia;
         //var m = FindMaterial();
         //m.SetInt("type",3);
     }
@@ -107,7 +113,7 @@ public class ColorBlind : Editor
     //[MenuItem("ThunderFireUXTool/Color/Normal")]
     public static void ToNormal()
     {
-        DestroyImmediate(AddorGetComponent());
+        DestroyImmediate(AddOrGetComponent());
         //var m = FindMaterial();
         //m.SetInt("type",0);
     }
