@@ -59,7 +59,14 @@ namespace UnityGameFramework.Runtime
             }
             set
             {
+#if UNITY_6000_0_OR_NEWER
+                if (m_AudioSource.clip != null)
+                {
+                    m_AudioSource.time = value;
+                }
+#else
                 m_AudioSource.time = value;
+#endif
             }
         }
 
