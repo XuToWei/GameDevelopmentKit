@@ -20,17 +20,12 @@
         "Coffee.UnmaskForUGUI",
         "ZString",
         "MemoryPack",
-        "SLATE",
         "EnhancedScroller",
         "Leihuo.UXTools.Runtime",
         "StateController",
-        "Animancer",
         "SocoTool",
         "R3.Unity",
-        "UniTask.Extension",
-        "uNode",
-        "uNode.Core",
-        "uNode.Integration.InputSystem"
+        "UniTask.Extension"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

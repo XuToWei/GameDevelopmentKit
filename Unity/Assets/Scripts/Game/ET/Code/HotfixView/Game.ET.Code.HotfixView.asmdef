@@ -28,7 +28,6 @@
         "EnhancedScroller",
         "Leihuo.UXTools.Runtime",
         "StateController",
-        "Animancer",
         "R3.Unity",
         "UniTask.Extension"
     ],
