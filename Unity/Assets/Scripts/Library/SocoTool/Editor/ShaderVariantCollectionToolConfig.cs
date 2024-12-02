@@ -8,7 +8,6 @@ namespace Soco.ShaderVariantsCollection
     [System.Serializable]
     public class ToggleObject
     {
-        [SerializeReference]
         public ScriptableObject obj;
         public bool use;
     }
