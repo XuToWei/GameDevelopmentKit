@@ -14,7 +14,7 @@ public class ETSystemGenerator: ISourceGenerator
     public void Initialize(GeneratorInitializationContext context)
     {
         this.templates = new AttributeTemplate();
-        context.RegisterForSyntaxNotifications(()=> SyntaxContextReceiver.Create(this.templates));
+        context.RegisterForSyntaxNotifications(() => SyntaxContextReceiver.Create(this.templates));
     }
 
     public void Execute(GeneratorExecutionContext context)
@@ -198,7 +198,7 @@ namespace {{namespaceName}}
                 
                 void SpeicalProcessForArgs()
                 {
-                    if ((attributeType=="EntitySystem" || attributeType=="LSEntitySystem")&&methodName==Definition.GetComponentMethod)
+                    if ((attributeType == "EntitySystem" || attributeType == "LSEntitySystem") && methodName == Definition.GetComponentMethod)
                     {
                         argsTypes = argsTypes.Split(',')[0];
                     }
@@ -206,9 +206,6 @@ namespace {{namespaceName}}
             }
         }
     }
-
-
-    
 
     class SyntaxContextReceiver: ISyntaxContextReceiver
     {
