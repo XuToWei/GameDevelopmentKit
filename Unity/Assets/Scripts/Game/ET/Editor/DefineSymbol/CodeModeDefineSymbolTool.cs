@@ -8,6 +8,20 @@ namespace ET.Editor
 {
     internal static class CodeModeDefineSymbolTool
     {
+        private static string s_IgnoreAsmdefTemplate;
+
+        private static string IgnoreAsmdefTemplate
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(s_IgnoreAsmdefTemplate))
+                {
+                    s_IgnoreAsmdefTemplate = File.ReadAllText("Assets/Res/Editor/ET/Config/IgnoreAsmdefTemplate.txt");
+                }
+                return s_IgnoreAsmdefTemplate;
+            }
+        }
+
 #if UNITY_ET_CODEMODE_CLIENT
         [MenuItem("ET/Define Symbol/Refresh", false, -1)]
         public static void Refresh()
@@ -208,99 +222,73 @@ namespace ET.Editor
             AssetDatabase.SaveAssets();
         }
 #endif
-
-        static void RenameFile(string sourceFile, string destFile)
+        
+        static void AddAsmdefFile(string file, string asmdefName)
         {
-            if (File.Exists(sourceFile))
+            RemoveAsmdefFile(file);
+            string content = IgnoreAsmdefTemplate.Replace("$asmdefName$", asmdefName);
+            File.WriteAllText(file, content);
+        }
+        
+        static void RemoveAsmdefFile(string file)
+        {
+            if (File.Exists(file))
             {
-                if (File.Exists(destFile))
+                File.Delete(file);
+                string metaFile = $"{file}.meta";
+                if (File.Exists(metaFile))
                 {
-                    File.Delete(destFile);
-                    File.Delete($"{destFile}.meta");
+                    File.Delete(metaFile);
                 }
-                File.Move(sourceFile, destFile);
-                File.Delete(sourceFile);
-                File.Delete($"{sourceFile}.meta");
             }
         }
         
         static void EnableETClientCode()
         {
-            string asmdefFile = "Assets/Scripts/Game/ET/Code/Hotfix/Client/Ignore.asmdef";
-            string asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefFile, asmdefDisableFile);
-            asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Client/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefFile, asmdefDisableFile);
+            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Hotfix/Client/Ignore.asmdef");
+            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Client/Ignore.asmdef");
         }
         
         static void DisableETClientCode()
         {
-            string asmdefFile = "Assets/Scripts/Game/ET/Code/Hotfix/Client/Ignore.asmdef";
-            string asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefDisableFile, asmdefFile);
-            asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Client/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefDisableFile, asmdefFile);
+            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Hotfix/Client/Ignore.asmdef", "Ignore.Hotfix.Client");
+            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Client/Ignore.asmdef", "Ignore.Model.Client");
         }
+        
         static void EnableETClientViewCode()
         {
-            string asmdefFile = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Ignore.asmdef";
-            string asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefFile, asmdefDisableFile);
-            asmdefFile = "Assets/Scripts/Game/ET/Code/ModelView/Client/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefFile, asmdefDisableFile);
+            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/HotfixView/Client/Ignore.asmdef");
+            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/ModelView/Client/Ignore.asmdef");
         }
         
         static void DisableETClientViewCode()
         {
-            string asmdefFile = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Ignore.asmdef";
-            string asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefDisableFile, asmdefFile);
-            asmdefFile = "Assets/Scripts/Game/ET/Code/ModelView/Client/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefDisableFile, asmdefFile);
+            AddAsmdefFile("Assets/Scripts/Game/ET/Code/HotfixView/Client/Ignore.asmdef", "Ignore.HotfixView.Client");
+            AddAsmdefFile("Assets/Scripts/Game/ET/Code/ModelView/Client/Ignore.asmdef", "Ignore.ModelView.Client");
         }
         
         static void EnableETServerCode()
         {
-            string asmdefFile = "Assets/Scripts/Game/ET/Code/Hotfix/Server/Ignore.asmdef";
-            string asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefFile, asmdefDisableFile);
-            asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Server/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefFile, asmdefDisableFile);
+            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Hotfix/Server/Ignore.asmdef");
+            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Server/Ignore.asmdef");
         }
         
         static void DisableETServerCode()
         {
-            string asmdefFile = "Assets/Scripts/Game/ET/Code/Hotfix/Server/Ignore.asmdef";
-            string asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefDisableFile, asmdefFile);
-            asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Server/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefDisableFile, asmdefFile);
+            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Hotfix/Server/Ignore.asmdef", "Ignore.Hotfix.Server");
+            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Server/Ignore.asmdef", "Ignore.Model.Server");
         }
         
         static void EnableModelGenerateClientCode()
         {
-            string asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Generate/Client/Ignore.asmdef";
-            string asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefFile, asmdefDisableFile);
-            asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefDisableFile, asmdefFile);
+            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Generate/Client/Ignore.asmdef");
+            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Ignore.asmdef", "Ignore.Model.Generate.ClientServer");
         }
         
         static void EnableModelGenerateClientServerCode()
         {
-            string asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Ignore.asmdef";
-            string asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefFile, asmdefDisableFile);
-            asmdefFile = "Assets/Scripts/Game/ET/Code/Model/Generate/Client/Ignore.asmdef";
-            asmdefDisableFile = $"{asmdefFile}.DISABLED";
-            RenameFile(asmdefDisableFile, asmdefFile);
+            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Ignore.asmdef");
+            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Generate/Client/Ignore.asmdef", "Ignore.Model.Generate.Client");
         }
         
         static void RefreshETResourceRule(bool isClient)
