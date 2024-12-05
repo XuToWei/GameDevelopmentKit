@@ -139,7 +139,15 @@ public class JsonAssetManager
     }
     public static object CreateAssets(string path, Type type)
     {
-        object newObject = Activator.CreateInstance(type);
+        object newObject;
+        if (type.IsSubclassOf(typeof(ScriptableObject)))
+        {
+            newObject = ScriptableObject.CreateInstance(type);
+        }
+        else
+        {
+            newObject = Activator.CreateInstance(type);
+        }
 
         string folder = Path.GetDirectoryName(path);
         if (!Directory.Exists(folder))
