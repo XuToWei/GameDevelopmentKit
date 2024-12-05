@@ -35,7 +35,7 @@ public class SearchableLocalizationKey
 
     public static void PropertyFieldWithProperty(SerializedProperty property, Action onKeyChange)
     {
-        Rect position = GUILayoutUtility.GetRect(null, EditorStyles.popup);
+        Rect position = GUILayoutUtility.GetRect(GUIContent.none, EditorStyles.popup);
 
         int id = GUIUtility.GetControlID(s_IdHash, FocusType.Keyboard, position);
 
@@ -55,7 +55,7 @@ public class SearchableLocalizationKey
     
     public static void PropertyFieldWithOutProperty(SerializedProperty property, Action onKeyChange)
     {
-        Rect position = GUILayoutUtility.GetRect(null, EditorStyles.popup, GUILayout.Width(20));
+        Rect position = GUILayoutUtility.GetRect(GUIContent.none, EditorStyles.popup, GUILayout.Width(20));
 
         int id = GUIUtility.GetControlID(s_IdHash, FocusType.Keyboard, position);
 
