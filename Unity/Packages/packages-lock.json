@@ -53,13 +53,13 @@
       "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
     },
     "com.cysharp.r3": {
-      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.2.8",
+      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.2.9",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.modules.imgui": "1.0.0"
       },
-      "hash": "01da4b42df832539e83a908dce95105ac195f51c"
+      "hash": "9b18209448c5e1f4572a4191b1f4f530a1d26c01"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
