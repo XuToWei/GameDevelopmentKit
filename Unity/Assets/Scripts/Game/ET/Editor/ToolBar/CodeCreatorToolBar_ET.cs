@@ -7,7 +7,7 @@ namespace ET.Editor
     {
         private static readonly GUIContent s_OpenETCodeCreatorTool = new GUIContent("ETCodeCreator", "Open ET Code Creator Tool.");
 
-        [Toolbar(OnGUISide.Left, 0)]
+        [Toolbar(OnGUISide.Right, 0)]
         static void OnToolbarGUI()
         {
             if (GUILayout.Button(s_OpenETCodeCreatorTool))
