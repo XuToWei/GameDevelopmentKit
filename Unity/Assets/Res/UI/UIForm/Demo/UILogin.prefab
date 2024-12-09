@@ -803,9 +803,14 @@ MonoBehaviour:
   m_GammaToLinear: 0
   m_EnableGrey: 0
   m_EnableRadiusCorner: 0
+  m_EnableDistortion: 0
   m_Contrast: 1
   m_Saturation: 0
   m_CornerRadius: {x: 10, y: 10, z: 10, w: 10}
+  m_BottomLeftDistortion: {x: 0, y: 0}
+  m_BottomRightDistortion: {x: 1, y: 0}
+  m_TopLeftDistortion: {x: 0, y: 1}
+  m_TopRightDistortion: {x: 1, y: 1}
   rect2props: {x: 0.000015258789, y: 0, z: 120.20816, w: 120.20816}
   image: {fileID: 0}
   m_OriginFlipMode: 0

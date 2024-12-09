@@ -32,7 +32,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1621142720048916593}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -107,6 +106,7 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
+    m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   m_Direction: 0
@@ -114,9 +114,14 @@ MonoBehaviour:
   m_GammaToLinear: 0
   m_EnableGrey: 0
   m_EnableRadiusCorner: 0
+  m_EnableDistortion: 0
   m_Contrast: 1
   m_Saturation: 0
   m_CornerRadius: {x: 10, y: 10, z: 10, w: 10}
+  m_BottomLeftDistortion: {x: 0, y: 0}
+  m_BottomRightDistortion: {x: 1, y: 0}
+  m_TopLeftDistortion: {x: 0, y: 1}
+  m_TopRightDistortion: {x: 1, y: 1}
   rect2props: {x: 0, y: 0, z: 0, w: 0}
   image: {fileID: 0}
   m_OriginFlipMode: 0
@@ -128,7 +133,7 @@ MonoBehaviour:
   m_FlipDirection: 3
 --- !u!95 &5078018506122635207
 Animator:
-  serializedVersion: 4
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -142,10 +147,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3428840382407381761
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +187,6 @@ RectTransform:
   - {fileID: 8697575915897662456}
   - {fileID: 6327570049985078792}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -268,7 +274,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1621142720048916593}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -343,6 +348,7 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
+    m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   m_Direction: 0
@@ -350,9 +356,14 @@ MonoBehaviour:
   m_GammaToLinear: 0
   m_EnableGrey: 0
   m_EnableRadiusCorner: 0
+  m_EnableDistortion: 0
   m_Contrast: 1
   m_Saturation: 0
   m_CornerRadius: {x: 10, y: 10, z: 10, w: 10}
+  m_BottomLeftDistortion: {x: 0, y: 0}
+  m_BottomRightDistortion: {x: 1, y: 0}
+  m_TopLeftDistortion: {x: 0, y: 1}
+  m_TopRightDistortion: {x: 1, y: 1}
   rect2props: {x: 0, y: 0, z: 0, w: 0}
   image: {fileID: 0}
   m_OriginFlipMode: 0
@@ -364,7 +375,7 @@ MonoBehaviour:
   m_FlipDirection: 3
 --- !u!95 &3137644382312209282
 Animator:
-  serializedVersion: 4
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -378,7 +389,9 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
