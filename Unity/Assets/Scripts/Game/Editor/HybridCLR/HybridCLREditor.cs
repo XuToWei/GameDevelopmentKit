@@ -37,6 +37,11 @@ namespace Game.Editor
                 aotAssemblyList.Add(AssetDatabase.LoadAssetAtPath<TextAsset>(file));
             }
             HybridCLRConfig hybridCLRConfig = AssetDatabase.LoadAssetAtPath<HybridCLRConfig>(HybridCLRHelper.ConfigAsset);
+            if (hybridCLRConfig == null)
+            {
+                hybridCLRConfig = ScriptableObject.CreateInstance<HybridCLRConfig>();
+                AssetDatabase.CreateAsset(hybridCLRConfig, HybridCLRHelper.ConfigAsset);
+            }
             hybridCLRConfig.aotAssemblies = aotAssemblyList.ToArray();
             EditorUtility.SetDirty(hybridCLRConfig);
             AssetDatabase.SaveAssets();
