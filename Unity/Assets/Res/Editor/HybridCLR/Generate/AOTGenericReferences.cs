@@ -6,18 +6,17 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	public static readonly IReadOnlyList<string> PatchedAOTAssemblyList = new List<string>
 	{
 		"CommandLine.dll",
-		"ET.dll",
+		"ET.Core.dll",
+		"Game.ET.Loader.dll",
 		"Game.dll",
 		"LubanLib.dll",
 		"MemoryPack.dll",
 		"MongoDB.Bson.dll",
-		"MongoDB.Driver.Core.dll",
-		"MongoDB.Driver.dll",
 		"System.Core.dll",
 		"System.Runtime.CompilerServices.Unsafe.dll",
 		"System.dll",
-		"UniTask.dll",
 		"UniTask.Extension.dll",
+		"UniTask.dll",
 		"UnityEngine.CoreModule.dll",
 		"UnityGameFramework.Extension.dll",
 		"mscorlib.dll",
@@ -131,7 +130,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.DTStartSceneConfig.<LoadAsync>d__4>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.DTStartZoneConfig.<LoadAsync>d__4>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.DTUnitConfig.<LoadAsync>d__4>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.DynamicEventSystem.<PublishAsync>d__9<object>>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.DynamicEventSystem.<PublishAsync>d__13<object>>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.EntryEvent1_InitDynamicEvent.<Run>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.EntryEvent1_InitShare.<Run>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.FiberInit_Main.<Handle>d__0>
@@ -171,21 +170,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.C2Room_CheckHashHandler.<Run>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.ChangePosition_NotifyAOI.<Run>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.CreateRobotConsoleHandler.<Run>d__0>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<InsertBatch>d__9<object>>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Query>d__3<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Query>d__4<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Query>d__5<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Query>d__6>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<QueryJson>d__7<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<QueryJson>d__8<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Remove>d__14<object>,long>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Remove>d__15<object>,long>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Remove>d__16<object>,long>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Remove>d__17<object>,long>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Save>d__10<object>>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Save>d__11<object>>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<Save>d__12>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.DBComponentSystem.<SaveNotWait>d__13<object>>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.EntryEvent2_InitServer.<Run>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.FiberInit_BenchmarkClient.<Handle>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask.<>c<ET.Server.FiberInit_BenchmarkServer.<Handle>d__0>
@@ -325,7 +309,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.DTStartSceneConfig.<LoadAsync>d__4>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.DTStartZoneConfig.<LoadAsync>d__4>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.DTUnitConfig.<LoadAsync>d__4>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.DynamicEventSystem.<PublishAsync>d__9<object>>
+	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.DynamicEventSystem.<PublishAsync>d__13<object>>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.EntryEvent1_InitDynamicEvent.<Run>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.EntryEvent1_InitShare.<Run>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.FiberInit_Main.<Handle>d__0>
@@ -365,21 +349,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.C2Room_CheckHashHandler.<Run>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.ChangePosition_NotifyAOI.<Run>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.CreateRobotConsoleHandler.<Run>d__0>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<InsertBatch>d__9<object>>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Query>d__3<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Query>d__4<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Query>d__5<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Query>d__6>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<QueryJson>d__7<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<QueryJson>d__8<object>,object>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Remove>d__14<object>,long>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Remove>d__15<object>,long>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Remove>d__16<object>,long>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Remove>d__17<object>,long>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Save>d__10<object>>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Save>d__11<object>>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<Save>d__12>
-	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.DBComponentSystem.<SaveNotWait>d__13<object>>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.EntryEvent2_InitServer.<Run>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.FiberInit_BenchmarkClient.<Handle>d__0>
 	// Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask<ET.Server.FiberInit_BenchmarkServer.<Handle>d__0>
@@ -1105,7 +1074,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// ET.AwakeSystem<object,int,int>
 	// ET.AwakeSystem<object,int>
 	// ET.AwakeSystem<object,object,int>
-	// ET.AwakeSystem<object,object,object,int>
 	// ET.AwakeSystem<object,object,object>
 	// ET.AwakeSystem<object,object>
 	// ET.AwakeSystem<object>
@@ -1118,7 +1086,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// ET.IAwake<int,int>
 	// ET.IAwake<int>
 	// ET.IAwake<object,int>
-	// ET.IAwake<object,object,int>
 	// ET.IAwake<object,object,object>
 	// ET.IAwake<object,object>
 	// ET.IAwake<object>
@@ -1127,13 +1094,15 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// ET.IAwakeSystem<int,int>
 	// ET.IAwakeSystem<int>
 	// ET.IAwakeSystem<object,int>
-	// ET.IAwakeSystem<object,object,int>
+	// ET.IAwakeSystem<object,long>
 	// ET.IAwakeSystem<object,object,object>
 	// ET.IAwakeSystem<object,object>
 	// ET.IAwakeSystem<object>
 	// ET.LateUpdateSystem<object>
 	// ET.ListComponent<Cysharp.Threading.Tasks.UniTask>
+	// ET.ListComponent<ET.EntityRef<object>>
 	// ET.ListComponent<Unity.Mathematics.float3>
+	// ET.ListComponent<int>
 	// ET.ListComponent<long>
 	// ET.MultiMap<int,object>
 	// ET.Singleton<object>
@@ -1190,21 +1159,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// MongoDB.Bson.Serialization.Serializers.StructSerializerBase<Unity.Mathematics.float4>
 	// MongoDB.Bson.Serialization.Serializers.StructSerializerBase<Unity.Mathematics.quaternion>
 	// MongoDB.Bson.Serialization.Serializers.StructSerializerBase<object>
-	// MongoDB.Driver.AndFilterDefinition.<>c__DisplayClass4_0<object>
-	// MongoDB.Driver.AndFilterDefinition<object>
-	// MongoDB.Driver.BsonDocumentFilterDefinition<object>
-	// MongoDB.Driver.EmptyFilterDefinition<object>
-	// MongoDB.Driver.ExpressionFilterDefinition<object>
-	// MongoDB.Driver.FilterDefinition<object>
-	// MongoDB.Driver.IAsyncCursor<object>
-	// MongoDB.Driver.IAsyncCursorExtensions.<FirstOrDefaultAsync>d__5<object>
-	// MongoDB.Driver.IAsyncCursorExtensions.<ToListAsync>d__16<object>
-	// MongoDB.Driver.IMongoCollection<object>
-	// MongoDB.Driver.JsonFilterDefinition<object>
-	// MongoDB.Driver.NotFilterDefinition<object>
-	// MongoDB.Driver.OrFilterDefinition<object>
 	// System.Action<Cysharp.Threading.Tasks.UniTask>
 	// System.Action<DotRecast.Detour.StraightPathItem>
+	// System.Action<ET.EntityRef<object>>
 	// System.Action<ET.MessageSessionDispatcherInfo>
 	// System.Action<ET.NumericWatcherInfo>
 	// System.Action<System.Collections.Generic.KeyValuePair<int,object>>
@@ -1232,6 +1189,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Concurrent.ConcurrentQueue<object>
 	// System.Collections.Generic.ArraySortHelper<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.ArraySortHelper<DotRecast.Detour.StraightPathItem>
+	// System.Collections.Generic.ArraySortHelper<ET.EntityRef<object>>
 	// System.Collections.Generic.ArraySortHelper<ET.MessageSessionDispatcherInfo>
 	// System.Collections.Generic.ArraySortHelper<ET.NumericWatcherInfo>
 	// System.Collections.Generic.ArraySortHelper<System.Collections.Generic.KeyValuePair<int,object>>
@@ -1247,6 +1205,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.Comparer<ET.Client.Wait_CreateMyUnit>
 	// System.Collections.Generic.Comparer<ET.Client.Wait_SceneChangeFinish>
 	// System.Collections.Generic.Comparer<ET.Client.Wait_UnitStop>
+	// System.Collections.Generic.Comparer<ET.EntityRef<object>>
 	// System.Collections.Generic.Comparer<ET.MessageSessionDispatcherInfo>
 	// System.Collections.Generic.Comparer<ET.NumericWatcherInfo>
 	// System.Collections.Generic.Comparer<System.Collections.Generic.KeyValuePair<int,object>>
@@ -1355,6 +1314,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ComparisonComparer<ET.Client.Wait_CreateMyUnit>
 	// System.Collections.Generic.ComparisonComparer<ET.Client.Wait_SceneChangeFinish>
 	// System.Collections.Generic.ComparisonComparer<ET.Client.Wait_UnitStop>
+	// System.Collections.Generic.ComparisonComparer<ET.EntityRef<object>>
 	// System.Collections.Generic.ComparisonComparer<ET.MessageSessionDispatcherInfo>
 	// System.Collections.Generic.ComparisonComparer<ET.NumericWatcherInfo>
 	// System.Collections.Generic.ComparisonComparer<System.Collections.Generic.KeyValuePair<int,object>>
@@ -1679,6 +1639,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ICollection<ushort>
 	// System.Collections.Generic.IComparer<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.IComparer<DotRecast.Detour.StraightPathItem>
+	// System.Collections.Generic.IComparer<ET.EntityRef<object>>
 	// System.Collections.Generic.IComparer<ET.MessageSessionDispatcherInfo>
 	// System.Collections.Generic.IComparer<ET.NumericWatcherInfo>
 	// System.Collections.Generic.IComparer<System.Collections.Generic.KeyValuePair<int,object>>
@@ -1719,7 +1680,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEnumerator<ET.MessageSessionDispatcherInfo>
 	// System.Collections.Generic.IEnumerator<ET.NumericWatcherInfo>
 	// System.Collections.Generic.IEnumerator<ET.RpcInfo>
-	// System.Collections.Generic.IEnumerator<MongoDB.Bson.BsonElement>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<System.ValueTuple<object,int>,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<int,ET.EntityRef<object>>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<int,ET.MessageSenderStruct>>
@@ -1749,6 +1709,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEqualityComparer<ushort>
 	// System.Collections.Generic.IList<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.IList<DotRecast.Detour.StraightPathItem>
+	// System.Collections.Generic.IList<ET.EntityRef<object>>
 	// System.Collections.Generic.IList<ET.MessageSessionDispatcherInfo>
 	// System.Collections.Generic.IList<ET.NumericWatcherInfo>
 	// System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<int,object>>
@@ -1773,6 +1734,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.KeyValuePair<ushort,object>
 	// System.Collections.Generic.List.Enumerator<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.List.Enumerator<DotRecast.Detour.StraightPathItem>
+	// System.Collections.Generic.List.Enumerator<ET.EntityRef<object>>
 	// System.Collections.Generic.List.Enumerator<ET.MessageSessionDispatcherInfo>
 	// System.Collections.Generic.List.Enumerator<ET.NumericWatcherInfo>
 	// System.Collections.Generic.List.Enumerator<System.Collections.Generic.KeyValuePair<int,object>>
@@ -1783,6 +1745,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.List.Enumerator<object>
 	// System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.Generic.List<DotRecast.Detour.StraightPathItem>
+	// System.Collections.Generic.List<ET.EntityRef<object>>
 	// System.Collections.Generic.List<ET.MessageSessionDispatcherInfo>
 	// System.Collections.Generic.List<ET.NumericWatcherInfo>
 	// System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<int,object>>
@@ -1798,6 +1761,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ObjectComparer<ET.Client.Wait_CreateMyUnit>
 	// System.Collections.Generic.ObjectComparer<ET.Client.Wait_SceneChangeFinish>
 	// System.Collections.Generic.ObjectComparer<ET.Client.Wait_UnitStop>
+	// System.Collections.Generic.ObjectComparer<ET.EntityRef<object>>
 	// System.Collections.Generic.ObjectComparer<ET.MessageSessionDispatcherInfo>
 	// System.Collections.Generic.ObjectComparer<ET.NumericWatcherInfo>
 	// System.Collections.Generic.ObjectComparer<System.Collections.Generic.KeyValuePair<int,object>>
@@ -2043,6 +2007,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.TreeWalkPredicate<System.Collections.Generic.KeyValuePair<long,object>>
 	// System.Collections.ObjectModel.ReadOnlyCollection<Cysharp.Threading.Tasks.UniTask>
 	// System.Collections.ObjectModel.ReadOnlyCollection<DotRecast.Detour.StraightPathItem>
+	// System.Collections.ObjectModel.ReadOnlyCollection<ET.EntityRef<object>>
 	// System.Collections.ObjectModel.ReadOnlyCollection<ET.MessageSessionDispatcherInfo>
 	// System.Collections.ObjectModel.ReadOnlyCollection<ET.NumericWatcherInfo>
 	// System.Collections.ObjectModel.ReadOnlyCollection<System.Collections.Generic.KeyValuePair<int,object>>
@@ -2058,6 +2023,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Comparison<ET.Client.Wait_CreateMyUnit>
 	// System.Comparison<ET.Client.Wait_SceneChangeFinish>
 	// System.Comparison<ET.Client.Wait_UnitStop>
+	// System.Comparison<ET.EntityRef<object>>
 	// System.Comparison<ET.MessageSessionDispatcherInfo>
 	// System.Comparison<ET.NumericWatcherInfo>
 	// System.Comparison<System.Collections.Generic.KeyValuePair<int,object>>
@@ -2137,8 +2103,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Comparison<object>
 	// System.Comparison<uint>
 	// System.Comparison<ushort>
-	// System.Dynamic.Utils.CacheDict.Entry<object,object>
-	// System.Dynamic.Utils.CacheDict<object,object>
 	// System.Func<Cysharp.Threading.Tasks.UniTask<object>>
 	// System.Func<Cysharp.Threading.Tasks.UniTask>
 	// System.Func<ET.ActorId>
@@ -2389,7 +2353,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<object,object,System.ValueTuple<byte,object>>
 	// System.Func<object,object,System.ValueTuple<byte,uint>>
 	// System.Func<object,object,System.ValueTuple<uint,object>>
-	// System.Func<object,object,byte,object,object>
 	// System.Func<object,object,byte,object>
 	// System.Func<object,object,byte>
 	// System.Func<object,object,int>
@@ -2887,8 +2850,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable<long>
 	// System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable<object>
 	// System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable<uint>
-	// System.Runtime.CompilerServices.ReadOnlyCollectionBuilder.Enumerator<object>
-	// System.Runtime.CompilerServices.ReadOnlyCollectionBuilder<object>
 	// System.Runtime.CompilerServices.TaskAwaiter<ET.ActorId>
 	// System.Runtime.CompilerServices.TaskAwaiter<ET.Client.WaitType.Wait_Room2C_Start>
 	// System.Runtime.CompilerServices.TaskAwaiter<ET.Client.Wait_CreateMyUnit>
@@ -2978,7 +2939,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Runtime.CompilerServices.TaskAwaiter<long>
 	// System.Runtime.CompilerServices.TaskAwaiter<object>
 	// System.Runtime.CompilerServices.TaskAwaiter<uint>
-	// System.Runtime.CompilerServices.TrueReadOnlyCollection<object>
 	// System.Runtime.CompilerServices.ValueTaskAwaiter<ET.ActorId>
 	// System.Runtime.CompilerServices.ValueTaskAwaiter<ET.Client.WaitType.Wait_Room2C_Start>
 	// System.Runtime.CompilerServices.ValueTaskAwaiter<ET.Client.Wait_CreateMyUnit>
@@ -4174,7 +4134,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Client.UGFUILSLobbyComponentSystem.<EnterMap>d__3>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Client.UGFUILSLobbyComponentSystem.<EnterMap>d__3&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Client.UGFUILobbyComponentSystem.<EnterMap>d__3>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Client.UGFUILobbyComponentSystem.<EnterMap>d__3&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.ConsoleComponentSystem.<Start>d__1>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.ConsoleComponentSystem.<Start>d__1&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.DynamicEventSystem.<PublishAsync>d__9<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.DynamicEventSystem.<PublishAsync>d__9<object>&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.DynamicEventSystem.<PublishAsync>d__13<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.DynamicEventSystem.<PublishAsync>d__13<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.EntryEvent1_InitDynamicEvent.<Run>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.EntryEvent1_InitDynamicEvent.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.EntryEvent1_InitShare.<Run>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.EntryEvent1_InitShare.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.FiberInit_Main.<Handle>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.FiberInit_Main.<Handle>d__0&)
@@ -4206,7 +4166,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Server.C2Room_CheckHashHandler.<Run>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Server.C2Room_CheckHashHandler.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Server.ChangePosition_NotifyAOI.<Run>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Server.ChangePosition_NotifyAOI.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Server.CreateRobotConsoleHandler.<Run>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Server.CreateRobotConsoleHandler.<Run>d__0&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Server.DBComponentSystem.<SaveNotWait>d__13<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Server.DBComponentSystem.<SaveNotWait>d__13<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Server.FiberInit_BenchmarkClient.<Handle>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Server.FiberInit_BenchmarkClient.<Handle>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Server.FiberInit_BenchmarkServer.<Handle>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Server.FiberInit_BenchmarkServer.<Handle>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Server.FiberInit_Gate.<Handle>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Server.FiberInit_Gate.<Handle>d__0&)
@@ -4293,11 +4252,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.C2G_LoginGateHandler.<CheckRoom>d__1>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.C2G_LoginGateHandler.<CheckRoom>d__1&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.C2G_MatchHandler.<Run>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.C2G_MatchHandler.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.C2R_LoginHandler.<Run>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.C2R_LoginHandler.<Run>d__0&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<InsertBatch>d__9<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<InsertBatch>d__9<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Query>d__6>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Query>d__6&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Save>d__10<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Save>d__10<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Save>d__11<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Save>d__11<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Save>d__12>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Save>d__12&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.LocationOneTypeSystem.<Add>d__1>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.LocationOneTypeSystem.<Add>d__1&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.LocationOneTypeSystem.<Lock>d__3>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.LocationOneTypeSystem.<Lock>d__3&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.LocationOneTypeSystem.<Remove>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.LocationOneTypeSystem.<Remove>d__2&)
@@ -4307,15 +4261,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.LocationProxyComponentSystem.<UnLock>d__3>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.LocationProxyComponentSystem.<UnLock>d__3&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.Match2Map_GetRoomHandler.<Run>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.Match2Map_GetRoomHandler.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.MatchComponentSystem.<Match>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.MatchComponentSystem.<Match>d__0&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.MessageLocationHandler.<Handle>d__1<object,object,object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.MessageLocationHandler.<Handle>d__1<object,object,object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.MessageLocationSenderComponentSystem.<SendInner>d__7>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.MessageLocationSenderComponentSystem.<SendInner>d__7&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.ProcessOuterSenderSystem.<>c__DisplayClass3_0.<<OnRead>g__CallInner|0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.ProcessOuterSenderSystem.<>c__DisplayClass3_0.<<OnRead>g__CallInner|0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.TransferHelper.<Transfer>d__1>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.TransferHelper.<Transfer>d__1&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,ET.Server.DBComponentSystem.<InsertBatch>d__9<object>>(System.Runtime.CompilerServices.TaskAwaiter&,ET.Server.DBComponentSystem.<InsertBatch>d__9<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.ConsoleComponentSystem.<Start>d__1>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.ConsoleComponentSystem.<Start>d__1&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Query>d__6>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Query>d__6&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Save>d__10<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Save>d__10<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Save>d__11<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Save>d__11<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Save>d__12>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Save>d__12&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.HttpComponentSystem.<Accept>d__2>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.HttpComponentSystem.<Accept>d__2&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<ET.ActorId>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.LocationOneTypeSystem.<Get>d__5>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.LocationOneTypeSystem.<Get>d__5&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<ET.ActorId>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.LocationProxyComponentSystem.<Get>d__5>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.LocationProxyComponentSystem.<Get>d__5&)
@@ -4324,14 +4274,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<int>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<System.ValueTuple<byte,ET.Client.Wait_UnitStop>>,ET.Client.MoveHelper.<MoveToAsync>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter<System.ValueTuple<byte,ET.Client.Wait_UnitStop>>&,ET.Client.MoveHelper.<MoveToAsync>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<int>,ET.Client.ClientSenderComponentSystem.<LoginAsync>d__4>(Cysharp.Threading.Tasks.UniTask.Awaiter<int>&,ET.Client.ClientSenderComponentSystem.<LoginAsync>d__4&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Client.ClientSenderComponentSystem.<LoginAsync>d__4>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Client.ClientSenderComponentSystem.<LoginAsync>d__4&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Remove>d__14<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Remove>d__14<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Remove>d__15<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Remove>d__15<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Remove>d__16<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Remove>d__16<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Remove>d__17<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Remove>d__17<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Remove>d__14<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Remove>d__14<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Remove>d__15<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Remove>d__15<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Remove>d__16<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Remove>d__16<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Remove>d__17<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Remove>d__17<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Server.GateMapFactory.<Create>d__0>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Server.GateMapFactory.<Create>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Server.MessageLocationSenderComponentSystem.<CallInner>d__11>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Server.MessageLocationSenderComponentSystem.<CallInner>d__11&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Server.RobotCaseComponentSystem.<New>d__1>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Server.RobotCaseComponentSystem.<New>d__1&)
@@ -4343,11 +4285,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Client.UGFUIComponentSystem.<OpenUIFormAsync>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Client.UGFUIComponentSystem.<OpenUIFormAsync>d__2&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.LubanLoadAllAsyncHandler.<<Handle>g__LoadByteBuf|0_0>d>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.LubanLoadAllAsyncHandler.<<Handle>g__LoadByteBuf|0_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.LubanLoadAllAsyncHandler.<<Handle>g__LoadJson|0_1>d>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.LubanLoadAllAsyncHandler.<<Handle>g__LoadJson|0_1>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Query>d__3<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Query>d__3<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Query>d__4<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Query>d__4<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<Query>d__5<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<Query>d__5<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<QueryJson>d__7<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<QueryJson>d__7<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.DBComponentSystem.<QueryJson>d__8<object>>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.DBComponentSystem.<QueryJson>d__8<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.MessageLocationSenderComponentSystem.<Call>d__10>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.MessageLocationSenderComponentSystem.<Call>d__10&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.MessageLocationSenderComponentSystem.<Call>d__8>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.MessageLocationSenderComponentSystem.<Call>d__8&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.MessageLocationSenderComponentSystem.<CallInner>d__11>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.MessageLocationSenderComponentSystem.<CallInner>d__11&)
@@ -4355,11 +4292,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.Server.ProcessOuterSenderSystem.<Call>d__13>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.Server.ProcessOuterSenderSystem.<Call>d__13&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter<object>,ET.SessionSystem.<Call>d__4>(Cysharp.Threading.Tasks.UniTask.Awaiter<object>&,ET.SessionSystem.<Call>d__4&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Client.HttpClientHelper.<Get>d__0>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Client.HttpClientHelper.<Get>d__0&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Query>d__3<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Query>d__3<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Query>d__4<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Query>d__4<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<Query>d__5<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<Query>d__5<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<QueryJson>d__7<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<QueryJson>d__7<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,ET.Server.DBComponentSystem.<QueryJson>d__8<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,ET.Server.DBComponentSystem.<QueryJson>d__8<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<uint>.AwaitUnsafeOnCompleted<Cysharp.Threading.Tasks.UniTask.Awaiter,ET.Client.RouterHelper.<Connect>d__2>(Cysharp.Threading.Tasks.UniTask.Awaiter&,ET.Client.RouterHelper.<Connect>d__2&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.ADynamicEvent.<Handle>d__5<object,object>>(ET.ADynamicEvent.<Handle>d__5<object,object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Client.A2NetClient_MessageHandler.<Run>d__0>(ET.Client.A2NetClient_MessageHandler.<Run>d__0&)
@@ -4426,7 +4358,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.DTStartSceneConfig.<LoadAsync>d__4>(ET.DTStartSceneConfig.<LoadAsync>d__4&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.DTStartZoneConfig.<LoadAsync>d__4>(ET.DTStartZoneConfig.<LoadAsync>d__4&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.DTUnitConfig.<LoadAsync>d__4>(ET.DTUnitConfig.<LoadAsync>d__4&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.DynamicEventSystem.<PublishAsync>d__9<object>>(ET.DynamicEventSystem.<PublishAsync>d__9<object>&)
+		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.DynamicEventSystem.<PublishAsync>d__13<object>>(ET.DynamicEventSystem.<PublishAsync>d__13<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.EntryEvent1_InitDynamicEvent.<Run>d__0>(ET.EntryEvent1_InitDynamicEvent.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.EntryEvent1_InitShare.<Run>d__0>(ET.EntryEvent1_InitShare.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.EventSystem.<PublishAsync>d__4<object,ET.Client.AppStartInitFinish>>(ET.EventSystem.<PublishAsync>d__4<object,ET.Client.AppStartInitFinish>&)
@@ -4469,12 +4401,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.C2Room_CheckHashHandler.<Run>d__0>(ET.Server.C2Room_CheckHashHandler.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.ChangePosition_NotifyAOI.<Run>d__0>(ET.Server.ChangePosition_NotifyAOI.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.CreateRobotConsoleHandler.<Run>d__0>(ET.Server.CreateRobotConsoleHandler.<Run>d__0&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.DBComponentSystem.<InsertBatch>d__9<object>>(ET.Server.DBComponentSystem.<InsertBatch>d__9<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.DBComponentSystem.<Query>d__6>(ET.Server.DBComponentSystem.<Query>d__6&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.DBComponentSystem.<Save>d__10<object>>(ET.Server.DBComponentSystem.<Save>d__10<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.DBComponentSystem.<Save>d__11<object>>(ET.Server.DBComponentSystem.<Save>d__11<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.DBComponentSystem.<Save>d__12>(ET.Server.DBComponentSystem.<Save>d__12&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.DBComponentSystem.<SaveNotWait>d__13<object>>(ET.Server.DBComponentSystem.<SaveNotWait>d__13<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.EntryEvent2_InitServer.<Run>d__0>(ET.Server.EntryEvent2_InitServer.<Run>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.FiberInit_BenchmarkClient.<Handle>d__0>(ET.Server.FiberInit_BenchmarkClient.<Handle>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder.Start<ET.Server.FiberInit_BenchmarkServer.<Handle>d__0>(ET.Server.FiberInit_BenchmarkServer.<Handle>d__0&)
@@ -4536,10 +4462,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<byte>.Start<ET.MoveComponentSystem.<MoveToAsync>d__5>(ET.MoveComponentSystem.<MoveToAsync>d__5&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<int>.Start<ET.Client.MoveHelper.<MoveToAsync>d__0>(ET.Client.MoveHelper.<MoveToAsync>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.Start<ET.Client.ClientSenderComponentSystem.<LoginAsync>d__4>(ET.Client.ClientSenderComponentSystem.<LoginAsync>d__4&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.Start<ET.Server.DBComponentSystem.<Remove>d__14<object>>(ET.Server.DBComponentSystem.<Remove>d__14<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.Start<ET.Server.DBComponentSystem.<Remove>d__15<object>>(ET.Server.DBComponentSystem.<Remove>d__15<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.Start<ET.Server.DBComponentSystem.<Remove>d__16<object>>(ET.Server.DBComponentSystem.<Remove>d__16<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<long>.Start<ET.Server.DBComponentSystem.<Remove>d__17<object>>(ET.Server.DBComponentSystem.<Remove>d__17<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Client.ClientSenderComponentSystem.<Call>d__6>(ET.Client.ClientSenderComponentSystem.<Call>d__6&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Client.HttpClientHelper.<Get>d__0>(ET.Client.HttpClientHelper.<Get>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Client.RouterHelper.<CreateRouterSession>d__0>(ET.Client.RouterHelper.<CreateRouterSession>d__0&)
@@ -4547,11 +4469,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Client.UGFUIComponentSystem.<OpenUIFormAsync>d__2>(ET.Client.UGFUIComponentSystem.<OpenUIFormAsync>d__2&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.LubanLoadAllAsyncHandler.<<Handle>g__LoadByteBuf|0_0>d>(ET.LubanLoadAllAsyncHandler.<<Handle>g__LoadByteBuf|0_0>d&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.LubanLoadAllAsyncHandler.<<Handle>g__LoadJson|0_1>d>(ET.LubanLoadAllAsyncHandler.<<Handle>g__LoadJson|0_1>d&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Server.DBComponentSystem.<Query>d__3<object>>(ET.Server.DBComponentSystem.<Query>d__3<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Server.DBComponentSystem.<Query>d__4<object>>(ET.Server.DBComponentSystem.<Query>d__4<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Server.DBComponentSystem.<Query>d__5<object>>(ET.Server.DBComponentSystem.<Query>d__5<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Server.DBComponentSystem.<QueryJson>d__7<object>>(ET.Server.DBComponentSystem.<QueryJson>d__7<object>&)
-		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Server.DBComponentSystem.<QueryJson>d__8<object>>(ET.Server.DBComponentSystem.<QueryJson>d__8<object>&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Server.GateMapFactory.<Create>d__0>(ET.Server.GateMapFactory.<Create>d__0&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Server.MessageLocationSenderComponentSystem.<Call>d__10>(ET.Server.MessageLocationSenderComponentSystem.<Call>d__10&)
 		// System.Void Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<object>.Start<ET.Server.MessageLocationSenderComponentSystem.<Call>d__8>(ET.Server.MessageLocationSenderComponentSystem.<Call>d__8&)
@@ -4593,8 +4510,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Cysharp.Threading.Tasks.UniTaskExtensions.Forget<byte>(Cysharp.Threading.Tasks.UniTask<byte>)
 		// System.Void Cysharp.Threading.Tasks.UniTaskExtensions.Forget<object>(Cysharp.Threading.Tasks.UniTask<object>)
 		// object ET.Entity.AddChild<object,ET.ActorId,object>(ET.ActorId,object,bool)
-		// object ET.Entity.AddChild<object,int>(int,bool)
-		// object ET.Entity.AddChild<object,object,object,int>(object,object,int,bool)
+		// object ET.Entity.AddChild<object,object,long>(object,long,bool)
 		// object ET.Entity.AddChild<object,object>(object,bool)
 		// object ET.Entity.AddChild<object>(bool)
 		// object ET.Entity.AddChildWithId<object,int>(long,int,bool)
@@ -4626,7 +4542,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void ET.EntitySystemSingleton.Awake<int,int>(ET.Entity,int,int)
 		// System.Void ET.EntitySystemSingleton.Awake<int>(ET.Entity,int)
 		// System.Void ET.EntitySystemSingleton.Awake<object,int>(ET.Entity,object,int)
-		// System.Void ET.EntitySystemSingleton.Awake<object,object,int>(ET.Entity,object,object,int)
+		// System.Void ET.EntitySystemSingleton.Awake<object,long>(ET.Entity,object,long)
 		// System.Void ET.EntitySystemSingleton.Awake<object,object,object>(ET.Entity,object,object,object)
 		// System.Void ET.EntitySystemSingleton.Awake<object,object>(ET.Entity,object,object)
 		// System.Void ET.EntitySystemSingleton.Awake<object>(ET.Entity,object)
@@ -4657,6 +4573,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void ET.ObjectHelper.Swap<object>(object&,object&)
 		// System.Void ET.RandomGenerator.BreakRank<object>(System.Collections.Generic.List<object>)
 		// object ET.RandomGenerator.RandomArray<object>(System.Collections.Generic.List<object>)
+		// ET.UGFUIWidget ET.UGFUIForm.AddUIWidget<object>(UnityEngine.Transform,object)
+		// ET.UGFUIWidget ET.UGFUIFormSystem.AddUIWidget<object>(ET.UGFUIForm,UnityEngine.Transform,object)
 		// object ET.World.AddSingleton<object>()
 		// Cysharp.Threading.Tasks.UniTask<UnityGameFramework.Runtime.Entity> Game.EntityExtension.ShowEntityAsync<object>(UnityGameFramework.Runtime.EntityComponent,int,object,System.Threading.CancellationToken,System.Action<float>,System.Action<string>)
 		// string Luban.StringUtil.CollectionToString<int>(System.Collections.Generic.IEnumerable<int>)
@@ -4759,18 +4677,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// object MongoDB.Bson.Serialization.BsonSerializer.Deserialize<object>(string,System.Action<MongoDB.Bson.Serialization.BsonDeserializationContext.Builder>)
 		// MongoDB.Bson.Serialization.IBsonSerializer<object> MongoDB.Bson.Serialization.BsonSerializer.LookupSerializer<object>()
 		// object MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize<object>(MongoDB.Bson.Serialization.IBsonSerializer<object>,MongoDB.Bson.Serialization.BsonDeserializationContext)
-		// System.Threading.Tasks.Task<object> MongoDB.Driver.IAsyncCursorExtensions.FirstOrDefaultAsync<object>(MongoDB.Driver.IAsyncCursor<object>,System.Threading.CancellationToken)
-		// System.Threading.Tasks.Task<System.Collections.Generic.List<object>> MongoDB.Driver.IAsyncCursorExtensions.ToListAsync<object>(MongoDB.Driver.IAsyncCursor<object>,System.Threading.CancellationToken)
-		// System.Threading.Tasks.Task<MongoDB.Driver.IAsyncCursor<object>> MongoDB.Driver.IMongoCollection<object>.FindAsync<object>(MongoDB.Driver.FilterDefinition<object>,MongoDB.Driver.FindOptions<object,object>,System.Threading.CancellationToken)
-		// System.Threading.Tasks.Task<MongoDB.Driver.DeleteResult> MongoDB.Driver.IMongoCollectionExtensions.DeleteOneAsync<object>(MongoDB.Driver.IMongoCollection<object>,System.Linq.Expressions.Expression<System.Func<object,bool>>,System.Threading.CancellationToken)
-		// System.Threading.Tasks.Task<MongoDB.Driver.IAsyncCursor<object>> MongoDB.Driver.IMongoCollectionExtensions.FindAsync<object>(MongoDB.Driver.IMongoCollection<object>,MongoDB.Driver.FilterDefinition<object>,MongoDB.Driver.FindOptions<object,object>,System.Threading.CancellationToken)
-		// System.Threading.Tasks.Task<MongoDB.Driver.IAsyncCursor<object>> MongoDB.Driver.IMongoCollectionExtensions.FindAsync<object>(MongoDB.Driver.IMongoCollection<object>,System.Linq.Expressions.Expression<System.Func<object,bool>>,MongoDB.Driver.FindOptions<object,object>,System.Threading.CancellationToken)
-		// System.Threading.Tasks.Task<MongoDB.Driver.ReplaceOneResult> MongoDB.Driver.IMongoCollectionExtensions.ReplaceOneAsync<object>(MongoDB.Driver.IMongoCollection<object>,System.Linq.Expressions.Expression<System.Func<object,bool>>,object,MongoDB.Driver.ReplaceOptions,System.Threading.CancellationToken)
-		// MongoDB.Driver.IMongoCollection<object> MongoDB.Driver.IMongoDatabase.GetCollection<object>(string,MongoDB.Driver.MongoCollectionSettings)
 		// object System.Activator.CreateInstance<object>()
 		// byte[] System.Array.Empty<byte>()
 		// object[] System.Array.Empty<object>()
-		// System.Collections.ObjectModel.ReadOnlyCollection<object> System.Dynamic.Utils.CollectionExtensions.ToReadOnly<object>(System.Collections.Generic.IEnumerable<object>)
 		// int System.HashCode.Combine<TrueSync.TSVector2,int>(TrueSync.TSVector2,int)
 		// int System.HashCode.Combine<object>(object)
 		// bool System.Linq.Enumerable.Any<object>(System.Collections.Generic.IEnumerable<object>)
@@ -4786,11 +4695,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// object[] System.Linq.Enumerable.ToArray<object>(System.Collections.Generic.IEnumerable<object>)
 		// System.Collections.Generic.IEnumerable<object> System.Linq.Enumerable.Where<object>(System.Collections.Generic.IEnumerable<object>,System.Func<object,bool>)
 		// System.Collections.Generic.IEnumerable<object> System.Linq.Enumerable.Iterator<object>.Select<object>(System.Func<object,object>)
-		// System.Linq.Expressions.Expression<object> System.Linq.Expressions.Expression.Lambda<object>(System.Linq.Expressions.Expression,System.Linq.Expressions.ParameterExpression[])
-		// System.Linq.Expressions.Expression<object> System.Linq.Expressions.Expression.Lambda<object>(System.Linq.Expressions.Expression,bool,System.Collections.Generic.IEnumerable<System.Linq.Expressions.ParameterExpression>)
-		// System.Linq.Expressions.Expression<object> System.Linq.Expressions.Expression.Lambda<object>(System.Linq.Expressions.Expression,string,bool,System.Collections.Generic.IEnumerable<System.Linq.Expressions.ParameterExpression>)
 		// System.Span<byte> System.MemoryExtensions.AsSpan<byte>(byte[])
-		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.Start<object>(object&)
 		// byte& System.Runtime.CompilerServices.Unsafe.Add<byte>(byte&,int)
 		// byte& System.Runtime.CompilerServices.Unsafe.As<byte,byte>(byte&)
 		// object& System.Runtime.CompilerServices.Unsafe.As<object,object>(object&)

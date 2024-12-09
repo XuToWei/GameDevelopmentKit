@@ -12,16 +12,7 @@
     <type fullname="CommandLine.ParserResultExtensions" preserve="all" />
     <type fullname="CommandLine.ParserResult`1" preserve="all" />
   </assembly>
-  <assembly fullname="ET">
-    <type fullname="DotRecast.Core.RcVec3f" preserve="all" />
-    <type fullname="DotRecast.Detour.DtFindPathOption" preserve="all" />
-    <type fullname="DotRecast.Detour.DtNavMesh" preserve="all" />
-    <type fullname="DotRecast.Detour.DtNavMeshQuery" preserve="all" />
-    <type fullname="DotRecast.Detour.DtQueryDefaultFilter" preserve="all" />
-    <type fullname="DotRecast.Detour.DtStatus" preserve="all" />
-    <type fullname="DotRecast.Detour.IDtQueryFilter" preserve="all" />
-    <type fullname="DotRecast.Detour.Io.DtMeshSetReader" preserve="all" />
-    <type fullname="DotRecast.Detour.StraightPathItem" preserve="all" />
+  <assembly fullname="ET.Core">
     <type fullname="ET.AEvent`2" preserve="all" />
     <type fullname="ET.AInvokeHandler`1" preserve="all" />
     <type fullname="ET.AInvokeHandler`2" preserve="all" />
@@ -34,9 +25,9 @@
     <type fullname="ET.AwakeSystem`1" preserve="all" />
     <type fullname="ET.AwakeSystem`2" preserve="all" />
     <type fullname="ET.AwakeSystem`3" preserve="all" />
-    <type fullname="ET.AwakeSystem`4" preserve="all" />
     <type fullname="ET.BaseAttribute" preserve="all" />
     <type fullname="ET.ByteHelper" preserve="all" />
+    <type fullname="ET.ChannelType" preserve="all" />
     <type fullname="ET.ChildOfAttribute" preserve="all" />
     <type fullname="ET.CodeAttribute" preserve="all" />
     <type fullname="ET.CodeLoaderComponent" preserve="all" />
@@ -156,6 +147,17 @@
     <type fullname="ET.UpdateSystem`1" preserve="all" />
     <type fullname="ET.WinPeriod" preserve="all" />
     <type fullname="ET.World" preserve="all" />
+  </assembly>
+  <assembly fullname="ET.ThirdParty">
+    <type fullname="DotRecast.Core.RcVec3f" preserve="all" />
+    <type fullname="DotRecast.Detour.DtFindPathOption" preserve="all" />
+    <type fullname="DotRecast.Detour.DtNavMesh" preserve="all" />
+    <type fullname="DotRecast.Detour.DtNavMeshQuery" preserve="all" />
+    <type fullname="DotRecast.Detour.DtQueryDefaultFilter" preserve="all" />
+    <type fullname="DotRecast.Detour.DtStatus" preserve="all" />
+    <type fullname="DotRecast.Detour.IDtQueryFilter" preserve="all" />
+    <type fullname="DotRecast.Detour.Io.DtMeshSetReader" preserve="all" />
+    <type fullname="DotRecast.Detour.StraightPathItem" preserve="all" />
     <type fullname="TrueSync.FP" preserve="all" />
     <type fullname="TrueSync.TSMatrix" preserve="all" />
     <type fullname="TrueSync.TSQuaternion" preserve="all" />
@@ -180,6 +182,7 @@
     <type fullname="ET.GlobalComponent" preserve="all" />
     <type fullname="ET.IUGFEntityEvent" preserve="all" />
     <type fullname="ET.IUGFUIFormEvent" preserve="all" />
+    <type fullname="ET.IUGFUIWidgetEvent" preserve="all" />
     <type fullname="ET.OnApplicationFocus" preserve="all" />
     <type fullname="ET.OnApplicationPause" preserve="all" />
     <type fullname="ET.OnCodeReload" preserve="all" />
@@ -188,6 +191,12 @@
     <type fullname="ET.UGFEventComponent" preserve="all" />
     <type fullname="ET.UGFUIForm" preserve="all" />
     <type fullname="ET.UGFUIFormEventAttribute" preserve="all" />
+    <type fullname="ET.UGFUIFormSystem" preserve="all" />
+    <type fullname="ET.UGFUIWidget" preserve="all" />
+    <type fullname="ET.UGFUIWidgetEventAttribute" preserve="all" />
+  </assembly>
+  <assembly fullname="Leihuo.UXTools.Runtime">
+    <type fullname="UnityEngine.UI.UXText" preserve="all" />
   </assembly>
   <assembly fullname="LubanLib">
     <type fullname="Luban.BeanBase" preserve="all" />
@@ -232,26 +241,6 @@
     <type fullname="MongoDB.Bson.Serialization.IBsonSerializer" preserve="all" />
     <type fullname="MongoDB.Bson.Serialization.Options.DictionaryRepresentation" preserve="all" />
   </assembly>
-  <assembly fullname="MongoDB.Driver">
-    <type fullname="MongoDB.Driver.DeleteResult" preserve="all" />
-    <type fullname="MongoDB.Driver.FilterDefinition`1" preserve="all" />
-    <type fullname="MongoDB.Driver.FindOptions`2" preserve="all" />
-    <type fullname="MongoDB.Driver.IMongoCollectionExtensions" preserve="all" />
-    <type fullname="MongoDB.Driver.IMongoCollection`1" preserve="all" />
-    <type fullname="MongoDB.Driver.IMongoDatabase" preserve="all" />
-    <type fullname="MongoDB.Driver.InsertManyOptions" preserve="all" />
-    <type fullname="MongoDB.Driver.JsonFilterDefinition`1" preserve="all" />
-    <type fullname="MongoDB.Driver.MongoClient" preserve="all" />
-    <type fullname="MongoDB.Driver.MongoClientBase" preserve="all" />
-    <type fullname="MongoDB.Driver.MongoCollectionSettings" preserve="all" />
-    <type fullname="MongoDB.Driver.MongoDatabaseSettings" preserve="all" />
-    <type fullname="MongoDB.Driver.ReplaceOneResult" preserve="all" />
-    <type fullname="MongoDB.Driver.ReplaceOptions" preserve="all" />
-  </assembly>
-  <assembly fullname="MongoDB.Driver.Core">
-    <type fullname="MongoDB.Driver.IAsyncCursorExtensions" preserve="all" />
-    <type fullname="MongoDB.Driver.IAsyncCursor`1" preserve="all" />
-  </assembly>
   <assembly fullname="System">
     <type fullname="System.CodeDom.Compiler.GeneratedCodeAttribute" preserve="all" />
     <type fullname="System.Collections.Generic.Queue`1" preserve="all" />
@@ -278,12 +267,6 @@
     <type fullname="System.Collections.Generic.HashSet`1" preserve="all" />
     <type fullname="System.Collections.Generic.HashSet`1/Enumerator" preserve="all" />
     <type fullname="System.Linq.Enumerable" preserve="all" />
-    <type fullname="System.Linq.Expressions.BinaryExpression" preserve="all" />
-    <type fullname="System.Linq.Expressions.ConstantExpression" preserve="all" />
-    <type fullname="System.Linq.Expressions.Expression" preserve="all" />
-    <type fullname="System.Linq.Expressions.Expression`1" preserve="all" />
-    <type fullname="System.Linq.Expressions.MemberExpression" preserve="all" />
-    <type fullname="System.Linq.Expressions.ParameterExpression" preserve="all" />
   </assembly>
   <assembly fullname="System.Net.Http">
     <type fullname="System.Net.Http.HttpClient" preserve="all" />
@@ -305,7 +288,7 @@
     <type fullname="Cysharp.Threading.Tasks.UniTask`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTask`1/Awaiter" preserve="all" />
   </assembly>
-  <assembly fullname="UniTaskExtension">
+  <assembly fullname="UniTask.Extension">
     <type fullname="Cysharp.Threading.Tasks.AutoResetUniTaskCompletionSourcePlus`1" preserve="all" />
     <type fullname="Cysharp.Threading.Tasks.UniTaskExtension" preserve="all" />
   </assembly>
@@ -424,11 +407,9 @@
     <type fullname="System.Runtime.CompilerServices.IsReadOnlyAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeCompatibilityAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeHelpers" preserve="all" />
-    <type fullname="System.Runtime.CompilerServices.TaskAwaiter" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.TaskAwaiter`1" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.TupleElementNamesAttribute" preserve="all" />
     <type fullname="System.RuntimeFieldHandle" preserve="all" />
-    <type fullname="System.RuntimeMethodHandle" preserve="all" />
     <type fullname="System.RuntimeTypeHandle" preserve="all" />
     <type fullname="System.Single" preserve="all" />
     <type fullname="System.String" preserve="all" />
