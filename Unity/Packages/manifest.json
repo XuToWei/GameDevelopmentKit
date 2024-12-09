@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.baracuda.preprocessor-symbol-definition-files": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
-    "com.code-philosophy.hybridclr": "https://github.com/focus-creative-games/hybridclr_unity.git#v7.0.0",
+    "com.code-philosophy.hybridclr": "https://github.com/focus-creative-games/hybridclr_unity.git",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git#1.0.3",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.8.1",
