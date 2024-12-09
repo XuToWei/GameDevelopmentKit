@@ -53,7 +53,7 @@
       "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
     },
     "com.cysharp.r3": {
-      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity/#1.2.9",
+      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -290,18 +290,11 @@
       }
     },
     "com.yasirkula.runtimeinspector": {
-      "version": "https://github.com/yasirkula/UnityRuntimeInspector.git#v1.7.2",
+      "version": "https://github.com/yasirkula/UnityRuntimeInspector.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
       "hash": "b0980bb9a554d8d429cec645593b5c207c49163a"
-    },
-    "jp.setchi.fancyscrollview": {
-      "version": "https://github.com/setchi/FancyScrollView.git#upm",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "e5d10d3e5961848f93be43c2911344750b509a88"
     },
     "me.xw.codebind": {
       "version": "https://github.com/XuToWei/CodeBind.git",
