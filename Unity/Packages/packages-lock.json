@@ -15,28 +15,32 @@
       "hash": "4d0fef095b5af314b06e204ea0f6c17681f3ec3c"
     },
     "com.coffee.softmask-for-ugui": {
-      "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git#1.0.3",
+      "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "0a9cf7a1809a289ca7bedecee594cdf256e26935"
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "fe7354b96c4b4dc36bfe583e94d35e8a3cf006fb"
     },
     "com.coffee.ui-effect": {
-      "version": "https://github.com/mob-sakai/UIEffect.git",
+      "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "332340e7bc2f8257816dd28784607a1edf6b6c2a"
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "3d23cbfcdb1f746ff059c271b135a9bead933a39"
     },
     "com.coffee.ui-particle": {
-      "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.8.1",
+      "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "686fff869000bdac0cb5b2ab6b1f3ed925839521"
+      "hash": "598c85e0f455d38d7592758cffeeef7771609b16"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -53,7 +57,7 @@
       "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
     },
     "com.cysharp.r3": {
-      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
+      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity#1.2.9",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -62,11 +66,11 @@
       "hash": "9b18209448c5e1f4572a4191b1f4f530a1d26c01"
     },
     "com.cysharp.unitask": {
-      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f9fd769be7c634610f2a61aa914a1a55f34740e1"
+      "hash": "7c0f199fe0d3fc528024488ccd671e6c7b27745b"
     },
     "com.cysharp.zstring": {
       "version": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Scripts/ZString",
