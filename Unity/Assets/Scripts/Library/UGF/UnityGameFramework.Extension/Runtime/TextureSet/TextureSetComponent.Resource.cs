@@ -20,8 +20,7 @@ namespace UnityGameFramework.Extension
             m_LoadAssetCallbacks = new LoadAssetCallbacks(OnLoadAssetSuccess, OnLoadAssetFailure);
         }
 
-        private void OnLoadAssetFailure(string assetName, LoadResourceStatus status, string errormessage,
-            object userdata)
+        private void OnLoadAssetFailure(string assetName, LoadResourceStatus status, string errormessage, object userdata)
         {
             ResourceData resourceData = (ResourceData) userdata;
             ReferencePool.Release(resourceData);

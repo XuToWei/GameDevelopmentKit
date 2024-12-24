@@ -1,11 +1,7 @@
-using System.Collections.Generic;
-using System.Threading;
 using GameFramework;
 using GameFramework.Event;
 using UnityEngine;
 using UnityGameFramework.Runtime;
-using WebRequestFailureEventArgs = UnityGameFramework.Runtime.WebRequestFailureEventArgs;
-using WebRequestSuccessEventArgs = UnityGameFramework.Runtime.WebRequestSuccessEventArgs;
 
 namespace UnityGameFramework.Extension
 {
@@ -16,8 +12,8 @@ namespace UnityGameFramework.Extension
 
         private void InitializedWeb()
         {
-            m_WebRequestComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<WebRequestComponent>();
-            EventComponent eventComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<EventComponent>();
+            m_WebRequestComponent = GameEntry.GetComponent<WebRequestComponent>();
+            EventComponent eventComponent = GameEntry.GetComponent<EventComponent>();
             eventComponent.Subscribe(WebRequestSuccessEventArgs.EventId,OnWebGetTextureSuccess);
             eventComponent.Subscribe(WebRequestFailureEventArgs.EventId,OnWebGetTextureFailure);
         }
@@ -74,7 +70,5 @@ namespace UnityGameFramework.Extension
             SetTexture(webGetTextureData.SetTexture2dObject, tex,webGetTextureData.SerialId);
             ReferencePool.Release(webGetTextureData);
         }
-        
-        
     }
 }

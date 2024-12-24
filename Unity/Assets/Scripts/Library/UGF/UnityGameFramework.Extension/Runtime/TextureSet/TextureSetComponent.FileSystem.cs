@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using GameFramework;
 using GameFramework.FileSystem;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -9,7 +10,6 @@ namespace UnityGameFramework.Extension
 {
     public partial class TextureSetComponent
     {
-                
         /// <summary>
         /// 文件系统组件
         /// </summary>
@@ -33,17 +33,21 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 文件系统最大文件数量
         /// </summary>
-        [SerializeField] private int m_FileSystemMaxFileLength = 64;
+        [SerializeField]
+        [DisableIf("m_FileSystemComponent")]
+        private int m_FileSystemMaxFileLength = 64;
 
         /// <summary>
         /// 初始化Buffer长度
         /// </summary>
-        [SerializeField] private int m_InitBufferLength = 1024 * 64;
+        [SerializeField]
+        [DisableIf("m_FileSystemComponent")]
+        private int m_InitBufferLength = 1024 * 64;
 
         private void InitializedFileSystem()
         {
-            SettingComponent settingComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<SettingComponent>();
-            m_FileSystemComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<FileSystemComponent>();
+            SettingComponent settingComponent = GameEntry.GetComponent<SettingComponent>();
+            m_FileSystemComponent = GameEntry.GetComponent<FileSystemComponent>();
             m_Buffer = new byte[m_InitBufferLength];
             string fileName = settingComponent.GetString("TextureFileSystemFullPath", "TextureFileSystem");
             m_FullPath = Utility.Path.GetRegularPath(Path.Combine(Application.persistentDataPath, $"{fileName}.dat"));
@@ -123,21 +127,20 @@ namespace UnityGameFramework.Extension
         {
             if (m_TextureFileSystem == null)
             {
-                m_TextureFileSystem = m_FileSystemComponent.CreateFileSystem(m_FullPath, FileSystemAccess.ReadWrite,
-                    m_FileSystemMaxFileLength, m_FileSystemMaxFileLength * 8);
+                m_TextureFileSystem = m_FileSystemComponent.CreateFileSystem(m_FullPath, FileSystemAccess.ReadWrite, m_FileSystemMaxFileLength, m_FileSystemMaxFileLength * 8);
             }
 
-            if (m_TextureFileSystem.FileCount < m_TextureFileSystem.MaxFileCount) return;
-            FileSystemComponent fileSystemComponent =
-                UnityGameFramework.Runtime.GameEntry.GetComponent<FileSystemComponent>();
-            SettingComponent settingComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<SettingComponent>();
+            if (m_TextureFileSystem.FileCount < m_TextureFileSystem.MaxFileCount)
+                return;
+
+            FileSystemComponent fileSystemComponent = GameEntry.GetComponent<FileSystemComponent>();
+            SettingComponent settingComponent = GameEntry.GetComponent<SettingComponent>();
             string fileName = settingComponent.GetString("TextureFileSystemFullPath", "TextureFileSystem");
             fileName = fileName != "TextureFileSystem" ? "TextureFileSystem" : "TextureFileSystemNew";
             m_FullPath = Path.Combine(Application.persistentDataPath, $"{fileName}.dat");
             settingComponent.SetString("TextureFileSystemFullPath", fileName);
             settingComponent.Save();
-            IFileSystem newFileSystem = fileSystemComponent.CreateFileSystem(m_FullPath, FileSystemAccess.ReadWrite,
-                m_TextureFileSystem.MaxFileCount * 2, m_TextureFileSystem.MaxFileCount * 16);
+            IFileSystem newFileSystem = fileSystemComponent.CreateFileSystem(m_FullPath, FileSystemAccess.ReadWrite, m_TextureFileSystem.MaxFileCount * 2, m_TextureFileSystem.MaxFileCount * 16);
             var fileInfos = m_TextureFileSystem.GetAllFileInfos();
 
             foreach (var fileInfo in fileInfos)

@@ -9,7 +9,7 @@ namespace UnityGameFramework.Extension
     {
         private TextureLoad m_TextureLoad;
         private ResourceComponent m_ResourceComponent;
-        public static TextureItemObject Create(string collectionPath, UnityEngine.Texture target,TextureLoad textureLoad,ResourceComponent resourceComponent = null)
+        public static TextureItemObject Create(string collectionPath, Texture target,TextureLoad textureLoad,ResourceComponent resourceComponent = null)
         {
             TextureItemObject item = ReferencePool.Acquire<TextureItemObject>();
             item.Initialize(collectionPath, target);
@@ -20,7 +20,7 @@ namespace UnityGameFramework.Extension
 
         protected override void Release(bool isShutdown)
         {
-            UnityEngine.Texture texture = (UnityEngine.Texture)Target;
+            Texture texture = (Texture)Target;
             if (texture == null)
             {
                 return;

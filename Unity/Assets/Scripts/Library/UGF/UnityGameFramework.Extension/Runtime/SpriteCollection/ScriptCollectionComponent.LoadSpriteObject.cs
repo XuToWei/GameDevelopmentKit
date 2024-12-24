@@ -11,11 +11,9 @@ namespace UnityGameFramework.Extension
         {
             [ShowInInspector]
             public ISetSpriteObject SpriteObject { get; private set; }
+
             [ShowInInspector]
             public SpriteCollection Collection { get; private set; }
-#if UNITY_EDITOR
-            public bool IsSelect { get; set; }
-#endif
 
             public static LoadSpriteObject Create(ISetSpriteObject obj, SpriteCollection collection)
             {

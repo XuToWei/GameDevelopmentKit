@@ -17,31 +17,74 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 检查是否可以释放间隔
         /// </summary>
-        [SerializeField] private float m_CheckCanReleaseInterval = 30f;
-
-        private float m_CheckCanReleaseTime = 0.0f;
+        [SerializeField]
+        private float m_CheckCanReleaseInterval = 30f;
 
         /// <summary>
         /// 对象池自动释放时间间隔
         /// </summary>
-        [SerializeField] private float m_AutoReleaseInterval = 60f;
-        [ReadOnly] [ShowInInspector]
+        [SerializeField]
+        private float m_AutoReleaseInterval = 60f;
+
+        /// <summary>
+        /// 对象池容量
+        /// </summary>
+        [SerializeField]
+        [DisableIf("m_SpriteCollectionPool")]
+        private int m_PoolCapacity = 16;
+
+        /// <summary>
+        /// 对象过期时间
+        /// </summary>
+        [SerializeField]
+        [DisableIf("m_SpriteCollectionPool")]
+        private float m_PoolExpireTime = 60f;
+
+        [ReadOnly]
+        [ShowInInspector]
         private LinkedList<LoadSpriteObject> m_LoadedSpriteObjectsLinkedList;
+
+        [ReadOnly]
+        [ShowInInspector]
+        private float m_CheckCanReleaseTime = 0.0f;
 
         private HashSet<string> m_SpriteCollectionBeingLoaded;
         private Dictionary<string, HashSet<ISetSpriteObject>> m_WaitSetObjects;
 
-#if UNITY_EDITOR
-        public LinkedList<LoadSpriteObject> LoadedSpriteObjectsLinkedList
+        /// <summary>
+        /// 对象池容量
+        /// </summary>
+        public int PoolCapacity
         {
-            get => m_LoadedSpriteObjectsLinkedList;
-            set => m_LoadedSpriteObjectsLinkedList = value;
+            get
+            {
+                return m_SpriteCollectionPool.Capacity;
+            }
+            set
+            {
+                m_SpriteCollectionPool.Capacity = m_PoolCapacity = value;
+            }
         }
-#endif
+
+        /// <summary>
+        /// 对象过期时间
+        /// </summary>
+        public float PoolExpireTime
+        {
+            get
+            {
+                return m_SpriteCollectionPool.ExpireTime;
+            }
+            set
+            {
+                m_SpriteCollectionPool.ExpireTime = m_PoolExpireTime = value;
+            }
+        }
+
         private void Start()
         {
             ObjectPoolComponent objectPoolComponent = GameEntry.GetComponent<ObjectPoolComponent>();
-            m_SpriteCollectionPool = objectPoolComponent.CreateMultiSpawnObjectPool<SpriteCollectionItemObject>("SpriteCollection", m_AutoReleaseInterval, 16, 60, 0);
+            m_SpriteCollectionPool = objectPoolComponent.CreateMultiSpawnObjectPool<SpriteCollectionItemObject>("SpriteCollection", m_AutoReleaseInterval, m_PoolCapacity, m_PoolExpireTime, 0);
             m_LoadedSpriteObjectsLinkedList = new LinkedList<LoadSpriteObject>();
             m_SpriteCollectionBeingLoaded = new HashSet<string>();
             m_WaitSetObjects = new Dictionary<string, HashSet<ISetSpriteObject>>();

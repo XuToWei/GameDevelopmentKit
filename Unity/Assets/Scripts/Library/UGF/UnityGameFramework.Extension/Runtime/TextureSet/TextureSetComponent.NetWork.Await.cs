@@ -1,6 +1,5 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using GameFramework;
 using UnityEngine;
 
 namespace UnityGameFramework.Extension

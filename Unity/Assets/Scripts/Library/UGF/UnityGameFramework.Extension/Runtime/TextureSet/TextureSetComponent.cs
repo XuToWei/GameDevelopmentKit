@@ -13,52 +13,100 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 检查是否可以释放间隔
         /// </summary>
-        [SerializeField] private float m_CheckCanReleaseInterval = 30f;
-
-        private float m_CheckCanReleaseTime = 0.0f;
-
+        [SerializeField]
+        private float m_CheckCanReleaseInterval = 30f;
+        
         /// <summary>
         /// 对象池自动释放时间间隔
         /// </summary>
-        [SerializeField] private float m_AutoReleaseInterval = 60f;
+        [SerializeField]
+        private float m_AutoReleaseInterval = 60f;
+
+        /// <summary>
+        /// 对象池容量
+        /// </summary>
+        [SerializeField]
+        [DisableIf("m_TexturePool")]
+        private int m_PoolCapacity = 16;
+
+        /// <summary>
+        /// 对象过期时间
+        /// </summary>
+        [SerializeField]
+        [DisableIf("m_TexturePool")]
+        private float m_PoolExpireTime = 60f;
 
         /// <summary>
         /// 保存加载的图片对象
         /// </summary>
+        [ReadOnly]
         [ShowInInspector]
+        [PropertyOrder(int.MaxValue - 1)]
         private LinkedList<LoadTextureObject> m_LoadTextureObjectsLinkedList;
+
+        /// <summary>
+        /// 序号
+        /// </summary>
+        [ReadOnly]
+        [ShowInInspector]
+        [PropertyOrder(int.MaxValue - 1)]
+        private int m_SerialId = 0;
+
+        /// <summary>
+        /// 取消加载序号集合
+        /// </summary>
+        [ReadOnly]
+        [ShowInInspector]
+        [PropertyOrder(int.MaxValue - 1)]
+        private HashSet<int> m_CancelIds;
+
+        [ReadOnly]
+        [ShowInInspector]
+        [PropertyOrder(int.MaxValue - 1)]
+        private float m_CheckCanReleaseTime = 0.0f;
 
         /// <summary>
         /// 散图集合对象池
         /// </summary>
         private IObjectPool<TextureItemObject> m_TexturePool;
 
-#if UNITY_EDITOR
-        public LinkedList<LoadTextureObject> LoadTextureObjectsLinkedList
-        {
-            get => m_LoadTextureObjectsLinkedList;
-            set => m_LoadTextureObjectsLinkedList = value;
-        }
-#endif
         /// <summary>
-        /// 序号
+        /// 对象池容量
         /// </summary>
-        private int m_SerialId = 0;
+        public int PoolCapacity
+        {
+            get
+            {
+                return m_TexturePool.Capacity;
+            }
+            set
+            {
+                m_TexturePool.Capacity = m_PoolCapacity = value;
+            }
+        }
 
         /// <summary>
-        /// 取消加载序号集合
+        /// 对象过期时间
         /// </summary>
-        public HashSet<int> m_CancelId;
+        public float PoolExpireTime
+        {
+            get
+            {
+                return m_TexturePool.ExpireTime;
+            }
+            set
+            {
+                m_TexturePool.ExpireTime = m_PoolExpireTime = value;
+            }
+        }
 
         private IEnumerator Start()
         {
             yield return new WaitForEndOfFrame();
             ObjectPoolComponent objectPoolComponent = GameEntry.GetComponent<ObjectPoolComponent>();
-            m_TexturePool = objectPoolComponent.CreateMultiSpawnObjectPool<TextureItemObject>(
-                "TexturePool",
-                m_AutoReleaseInterval, 16, 60, 0);
+            m_TexturePool = objectPoolComponent.CreateMultiSpawnObjectPool<TextureItemObject>("TexturePool", m_AutoReleaseInterval, m_PoolCapacity, m_PoolExpireTime, 0);
             m_LoadTextureObjectsLinkedList = new LinkedList<LoadTextureObject>();
-            m_CancelId = new HashSet<int>();
+            m_CancelIds = new HashSet<int>();
             InitializedFileSystem();
             InitializedResources();
             InitializedWeb();
@@ -77,6 +125,7 @@ namespace UnityGameFramework.Extension
         /// 回收无引用的Texture。
         /// </summary>
         [Button("Release Unused")]
+        [PropertyOrder(int.MaxValue)]
         public void ReleaseUnused()
         {
             if (m_LoadTextureObjectsLinkedList == null)
@@ -102,13 +151,13 @@ namespace UnityGameFramework.Extension
         private void SetTexture(ISetTexture2dObject setTexture2dObject, Texture2D texture, int serialId)
         {
             m_LoadTextureObjectsLinkedList.AddLast(LoadTextureObject.Create(setTexture2dObject, texture));
-            if (!m_CancelId.Contains(serialId))
+            if (!m_CancelIds.Contains(serialId))
             {
                 setTexture2dObject.SetTexture(texture);
             }
             else
             {
-                m_CancelId.Remove(serialId);
+                m_CancelIds.Remove(serialId);
             }
         }
         
@@ -130,7 +179,7 @@ namespace UnityGameFramework.Extension
                 return;
             }
 
-            m_CancelId.Add(id);
+            m_CancelIds.Add(id);
         }
     }
 }

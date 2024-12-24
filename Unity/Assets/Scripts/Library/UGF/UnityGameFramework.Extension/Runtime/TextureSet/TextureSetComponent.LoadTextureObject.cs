@@ -1,8 +1,6 @@
 using System;
 using GameFramework;
-#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
-#endif
 using UnityEngine;
 
 namespace UnityGameFramework.Extension
@@ -13,12 +11,11 @@ namespace UnityGameFramework.Extension
         public class LoadTextureObject : IReference
         {
             [ShowInInspector]
-            public ISetTexture2dObject Texture2dObject { get; private set;}
+            public ISetTexture2dObject Texture2dObject { get; private set; }
+
             [ShowInInspector]
             public Texture2D Texture2D { get; private set; }
-#if UNITY_EDITOR
-            public bool IsSelect { get; set; }
-#endif
+
             private LoadTextureObject(ISetTexture2dObject obj,Texture2D texture2D)
             {
                 Texture2dObject = obj;

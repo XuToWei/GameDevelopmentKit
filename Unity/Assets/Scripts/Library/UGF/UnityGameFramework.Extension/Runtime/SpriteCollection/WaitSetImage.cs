@@ -20,10 +20,13 @@ namespace UnityGameFramework.Extension
             waitSetImage.CollectionPath = collection;
             return waitSetImage;
         }
+
         [ShowInInspector]
         public string SpritePath { get; private set; }
+
         [ShowInInspector]
         public string CollectionPath { get; private set; }
+
         [ShowInInspector]
         public Sprite CurSprite { get; private set; }
 
