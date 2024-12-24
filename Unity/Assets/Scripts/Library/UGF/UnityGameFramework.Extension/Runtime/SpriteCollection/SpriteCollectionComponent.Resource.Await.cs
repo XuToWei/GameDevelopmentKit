@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 
@@ -11,57 +10,43 @@ namespace UnityGameFramework.Extension
         /// 设置精灵
         /// </summary>
         /// <param name="setSpriteObject">需要设置精灵的对象</param>
-        /// <param name="cancellationToken">CancellationToken</param>
-        public async UniTask SetSpriteAsync(ISetSpriteObject setSpriteObject, CancellationToken cancellationToken = default)
+        public async UniTask SetSpriteAsync(ISetSpriteObject setSpriteObject)
         {
-            if (cancellationToken.IsCancellationRequested)
+            string collectionPath = setSpriteObject.CollectionPath;
+            if (m_SpriteCollectionPool.CanSpawn(collectionPath))
             {
-                return;
-            }
-            if (m_SpriteCollectionPool.CanSpawn(setSpriteObject.CollectionPath))
-            {
-                SpriteCollection collectionItem = (SpriteCollection)m_SpriteCollectionPool.Spawn(setSpriteObject.CollectionPath).Target;
+                SpriteCollection collectionItem = (SpriteCollection)m_SpriteCollectionPool.Spawn(collectionPath).Target;
                 setSpriteObject.SetSprite(collectionItem.GetSprite(setSpriteObject.SpritePath));
                 m_LoadedSpriteObjectsLinkedList.AddLast(LoadSpriteObject.Create(setSpriteObject, collectionItem));
                 return;
             }
-            if (m_SpriteCollectionBeingLoaded.Contains(setSpriteObject.CollectionPath))
-            {
-                return;
-            }
-            if (!m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out var loadSp))
+            if (!m_WaitSetObjects.TryGetValue(collectionPath, out var loadSp))
             { 
                 loadSp = new HashSet<ISetSpriteObject>();
-                m_WaitSetObjects.Add(setSpriteObject.CollectionPath, loadSp);
+                m_WaitSetObjects.Add(collectionPath, loadSp);
             }
             loadSp.Add(setSpriteObject);
             
-            m_SpriteCollectionBeingLoaded.Add(setSpriteObject.CollectionPath);
-            
-            (bool isCancel, SpriteCollection collection) = await m_ResourceComponent.LoadAssetAsync<SpriteCollection>
-                (setSpriteObject.CollectionPath, cancellationToken: cancellationToken).SuppressCancellationThrow();
-            
+            if (!m_SpriteCollectionBeingLoaded.Add(collectionPath))
+            {
+                return;
+            }
+            (bool isCancel, SpriteCollection collection) = await m_ResourceComponent.LoadAssetAsync<SpriteCollection>(collectionPath).SuppressCancellationThrow();
+            m_SpriteCollectionBeingLoaded.Remove(collectionPath);
             if (isCancel)
             {
                 loadSp.Remove(setSpriteObject);
-                return;
+                ReferencePool.Release(setSpriteObject);
             }
-
-            m_SpriteCollectionPool.Register(SpriteCollectionItemObject.Create(setSpriteObject.CollectionPath, collection, m_ResourceComponent), false);
-            m_SpriteCollectionBeingLoaded.Remove(setSpriteObject.CollectionPath);
+            m_SpriteCollectionPool.Register(SpriteCollectionItemObject.Create(collectionPath, collection, m_ResourceComponent), false);
             
-            if(m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out HashSet<ISetSpriteObject> awaitSets))
+            if(m_WaitSetObjects.TryGetValue(collectionPath, out HashSet<ISetSpriteObject> awaitSets))
             {
                 if (awaitSets.Count > 0)
                 {
-                    if (!awaitSets.Contains(setSpriteObject))
-                    {
-                        ReferencePool.Release(setSpriteObject);
-                        return;
-                    }
                     foreach (ISetSpriteObject awaitSet in awaitSets)
                     {
-                        m_SpriteCollectionPool.Spawn(setSpriteObject.CollectionPath);
+                        m_SpriteCollectionPool.Spawn(collectionPath);
                         awaitSet.SetSprite(collection.GetSprite(awaitSet.SpritePath));
                         m_LoadedSpriteObjectsLinkedList.AddLast(LoadSpriteObject.Create(awaitSet, collection));
                     }

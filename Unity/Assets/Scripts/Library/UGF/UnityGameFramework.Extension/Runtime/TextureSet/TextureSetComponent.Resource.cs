@@ -16,7 +16,7 @@ namespace UnityGameFramework.Extension
 
         private void InitializedResources()
         {
-            m_ResourceComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<ResourceComponent>();
+            m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
             m_LoadAssetCallbacks = new LoadAssetCallbacks(OnLoadAssetSuccess, OnLoadAssetFailure);
         }
 
@@ -35,9 +35,7 @@ namespace UnityGameFramework.Extension
             {
                 if (!m_TexturePool.CanSpawn(resourceData.SetTexture2dObject.Texture2dFilePath))
                 {
-                    m_TexturePool.Register(
-                        TextureItemObject.Create(resourceData.SetTexture2dObject.Texture2dFilePath, texture,
-                            TextureLoad.FromResource, m_ResourceComponent), true);
+                    m_TexturePool.Register(TextureItemObject.Create(resourceData.SetTexture2dObject.Texture2dFilePath, texture, TextureLoad.FromResource, m_ResourceComponent), true);
                 }
                 else
                 {
@@ -69,8 +67,7 @@ namespace UnityGameFramework.Extension
             else
             {
                 serialId = m_SerialId++;
-                m_ResourceComponent.LoadAsset(setTexture2dObject.Texture2dFilePath,
-                    typeof(Texture2D), m_LoadAssetCallbacks, ResourceData.Create(setTexture2dObject, serialId));
+                m_ResourceComponent.LoadAsset(setTexture2dObject.Texture2dFilePath, typeof(Texture2D), m_LoadAssetCallbacks, ResourceData.Create(setTexture2dObject, serialId));
             }
 
             return serialId;

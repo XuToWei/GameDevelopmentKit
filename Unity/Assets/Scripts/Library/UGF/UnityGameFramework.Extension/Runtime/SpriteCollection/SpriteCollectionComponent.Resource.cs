@@ -73,12 +73,11 @@ namespace UnityGameFramework.Extension
             }
             loadSp.Add(setSpriteObject);
 
-            if (m_SpriteCollectionBeingLoaded.Contains(setSpriteObject.CollectionPath))
+            if (!m_SpriteCollectionBeingLoaded.Add(setSpriteObject.CollectionPath))
             {
                 return;
             }
 
-            m_SpriteCollectionBeingLoaded.Add(setSpriteObject.CollectionPath);
             m_ResourceComponent.LoadAsset(setSpriteObject.CollectionPath, typeof(SpriteCollection), m_LoadAssetCallbacks, setSpriteObject);
         }
 
