@@ -76,13 +76,7 @@
 
 - [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)
 
-- [SLATE Cinematic Sequencer](https://assetstore.unity.com/packages/tools/animation/slate-cinematic-sequencer-56558)
-
-- [SmartUiSelection](https://assetstore.unity.com/packages/tools/gui/smart-ui-selection-for-unity-124328)
-
 - [SRDebugger](https://assetstore.unity.com/packages/tools/gui/srdebugger-console-tools-on-device-27688)
-
-- [DOTween Pro](https://assetstore.unity.com/packages/tools/visual-scripting/dotween-pro-32416)
 
 - [EnhancedScroller](https://assetstore.unity.com/packages/tools/gui/enhancedscroller-36378)
 
