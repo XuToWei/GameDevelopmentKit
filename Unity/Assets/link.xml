@@ -18,8 +18,10 @@
     
     <assembly fullname="ICSharpCode.SharpZipLib" preserve="all" />
     
-    <assembly fullname="UIEffect" preserve="all" />
+    <assembly fullname="Coffee.UIEffect" preserve="all" />
     <assembly fullname="Coffee.UIParticle" preserve="all" />
+    <assembly fullname="Coffee.SoftMaskForUGUI" preserve="all" />
+    <assembly fullname="Coffee.UnmaskForUGUI" preserve="all" />
     
     <assembly fullname="Newtonsoft.Json" preserve="all" />
     <assembly fullname="CodeBind" preserve="all" />
@@ -34,6 +36,9 @@
     <assembly fullname="StompyRobot.SRDebugger" preserve="all" />
     <assembly fullname="EnhancedScroller" preserve="all" />
     <assembly fullname="R3.Unity" preserve="all" />
+    <assembly fullname="LitMotion" preserve="all" />
+    <assembly fullname="LitMotion.Extensions" preserve="all" />
+    <assembly fullname="LitMotion.Animation" preserve="all" />
     
     <assembly fullname="Game" preserve="all" />
     <!--UNITY_HOTFIX_END-->

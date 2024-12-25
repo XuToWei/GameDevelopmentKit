@@ -8,6 +8,7 @@ namespace ET.Editor
 {
     internal static class CodeModeDefineSymbolTool
     {
+        private const string CodePath = "Assets/Scripts/Game/ET/Code";
         private static string s_IgnoreAsmdefTemplate;
 
         private static string IgnoreAsmdefTemplate
@@ -245,50 +246,50 @@ namespace ET.Editor
         
         static void EnableETClientCode()
         {
-            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Hotfix/Client/Ignore.asmdef");
-            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Client/Ignore.asmdef");
+            RemoveAsmdefFile($"{CodePath}/Hotfix/Client/Ignore.asmdef");
+            RemoveAsmdefFile($"{CodePath}/Model/Client/Ignore.asmdef");
         }
         
         static void DisableETClientCode()
         {
-            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Hotfix/Client/Ignore.asmdef", "Ignore.Hotfix.Client");
-            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Client/Ignore.asmdef", "Ignore.Model.Client");
+            AddAsmdefFile($"{CodePath}/Hotfix/Client/Ignore.asmdef", "Ignore.Hotfix.Client");
+            AddAsmdefFile($"{CodePath}/Model/Client/Ignore.asmdef", "Ignore.Model.Client");
         }
         
         static void EnableETClientViewCode()
         {
-            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/HotfixView/Client/Ignore.asmdef");
-            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/ModelView/Client/Ignore.asmdef");
+            RemoveAsmdefFile($"{CodePath}/HotfixView/Client/Ignore.asmdef");
+            RemoveAsmdefFile($"{CodePath}/ModelView/Client/Ignore.asmdef");
         }
         
         static void DisableETClientViewCode()
         {
-            AddAsmdefFile("Assets/Scripts/Game/ET/Code/HotfixView/Client/Ignore.asmdef", "Ignore.HotfixView.Client");
-            AddAsmdefFile("Assets/Scripts/Game/ET/Code/ModelView/Client/Ignore.asmdef", "Ignore.ModelView.Client");
+            AddAsmdefFile($"{CodePath}/HotfixView/Client/Ignore.asmdef", "Ignore.HotfixView.Client");
+            AddAsmdefFile($"{CodePath}/ModelView/Client/Ignore.asmdef", "Ignore.ModelView.Client");
         }
         
         static void EnableETServerCode()
         {
-            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Hotfix/Server/Ignore.asmdef");
-            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Server/Ignore.asmdef");
+            RemoveAsmdefFile($"{CodePath}/Hotfix/Server/Ignore.asmdef");
+            RemoveAsmdefFile($"{CodePath}/Model/Server/Ignore.asmdef");
         }
         
         static void DisableETServerCode()
         {
-            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Hotfix/Server/Ignore.asmdef", "Ignore.Hotfix.Server");
-            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Server/Ignore.asmdef", "Ignore.Model.Server");
+            AddAsmdefFile($"{CodePath}/Hotfix/Server/Ignore.asmdef", "Ignore.Hotfix.Server");
+            AddAsmdefFile($"{CodePath}/Model/Server/Ignore.asmdef", "Ignore.Model.Server");
         }
         
         static void EnableModelGenerateClientCode()
         {
-            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Generate/Client/Ignore.asmdef");
-            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Ignore.asmdef", "Ignore.Model.Generate.ClientServer");
+            RemoveAsmdefFile($"{CodePath}/Model/Generate/Client/Ignore.asmdef");
+            AddAsmdefFile($"{CodePath}/Model/Generate/ClientServer/Ignore.asmdef", "Ignore.Model.Generate.ClientServer");
         }
         
         static void EnableModelGenerateClientServerCode()
         {
-            RemoveAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Generate/ClientServer/Ignore.asmdef");
-            AddAsmdefFile("Assets/Scripts/Game/ET/Code/Model/Generate/Client/Ignore.asmdef", "Ignore.Model.Generate.Client");
+            RemoveAsmdefFile($"{CodePath}/Model/Generate/ClientServer/Ignore.asmdef");
+            AddAsmdefFile($"{CodePath}/Model/Generate/Client/Ignore.asmdef", "Ignore.Model.Generate.Client");
         }
         
         static void RefreshETResourceRule(bool isClient)

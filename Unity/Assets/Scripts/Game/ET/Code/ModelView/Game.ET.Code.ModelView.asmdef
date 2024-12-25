@@ -16,8 +16,7 @@
         "CodeBind",
         "Unity.TextMeshPro",
         "UniTask",
-        "FancyScrollView",
-        "UIEffect",
+        "Coffee.UIEffect",
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
@@ -27,7 +26,10 @@
         "Leihuo.UXTools.Runtime",
         "StateController",
         "R3.Unity",
-        "UniTask.Extension"
+        "UniTask.Extension",
+        "LitMotion",
+        "LitMotion.Extensions",
+        "LitMotion.Animation"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -13,8 +13,7 @@
         "StompyRobot.SRF",
         "CodeBind",
         "Unity.TextMeshPro",
-        "FancyScrollView",
-        "UIEffect",
+        "Coffee.UIEffect",
         "Coffee.UIParticle",
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
@@ -25,7 +24,10 @@
         "StateController",
         "SocoTool",
         "R3.Unity",
-        "UniTask.Extension"
+        "UniTask.Extension",
+        "LitMotion",
+        "LitMotion.Extensions",
+        "LitMotion.Animation"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

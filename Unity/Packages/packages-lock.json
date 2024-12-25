@@ -1,5 +1,25 @@
 {
   "dependencies": {
+    "com.annulusgames.lit-motion": {
+      "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.burst": "1.6.0",
+        "com.unity.collections": "1.5.1",
+        "com.unity.mathematics": "1.0.1"
+      },
+      "hash": "f7df4966aa30482fb739148aba2bc7bc672dfaf6"
+    },
+    "com.annulusgames.lit-motion.animation": {
+      "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.annulusgames.lit-motion": "2.0.0"
+      },
+      "hash": "f7df4966aa30482fb739148aba2bc7bc672dfaf6"
+    },
     "com.baracuda.preprocessor-symbol-definition-files": {
       "version": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
       "depth": 0,
