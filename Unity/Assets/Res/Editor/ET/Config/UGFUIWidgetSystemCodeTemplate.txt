@@ -12,7 +12,7 @@ namespace ET.Client
         {
             //self.InitBind(uiWidgetTransform);
         }
-        
+
         [EntitySystem]
         private static void Destroy(this UGFUIWidget#NAME# self)
         {

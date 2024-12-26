@@ -10,7 +10,7 @@ namespace ET.Client
             base.OnInit(uiWidget, userData);
             uiWidget.AddComponent<UGFUIWidgetTest, Transform>(uiWidget.Transform);
         }
-            
+
         public override void OnOpen(UGFUIWidget uiWidget, object userData)
         {
             base.OnOpen(uiWidget, userData);

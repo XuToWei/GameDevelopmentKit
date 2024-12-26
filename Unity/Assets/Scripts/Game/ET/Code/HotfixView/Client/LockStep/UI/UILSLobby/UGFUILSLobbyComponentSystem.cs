@@ -14,18 +14,18 @@ namespace ET.Client
         {
             self.InitBind(uiTransform);
         }
-        
+
         [EntitySystem]
         private static void Destroy(this UGFUILSLobbyComponent self)
         {
             self.ClearBind();
         }
-        
+
         public static async UniTask EnterMap(this UGFUILSLobbyComponent self)
         {
             await EnterMapHelper.Match(self.Fiber());
         }
-        
+
         public static void Replay(this UGFUILSLobbyComponent self)
         {
             byte[] bytes = File.ReadAllBytes(self.ReplayPathInputField.text);

@@ -12,7 +12,7 @@ namespace ET.Client
         {
             self.InitBind(uiTransform);
         }
-        
+
         [EntitySystem]
         private static void Destroy(this UGFUIHelpComponent self)
         {

@@ -12,7 +12,7 @@ namespace ET.Client
         {
            //self.InitBind(transform);
         }
-        
+
         [EntitySystem]
         private static void Destroy(this UGFEntity#NAME# self)
         {

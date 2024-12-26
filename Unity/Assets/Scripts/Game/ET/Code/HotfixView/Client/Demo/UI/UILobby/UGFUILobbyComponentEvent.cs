@@ -15,7 +15,7 @@ namespace ET.Client
                 var uiLobby = uiForm.AddComponent<UGFUILobbyComponent, Transform>(uiForm.Transform);
                 uiLobby.EnterMapButton.SetAsync(uiLobby.EnterMap);
             }
-            
+
             public override void OnOpen(UGFUIForm uiForm, object userData)
             {
                 base.OnOpen(uiForm, userData);

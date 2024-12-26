@@ -13,7 +13,7 @@ namespace ET.Client
                 base.OnInit(uiForm, userData);
                 UGFUI#NAME# ui#NAME# = uiForm.AddComponent<UGFUI#NAME#, Transform>(uiForm.Transform);
             }
-            
+
             public override void OnOpen(UGFUIForm uiForm, object userData)
             {
                 base.OnOpen(uiForm, userData);

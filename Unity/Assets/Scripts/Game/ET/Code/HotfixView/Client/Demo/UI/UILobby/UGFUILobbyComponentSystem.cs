@@ -13,13 +13,13 @@ namespace ET.Client
         {
             self.InitBind(uiTransform);
         }
-        
+
         [EntitySystem]
         private static void Destroy(this UGFUILobbyComponent self)
         {
             self.ClearBind();
         }
-        
+
         private static async UniTask EnterMap(this UGFUILobbyComponent self)
         {
             Scene root = self.Root();

@@ -13,13 +13,13 @@ namespace ET.Client
         {
             self.InitBind(uiTransform);
         }
-        
+
         [EntitySystem]
         private static void Destroy(this UGFUILSLoginComponent self)
         {
             self.ClearBind();
         }
-        
+
         public static void OnLogin(this UGFUILSLoginComponent self)
         {
             LoginHelper.Login(

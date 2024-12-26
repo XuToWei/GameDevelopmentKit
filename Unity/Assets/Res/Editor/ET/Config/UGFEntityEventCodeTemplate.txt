@@ -12,7 +12,7 @@ namespace ET.Client
                 base.OnInit(entity, userData);
                 UGFEntity#NAME# entity#NAME# = entity.AddComponent<UGFEntity#NAME#, Transform>(entity.Transform);
             }
-            
+
             public override void OnShow(UGFEntity entity, object userData)
             {
                 base.OnShow(entity, userData);

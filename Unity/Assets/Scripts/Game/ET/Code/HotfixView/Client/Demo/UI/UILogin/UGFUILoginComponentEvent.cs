@@ -17,7 +17,7 @@ namespace ET.Client
                 uiLogin.uiWidgetTest = uiForm.AddUIWidget<UGFUIWidgetTestEvent>(uiLogin.TestWidgetTransform);
                 
             }
-            
+
             public override void OnOpen(UGFUIForm uiForm, object userData)
             {
                 base.OnOpen(uiForm, userData);

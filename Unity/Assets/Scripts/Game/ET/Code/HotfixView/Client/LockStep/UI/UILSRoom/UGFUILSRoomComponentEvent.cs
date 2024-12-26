@@ -29,7 +29,7 @@ namespace ET.Client
                     uiLSRoom.SaveReplayButton.Set(uiLSRoom.OnSaveReplay);
                 }
             }
-            
+
             public override void OnOpen(UGFUIForm uiForm, object userData)
             {
                 base.OnOpen(uiForm, userData);
