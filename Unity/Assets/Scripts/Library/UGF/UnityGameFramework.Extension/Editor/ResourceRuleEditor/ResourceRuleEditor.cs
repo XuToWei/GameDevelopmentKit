@@ -482,7 +482,8 @@ namespace UnityGameFramework.Extension.Editor
                 Debug.Log("Refresh ResourceCollection.xml fail");
             }
 
-            ResourceOptimize.Optimize(ref m_ResourceCollection);
+            ResourceOptimize optimize = new ResourceOptimize();
+            optimize.Optimize(m_ResourceCollection);
         }
 
         public void RefreshResourceCollection(string configPath)
