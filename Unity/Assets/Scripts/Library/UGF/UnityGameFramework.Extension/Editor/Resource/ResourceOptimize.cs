@@ -28,6 +28,7 @@ namespace UnityGameFramework.Extension.Editor
             return $"Auto/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
         }
         
+        private static ResourceOptimize s_Instance = new ResourceOptimize();
         private ResourceCollection m_ResourceCollection;
 
         private readonly Dictionary<string, DependencyData> m_DependencyDatas;
@@ -36,23 +37,37 @@ namespace UnityGameFramework.Extension.Editor
         private readonly Dictionary<string, List<string>> m_CombineBundles;
         private readonly MethodInfo m_GetStorageMemorySizeLongMethod;
         private readonly object[] m_ParamCache;
+        private readonly Dictionary<string, string[]> m_DependencyCachePool;
 
-        public ResourceOptimize()
+        [MenuItem("Game Framework/Resource Tools/Resource Optimize", false, 52)]
+        static void StartOptimize()
         {
-            m_ResourceCollection = new ResourceCollection();
+            ResourceCollection resourceCollection = new ResourceCollection();
+            resourceCollection.Load();
+            Optimize(ref resourceCollection);
+        }
+
+        private ResourceOptimize()
+        {
             m_DependencyDatas = new Dictionary<string, DependencyData>();
             m_ScatteredAssets = new Dictionary<string, List<Asset>>();
             m_AnalyzedStamps = new HashSet<Stamp>();
             m_CombineBundles = new Dictionary<string, List<string>>();
             m_GetStorageMemorySizeLongMethod = typeof(EditorWindow).Assembly.GetType("UnityEditor.TextureUtil").GetMethod("GetStorageMemorySizeLong", BindingFlags.Static | BindingFlags.Public);
             m_ParamCache = new object[1];
+            m_DependencyCachePool = new Dictionary<string, string[]>();
         }
 
-        public void Optimize(ResourceCollection resourceCollection = null)
+        public static void Optimize(ref ResourceCollection resourceCollection)
         {
-            Analyze(resourceCollection);
-            CalCombine();
-            Save();
+            if (resourceCollection == null)
+            {
+                throw new GameFrameworkException("ResourceCollection is invalid.");
+            }
+            s_Instance.m_ResourceCollection = resourceCollection;
+            s_Instance.Analyze();
+            s_Instance.CalCombine();
+            s_Instance.Save();
         }
 
         private void Save()
@@ -100,7 +115,7 @@ namespace UnityGameFramework.Extension.Editor
                 }
             }
             
-            foreach (var abInfo in allCombines.Values.ToArray())
+            foreach (ABInfo abInfo in allCombines.Values.ToArray())
             {
                 var bundleName = abInfo.name;
                 if (abInfo.size * abInfo.referenceCount < MIN_NO_NAME_COMBINE_SIZE)
@@ -118,18 +133,16 @@ namespace UnityGameFramework.Extension.Editor
                 }
             }
 
-            var left =  allCombines.Values.ToList();
+            List<ABInfo> left =  allCombines.Values.ToList();
             left.Sort((a,b) => a.size.CompareTo(b.size));
             allFinalCombine = left.Count;
             List<string> currentCombineBundle = null;
             long currentCombineBundleSize = 0;
-            for (int i = 0; i < left.Count; i++) 
-            { 
-                var abName= left[i].name; 
-                var size= left[i].size;
+            foreach (ABInfo abInfo in left)
+            {
                 currentCombineBundle ??= new List<string>();
-                currentCombineBundle.Add(abName);
-                currentCombineBundleSize += size;
+                currentCombineBundle.Add(abInfo.name);
+                currentCombineBundleSize += abInfo.size;
                 if (currentCombineBundleSize > MAX_COMBINE_SHARE_AB_SIZE)
                 {
                     m_CombineBundles[GetNewCombineName(currentCombineBundle)] = currentCombineBundle;
@@ -149,20 +162,12 @@ namespace UnityGameFramework.Extension.Editor
                       $"因为这次合并操作，总共减少了{(m_CombineBundles.Count > 0 ? allShareRemoveByNoName + allFinalCombine - m_CombineBundles.Count : 0)}个share bundle");
         }
 
-        private void Analyze(ResourceCollection resourceCollection)
+        private void Analyze()
         {
-            if (resourceCollection == null)
-            {
-                m_ResourceCollection = new ResourceCollection();
-                m_ResourceCollection.Load();
-            }
-            else
-            {
-                m_ResourceCollection = resourceCollection;
-            }
             m_DependencyDatas.Clear();
             m_ScatteredAssets.Clear();
             m_AnalyzedStamps.Clear();
+            m_DependencyCachePool.Clear();
 
             HashSet<string> scriptAssetNames = GetFilteredAssetNames("t:Script");
             Asset[] assets = m_ResourceCollection.GetAssets();
@@ -177,21 +182,20 @@ namespace UnityGameFramework.Extension.Editor
                 }
 
                 DependencyData dependencyData = new DependencyData();
-                AnalyzeAsset(assetName, assets[i], dependencyData, scriptAssetNames);
+                AnalyzeAsset(assetName, assets[i], scriptAssetNames, ref dependencyData);
                 dependencyData.RefreshData();
                 m_DependencyDatas.Add(assetName, dependencyData);
             }
 
             foreach (List<Asset> scatteredAsset in m_ScatteredAssets.Values)
             {
-                scatteredAsset.Sort((a, b) => a.Name.CompareTo(b.Name));
+                scatteredAsset.Sort((a, b) => String.Compare(a.Name, b.Name, StringComparison.Ordinal));
             }
         }
 
-        private void AnalyzeAsset(string assetName, Asset hostAsset, DependencyData dependencyData,
-            HashSet<string> scriptAssetNames)
+        private void AnalyzeAsset(string assetName, Asset hostAsset, HashSet<string> scriptAssetNames, ref DependencyData dependencyData)
         {
-            string[] dependencyAssetNames = AssetDatabase.GetDependencies(assetName, false);
+            string[] dependencyAssetNames = GetDependencies(assetName);
             foreach (string dependencyAssetName in dependencyAssetNames)
             {
                 if (scriptAssetNames.Contains(dependencyAssetName))
@@ -216,12 +220,10 @@ namespace UnityGameFramework.Extension.Editor
                 }
 
                 Stamp stamp = new Stamp(hostAsset.Name, dependencyAssetName);
-                if (m_AnalyzedStamps.Contains(stamp))
+                if (!m_AnalyzedStamps.Add(stamp))
                 {
                     continue;
                 }
-
-                m_AnalyzedStamps.Add(stamp);
 
                 string guid = AssetDatabase.AssetPathToGUID(dependencyAssetName);
                 if (string.IsNullOrEmpty(guid))
@@ -248,7 +250,7 @@ namespace UnityGameFramework.Extension.Editor
 
                     scatteredAssets.Add(hostAsset);
 
-                    AnalyzeAsset(dependencyAssetName, hostAsset, dependencyData, scriptAssetNames);
+                    AnalyzeAsset(dependencyAssetName, hostAsset, scriptAssetNames, ref dependencyData);
                 }
             }
         }
@@ -281,6 +283,20 @@ namespace UnityGameFramework.Extension.Editor
             {
                 //直接使用文件长度
                 return new FileInfo(assetPath).Length;
+            }
+        }
+
+        private string[] GetDependencies(string assetName)
+        {
+            if(m_DependencyCachePool.TryGetValue(assetName, out string[] dependencies))
+            {
+                return dependencies;
+            }
+            else
+            {
+                string[] dependencyAssetNames = AssetDatabase.GetDependencies(assetName, false);
+                m_DependencyCachePool.Add(assetName, dependencyAssetNames);
+                return dependencyAssetNames;
             }
         }
     }
