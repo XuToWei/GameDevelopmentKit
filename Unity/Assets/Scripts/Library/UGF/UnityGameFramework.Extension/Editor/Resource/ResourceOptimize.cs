@@ -173,7 +173,7 @@ namespace UnityGameFramework.Extension.Editor
             m_AnalyzedStamps.Clear();
             m_DependencyCachePool.Clear();
 
-            HashSet<string> scriptAssetNames = GetFilteredAssetNames("t:Script");
+            HashSet<string> excludeAssetNames = GetFilteredAssetNames("t:Script t:SubGraphAsset");
             Asset[] assets = m_ResourceCollection.GetAssets();
             int count = assets.Length;
             for (int i = 0; i < count; i++)
@@ -186,7 +186,7 @@ namespace UnityGameFramework.Extension.Editor
                 }
 
                 DependencyData dependencyData = new DependencyData();
-                AnalyzeAsset(assetName, assets[i], scriptAssetNames, ref dependencyData);
+                AnalyzeAsset(assetName, assets[i], excludeAssetNames, ref dependencyData);
                 dependencyData.RefreshData();
                 m_DependencyDatas.Add(assetName, dependencyData);
             }
@@ -197,12 +197,12 @@ namespace UnityGameFramework.Extension.Editor
             }
         }
 
-        private void AnalyzeAsset(string assetName, Asset hostAsset, HashSet<string> scriptAssetNames, ref DependencyData dependencyData)
+        private void AnalyzeAsset(string assetName, Asset hostAsset, HashSet<string> excludeAssetNames, ref DependencyData dependencyData)
         {
             string[] dependencyAssetNames = GetDependencies(assetName);
             foreach (string dependencyAssetName in dependencyAssetNames)
             {
-                if (scriptAssetNames.Contains(dependencyAssetName))
+                if (excludeAssetNames.Contains(dependencyAssetName))
                 {
                     continue;
                 }
@@ -254,7 +254,7 @@ namespace UnityGameFramework.Extension.Editor
 
                     scatteredAssets.Add(hostAsset);
 
-                    AnalyzeAsset(dependencyAssetName, hostAsset, scriptAssetNames, ref dependencyData);
+                    AnalyzeAsset(dependencyAssetName, hostAsset, excludeAssetNames, ref dependencyData);
                 }
             }
         }

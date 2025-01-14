@@ -94,7 +94,7 @@ namespace UnityGameFramework.Editor.ResourceTools
             m_CircularDependencyDatas.Clear();
             m_AnalyzedStamps.Clear();
 
-            HashSet<string> scriptAssetNames = GetFilteredAssetNames("t:Script");
+            HashSet<string> excludeAssetNames = GetFilteredAssetNames("t:Script t:SubGraphAsset");
             Asset[] assets = m_ResourceCollection.GetAssets();
             int count = assets.Length;
             for (int i = 0; i < count; i++)
@@ -112,7 +112,7 @@ namespace UnityGameFramework.Editor.ResourceTools
                 }
 
                 DependencyData dependencyData = new DependencyData();
-                AnalyzeAsset(assetName, assets[i], dependencyData, scriptAssetNames);
+                AnalyzeAsset(assetName, assets[i], dependencyData, excludeAssetNames);
                 dependencyData.RefreshData();
                 m_DependencyDatas.Add(assetName, dependencyData);
             }
@@ -130,12 +130,12 @@ namespace UnityGameFramework.Editor.ResourceTools
             }
         }
 
-        private void AnalyzeAsset(string assetName, Asset hostAsset, DependencyData dependencyData, HashSet<string> scriptAssetNames)
+        private void AnalyzeAsset(string assetName, Asset hostAsset, DependencyData dependencyData, HashSet<string> excludeAssetNames)
         {
             string[] dependencyAssetNames = AssetDatabase.GetDependencies(assetName, false);
             foreach (string dependencyAssetName in dependencyAssetNames)
             {
-                if (scriptAssetNames.Contains(dependencyAssetName))
+                if (excludeAssetNames.Contains(dependencyAssetName))
                 {
                     continue;
                 }
@@ -184,7 +184,7 @@ namespace UnityGameFramework.Editor.ResourceTools
 
                     scatteredAssets.Add(hostAsset);
 
-                    AnalyzeAsset(dependencyAssetName, hostAsset, dependencyData, scriptAssetNames);
+                    AnalyzeAsset(dependencyAssetName, hostAsset, dependencyData, excludeAssetNames);
                 }
             }
         }
