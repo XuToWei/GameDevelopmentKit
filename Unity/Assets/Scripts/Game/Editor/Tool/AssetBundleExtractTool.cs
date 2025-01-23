@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
-using UnityEngine;
+using UnityGameFramework.Extension.Editor;
 
 namespace Game.Editor
 {
@@ -15,7 +15,7 @@ namespace Game.Editor
         [MenuItem("Game/Tool/ExtractAllWorkingAssetBundle")]
         public static void ExtractAllWorkingAssetBundle()
         {
-            string assetBundleDirectory = $"{Application.dataPath}/../../Temp/Bundle/Working";
+            string assetBundleDirectory = $"{ResourceBuildHelper.OutputDirectory}/Working";
             string[] assetBundleFiles = Directory.GetFiles(assetBundleDirectory, "*", SearchOption.AllDirectories);
             async UniTask RunAsync()
             {
