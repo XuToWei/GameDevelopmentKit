@@ -94,3 +94,5 @@
 [UGFExtensions](https://github.com/FingerCaster/UGFExtensions)
 
 [SocoTools](https://github.com/crossous/SocoTools)
+
+[FolderTag](https://github.com/liyingsong99/FolderTag)
