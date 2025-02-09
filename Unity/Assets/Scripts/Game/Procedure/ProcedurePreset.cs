@@ -16,13 +16,7 @@ namespace Game
             ExButton.AllButtonOnPointerDownEvent -= PlayButtonClickSound;
             ExButton.AllButtonOnPointerDownEvent += PlayButtonClickSound;
             
-#if UNITY_ET
             ChangeState<ProcedureET>(procedureOwner);
-#elif UNITY_GAMEHOT
-            ChangeState<ProcedureGameHot>(procedureOwner);
-#else
-            ChangeState<ProcedureGame>(procedureOwner);
-#endif
         }
     }
 }
