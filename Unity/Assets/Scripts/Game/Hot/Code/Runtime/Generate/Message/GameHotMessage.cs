@@ -9,7 +9,7 @@ namespace Game.Hot
     /// <summary>
     /// 心跳测试
     /// </summary>
-    // protofile : GameHot/GameHot.proto
+    // proto file : GameHot/GameHot.proto (line:4)
     [Serializable, ProtoContract(Name = @"CSHeartBeatTest")]
     public partial class CSHeartBeatTest : CSPacketBase
     {
@@ -34,7 +34,7 @@ namespace Game.Hot
         }
     }
 
-    // protofile : GameHot/GameHot.proto
+    // proto file : GameHot/GameHot.proto (line:11)
     [Serializable, ProtoContract(Name = @"SCHeartBeatTest")]
     public partial class SCHeartBeatTest : SCPacketBase
     {
@@ -47,20 +47,26 @@ namespace Game.Hot
         }
     }
 
-    // protofile : GameHot/GameHot2.proto
+    // proto file : GameHot/GameHot2.proto (line:3)
     [Serializable, ProtoContract(Name = @"CSHeartBeatTest22")]
     public partial class CSHeartBeatTest22 : CSPacketBase
     {
         public override int Id => 30003;
+        /// <summary>
+        /// 测试A
+        /// </summary>
         [ProtoMember(1)]
         public List<int> A { get; set; } = new List<int>();
+        [ProtoMember(1)]
+        public List<string> B { get; set; } = new List<string>();
         public override void Clear()
         {
             this.A.Clear();
+            this.B.Clear();
         }
     }
 
-    // protofile : GameHot/GameHot2.proto
+    // proto file : GameHot/GameHot2.proto (line:10)
     [Serializable, ProtoContract(Name = @"SCHeartBeatTest22")]
     public partial class SCHeartBeatTest22 : SCPacketBase
     {
@@ -71,6 +77,16 @@ namespace Game.Hot
         {
             this.A.Clear();
         }
+    }
+
+    // 测试枚举
+    // proto file : GameHot/GameHot2.proto (line:16)
+    public enum TestEnum    {
+        /// <summary>
+        /// 测试A
+        /// </summary>
+        A = 1,
+        B = 2,
     }
 
 }

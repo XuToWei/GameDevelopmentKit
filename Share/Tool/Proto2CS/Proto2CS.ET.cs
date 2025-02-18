@@ -55,12 +55,15 @@ namespace ET
                 string s = File.ReadAllText(protoFile);
                 
                 bool isMsgStart = false;
+                bool isEnumStart = false;
+                int lineNum = 0;
                 string msgName = string.Empty;
                 string responseType = "";
-                StringBuilder sbDispose = new StringBuilder();
+                StringBuilder msgDisposeSb = new StringBuilder();
                 foreach (string line in s.Split('\n'))
                 {
                     string newline = line.Trim();
+                    lineNum++;
 
                     if (string.IsNullOrEmpty(newline))
                     {
@@ -95,7 +98,7 @@ namespace ET
                         isMsgStart = true;
 
                         msgName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
-                        string[] ss = newline.Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] ss = newline.Split(s_SplitStrings, StringSplitOptions.RemoveEmptyEntries);
 
                         if (ss.Length == 2)
                         {
@@ -108,7 +111,7 @@ namespace ET
                         }
                         s_MsgOpcode.Add(new OpcodeInfo() { name = msgName, opcode = ++s_StartOpcode });
 
-                        s_StringBuilder.Append($"\t// protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
+                        s_StringBuilder.Append($"\t// proto file : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)} (line:{lineNum})\n");
                         s_StringBuilder.Append($"\t[MemoryPackable]\n");
                         s_StringBuilder.Append($"\t[Message({s_CSName}.{msgName})]\n");
                         if (!string.IsNullOrEmpty(responseType))
@@ -133,12 +136,23 @@ namespace ET
 
                         continue;
                     }
+                    else if (newline.StartsWith("enum"))
+                    {
+                        isEnumStart = true;
+
+                        string enumName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
+
+                        s_StringBuilder.Append($"\t// proto file : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)} (line:{lineNum})\n");
+                        s_StringBuilder.Append($"\tpublic enum {enumName}");
+                        
+                        continue;
+                    }
 
                     if (isMsgStart)
                     {
                         if (newline.StartsWith("{"))
                         {
-                            sbDispose.Clear();
+                            msgDisposeSb.Clear();
                             s_StringBuilder.Append("\t{\n");
                             s_StringBuilder.Append($"\t\tpublic static {msgName} Create(bool isFromPool = false) \n\t\t{{ \n\t\t\treturn ObjectPool.Instance.Fetch(typeof({msgName}), isFromPool) as {msgName}; \n\t\t}}\n\n");
                             continue;
@@ -152,7 +166,7 @@ namespace ET
                             // 加了no dispose则自己去定义dispose函数，不要自动生成
                             if (!newline.Contains("// no dispose"))
                             {
-                                s_StringBuilder.Append($"\t\tpublic override void Dispose() \n\t\t{{\n\t\t\tif (!this.IsFromPool) {{ return; }}\n{sbDispose.ToString()}\t\t\tObjectPool.Instance.Recycle(this); \n\t\t}}\n");
+                                s_StringBuilder.Append($"\t\tpublic override void Dispose() \n\t\t{{\n\t\t\tif (!this.IsFromPool) {{ return; }}\n{msgDisposeSb.ToString()}\t\t\tObjectPool.Instance.Recycle(this); \n\t\t}}\n");
                             }
 
                             s_StringBuilder.Append("\t}\n\n");
@@ -183,16 +197,49 @@ namespace ET
 
                         if (memberStr.StartsWith("map<"))
                         {
-                            Map(s_StringBuilder, memberStr, sbDispose);
+                            MsgMap(s_StringBuilder, memberStr, msgDisposeSb);
                         }
                         else if (memberStr.StartsWith("repeated"))
                         {
-                            Repeated(s_StringBuilder, memberStr, sbDispose);
+                            MsgRepeated(s_StringBuilder, memberStr, msgDisposeSb);
                         }
                         else
                         {
-                            Members(s_StringBuilder, memberStr, sbDispose);
+                            MsgMembers(s_StringBuilder, memberStr, msgDisposeSb);
                         }
+                    }
+                    else if (isEnumStart)
+                    {
+                        if (newline.StartsWith("{"))
+                        {
+                            s_StringBuilder.Append("\t{\n");
+                            continue;
+                        }
+
+                        if (newline.StartsWith("}"))
+                        {
+                            isEnumStart = false;
+                            s_StringBuilder.Append("\t}\n\n");
+                            continue;
+                        }
+
+                        if (newline.Trim().StartsWith("//"))
+                        {
+                            s_StringBuilder.Append("\t\t/// <summary>\n");
+                            s_StringBuilder.Append($"\t\t/// {newline.TrimStart('/', ' ')}\n");
+                            s_StringBuilder.Append("\t\t/// </summary>\n");
+                            continue;
+                        }
+
+                        if (newline.Contains("//"))
+                        {
+                            string[] lineSplit = newline.Split("//");
+                            s_StringBuilder.Append("\t\t/// <summary>\n");
+                            s_StringBuilder.Append($"\t\t/// {lineSplit[1].Trim()}\n");
+                            s_StringBuilder.Append("\t\t/// </summary>\n");
+                        }
+
+                        EnumMembers(s_StringBuilder, newline);
                     }
                 }
             }
@@ -214,7 +261,7 @@ namespace ET
                 Log.Info($"proto2cs file : {csPath}");
             }
 
-            private static void Map(StringBuilder sb, string newline, StringBuilder sbDispose)
+            private static void MsgMap(StringBuilder sb, string newline, StringBuilder sbDispose)
             {
                 try
                 {
@@ -242,7 +289,7 @@ namespace ET
                 }
             }
 
-            private static void Repeated(StringBuilder sb, string newline, StringBuilder sbDispose)
+            private static void MsgRepeated(StringBuilder sb, string newline, StringBuilder sbDispose)
             {
                 try
                 {
@@ -303,7 +350,7 @@ namespace ET
                 return typeCs;
             }
 
-            private static void Members(StringBuilder sb, string newline, StringBuilder sbDispose)
+            private static void MsgMembers(StringBuilder sb, string newline, StringBuilder sbDispose)
             {
                 try
                 {
@@ -328,6 +375,25 @@ namespace ET
                             sbDispose.Append($"\t\t\tthis.{name} = default;\n");
                             break;
                     }
+                }
+                catch (Exception)
+                {
+                    Log.Warning($"ErrorLine => \"{s_CSName}\" : \"{newline}\"\n");
+                    throw;
+                }
+            }
+
+            private static void EnumMembers(StringBuilder sb, string newline)
+            {
+                try
+                {
+                    int index = newline.IndexOf(";", StringComparison.Ordinal);
+                    newline = newline.Remove(index);
+                    string[] ss = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries);
+                    string name = ss[0];
+                    int n = int.Parse(ss[2]);
+
+                    sb.Append($"\t\t{name} = {n},\n");
                 }
                 catch (Exception)
                 {
