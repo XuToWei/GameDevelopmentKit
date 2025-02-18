@@ -46,17 +46,20 @@ namespace ET
                 string s = File.ReadAllText(protoFile);
                 
                 bool isMsgStart = false;
-                StringBuilder disposeSb = new StringBuilder();
+                bool isEnumStart = false;
+                int lineNum = 0;
+                StringBuilder msgDisposeSb = new StringBuilder();
                 foreach (string line in s.Split('\n'))
                 {
                     string newline = line.Trim();
-                    
+                    lineNum++;
+
                     if (string.IsNullOrEmpty(newline))
                     {
                         continue;
                     }
 
-                    if (!isMsgStart && newline.StartsWith("//"))
+                    if (!isMsgStart && !isEnumStart && newline.StartsWith("//"))
                     {
                         if (newline.StartsWith("///"))
                         {
@@ -76,19 +79,19 @@ namespace ET
                         string parentClass = "";
                         isMsgStart = true;
 
-                        disposeSb.Clear();
-                        disposeSb.Append($"\t\tpublic override void Clear()\n");
-                        disposeSb.Append("\t\t{\n");
+                        msgDisposeSb.Clear();
+                        msgDisposeSb.Append($"\t\tpublic override void Clear()\n");
+                        msgDisposeSb.Append("\t\t{\n");
 
                         string msgName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
-                        string[] ss = newline.Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] ss = newline.Split(s_SplitStrings, StringSplitOptions.RemoveEmptyEntries);
 
                         if (ss.Length == 2)
                         {
                             parentClass = ss[1].Trim();
                         }
 
-                        s_StringBuilder.Append($"\t// protofile : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)}\n");
+                        s_StringBuilder.Append($"\t// proto file : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)} (line:{lineNum})\n");
                         s_StringBuilder.Append($"\t[Serializable, ProtoContract(Name = @\"{msgName}\")]\n");
                         s_StringBuilder.Append($"\tpublic partial class {msgName}");
                         if (string.IsNullOrEmpty(parentClass))
@@ -113,6 +116,17 @@ namespace ET
                         
                         continue;
                     }
+                    else if (newline.StartsWith("enum"))
+                    {
+                        isEnumStart = true;
+
+                        string enumName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
+
+                        s_StringBuilder.Append($"\t// proto file : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)} (line:{lineNum})\n");
+                        s_StringBuilder.Append($"\tpublic enum {enumName}");
+                        
+                        continue;
+                    }
 
                     if (isMsgStart)
                     {
@@ -126,9 +140,9 @@ namespace ET
                         if (newline.StartsWith("}"))
                         {
                             isMsgStart = false;
-                            disposeSb.Append("\t\t}\n");
-                            s_StringBuilder.Append(disposeSb.ToString());
-                            disposeSb.Clear();
+                            msgDisposeSb.Append("\t\t}\n");
+                            s_StringBuilder.Append(msgDisposeSb.ToString());
+                            msgDisposeSb.Clear();
                             s_StringBuilder.Append("\t}\n\n");
                             continue;
                         }
@@ -141,32 +155,59 @@ namespace ET
                             continue;
                         }
 
-                        string memberStr;
                         if (newline.Contains("//"))
                         {
                             string[] lineSplit = newline.Split("//");
-                            memberStr = lineSplit[0].Trim();
                             s_StringBuilder.Append("\t\t/// <summary>\n");
                             s_StringBuilder.Append($"\t\t/// {lineSplit[1].Trim()}\n");
                             s_StringBuilder.Append("\t\t/// </summary>\n");
                         }
-                        else
-                        {
-                            memberStr = newline;
-                        }
 
                         if (newline.StartsWith("map<"))
                         {
-                            Map(s_StringBuilder, newline, disposeSb);
+                            MsgMap(s_StringBuilder, newline, msgDisposeSb);
                         }
                         else if (newline.StartsWith("repeated"))
                         {
-                            Repeated(s_StringBuilder, newline, disposeSb);
+                            MsgRepeated(s_StringBuilder, newline, msgDisposeSb);
                         }
                         else
                         {
-                            Members(s_StringBuilder, newline, disposeSb);
+                            MsgMembers(s_StringBuilder, newline, msgDisposeSb);
                         }
+                    }
+                    else if (isEnumStart)
+                    {
+                        if (newline.StartsWith("{"))
+                        {
+                            s_StringBuilder.Append("\t{\n");
+                            continue;
+                        }
+
+                        if (newline.StartsWith("}"))
+                        {
+                            isEnumStart = false;
+                            s_StringBuilder.Append("\t}\n\n");
+                            continue;
+                        }
+
+                        if (newline.Trim().StartsWith("//"))
+                        {
+                            s_StringBuilder.Append("\t\t/// <summary>\n");
+                            s_StringBuilder.Append($"\t\t/// {newline.TrimStart('/', ' ')}\n");
+                            s_StringBuilder.Append("\t\t/// </summary>\n");
+                            continue;
+                        }
+
+                        if (newline.Contains("//"))
+                        {
+                            string[] lineSplit = newline.Split("//");
+                            s_StringBuilder.Append("\t\t/// <summary>\n");
+                            s_StringBuilder.Append($"\t\t/// {lineSplit[1].Trim()}\n");
+                            s_StringBuilder.Append("\t\t/// </summary>\n");
+                        }
+
+                        EnumMembers(s_StringBuilder, newline);
                     }
                 }
             }
@@ -186,7 +227,7 @@ namespace ET
                 Log.Info($"proto2cs file : {csPath}");
             }
 
-            private static void Map(StringBuilder sb, string newline, StringBuilder disposeSb)
+            private static void MsgMap(StringBuilder sb, string newline, StringBuilder disposeSb)
             {
                 try
                 {
@@ -213,7 +254,7 @@ namespace ET
                 }
             }
 
-            private static void Repeated(StringBuilder sb, string newline, StringBuilder disposeSb)
+            private static void MsgRepeated(StringBuilder sb, string newline, StringBuilder disposeSb)
             {
                 try
                 {
@@ -274,7 +315,7 @@ namespace ET
                 return typeCs;
             }
 
-            private static void Members(StringBuilder sb, string newline, StringBuilder disposeSb)
+            private static void MsgMembers(StringBuilder sb, string newline, StringBuilder disposeSb)
             {
                 try
                 {
@@ -299,6 +340,25 @@ namespace ET
                             disposeSb.Append($"\t\t\tthis.{name} = default;\n");
                             break;
                     }
+                }
+                catch (Exception)
+                {
+                    Log.Warning($"ErrorLine => \"{s_CSName}\" : \"{newline}\"\n");
+                    throw;
+                }
+            }
+
+            private static void EnumMembers(StringBuilder sb, string newline)
+            {
+                try
+                {
+                    int index = newline.IndexOf(";", StringComparison.Ordinal);
+                    newline = newline.Remove(index);
+                    string[] ss = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries);
+                    string name = ss[0];
+                    int n = int.Parse(ss[2]);
+
+                    sb.Append($"\t\t{name} = {n},\n");
                 }
                 catch (Exception)
                 {

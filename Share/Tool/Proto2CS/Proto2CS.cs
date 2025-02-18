@@ -17,7 +17,8 @@ namespace ET
     {
         private static readonly string WorkDir = Path.GetFullPath("../Bin");
         private const string PROTO_ROOT_DIR = "../Design/Proto";
-        private static readonly char[] s_SplitChars = new[] { ' ', '\t' };
+        private static readonly char[] s_SplitChars = [' ', '\t'];
+        private static readonly string[] s_SplitStrings = ["//"];
 
         private class GenConfig
         {
@@ -76,7 +77,13 @@ namespace ET
                 {
                     if (Directory.Exists(dir))
                     {
-                        Directory.Delete(dir, true);
+                        //只删除cs文件，保留meta，避免提交反复生成meta
+                        var csFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
+                        foreach (var csFile in csFiles)
+                        {
+                            Log.Info(csFile);
+                            File.Delete(csFile);
+                        }
                     }
                 }
             }
@@ -118,6 +125,39 @@ namespace ET
                 else
                 {
                     throw new Exception($"{genConfig.protoDir} error codeType : {genConfig.codeType} !");
+                }
+            }
+
+            //删除空目录和空meta文件
+            foreach (var genConfig in genConfigs)
+            {
+                foreach (var dir in genConfig.codeOutputDirs)
+                {
+                    if (Directory.Exists(dir))
+                    {
+                        var metaFiles = Directory.GetFiles(dir, "*.meta", SearchOption.AllDirectories);
+                        foreach (var metaFile in metaFiles)
+                        {
+                            string name = metaFile.Substring(0, metaFile.Length - 5);
+                            if(File.Exists(name))
+                                continue;
+                            if (Directory.Exists(name))
+                            {
+                                if (Directory.GetFiles(name, "*.cs", SearchOption.AllDirectories).Length > 0)
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    Directory.Delete(name, true);
+                                }
+                            }
+                            if (File.Exists(metaFile))
+                            {
+                                File.Delete(metaFile);
+                            }
+                        }
+                    }
                 }
             }
 

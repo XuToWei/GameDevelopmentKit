@@ -2,10 +2,20 @@ syntax = "proto3";
 
 message CSHeartBeatTest22
 {
+	// 测试A
 	repeated int32 A = 1;
+	repeated string B = 1;
 }
 
 message SCHeartBeatTest22
 {
 	repeated int32 A = 1;
+}
+
+// 测试枚举
+enum TestEnum
+{
+	// 测试A
+	A = 1;
+	B = 2;
 }
