@@ -33,7 +33,7 @@
 #elif UNITY_ET_CODEMODE_CLIENTSERVER
         public static CodeMode CodeMode => CodeMode.ClientServer;
 #else
-        public static CodeMode CodeMode => CodeMode.Client;
+        public static CodeMode CodeMode => throw new System.Exception("Please set CodeMode by menu \"ET/Define Symbol/CodeMode\"");
 #endif
     }
 }
