@@ -65,16 +65,38 @@ namespace UnityGameFramework.Extension.Editor
                 throw new GameFrameworkException("ResourceCollection is invalid.");
             }
             m_ResourceCollection = resourceCollection;
+            OptimizeLoadType();
             Analyze();
             CalCombine();
             Save();
+        }
+
+        private void OptimizeLoadType()
+        {
+#if UNITY_WEBGL
+            foreach (var resource in m_ResourceCollection.GetResources())
+            {
+                if(resource.LoadType != LoadType.LoadFromMemory &&
+                   resource.LoadType != LoadType.LoadFromMemoryAndDecrypt &&
+                   resource.LoadType != LoadType.LoadFromMemoryAndQuickDecrypt)
+                {
+                    resource.LoadType = LoadType.LoadFromMemory;
+                    Debug.Log($"UNITY_WEBGL下修改资源\"{resource.Name}\"的加载方式为LoadFromMemory");
+                }
+            }
+#endif
         }
 
         private void Save()
         {
             foreach (var kv in m_CombineBundles)
             {
+                //WebGL下不能使用LoadFromFile
+#if UNITY_WEBGL
+                m_ResourceCollection.AddResource(kv.Key, null, null, LoadType.LoadFromMemory, true);
+#else
                 m_ResourceCollection.AddResource(kv.Key, null, null, LoadType.LoadFromFile, true);
+#endif
                 foreach (var name in kv.Value)
                 {
                     m_ResourceCollection.AssignAsset(AssetDatabase.AssetPathToGUID(name), kv.Key, null);
