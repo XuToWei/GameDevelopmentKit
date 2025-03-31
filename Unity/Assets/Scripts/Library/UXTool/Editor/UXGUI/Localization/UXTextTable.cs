@@ -192,7 +192,7 @@ namespace UnityEngine.UI
                     MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray(), $"~未翻译的文本", overwriteSheet: true);
                 }
             }
-            Debug.Log("写入完毕");
+            Debug.Log($"未翻译的文本写入：{ThunderFireUIToolConfig.TextTablePath}@~未翻译的文本！");
         }
     }
 }
