@@ -184,12 +184,12 @@ namespace UnityEngine.UI
                     {
                         if (EditorLocalizationTool.GetString(EditorLocalizationTool.ReadyLanguageTypes[0], item[0], null) == null)
                         {
-                            var value = new { Key = item[0], ChineseSimplified = item[2]};
+                            var value = new { key = item[0], ChineseSimplified = item[2]};
                             insertList.Add(value);
                         }
                     }
                     //使用miniexcel把key写入ThunderFireUIToolConfig.TextTablePath
-                    MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray());
+                    MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray(), $"~未翻译的文本", overwriteSheet: true);
                 }
             }
             Debug.Log("写入完毕");
