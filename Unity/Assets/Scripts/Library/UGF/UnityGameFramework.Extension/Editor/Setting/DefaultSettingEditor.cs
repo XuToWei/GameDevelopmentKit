@@ -62,8 +62,8 @@ namespace UnityGameFramework.Extension.Editor
                         GUI.FocusControl("");
                     }
                 }
-                m_NewKey = EditorGUILayout.TextField(m_NewKey, GUILayout.Width(200f));
-                m_NewValue = EditorGUILayout.TextField(m_NewValue);
+                m_NewKey = EditorGUILayout.TextField(m_NewKey, GUILayout.MaxWidth(500f));
+                m_NewValue = EditorGUILayout.TextField(m_NewValue, GUILayout.MinWidth(300f));
                 EditorGUILayout.EndHorizontal();
                 
                 EditorGUILayout.Space();
@@ -88,9 +88,9 @@ namespace UnityGameFramework.Extension.Editor
                             m_SettingsNames = m_Settings.GetAllSettingNames();
                             Save();
                         }
-                        GUILayout.Box(settingName, GUILayout.Width(200f));
+                        GUILayout.Box(settingName, GUILayout.MaxWidth(500f));
                         string value = m_Settings.GetString(settingName);
-                        string newValue = EditorGUILayout.TextField(value);
+                        string newValue = EditorGUILayout.TextField(value, GUILayout.MinWidth(300f));
                         if (!string.Equals(newValue, value))
                         {
                             m_Settings.SetString(settingName, newValue);
