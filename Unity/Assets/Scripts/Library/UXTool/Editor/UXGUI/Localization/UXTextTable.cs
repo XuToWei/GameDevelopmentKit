@@ -189,7 +189,7 @@ namespace UnityEngine.UI
                         }
                     }
                     //使用miniexcel把key写入ThunderFireUIToolConfig.TextTablePath
-                    MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray(), $"~未翻译的文本", overwriteSheet: true);
+                    MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray(), "~未翻译的文本", ExcelType.XLSX, overwriteSheet: true);
                 }
             }
             Debug.Log($"未翻译的文本写入：{ThunderFireUIToolConfig.TextTablePath}@~未翻译的文本！");
