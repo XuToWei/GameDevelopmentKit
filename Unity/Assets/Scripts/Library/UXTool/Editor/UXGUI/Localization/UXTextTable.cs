@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 // using UnityEditor.SceneManagement;
 using ThunderFireUITool;
 using Game.Editor;
+using MiniExcelLibs;
 using UnityEditor;
 
 namespace UnityEngine.UI
@@ -165,6 +166,33 @@ namespace UnityEngine.UI
             }
             // changed by gdk
             Debug.Log("检查完毕！");
+        }
+        // changed by gdk
+        [MenuItem(ThunderFireUIToolConfig.Menu_Localization + "/写入所有文本表格Key (Write All Text Table Key)", false, 54)]
+        private static void WriteAllTextTableKey()
+        {
+            string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[]{ ThunderFireUIToolConfig.RootPath });
+            foreach (var guid in guids)
+            {
+                string filePath = AssetDatabase.GUIDToAssetPath(guid);
+                GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
+                List<string[]> list = GetAllKeyInGameObject(filePath, obj);
+                if (list.Count > 0)
+                {
+                    List<object> insertList = new List<object>();
+                    foreach (string[] item in list)
+                    {
+                        if (EditorLocalizationTool.GetString(EditorLocalizationTool.ReadyLanguageTypes[0], item[0], null) == null)
+                        {
+                            var value = new { key = item[0], ChineseSimplified = item[2]};
+                            insertList.Add(value);
+                        }
+                    }
+                    //使用miniexcel把key写入ThunderFireUIToolConfig.TextTablePath
+                    MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray(), "~未翻译的文本", ExcelType.XLSX, overwriteSheet: true);
+                }
+            }
+            Debug.Log($"未翻译的文本写入：{ThunderFireUIToolConfig.TextTablePath}@~未翻译的文本！");
         }
     }
 }
