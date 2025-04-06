@@ -32,7 +32,7 @@ public partial class DTAIConfig : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRAIConfig _v;
-            _v = DRAIConfig.DeserializeDRAIConfig(_buf);
+            _v = global::ET.DRAIConfig.DeserializeDRAIConfig(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }

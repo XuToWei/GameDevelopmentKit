@@ -32,7 +32,7 @@ public partial class DTEntity : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DREntity _v;
-            _v = DREntity.DeserializeDREntity(_buf);
+            _v = global::Game.DREntity.DeserializeDREntity(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }

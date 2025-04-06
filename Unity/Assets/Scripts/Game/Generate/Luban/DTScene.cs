@@ -32,7 +32,7 @@ public partial class DTScene : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRScene _v;
-            _v = DRScene.DeserializeDRScene(_buf);
+            _v = global::Game.DRScene.DeserializeDRScene(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }

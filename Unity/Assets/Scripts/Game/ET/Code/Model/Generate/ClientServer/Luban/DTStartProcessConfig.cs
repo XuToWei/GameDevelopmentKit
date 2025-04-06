@@ -31,7 +31,7 @@ public partial class DTStartProcessConfig : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRStartProcessConfig _v;
-            _v = DRStartProcessConfig.DeserializeDRStartProcessConfig(_buf);
+            _v = global::ET.DRStartProcessConfig.DeserializeDRStartProcessConfig(_buf);
             _dataList.Add(_v);
         }
         _dataMapUnion.Clear();

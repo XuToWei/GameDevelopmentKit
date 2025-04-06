@@ -32,7 +32,7 @@ public partial class DTUnitConfig : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRUnitConfig _v;
-            _v = DRUnitConfig.DeserializeDRUnitConfig(_buf);
+            _v = global::ET.DRUnitConfig.DeserializeDRUnitConfig(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
