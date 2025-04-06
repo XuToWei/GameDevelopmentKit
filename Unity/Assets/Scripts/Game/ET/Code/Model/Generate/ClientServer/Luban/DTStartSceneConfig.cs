@@ -31,7 +31,7 @@ public partial class DTStartSceneConfig : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRStartSceneConfig _v;
-            _v = DRStartSceneConfig.DeserializeDRStartSceneConfig(_buf);
+            _v = global::ET.DRStartSceneConfig.DeserializeDRStartSceneConfig(_buf);
             _dataList.Add(_v);
         }
         _dataMapUnion.Clear();

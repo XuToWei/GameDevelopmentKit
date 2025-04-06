@@ -31,7 +31,7 @@ public partial class DTStartZoneConfig : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRStartZoneConfig _v;
-            _v = DRStartZoneConfig.DeserializeDRStartZoneConfig(_buf);
+            _v = global::ET.DRStartZoneConfig.DeserializeDRStartZoneConfig(_buf);
             _dataList.Add(_v);
         }
         _dataMapUnion.Clear();

@@ -46,7 +46,7 @@ namespace UnityGameFramework.Extension.Editor
             string[] fileNames = Directory.GetFiles(streamingAssetsPath, "*", SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
             {
-                if (fileName.Contains(".dat"))
+                if (fileName.Contains(".dat") || fileName.Contains(".meta"))
                 {
                     File.Delete(fileName);
                 }

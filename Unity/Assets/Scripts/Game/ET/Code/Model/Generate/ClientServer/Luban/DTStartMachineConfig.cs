@@ -31,7 +31,7 @@ public partial class DTStartMachineConfig : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRStartMachineConfig _v;
-            _v = DRStartMachineConfig.DeserializeDRStartMachineConfig(_buf);
+            _v = global::ET.DRStartMachineConfig.DeserializeDRStartMachineConfig(_buf);
             _dataList.Add(_v);
         }
         _dataMapUnion.Clear();

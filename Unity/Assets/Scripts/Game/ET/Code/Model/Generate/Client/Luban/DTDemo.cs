@@ -32,7 +32,7 @@ public partial class DTDemo : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRDemo _v;
-            _v = DRDemo.DeserializeDRDemo(_buf);
+            _v = global::ET.DRDemo.DeserializeDRDemo(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
