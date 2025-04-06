@@ -32,7 +32,7 @@ public partial class DTSound : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRSound _v;
-            _v = DRSound.DeserializeDRSound(_buf);
+            _v = global::Game.DRSound.DeserializeDRSound(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }

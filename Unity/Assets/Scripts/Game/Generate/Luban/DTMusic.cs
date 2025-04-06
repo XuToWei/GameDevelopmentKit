@@ -32,7 +32,7 @@ public partial class DTMusic : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRMusic _v;
-            _v = DRMusic.DeserializeDRMusic(_buf);
+            _v = global::Game.DRMusic.DeserializeDRMusic(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }

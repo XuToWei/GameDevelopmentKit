@@ -32,7 +32,7 @@ public partial class DTUIForm : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRUIForm _v;
-            _v = DRUIForm.DeserializeDRUIForm(_buf);
+            _v = global::Game.DRUIForm.DeserializeDRUIForm(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
