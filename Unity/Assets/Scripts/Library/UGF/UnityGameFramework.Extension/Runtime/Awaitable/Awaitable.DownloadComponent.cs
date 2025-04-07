@@ -81,7 +81,7 @@ namespace UnityGameFramework.Extension
             return NewUniTask<DownloadResult>(MoveNext, cancellationToken, ReturnAction);
         }
         
-        private class DownloadEventData : IReference
+        private sealed class DownloadEventData : IReference
         {
             public Action<long> UpdateEvent;
             public Action<long> StartEvent;

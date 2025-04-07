@@ -85,7 +85,7 @@ namespace UnityGameFramework.Extension
             return NewUniTask<Entity>(MoveNext, cancellationToken, ReturnAction);
         }
          
-         private class ShowEntityEventData : IReference
+         private sealed class ShowEntityEventData : IReference
          {
              public Action<float> UpdateEvent;
              public bool IsError;
