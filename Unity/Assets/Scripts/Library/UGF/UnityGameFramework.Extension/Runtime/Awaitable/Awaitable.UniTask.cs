@@ -13,7 +13,7 @@ namespace UnityGameFramework.Extension
             return new UniTask<T>(UniTaskConfiguredSource<T>.Create(moveNext, PlayerLoopTiming.LastUpdate, cancellationToken, returnAction, out short token), token);
         }
 
-        sealed class UniTaskConfiguredSource<T> : IUniTaskSource<T>, IPlayerLoopItem, ITaskPoolNode<UniTaskConfiguredSource<T>>
+        private sealed class UniTaskConfiguredSource<T> : IUniTaskSource<T>, IPlayerLoopItem, ITaskPoolNode<UniTaskConfiguredSource<T>>
         {
             static TaskPool<UniTaskConfiguredSource<T>> pool;
             UniTaskConfiguredSource<T> nextNode;
