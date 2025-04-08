@@ -99,7 +99,7 @@ namespace UnityGameFramework.Extension
             return NewUniTask<object>(MoveNext, returnAction: ReturnAction);
         }
 
-        private class LoadSceneEventData : IReference
+        private sealed class LoadSceneEventData : IReference
         {
             public Action<float> UpdateEvent;
             public bool IsError;

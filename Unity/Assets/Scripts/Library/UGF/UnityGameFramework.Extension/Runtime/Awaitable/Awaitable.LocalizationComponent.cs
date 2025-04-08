@@ -52,7 +52,7 @@ namespace UnityGameFramework.Extension
             return NewUniTask<object>(MoveNext, returnAction: ReturnAction);
         }
         
-        private class ReadDataEventData : IReference
+        private sealed class ReadDataEventData : IReference
         {
             public Action<float> UpdateEvent;
             public bool IsError;

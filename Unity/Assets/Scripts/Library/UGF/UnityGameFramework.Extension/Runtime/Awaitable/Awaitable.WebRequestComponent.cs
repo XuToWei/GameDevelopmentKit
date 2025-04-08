@@ -135,7 +135,7 @@ namespace UnityGameFramework.Extension
             return NewUniTask<WebRequestResult>(MoveNext, cancellationToken, ReturnAction);
         }
         
-        private class WebRequestEventData : IReference
+        private sealed class WebRequestEventData : IReference
         {
             public Action StartEvent;
             public bool IsError;
@@ -160,6 +160,7 @@ namespace UnityGameFramework.Extension
             {
                 eventData.IsFinished = true;
                 eventData.IsError = false;
+                eventData.Bytes = ne.GetWebResponseBytes();
             }
         }
 

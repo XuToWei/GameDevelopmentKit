@@ -84,7 +84,7 @@ namespace UnityGameFramework.Extension
             return NewUniTask<UIForm>(MoveNext, cancellationToken, ReturnAction);
         }
         
-        private class OpenUIFormEventData : IReference
+        private sealed class OpenUIFormEventData : IReference
         {
             public Action<float> UpdateEvent;
             public bool IsError;
