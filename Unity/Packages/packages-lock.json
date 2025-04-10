@@ -32,7 +32,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3fe41a8cbae3c5b9ae88724d60ffe3cf2e9b2881"
+      "hash": "903cf9faa2760d85bdaf8835101401070cef6fd3"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -41,7 +41,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "fe7354b96c4b4dc36bfe583e94d35e8a3cf006fb"
+      "hash": "b63f3c8233e9a58a480f4e2d353c83c08a584a88"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
@@ -50,7 +50,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "3d23cbfcdb1f746ff059c271b135a9bead933a39"
+      "hash": "c6fa44a0b624ce0aa372c72ad1934ed02042a19b"
     },
     "com.coffee.ui-particle": {
       "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
@@ -60,7 +60,7 @@
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "598c85e0f455d38d7592758cffeeef7771609b16"
+      "hash": "4b98abd7469b10d55c9c623830cb6e1518f72731"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -318,14 +318,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "b0980bb9a554d8d429cec645593b5c207c49163a"
+      "hash": "bdd9b5b6f7556290171ad0fdd276b1bc14c462de"
     },
     "me.xw.codebind": {
       "version": "https://github.com/XuToWei/CodeBind.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "fddaf8429790ef762153aef0445233cb57f77c4a"
+      "hash": "b1eb5755fd2c06f95cead6ed837ba9db94c740ea"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",

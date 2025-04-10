@@ -14,9 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TransformSensitivity: 1
   m_RuntimePresets: []
-  m_FallbackVariantBehaviour: 0
-  m_UnregisteredShaderVariants: []
+  m_UseHDRColorPicker: 1
   m_ShaderVariantCollection: {fileID: 6798488123436095256}
+  m_ShaderVariantRegistry:
+    m_OptionalShaders: []
+    m_Asset: {fileID: 6798488123436095256}
+    m_ErrorOnUnregisteredVariant: 0
+    m_UnregisteredVariants: []
 --- !u!200 &6798488123436095256
 ShaderVariantCollection:
   m_ObjectHideFlags: 0
