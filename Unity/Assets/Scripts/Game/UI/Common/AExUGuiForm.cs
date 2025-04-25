@@ -109,7 +109,7 @@ namespace Game
             m_UIWidgetContainer?.OnDepthChanged(uiGroupDepth, depthInUIGroup);
         }
 
-        public void AddUIWidget(AUIWidget auiWidget, object userData = default)
+        public void AddUIWidget(AUIWidget auiWidget, object userData = null)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -140,7 +140,7 @@ namespace Game
         /// <param name="auiWidget"></param>
         /// <param name="userData"></param>
         /// <exception cref="GameFrameworkException"></exception>
-        public void OpenUIWidget(AUIWidget auiWidget, object userData = default)
+        public void OpenUIWidget(AUIWidget auiWidget, object userData = null)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -155,7 +155,7 @@ namespace Game
         /// <param name="auiWidget"></param>
         /// <param name="userData"></param>
         /// <exception cref="GameFrameworkException"></exception>
-        public void DynamicOpenUIWidget(AUIWidget auiWidget, object userData = default)
+        public void DynamicOpenUIWidget(AUIWidget auiWidget, object userData = null)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -164,7 +164,7 @@ namespace Game
             m_UIWidgetContainer.DynamicOpenUIWidget(auiWidget, userData);
         }
 
-        public void CloseUIWidget(AUIWidget uiWidget, object userData = default, bool isShutdown = false)
+        public void CloseUIWidget(AUIWidget uiWidget, object userData = null, bool isShutdown = false)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -173,7 +173,7 @@ namespace Game
             m_UIWidgetContainer.CloseUIWidget(uiWidget, userData, isShutdown);
         }
 
-        public void CloseAllUIWidgets(object userData = default, bool isShutdown = false)
+        public void CloseAllUIWidgets(object userData = null, bool isShutdown = false)
         {
             if (m_UIWidgetContainer == null)
                 return;
@@ -203,13 +203,22 @@ namespace Game
             m_EventContainer.UnsubscribeAll();
         }
 
-        public int? ShowEntity(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = default)
+        public int? ShowEntity<T>(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = null) where T : EntityLogic
         {
             if (m_EntityContainer == null)
             {
                 m_EntityContainer = EntityContainer.Create(this);
             }
-            return m_EntityContainer.ShowEntity(entityTypeId, onShowSuccess, onShowFailure);
+            return m_EntityContainer.ShowEntity<T>(entityTypeId, onShowSuccess, onShowFailure);
+        }
+
+        public int? ShowEntity(int entityTypeId, Type logicType, Action<Entity> onShowSuccess, Action onShowFailure = null)
+        {
+            if (m_EntityContainer == null)
+            {
+                m_EntityContainer = EntityContainer.Create(this);
+            }
+            return m_EntityContainer.ShowEntity(entityTypeId, logicType, onShowSuccess, onShowFailure);
         }
 
         public int? ShowEntity<T>(int entityTypeId, object userData) where T : EntityLogic
@@ -228,15 +237,6 @@ namespace Game
                 m_EntityContainer = EntityContainer.Create(this);
             }
             return m_EntityContainer.ShowEntity(entityTypeId, logicType, userData);
-        }
-
-        public UniTask<Entity> ShowEntityAsync(int entityTypeId, object userData)
-        {
-            if (m_EntityContainer == null)
-            {
-                m_EntityContainer = EntityContainer.Create(this);
-            }
-            return m_EntityContainer.ShowEntityAsync(entityTypeId, typeof(ItemEntity), userData);
         }
 
         public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData) where T : EntityLogic

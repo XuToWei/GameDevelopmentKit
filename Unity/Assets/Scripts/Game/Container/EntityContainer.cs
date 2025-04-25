@@ -10,7 +10,7 @@ namespace Game
 {
     public sealed class EntityContainer : IReference
     {
-        private class EntityLoaderEventArgs : GameEventArgs
+        private sealed class EntityLoaderEventArgs : GameEventArgs
         {
             private static readonly int s_EventId = typeof(ShowEntitySuccessEventArgs).GetHashCode();
             public override int Id => s_EventId;
@@ -28,8 +28,8 @@ namespace Game
 
             public override void Clear()
             {
-                OnSuccessCallback = default;
-                OnFailureCallback = default;
+                OnSuccessCallback = null;
+                OnFailureCallback = null;
             }
         }
 
@@ -91,9 +91,14 @@ namespace Game
             ReferencePool.Release(eventArgs);
         }
 
-        public int? ShowEntity(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = default)
+        public int? ShowEntity<T>(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = null) where T : EntityLogic
         {
-            int? serialId = GameEntry.Entity.ShowEntity(entityTypeId, typeof(ItemEntity), EntityLoaderEventArgs.Create(onShowSuccess, onShowFailure));
+            return ShowEntity(entityTypeId, typeof(T), onShowSuccess, onShowFailure);
+        }
+
+        public int? ShowEntity(int entityTypeId, Type logicType, Action<Entity> onShowSuccess, Action onShowFailure = null)
+        {
+            int? serialId = GameEntry.Entity.ShowEntity(entityTypeId, logicType, EntityLoaderEventArgs.Create(onShowSuccess, onShowFailure));
             if (serialId.HasValue)
             {
                 m_EntitySerialIds.Add(serialId.Value);
@@ -114,15 +119,6 @@ namespace Game
                 m_EntitySerialIds.Add(serialId.Value);
             }
             return serialId;
-        }
-
-        public UniTask<Entity> ShowEntityAsync(int entityTypeId, object userData)
-        {
-            if (m_CancellationTokenSource == null)
-            {
-                m_CancellationTokenSource = new CancellationTokenSource();
-            }
-            return GameEntry.Entity.ShowEntityAsync(entityTypeId, typeof(ItemEntity), userData, m_CancellationTokenSource.Token);
         }
 
         public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData) where T : EntityLogic
