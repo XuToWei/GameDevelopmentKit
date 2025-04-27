@@ -278,15 +278,26 @@ namespace Game
             m_EntityContainer.HideEntity(entity);
         }
 
-        public async UniTask<T> LoadAssetAsync<T>(string assetName) where T : UnityEngine.Object
+        public void LoadAsset<T>(string assetName, Action<T> onLoadSuccess, Action onLoadFailure = null, int priority = 0,
+            Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null) where T : UnityEngine.Object
         {
             if (m_ResourceContainer == null)
             {
                 m_ResourceContainer = ResourceContainer.Create(m_CancellationTokenSource.Token);
             }
-            return await m_ResourceContainer.LoadAssetAsync<T>(assetName);
+            m_ResourceContainer.LoadAsset(assetName, onLoadSuccess, onLoadFailure, priority, updateEvent, dependencyAssetEvent);
         }
-        
+
+        public async UniTask<T> LoadAssetAsync<T>(string assetName, int priority = 0,
+            Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null) where T : UnityEngine.Object
+        {
+            if (m_ResourceContainer == null)
+            {
+                m_ResourceContainer = ResourceContainer.Create(m_CancellationTokenSource.Token);
+            }
+            return await m_ResourceContainer.LoadAssetAsync<T>(assetName, priority, updateEvent, dependencyAssetEvent);
+        }
+
         public void UnloadAsset(UnityEngine.Object asset)
         {
             if (m_ResourceContainer == null)
