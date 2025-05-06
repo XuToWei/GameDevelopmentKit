@@ -7,6 +7,7 @@ namespace ThunderFireUITool
     public partial class ThunderFireUIToolConfig
     {
         public static readonly string TextTablePath = "../Design/Excel/Localization.xlsx";
+        public static readonly string NoTranslateTextTableSheet = "~未翻译的文本";
 
         public static readonly string UXEditorCommonPath = $"{EditorAssetsRootPath}Common/";
         public static readonly string UXEditorToolsPath = $"{EditorAssetsRootPath}Tools/";

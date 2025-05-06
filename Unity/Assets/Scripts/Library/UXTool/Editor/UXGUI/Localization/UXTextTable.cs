@@ -171,6 +171,7 @@ namespace UnityEngine.UI
         [MenuItem(ThunderFireUIToolConfig.Menu_Localization + "/写入所有文本表格Key (Write All Text Table Key)", false, 54)]
         private static void WriteAllTextTableKey()
         {
+            MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, null, ThunderFireUIToolConfig.NoTranslateTextTableSheet, ExcelType.XLSX, overwriteSheet: true);
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[]{ ThunderFireUIToolConfig.RootPath });
             List<object> insertList = new List<object>();
             foreach (var guid in guids)
@@ -194,8 +195,8 @@ namespace UnityEngine.UI
             if (insertList.Count > 0)
             {
                 //使用miniexcel把key写入ThunderFireUIToolConfig.TextTablePath
-                MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray(), "~未翻译的文本", ExcelType.XLSX, overwriteSheet: true);
-                Debug.Log($"未翻译的文本写入：{ThunderFireUIToolConfig.TextTablePath}@~未翻译的文本！");
+                MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray(), ThunderFireUIToolConfig.NoTranslateTextTableSheet, ExcelType.XLSX, overwriteSheet: true);
+                Debug.Log($"未翻译的文本写入：{ThunderFireUIToolConfig.TextTablePath}@{ThunderFireUIToolConfig.NoTranslateTextTableSheet}！");
             }
             else
             {
