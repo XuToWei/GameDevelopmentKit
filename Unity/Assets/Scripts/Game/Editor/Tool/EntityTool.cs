@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using GameFramework;
 using MiniExcelLibs;
-using ThunderFireUITool;
 using UnityEditor;
 using UnityEngine;
 
@@ -67,7 +66,7 @@ namespace Game.Editor
             if (insertList.Count > 0)
             {
                 MiniExcel.Insert(COMMON_ENTITY_XLSX, insertList.ToArray(), NO_ADD_ENTITY_SHEET, ExcelType.XLSX, overwriteSheet: true);
-                Debug.Log($"未添加的实体写入：{ThunderFireUIToolConfig.TextTablePath}@{NO_ADD_ENTITY_SHEET}！");
+                Debug.Log($"未添加的实体写入：{COMMON_ENTITY_XLSX}@{NO_ADD_ENTITY_SHEET}！");
             }
             else
             {
