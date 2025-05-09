@@ -61,6 +61,8 @@ namespace ThunderFireUITool
         /// </summary>
         public static void ExitPreview()
         {
+            EditorPrefs.SetBool("InPreview", false);
+
             EditorApplication.playModeStateChanged -= OnPlayModeChanged;
             ResumeOriginScene();
         }

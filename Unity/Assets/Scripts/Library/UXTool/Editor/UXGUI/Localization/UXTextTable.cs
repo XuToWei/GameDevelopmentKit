@@ -171,7 +171,9 @@ namespace UnityEngine.UI
         [MenuItem(ThunderFireUIToolConfig.Menu_Localization + "/写入所有文本表格Key (Write All Text Table Key)", false, 54)]
         private static void WriteAllTextTableKey()
         {
+            MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, null, ThunderFireUIToolConfig.NoTranslateTextTableSheet, ExcelType.XLSX, overwriteSheet: true);
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[]{ ThunderFireUIToolConfig.RootPath });
+            List<object> insertList = new List<object>();
             foreach (var guid in guids)
             {
                 string filePath = AssetDatabase.GUIDToAssetPath(guid);
@@ -179,7 +181,6 @@ namespace UnityEngine.UI
                 List<string[]> list = GetAllKeyInGameObject(filePath, obj);
                 if (list.Count > 0)
                 {
-                    List<object> insertList = new List<object>();
                     foreach (string[] item in list)
                     {
                         if (EditorLocalizationTool.GetString(EditorLocalizationTool.ReadyLanguageTypes[0], item[0], null) == null)
@@ -188,11 +189,19 @@ namespace UnityEngine.UI
                             insertList.Add(value);
                         }
                     }
-                    //使用miniexcel把key写入ThunderFireUIToolConfig.TextTablePath
-                    MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray(), "~未翻译的文本", ExcelType.XLSX, overwriteSheet: true);
                 }
             }
-            Debug.Log($"未翻译的文本写入：{ThunderFireUIToolConfig.TextTablePath}@~未翻译的文本！");
+            // changed by gdk
+            if (insertList.Count > 0)
+            {
+                //使用miniexcel把key写入ThunderFireUIToolConfig.TextTablePath
+                MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray(), ThunderFireUIToolConfig.NoTranslateTextTableSheet, ExcelType.XLSX, overwriteSheet: true);
+                Debug.Log($"未翻译的文本写入：{ThunderFireUIToolConfig.TextTablePath}@{ThunderFireUIToolConfig.NoTranslateTextTableSheet}！");
+            }
+            else
+            {
+                Debug.Log("没有未翻译的文本！");
+            }
         }
     }
 }

@@ -65,13 +65,22 @@ namespace Game
             m_EventContainer.UnsubscribeAll();
         }
 
-        public int? ShowEntity(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = default)
+        public int? ShowEntity<T>(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = null) where T : EntityLogic
         {
             if (m_EntityContainer == null)
             {
                 m_EntityContainer = EntityContainer.Create(this);
             }
-            return m_EntityContainer.ShowEntity(entityTypeId, onShowSuccess, onShowFailure);
+            return m_EntityContainer.ShowEntity<T>(entityTypeId, onShowSuccess, onShowFailure);
+        }
+
+        public int? ShowEntity(int entityTypeId, Type logicType, Action<Entity> onShowSuccess, Action onShowFailure = null)
+        {
+            if (m_EntityContainer == null)
+            {
+                m_EntityContainer = EntityContainer.Create(this);
+            }
+            return m_EntityContainer.ShowEntity(entityTypeId, logicType, onShowSuccess, onShowFailure);
         }
 
         public int? ShowEntity<T>(int entityTypeId, object userData) where T : EntityLogic
@@ -90,15 +99,6 @@ namespace Game
                 m_EntityContainer = EntityContainer.Create(this);
             }
             return m_EntityContainer.ShowEntity(entityTypeId, logicType, userData);
-        }
-
-        public UniTask<Entity> ShowEntityAsync(int entityTypeId, object userData)
-        {
-            if (m_EntityContainer == null)
-            {
-                m_EntityContainer = EntityContainer.Create(this);
-            }
-            return m_EntityContainer.ShowEntityAsync(entityTypeId, typeof(ItemEntity), userData);
         }
 
         public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData) where T : EntityLogic

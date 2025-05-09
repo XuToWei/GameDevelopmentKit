@@ -9,7 +9,7 @@
         "com.unity.collections": "1.5.1",
         "com.unity.mathematics": "1.0.1"
       },
-      "hash": "b946c3a10848a426a09baa395df5151792d7625e"
+      "hash": "b651c5866fe0e3fba065ce2e56dfdfcd59d3d109"
     },
     "com.annulusgames.lit-motion.animation": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
@@ -18,7 +18,7 @@
       "dependencies": {
         "com.annulusgames.lit-motion": "2.0.0"
       },
-      "hash": "b946c3a10848a426a09baa395df5151792d7625e"
+      "hash": "b651c5866fe0e3fba065ce2e56dfdfcd59d3d109"
     },
     "com.baracuda.preprocessor-symbol-definition-files": {
       "version": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
@@ -32,7 +32,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "903cf9faa2760d85bdaf8835101401070cef6fd3"
+      "hash": "7a0032934b438ad20a4a691f8093ce1865824c42"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -41,7 +41,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "b63f3c8233e9a58a480f4e2d353c83c08a584a88"
+      "hash": "8b76751edaaf8ba86698977a89861561f5799f47"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
@@ -50,7 +50,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "c6fa44a0b624ce0aa372c72ad1934ed02042a19b"
+      "hash": "3ff52e4735481da36428d361afe28b85eca96e2d"
     },
     "com.coffee.ui-particle": {
       "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
@@ -149,7 +149,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.35",
+      "version": "3.0.36",
       "depth": 0,
       "source": "registry",
       "dependencies": {

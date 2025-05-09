@@ -81,6 +81,8 @@ namespace ThunderFireUITool
         /// </summary>
         public static void ExitPreviewGuide()
         {
+            EditorPrefs.SetBool("InGuidePreview", false);
+
             EditorApplication.playModeStateChanged -= OnPlayModeChanged;
 
             string guideLauncherObjName = EditorPrefs.GetString("GuideLauncherObjName");

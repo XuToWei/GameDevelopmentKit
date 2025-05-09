@@ -92,8 +92,7 @@ namespace UnityGameFramework.Extension
                     if (asset == null)
                     {
                         resourceComponent.UnloadAsset(assetResult);
-                        core.TrySetException(new GameFrameworkException(Utility.Text.Format(
-                            "Load asset failure load type is {0} but asset type is {1}.", assetResult.GetType(), typeof(T))));
+                        core.TrySetException(new GameFrameworkException(Utility.Text.Format("Load asset '{0}' failure load type is {1} but asset type is {2}.", assetName, assetResult.GetType(), typeof(T))));
                     }
                     else
                     {
