@@ -115,7 +115,7 @@ namespace UnityGameFramework.Extension
             int currentFrameCount = Time.frameCount;
             for (int i = m_FrameTasks.Count - 1; i >= 0; i--)
             {
-                if (m_FrameTasks.Count <= currentFrameCount)
+                if (m_FrameTasks[i].FrameCount <= currentFrameCount)
                 {
                     m_FrameTasks[i].CallBack.Invoke();
                     ReferencePool.Release(m_FrameTasks[i]);
