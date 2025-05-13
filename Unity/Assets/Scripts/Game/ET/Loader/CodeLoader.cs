@@ -24,13 +24,46 @@ namespace ET
 
             if (Define.EnableHotfix && GameEntry.CodeRunner.EnableCodeBytesMode)
             {
+#if UNITY_EDITOR
+                // 使用Unity编辑器的Model dll，可以让ModelView中的Monobehaviour正常使用
+                if (Define.UseUnityEditorModelDll)
+                {
+                    Assembly[] assemblies = Utility.Assembly.GetAssemblies();
+                    foreach (Assembly ass in assemblies)
+                    {
+                        string name = ass.GetName().Name;
+                        if (name == "Game.ET.Code.Model")
+                        {
+                            m_Model = ass;
+                        }
+                        else if (name == "Game.ET.Code.ModelView")
+                        {
+                            m_ModelView = ass;
+                        }
+
+                        if (m_Model != null && m_ModelView != null)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    byte[] assBytesModel = await LoadCodeBytesAsync("Game.ET.Code.Model.dll.bytes");
+                    byte[] pdbBytesModel = await LoadCodeBytesAsync("Game.ET.Code.Model.pdb.bytes");
+                    byte[] assBytesModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.dll.bytes");
+                    byte[] pdbBytesModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.pdb.bytes");
+                    m_Model = Assembly.Load(assBytesModel, pdbBytesModel);
+                    m_ModelView = Assembly.Load(assBytesModelView, pdbBytesModelView);
+                }
+#else
                 byte[] assBytesModel = await LoadCodeBytesAsync("Game.ET.Code.Model.dll.bytes");
                 byte[] pdbBytesModel = await LoadCodeBytesAsync("Game.ET.Code.Model.pdb.bytes");
                 byte[] assBytesModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.dll.bytes");
                 byte[] pdbBytesModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.pdb.bytes");
                 m_Model = Assembly.Load(assBytesModel, pdbBytesModel);
                 m_ModelView = Assembly.Load(assBytesModelView, pdbBytesModelView);
-                
+#endif
                 var hotfixAssemblies = await LoadHotfixAsync();
                 
                 World.Instance.AddSingleton<CodeTypes, Assembly[]>(new []
