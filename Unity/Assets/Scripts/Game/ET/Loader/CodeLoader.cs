@@ -2,13 +2,8 @@
 using Cysharp.Threading.Tasks;
 using Game;
 using GameFramework;
-
-#if UNITY_EDITOR
-using System.IO;
-#else
 using UnityEngine;
 using UnityGameFramework.Extension;
-#endif
 
 namespace ET
 {
@@ -24,9 +19,8 @@ namespace ET
 
             if (Define.EnableHotfix && GameEntry.CodeRunner.EnableCodeBytesMode)
             {
-#if UNITY_EDITOR
                 // 使用Unity编辑器的Model dll，可以让ModelView中的Monobehaviour正常使用
-                if (Define.UseUnityEditorModelDll)
+                if (Define.IsEditor && Define.UseUnityEditorModelDll)
                 {
                     Assembly[] assemblies = Utility.Assembly.GetAssemblies();
                     foreach (Assembly ass in assemblies)
@@ -56,16 +50,8 @@ namespace ET
                     m_Model = Assembly.Load(assBytesModel, pdbBytesModel);
                     m_ModelView = Assembly.Load(assBytesModelView, pdbBytesModelView);
                 }
-#else
-                byte[] assBytesModel = await LoadCodeBytesAsync("Game.ET.Code.Model.dll.bytes");
-                byte[] pdbBytesModel = await LoadCodeBytesAsync("Game.ET.Code.Model.pdb.bytes");
-                byte[] assBytesModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.dll.bytes");
-                byte[] pdbBytesModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.pdb.bytes");
-                m_Model = Assembly.Load(assBytesModel, pdbBytesModel);
-                m_ModelView = Assembly.Load(assBytesModelView, pdbBytesModelView);
-#endif
                 var hotfixAssemblies = await LoadHotfixAsync();
-                
+
                 World.Instance.AddSingleton<CodeTypes, Assembly[]>(new []
                     {typeof (World).Assembly, typeof(Init).Assembly, m_Model, m_ModelView, hotfixAssemblies.Item1, hotfixAssemblies.Item2});
             }
@@ -130,21 +116,14 @@ namespace ET
             Assembly hotfixView = Assembly.Load(assBytesHotfixView, pdbBytesHotfixView);
             return (hotfix, hotfixView);
         }
-        
+
         private async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
         {
-            fileName = AssetUtility.GetETAsset(Utility.Text.Format("Code/{0}", fileName));
-#if UNITY_EDITOR
-            await UniTask.CompletedTask;
-            // ReSharper disable once MethodHasAsyncOverload
-            byte[] bytes = File.ReadAllBytes(fileName);
-            return bytes;
-#else
-            TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(fileName);
+            string assetName = AssetUtility.GetETAsset(Utility.Text.Format("Code/{0}", fileName));
+            TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(assetName);
             byte[] bytes = textAsset.bytes;
             GameEntry.Resource.UnloadAsset(textAsset);
             return bytes;
-#endif
         }
     }
 }
