@@ -40,6 +40,17 @@ namespace GameFramework.Procedure
         }
 
         /// <summary>
+        /// 获取流程管理器是否已初始化。
+        /// </summary>
+        public bool IsInitialized
+        {
+            get
+            {
+                return m_ProcedureFsm != null;
+            }
+        }
+
+        /// <summary>
         /// 获取当前流程。
         /// </summary>
         public ProcedureBase CurrentProcedure
