@@ -1,6 +1,4 @@
 using UnityEditor;
-using UnityEditor.Build;
-
 namespace ThunderFireUITool
 {
     public class ScriptingDefineSymbolUtils
@@ -23,34 +21,34 @@ namespace ThunderFireUITool
 
         private static void EnableDefineSymbol(string defineSymbol)
         {
-            string defineSymbols = PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.Standalone);
+            string defineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
             if (!defineSymbols.Contains(defineSymbol))
             {
                 defineSymbols += ";" + defineSymbol;
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.Standalone, defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.iOS, defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.Android, defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.PS4, defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.PS5, defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(BuildTargetGroup.GameCoreXboxOne), defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(BuildTargetGroup.GameCoreXboxSeries), defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.PS4, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.PS5, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.GameCoreXboxOne, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.GameCoreXboxSeries, defineSymbols);
             }
         }
 
         private static void DisableDefineSymbol(string defineSymbol)
         {
-            string defineSymbols = PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(BuildTargetGroup.Standalone));
+            string defineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
             if (defineSymbols.Contains(defineSymbol))
             {
                 defineSymbols = defineSymbols.Replace(defineSymbol + ";", "");
                 defineSymbols = defineSymbols.Replace(defineSymbol, "");
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.Standalone, defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.iOS, defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.Android, defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.PS4, defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.PS5, defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(BuildTargetGroup.GameCoreXboxOne), defineSymbols);
-                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(BuildTargetGroup.GameCoreXboxSeries), defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.PS4, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.PS5, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.GameCoreXboxOne, defineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.GameCoreXboxSeries, defineSymbols);
             }
         }
     }

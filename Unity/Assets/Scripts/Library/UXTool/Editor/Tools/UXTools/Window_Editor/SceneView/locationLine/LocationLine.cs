@@ -84,15 +84,15 @@ namespace ThunderFireUITool
         {
             OnPointerEnterAction?.Invoke(e);
         }
-        private new void OnPointerDown(PointerDownEvent e)
+        private void OnPointerDown(PointerDownEvent e)
         {
             OnPointerDownAction?.Invoke(e);
         }
-        private new void OnPointerMove(PointerMoveEvent e)
+        private void OnPointerMove(PointerMoveEvent e)
         {
             OnPointerMoveAction?.Invoke(e);
         }
-        private new void OnPointerUp(PointerUpEvent e)
+        private void OnPointerUp(PointerUpEvent e)
         {
             OnPointerUpAction?.Invoke(e);
         }
