@@ -13,18 +13,21 @@ namespace FolderTag
             //var t = Stopwatch.StartNew();
             DrawFolderTag(guid, rect);
             //t.Stop();
-            
+
             //if(t.ElapsedMilliseconds > 0)
             //    UnityEngine.Debug.Log($"DrawFolders: {t.ElapsedMilliseconds} ms");
         }
-        
+
         private static void DrawFolderTag(string guid, Rect rect)
         {
             if (rect.width < rect.height)
                 return;
 
             var path = AssetDatabase.GUIDToAssetPath(guid);
-            if (!FolderHelper.IsValidFolder(path))
+            if (!FolderHelper.IsValidFolder(path) && !FolderHelper.IsValidScene(path))
+                return;
+
+            if (!FolderSettings.Opt_EnableSceneTag.Value && FolderHelper.IsValidScene(path))
                 return;
 
             var data = FolderSettings.GetFolderData(guid, path, out var isSubFolder);
@@ -42,10 +45,10 @@ namespace FolderTag
                 GUI.color = isSubFolder ? data._color * FolderSettings.Opt_SubFoldersTint.Value : data._color;
                 GUI.DrawTexture(rect, FolderSettings.Gradient, ScaleMode.ScaleAndCrop);
             }
-            else if(FolderSettings.FoldersDescColor == Color.white)
+            else if (FolderSettings.FoldersDescColor == Color.white)
             {
                 // use gradient color
-                tagColor = EditorGUIUtility.isProSkin ? data._color * 1.5f : data._color; 
+                tagColor = EditorGUIUtility.isProSkin ? data._color * 1.5f : data._color;
             }
 
             // draw tag
@@ -60,7 +63,7 @@ namespace FolderTag
             }
 
             GUI.color = Color.white;
-            
+
             GUIStyle _labelSkin()
             {
                 if (s_labelSelected == null || s_labelSelected.normal.textColor != FolderSettings.FoldersDescColor)
@@ -76,7 +79,7 @@ namespace FolderTag
             s_labelSelected.normal.textColor = FolderSettings.FoldersDescColor;
             s_labelSelected.hover.textColor = s_labelSelected.normal.textColor;
 
-            s_labelNormal = new GUIStyle("Label");  
+            s_labelNormal = new GUIStyle("Label");
             s_labelNormal.normal.textColor = new Color32(210, 210, 210, 255) * FolderSettings.FoldersDescColor;
             s_labelNormal.hover.textColor = s_labelNormal.normal.textColor;
         }

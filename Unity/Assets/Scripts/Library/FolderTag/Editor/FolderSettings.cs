@@ -18,6 +18,8 @@ namespace FolderTag
         private const string mPrefsPath = "ProjectSettings\\" + mPrefsFile;
         private const int mGradientWidth = 16;
 
+        public static EditorOption<string> Opt_FolderTagPath = new EditorOption<string>(nameof(FolderTag) + "_FolderTagPath", mPrefsPath);
+        public static EditorOption<bool> Opt_EnableSceneTag = new EditorOption<bool>(nameof(FolderTag) + "_EnableSceneTag", true);
         public static EditorOption<bool> Opt_ShowGradient = new EditorOption<bool>(nameof(FolderTag) + "_ShowGradient", true);
         public static EditorOption<bool> Opt_InspectorEdit = new EditorOption<bool>(nameof(FolderTag) + "_InspectorEdit", true);
         public static EditorOption<Color> Opt_SubFoldersTint = new EditorOption<Color>(nameof(FolderTag) + "_SubFoldersTint", new Color(0.7f, 0.7f, 0.7f, 0.7f));
@@ -41,7 +43,7 @@ namespace FolderTag
 
         private static Dictionary<string, FolderData> dicFoldersData;
         private static List<FolderData> listFoldersData;
-        private static ReorderableList foldersList;
+        private static ReorderableList foldersList, scenesList;
 
         #endregion
 
@@ -92,6 +94,7 @@ namespace FolderTag
         public class FolderData
         {
             public string _guid;
+            public bool _isScene;
             public Color _color;
             public bool _recursive;
             public string _tag = "folder tag";
@@ -113,9 +116,9 @@ namespace FolderTag
         [InitializeOnLoadMethod]
         private static void InitializeOnLoad()
         {
-            if (File.Exists(mPrefsPath))
+            if (File.Exists(Opt_FolderTagPath.Value))
             {
-                using var file = File.OpenText(mPrefsPath);
+                using var file = File.OpenText(Opt_FolderTagPath.Value);
                 try
                 {
                     var data = JsonUtility.FromJson<JsonWrapper>(file.ReadToEnd());
@@ -139,6 +142,25 @@ namespace FolderTag
                 FoldersDescColor = mFoldersDescTint;
             }
 
+            //从Resources目录中加载所有命名为FolderTag.json 的额外数据文件 
+            var allTagJsons = Resources.LoadAll<TextAsset>("FolderTag_Prefs");
+            foreach (var tagJson in allTagJsons)
+            {
+                var data = JsonUtility.FromJson<JsonWrapper>(tagJson.text);
+                var list = data.FoldersData
+                    .Enumerate()
+                    .Select(n => n.Value)
+                    .ToList();
+
+                foreach (var item in list)
+                {
+                    if (listFoldersData.Any(n => n._guid == item._guid))
+                        continue;
+
+                    listFoldersData.Add(item);
+                }
+            }
+
             dicFoldersData = listFoldersData.ToDictionary(n => n._guid, n => n);
 
             UpdateGradient();
@@ -149,6 +171,20 @@ namespace FolderTag
         {
             // editor prefs variables
             EditorGUI.BeginChangeCheck();
+
+            var folderTagPath = EditorGUILayout.TextField("Data Save Path", Opt_FolderTagPath.Value);
+            if (folderTagPath != Opt_FolderTagPath.Value)
+            {
+                Opt_FolderTagPath.Value = folderTagPath;
+                EditorApplication.RepaintProjectWindow();
+            }
+
+            var enableSceneTag = EditorGUILayout.Toggle("Enable Scene Tag", Opt_EnableSceneTag.Value);
+            if (enableSceneTag != Opt_EnableSceneTag.Value)
+            {
+                Opt_EnableSceneTag.Value = enableSceneTag;
+                EditorApplication.RepaintProjectWindow();
+            }
 
             var showGradient = EditorGUILayout.Toggle("Show Gradient", Opt_ShowGradient.Value);
 
@@ -218,30 +254,55 @@ namespace FolderTag
             GetFoldersList(true);
         }
 
-        public static ReorderableList GetFoldersList(bool forceNew = false)
+        private static ReorderableList scenePreviewList, folderPreviewList;
+        public static ReorderableList GetFoldersList(bool forceNew = false, bool isScene = false)
         {
-            if (foldersList != null && !forceNew)
-                return foldersList;
+            var currentPreviewList = isScene ? scenePreviewList : folderPreviewList;
+            if (currentPreviewList != null && !forceNew)
+                return currentPreviewList;
 
             float lineHeight = EditorGUIUtility.singleLineHeight;
+            var listPreview = listFoldersData.Where(n => n._isScene == isScene).ToList();
 
-            foldersList = new ReorderableList(listFoldersData, typeof(FolderData), true, true, true, true);
-            foldersList.drawElementCallback = (rect, index, isActive, isFocused) =>
+            currentPreviewList = new ReorderableList(listPreview, typeof(FolderData), true, true, true, true);
+            currentPreviewList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
-                var element = listFoldersData[index];
+                var element = listPreview[index];
 
                 var refRect = new Rect(rect.position + new Vector2(0f, 1f),
                     new Vector2(rect.size.x * .5f - EditorGUIUtility.standardVerticalSpacing, lineHeight));
                 var colorRect = new Rect(rect.position + new Vector2(rect.size.x * .5f, 1f),
-                    new Vector2(rect.size.x * .5f - 18f - EditorGUIUtility.standardVerticalSpacing, lineHeight));
-                var recRect = new Rect(rect.position + new Vector2(rect.size.x - 18f, 1f), new Vector2(18f, lineHeight));
+                    new Vector2(rect.size.x * .5f - 50f - EditorGUIUtility.standardVerticalSpacing, lineHeight));
+                var recRect = new Rect(rect.position + new Vector2(rect.size.x - 50f, 1f), new Vector2(18f, lineHeight));
                 var tagRect = new Rect(rect.position + new Vector2(0f, lineHeight + 2f), new Vector2(rect.size.x, lineHeight));
 
+                var deleteRect = new Rect(rect.position + new Vector2(rect.size.x - 18f, 1f), new Vector2(18f, lineHeight));
+                if (GUI.Button(deleteRect, "x"))
+                {
+                    listFoldersData.Remove(element);
+                    dicFoldersData.Remove(element._guid);
+                    SaveProjectPrefs();
+                    EditorApplication.RepaintProjectWindow();
+                }
+
                 EditorGUI.BeginChangeCheck();
+
+                UnityEngine.Object preview = null;
+                Type type = typeof(DefaultAsset);
+                if (isScene)
+                {
+                    preview = AssetDatabase.LoadAssetAtPath<SceneAsset>(AssetDatabase.GUIDToAssetPath(element._guid));
+                    type = typeof(SceneAsset);
+                }
+                else
+                {
+                    preview = AssetDatabase.LoadAssetAtPath<DefaultAsset>(AssetDatabase.GUIDToAssetPath(element._guid));
+                }
+
                 var folder = EditorGUI.ObjectField(refRect,
                     GUIContent.none,
-                    AssetDatabase.LoadAssetAtPath<DefaultAsset>(AssetDatabase.GUIDToAssetPath(element._guid)),
-                    typeof(DefaultAsset),
+                    preview,
+                    type,
                     false);
 
                 element._color = EditorGUI.ColorField(colorRect, GUIContent.none, element._color);
@@ -265,8 +326,11 @@ namespace FolderTag
                     if (element._guid != fodlerGuid)
                     {
                         // ignore non directory files
-                        if (folder != null && !File.GetAttributes(AssetDatabase.GetAssetPath(folder)).HasFlag(FileAttributes.Directory))
+                        if (folder != null && !File.GetAttributes(AssetDatabase.GetAssetPath(folder)).HasFlag(FileAttributes.Directory)
+                            && !FolderHelper.IsValidScene(AssetDatabase.GetAssetPath(folder)))
+                        {
                             folder = null;
+                        }
 
                         // ignore if already contains
                         if (folder != null && listFoldersData.Any(n => n._guid == fodlerGuid))
@@ -279,23 +343,26 @@ namespace FolderTag
                     EditorApplication.RepaintProjectWindow();
                 }
             };
-            foldersList.elementHeight = lineHeight * 2 + 3;
-            foldersList.onRemoveCallback = list =>
+            currentPreviewList.elementHeight = lineHeight * 2 + 3;
+            currentPreviewList.onRemoveCallback = data =>
             {
-                listFoldersData.RemoveAt(list.index);
+                var folderData = listPreview[data.index];
+                listFoldersData.Remove(folderData);
+                dicFoldersData.Remove(folderData._guid);
                 SaveProjectPrefs();
+                EditorApplication.RepaintProjectWindow();
             };
-            foldersList.onAddCallback = list => { listFoldersData.Add(CreateFolderData()); };
-            foldersList.drawHeaderCallback = rect => { EditorGUI.LabelField(rect, new GUIContent("Folders", "")); };
+            currentPreviewList.onAddCallback = data => { listFoldersData.Add(CreateFolderData(isScene)); };
+            currentPreviewList.drawHeaderCallback = rect => { EditorGUI.LabelField(rect, new GUIContent(isScene ? "Scenes" : "Folders", "")); };
 
-            return foldersList;
+            return currentPreviewList;
         }
 
-        public static FolderData CreateFolderData()
+        public static FolderData CreateFolderData(bool isScene = false)
         {
             var color = Color.HSVToRGB(Random.value, 0.7f, 0.7f);
             color.a = 0.7f;
-            return new FolderData() { _color = color };
+            return new FolderData() { _color = color, _isScene = isScene };
         }
 
         public static FolderData GetFolderData(string guid, string path, out bool subFolder)
@@ -322,6 +389,20 @@ namespace FolderTag
             return folderData;
         }
 
+        public static void CleanEmptyData()
+        {
+            //移除dicFoldersData中guid指向的资源不存在的数据
+            foreach (var item in dicFoldersData.Values.ToArray())
+            {
+                if (AssetDatabase.LoadAssetAtPath<DefaultAsset>(AssetDatabase.GUIDToAssetPath(item._guid)) != null)
+                    continue;
+
+                dicFoldersData.Remove(item._guid);
+                listFoldersData.Remove(item);
+            }
+            SaveProjectPrefs();
+        }
+
         public static void SaveProjectPrefs()
         {
             dicFoldersData = listFoldersData
@@ -336,7 +417,7 @@ namespace FolderTag
                     .Select(n => new KeyValuePair<string, FolderData>(n._guid, n)))
             };
 
-            File.WriteAllText(mPrefsPath, JsonUtility.ToJson(json));
+            File.WriteAllText(Opt_FolderTagPath.Value, JsonUtility.ToJson(json, true));
         }
     }
 }

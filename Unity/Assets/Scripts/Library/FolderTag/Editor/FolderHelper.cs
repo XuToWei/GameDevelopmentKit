@@ -21,5 +21,10 @@ namespace FolderTag
         {
             return UnityEditor.AssetDatabase.IsValidFolder(path) && !path.Equals("Assets");
         }
+
+        public static bool IsValidScene(string path)
+        {
+            return path.EndsWith(".unity");
+        }
     }
 }
