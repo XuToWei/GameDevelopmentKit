@@ -47,7 +47,7 @@ namespace ET
                         DataSet dataSet = reader.AsDataSet();
                         foreach (DataTable table in dataSet.Tables)
                         {
-                            if (table.Rows.Count < 1 || !table.Rows[0][0].ToString().StartsWith("##"))
+                            if (table.Rows.Count < 1 || table.Columns.Count < 1 || !table.Rows[0][0].ToString().StartsWith("##"))
                             {
                                 continue;
                             }
