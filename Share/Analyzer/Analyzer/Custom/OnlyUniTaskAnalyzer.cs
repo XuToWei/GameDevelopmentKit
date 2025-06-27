@@ -20,7 +20,7 @@ namespace ET.Analyzer.Custom
             }
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(this.Analyzer, SyntaxKind.MethodDeclaration,SyntaxKind.LocalFunctionStatement);
+            context.RegisterSyntaxNodeAction(this.Analyzer, SyntaxKind.MethodDeclaration, SyntaxKind.LocalFunctionStatement);
         }
         
         private void Analyzer(SyntaxNodeAnalysisContext context)
