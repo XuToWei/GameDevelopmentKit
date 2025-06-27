@@ -10,10 +10,10 @@ namespace ET.Analyzer
 {
     
      [DiagnosticAnalyzer(LanguageNames.CSharp)]
-     public class DeclarationAnalyzer: DiagnosticAnalyzer
+     public class CustomDeclarationAnalyzer: DiagnosticAnalyzer
      {
          public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-                 ImmutableArray.Create(DeclarationUpperAnalyzerRule.Rule);
+                 ImmutableArray.Create(CustomDeclarationUpperAnalyzerRule.Rule);
 
          public override void Initialize(AnalysisContext context)
          {
@@ -38,7 +38,7 @@ namespace ET.Analyzer
                  var className = classDeclaration.Identifier.Text;
                  if (!char.IsUpper(className[0]))
                  {
-                     var diagnostic = Diagnostic.Create(DeclarationUpperAnalyzerRule.Rule, classDeclaration.Identifier.GetLocation(), "Class Name", className);
+                     var diagnostic = Diagnostic.Create(CustomDeclarationUpperAnalyzerRule.Rule, classDeclaration.Identifier.GetLocation(), "Class Name", className);
                      context.ReportDiagnostic(diagnostic);
                  }
              }

@@ -7,10 +7,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace ET.Analyzer.Custom
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class OnlyUniTaskAnalyzer: DiagnosticAnalyzer
+    public class CustomOnlyUniTaskAnalyzer: DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-                ImmutableArray.Create(OnlyUniTaskAnalyzerRule.Rule);
+                ImmutableArray.Create(CustomOnlyUniTaskAnalyzerRule.Rule);
         
         public override void Initialize(AnalysisContext context)
         {
@@ -56,7 +56,7 @@ namespace ET.Analyzer.Custom
             {
                 if (namespaceName != "Cysharp.Threading.Tasks" || !returnType.Name.StartsWith("UniTask"))
                 {
-                    Diagnostic diagnostic = Diagnostic.Create(OnlyUniTaskAnalyzerRule.Rule, context.Node.GetLocation());
+                    Diagnostic diagnostic = Diagnostic.Create(CustomOnlyUniTaskAnalyzerRule.Rule, context.Node.GetLocation());
                     context.ReportDiagnostic(diagnostic);
                 }
             }
@@ -64,7 +64,7 @@ namespace ET.Analyzer.Custom
             {
                 if (namespaceName == "System.Threading.Tasks" && returnType.Name.StartsWith("Task"))
                 {
-                    Diagnostic diagnostic = Diagnostic.Create(OnlyUniTaskAnalyzerRule.Rule, context.Node.GetLocation());
+                    Diagnostic diagnostic = Diagnostic.Create(CustomOnlyUniTaskAnalyzerRule.Rule, context.Node.GetLocation());
                     context.ReportDiagnostic(diagnostic);
                 }
             }

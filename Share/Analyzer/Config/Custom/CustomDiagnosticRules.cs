@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis;
 
 namespace ET.Analyzer.Custom
 {
-    public static class OnlyUniTaskAnalyzerRule
+    public static class CustomOnlyUniTaskAnalyzerRule
     {
         private const string Title = "请使用UniTask，不要使用其他Task";
 
@@ -20,7 +20,7 @@ namespace ET.Analyzer.Custom
                     Description);
     }
 
-    public static class DeclarationUpperAnalyzerRule
+    public static class CustomDeclarationUpperAnalyzerRule
     {
         private const string Title = "{0} '{1}' 命名开头需要大写";
 
