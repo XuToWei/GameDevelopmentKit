@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game
@@ -6,6 +7,18 @@ namespace Game
     public class HybridCLRConfig : ScriptableObject
     {
         [SerializeField]
-        public TextAsset[] aotAssemblies;
+        private TextAsset[] m_AotAssemblies;
+
+        public TextAsset[] AotAssemblies => m_AotAssemblies;
+
+        public void SetAotAssemblies(TextAsset[] aotAssemblies)
+        {
+            m_AotAssemblies = aotAssemblies;
+        }
+
+        public void SetAotAssemblies(List<TextAsset> aotAssemblies)
+        {
+            m_AotAssemblies = aotAssemblies.ToArray();
+        }
     }
 }

@@ -17,9 +17,12 @@ namespace Game
         
         private float m_CellViewSize;
         
+        [UGuiProperty]
         public Action<int, GameObject> itemRenderer { set; private get; }
         
-        [ShowInInspector, DisableInEditorMode]
+        [ShowInInspector]
+        [DisableInEditorMode]
+        [UGuiProperty]
         public int numItems
         {
             set
@@ -30,6 +33,7 @@ namespace Game
             get => m_NumItems;
         }
 
+        [UGuiProperty]
         public EnhancedScroller scroller { get; private set; }
 
         private void Awake()
@@ -51,10 +55,11 @@ namespace Game
 
         public EnhancedScrollerCellView GetCellView(EnhancedScroller scroller, int dataIndex, int cellIndex)
         {
-            CommonEnhancedScrollerCellView cellView = scroller.GetCellView(m_CellViewPrefab) as CommonEnhancedScrollerCellView;
+            CommonEnhancedScrollerCellView cellView = (CommonEnhancedScrollerCellView)scroller.GetCellView(m_CellViewPrefab);
             cellView.name = Utility.Text.Format("Cell {0}", dataIndex);
             cellView.SetRenderer(itemRenderer);
             cellView.SetDataIndex(dataIndex);
+            cellView.gameObject.SetActive(true);
             itemRenderer?.Invoke(dataIndex, cellView.gameObject);
             return cellView;
         }
