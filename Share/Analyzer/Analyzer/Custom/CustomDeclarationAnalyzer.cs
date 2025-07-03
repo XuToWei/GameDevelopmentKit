@@ -156,34 +156,30 @@ namespace ET.Analyzer
                 {
                     var diagnostic = Diagnostic.Create(CustomDeclarationEndCant_AnalyzerRule.Rule, variable.Identifier.GetLocation(), TYPE_NAME, name);
                     context.ReportDiagnostic(diagnostic);
-                    continue;
                 }
-                if (declaration.Modifiers.Any(SyntaxKind.ConstKeyword))
+                else if (declaration.Modifiers.Any(SyntaxKind.ConstKeyword))
                 {
                     if (!name.CheckUpperDeclaration())
                     {
                         var diagnostic = Diagnostic.Create(CustomDeclarationUpperAnalyzerRule.Rule, variable.Identifier.GetLocation(), TYPE_NAME, name);
                         context.ReportDiagnostic(diagnostic);
                     }
-                    continue;
                 }
-                if (declaration.Modifiers.Any(SyntaxKind.PrivateKeyword) || declaration.Modifiers.Any(SyntaxKind.ProtectedKeyword))
+                else if (declaration.Modifiers.Any(SyntaxKind.PublicKeyword) || declaration.Modifiers.Any(SyntaxKind.InternalKeyword))
+                {
+                    if (!name.CheckUpperDeclaration())
+                    {
+                        var diagnostic = Diagnostic.Create(CustomDeclarationUpperAnalyzerRule.Rule, variable.Identifier.GetLocation(), TYPE_NAME, name);
+                        context.ReportDiagnostic(diagnostic);
+                    }
+                }
+                else if (declaration.Modifiers.Any(SyntaxKind.PrivateKeyword) || declaration.Modifiers.Any(SyntaxKind.ProtectedKeyword))
                 {
                     if (!name.CheckLowerDeclaration())
                     {
                         var diagnostic = Diagnostic.Create(CustomDeclarationLowerAnalyzerRule.Rule, variable.Identifier.GetLocation(), TYPE_NAME, name);
                         context.ReportDiagnostic(diagnostic);
                     }
-                    continue;
-                }
-                if (declaration.Modifiers.Any(SyntaxKind.PublicKeyword) || declaration.Modifiers.Any(SyntaxKind.InternalKeyword))
-                {
-                    if (!name.CheckUpperDeclaration())
-                    {
-                        var diagnostic = Diagnostic.Create(CustomDeclarationUpperAnalyzerRule.Rule, variable.Identifier.GetLocation(), TYPE_NAME, name);
-                        context.ReportDiagnostic(diagnostic);
-                    }
-                    continue;
                 }
              }
          }
@@ -215,19 +211,19 @@ namespace ET.Analyzer
                  var diagnostic = Diagnostic.Create(CustomDeclarationEndCant_AnalyzerRule.Rule, declaration.Identifier.GetLocation(), TYPE_NAME, name);
                  context.ReportDiagnostic(diagnostic);
              }
-             else if (declaration.Modifiers.Any(SyntaxKind.PrivateKeyword) || declaration.Modifiers.Any(SyntaxKind.ProtectedKeyword))
-             {
-                 if (!name.CheckLowerDeclaration())
-                 {
-                     var diagnostic = Diagnostic.Create(CustomDeclarationLowerAnalyzerRule.Rule, declaration.Identifier.GetLocation(), TYPE_NAME, name);
-                     context.ReportDiagnostic(diagnostic);
-                 }
-             }
              else if (declaration.Modifiers.Any(SyntaxKind.PublicKeyword) || declaration.Modifiers.Any(SyntaxKind.InternalKeyword))
              {
                  if (!name.CheckUpperDeclaration())
                  {
                      var diagnostic = Diagnostic.Create(CustomDeclarationUpperAnalyzerRule.Rule, declaration.Identifier.GetLocation(), TYPE_NAME, name);
+                     context.ReportDiagnostic(diagnostic);
+                 }
+             }
+             else if (declaration.Modifiers.Any(SyntaxKind.PrivateKeyword) || declaration.Modifiers.Any(SyntaxKind.ProtectedKeyword))
+             {
+                 if (!name.CheckLowerDeclaration())
+                 {
+                     var diagnostic = Diagnostic.Create(CustomDeclarationLowerAnalyzerRule.Rule, declaration.Identifier.GetLocation(), TYPE_NAME, name);
                      context.ReportDiagnostic(diagnostic);
                  }
              }
@@ -251,18 +247,16 @@ namespace ET.Analyzer
                  {
                      var diagnostic = Diagnostic.Create(CustomDeclarationEndCant_AnalyzerRule.Rule, variable.Identifier.GetLocation(), TYPE_NAME, name);
                      context.ReportDiagnostic(diagnostic);
-                     continue;
                  }
-                 if (declaration.Modifiers.Any(SyntaxKind.ConstKeyword))
+                 else if (declaration.Modifiers.Any(SyntaxKind.ConstKeyword))
                  {
                      if (!name.CheckUpperDeclaration())
                      {
                          var diagnostic = Diagnostic.Create(CustomDeclarationUpperAnalyzerRule.Rule, variable.Identifier.GetLocation(), TYPE_NAME, name);
                          context.ReportDiagnostic(diagnostic);
                      }
-                     continue;
                  }
-                 if (!name.CheckLowerDeclaration())
+                 else if (!name.CheckLowerDeclaration())
                  {
                      var diagnostic = Diagnostic.Create(CustomDeclarationLowerAnalyzerRule.Rule, variable.Identifier.GetLocation(), TYPE_NAME, name);
                      context.ReportDiagnostic(diagnostic);
