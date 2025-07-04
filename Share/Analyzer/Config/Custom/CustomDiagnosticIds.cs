@@ -6,5 +6,6 @@ namespace ET.Analyzer.Custom
         public const string DeclarationUpperAnalyzerRuleId = "ET0502";
         public const string DeclarationLowerAnalyzerRuleId = "ET0503";
         public const string DeclarationEndCant_AnalyzerRuleId = "ET0504";
+        public const string LogMethodAnalyzerRuleId = "ET0505";
     }
 }

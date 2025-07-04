@@ -29,5 +29,12 @@ namespace ET.Analyzer.Custom
             Unity_Game_Hot_Editor,
             Unity_Game_Hot_Loader
         ];
+        
+        public static readonly string[] GameRuntimeAll = 
+        [
+            Unity_Game,
+            Unity_Game_Hot_Code,
+            Unity_Game_Hot_Loader
+        ];
     }
 }

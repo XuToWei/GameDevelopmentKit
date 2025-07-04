@@ -73,5 +73,20 @@ namespace ET.Analyzer.Custom
                     true,
                     Description);
     }
+
+    public static class CustomLogMethodAnalyzerRule
+    {
+        private const string Title = "请使用UnityGameFramework.Runtime.Log，不要使用UnityEngine.Debug";
+        private const string MessageFormat = "请使用UnityGameFramework.Runtime.Log，不要使用UnityEngine.Debug";
+        private const string Description = "请使用UnityGameFramework.Runtime.Log，不要使用UnityEngine.Debug.";
+        public static readonly DiagnosticDescriptor Rule =
+            new DiagnosticDescriptor(CustomDiagnosticIds.LogMethodAnalyzerRuleId,
+                Title,
+                MessageFormat,
+                DiagnosticCategories.Custom,
+                DiagnosticSeverity.Error,
+                true,
+                Description);
+    }
 }
 
