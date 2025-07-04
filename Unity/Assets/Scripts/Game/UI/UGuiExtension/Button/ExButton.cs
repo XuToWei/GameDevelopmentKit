@@ -20,7 +20,7 @@ namespace Game
         [SerializeField]
         private ButtonOnPointerDownEvent m_OnPointerDown = new ButtonOnPointerDownEvent();
 
-        [UGuiProperty]
+        [IgnorePropertyDeclaration]
         public ButtonOnPointerDownEvent onPointerDown
         {
             get => m_OnPointerDown;

@@ -134,7 +134,7 @@ namespace ET.Analyzer
          private void FieldDeclarationAnalyzeNode(SyntaxNodeAnalysisContext context)
          {
              const string TYPE_NAME = "field";
-             const string IGNORE_UGUI_FIELD_ATTRIBUTE = "Game.UGuiFieldAttribute";
+             const string IGNORE_UGUI_FIELD_ATTRIBUTE = "Game.IgnoreFieldDeclarationAttribute";
 
              if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameAll))
              {
@@ -187,7 +187,7 @@ namespace ET.Analyzer
          private void PropertyDeclarationAnalyzeNode(SyntaxNodeAnalysisContext context)
          {
              const string TYPE_NAME = "property";
-             const string IGNORE_UGUI_PROPERTY_ATTRIBUTE = "Game.UGuiPropertyAttribute";
+             const string IGNORE_UGUI_PROPERTY_ATTRIBUTE = "Game.IgnorePropertyDeclarationAttribute";
              if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameAll))
              {
                  return;

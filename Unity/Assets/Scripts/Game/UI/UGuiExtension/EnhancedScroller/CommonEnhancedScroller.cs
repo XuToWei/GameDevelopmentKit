@@ -17,12 +17,12 @@ namespace Game
         
         private float m_CellViewSize;
         
-        [UGuiProperty]
+        [IgnorePropertyDeclaration]
         public Action<int, GameObject> itemRenderer { set; private get; }
         
         [ShowInInspector]
         [DisableInEditorMode]
-        [UGuiProperty]
+        [IgnorePropertyDeclaration]
         public int numItems
         {
             set
@@ -33,7 +33,7 @@ namespace Game
             get => m_NumItems;
         }
 
-        [UGuiProperty]
+        [IgnorePropertyDeclaration]
         public EnhancedScroller scroller { get; private set; }
 
         private void Awake()
