@@ -6,44 +6,11 @@ using UnityGameFramework.Extension;
 
 namespace Game.Hot
 {
-    public sealed class ProcedureManager : GameHotModule
+    public sealed class ProcedureComponent : HotComponent
     {
         private IFsmManager m_FsmManager;
-        private IFsm<ProcedureManager> m_ProcedureFsm;
-        
-        public ProcedureManager()
-        {
-            m_FsmManager = null;
-            m_ProcedureFsm = null;
-        }
-
-        protected internal override void Initialize()
-        {
-            var fsmManager = GameFrameworkEntry.GetModule<IFsmManager>();
-            if (fsmManager == null)
-            {
-                throw new GameFrameworkException("FSM manager is invalid.");
-            }
-            Type procedureBaseType = typeof(ProcedureBase);
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            Type[] types = assembly.GetTypes();
-            using UGFList<ProcedureBase> procedures = UGFList<ProcedureBase>.Create();
-            for (int i = 0; i < types.Length; i++)
-            {
-                if (!types[i].IsClass || types[i].IsAbstract)
-                {
-                    continue;
-                }
-                if (types[i].BaseType == procedureBaseType)
-                {
-                    procedures.Add((ProcedureBase)Activator.CreateInstance(types[i]));
-                }
-            }
-            m_FsmManager = fsmManager;
-            m_ProcedureFsm = m_FsmManager.CreateFsm(this, procedures.ToArray());
-        }
-
-        protected internal override int Priority => -2;
+        private IFsm<ProcedureComponent> m_ProcedureFsm;
+        protected override int Priority => -2;
 
         public ProcedureBase CurrentProcedure
         {
@@ -70,13 +37,41 @@ namespace Game.Hot
                 return m_ProcedureFsm.CurrentStateTime;
             }
         }
-        
-        protected internal override void Update(float elapseSeconds, float realElapseSeconds)
+
+        protected override void OnInitialize()
+        {
+            var fsmManager = GameFrameworkEntry.GetModule<IFsmManager>();
+            if (fsmManager == null)
+            {
+                throw new GameFrameworkException("FSM manager is invalid.");
+            }
+            Type procedureBaseType = typeof(ProcedureBase);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Type[] types = assembly.GetTypes();
+            using UGFList<FsmState<ProcedureComponent>> procedures = UGFList<FsmState<ProcedureComponent>>.Create();
+            for (int i = 0; i < types.Length; i++)
+            {
+                if (!types[i].IsClass || types[i].IsAbstract)
+                {
+                    continue;
+                }
+                if (types[i].BaseType == procedureBaseType)
+                {
+                    procedures.Add((ProcedureBase)Activator.CreateInstance(types[i]));
+                }
+            }
+            m_FsmManager = fsmManager;
+            m_ProcedureFsm = m_FsmManager.CreateFsm(this, procedures.ToArray());
+            // 开启流程（入口）
+            StartProcedure<ProcedureLaunch>();
+        }
+
+        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             
         }
         
-        protected internal override void Shutdown()
+        protected override void OnShutdown()
         {
             if (m_FsmManager != null)
             {
