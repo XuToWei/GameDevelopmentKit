@@ -11,6 +11,11 @@
         public static bool UseUnityEditorModelDll = true;
 #else
         public static bool IsEditor => false;
+
+        /// <summary>
+        /// 是否使用Unity编辑器的Model dll，该模式下ModelView中的Monobehaviour能够在EditorCode下正常运行
+        /// </summary>
+        public static bool UseUnityEditorModelDll = false;
 #endif
 
 #if UNITY_HOTFIX

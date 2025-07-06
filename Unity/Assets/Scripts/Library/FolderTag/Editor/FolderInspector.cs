@@ -45,7 +45,7 @@ namespace FolderTag
             {
                 folderData._tag = strTag;
             }
-            
+
             GUILayout.Space(5);
 
             EditorGUILayout.LabelField("Description");
@@ -57,6 +57,13 @@ namespace FolderTag
 
                 EditorApplication.RepaintProjectWindow();
                 FolderSettings.SaveProjectPrefs();
+            }
+
+            GUILayout.Space(10);
+
+            if (GUILayout.Button("Clean Empty Data"))
+            {
+                FolderSettings.CleanEmptyData();
             }
 
             GUILayout.Space(10);

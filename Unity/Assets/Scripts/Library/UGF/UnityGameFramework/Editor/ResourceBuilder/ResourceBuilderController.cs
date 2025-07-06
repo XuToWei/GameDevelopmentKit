@@ -111,6 +111,7 @@ namespace UnityGameFramework.Editor.ResourceTools
             CompressionHelperTypeName = string.Empty;
             AdditionalCompressionSelected = false;
             ForceRebuildAssetBundleSelected = false;
+            DisableWriteTypeTreeSelected = false;
             BuildEventHandlerTypeName = string.Empty;
             OutputDirectory = string.Empty;
             OutputPackageSelected = OutputFullSelected = OutputPackedSelected = true;
@@ -199,6 +200,12 @@ namespace UnityGameFramework.Editor.ResourceTools
         }
 
         public bool ForceRebuildAssetBundleSelected
+        {
+            get;
+            set;
+        }
+
+        public bool DisableWriteTypeTreeSelected
         {
             get;
             set;
@@ -383,6 +390,10 @@ namespace UnityGameFramework.Editor.ResourceTools
                             ForceRebuildAssetBundleSelected = bool.Parse(xmlNode.InnerText);
                             break;
 
+                        case "DisableWriteTypeTreeSelected":
+                            DisableWriteTypeTreeSelected = bool.Parse(xmlNode.InnerText);
+                            break;
+
                         case "BuildEventHandlerTypeName":
                             BuildEventHandlerTypeName = xmlNode.InnerText;
                             break;
@@ -449,6 +460,8 @@ namespace UnityGameFramework.Editor.ResourceTools
                 xmlSettings.AppendChild(xmlElement);
                 xmlElement = xmlDocument.CreateElement("ForceRebuildAssetBundleSelected");
                 xmlElement.InnerText = ForceRebuildAssetBundleSelected.ToString();
+                xmlElement = xmlDocument.CreateElement("DisableWriteTypeTreeSelected");
+                xmlElement.InnerText = DisableWriteTypeTreeSelected.ToString();
                 xmlSettings.AppendChild(xmlElement);
                 xmlElement = xmlDocument.CreateElement("BuildEventHandlerTypeName");
                 xmlElement.InnerText = BuildEventHandlerTypeName;
@@ -1415,6 +1428,11 @@ namespace UnityGameFramework.Editor.ResourceTools
             if (ForceRebuildAssetBundleSelected)
             {
                 buildOptions |= BuildAssetBundleOptions.ForceRebuildAssetBundle;
+            }
+            
+            if (DisableWriteTypeTreeSelected)
+            {
+                buildOptions |= BuildAssetBundleOptions.DisableWriteTypeTree;
             }
 
             if (AssetBundleCompression == AssetBundleCompressionType.Uncompressed)
