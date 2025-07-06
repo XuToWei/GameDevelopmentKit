@@ -21,7 +21,7 @@ namespace Game.Hot
             m_StartGame = true;
         }
 
-        protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
+        protected override void OnEnter(IFsm<ProcedureComponent> procedureOwner)
         {
             base.OnEnter(procedureOwner);
 
@@ -31,7 +31,7 @@ namespace Game.Hot
             GameEntry.UI.OpenUIForm(UIFormId.MenuForm, this);
         }
 
-        protected override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
+        protected override void OnLeave(IFsm<ProcedureComponent> procedureOwner, bool isShutdown)
         {
             base.OnLeave(procedureOwner, isShutdown);
 
@@ -44,7 +44,7 @@ namespace Game.Hot
             }
         }
 
-        protected override void OnUpdate(IFsm<ProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
+        protected override void OnUpdate(IFsm<ProcedureComponent> procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 

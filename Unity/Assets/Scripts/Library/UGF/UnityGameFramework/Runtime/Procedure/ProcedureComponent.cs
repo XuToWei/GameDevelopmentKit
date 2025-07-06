@@ -31,6 +31,17 @@ namespace UnityGameFramework.Runtime
         private string m_EntranceProcedureTypeName = null;
 
         /// <summary>
+        /// 获取是否已初始化流程管理器。
+        /// </summary>
+        public bool IsInitialized
+        {
+            get
+            {
+                return m_ProcedureManager != null && m_ProcedureManager.IsInitialized;
+            }
+        }
+
+        /// <summary>
         /// 获取当前流程。
         /// </summary>
         public ProcedureBase CurrentProcedure

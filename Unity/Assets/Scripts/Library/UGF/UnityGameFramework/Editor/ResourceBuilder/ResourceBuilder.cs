@@ -220,6 +220,8 @@ namespace UnityGameFramework.Editor.ResourceTools
                     {
                         EditorGUILayout.LabelField("Force Rebuild AssetBundle", GUILayout.Width(160f));
                         m_Controller.ForceRebuildAssetBundleSelected = EditorGUILayout.Toggle(m_Controller.ForceRebuildAssetBundleSelected);
+                        EditorGUILayout.LabelField("Disable Write Type Tree", GUILayout.Width(145f));
+                        m_Controller.DisableWriteTypeTreeSelected = EditorGUILayout.Toggle(m_Controller.DisableWriteTypeTreeSelected);
                     }
                     EditorGUILayout.EndHorizontal();
                     EditorGUILayout.BeginHorizontal();

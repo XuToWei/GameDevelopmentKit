@@ -84,6 +84,12 @@ namespace UnityGameFramework.Extension.Editor
                     Debug.Log($"UNITY_WEBGL下修改资源\"{resource.Name}\"的加载方式为LoadFromMemory");
                 }
             }
+
+            if (!string.IsNullOrEmpty(resource.FileSystem))
+            {
+                resource.FileSystem = string.Empty;
+                Debug.Log($"UNITY_WEBGL下删除资源\"{resource.Name}\"的文件系统");
+            }
 #endif
         }
 

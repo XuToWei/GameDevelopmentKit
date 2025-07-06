@@ -18,7 +18,7 @@ namespace Game.Hot
             get;
         }
 
-        protected ScrollableBackground SceneBackground
+        protected ScrollableBackground m_SceneBackground
         {
             get;
             private set;
@@ -37,14 +37,14 @@ namespace Game.Hot
             GameEntry.Event.Subscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
             GameEntry.Event.Subscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFailure);
 
-            SceneBackground = Object.FindFirstObjectByType<ScrollableBackground>();
-            if (SceneBackground == null)
+            m_SceneBackground = Object.FindFirstObjectByType<ScrollableBackground>();
+            if (m_SceneBackground == null)
             {
                 Log.Warning("Can not find scene background.");
                 return;
             }
 
-            SceneBackground.VisibleBoundary.gameObject.GetOrAddComponent<HideByBoundary>();
+            m_SceneBackground.VisibleBoundary.gameObject.GetOrAddComponent<HideByBoundary>();
             GameEntry.Entity.ShowMyAircraft(new MyAircraftData(GameEntry.Entity.GenerateSerialId(), 10000)
             {
                 Name = "My Aircraft",

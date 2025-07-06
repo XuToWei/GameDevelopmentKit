@@ -99,6 +99,13 @@
       "dependencies": {},
       "hash": "f4b39aad95edd3350f8f06567c9d07168ac941ec"
     },
+    "com.psygames.unitywebsocket": {
+      "version": "https://github.com/psygames/UnityWebSocket.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "369f2a56f68e7a133d3d1acfdc26d4693cd74497"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
@@ -332,7 +339,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "5df24d1f3689ad1a040d0e0227c5b4b976a7482e"
+      "hash": "c637d94d47683ddba39c82ca24313e474dbc9c27"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",

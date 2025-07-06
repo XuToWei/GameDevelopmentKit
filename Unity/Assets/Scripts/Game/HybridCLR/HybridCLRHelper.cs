@@ -13,7 +13,7 @@ namespace Game
         public static async UniTask LoadAsync()
         {
             HybridCLRConfig aotGroup = await GameEntry.Resource.LoadAssetAsync<HybridCLRConfig>(ConfigAsset);
-            foreach (TextAsset textAsset in aotGroup.aotAssemblies)
+            foreach (TextAsset textAsset in aotGroup.AotAssemblies)
             {
                 RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HomologousImageMode.Consistent);
             }

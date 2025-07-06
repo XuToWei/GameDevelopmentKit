@@ -5,5 +5,6 @@
         public const string Hotfix = "ETHotfixProjectAnalyzers";
         public const string Model = "ETModelProjectAnalyzers";
         public const string All = "ETAllProjectAnalyzers";
+        public const string Custom = "CustomProjectAnalyzers";
     }
 }
