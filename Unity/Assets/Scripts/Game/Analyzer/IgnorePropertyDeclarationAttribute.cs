@@ -8,6 +8,6 @@ namespace Game
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class IgnorePropertyDeclarationAttribute : Attribute
     {
-        
+
     }
 }

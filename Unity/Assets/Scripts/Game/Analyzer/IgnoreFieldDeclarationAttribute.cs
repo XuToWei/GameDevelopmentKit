@@ -8,6 +8,6 @@ namespace Game
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class IgnoreFieldDeclarationAttribute : Attribute
     {
-        
+
     }
 }
