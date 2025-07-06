@@ -12,19 +12,19 @@ using NetworkCustomErrorEventArgs = UnityGameFramework.Runtime.NetworkCustomErro
 
 namespace UnityGameFramework.Extension
 {
-    public sealed class ServiceNetworkComponent : GameFrameworkComponent
+    public sealed class NetworkServiceComponent : GameFrameworkComponent
     {
-        private IServiceNetworkHelper m_ServiceNetworkHelper = null;
+        private INetworkServiceHelper m_NetworkServiceHelper = null;
         
         public bool Connected
         {
             get
             {
-                if (m_ServiceNetworkHelper == null)
+                if (m_NetworkServiceHelper == null)
                 {
                     throw new GameFrameworkException("ServiceNetwork helper is invalid.");
                 }
-                return m_ServiceNetworkHelper.Connected;
+                return m_NetworkServiceHelper.Connected;
             }
         }
 
@@ -124,119 +124,119 @@ namespace UnityGameFramework.Extension
             OnCustomError(webSocketCustomErrorEventArgs.CustomErrorData.ToString(), webSocketCustomErrorEventArgs.WebSocketChannel);
         }
 
-        public void InitServiceNetworkHelper(IServiceNetworkHelper serviceNetworkHelper)
+        public void InitServiceNetworkHelper(INetworkServiceHelper serviceNetworkHelper)
         {
             if (serviceNetworkHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
 
-            m_ServiceNetworkHelper = serviceNetworkHelper;
+            m_NetworkServiceHelper = serviceNetworkHelper;
         }
 
         public void Connect()
         {
-            if (m_ServiceNetworkHelper == null)
+            if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
 
-            m_ServiceNetworkHelper.Connect();
+            m_NetworkServiceHelper.Connect();
         }
 
         public void Disconnect()
         {
-            if (m_ServiceNetworkHelper == null)
+            if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
 
-            m_ServiceNetworkHelper.Disconnect();
+            m_NetworkServiceHelper.Disconnect();
         }
 
         public void Send<T>(T packet) where T : Packet
         {
-            if (m_ServiceNetworkHelper == null)
+            if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
 
-            m_ServiceNetworkHelper.Send(packet);
+            m_NetworkServiceHelper.Send(packet);
         }
 
         private void OnConnected(object channel)
         {
-            if (m_ServiceNetworkHelper == null)
+            if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
 
-            if(!m_ServiceNetworkHelper.IsChannel(channel))
+            if(!m_NetworkServiceHelper.IsChannel(channel))
             {
                 return;
             }
 
-            m_ServiceNetworkHelper.OnConnected();
+            m_NetworkServiceHelper.OnConnected();
         }
 
         private void OnDisconnected(object channel)
         {
-            if (m_ServiceNetworkHelper == null)
+            if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
 
-            if(!m_ServiceNetworkHelper.IsChannel(channel))
+            if(!m_NetworkServiceHelper.IsChannel(channel))
             {
                 return;
             }
 
-            m_ServiceNetworkHelper.OnDisconnected();
+            m_NetworkServiceHelper.OnDisconnected();
         }
 
         private void OnMissHeartBeat(object channel)
         {
-            if (m_ServiceNetworkHelper == null)
+            if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
 
-            if(!m_ServiceNetworkHelper.IsChannel(channel))
+            if(!m_NetworkServiceHelper.IsChannel(channel))
             {
                 return;
             }
 
-            m_ServiceNetworkHelper.OnMissHeartBeat();
+            m_NetworkServiceHelper.OnMissHeartBeat();
         }
 
         private void OnError(string errorMessage, object channel)
         {
-            if (m_ServiceNetworkHelper == null)
+            if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
 
-            if(!m_ServiceNetworkHelper.IsChannel(channel))
+            if(!m_NetworkServiceHelper.IsChannel(channel))
             {
                 return;
             }
 
-            m_ServiceNetworkHelper.OnError(errorMessage);
+            m_NetworkServiceHelper.OnError(errorMessage);
         }
 
         private void OnCustomError(string customErrorData, object channel)
         {
-            if (m_ServiceNetworkHelper == null)
+            if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
 
-            if(!m_ServiceNetworkHelper.IsChannel(channel))
+            if(!m_NetworkServiceHelper.IsChannel(channel))
             {
                 return;
             }
 
-            m_ServiceNetworkHelper.OnCustomError(customErrorData);
+            m_NetworkServiceHelper.OnCustomError(customErrorData);
         }
     }
 }

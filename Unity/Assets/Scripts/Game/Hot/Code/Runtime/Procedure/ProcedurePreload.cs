@@ -8,13 +8,13 @@ namespace Game.Hot
 {
     public class ProcedurePreload : ProcedureBase
     {
-        protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
+        protected override void OnEnter(IFsm<ProcedureComponent> procedureOwner)
         {
             base.OnEnter(procedureOwner);
             PreloadAsync(procedureOwner).Forget();
         }
 
-        private async UniTaskVoid PreloadAsync(IFsm<ProcedureManager> procedureOwner)
+        private async UniTaskVoid PreloadAsync(IFsm<ProcedureComponent> procedureOwner)
         {
             await Tables.Instance.LoadAllAsync();
             Log.Info("Game.Hot.Code Load Config!");

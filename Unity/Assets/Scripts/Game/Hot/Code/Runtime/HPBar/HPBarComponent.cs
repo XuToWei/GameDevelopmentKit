@@ -14,7 +14,7 @@ using UnityGameFramework.Runtime;
 
 namespace Game.Hot
 {
-    public class HPBarManager : GameHotModule
+    public sealed class HPBarComponent : HotComponent
     {
         private HPBarItem m_HPBarItemTemplate;
         
@@ -39,19 +39,19 @@ namespace Game.Hot
             m_InstancePoolCapacity = 16;
         }
 
-        protected internal override void Initialize()
+        protected override void OnInitialize()
         {
             m_HPBarItemObjectPool = GameEntry.ObjectPool.CreateSingleSpawnObjectPool<HPBarItemObject>("HPBarItem", m_InstancePoolCapacity);
             m_ActiveHPBarItems = new List<HPBarItem>();
         }
 
-        protected internal override void Shutdown()
+        protected override void OnShutdown()
         {
             GameEntry.Resource.UnloadAsset(m_HPBarItemAssetObj);
             GameEntry.Resource.UnloadAsset(m_HPBarInstancesAssetObj);
         }
 
-        protected internal override void Update(float elapseSeconds, float realElapseSeconds)
+        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             for (int i = m_ActiveHPBarItems.Count - 1; i >= 0; i--)
             {

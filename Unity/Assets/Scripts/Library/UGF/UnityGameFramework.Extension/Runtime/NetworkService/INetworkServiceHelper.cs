@@ -2,7 +2,7 @@
 
 namespace UnityGameFramework.Extension
 {
-    public interface IServiceNetworkHelper
+    public interface INetworkServiceHelper
     {
         bool Connected { get; }
         bool IsChannel(object channel);

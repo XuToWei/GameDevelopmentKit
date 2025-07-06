@@ -19,7 +19,7 @@ namespace Game.Hot
         private bool m_IsChangeSceneComplete = false;
         private int m_BackgroundMusicId = 0;
 
-        protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
+        protected override void OnEnter(IFsm<ProcedureComponent> procedureOwner)
         {
             base.OnEnter(procedureOwner);
 
@@ -61,7 +61,7 @@ namespace Game.Hot
             m_BackgroundMusicId = drScene.BackgroundMusicId;
         }
 
-        protected override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
+        protected override void OnLeave(IFsm<ProcedureComponent> procedureOwner, bool isShutdown)
         {
             GameEntry.Event.Unsubscribe(LoadSceneSuccessEventArgs.EventId, OnLoadSceneSuccess);
             GameEntry.Event.Unsubscribe(LoadSceneFailureEventArgs.EventId, OnLoadSceneFailure);
@@ -71,7 +71,7 @@ namespace Game.Hot
             base.OnLeave(procedureOwner, isShutdown);
         }
 
-        protected override void OnUpdate(IFsm<ProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
+        protected override void OnUpdate(IFsm<ProcedureComponent> procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 

@@ -17,35 +17,8 @@ namespace Game.Hot
             private set;
         }
 
-        private class Runner : MonoBehaviour
-        {
-            private void Update()
-            {
-                GameHot.Update();
-            }
-
-            private void LateUpdate()
-            {
-                GameHot.LateUpdate();
-            }
-
-            private void OnDestroy()
-            {
-                GameHot.OnShutdown();
-            }
-
-            private void OnApplicationPause(bool pauseStatus)
-            {
-                GameHot.OnApplicationPause(pauseStatus);
-            }
-
-            private void OnApplicationFocus(bool hasFocus)
-            {
-                GameHot.OnApplicationFocus(hasFocus);
-            }
-        }
-
-        private Runner m_RunnerComponent;
+        private GameObject m_HotEntryAsset;
+        private GameObject m_HotEntryGameObject;
 
         private void Awake()
         {
@@ -59,40 +32,28 @@ namespace Game.Hot
 
         private void OnDestroy()
         {
-            if (this.m_RunnerComponent != null)
+            if (this.m_HotEntryGameObject != null)
             {
-                DestroyImmediate(this.m_RunnerComponent);
+                DestroyImmediate(this.m_HotEntryGameObject);
+                this.m_HotEntryGameObject = null;
+            }
+            if (this.m_HotEntryAsset != null)
+            {
+                GameEntry.Resource.UnloadAsset(this.m_HotEntryAsset);
+                m_HotEntryAsset = null;
             }
         }
 
         private async UniTaskVoid StartAsync()
         {
-            Assembly assembly = null;
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
+            //AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
             if (Define.EnableHotfix && GameEntry.CodeRunner.EnableCodeBytesMode)
             {
-                byte[] assBytes = await LoadCodeBytesAsync("Game.Hot.Code.dll.bytes");
-                byte[] pdbBytes = await LoadCodeBytesAsync("Game.Hot.Code.pdb.bytes");
-                assembly = Assembly.Load(assBytes, pdbBytes);
+                await LoadCodeBytesAsync("Game.Hot.Code.dll.bytes");
+                await LoadCodeBytesAsync("Game.Hot.Code.pdb.bytes");
             }
-            else
-            {
-                Assembly[] assemblies = Utility.Assembly.GetAssemblies();
-                foreach (Assembly ass in assemblies)
-                {
-                    string name = ass.GetName().Name;
-                    if (name == "Game.Hot.Code")
-                    {
-                        assembly = ass;
-                        break;
-                    }
-                }
-            }
-            
-            MethodInfo methodInfo = assembly.GetType("Game.Hot.HotEntry").GetMethod("Start");
-            methodInfo.Invoke(null, null);
-            
-            this.m_RunnerComponent = this.gameObject.AddComponent<Runner>();
+            this.m_HotEntryAsset = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetGameHotAsset("HotEntry.prefab"));
+            this.m_HotEntryGameObject = GameObject.Instantiate(this.m_HotEntryAsset, GameEntry.CodeRunner.transform);
         }
         
         private async UniTask<byte[]> LoadCodeBytesAsync(string fileName)
