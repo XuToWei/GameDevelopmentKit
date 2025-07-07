@@ -56,8 +56,7 @@ namespace ET.Analyzer
             }
             
             //针对配置相对目录做屏蔽
-            string filePath = context.Node.SyntaxTree.FilePath.Replace('\\', '/').Replace("//", "/");
-            if (AnalyzerGlobalSetting.EnableClassIgnoreDirNames.Any(dir => filePath.Contains(dir.Replace('\\', '/').Replace("//", "/"))))
+            if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.EnableClassIgnorePathNames))
             {
                 return;
             }

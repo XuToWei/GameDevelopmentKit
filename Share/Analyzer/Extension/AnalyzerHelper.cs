@@ -593,5 +593,29 @@ namespace ET.Analyzer
             string typeName = namedTypeSymbol.Name;
             return typeName is Definition.EntityRefType or Definition.EntityWeakRefType;
         }
+
+        /// <summary>
+        /// 检查是不是过滤路径
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="filterPaths"></param>
+        /// <returns></returns>
+        public static bool IsFilterPath(this string filePath, HashSet<string> filterPaths)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return false;
+            }
+            filePath = filePath.Replace('\\', '/').Replace("//", "/");
+            foreach (string path in filterPaths)
+            {
+                string normalizedPath = path.Replace('\\', '/').Replace("//", "/");
+                if (filePath.Contains(normalizedPath))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

@@ -41,6 +41,10 @@ namespace ET.Analyzer
              {
                  return;
              }
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             {
+                 return;
+             }
              if (context.Node is not ClassDeclarationSyntax declaration)
              {
                  return;
@@ -62,6 +66,10 @@ namespace ET.Analyzer
          private void StructDeclarationAnalyzeNode(SyntaxNodeAnalysisContext context)
          {
              if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameAll))
+             {
+                 return;
+             }
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
              {
                  return;
              }
@@ -89,6 +97,10 @@ namespace ET.Analyzer
              {
                  return;
              }
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             {
+                 return;
+             }
              if (context.Node is not InterfaceDeclarationSyntax declaration)
              {
                  return;
@@ -110,6 +122,10 @@ namespace ET.Analyzer
          private void EnumDeclarationAnalyzeNode(SyntaxNodeAnalysisContext context)
          {
              if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameAll))
+             {
+                 return;
+             }
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
              {
                  return;
              }
@@ -137,6 +153,10 @@ namespace ET.Analyzer
              const string IGNORE_UGUI_FIELD_ATTRIBUTE = "Game.IgnoreFieldDeclarationAttribute";
 
              if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameAll))
+             {
+                 return;
+             }
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
              {
                  return;
              }
@@ -192,6 +212,10 @@ namespace ET.Analyzer
              {
                  return;
              }
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             {
+                 return;
+             }
              if (context.Node is not PropertyDeclarationSyntax declaration)
              {
                  return;
@@ -235,6 +259,10 @@ namespace ET.Analyzer
              {
                  return;
              }
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             {
+                 return;
+             }
              if (context.Node is not LocalDeclarationStatementSyntax declaration)
              {
                  return;
@@ -270,6 +298,10 @@ namespace ET.Analyzer
              {
                  return;
              }
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             {
+                 return;
+             }
              if (context.Node is not LocalFunctionStatementSyntax declaration)
              {
                  return;
@@ -291,6 +323,10 @@ namespace ET.Analyzer
          private void MethodDeclarationAnalyzeNode(SyntaxNodeAnalysisContext context)
          {
              if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameAll))
+             {
+                 return;
+             }
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
              {
                  return;
              }
