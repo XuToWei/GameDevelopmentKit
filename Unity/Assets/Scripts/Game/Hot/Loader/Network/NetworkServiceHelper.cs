@@ -4,7 +4,7 @@ using UnityGameFramework.Extension;
 
 namespace Game
 {
-    public class ServiceNetworkHelper : INetworkServiceHelper
+    public class NetworkServiceHelper : INetworkServiceHelper
     {
         private IWebSocketChannel m_WebSocketChannel;
         
