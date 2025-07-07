@@ -2,15 +2,17 @@
 <UnityGameFramework>
   <ResourceBuilder>
     <Settings>
-      <InternalResourceVersion>1</InternalResourceVersion>
+      <InternalResourceVersion>0</InternalResourceVersion>
       <Platforms>2</Platforms>
       <AssetBundleCompression>1</AssetBundleCompression>
       <CompressionHelperTypeName>UnityGameFramework.Runtime.DefaultCompressionHelper</CompressionHelperTypeName>
       <AdditionalCompressionSelected>True</AdditionalCompressionSelected>
-      <ForceRebuildAssetBundleSelected>False</ForceRebuildAssetBundleSelected>
+      <ForceRebuildAssetBundleSelected>True</ForceRebuildAssetBundleSelected>
+      <DisableWriteTypeTreeSelected>True</DisableWriteTypeTreeSelected>
       <BuildEventHandlerTypeName>UnityGameFramework.Extension.Editor.BuildEventHandle</BuildEventHandlerTypeName>
       <OutputDirectory>../Temp/Bundle</OutputDirectory>
       <OutputPackageSelected>True</OutputPackageSelected>
+      <OutputPackageWithMD5>False</OutputPackageWithMD5>
       <OutputFullSelected>False</OutputFullSelected>
       <OutputPackedSelected>False</OutputPackedSelected>
     </Settings>

@@ -17,6 +17,17 @@ namespace UnityGameFramework.Extension
     /// </summary>
     public class WebGLLoadResourceAgentHelper : LoadResourceAgentHelperBase, IDisposable
     {
+        private ResourceComponent m_ResourceComponent = null;
+
+        private ResourceComponent GetResourceComponent()
+        {
+            if (m_ResourceComponent == null)
+            {
+                m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
+            }
+            return m_ResourceComponent;
+        }
+
         private string m_FileFullPath = null;
         private string m_FileName = null;
         private string m_BytesFullPath = null;
@@ -181,34 +192,38 @@ namespace UnityGameFramework.Extension
                 return;
             }
 #if UNITY_WEBGL && !UNITY_EDITOR
-            byte[] bytes = null;
-            bool isError = false;
-            string errorMessage = null;
-            try
+            if(GetResourceComponent().ResourceMode != ResourceMode.Package)
             {
-                bytes = System.IO.File.ReadAllBytes(fullPath);
-            }
-            catch (Exception e)
-            {
-                isError = true;
-                errorMessage = e.Message;
-            }
+                byte[] bytes = null;
+                bool isError = false;
+                string errorMessage = null;
+                try
+                {
+                    bytes = System.IO.File.ReadAllBytes(fullPath);
+                }
+                catch (Exception e)
+                {
+                    isError = true;
+                    errorMessage = e.Message;
+                }
 
-            if (isError)
-            {
-                LoadResourceAgentHelperErrorEventArgs loadResourceAgentHelperErrorEventArgs = LoadResourceAgentHelperErrorEventArgs.Create(LoadResourceStatus.NotExist, Utility.Text.Format("Can not load asset bundle '{0}' with error message '{1}'.", m_BytesFullPath, errorMessage));
-                m_LoadResourceAgentHelperErrorEventHandler(this, loadResourceAgentHelperErrorEventArgs);
-                ReferencePool.Release(loadResourceAgentHelperErrorEventArgs);
+                if (isError)
+                {
+                    LoadResourceAgentHelperErrorEventArgs loadResourceAgentHelperErrorEventArgs = LoadResourceAgentHelperErrorEventArgs.Create(LoadResourceStatus.NotExist, Utility.Text.Format("Can not load asset bundle '{0}' with error message '{1}'.", m_BytesFullPath, errorMessage));
+                    m_LoadResourceAgentHelperErrorEventHandler(this, loadResourceAgentHelperErrorEventArgs);
+                    ReferencePool.Release(loadResourceAgentHelperErrorEventArgs);
+                }
+                else
+                {
+                    LoadResourceAgentHelperReadBytesCompleteEventArgs loadResourceAgentHelperReadBytesCompleteEventArgs = LoadResourceAgentHelperReadBytesCompleteEventArgs.Create(bytes);
+                    m_LoadResourceAgentHelperReadBytesCompleteEventHandler(this, loadResourceAgentHelperReadBytesCompleteEventArgs);
+                    ReferencePool.Release(loadResourceAgentHelperReadBytesCompleteEventArgs);
+                    m_BytesFullPath = null;
+                    m_LastProgress = 0f;
+                }
+                return;
             }
-            else
-            {
-                LoadResourceAgentHelperReadBytesCompleteEventArgs loadResourceAgentHelperReadBytesCompleteEventArgs = LoadResourceAgentHelperReadBytesCompleteEventArgs.Create(bytes);
-                m_LoadResourceAgentHelperReadBytesCompleteEventHandler(this, loadResourceAgentHelperReadBytesCompleteEventArgs);
-                ReferencePool.Release(loadResourceAgentHelperReadBytesCompleteEventArgs);
-                m_BytesFullPath = null;
-                m_LastProgress = 0f;
-            }
-#else
+#endif
             m_BytesFullPath = fullPath;
 #if UNITY_5_4_OR_NEWER
             m_UnityWebRequest = UnityWebRequest.Get(Utility.Path.GetRemotePath(fullPath));
@@ -219,7 +234,6 @@ namespace UnityGameFramework.Extension
 #endif
 #else
             m_WWW = new WWW(Utility.Path.GetRemotePath(fullPath));
-#endif
 #endif
         }
 

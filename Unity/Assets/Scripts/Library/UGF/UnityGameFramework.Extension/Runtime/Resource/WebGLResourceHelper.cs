@@ -16,6 +16,17 @@ namespace UnityGameFramework.Extension
     /// </summary>
     public class WebGLResourceHelper : ResourceHelperBase
     {
+        private ResourceComponent m_ResourceComponent = null;
+
+        private ResourceComponent GetResourceComponent()
+        {
+            if (m_ResourceComponent == null)
+            {
+                m_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
+            }
+            return m_ResourceComponent;
+        }
+
         /// <summary>
         /// 直接从指定文件路径加载数据流。
         /// </summary>
@@ -25,7 +36,14 @@ namespace UnityGameFramework.Extension
         public override void LoadBytes(string fileUri, LoadBytesCallbacks loadBytesCallbacks, object userData)
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            LoadBytesForWebGL(fileUri, loadBytesCallbacks, userData);
+            if(GetResourceComponent().ResourceMode == ResourceMode.Package)
+            {
+                StartCoroutine(LoadBytesCo(fileUri, loadBytesCallbacks, userData));
+            }
+            else
+            {
+                LoadBytesByFileRead(fileUri, loadBytesCallbacks, userData);
+            }
 #else
             StartCoroutine(LoadBytesCo(fileUri, loadBytesCallbacks, userData));
 #endif
@@ -108,7 +126,7 @@ namespace UnityGameFramework.Extension
         }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        private void LoadBytesForWebGL(string fileUri, LoadBytesCallbacks loadBytesCallbacks, object userData)
+        private void LoadBytesByFileRead(string fileUri, LoadBytesCallbacks loadBytesCallbacks, object userData)
         {
             bool isError = false;
             byte[] bytes = null;
