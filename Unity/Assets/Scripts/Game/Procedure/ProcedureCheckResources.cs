@@ -1,4 +1,5 @@
-﻿using UnityGameFramework.Runtime;
+﻿using GameFramework.Resource;
+using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
 namespace Game
@@ -31,7 +32,8 @@ namespace Game
                 return;
             }
 
-            if (m_NeedUpdateResources)
+            // 边下边玩的资源在运行时更新
+            if (m_NeedUpdateResources && GameEntry.Resource.ResourceMode == ResourceMode.Updatable)
             {
                 procedureOwner.SetData<VarInt32>("UpdateResourceCount", m_UpdateResourceCount);
                 procedureOwner.SetData<VarInt64>("UpdateResourceTotalCompressedLength", m_UpdateResourceTotalCompressedLength);
