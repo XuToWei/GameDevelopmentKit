@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Hot.Editor
 {
-    internal sealed class CompileDllToolBar_UGFHotfix
+    internal sealed class CompileDllToolBar_GameHot
     {
         private static readonly GUIContent s_ButtonGUIContent = new GUIContent("HotCompile", "Compile GameHot Dll.");
 
