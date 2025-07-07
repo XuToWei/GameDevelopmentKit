@@ -42,7 +42,7 @@ namespace Game.Editor
                 hybridCLRConfig = ScriptableObject.CreateInstance<HybridCLRConfig>();
                 AssetDatabase.CreateAsset(hybridCLRConfig, HybridCLRHelper.ConfigAsset);
             }
-            hybridCLRConfig.aotAssemblies = aotAssemblyList.ToArray();
+            hybridCLRConfig.SetAotAssemblies(aotAssemblyList);
             EditorUtility.SetDirty(hybridCLRConfig);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);

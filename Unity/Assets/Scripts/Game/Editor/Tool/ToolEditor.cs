@@ -14,15 +14,15 @@ namespace Game.Editor
             async UniTaskVoid RunAsync()
             {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-                const string tools = "./Tool";
+                const string TOOL = "./Tool";
 #else
-                const string tools = ".\\Tool.exe";
+                const string TOOL = ".\\Tool.exe";
 #endif
                 Stopwatch stopwatch = Stopwatch.StartNew();
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-                await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1", "../Bin/", environmentVars: new List<string>() { "/usr/local/share/dotnet" });
+                await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1", "../Bin/", environmentVars: new List<string>() { "/usr/local/share/dotnet" });
 #else
-                await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=GB2312", "../Bin/");
+                await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1 --Customs=GB2312", "../Bin/");
 #endif
                 stopwatch.Stop();
                 UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
@@ -45,15 +45,15 @@ namespace Game.Editor
             async UniTaskVoid RunAsync()
             {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-                const string tools = "./Tool";
+                const string TOOL = "./Tool";
 #else
-                const string tools = ".\\Tool.exe";
+                const string TOOL = ".\\Tool.exe";
 #endif
                 Stopwatch stopwatch = Stopwatch.StartNew();
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-                await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=Json", "../Bin/");
+                await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1 --Customs=Json", "../Bin/");
 #else
-                await ShellTool.RunAsync($"{tools} --AppType=ExcelExporter --Console=1 --Customs=Json,GB2312", "../Bin/");
+                await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1 --Customs=Json,GB2312", "../Bin/");
 #endif
                 stopwatch.Stop();
                 UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
@@ -74,11 +74,11 @@ namespace Game.Editor
         public static void Proto2CS()
         {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-            const string tools = "./Tool";
+            const string TOOL = "./Tool";
 #else
-            const string tools = ".\\Tool.exe";
+            const string TOOL = ".\\Tool.exe";
 #endif
-            ShellTool.Run($"{tools} --AppType=Proto2CS --Console=1", "../Bin/");
+            ShellTool.Run($"{TOOL} --AppType=Proto2CS --Console=1", "../Bin/");
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
         

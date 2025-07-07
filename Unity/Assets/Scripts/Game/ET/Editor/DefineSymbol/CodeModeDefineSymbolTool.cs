@@ -11,16 +11,13 @@ namespace ET.Editor
         private const string CodePath = "Assets/Scripts/Game/ET/Code";
         private static string s_IgnoreAsmdefTemplate;
 
-        private static string IgnoreAsmdefTemplate
+        private static string GetIgnoreAsmdefTemplate()
         {
-            get
+            if (string.IsNullOrEmpty(s_IgnoreAsmdefTemplate))
             {
-                if (string.IsNullOrEmpty(s_IgnoreAsmdefTemplate))
-                {
-                    s_IgnoreAsmdefTemplate = File.ReadAllText("Assets/Res/Editor/ET/Config/IgnoreAsmdefTemplate.txt");
-                }
-                return s_IgnoreAsmdefTemplate;
+                s_IgnoreAsmdefTemplate = File.ReadAllText("Assets/Res/Editor/ET/Config/IgnoreAsmdefTemplate.txt");
             }
+            return s_IgnoreAsmdefTemplate;
         }
 
 #if UNITY_ET_CODEMODE_CLIENT
@@ -227,7 +224,7 @@ namespace ET.Editor
         static void AddAsmdefFile(string file, string asmdefName)
         {
             RemoveAsmdefFile(file);
-            string content = IgnoreAsmdefTemplate.Replace("$asmdefName$", asmdefName);
+            string content = GetIgnoreAsmdefTemplate().Replace("$asmdefName$", asmdefName);
             File.WriteAllText(file, content);
         }
         

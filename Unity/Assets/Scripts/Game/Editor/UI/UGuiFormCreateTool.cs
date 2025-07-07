@@ -4,12 +4,12 @@ namespace Game.Editor
 {
     public static class UGuiFormCreateTool
     {
-        private static readonly string UGuiFormTemplate = "Assets/Res/Editor/UI/UGuiTemplateForm.prefab";
+        private static readonly string s_UGuiFormTemplate = "Assets/Res/Editor/UI/UGuiTemplateForm.prefab";
         
         [MenuItem("GameObject/UI/UGuiForm", false, UIEditorDefine.MenuPriority)]
         public static void CreateUGuiForm()
         {
-            UnityEngine.GameObject obj = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<UnityEngine.GameObject>(UGuiFormTemplate));
+            UnityEngine.GameObject obj = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<UnityEngine.GameObject>(s_UGuiFormTemplate));
             obj.name = "UIForm";
             UnityEngine.RectTransform rectTransform = obj.GetComponent<UnityEngine.RectTransform>();
             rectTransform.SetParent(Selection.activeTransform);

@@ -5,6 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System;
 using GameFramework;
 using System.Collections.Generic;
 
@@ -186,7 +187,7 @@ namespace UnityGameFramework.Editor.ResourceTools
 
         private int AssetComparer(Asset a, Asset b)
         {
-            return a.Guid.CompareTo(b.Guid);
+            return String.Compare(a.Guid, b.Guid, StringComparison.Ordinal);
         }
     }
 }

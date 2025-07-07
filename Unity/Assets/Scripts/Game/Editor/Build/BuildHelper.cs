@@ -20,7 +20,7 @@ namespace Game.Editor
             Debug.Log("ReGenerateProjectFiles finished.");
         }
 
-        public static void BuildPkg(Platform platform)
+        public static BuildReport BuildPkg(Platform platform)
         {
             BuildTarget buildTarget = BuildTarget.NoTarget;
             string appName = Application.productName;
@@ -93,7 +93,11 @@ namespace Game.Editor
                 throw new GameFrameworkException($"build pkg fail : { buildReport.summary.result }");
             }
             Debug.Log($"finish build pkg at {locationPathName}");
-            EditorUtility.OpenWithDefaultApp(fold);
+            if (!Application.isBatchMode)
+            {
+                EditorUtility.OpenWithDefaultApp(fold);
+            }
+            return buildReport;
         }
 
         public static void BuildResource(Platform platform)

@@ -25,21 +25,21 @@ namespace Game.Hot
             m_GotoMenu = true;
         }
 
-        protected override void OnInit(IFsm<ProcedureManager> procedureOwner)
+        protected override void OnInit(IFsm<ProcedureComponent> procedureOwner)
         {
             base.OnInit(procedureOwner);
 
             m_Games.Add(GameMode.Survival, new SurvivalGame());
         }
 
-        protected override void OnDestroy(IFsm<ProcedureManager> procedureOwner)
+        protected override void OnDestroy(IFsm<ProcedureComponent> procedureOwner)
         {
             base.OnDestroy(procedureOwner);
 
             m_Games.Clear();
         }
 
-        protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
+        protected override void OnEnter(IFsm<ProcedureComponent> procedureOwner)
         {
             base.OnEnter(procedureOwner);
 
@@ -49,7 +49,7 @@ namespace Game.Hot
             m_CurrentGame.Initialize();
         }
 
-        protected override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
+        protected override void OnLeave(IFsm<ProcedureComponent> procedureOwner, bool isShutdown)
         {
             if (m_CurrentGame != null)
             {
@@ -60,7 +60,7 @@ namespace Game.Hot
             base.OnLeave(procedureOwner, isShutdown);
         }
 
-        protected override void OnUpdate(IFsm<ProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
+        protected override void OnUpdate(IFsm<ProcedureComponent> procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 

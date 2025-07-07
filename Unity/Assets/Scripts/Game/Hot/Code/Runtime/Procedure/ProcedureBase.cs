@@ -1,12 +1,12 @@
 using GameFramework.Fsm;
-using ProcedureOwner = GameFramework.Fsm.IFsm<Game.Hot.ProcedureManager>;
+using ProcedureOwner = GameFramework.Fsm.IFsm<Game.Hot.ProcedureComponent>;
 
 namespace Game.Hot
 {
     /// <summary>
     /// 流程基类。
     /// </summary>
-    public abstract class ProcedureBase : FsmState<ProcedureManager>
+    public abstract class ProcedureBase : FsmState<ProcedureComponent>
     {
         /// <summary>
         /// 状态初始化时调用。

@@ -4,7 +4,8 @@
     "references": [
         "GameFramework",
         "UnityGameFramework.Runtime",
-        "UniTask"
+        "UniTask",
+        "UnityWebSocket.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

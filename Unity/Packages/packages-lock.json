@@ -99,6 +99,13 @@
       "dependencies": {},
       "hash": "f4b39aad95edd3350f8f06567c9d07168ac941ec"
     },
+    "com.psygames.unitywebsocket": {
+      "version": "https://github.com/psygames/UnityWebSocket.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "369f2a56f68e7a133d3d1acfdc26d4693cd74497"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
