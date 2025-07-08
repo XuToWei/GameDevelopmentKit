@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace Game.Editor
 {
-    public static class ToolEditor
+    public static class EditorTool
     {
         [MenuItem("Game/Tool/ExcelExporter")]
         public static void ExcelExporter()
