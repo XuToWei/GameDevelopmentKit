@@ -25,7 +25,7 @@ namespace UnityGameFramework.Extension.Editor
         public static string GetNewCombineName(List<string> currentCombineBundle)
         {
             var newCombine = string.Join("@@", currentCombineBundle);
-            return $"Auto/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
+            return Utility.Text.Format("Auto/Combine/{0:x8}", Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine)));
         }
 
         private ResourceCollection m_ResourceCollection;
