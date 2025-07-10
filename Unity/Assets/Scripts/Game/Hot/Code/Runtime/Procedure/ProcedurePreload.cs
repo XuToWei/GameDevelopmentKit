@@ -16,7 +16,7 @@ namespace Game.Hot
 
         private async UniTaskVoid PreloadAsync(IFsm<ProcedureComponent> procedureOwner)
         {
-            await Tables.Instance.LoadAllAsync();
+            await HotEntry.Tables.LoadAllAsync();
             Log.Info("Game.Hot.Code Load Config!");
             
             await HotEntry.HPBar.PreloadAsync();

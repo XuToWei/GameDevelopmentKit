@@ -32,7 +32,7 @@ public partial class DTThruster : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRThruster _v;
-            _v = DRThruster.DeserializeDRThruster(_buf);
+            _v = global::Game.Hot.DRThruster.DeserializeDRThruster(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -45,7 +45,7 @@ public partial class DTThruster : IDataTable
     public DRThruster Get(int key) => _dataMap[key];
     public DRThruster this[int key] => _dataMap[key];
 
-    public void ResolveRef(Tables tables)
+    public void ResolveRef(TablesComponent tables)
     {
         foreach(var _v in _dataList)
         {

@@ -36,10 +36,8 @@ public sealed partial class DRThruster : Luban.BeanBase
     public const int __ID__ = -1106796109;
     public override int GetTypeId() => __ID__;
 
-    public  void ResolveRef(Tables tables)
+    public  void ResolveRef(TablesComponent tables)
     {
-        
-        
         PostResolveRef();
     }
 

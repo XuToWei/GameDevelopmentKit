@@ -56,14 +56,8 @@ public sealed partial class DRAircraft : Luban.BeanBase
     public const int __ID__ = 1010378180;
     public override int GetTypeId() => __ID__;
 
-    public  void ResolveRef(Tables tables)
+    public  void ResolveRef(TablesComponent tables)
     {
-        
-        
-        
-        
-        
-        
         PostResolveRef();
     }
 

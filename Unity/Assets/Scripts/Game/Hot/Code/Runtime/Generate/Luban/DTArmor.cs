@@ -32,7 +32,7 @@ public partial class DTArmor : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRArmor _v;
-            _v = DRArmor.DeserializeDRArmor(_buf);
+            _v = global::Game.Hot.DRArmor.DeserializeDRArmor(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -45,7 +45,7 @@ public partial class DTArmor : IDataTable
     public DRArmor Get(int key) => _dataMap[key];
     public DRArmor this[int key] => _dataMap[key];
 
-    public void ResolveRef(Tables tables)
+    public void ResolveRef(TablesComponent tables)
     {
         foreach(var _v in _dataList)
         {

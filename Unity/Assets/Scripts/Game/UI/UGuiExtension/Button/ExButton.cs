@@ -12,11 +12,10 @@ namespace Game
     public class ExButton : Button
     {
         public static event Action AllButtonOnPointerDownEvent;
-        
+
         [Serializable]
         public class ButtonOnPointerDownEvent : UnityEvent {}
-        
-        [FormerlySerializedAs("onPointerDown")]
+
         [SerializeField]
         private ButtonOnPointerDownEvent m_OnPointerDown = new ButtonOnPointerDownEvent();
 

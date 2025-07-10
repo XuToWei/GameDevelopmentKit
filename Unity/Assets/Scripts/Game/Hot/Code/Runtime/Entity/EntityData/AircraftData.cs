@@ -38,7 +38,7 @@ namespace Game.Hot
         public AircraftData(int entityId, int typeId, CampType camp)
             : base(entityId, typeId, camp)
         {
-            DRAircraft drAircraft = Tables.Instance.DTAircraft.GetOrDefault(TypeId);
+            DRAircraft drAircraft = HotEntry.Tables.DTAircraft.GetOrDefault(TypeId);
             if (drAircraft == null)
             {
                 return;

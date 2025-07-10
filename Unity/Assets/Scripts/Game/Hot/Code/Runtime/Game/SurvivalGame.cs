@@ -32,7 +32,7 @@ namespace Game.Hot
                 m_ElapseSeconds = 0f;
                 float randomPositionX = m_SceneBackground.EnemySpawnBoundary.bounds.min.x + m_SceneBackground.EnemySpawnBoundary.bounds.size.x * (float)Utility.Random.GetRandomDouble();
                 float randomPositionZ = m_SceneBackground.EnemySpawnBoundary.bounds.min.z + m_SceneBackground.EnemySpawnBoundary.bounds.size.z * (float)Utility.Random.GetRandomDouble();
-                GameEntry.Entity.ShowAsteroid(new AsteroidData(GameEntry.Entity.GenerateSerialId(), 60000 + Utility.Random.GetRandom(Tables.Instance.DTAsteroid.DataList.Count))
+                GameEntry.Entity.ShowAsteroid(new AsteroidData(GameEntry.Entity.GenerateSerialId(), 60000 + Utility.Random.GetRandom(HotEntry.Tables.DTAsteroid.DataList.Count))
                 {
                     Position = new Vector3(randomPositionX, 0f, randomPositionZ),
                 });

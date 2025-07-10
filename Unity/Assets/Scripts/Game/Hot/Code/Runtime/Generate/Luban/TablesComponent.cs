@@ -11,7 +11,7 @@ using Luban;
 
 namespace Game.Hot
 {
-public partial class Tables
+public partial class TablesComponent
 {
     public DTOneConfig DTOneConfig { private set; get; }
     public DTAircraft DTAircraft { private set; get; }

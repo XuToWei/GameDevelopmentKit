@@ -79,7 +79,7 @@ namespace Game.Hot
             m_GotoMenuDelaySeconds += elapseSeconds;
             if (m_GotoMenuDelaySeconds >= GameOverDelayedSeconds)
             {
-                procedureOwner.SetData<VarInt32>("NextSceneId", Tables.Instance.DTOneConfig.SceneMenu);
+                procedureOwner.SetData<VarInt32>("NextSceneId", HotEntry.Tables.DTOneConfig.SceneMenu);
                 ChangeState<ProcedureChangeScene>(procedureOwner);
             }
         }

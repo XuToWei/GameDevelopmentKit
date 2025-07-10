@@ -9,10 +9,8 @@ using UnityGameFramework.Extension;
 
 namespace Game.Hot
 {
-    public partial class Tables
+    public partial class TablesComponent : HotComponent
     {
-        public static Tables Instance { get; } = new Tables();
-        
         public async UniTask LoadAllAsync()
         {
             Type tablesType = this.GetType();
@@ -28,7 +26,9 @@ namespace Game.Hot
                 {
                     string lubanAssetFile = AssetUtility.GetGameHotAsset(Utility.Text.Format("Luban/{0}.bytes", file));
                     TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(lubanAssetFile);
-                    return new ByteBuf(textAsset.bytes);
+                    ByteBuf byteBuf = new ByteBuf(textAsset.bytes);
+                    GameEntry.Resource.UnloadAsset(textAsset);
+                    return byteBuf;
                 }
 
                 Func<string, UniTask<ByteBuf>> func = LoadByteBuf;
@@ -40,12 +40,29 @@ namespace Game.Hot
                 {
                     string lubanAssetFile = AssetUtility.GetGameHotAsset(Utility.Text.Format("Luban/{0}.json", file));
                     TextAsset textAsset = await GameEntry.Resource.LoadAssetAsync<TextAsset>(lubanAssetFile);
-                    return JSON.Parse(textAsset.text);
+                    JSONNode jsonNode = JSON.Parse(textAsset.text);
+                    GameEntry.Resource.UnloadAsset(textAsset);
+                    return jsonNode;
                 }
 
                 Func<string, UniTask<JSONNode>> func = LoadJson;
                 await (UniTask)loadMethodInfo.Invoke(this, new object[] { func });
             }
+        }
+
+        protected override void OnInitialize()
+        {
+            
+        }
+
+        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        {
+            
+        }
+
+        protected override void OnShutdown()
+        {
+            
         }
     }
 }

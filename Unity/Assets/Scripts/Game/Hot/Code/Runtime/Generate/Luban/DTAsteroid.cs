@@ -32,7 +32,7 @@ public partial class DTAsteroid : IDataTable
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
         {
             DRAsteroid _v;
-            _v = DRAsteroid.DeserializeDRAsteroid(_buf);
+            _v = global::Game.Hot.DRAsteroid.DeserializeDRAsteroid(_buf);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -45,7 +45,7 @@ public partial class DTAsteroid : IDataTable
     public DRAsteroid Get(int key) => _dataMap[key];
     public DRAsteroid this[int key] => _dataMap[key];
 
-    public void ResolveRef(Tables tables)
+    public void ResolveRef(TablesComponent tables)
     {
         foreach(var _v in _dataList)
         {

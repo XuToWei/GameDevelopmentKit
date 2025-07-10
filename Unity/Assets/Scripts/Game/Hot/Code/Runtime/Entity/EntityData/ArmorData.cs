@@ -22,7 +22,7 @@ namespace Game.Hot
         public ArmorData(int entityId, int typeId, int ownerId, CampType ownerCamp)
             : base(entityId, typeId, ownerId, ownerCamp)
         {
-            DRArmor drArmor = Tables.Instance.DTArmor.GetOrDefault(TypeId);
+            DRArmor drArmor = HotEntry.Tables.DTArmor.GetOrDefault(TypeId);
             if (drArmor == null)
             {
                 return;

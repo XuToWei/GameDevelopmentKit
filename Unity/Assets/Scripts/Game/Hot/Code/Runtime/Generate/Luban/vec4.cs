@@ -32,12 +32,8 @@ public partial struct vec4
     public readonly float Z;
     public readonly float W;
 
-    public  void ResolveRef(Tables tables)
+    public  void ResolveRef(TablesComponent tables)
     {
-        
-        
-        
-        
         PostResolveRef();
     }
 

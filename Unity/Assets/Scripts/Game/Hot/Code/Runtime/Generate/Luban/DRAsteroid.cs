@@ -61,15 +61,8 @@ public sealed partial class DRAsteroid : Luban.BeanBase
     public const int __ID__ = 1354599273;
     public override int GetTypeId() => __ID__;
 
-    public  void ResolveRef(Tables tables)
+    public  void ResolveRef(TablesComponent tables)
     {
-        
-        
-        
-        
-        
-        
-        
         PostResolveRef();
     }
 

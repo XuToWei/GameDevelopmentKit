@@ -28,10 +28,8 @@ public partial struct vec2
     public readonly float X;
     public readonly float Y;
 
-    public  void ResolveRef(Tables tables)
+    public  void ResolveRef(TablesComponent tables)
     {
-        
-        
         PostResolveRef();
     }
 

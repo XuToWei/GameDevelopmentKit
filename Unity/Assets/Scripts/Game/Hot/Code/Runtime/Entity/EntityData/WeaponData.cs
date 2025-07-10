@@ -31,7 +31,7 @@ namespace Game.Hot
         public WeaponData(int entityId, int typeId, int ownerId, CampType ownerCamp)
             : base(entityId, typeId, ownerId, ownerCamp)
         {
-            DRWeapon drWeapon = Tables.Instance.DTWeapon.GetOrDefault(TypeId);
+            DRWeapon drWeapon = HotEntry.Tables.DTWeapon.GetOrDefault(TypeId);
             if (drWeapon == null)
             {
                 return;

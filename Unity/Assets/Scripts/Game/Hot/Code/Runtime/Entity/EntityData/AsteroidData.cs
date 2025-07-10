@@ -34,7 +34,7 @@ namespace Game.Hot
         public AsteroidData(int entityId, int typeId)
             : base(entityId, typeId, CampType.Neutral)
         {
-            DRAsteroid drAsteroid = Tables.Instance.DTAsteroid.GetOrDefault(TypeId);
+            DRAsteroid drAsteroid = HotEntry.Tables.DTAsteroid.GetOrDefault(TypeId);
             if (drAsteroid == null)
             {
                 return;

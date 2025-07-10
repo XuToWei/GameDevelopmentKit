@@ -14,7 +14,7 @@ namespace Game.Hot
         protected override void OnUpdate(IFsm<ProcedureComponent> procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-            procedureOwner.SetData<VarInt32>("NextSceneId", Tables.Instance.DTOneConfig.SceneMenu);
+            procedureOwner.SetData<VarInt32>("NextSceneId", HotEntry.Tables.DTOneConfig.SceneMenu);
             ChangeState<ProcedureChangeScene>(procedureOwner);
         }
     }

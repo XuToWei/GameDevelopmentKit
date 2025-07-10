@@ -56,14 +56,8 @@ public sealed partial class DRWeapon : Luban.BeanBase
     public const int __ID__ = 599888970;
     public override int GetTypeId() => __ID__;
 
-    public  void ResolveRef(Tables tables)
+    public  void ResolveRef(TablesComponent tables)
     {
-        
-        
-        
-        
-        
-        
         PostResolveRef();
     }
 

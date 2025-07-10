@@ -29,12 +29,21 @@ namespace Game.Hot
         }
 
         public static ProcedureComponent Procedure { get; private set; }
+        public static TablesComponent Tables { get; private set; }
+
+        #region Custom Components
         public static HPBarComponent HPBar { get; private set; }
+        #endregion
+
         
         private void InitComponents()
         {
             Procedure = HotComponentEntry.GetComponent<ProcedureComponent>();
+            Tables = HotComponentEntry.GetComponent<TablesComponent>();
+
+            #region Custom Components
             HPBar = HotComponentEntry.GetComponent<HPBarComponent>();
+            #endregion
         }
     }
 }

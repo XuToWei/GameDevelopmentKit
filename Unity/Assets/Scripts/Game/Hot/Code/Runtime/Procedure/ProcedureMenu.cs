@@ -50,7 +50,7 @@ namespace Game.Hot
 
             if (m_StartGame)
             {
-                procedureOwner.SetData<VarInt32>("NextSceneId", Tables.Instance.DTOneConfig.SceneMain);
+                procedureOwner.SetData<VarInt32>("NextSceneId", HotEntry.Tables.DTOneConfig.SceneMain);
                 procedureOwner.SetData<VarByte>("GameMode", (byte)GameMode.Survival);
                 ChangeState<ProcedureChangeScene>(procedureOwner);
             }

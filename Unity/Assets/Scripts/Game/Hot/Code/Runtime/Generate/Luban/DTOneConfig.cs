@@ -28,7 +28,7 @@ public partial class DTOneConfig : IDataTable
         ByteBuf _buf = await _loadFunc();
         int n = _buf.ReadSize();
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
-        _data = DROneConfig.DeserializeDROneConfig(_buf);
+        _data = global::Game.Hot.DROneConfig.DeserializeDROneConfig(_buf);
         PostInit();
     }
 
@@ -36,7 +36,7 @@ public partial class DTOneConfig : IDataTable
     public int SceneMenu => _data.SceneMenu;
     public int SceneMain => _data.SceneMain;
 
-    public void ResolveRef(Tables tables)
+    public void ResolveRef(TablesComponent tables)
     {
         _data.ResolveRef(tables);
         PostResolveRef();

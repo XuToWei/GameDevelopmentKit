@@ -19,7 +19,7 @@ namespace Game.Hot
         public ThrusterData(int entityId, int typeId, int ownerId, CampType ownerCamp)
             : base(entityId, typeId, ownerId, ownerCamp)
         {
-            DRThruster drThruster = Tables.Instance.DTThruster.GetOrDefault(TypeId);
+            DRThruster drThruster = HotEntry.Tables.DTThruster.GetOrDefault(TypeId);
             if (drThruster == null)
             {
                 return;
