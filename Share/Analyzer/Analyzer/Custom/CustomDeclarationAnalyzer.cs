@@ -150,7 +150,7 @@ namespace ET.Analyzer
          private void FieldDeclarationAnalyzeNode(SyntaxNodeAnalysisContext context)
          {
              const string TYPE_NAME = "field";
-             const string IGNORE_UGUI_FIELD_ATTRIBUTE = "Game.IgnoreFieldDeclarationAttribute";
+             const string IGNORE_FIELD_ATTRIBUTE = "Game.IgnoreFieldDeclarationAttribute";
 
              if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameAll))
              {
@@ -164,13 +164,13 @@ namespace ET.Analyzer
              {
                  return;
              }
-             var symbol = context.SemanticModel.GetDeclaredSymbol(declaration);
-             if (symbol != null && symbol.HasAttribute(IGNORE_UGUI_FIELD_ATTRIBUTE))
-             {
-                 return;
-             }
              foreach (var variable in declaration.Declaration.Variables)
              {
+                var symbol = context.SemanticModel.GetDeclaredSymbol(variable);
+                if (symbol != null && symbol.HasAttribute(IGNORE_FIELD_ATTRIBUTE))
+                {
+                    continue;
+                }
                 var name = variable.Identifier.Text;
                 if (!name.CheckEndCant_Declaration())
                 {
@@ -207,7 +207,7 @@ namespace ET.Analyzer
          private void PropertyDeclarationAnalyzeNode(SyntaxNodeAnalysisContext context)
          {
              const string TYPE_NAME = "property";
-             const string IGNORE_UGUI_PROPERTY_ATTRIBUTE = "Game.IgnorePropertyDeclarationAttribute";
+             const string IGNORE_PROPERTY_ATTRIBUTE = "Game.IgnorePropertyDeclarationAttribute";
              if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameAll))
              {
                  return;
@@ -225,7 +225,7 @@ namespace ET.Analyzer
                  return;
              }
              var symbol = context.SemanticModel.GetDeclaredSymbol(declaration);
-             if (symbol != null && symbol.HasAttribute(IGNORE_UGUI_PROPERTY_ATTRIBUTE))
+             if (symbol != null && symbol.HasAttribute(IGNORE_PROPERTY_ATTRIBUTE))
              {
                  return;
              }
