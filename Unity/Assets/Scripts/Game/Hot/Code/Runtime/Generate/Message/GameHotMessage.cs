@@ -89,4 +89,11 @@ namespace Game.Hot
         B = 2,
     }
 
+    public static partial class GameHotMessageId
+    {
+         public const ushort CSHeartBeatTest = 30001;
+         public const ushort SCHeartBeatTest = 30002;
+         public const ushort CSHeartBeatTest22 = 30003;
+         public const ushort SCHeartBeatTest22 = 30004;
+    }
 }
