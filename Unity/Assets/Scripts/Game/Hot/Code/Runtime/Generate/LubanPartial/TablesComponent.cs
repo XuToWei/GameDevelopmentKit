@@ -49,20 +49,5 @@ namespace Game.Hot
                 await (UniTask)loadMethodInfo.Invoke(this, new object[] { func });
             }
         }
-
-        protected override void OnInitialize()
-        {
-            
-        }
-
-        protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
-        {
-            
-        }
-
-        protected override void OnShutdown()
-        {
-            
-        }
     }
 }

@@ -41,18 +41,21 @@ namespace Game.Hot
 
         protected override void OnInitialize()
         {
+            base.OnInitialize();
             m_HPBarItemObjectPool = GameEntry.ObjectPool.CreateSingleSpawnObjectPool<HPBarItemObject>("HPBarItem", m_InstancePoolCapacity);
             m_ActiveHPBarItems = new List<HPBarItem>();
         }
 
         protected override void OnShutdown()
         {
+            base.OnShutdown();
             GameEntry.Resource.UnloadAsset(m_HPBarItemAssetObj);
             GameEntry.Resource.UnloadAsset(m_HPBarInstancesAssetObj);
         }
 
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
+            base.OnUpdate(elapseSeconds, realElapseSeconds);
             for (int i = m_ActiveHPBarItems.Count - 1; i >= 0; i--)
             {
                 HPBarItem hpBarItem = m_ActiveHPBarItems[i];
