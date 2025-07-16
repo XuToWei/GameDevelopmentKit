@@ -64,7 +64,7 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drUIForm.CSName))
                 {
-                    throw new Exception($"UGFUIFormId {drUIForm.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");

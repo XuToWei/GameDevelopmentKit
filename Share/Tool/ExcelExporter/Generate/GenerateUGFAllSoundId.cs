@@ -74,7 +74,7 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drMusic.CSName))
                 {
-                    throw new Exception($"MusicId {drMusic.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
@@ -136,7 +136,7 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drUISound.CSName))
                 {
-                    throw new Exception($"UGFUISoundId {drUISound.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
@@ -198,7 +198,7 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drSound.CSName))
                 {
-                    throw new Exception($"UGFSoundId {drSound.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");

@@ -64,7 +64,7 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drScene.CSName))
                 {
-                    throw new Exception($"UGFSceneId {drScene.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");

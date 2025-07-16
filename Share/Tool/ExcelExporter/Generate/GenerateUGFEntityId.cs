@@ -64,7 +64,7 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drEntity.CSName))
                 {
-                    throw new Exception($"UGFEntityId {drEntity.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");

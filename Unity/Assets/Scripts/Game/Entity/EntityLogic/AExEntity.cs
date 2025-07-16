@@ -83,7 +83,7 @@ namespace Game
             return m_EntityContainer.ShowEntity(entityTypeId, logicType, onShowSuccess, onShowFailure);
         }
 
-        public int? ShowEntity<T>(int entityTypeId, object userData) where T : EntityLogic
+        public int? ShowEntity<T>(int entityTypeId, object userData = null) where T : EntityLogic
         {
             if (m_EntityContainer == null)
             {
@@ -92,7 +92,7 @@ namespace Game
             return m_EntityContainer.ShowEntity<T>(entityTypeId, userData);
         }
 
-        public int? ShowEntity(int entityTypeId, Type logicType, object userData)
+        public int? ShowEntity(int entityTypeId, Type logicType, object userData = null)
         {
             if (m_EntityContainer == null)
             {
@@ -101,7 +101,7 @@ namespace Game
             return m_EntityContainer.ShowEntity(entityTypeId, logicType, userData);
         }
 
-        public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData) where T : EntityLogic
+        public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData = null) where T : EntityLogic
         {
             if (m_EntityContainer == null)
             {
@@ -110,7 +110,7 @@ namespace Game
             return m_EntityContainer.ShowEntityAsync(entityTypeId, typeof(T), userData);
         }
 
-        public UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData)
+        public UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData = null)
         {
             if (m_EntityContainer == null)
             {
