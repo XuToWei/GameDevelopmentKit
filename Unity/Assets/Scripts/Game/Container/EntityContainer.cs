@@ -126,13 +126,15 @@ namespace Game
             return ShowEntityAsync(entityTypeId, typeof(T), userData);
         }
 
-        public UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData)
+        public async UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData)
         {
             if (m_CancellationTokenSource == null)
             {
                 m_CancellationTokenSource = new CancellationTokenSource();
             }
-            return GameEntry.Entity.ShowEntityAsync(entityTypeId, logicType, userData, m_CancellationTokenSource.Token);
+            Entity entity = await GameEntry.Entity.ShowEntityAsync(entityTypeId, logicType, userData, m_CancellationTokenSource.Token);
+            m_EntitySerialIds.Add(entity.Id);
+            return entity;
         }
 
         public void HideAllEntity()
