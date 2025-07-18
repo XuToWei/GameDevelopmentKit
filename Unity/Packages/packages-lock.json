@@ -32,7 +32,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "7a0032934b438ad20a4a691f8093ce1865824c42"
+      "hash": "ee7af5c5926c12402b3ccd121408646f1cf3128f"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -319,6 +319,13 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "com.yasirkula.inspectplus": {
+      "version": "https://github.com/yasirkula/UnityInspectPlus.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "160da9f371f8fd02ea2b24acdb8e86bc6c627f20"
     },
     "com.yasirkula.runtimeinspector": {
       "version": "https://github.com/yasirkula/UnityRuntimeInspector.git",

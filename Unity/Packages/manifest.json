@@ -24,6 +24,7 @@
     "com.unity.render-pipelines.universal": "17.0.3",
     "com.unity.searcher": "4.9.3",
     "com.unity.ugui": "2.0.0",
+    "com.yasirkula.inspectplus": "https://github.com/yasirkula/UnityInspectPlus.git",
     "com.yasirkula.runtimeinspector": "https://github.com/yasirkula/UnityRuntimeInspector.git",
     "me.xw.codebind": "https://github.com/XuToWei/CodeBind.git",
     "me.xw.statecontroller": "https://github.com/XuToWei/StateController.git",
