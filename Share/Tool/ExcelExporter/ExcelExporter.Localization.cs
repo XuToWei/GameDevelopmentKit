@@ -366,7 +366,7 @@ namespace ET
                     newKey = $"Key_{newKey}";
                     stringBuilder.AppendLine("");
                     stringBuilder.AppendLine("        /// <summary>");
-                    stringBuilder.AppendLine($"        /// {content}。");
+                    stringBuilder.AppendLine($"        /// {content}");
                     stringBuilder.AppendLine("        /// </summary>");
                     stringBuilder.AppendLine($"        public const string {newKey} = \"{key}\";");
                     Match match = Regex.Match(key, @"^(.*?)(\d+)$");

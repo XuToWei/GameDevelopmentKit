@@ -140,7 +140,7 @@ namespace ET
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
-                stringBuilder.AppendLine($"        /// {drUISound.Desc}。");
+                stringBuilder.AppendLine($"        /// {drUISound.Desc}");
                 stringBuilder.AppendLine("        /// </summary>");
                 stringBuilder.AppendLine($"        public const int {drUISound.CSName} = {drUISound.Id};");
             }
@@ -202,7 +202,7 @@ namespace ET
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
-                stringBuilder.AppendLine($"        /// {drSound.Desc}。");
+                stringBuilder.AppendLine($"        /// {drSound.Desc}");
                 stringBuilder.AppendLine("        /// </summary>");
                 stringBuilder.AppendLine($"        public const int {drSound.CSName} = {drSound.Id};");
             }
