@@ -392,7 +392,7 @@ namespace ET
                     stringBuilder.AppendLine("            {");
                     for (int i = 0; i < orders.Count; i++)
                     {
-                        stringBuilder.AppendLine($"                case {orders[i]}: return K_{newKey}{orders[i]};");
+                        stringBuilder.AppendLine($"                case {orders[i]}: return Key_{newKey}{orders[i]};");
                     }
                     stringBuilder.AppendLine("                default: return string.Empty;");
                     stringBuilder.AppendLine("            }");
