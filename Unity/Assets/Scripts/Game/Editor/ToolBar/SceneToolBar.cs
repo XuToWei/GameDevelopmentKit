@@ -11,7 +11,7 @@ namespace Game.Editor
 {
     internal sealed class SceneToolBar
     {
-        private static readonly GUILayoutOption s_GUILayoutOption = GUILayout.Width(50);
+        private static readonly GUILayoutOption s_GUILayoutOption = GUILayout.Width(20);
 
         private static string[] s_SceneNames;
         private static string[] s_SceneGuids;

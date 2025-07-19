@@ -9,8 +9,18 @@ namespace Game.Editor
 {
     public static class ShellTool
     {
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+        private static readonly List<string> s_DefaultEnvironmentVars = new List<string>() { "/usr/local/share/dotnet" };
+#endif
+
         public static void Run(string cmd, string workDirectory, string encodingName = "UTF-8", List<string> environmentVars = null)
         {
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+            if (environmentVars == null)
+            {
+                environmentVars = s_DefaultEnvironmentVars;
+            }
+#endif
             Process process = new();
             try
             {
@@ -81,6 +91,12 @@ namespace Game.Editor
         
         public static async UniTask RunAsync(string cmd, string workDirectory, string encodingName = "UTF-8", List<string> environmentVars = null)
         {
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+            if (environmentVars == null)
+            {
+                environmentVars = s_DefaultEnvironmentVars;
+            }
+#endif
             Process process = new();
             try
             {
