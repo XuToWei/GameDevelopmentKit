@@ -28,11 +28,11 @@ namespace ET
             if (ExcelExporter.ExcelExporter_Luban.IsEnableGameHot)
             {
                 GenerateCS_Music("Game.Hot", "MusicId",
-                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/MusicId.cs"));
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/UGF/MusicId.cs"));
                 GenerateCS_UISound("Game.Hot", "UISoundId",
-                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/UISoundId.cs"));
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/UGF/UISoundId.cs"));
                 GenerateCS_Sound("Game.Hot", "SoundId",
-                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/SoundId.cs"));
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/UGF/SoundId.cs"));
             }
         }
         

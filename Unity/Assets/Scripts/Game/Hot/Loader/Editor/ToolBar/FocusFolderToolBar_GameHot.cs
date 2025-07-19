@@ -15,14 +15,14 @@ namespace Game.Hot.Editor
             if (GUILayout.Button(s_HotRuntimeFocusGUIContent))
             {
                 EditorUtility.FocusProjectWindow();
-                Object obj = AssetDatabase.LoadAssetAtPath<Object>("Assets/Scripts/Game/Hot/Code/Runtime");
+                Object obj = AssetDatabase.LoadAssetAtPath<Object>("Assets/Scripts/Game/Hot/Code");
                 Selection.activeObject = obj;
             }
             
             if (GUILayout.Button(s_HotUIFocusGUIContent))
             {
                 EditorUtility.FocusProjectWindow();
-                Object obj = AssetDatabase.LoadAssetAtPath<Object>("Assets/Scripts/Game/Hot/Code/Runtime/UI");
+                Object obj = AssetDatabase.LoadAssetAtPath<Object>("Assets/Scripts/Game/Hot/Code/UI");
                 Selection.activeObject = obj;
             }
         }
