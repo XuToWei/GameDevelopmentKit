@@ -4,7 +4,7 @@ using UnityGameFramework.Runtime;
 
 namespace Game.Editor
 {
-    internal static class LogTool
+    internal static class GLogTool
     {
         [InitializeOnLoadMethod]
         private static void OnInitialize()

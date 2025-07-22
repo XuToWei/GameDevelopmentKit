@@ -11,7 +11,7 @@ namespace Game.Editor
     /// <summary>
     /// 日志重定向相关的实用函数。
     /// </summary>
-    internal static class LogRedirection
+    internal static class GLogRedirection
     {
         private static readonly Regex s_LogRegex = new Regex(@" \(at (.+)\:(\d+)\)\r?\n");
 
