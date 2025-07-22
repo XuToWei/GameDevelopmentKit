@@ -30,7 +30,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(message);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, message));
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(message);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, message));
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6);
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
         }
 
         /// <summary>
@@ -407,7 +407,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
         }
 
         /// <summary>
@@ -450,7 +450,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
         }
 
         /// <summary>
@@ -495,7 +495,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
         }
 
         /// <summary>
@@ -542,7 +542,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
         }
 
         /// <summary>
@@ -591,7 +591,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Debug(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+            GameFrameworkLog.Debug(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
         }
 
         /// <summary>
@@ -609,7 +609,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(message);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, message));
         }
 
         /// <summary>
@@ -627,7 +627,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(message);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, message));
         }
 
         /// <summary>
@@ -647,7 +647,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg);
         }
 
         /// <summary>
@@ -669,7 +669,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2);
         }
 
         /// <summary>
@@ -693,7 +693,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -719,7 +719,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -747,7 +747,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -777,7 +777,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6);
         }
 
         /// <summary>
@@ -809,7 +809,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
 
         /// <summary>
@@ -843,7 +843,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         }
 
         /// <summary>
@@ -879,7 +879,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         }
 
         /// <summary>
@@ -917,7 +917,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
         }
 
         /// <summary>
@@ -957,7 +957,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
         }
 
         /// <summary>
@@ -999,7 +999,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
         }
 
         /// <summary>
@@ -1043,7 +1043,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
         }
 
         /// <summary>
@@ -1089,7 +1089,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
         }
 
         /// <summary>
@@ -1137,7 +1137,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
         }
 
         /// <summary>
@@ -1187,7 +1187,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Info(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+            GameFrameworkLog.Info(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
         }
 
         /// <summary>
@@ -1206,7 +1206,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(message);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, message));
         }
 
         /// <summary>
@@ -1225,7 +1225,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(message);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, message));
         }
 
         /// <summary>
@@ -1246,7 +1246,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg);
         }
 
         /// <summary>
@@ -1269,7 +1269,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2);
         }
 
         /// <summary>
@@ -1294,7 +1294,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -1321,7 +1321,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -1350,7 +1350,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -1381,7 +1381,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6);
         }
 
         /// <summary>
@@ -1414,7 +1414,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
 
         /// <summary>
@@ -1449,7 +1449,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         }
 
         /// <summary>
@@ -1486,7 +1486,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         }
 
         /// <summary>
@@ -1525,7 +1525,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
         }
 
         /// <summary>
@@ -1566,7 +1566,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
         }
 
         /// <summary>
@@ -1609,7 +1609,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
         }
 
         /// <summary>
@@ -1654,7 +1654,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
         }
 
         /// <summary>
@@ -1701,7 +1701,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
         }
 
         /// <summary>
@@ -1750,7 +1750,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
         }
 
         /// <summary>
@@ -1801,7 +1801,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Warning(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+            GameFrameworkLog.Warning(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
         }
 
         /// <summary>
@@ -1821,7 +1821,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(message);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, message));
         }
 
         /// <summary>
@@ -1841,7 +1841,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(message);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, message));
         }
 
         /// <summary>
@@ -1863,7 +1863,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg);
         }
 
         /// <summary>
@@ -1887,7 +1887,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2);
         }
 
         /// <summary>
@@ -1913,7 +1913,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -1941,7 +1941,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -1971,7 +1971,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -2003,7 +2003,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6);
         }
 
         /// <summary>
@@ -2037,7 +2037,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
 
         /// <summary>
@@ -2073,7 +2073,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         }
 
         /// <summary>
@@ -2111,7 +2111,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         }
 
         /// <summary>
@@ -2151,7 +2151,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
         }
 
         /// <summary>
@@ -2193,7 +2193,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
         }
 
         /// <summary>
@@ -2237,7 +2237,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
         }
 
         /// <summary>
@@ -2283,7 +2283,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
         }
 
         /// <summary>
@@ -2331,7 +2331,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
         }
 
         /// <summary>
@@ -2381,7 +2381,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
         }
 
         /// <summary>
@@ -2433,7 +2433,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Error(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+            GameFrameworkLog.Error(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
         }
 
         /// <summary>
@@ -2454,7 +2454,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(message);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, message));
         }
 
         /// <summary>
@@ -2475,7 +2475,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(message);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, message));
         }
 
         /// <summary>
@@ -2498,7 +2498,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg);
         }
 
         /// <summary>
@@ -2523,7 +2523,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2);
         }
 
         /// <summary>
@@ -2550,7 +2550,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3);
         }
 
         /// <summary>
@@ -2579,7 +2579,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4);
         }
 
         /// <summary>
@@ -2610,7 +2610,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -2643,7 +2643,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6);
         }
 
         /// <summary>
@@ -2678,7 +2678,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         }
 
         /// <summary>
@@ -2715,7 +2715,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         }
 
         /// <summary>
@@ -2754,7 +2754,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         }
 
         /// <summary>
@@ -2795,7 +2795,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
         }
 
         /// <summary>
@@ -2838,7 +2838,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
         }
 
         /// <summary>
@@ -2883,7 +2883,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
         }
 
         /// <summary>
@@ -2930,7 +2930,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
         }
 
         /// <summary>
@@ -2979,7 +2979,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
         }
 
         /// <summary>
@@ -3030,7 +3030,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
         }
 
         /// <summary>
@@ -3083,7 +3083,7 @@ namespace Game
             {
                 return;
             }
-            GameFrameworkLog.Fatal(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+            GameFrameworkLog.Fatal(Utility.Text.Format("{0}{1}", m_Tag, format), arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
         }
     }
 }
