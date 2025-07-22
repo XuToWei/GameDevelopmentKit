@@ -16,17 +16,7 @@ namespace UnityGameFramework.Extension
     {
         private INetworkServiceHelper m_NetworkServiceHelper = null;
         
-        public bool Connected
-        {
-            get
-            {
-                if (m_NetworkServiceHelper == null)
-                {
-                    throw new GameFrameworkException("ServiceNetwork helper is invalid.");
-                }
-                return m_NetworkServiceHelper.Connected;
-            }
-        }
+        public NetworkServiceState State => m_NetworkServiceHelper == null ? NetworkServiceState.UnInitialized : m_NetworkServiceHelper.State;
 
         private IEnumerator Start()
         {
@@ -47,6 +37,7 @@ namespace UnityGameFramework.Extension
 
         private void OnDestroy()
         {
+            DestroyServiceNetworkHelper();
             EventComponent eventComponent = GameEntry.GetComponent<EventComponent>();
             if (eventComponent != null)
             {
@@ -130,8 +121,24 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
+            if (m_NetworkServiceHelper != null)
+            {
+                throw new GameFrameworkException("ServiceNetwork helper has been initialized.");
+            }
 
             m_NetworkServiceHelper = serviceNetworkHelper;
+            m_NetworkServiceHelper.OnInitialize();
+        }
+        
+        public void DestroyServiceNetworkHelper()
+        {
+            if (m_NetworkServiceHelper == null)
+            {
+                return;
+            }
+
+            m_NetworkServiceHelper.OnShutdown();
+            m_NetworkServiceHelper = null;
         }
 
         public void Connect()
