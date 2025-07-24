@@ -283,19 +283,19 @@ namespace Game
         {
             if (m_ResourceContainer == null)
             {
-                m_ResourceContainer = ResourceContainer.Create(m_CancellationTokenSource.Token);
+                m_ResourceContainer = ResourceContainer.Create(this);
             }
             m_ResourceContainer.LoadAsset(assetName, onLoadSuccess, onLoadFailure, priority, updateEvent, dependencyAssetEvent);
         }
 
-        public async UniTask<T> LoadAssetAsync<T>(string assetName, int priority = 0,
+        public UniTask<T> LoadAssetAsync<T>(string assetName, int priority = 0,
             Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null) where T : UnityEngine.Object
         {
             if (m_ResourceContainer == null)
             {
-                m_ResourceContainer = ResourceContainer.Create(m_CancellationTokenSource.Token);
+                m_ResourceContainer = ResourceContainer.Create(this);
             }
-            return await m_ResourceContainer.LoadAssetAsync<T>(assetName, priority, updateEvent, dependencyAssetEvent);
+            return m_ResourceContainer.LoadAssetAsync<T>(assetName, priority, updateEvent, dependencyAssetEvent);
         }
 
         public void UnloadAsset(UnityEngine.Object asset)

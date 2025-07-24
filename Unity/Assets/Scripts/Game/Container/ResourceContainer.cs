@@ -20,11 +20,13 @@ namespace Game
 
         private readonly List<UnityEngine.Object> m_Assets = new List<UnityEngine.Object>();
         private CancellationTokenSource m_CancellationTokenSource;
+        private int m_Version;
 
         public static ResourceContainer Create(object owner)
         {
             ResourceContainer resourceContainer = ReferencePool.Acquire<ResourceContainer>();
             resourceContainer.Owner = owner;
+            resourceContainer.m_Version++;
             return resourceContainer;
         }
         
@@ -38,6 +40,7 @@ namespace Game
         public void LoadAsset<T>(string assetName, Action<T> onLoadSuccess, Action onLoadFailure = null, int priority = 0,
             Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null) where T : UnityEngine.Object
         {
+            int version = m_Version;
             void LoadAssetSuccessCallback(string _, object asset, float duration, object userData)
             {
                 T assetResult = asset as T;
@@ -45,6 +48,12 @@ namespace Game
                 {
                     GameEntry.Resource.UnloadAsset(asset);
                     throw new GameFrameworkException(Utility.Text.Format("Load asset '{0}' failure load type is {1} but asset type is {2}.", assetName, asset.GetType(), typeof(T)));
+                }
+                //版本变化了，说明已经被销毁了，直接卸载
+                if(version != m_Version)
+                {
+                    GameEntry.Resource.UnloadAsset(asset);
+                    return;
                 }
                 m_Assets.Add(assetResult);
                 onLoadSuccess?.Invoke(assetResult);

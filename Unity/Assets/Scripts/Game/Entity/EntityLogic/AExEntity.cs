@@ -10,6 +10,7 @@ namespace Game
     {
         private EventContainer m_EventContainer;
         private EntityContainer m_EntityContainer;
+        private ResourceContainer m_ResourceContainer;
 
         private void ClearEntity()
         {
@@ -138,6 +139,40 @@ namespace Game
             if (m_EntityContainer == null)
                 return;
             m_EntityContainer.HideEntity(entity);
+        }
+
+        public void LoadAsset<T>(string assetName, Action<T> onLoadSuccess, Action onLoadFailure = null, int priority = 0,
+            Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null) where T : UnityEngine.Object
+        {
+            if (m_ResourceContainer == null)
+            {
+                m_ResourceContainer = ResourceContainer.Create(this);
+            }
+            m_ResourceContainer.LoadAsset(assetName, onLoadSuccess, onLoadFailure, priority, updateEvent, dependencyAssetEvent);
+        }
+
+        public async UniTask<T> LoadAssetAsync<T>(string assetName, int priority = 0,
+            Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null) where T : UnityEngine.Object
+        {
+            if (m_ResourceContainer == null)
+            {
+                m_ResourceContainer = ResourceContainer.Create(this);
+            }
+            return await m_ResourceContainer.LoadAssetAsync<T>(assetName, priority, updateEvent, dependencyAssetEvent);
+        }
+
+        public void UnloadAsset(UnityEngine.Object asset)
+        {
+            if (m_ResourceContainer == null)
+                return;
+            m_ResourceContainer.UnloadAsset(asset);
+        }
+
+        public void UnloadAllAssets()
+        {
+            if (m_ResourceContainer == null)
+                return;
+            m_ResourceContainer.UnloadAllAssets();
         }
     }
 }
