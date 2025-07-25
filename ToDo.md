@@ -2,3 +2,4 @@
 2：NetworkService和WebSocket事件删除报错
 3：WebSocket和CodeRunner 的ShutDown优化 UnityGameFramework.Runtime.GameEntry
 4：GF的Inspector优化  没有初始化也不会报错， procedure还原
+5：EntityContainer，在关闭时存在Attach的Entity会报错
