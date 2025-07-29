@@ -20,10 +20,23 @@ namespace UnityGameFramework.Runtime
     {
         private static readonly GameFrameworkLinkedList<GameFrameworkComponent> s_GameFrameworkComponents = new GameFrameworkLinkedList<GameFrameworkComponent>();
 
+        private static bool s_IsInitialized = false; 
+
         /// <summary>
         /// 游戏框架所在的场景编号。
         /// </summary>
         internal const int GameFrameworkSceneId = 0;
+
+        /// <summary>
+        /// 游戏框架是否初始化。
+        /// </summary>
+        public static bool IsInitialized
+        {
+            get
+            {
+                return s_IsInitialized;
+            }
+        }
 
         /// <summary>
         /// 获取游戏框架组件。
@@ -79,12 +92,33 @@ namespace UnityGameFramework.Runtime
         }
 
         /// <summary>
+        /// 初始化游戏框架。
+        /// </summary>
+        public static void Initialize()
+        {
+            if (s_IsInitialized)
+            {
+                throw new GameFrameworkException("Game Framework is already initialized.");
+            }
+
+            Log.Info("Initialize Game Framework.");
+            s_IsInitialized = true;
+        }
+
+        /// <summary>
         /// 关闭游戏框架。
         /// </summary>
         /// <param name="shutdownType">关闭游戏框架类型。</param>
         public static void Shutdown(ShutdownType shutdownType)
         {
+            if (!s_IsInitialized)
+            {
+                throw new GameFrameworkException("Game Framework is not initialized.");
+            }
+
             Log.Info("Shutdown Game Framework ({0})...", shutdownType);
+            s_IsInitialized = false;
+
             BaseComponent baseComponent = GetComponent<BaseComponent>();
             if (baseComponent != null)
             {

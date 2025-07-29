@@ -34,8 +34,8 @@ namespace Game
 
         protected override void OnHide(bool isShutdown, object userData)
         {
-            HideAllEntity();
-            UnsubscribeAll();
+            HideAllEntity(isShutdown);
+            UnsubscribeAll(isShutdown);
             if (isShutdown)
             {
                 ClearEntity();
@@ -59,29 +59,20 @@ namespace Game
             m_EventContainer.Unsubscribe(id, handler);
         }
 
-        public void UnsubscribeAll()
+        public void UnsubscribeAll(bool isShutdown)
         {
             if (m_EventContainer == null)
                 return;
-            m_EventContainer.UnsubscribeAll();
+            m_EventContainer.UnsubscribeAll(isShutdown);
         }
 
-        public int? ShowEntity<T>(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = null) where T : EntityLogic
+        public int? ShowEntity<T>(int entityTypeId, Action<Entity> onShowSuccess = null, Action onShowFailure = null) where T : EntityLogic
         {
             if (m_EntityContainer == null)
             {
                 m_EntityContainer = EntityContainer.Create(this);
             }
             return m_EntityContainer.ShowEntity<T>(entityTypeId, onShowSuccess, onShowFailure);
-        }
-
-        public int? ShowEntity(int entityTypeId, Type logicType, Action<Entity> onShowSuccess, Action onShowFailure = null)
-        {
-            if (m_EntityContainer == null)
-            {
-                m_EntityContainer = EntityContainer.Create(this);
-            }
-            return m_EntityContainer.ShowEntity(entityTypeId, logicType, onShowSuccess, onShowFailure);
         }
 
         public int? ShowEntity<T>(int entityTypeId, object userData = null) where T : EntityLogic
@@ -120,11 +111,11 @@ namespace Game
             return m_EntityContainer.ShowEntityAsync(entityTypeId, logicType, userData);
         }
 
-        public void HideAllEntity()
+        public void HideAllEntity(bool isShutdown)
         {
             if (m_EntityContainer == null)
                 return;
-            m_EntityContainer.HideAllEntity();
+            m_EntityContainer.HideAllEntity(isShutdown);
         }
 
         public void HideEntity(int serialId)

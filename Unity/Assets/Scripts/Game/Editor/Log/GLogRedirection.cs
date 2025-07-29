@@ -19,7 +19,6 @@ namespace Game.Editor
         private static bool OnOpenAsset(int instanceId, int line)
         {
             string selectedStackTrace = GetSelectedStackTrace();
-            Debug.Log(selectedStackTrace);
             if (string.IsNullOrEmpty(selectedStackTrace))
             {
                 return false;

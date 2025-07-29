@@ -38,21 +38,6 @@ namespace UnityGameFramework.Extension
         private void OnDestroy()
         {
             DestroyServiceNetworkHelper();
-            EventComponent eventComponent = GameEntry.GetComponent<EventComponent>();
-            if (eventComponent != null)
-            {
-                eventComponent.Unsubscribe(NetworkConnectedEventArgs.EventId, OnNetworkConnected);
-                eventComponent.Unsubscribe(NetworkClosedEventArgs.EventId, OnNetworkClosed);
-                eventComponent.Unsubscribe(NetworkMissHeartBeatEventArgs.EventId, OnNetworkMissHeartBeat);
-                eventComponent.Unsubscribe(NetworkErrorEventArgs.EventId, OnNetworkError);
-                eventComponent.Unsubscribe(NetworkCustomErrorEventArgs.EventId, OnNetworkCustomError);
-
-                eventComponent.Unsubscribe(WebSocketConnectedEventArgs.EventId, OnWebSocketConnected);
-                eventComponent.Unsubscribe(WebSocketClosedEventArgs.EventId, OnWebSocketClosed);
-                eventComponent.Unsubscribe(WebSocketMissHeartBeatEventArgs.EventId, OnWebSocketMissHeartBeat);
-                eventComponent.Unsubscribe(WebSocketErrorEventArgs.EventId, OnWebSocketError);
-                eventComponent.Unsubscribe(WebSocketCustomErrorEventArgs.EventId, OnWebSocketCustomError);
-            }
         }
 
         private void OnNetworkConnected(object sender, GameEventArgs args)

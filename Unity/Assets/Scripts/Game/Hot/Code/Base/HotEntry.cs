@@ -35,7 +35,6 @@ namespace Game.Hot
         public static HPBarComponent HPBar { get; private set; }
         #endregion
 
-        
         private void InitComponents()
         {
             Procedure = HotComponentEntry.GetComponent<ProcedureComponent>();

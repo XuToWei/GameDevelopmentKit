@@ -33,15 +33,18 @@ namespace Game.Hot
 
         protected override void OnLeave(IFsm<ProcedureComponent> procedureOwner, bool isShutdown)
         {
-            base.OnLeave(procedureOwner, isShutdown);
-
-            GameEntry.Event.Unsubscribe(OpenUIFormSuccessEventArgs.EventId, OnOpenUIFormSuccess);
-
-            if (m_MenuForm != null)
+            if (!isShutdown)
             {
-                m_MenuForm.Close();
-                m_MenuForm = null;
+                GameEntry.Event.Unsubscribe(OpenUIFormSuccessEventArgs.EventId, OnOpenUIFormSuccess);
+
+                if (m_MenuForm != null)
+                {
+                    m_MenuForm.Close();
+                    m_MenuForm = null;
+                }
             }
+
+            base.OnLeave(procedureOwner, isShutdown);
         }
 
         protected override void OnUpdate(IFsm<ProcedureComponent> procedureOwner, float elapseSeconds, float realElapseSeconds)
