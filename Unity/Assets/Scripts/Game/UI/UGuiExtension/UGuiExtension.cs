@@ -46,16 +46,9 @@ namespace Game
 
         public static void SetAsync(this UnityEvent unityEvent, Func<UniTask> action)
         {
-            async UniTask OnClickAsync()
+            async UniTaskVoid OnClickAsync()
             {
-                try
-                {
-                    await action();
-                }
-                catch (Exception e)
-                {
-                    throw new GameFrameworkException("Unity Event error", e);
-                }
+                await action();
             }
             
             void OnClick()
@@ -68,7 +61,7 @@ namespace Game
 
         public static void SetAsync(this Button button, Func<UniTask> action)
         {
-            async UniTask OnClickAsync()
+            async UniTaskVoid OnClickAsync()
             {
                 try
                 {
@@ -77,7 +70,10 @@ namespace Game
                 }
                 catch (Exception e)
                 {
-                    throw new GameFrameworkException($"{button.name} click error", e);
+                    if (!e.IsOperationCanceledException())
+                    {
+                        throw new GameFrameworkException($"{button.name} click error", e);
+                    }
                 }
                 finally
                 {

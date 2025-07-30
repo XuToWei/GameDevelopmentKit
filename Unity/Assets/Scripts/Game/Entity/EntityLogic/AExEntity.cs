@@ -132,6 +132,20 @@ namespace Game
             m_EntityContainer.HideEntity(entity);
         }
 
+        public void TryHideEntity(int serialId)
+        {
+            if (m_EntityContainer == null)
+                return;
+            m_EntityContainer.TryHideEntity(serialId);
+        }
+
+        public void TryHideEntity(Entity entity)
+        {
+            if (m_EntityContainer == null)
+                return;
+            m_EntityContainer.TryHideEntity(entity);
+        }
+
         public void LoadAsset<T>(string assetName, Action<T> onLoadSuccess, Action onLoadFailure = null, int priority = 0,
             Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null) where T : UnityEngine.Object
         {
