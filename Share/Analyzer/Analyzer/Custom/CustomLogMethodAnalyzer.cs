@@ -30,6 +30,10 @@ namespace ET.Analyzer.Custom
             {
                 return;
             }
+            if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+            {
+                return;
+            }
             var invocation = (InvocationExpressionSyntax)context.Node;
             var memberAccess = invocation.Expression as MemberAccessExpressionSyntax;
             if (memberAccess == null)

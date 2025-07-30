@@ -36,9 +36,9 @@ namespace UnityGameFramework.Editor
             {
                 EditorGUILayout.HelpBox("Entrance procedure is invalid.", MessageType.Error);
             }
-            else if (EditorApplication.isPlaying)
+            else if (GameEntry.IsInitialized)
             {
-                EditorGUILayout.LabelField("Current Procedure", t.IsInitialized && t.CurrentProcedure != null ? t.CurrentProcedure.GetType().ToString() : "None");
+                EditorGUILayout.LabelField("Current Procedure", t.CurrentProcedure == null ? "None" : t.CurrentProcedure.GetType().ToString());
             }
 
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);

@@ -9,7 +9,11 @@ namespace Game.Editor
 {
     public static class ShellTool
     {
-        public static void Run(string cmd, string workDirectory, string encodingName = "UTF-8", List<string> environmentVars = null)
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+        private static readonly List<string> s_DefaultUnixEnvironmentVars = new List<string>() { "/usr/local/share/dotnet" };
+#endif
+
+        public static void Run(string cmd, string workDirectory, string encodingName = null, List<string> environmentVars = null)
         {
             Process process = new();
             try
@@ -18,10 +22,22 @@ namespace Game.Editor
                 string app = "bash";
                 string splitChar = ":";
                 string arguments = "-c";
+                if (environmentVars == null)
+                {
+                    environmentVars = s_DefaultUnixEnvironmentVars;
+                }
+                if (string.IsNullOrEmpty(encodingName))
+                {
+                    encodingName = "UTF-8";
+                }
 #elif UNITY_EDITOR_WIN
                 string app = "cmd.exe";
                 string splitChar = ";";
                 string arguments = "/c";
+                if (string.IsNullOrEmpty(encodingName))
+                {
+                    encodingName = "GB2312";
+                }
 #endif
                 ProcessStartInfo start = new ProcessStartInfo(app);
 
@@ -79,7 +95,7 @@ namespace Game.Editor
             }
         }
         
-        public static async UniTask RunAsync(string cmd, string workDirectory, string encodingName = "UTF-8", List<string> environmentVars = null)
+        public static async UniTask RunAsync(string cmd, string workDirectory, string encodingName = null, List<string> environmentVars = null)
         {
             Process process = new();
             try
@@ -88,10 +104,22 @@ namespace Game.Editor
                 string app = "bash";
                 string splitChar = ":";
                 string arguments = "-c";
+                if (environmentVars == null)
+                {
+                    environmentVars = s_DefaultUnixEnvironmentVars;
+                }
+                if (string.IsNullOrEmpty(encodingName))
+                {
+                    encodingName = "UTF-8";
+                }
 #elif UNITY_EDITOR_WIN
                 string app = "cmd.exe";
                 string splitChar = ";";
                 string arguments = "/c";
+                if (string.IsNullOrEmpty(encodingName))
+                {
+                    encodingName = "GB2312";
+                }
 #endif
                 ProcessStartInfo start = new ProcessStartInfo(app);
 

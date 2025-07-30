@@ -29,7 +29,10 @@ namespace ET.Analyzer.Custom
             {
                 return;
             }
-            
+            if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+            {
+                return;
+            }
             IMethodSymbol? methodSymbol = null;
             
             if (context.Node is MethodDeclarationSyntax methodDeclarationSyntax)

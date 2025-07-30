@@ -91,5 +91,18 @@ namespace Game
 
             return uiComponent.OpenUIForm(assetName, drUIForm.UIGroupName, Constant.AssetPriority.UIFormAsset, drUIForm.PauseCoveredUIForm, userData);
         }
+
+        public static void TryCloseUIForm(this UIComponent uiComponent, int serialId, object userData = null)
+        {
+            if (uiComponent.IsLoadingUIForm(serialId) || uiComponent.HasUIForm(serialId) )
+            {
+                uiComponent.CloseUIForm(serialId, userData);
+            }
+        }
+
+        public static void TryCloseUIForm(this UIComponent uiComponent, UIForm uiForm, object userData = null)
+        {
+            uiComponent.TryCloseUIForm(uiForm.SerialId, userData);
+        }
     }
 }

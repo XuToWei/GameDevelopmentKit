@@ -22,7 +22,7 @@ namespace ET
             if (ExcelExporter.ExcelExporter_Luban.IsEnableGameHot)
             {
                 GenerateCS("Game.Hot", "UIFormId",
-                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/UIFormId.cs"));
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/UGF/UIFormId.cs"));
             }
         }
         
@@ -64,7 +64,7 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drUIForm.CSName))
                 {
-                    throw new Exception($"UGFUIFormId {drUIForm.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");

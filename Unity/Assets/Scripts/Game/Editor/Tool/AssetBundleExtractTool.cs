@@ -56,7 +56,7 @@ namespace Game.Editor
 #else
             string webExtractExe = ".\\WebExtract.exe";
             string binary2TextExe = ".\\binary2text.exe";
-            await ShellTool.RunAsync($"{webExtractExe} {assetBundleFile}", workDirectory, "GB2312");
+            await ShellTool.RunAsync($"{webExtractExe} {assetBundleFile}", workDirectory);
 #endif
             string fileName = Path.GetFileName(assetBundleFile);
             string outputDirectoryName = $"{Path.GetDirectoryName(assetBundleFile)}/{fileName}_data";

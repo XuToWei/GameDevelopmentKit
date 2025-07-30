@@ -12,7 +12,7 @@ namespace Game.Editor
         {
             if (GUILayout.Button(s_ExportButtonGUIContent))
             {
-                ToolEditor.ExcelExporter();
+                EditorTool.ExcelExporter();
             }
         }
     }

@@ -24,6 +24,8 @@ namespace UnityGameFramework.Runtime
 
         private float m_GameSpeedBeforePause = 1f;
 
+        private IShutdownHelper m_ShutdownHelper;
+
         [SerializeField]
         private bool m_EditorResourceMode = true;
 
@@ -44,6 +46,9 @@ namespace UnityGameFramework.Runtime
 
         [SerializeField]
         private string m_JsonHelperTypeName = "UnityGameFramework.Runtime.DefaultJsonHelper";
+
+        [SerializeField]
+        private string m_ShutdownHelperTypeName = "UnityGameFramework.Runtime.DefaultLogHelper";
 
         [SerializeField]
         private int m_FrameRate = 30;
@@ -189,6 +194,7 @@ namespace UnityGameFramework.Runtime
             InitTextHelper();
             InitVersionHelper();
             InitLogHelper();
+            InitShutdownHelper();
             Log.Info("Game Framework Version: {0}", GameFramework.Version.GameFrameworkVersion);
             Log.Info("Game Version: {0} ({1})", GameFramework.Version.GameVersion, GameFramework.Version.InternalGameVersion);
             Log.Info("Unity Version: {0}", Application.unityVersion);
@@ -241,7 +247,7 @@ namespace UnityGameFramework.Runtime
 
         private void OnDestroy()
         {
-            GameFrameworkEntry.Shutdown();
+            m_ShutdownHelper.Shutdown();
         }
 
         /// <summary>
@@ -403,6 +409,30 @@ namespace UnityGameFramework.Runtime
             }
 
             Utility.Json.SetJsonHelper(jsonHelper);
+        }
+
+        private void InitShutdownHelper()
+        {
+            if (string.IsNullOrEmpty(m_ShutdownHelperTypeName))
+            {
+                return;
+            }
+
+            Type shutdownHelperType = Utility.Assembly.GetType(m_ShutdownHelperTypeName);
+            if (shutdownHelperType == null)
+            {
+                Log.Error("Can not find shutdown helper type '{0}'.", m_ShutdownHelperTypeName);
+                return;
+            }
+
+            IShutdownHelper shutdownHelper = (IShutdownHelper)Activator.CreateInstance(shutdownHelperType);
+            if (shutdownHelper == null)
+            {
+                Log.Error("Can not create shutdown helper instance '{0}'.", m_ShutdownHelperTypeName);
+                return;
+            }
+
+            m_ShutdownHelper = shutdownHelper;
         }
 
         private void OnLowMemory()

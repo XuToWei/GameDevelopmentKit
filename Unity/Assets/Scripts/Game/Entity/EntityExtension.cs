@@ -18,7 +18,7 @@ namespace Game
 
         public static void TryHideEntity(this EntityComponent entityComponent, int serialId)
         {
-            if (entityComponent.HasEntity(serialId))
+            if (entityComponent.IsLoadingEntity(serialId) || entityComponent.HasEntity(serialId))
             {
                 entityComponent.HideEntity(serialId);
             }

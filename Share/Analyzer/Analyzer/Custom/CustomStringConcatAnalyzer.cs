@@ -34,6 +34,10 @@ namespace ET.Analyzer
             {
                 return;
             }
+            if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+            {
+                return;
+            }
 
             var binaryExpression = (BinaryExpressionSyntax)context.Node;
             
@@ -63,7 +67,11 @@ namespace ET.Analyzer
 
         private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
         {
-            if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameAll))
+            if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameRuntimeAll))
+            {
+                return;
+            }
+            if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
             {
                 return;
             }
@@ -103,6 +111,10 @@ namespace ET.Analyzer
         private void AnalyzeInterpolatedStringExpression(SyntaxNodeAnalysisContext context)
         {
             if (!AnalyzerHelper.IsAssemblyNeedAnalyze(context.Compilation.AssemblyName, CustomAnalyzeAssembly.GameRuntimeAll))
+            {
+                return;
+            }
+            if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
             {
                 return;
             }

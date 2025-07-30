@@ -9,9 +9,20 @@ namespace Game.Hot
         /// </summary>
         protected internal virtual int Priority => 0;
 
-        protected internal abstract void OnInitialize();
-        protected internal abstract void OnUpdate(float elapseSeconds, float realElapseSeconds);
-        protected internal abstract void OnShutdown();
+        protected internal virtual void OnInitialize()
+        {
+            
+        }
+
+        protected internal virtual void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        {
+            
+        }
+
+        protected internal virtual void OnShutdown()
+        {
+            
+        }
 
         protected virtual void Awake()
         {

@@ -28,11 +28,11 @@ namespace ET
             if (ExcelExporter.ExcelExporter_Luban.IsEnableGameHot)
             {
                 GenerateCS_Music("Game.Hot", "MusicId",
-                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/MusicId.cs"));
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/UGF/MusicId.cs"));
                 GenerateCS_UISound("Game.Hot", "UISoundId",
-                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/UISoundId.cs"));
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/UGF/UISoundId.cs"));
                 GenerateCS_Sound("Game.Hot", "SoundId",
-                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/SoundId.cs"));
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/UGF/SoundId.cs"));
             }
         }
         
@@ -74,7 +74,7 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drMusic.CSName))
                 {
-                    throw new Exception($"MusicId {drMusic.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
@@ -136,11 +136,11 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drUISound.CSName))
                 {
-                    throw new Exception($"UGFUISoundId {drUISound.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
-                stringBuilder.AppendLine($"        /// {drUISound.Desc}。");
+                stringBuilder.AppendLine($"        /// {drUISound.Desc}");
                 stringBuilder.AppendLine("        /// </summary>");
                 stringBuilder.AppendLine($"        public const int {drUISound.CSName} = {drUISound.Id};");
             }
@@ -198,11 +198,11 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drSound.CSName))
                 {
-                    throw new Exception($"UGFSoundId {drSound.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");
-                stringBuilder.AppendLine($"        /// {drSound.Desc}。");
+                stringBuilder.AppendLine($"        /// {drSound.Desc}");
                 stringBuilder.AppendLine("        /// </summary>");
                 stringBuilder.AppendLine($"        public const int {drSound.CSName} = {drSound.Id};");
             }
