@@ -95,3 +95,4 @@ public sealed class vec4 :  Luban.EditorBeanBase
 }
 
 }
+

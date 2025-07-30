@@ -17,16 +17,16 @@ MonoBehaviour:
   m_VersionInfos:
   - m_Key: Normal
     m_Value:
-      m_ForceUpdateGame: 
+      m_ForceUpdateGame: 0
       m_LatestGameVersion: 
-      m_InternalGameVersion: 
-      m_ServerPath: 127.0.0.1:8088
+      m_InternalGameVersion: 0
+      m_ServerPath: http://127.0.0.1:8088
       m_ResourceVersion: 
-      m_Platform: 
-      m_VersionListLength: 
-      m_InternalResourceVersion: 
-      m_VersionListHashCode: 
-      m_VersionListCompressedLength: 
-      m_VersionListCompressedHashCode: 
+      m_Platform: 0
+      m_VersionListLength: 0
+      m_InternalResourceVersion: 0
+      m_VersionListHashCode: 0
+      m_VersionListCompressedLength: 0
+      m_VersionListCompressedHashCode: 0
   m_IsGenerateToFullPath: 1
   m_OutPath: 

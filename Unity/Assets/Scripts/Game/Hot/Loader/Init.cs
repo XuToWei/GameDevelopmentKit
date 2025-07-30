@@ -37,7 +37,7 @@ namespace Game.Hot
             if (this.m_HotEntryAsset != null)
             {
                 GameEntry.Resource.UnloadAsset(this.m_HotEntryAsset);
-                m_HotEntryAsset = null;
+                this.m_HotEntryAsset = null;
             }
         }
 

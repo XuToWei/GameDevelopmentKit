@@ -13,7 +13,7 @@ rd/s /q %DESTINATION%\UI\UIPrefab
 rd/s /q %DESTINATION%\UI\UISound
 rd/s /q %DESTINATION%\UI\UISprite
 
-set DESTINATION=..\..\Unity\Assets\Scripts\Game\Hot\Code\Runtime
+set DESTINATION=..\..\Unity\Assets\Scripts\Game\Hot\Code
 
 rd/s /q %DESTINATION%\Definition\DataStruct
 rd/s /q %DESTINATION%\Definition\Enum

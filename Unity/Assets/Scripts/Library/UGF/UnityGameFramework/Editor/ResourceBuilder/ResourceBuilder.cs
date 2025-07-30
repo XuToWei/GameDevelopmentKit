@@ -277,6 +277,7 @@ namespace UnityGameFramework.Editor.ResourceTools
                         EditorGUI.BeginDisabledGroup(!m_Controller.OutputPackageSelected);
                         EditorGUILayout.LabelField("Output Package Path", GUILayout.Width(160f));
                         GUILayout.Label(m_Controller.OutputPackagePath);
+                        m_Controller.OutputPackageWithMD5 = EditorGUILayout.ToggleLeft("MD5", m_Controller.OutputPackageWithMD5, GUILayout.Width(75f));
                         EditorGUI.EndDisabledGroup();
                         m_Controller.OutputPackageSelected = EditorGUILayout.ToggleLeft("Generate", m_Controller.OutputPackageSelected, GUILayout.Width(70f));
                     }

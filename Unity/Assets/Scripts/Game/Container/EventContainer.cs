@@ -45,20 +45,29 @@ namespace Game
             }
             GameEntry.Event.Unsubscribe(id, handler);
         }
-
+        
         public void UnsubscribeAll()
         {
-            if (m_EventHandlerDict.Count > 0)
+            UnsubscribeAll(false);
+        }
+
+        public void UnsubscribeAll(bool isShutdown)
+        {
+            if (!isShutdown)
             {
-                foreach (var item in m_EventHandlerDict)
+                if (m_EventHandlerDict.Count > 0)
                 {
-                    foreach (var eventHandler in item.Value)
+                    foreach (var item in m_EventHandlerDict)
                     {
-                        GameEntry.Event.Unsubscribe(item.Key, eventHandler);
+                        foreach (var eventHandler in item.Value)
+                        {
+                            GameEntry.Event.Unsubscribe(item.Key, eventHandler);
+                        }
                     }
                 }
-                m_EventHandlerDict.Clear();
             }
+
+            m_EventHandlerDict.Clear();
         }
     }
 }

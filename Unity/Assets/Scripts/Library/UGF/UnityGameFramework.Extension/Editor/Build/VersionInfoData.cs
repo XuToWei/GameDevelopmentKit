@@ -143,7 +143,7 @@ namespace UnityGameFramework.Extension.Editor
         }
         public string ToVersionInfoJson()
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this.ToVersionInfo());
         }
 
         public void AutoIncrementInternalGameVersion()

@@ -19,11 +19,16 @@ namespace Game
             InitBuiltinComponents();
             InitExtensionComponents();
             InitGameComponents();
+
+            UnityGameFramework.Runtime.GameEntry.Initialize();
         }
 
         private void OnApplicationQuit()
         {
-            UnityGameFramework.Runtime.GameEntry.Shutdown(UnityGameFramework.Runtime.ShutdownType.Quit);
+            if (UnityGameFramework.Runtime.GameEntry.IsInitialized)
+            {
+                UnityGameFramework.Runtime.GameEntry.Shutdown(UnityGameFramework.Runtime.ShutdownType.Quit);
+            }
         }
     }
 }

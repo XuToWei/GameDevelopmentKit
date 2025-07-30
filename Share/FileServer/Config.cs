@@ -8,6 +8,7 @@
         {
             "../Temp/Bundle/Full",//本地
             "../Temp/Version",//本地
+            "../Temp/Pkg/WebGL",//本地WebGL
             "../Bundle",//服务器目录
             "../Version",//服务器目录
         };

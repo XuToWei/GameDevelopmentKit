@@ -93,7 +93,7 @@ namespace ET
                 if (string.Equals(genConfig.codeType, "ET", StringComparison.CurrentCultureIgnoreCase))
                 {
                     //MemoryPack
-                    List<string> protoFiles = Directory.GetFiles(genConfig.protoDir, "*.proto").ToList();
+                    List<string> protoFiles = Directory.GetFiles(genConfig.protoDir, "*.proto", SearchOption.AllDirectories).ToList();
                     if (protoFiles.Count < 1)
                     {
                         continue;
@@ -109,7 +109,7 @@ namespace ET
                 else if (string.Equals(genConfig.codeType, "UGF", StringComparison.CurrentCultureIgnoreCase))
                 {
                     //Protobuf，为了通用
-                    List<string> protoFiles = Directory.GetFiles(genConfig.protoDir, "*.proto").ToList();
+                    List<string> protoFiles = Directory.GetFiles(genConfig.protoDir, "*.proto", SearchOption.AllDirectories).ToList();
                     if (protoFiles.Count < 1)
                     {
                         continue;

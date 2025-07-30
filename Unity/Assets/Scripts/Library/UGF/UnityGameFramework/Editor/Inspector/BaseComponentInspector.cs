@@ -27,6 +27,7 @@ namespace UnityGameFramework.Editor
         private SerializedProperty m_LogHelperTypeName = null;
         private SerializedProperty m_CompressionHelperTypeName = null;
         private SerializedProperty m_JsonHelperTypeName = null;
+        private SerializedProperty m_ShutdownHelperTypeName = null;
         private SerializedProperty m_FrameRate = null;
         private SerializedProperty m_GameSpeed = null;
         private SerializedProperty m_RunInBackground = null;
@@ -42,6 +43,8 @@ namespace UnityGameFramework.Editor
         private int m_CompressionHelperTypeNameIndex = 0;
         private string[] m_JsonHelperTypeNames = null;
         private int m_JsonHelperTypeNameIndex = 0;
+        private string[] m_ShutdownHelperTypeNames = null;
+        private int m_ShutdownHelperTypeNameIndex = 0;
 
         public override void OnInspectorGUI()
         {
@@ -98,6 +101,13 @@ namespace UnityGameFramework.Editor
                     {
                         m_JsonHelperTypeNameIndex = jsonHelperSelectedIndex;
                         m_JsonHelperTypeName.stringValue = jsonHelperSelectedIndex <= 0 ? null : m_JsonHelperTypeNames[jsonHelperSelectedIndex];
+                    }
+ 
+                    int shutdownHelperSelectedIndex = EditorGUILayout.Popup("Shutdown Helper", m_ShutdownHelperTypeNameIndex, m_ShutdownHelperTypeNames);
+                    if (shutdownHelperSelectedIndex != m_ShutdownHelperTypeNameIndex)
+                    {
+                        m_ShutdownHelperTypeNameIndex = shutdownHelperSelectedIndex;
+                        m_ShutdownHelperTypeName.stringValue = shutdownHelperSelectedIndex <= 0 ? null : m_ShutdownHelperTypeNames[shutdownHelperSelectedIndex];
                     }
                 }
                 EditorGUILayout.EndVertical();
@@ -185,6 +195,8 @@ namespace UnityGameFramework.Editor
             m_LogHelperTypeName = serializedObject.FindProperty("m_LogHelperTypeName");
             m_CompressionHelperTypeName = serializedObject.FindProperty("m_CompressionHelperTypeName");
             m_JsonHelperTypeName = serializedObject.FindProperty("m_JsonHelperTypeName");
+            m_ShutdownHelperTypeName = serializedObject.FindProperty("m_ShutdownHelperTypeName");
+
             m_FrameRate = serializedObject.FindProperty("m_FrameRate");
             m_GameSpeed = serializedObject.FindProperty("m_GameSpeed");
             m_RunInBackground = serializedObject.FindProperty("m_RunInBackground");
@@ -282,6 +294,24 @@ namespace UnityGameFramework.Editor
                 {
                     m_JsonHelperTypeNameIndex = 0;
                     m_JsonHelperTypeName.stringValue = null;
+                }
+            }
+
+            List<string> shutdownHelperTypeNames = new List<string>
+            {
+                NoneOptionName
+            };
+
+            shutdownHelperTypeNames.AddRange(Type.GetRuntimeTypeNames(typeof(IShutdownHelper)));
+            m_ShutdownHelperTypeNames = shutdownHelperTypeNames.ToArray();
+            m_ShutdownHelperTypeNameIndex = 0;
+            if (!string.IsNullOrEmpty(m_ShutdownHelperTypeName.stringValue))
+            {
+                m_ShutdownHelperTypeNameIndex = shutdownHelperTypeNames.IndexOf(m_ShutdownHelperTypeName.stringValue);
+                if (m_ShutdownHelperTypeNameIndex <= 0)
+                {
+                    m_ShutdownHelperTypeNameIndex = 0;
+                    m_ShutdownHelperTypeName.stringValue = null;
                 }
             }
 

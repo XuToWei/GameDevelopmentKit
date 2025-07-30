@@ -44,7 +44,7 @@ public sealed class DRAircraft :  Luban.EditorBeanBase
             var _fieldJson = _json["WeaponIds"];
             if (_fieldJson != null)
             {
-                if(!_fieldJson.IsArray) { throw new SerializationException(); } WeaponIds = new System.Collections.Generic.List<int>(); foreach(JSONNode __e in _fieldJson.Children) { int __v;  if(!__e.IsNumber) { throw new SerializationException(); }  __v = __e;  WeaponIds.Add(__v); }  
+                if(!_fieldJson.IsArray) { throw new SerializationException(); } WeaponIds = new System.Collections.Generic.List<int>(); foreach(JSONNode __e0 in _fieldJson.Children) { int __v0;  if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0;  WeaponIds.Add(__v0); }  
             }
         }
         
@@ -52,7 +52,7 @@ public sealed class DRAircraft :  Luban.EditorBeanBase
             var _fieldJson = _json["ArmorIds"];
             if (_fieldJson != null)
             {
-                if(!_fieldJson.IsArray) { throw new SerializationException(); } ArmorIds = new System.Collections.Generic.List<int>(); foreach(JSONNode __e in _fieldJson.Children) { int __v;  if(!__e.IsNumber) { throw new SerializationException(); }  __v = __e;  ArmorIds.Add(__v); }  
+                if(!_fieldJson.IsArray) { throw new SerializationException(); } ArmorIds = new System.Collections.Generic.List<int>(); foreach(JSONNode __e0 in _fieldJson.Children) { int __v0;  if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0;  ArmorIds.Add(__v0); }  
             }
         }
         
@@ -85,12 +85,12 @@ public sealed class DRAircraft :  Luban.EditorBeanBase
         {
 
             if (WeaponIds == null) { throw new System.ArgumentNullException(); }
-            { var __cjson = new JSONArray(); foreach(var _e in WeaponIds) { __cjson["null"] = new JSONNumber(_e); } _json["WeaponIds"] = __cjson; }
+            { var __cjson0 = new JSONArray(); _json["WeaponIds"] = __cjson0; foreach(var _e0 in WeaponIds) { JSONNode __v0; __v0 = new JSONNumber(_e0); __cjson0.Add(__v0); } }
         }
         {
 
             if (ArmorIds == null) { throw new System.ArgumentNullException(); }
-            { var __cjson = new JSONArray(); foreach(var _e in ArmorIds) { __cjson["null"] = new JSONNumber(_e); } _json["ArmorIds"] = __cjson; }
+            { var __cjson0 = new JSONArray(); _json["ArmorIds"] = __cjson0; foreach(var _e0 in ArmorIds) { JSONNode __v0; __v0 = new JSONNumber(_e0); __cjson0.Add(__v0); } }
         }
         {
             _json["DeadEffectId"] = new JSONNumber(DeadEffectId);
@@ -145,3 +145,4 @@ public sealed class DRAircraft :  Luban.EditorBeanBase
 }
 
 }
+
