@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using ExcelDataReader;
 using GameFramework.Localization;
 using Luban;
@@ -39,6 +40,7 @@ namespace ET
                     return;
                 Log.Info("Start Export Localization Excel ...");
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                List<string> keys = new List<string>();
                 SortedDictionary<Language, SortedDictionary<string, string>> resultDict = new SortedDictionary<Language, SortedDictionary<string, string>>();
                 using (var stream = new FileStream(s_LocalizationExcelFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
@@ -78,13 +80,19 @@ namespace ET
                                 }
                                 if (cellValue == "key")
                                 {
+                                    bool isFirstAddKey = keys.Count == 0;
                                     for (int keyRowIndex = startRowIndex; keyRowIndex < table.Rows.Count; keyRowIndex++)
                                     {
+                                        string key = table.Rows[keyRowIndex][columnIndex].ToString();
                                         keyTableInfos.Add(new KeyTableInfo()
                                         {
-                                            key = table.Rows[keyRowIndex][columnIndex].ToString(),
+                                            key = key,
                                             rowIndex = keyRowIndex,
                                         });
+                                        if (isFirstAddKey)
+                                        {
+                                            keys.Add(key);
+                                        }
                                     }
                                 }
                                 else
@@ -195,6 +203,34 @@ namespace ET
                 GenerateReadyLanguageCode(readyLanguages);
                 //生成一份给UXTool使用
                 GenerateUXToolCode(readyLanguages, extensionName);
+                //生成多语言Key的代码
+                if (ExcelExporter_Luban.IsEnableET)
+                {
+                    if (resultDict.TryGetValue(Language.ChineseSimplified, out var result))
+                    {
+                        GenerateLocalizationKeyCode(result, "ET", "LocalizationKey",
+                            Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/LocalizationKey.cs"));
+                    }
+                    else if(readyLanguages.Length > 0)
+                    {
+                        GenerateLocalizationKeyCode(resultDict[readyLanguages[0]], "ET", "LocalizationKey",
+                            Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/Model/Generate/LocalizationKey.cs"));
+                    }
+                }
+                if(ExcelExporter_Luban.IsEnableGameHot)
+                {
+                    if (resultDict.TryGetValue(Language.ChineseSimplified, out var result))
+                    {
+                        GenerateLocalizationKeyCode(result, "Game.Hot", "LocalizationKey",
+                            Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/LocalizationKey.cs"));
+                    }
+                    else if(readyLanguages.Length > 0)
+                    {
+                        GenerateLocalizationKeyCode(resultDict[readyLanguages[0]], "Game.Hot", "LocalizationKey",
+                            Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/LocalizationKey.cs"));
+                    }
+                }
+                
                 Log.Info("Export Localization Excel Success!");
             }
 
@@ -306,6 +342,76 @@ namespace ET
 =======================================================================
 ";
                 return error;
+            }
+
+            private static void GenerateLocalizationKeyCode(SortedDictionary<string, string> result, string nameSpaceName, string className, string codeFile)
+            {
+                StringBuilder stringBuilder = new();
+                stringBuilder.AppendLine("// This is an automatically generated class by Share.Tool. Please do not modify it.");
+                stringBuilder.AppendLine("");
+                stringBuilder.AppendLine($"namespace {nameSpaceName}");
+                stringBuilder.AppendLine("{");
+                stringBuilder.AppendLine("    /// <summary>");
+                stringBuilder.AppendLine("    /// 多语言key。");
+                stringBuilder.AppendLine("    /// </summary>");
+                stringBuilder.AppendLine($"    public static class {className}");
+                stringBuilder.AppendLine("    {");
+                Dictionary<string, List<int>> orderKeys = new Dictionary<string, List<int>>();
+                foreach (var (key, content) in result)
+                {
+                    if(string.IsNullOrEmpty(key))
+                        continue;
+                    string newKey = key.Replace(".", "_").Replace("\\", string.Empty).
+                            Replace("/", string.Empty).Replace(" ", string.Empty);
+                    newKey = $"Key_{newKey}";
+                    stringBuilder.AppendLine("");
+                    stringBuilder.AppendLine("        /// <summary>");
+                    stringBuilder.AppendLine($"        /// {content}");
+                    stringBuilder.AppendLine("        /// </summary>");
+                    stringBuilder.AppendLine($"        public const string {newKey} = \"{key}\";");
+                    Match match = Regex.Match(key, @"^(.*?)(\d+)$");
+                    if (match.Success)
+                    {
+                        string orderKey = match.Groups[1].Value;
+                        if (!orderKeys.ContainsKey(orderKey))
+                        {
+                            orderKeys.Add(orderKey, new List<int>());
+                        }
+                        List<int> orders = orderKeys[orderKey];
+                        orders.Add(int.Parse(match.Groups[2].Value));
+                    }
+                }
+                foreach (var (key, orders) in orderKeys)
+                {
+                    string newKey = key.Replace(".", "_").Replace("\\", string.Empty).
+                            Replace("/", string.Empty).Replace(" ", string.Empty);
+                    stringBuilder.AppendLine("");
+                    stringBuilder.AppendLine($"        public static string Get_{newKey}(int order)");
+                    stringBuilder.AppendLine("        {");
+                    stringBuilder.AppendLine("            switch (order)");
+                    stringBuilder.AppendLine("            {");
+                    for (int i = 0; i < orders.Count; i++)
+                    {
+                        stringBuilder.AppendLine($"                case {orders[i]}: return Key_{newKey}{orders[i]};");
+                    }
+                    stringBuilder.AppendLine("                default: return string.Empty;");
+                    stringBuilder.AppendLine("            }");
+                    stringBuilder.AppendLine("        }");
+                }
+
+                stringBuilder.AppendLine("    }");
+                stringBuilder.AppendLine("}");
+                string codeContent = stringBuilder.ToString();
+                string dir = Path.GetDirectoryName(codeFile);
+                if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                if (!File.Exists(codeFile) || !string.Equals(codeContent, File.ReadAllText(codeFile)))
+                {
+                    File.WriteAllText(codeFile, codeContent);
+                    Log.Info($"Generate code : {codeFile}!");
+                }
             }
         }
     }

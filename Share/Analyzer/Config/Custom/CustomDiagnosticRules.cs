@@ -91,9 +91,9 @@ namespace ET.Analyzer.Custom
 
     public static class CustomStringConcatAnalyzerRule
     {
-        private const string Title = "请使用Utility.Text.Format，不要使用'+'、'string.Format'、'string.Concat'或字符串内插";
-        private const string MessageFormat = "请使用Utility.Text.Format，不要使用'{0}'";
-        private const string Description = "请使用Utility.Text.Format，不要使用'+'、'string.Format'、'string.Concat'或字符串内插.";
+        private const string Title = "请使用GameFramework.Utility.Text.Format，不要使用'+'、'string.Format'、'string.Concat'";
+        private const string MessageFormat = "请使用GameFramework.Utility.Text.Format，不要使用'{0}'";
+        private const string Description = "请使用GameFramework.Utility.Text.Format，不要使用'+'、'string.Format'、'string.Concat'.";
         public static readonly DiagnosticDescriptor Rule =
             new DiagnosticDescriptor(CustomDiagnosticIds.StringConcatAnalyzerRuleId,
                 Title,

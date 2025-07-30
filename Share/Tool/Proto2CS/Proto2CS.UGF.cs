@@ -34,6 +34,12 @@ namespace ET
 
             public static void Stop()
             {
+                s_StringBuilder.Append("\tpublic static partial class " + s_CSName + "Id\n\t{\n");
+                foreach (OpcodeInfo info in s_MsgOpcode)
+                {
+                    s_StringBuilder.Append($"\t\t public const ushort {info.name} = {info.opcode};\n");
+                }
+                s_StringBuilder.Append("\t}\n");
                 s_StringBuilder.Append("}\n");
                 foreach (var csOutDir in s_CSOutDirs)
                 {
@@ -91,6 +97,12 @@ namespace ET
                             parentClass = ss[1].Trim();
                         }
 
+                        if (s_StartOpcode - 1 >= OpcodeRangeDefine.MaxOpcode)
+                        {
+                            throw new Exception($"Proto_UGF error : {protoFile}'s opcode is larger then max opcode:{OpcodeRangeDefine.MaxOpcode}!");
+                        }
+                        s_MsgOpcode.Add(new OpcodeInfo() { name = msgName, opcode = ++s_StartOpcode });
+
                         s_StringBuilder.Append($"\t// proto file : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)} (line:{lineNum})\n");
                         s_StringBuilder.Append($"\t[Serializable, ProtoContract(Name = @\"{msgName}\")]\n");
                         s_StringBuilder.Append($"\tpublic partial class {msgName}");
@@ -113,7 +125,13 @@ namespace ET
                         {
                             s_StringBuilder.Append($" : {parentClass}\n");
                         }
-                        
+
+                        if (newline.Contains("{"))
+                        {
+                            s_StringBuilder.Append("\t{\n");
+                            s_StringBuilder.Append($"\t\tpublic override int Id => {s_StartOpcode};\n");
+                        }
+
                         continue;
                     }
                     else if (newline.StartsWith("enum"))
@@ -133,7 +151,7 @@ namespace ET
                         if (newline.StartsWith("{"))
                         {
                             s_StringBuilder.Append("\t{\n");
-                            s_StringBuilder.Append($"\t\tpublic override int Id => {++s_StartOpcode};\n");
+                            s_StringBuilder.Append($"\t\tpublic override int Id => {s_StartOpcode};\n");
                             continue;
                         }
 
@@ -238,9 +256,9 @@ namespace ET
                     string keyType = ConvertType(ss[0].Trim());
                     string valueType = ConvertType(ss[1].Trim());
                     string tail = newline.Substring(end + 1);
-                    ss = tail.Trim().Replace(";", "").Split(" ");
+                    ss = tail.Trim().Replace(";", "").Replace("=", " ").Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries);
                     string v = ss[0];
-                    string n = ss[2];
+                    string n = ss[1];
                 
                     sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }} = new Dictionary<{keyType}, {valueType}>();\n");
@@ -258,13 +276,12 @@ namespace ET
             {
                 try
                 {
-                    int index = newline.IndexOf(";", StringComparison.Ordinal);
-                    newline = newline.Remove(index);
+                    newline = newline.Replace(";", "").Replace("=", " ");
                     string[] ss = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries);
                     string type = ss[1];
                     type = ConvertType(type);
                     string name = ss[2];
-                    int n = int.Parse(ss[4]);
+                    int n = int.Parse(ss[3]);
 
                     sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }} = new List<{type}>();\n");
@@ -319,12 +336,11 @@ namespace ET
             {
                 try
                 {
-                    int index = newline.IndexOf(";", StringComparison.Ordinal);
-                    newline = newline.Remove(index);
+                    newline = newline.Replace(";", "").Replace("=", " ");
                     string[] ss = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries);
                     string type = ss[0];
                     string name = ss[1];
-                    int n = int.Parse(ss[3]);
+                    int n = int.Parse(ss[2]);
                     string typeCs = ConvertType(type);
 
                     sb.Append($"\t\t[ProtoMember({n})]\n");
@@ -352,11 +368,10 @@ namespace ET
             {
                 try
                 {
-                    int index = newline.IndexOf(";", StringComparison.Ordinal);
-                    newline = newline.Remove(index);
+                    newline = newline.Replace(";", "").Replace("=", " ");
                     string[] ss = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries);
                     string name = ss[0];
-                    int n = int.Parse(ss[2]);
+                    int n = int.Parse(ss[1]);
 
                     sb.Append($"\t\t{name} = {n},\n");
                 }

@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace Game.Editor
 {
-    public static class ToolEditor
+    public static class EditorTool
     {
         [MenuItem("Game/Tool/ExcelExporter")]
         public static void ExcelExporter()
@@ -20,7 +20,7 @@ namespace Game.Editor
 #endif
                 Stopwatch stopwatch = Stopwatch.StartNew();
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-                await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1", "../Bin/", environmentVars: new List<string>() { "/usr/local/share/dotnet" });
+                await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1", "../Bin/");
 #else
                 await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1 --Customs=GB2312", "../Bin/");
 #endif

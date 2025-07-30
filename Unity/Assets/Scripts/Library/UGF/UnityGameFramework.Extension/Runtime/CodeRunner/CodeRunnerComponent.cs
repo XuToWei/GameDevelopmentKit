@@ -57,7 +57,7 @@ namespace UnityGameFramework.Extension
             IsRunning = true;
         }
 
-        public void Shutdown()
+        public void StopRun()
         {
             if (!IsRunning)
             {

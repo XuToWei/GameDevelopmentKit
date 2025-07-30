@@ -73,7 +73,7 @@ rd/s /q %DESTINATION%\ModelView\Client\LockStep
 del %DESTINATION%\ModelView\Client\Demo.meta
 del %DESTINATION%\ModelView\Client\LockStep.meta
 
-set DESTINATION=..\..\Unity\Assets\Scripts\Game\Hot\Code\Runtime
+set DESTINATION=..\..\Unity\Assets\Scripts\Game\Hot\Code
 
 rd/s /q %DESTINATION%\Definition\DataStruct
 rd/s /q %DESTINATION%\Definition\Enum

@@ -25,7 +25,7 @@ namespace UnityGameFramework.Extension.Editor
         public static string GetNewCombineName(List<string> currentCombineBundle)
         {
             var newCombine = string.Join("@@", currentCombineBundle);
-            return $"Auto/Combine/{Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine))}";
+            return Utility.Text.Format("Auto/Combine/{0:x8}", Utility.Verifier.GetCrc32(Encoding.UTF8.GetBytes(newCombine)));
         }
 
         private ResourceCollection m_ResourceCollection;
@@ -83,12 +83,11 @@ namespace UnityGameFramework.Extension.Editor
                     resource.LoadType = LoadType.LoadFromMemory;
                     Debug.Log($"UNITY_WEBGL下修改资源\"{resource.Name}\"的加载方式为LoadFromMemory");
                 }
-            }
-
-            if (!string.IsNullOrEmpty(resource.FileSystem))
-            {
-                resource.FileSystem = string.Empty;
-                Debug.Log($"UNITY_WEBGL下删除资源\"{resource.Name}\"的文件系统");
+                if (!string.IsNullOrEmpty(resource.FileSystem))
+                {
+                    resource.FileSystem = string.Empty;
+                    Debug.Log($"UNITY_WEBGL下删除资源\"{resource.Name}\"的文件系统");
+                }
             }
 #endif
         }
@@ -97,9 +96,9 @@ namespace UnityGameFramework.Extension.Editor
         {
             foreach (var kv in m_CombineBundles)
             {
-                //WebGL下不能使用LoadFromFile
 #if UNITY_WEBGL
-                m_ResourceCollection.AddResource(kv.Key, null, null, LoadType.LoadFromMemory, true);
+                //WebGL下不能使用LoadFromFile
+                m_ResourceCollection.AddResource(kv.Key, null, null, LoadType.LoadFromMemory, false);
 #else
                 m_ResourceCollection.AddResource(kv.Key, null, null, LoadType.LoadFromFile, true);
 #endif

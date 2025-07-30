@@ -16,14 +16,6 @@ namespace GameFramework.Procedure
     public interface IProcedureManager
     {
         /// <summary>
-        /// 获取是否已初始化流程管理器。
-        /// </summary>
-        bool IsInitialized
-        {
-            get;
-        }
-
-        /// <summary>
         /// 获取当前流程。
         /// </summary>
         ProcedureBase CurrentProcedure

@@ -8,17 +8,17 @@ namespace Game
 {
     public static partial class EntityExtension
     {
-        public static async UniTask<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityTypeId, Type logicType,
+        public static UniTask<Entity> ShowEntityAsync(this EntityComponent entityComponent, int entityTypeId, Type logicType,
             object userData = null, CancellationToken cancellationToken = default, Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null)
         {
             DREntity drEntity = GameEntry.Tables.DTEntity.GetOrDefault(entityTypeId);
             if (drEntity == null)
             {
                 Log.Warning("Can not load entity id '{0}' from data table.", entityTypeId.ToString());
-                return null;
+                return UniTask.FromResult<Entity>(null);
             }
             
-            return await entityComponent.ShowEntityAsync(entityComponent.GenerateSerialId(), logicType, AssetUtility.GetEntityAsset(drEntity.AssetName),
+            return entityComponent.ShowEntityAsync(entityComponent.GenerateSerialId(), logicType, AssetUtility.GetEntityAsset(drEntity.AssetName),
                 drEntity.EntityGroupName, drEntity.Priority, userData, cancellationToken, updateEvent, dependencyAssetEvent);
         }
         

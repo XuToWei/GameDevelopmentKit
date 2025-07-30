@@ -91,12 +91,22 @@ namespace Game
             ReferencePool.Release(eventArgs);
         }
 
-        public int? ShowEntity<T>(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure = null) where T : EntityLogic
+        public int? ShowEntity<T>(int entityTypeId, Action<Entity> onShowSuccess) where T : EntityLogic
+        {
+            return ShowEntity<T>(entityTypeId, onShowSuccess, null);
+        }
+
+        public int? ShowEntity<T>(int entityTypeId, Action<Entity> onShowSuccess, Action onShowFailure) where T : EntityLogic
         {
             return ShowEntity(entityTypeId, typeof(T), onShowSuccess, onShowFailure);
         }
 
-        public int? ShowEntity(int entityTypeId, Type logicType, Action<Entity> onShowSuccess, Action onShowFailure = null)
+        public int? ShowEntity(int entityTypeId, Type logicType, Action<Entity> onShowSuccess)
+        {
+            return ShowEntity(entityTypeId, logicType, onShowSuccess, null);
+        }
+
+        public int? ShowEntity(int entityTypeId, Type logicType, Action<Entity> onShowSuccess, Action onShowFailure)
         {
             int? serialId = GameEntry.Entity.ShowEntity(entityTypeId, logicType, EntityLoaderEventArgs.Create(onShowSuccess, onShowFailure));
             if (serialId.HasValue)
@@ -104,6 +114,11 @@ namespace Game
                 m_EntitySerialIds.Add(serialId.Value);
             }
             return serialId;
+        }
+
+        public int? ShowEntity<T>(int entityTypeId) where T : EntityLogic
+        {
+            return ShowEntity<T>(entityTypeId, null);
         }
 
         public int? ShowEntity<T>(int entityTypeId, object userData) where T : EntityLogic
@@ -121,30 +136,51 @@ namespace Game
             return serialId;
         }
 
+        public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId) where T : EntityLogic
+        {
+            return ShowEntityAsync<T>(entityTypeId, null);
+        }
+
         public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData) where T : EntityLogic
         {
             return ShowEntityAsync(entityTypeId, typeof(T), userData);
         }
 
-        public UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData)
+        public UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType)
+        {
+            return ShowEntityAsync(entityTypeId, logicType, null);
+        }
+
+        public async UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData)
         {
             if (m_CancellationTokenSource == null)
             {
                 m_CancellationTokenSource = new CancellationTokenSource();
             }
-            return GameEntry.Entity.ShowEntityAsync(entityTypeId, logicType, userData, m_CancellationTokenSource.Token);
+            Entity entity = await GameEntry.Entity.ShowEntityAsync(entityTypeId, logicType, userData, m_CancellationTokenSource.Token);
+            m_EntitySerialIds.Add(entity.Id);
+            return entity;
         }
 
         public void HideAllEntity()
         {
-            if (m_EntitySerialIds.Count > 0)
+            HideAllEntity(false);
+        }
+
+        public void HideAllEntity(bool isShutdown)
+        {
+            if (!isShutdown)
             {
-                foreach (int serialId in m_EntitySerialIds)
+                if (m_EntitySerialIds.Count > 0)
                 {
-                    GameEntry.Entity.HideEntity(serialId);
+                    foreach (int serialId in m_EntitySerialIds)
+                    {
+                        GameEntry.Entity.HideEntity(serialId);
+                    }
                 }
-                m_EntitySerialIds.Clear();
             }
+
+            m_EntitySerialIds.Clear();
             if (m_CancellationTokenSource != null)
             {
                 m_CancellationTokenSource.Cancel();
@@ -165,6 +201,22 @@ namespace Game
         public void HideEntity(Entity entity)
         {
             HideEntity(entity.Id);
+        }
+
+        
+        public void TryHideEntity(int serialId)
+        {
+            if (!m_EntitySerialIds.Contains(serialId))
+            {
+                throw new GameFrameworkException(Utility.Text.Format("Entity serialId : '{0}' not in container.", serialId));
+            }
+            m_EntitySerialIds.Remove(serialId);
+            GameEntry.Entity.TryHideEntity(serialId);
+        }
+
+        public void TryHideEntity(Entity entity)
+        {
+            TryHideEntity(entity.Id);
         }
     }
 }

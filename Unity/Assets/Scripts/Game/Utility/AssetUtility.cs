@@ -69,6 +69,11 @@ namespace Game
             return Utility.Text.Format("Assets/Res/UI/UISprite/{0}.png", assetName);
         }
 
+        public static string GetUISpriteCollectionAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/Res/UI/UISpriteCollection/{0}.asset", assetName);
+        }
+
         public static string GetLubanAsset(string assetName, bool fromJson)
         {
             return Utility.Text.Format("Assets/Res/Luban/{0}.{1}", assetName, fromJson ? "json" : "bytes");

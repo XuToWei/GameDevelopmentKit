@@ -62,7 +62,7 @@ namespace UnityGameFramework.Editor
 
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
-                if (EditorApplication.isPlaying && IsPrefabInHierarchy(t.gameObject))
+                if (GameEntry.IsInitialized && IsPrefabInHierarchy(t.gameObject))
                 {
                     EditorGUILayout.EnumPopup("Resource Mode", t.ResourceMode);
                 }
@@ -266,7 +266,7 @@ namespace UnityGameFramework.Editor
             }
             EditorGUI.EndDisabledGroup();
 
-            if (EditorApplication.isPlaying && IsPrefabInHierarchy(t.gameObject))
+            if (GameEntry.IsInitialized && IsPrefabInHierarchy(t.gameObject))
             {
                 EditorGUILayout.LabelField("Unload Unused Assets", Utility.Text.Format("{0:F2} / {1:F2}", t.LastUnloadUnusedAssetsOperationElapseSeconds, t.MaxUnloadUnusedAssetsInterval));
                 EditorGUILayout.LabelField("Read-Only Path", t.ReadOnlyPath.ToString());

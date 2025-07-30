@@ -32,7 +32,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "7a0032934b438ad20a4a691f8093ce1865824c42"
+      "hash": "73654e76d28386dbc7766f803e2cb7a243e331e6"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -320,6 +320,13 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.yasirkula.inspectplus": {
+      "version": "https://github.com/yasirkula/UnityInspectPlus.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "160da9f371f8fd02ea2b24acdb8e86bc6c627f20"
+    },
     "com.yasirkula.runtimeinspector": {
       "version": "https://github.com/yasirkula/UnityRuntimeInspector.git",
       "depth": 0,
@@ -332,7 +339,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "b1eb5755fd2c06f95cead6ed837ba9db94c740ea"
+      "hash": "dc21ade96bd3139d12d7b89217780813d902202c"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",

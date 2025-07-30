@@ -221,7 +221,7 @@ namespace Game
             return m_EntityContainer.ShowEntity(entityTypeId, logicType, onShowSuccess, onShowFailure);
         }
 
-        public int? ShowEntity<T>(int entityTypeId, object userData) where T : EntityLogic
+        public int? ShowEntity<T>(int entityTypeId, object userData = null) where T : EntityLogic
         {
             if (m_EntityContainer == null)
             {
@@ -230,7 +230,7 @@ namespace Game
             return m_EntityContainer.ShowEntity<T>(entityTypeId, userData);
         }
 
-        public int? ShowEntity(int entityTypeId, Type logicType, object userData)
+        public int? ShowEntity(int entityTypeId, Type logicType, object userData = null)
         {
             if (m_EntityContainer == null)
             {
@@ -239,7 +239,7 @@ namespace Game
             return m_EntityContainer.ShowEntity(entityTypeId, logicType, userData);
         }
 
-        public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData) where T : EntityLogic
+        public UniTask<Entity> ShowEntityAsync<T>(int entityTypeId, object userData = null) where T : EntityLogic
         {
             if (m_EntityContainer == null)
             {
@@ -248,7 +248,7 @@ namespace Game
             return m_EntityContainer.ShowEntityAsync(entityTypeId, typeof(T), userData);
         }
 
-        public UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData)
+        public UniTask<Entity> ShowEntityAsync(int entityTypeId, Type logicType, object userData = null)
         {
             if (m_EntityContainer == null)
             {
@@ -283,19 +283,19 @@ namespace Game
         {
             if (m_ResourceContainer == null)
             {
-                m_ResourceContainer = ResourceContainer.Create(m_CancellationTokenSource.Token);
+                m_ResourceContainer = ResourceContainer.Create(this);
             }
             m_ResourceContainer.LoadAsset(assetName, onLoadSuccess, onLoadFailure, priority, updateEvent, dependencyAssetEvent);
         }
 
-        public async UniTask<T> LoadAssetAsync<T>(string assetName, int priority = 0,
+        public UniTask<T> LoadAssetAsync<T>(string assetName, int priority = 0,
             Action<float> updateEvent = null, Action<string> dependencyAssetEvent = null) where T : UnityEngine.Object
         {
             if (m_ResourceContainer == null)
             {
-                m_ResourceContainer = ResourceContainer.Create(m_CancellationTokenSource.Token);
+                m_ResourceContainer = ResourceContainer.Create(this);
             }
-            return await m_ResourceContainer.LoadAssetAsync<T>(assetName, priority, updateEvent, dependencyAssetEvent);
+            return m_ResourceContainer.LoadAssetAsync<T>(assetName, priority, updateEvent, dependencyAssetEvent);
         }
 
         public void UnloadAsset(UnityEngine.Object asset)

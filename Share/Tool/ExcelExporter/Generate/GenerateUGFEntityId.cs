@@ -22,7 +22,7 @@ namespace ET
             if (ExcelExporter.ExcelExporter_Luban.IsEnableGameHot)
             {
                 GenerateCS("Game.Hot", "EntityId",
-                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Runtime/Generate/UGF/EntityId.cs"));
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/UGF/EntityId.cs"));
             }
         }
         
@@ -64,7 +64,7 @@ namespace ET
             {
                 if (string.IsNullOrEmpty(drEntity.CSName))
                 {
-                    throw new Exception($"UGFEntityId {drEntity.Id} CSName is empty!");
+                    continue;
                 }
                 stringBuilder.AppendLine("");
                 stringBuilder.AppendLine("        /// <summary>");

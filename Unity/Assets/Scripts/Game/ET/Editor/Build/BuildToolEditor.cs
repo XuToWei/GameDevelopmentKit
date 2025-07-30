@@ -90,12 +90,12 @@ namespace ET.Editor
             
             if (GUILayout.Button("ExcelExporter"))
             {
-                ToolEditor.ExcelExporter();
+                EditorTool.ExcelExporter();
             }
 
             if (GUILayout.Button("Proto2CS"))
             {
-                ToolEditor.Proto2CS();
+                EditorTool.Proto2CS();
             }
 
             GUILayout.Space(5);

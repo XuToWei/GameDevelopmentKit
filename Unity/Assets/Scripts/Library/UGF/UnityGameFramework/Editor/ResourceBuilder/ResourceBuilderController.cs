@@ -39,6 +39,8 @@ namespace UnityGameFramework.Editor.ResourceTools
         private IBuildEventHandler m_BuildEventHandler;
         private IFileSystemManager m_FileSystemManager;
 
+        private Dictionary<string, string> m_PackageResourceDataMD5s;
+
         public ResourceBuilderController()
         {
             m_ConfigurationPath = Type.GetConfigurationPath<ResourceBuilderConfigPathAttribute>() ?? Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "GameFramework/Configs/ResourceBuilder.xml"));
@@ -115,6 +117,8 @@ namespace UnityGameFramework.Editor.ResourceTools
             BuildEventHandlerTypeName = string.Empty;
             OutputDirectory = string.Empty;
             OutputPackageSelected = OutputFullSelected = OutputPackedSelected = true;
+
+            m_PackageResourceDataMD5s = new Dictionary<string, string>(StringComparer.Ordinal);
         }
 
         public string ProductName
@@ -224,6 +228,12 @@ namespace UnityGameFramework.Editor.ResourceTools
         }
 
         public bool OutputPackageSelected
+        {
+            get;
+            set;
+        }
+
+        public bool OutputPackageWithMD5
         {
             get;
             set;
@@ -406,6 +416,10 @@ namespace UnityGameFramework.Editor.ResourceTools
                             OutputPackageSelected = bool.Parse(xmlNode.InnerText);
                             break;
 
+                        case "OutputPackageWithMD5":
+                            OutputPackageWithMD5 = bool.Parse(xmlNode.InnerText);
+                            break;
+
                         case "OutputFullSelected":
                             OutputFullSelected = bool.Parse(xmlNode.InnerText);
                             break;
@@ -460,6 +474,7 @@ namespace UnityGameFramework.Editor.ResourceTools
                 xmlSettings.AppendChild(xmlElement);
                 xmlElement = xmlDocument.CreateElement("ForceRebuildAssetBundleSelected");
                 xmlElement.InnerText = ForceRebuildAssetBundleSelected.ToString();
+                xmlSettings.AppendChild(xmlElement);
                 xmlElement = xmlDocument.CreateElement("DisableWriteTypeTreeSelected");
                 xmlElement.InnerText = DisableWriteTypeTreeSelected.ToString();
                 xmlSettings.AppendChild(xmlElement);
@@ -471,6 +486,9 @@ namespace UnityGameFramework.Editor.ResourceTools
                 xmlSettings.AppendChild(xmlElement);
                 xmlElement = xmlDocument.CreateElement("OutputPackageSelected");
                 xmlElement.InnerText = OutputPackageSelected.ToString();
+                xmlSettings.AppendChild(xmlElement);
+                xmlElement = xmlDocument.CreateElement("OutputPackageWithMD5");
+                xmlElement.InnerText = OutputPackageWithMD5.ToString();
                 xmlSettings.AppendChild(xmlElement);
                 xmlElement = xmlDocument.CreateElement("OutputFullSelected");
                 xmlElement.InnerText = OutputFullSelected.ToString();
@@ -1053,6 +1071,18 @@ namespace UnityGameFramework.Editor.ResourceTools
 
         private void ProcessPackageVersionList(string outputPackagePath, Platform platform)
         {
+            string GetName(ResourceData resourceData)
+            {
+                if (OutputPackageWithMD5)
+                {
+                    return Utility.Text.Format("{0}.{1}", resourceData.Name, m_PackageResourceDataMD5s[GetResourceFullName(resourceData.Name, resourceData.Variant)]);
+                }
+                else
+                {
+                    return resourceData.Name;
+                }
+            }
+
             Asset[] originalAssets = m_ResourceCollection.GetAssets();
             PackageVersionList.Asset[] assets = new PackageVersionList.Asset[originalAssets.Length];
             for (int i = 0; i < assets.Length; i++)
@@ -1068,7 +1098,7 @@ namespace UnityGameFramework.Editor.ResourceTools
             foreach (ResourceData resourceData in resourceDatas)
             {
                 ResourceCode resourceCode = resourceData.GetCode(platform);
-                resources[index++] = new PackageVersionList.Resource(resourceData.Name, resourceData.Variant, GetExtension(resourceData), (byte)resourceData.LoadType, resourceCode.Length, resourceCode.HashCode, GetAssetIndexes(resourceData));
+                resources[index++] = new PackageVersionList.Resource(GetName(resourceData), resourceData.Variant, GetExtension(resourceData), (byte)resourceData.LoadType, resourceCode.Length, resourceCode.HashCode, GetAssetIndexes(resourceData));
             }
 
             string[] fileSystemNames = GetFileSystemNames(resourceDatas);
@@ -1348,7 +1378,14 @@ namespace UnityGameFramework.Editor.ResourceTools
 
         private bool ProcessOutput(Platform platform, string outputPackagePath, string outputFullPath, string outputPackedPath, bool additionalCompressionSelected, string name, string variant, string fileSystem, ResourceData resourceData, byte[] bytes, int length, int hashCode, int compressedLength, int compressedHashCode)
         {
-            string fullNameWithExtension = Utility.Text.Format("{0}.{1}", GetResourceFullName(name, variant), GetExtension(resourceData));
+            string resourceFullName = GetResourceFullName(name, variant);
+            if (OutputPackageSelected && OutputPackageWithMD5)
+            {
+                string md5 = Utility.Text.Format("{0:x8}", hashCode);
+                m_PackageResourceDataMD5s.Add(resourceFullName, md5);
+                resourceFullName = GetResourceFullName(Utility.Text.Format("{0}.{1}", name, md5), variant);
+            }
+            string fullNameWithExtension = Utility.Text.Format("{0}.{1}", resourceFullName, GetExtension(resourceData));
 
             if (OutputPackageSelected)
             {
