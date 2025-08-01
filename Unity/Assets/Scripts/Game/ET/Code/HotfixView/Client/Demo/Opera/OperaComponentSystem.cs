@@ -19,7 +19,7 @@ namespace ET.Client
         {
             if (Input.GetMouseButtonDown(1))
             {
-                Ray ray = GameEntry.Camera.MainCamera.ScreenPointToRay(Input.mousePosition);
+                Ray ray = GameEntry.Camera.SceneCamera.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 1000, self.mapMask))
                 {
