@@ -30,9 +30,13 @@ namespace UnityGameFramework.Extension.Editor
 
     public enum ResourceFilterType
     {
+        [Tooltip("指定文件夹打成一个Resource")]
         Root,
+        [Tooltip("指定文件夹下的文件分别打成一个Resource")]
         Children,
+        [Tooltip("指定文件夹下的子文件夹分别打成一个Resource")]
         ChildrenFoldersOnly,
+        [Tooltip("指定文件夹下的子文件夹的文件分别打成一个Resource")]
         ChildrenFilesOnly,
     }
 }
