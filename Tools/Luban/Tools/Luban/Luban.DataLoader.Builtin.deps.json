@@ -293,7 +293,10 @@
           "Scriban": "5.12.0"
         },
         "runtime": {
-          "Luban.Core.dll": {}
+          "Luban.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
