@@ -7,11 +7,23 @@ namespace Game
     {
         public int Id => Entity.Id;
 
+#if UNITY_EDITOR
+        private string m_GameObjectName;
+#endif
+
+        protected override void OnInit(object userData)
+        {
+            base.OnInit(userData); 
+#if UNITY_EDITOR
+            m_GameObjectName = CachedTransform.name;
+#endif
+        }
+
         protected override void OnShow(object userData)
         {
             base.OnShow(userData);
 #if UNITY_EDITOR
-            Name = Utility.Text.Format("[Entity {0}]", Id);
+            Name = Utility.Text.Format("[Entity {0} {1}]", Id, m_GameObjectName);
 #endif
         }
     }

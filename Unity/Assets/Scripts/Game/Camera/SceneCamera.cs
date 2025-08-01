@@ -14,7 +14,7 @@ namespace Game
             if (GameEntry.Event == null)
                 return;
             SceneCameraEnableEventArgs eventArgs = SceneCameraEnableEventArgs.Create(m_SceneCamera);
-            GameEntry.Event.Fire(this, eventArgs);
+            GameEntry.Event.FireNow(this, eventArgs);
         }
         
         private void OnDestroy()
@@ -22,7 +22,7 @@ namespace Game
             if (GameEntry.Event == null)
                 return;
             SceneCameraDisableEventArgs eventArgs = SceneCameraDisableEventArgs.Create(m_SceneCamera);
-            GameEntry.Event.Fire(this, eventArgs);
+            GameEntry.Event.FireNow(this, eventArgs);
         }
     }
 }
