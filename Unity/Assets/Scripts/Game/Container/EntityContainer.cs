@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
+using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
 
 namespace Game
@@ -33,7 +34,7 @@ namespace Game
             }
         }
 
-        private readonly HashSet<int> m_EntitySerialIds = new HashSet<int>();
+        private readonly HashSet<int> m_EntityIds = new HashSet<int>();
         private CancellationTokenSource m_CancellationTokenSource;
 
         public object Owner
@@ -53,7 +54,7 @@ namespace Game
 
         public void Clear()
         {
-            m_EntitySerialIds.Clear();
+            m_EntityIds.Clear();
             m_CancellationTokenSource = null;
             Owner = null;
             GameEntry.Event.Unsubscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
@@ -111,7 +112,7 @@ namespace Game
             int? serialId = GameEntry.Entity.ShowEntity(entityTypeId, logicType, EntityLoaderEventArgs.Create(onShowSuccess, onShowFailure));
             if (serialId.HasValue)
             {
-                m_EntitySerialIds.Add(serialId.Value);
+                m_EntityIds.Add(serialId.Value);
             }
             return serialId;
         }
@@ -131,7 +132,7 @@ namespace Game
             int? serialId = GameEntry.Entity.ShowEntity(entityTypeId, logicType, userData);
             if (serialId.HasValue)
             {
-                m_EntitySerialIds.Add(serialId.Value);
+                m_EntityIds.Add(serialId.Value);
             }
             return serialId;
         }
@@ -158,7 +159,7 @@ namespace Game
                 m_CancellationTokenSource = new CancellationTokenSource();
             }
             Entity entity = await GameEntry.Entity.ShowEntityAsync(entityTypeId, logicType, userData, m_CancellationTokenSource.Token);
-            m_EntitySerialIds.Add(entity.Id);
+            m_EntityIds.Add(entity.Id);
             return entity;
         }
 
@@ -171,16 +172,13 @@ namespace Game
         {
             if (!isShutdown)
             {
-                if (m_EntitySerialIds.Count > 0)
+                foreach (int serialId in m_EntityIds)
                 {
-                    foreach (int serialId in m_EntitySerialIds)
-                    {
-                        GameEntry.Entity.HideEntity(serialId);
-                    }
+                    GameEntry.Entity.HideEntity(serialId);
                 }
             }
 
-            m_EntitySerialIds.Clear();
+            m_EntityIds.Clear();
             if (m_CancellationTokenSource != null)
             {
                 m_CancellationTokenSource.Cancel();
@@ -188,13 +186,81 @@ namespace Game
             }
         }
 
+        public void TryHideAllEntity()
+        {
+            TryHideAllEntity(false);
+        }
+
+        public void TryHideAllEntity(bool isShutdown)
+        {
+            if (!isShutdown)
+            {
+                foreach (int serialId in m_EntityIds)
+                {
+                    GameEntry.Entity.TryHideEntity(serialId);
+                }
+            }
+
+            m_EntityIds.Clear();
+            if (m_CancellationTokenSource != null)
+            {
+                m_CancellationTokenSource.Cancel();
+                m_CancellationTokenSource = null;
+            }
+        }
+
+        public int[] GetEntityIds()
+        {
+            int[] entityIds = new int[m_EntityIds.Count];
+            int index = 0;
+            foreach (int entityId in m_EntityIds)
+            {
+                entityIds[index++] = entityId;
+            }
+            return entityIds;
+        }
+
+        public void GetEntityIds(List<int> result)
+        {
+            if (result == null)
+            {
+                throw new GameFrameworkException("Result list is invalid.");
+            }
+            result.Clear();
+            foreach (int entityId in m_EntityIds)
+            {
+                result.Add(entityId);
+            }
+        }
+
+        public void HideAllLoadingEntity()
+        {
+            HideAllEntity(false);
+        }
+
+        public void HideAllLoadingEntity(bool isShutdown)
+        {
+            if (!isShutdown)
+            {
+                using UGFList<int> entityIds = UGFList<int>.Create();
+                GetEntityIds(entityIds);
+                foreach (int entityId in entityIds)
+                {
+                    if (GameEntry.Entity.IsLoadingEntity(entityId))
+                    {
+                        HideEntity(entityId);
+                    }
+                }
+            }
+        }
+
         public void HideEntity(int serialId)
         {
-            if (!m_EntitySerialIds.Contains(serialId))
+            if (!m_EntityIds.Contains(serialId))
             {
                 throw new GameFrameworkException(Utility.Text.Format("Entity serialId : '{0}' not in container.", serialId));
             }
-            m_EntitySerialIds.Remove(serialId);
+            m_EntityIds.Remove(serialId);
             GameEntry.Entity.HideEntity(serialId);
         }
 
@@ -203,15 +269,13 @@ namespace Game
             HideEntity(entity.Id);
         }
 
-        
         public void TryHideEntity(int serialId)
         {
-            if (!m_EntitySerialIds.Contains(serialId))
+            if (m_EntityIds.Contains(serialId))
             {
-                throw new GameFrameworkException(Utility.Text.Format("Entity serialId : '{0}' not in container.", serialId));
+                m_EntityIds.Remove(serialId);
+                GameEntry.Entity.TryHideEntity(serialId);
             }
-            m_EntitySerialIds.Remove(serialId);
-            GameEntry.Entity.TryHideEntity(serialId);
         }
 
         public void TryHideEntity(Entity entity)

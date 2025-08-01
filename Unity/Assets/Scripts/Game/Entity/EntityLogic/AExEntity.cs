@@ -59,11 +59,35 @@ namespace Game
             m_EventContainer.Unsubscribe(id, handler);
         }
 
+        public void TryUnsubscribe(int id, EventHandler<GameEventArgs> handler)
+        {
+            if (m_EventContainer == null)
+                return;
+            m_EventContainer.TryUnsubscribe(id, handler);
+        }
+
+        public void UnsubscribeAll()
+        {
+            UnsubscribeAll(false);
+        }
+
         public void UnsubscribeAll(bool isShutdown)
         {
             if (m_EventContainer == null)
                 return;
             m_EventContainer.UnsubscribeAll(isShutdown);
+        }
+
+        public void TryUnsubscribeAll()
+        {
+            TryUnsubscribeAll(false);
+        }
+
+        public void TryUnsubscribeAll(bool isShutdown)
+        {
+            if (m_EventContainer == null)
+                return;
+            m_EventContainer.TryUnsubscribeAll(isShutdown);
         }
 
         public int? ShowEntity<T>(int entityTypeId, Action<Entity> onShowSuccess = null, Action onShowFailure = null) where T : EntityLogic
@@ -111,11 +135,28 @@ namespace Game
             return m_EntityContainer.ShowEntityAsync(entityTypeId, logicType, userData);
         }
 
+        public void HideAllEntity()
+        {
+            HideAllEntity(false);
+        }
+
         public void HideAllEntity(bool isShutdown)
         {
             if (m_EntityContainer == null)
                 return;
             m_EntityContainer.HideAllEntity(isShutdown);
+        }
+
+        public void TryHideAllEntity()
+        {
+            TryHideAllEntity(false);
+        }
+
+        public void TryHideAllEntity(bool isShutdown)
+        {
+            if (m_EntityContainer == null)
+                return;
+            m_EntityContainer.TryHideAllEntity(isShutdown);
         }
 
         public void HideEntity(int serialId)

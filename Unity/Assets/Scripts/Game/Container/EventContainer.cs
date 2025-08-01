@@ -45,7 +45,15 @@ namespace Game
             }
             GameEntry.Event.Unsubscribe(id, handler);
         }
-        
+
+        public void TryUnsubscribe(int id, EventHandler<GameEventArgs> handler)
+        {
+            if (m_EventHandlerDict.Remove(id, handler))
+            {
+                GameEntry.Event.TryUnsubscribe(id, handler);
+            }
+        }
+
         public void UnsubscribeAll()
         {
             UnsubscribeAll(false);
@@ -62,6 +70,30 @@ namespace Game
                         foreach (var eventHandler in item.Value)
                         {
                             GameEntry.Event.Unsubscribe(item.Key, eventHandler);
+                        }
+                    }
+                }
+            }
+
+            m_EventHandlerDict.Clear();
+        }
+
+        public void TryUnsubscribeAll()
+        {
+            TryUnsubscribeAll(false);
+        }
+
+        public void TryUnsubscribeAll(bool isShutdown)
+        {
+            if (!isShutdown)
+            {
+                if (m_EventHandlerDict.Count > 0)
+                {
+                    foreach (var item in m_EventHandlerDict)
+                    {
+                        foreach (var eventHandler in item.Value)
+                        {
+                            GameEntry.Event.TryUnsubscribe(item.Key, eventHandler);
                         }
                     }
                 }
