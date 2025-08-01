@@ -13,23 +13,30 @@ namespace Game
 {
 public partial class DTUISound : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRUISound> _dataMap;
-    private readonly System.Collections.Generic.List<DRUISound> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRUISound> _dataMap;
+    private System.Collections.Generic.List<DRUISound> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTUISound(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRUISound>();
-        _dataList = new System.Collections.Generic.List<DRUISound>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRUISound>(n);
+            _dataList = new System.Collections.Generic.List<DRUISound>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRUISound _v;
             _v = global::Game.DRUISound.DeserializeDRUISound(_buf);

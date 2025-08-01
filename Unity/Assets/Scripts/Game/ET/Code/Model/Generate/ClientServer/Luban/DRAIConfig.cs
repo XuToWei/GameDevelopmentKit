@@ -20,7 +20,7 @@ public sealed partial class DRAIConfig : Luban.BeanBase
         Order = _buf.ReadInt();
         Name = _buf.ReadString();
         Desc = _buf.ReadString();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);NodeParams = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); NodeParams.Add(_e0);}}
+        {int n0 = _buf.ReadSize(); NodeParams = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); NodeParams.Add(_e0);}}
         PostInit();
     }
 

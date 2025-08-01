@@ -13,23 +13,30 @@ namespace Game.Hot
 {
 public partial class DTAsteroid : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRAsteroid> _dataMap;
-    private readonly System.Collections.Generic.List<DRAsteroid> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRAsteroid> _dataMap;
+    private System.Collections.Generic.List<DRAsteroid> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTAsteroid(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRAsteroid>();
-        _dataList = new System.Collections.Generic.List<DRAsteroid>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRAsteroid>(n);
+            _dataList = new System.Collections.Generic.List<DRAsteroid>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRAsteroid _v;
             _v = global::Game.Hot.DRAsteroid.DeserializeDRAsteroid(_buf);

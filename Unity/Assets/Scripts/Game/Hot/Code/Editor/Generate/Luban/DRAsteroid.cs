@@ -153,6 +153,5 @@ public sealed class DRAsteroid :  Luban.EditorBeanBase
     public int DeadSoundId;
 
 }
-
 }
 

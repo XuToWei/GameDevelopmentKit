@@ -80,6 +80,5 @@ public sealed class vec3 :  Luban.EditorBeanBase
     public float z;
 
 }
-
 }
 

@@ -159,6 +159,5 @@ public sealed class DRUnitConfig :  Luban.EditorBeanBase
     public int Weight;
 
 }
-
 }
 

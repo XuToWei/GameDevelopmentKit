@@ -13,23 +13,30 @@ namespace Game
 {
 public partial class DTMusic : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRMusic> _dataMap;
-    private readonly System.Collections.Generic.List<DRMusic> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRMusic> _dataMap;
+    private System.Collections.Generic.List<DRMusic> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTMusic(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRMusic>();
-        _dataList = new System.Collections.Generic.List<DRMusic>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRMusic>(n);
+            _dataList = new System.Collections.Generic.List<DRMusic>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRMusic _v;
             _v = global::Game.DRMusic.DeserializeDRMusic(_buf);

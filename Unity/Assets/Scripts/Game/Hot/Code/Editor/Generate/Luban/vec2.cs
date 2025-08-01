@@ -67,6 +67,5 @@ public sealed class vec2 :  Luban.EditorBeanBase
     public float y;
 
 }
-
 }
 

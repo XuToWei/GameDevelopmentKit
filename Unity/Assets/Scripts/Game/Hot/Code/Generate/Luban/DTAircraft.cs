@@ -13,23 +13,30 @@ namespace Game.Hot
 {
 public partial class DTAircraft : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRAircraft> _dataMap;
-    private readonly System.Collections.Generic.List<DRAircraft> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRAircraft> _dataMap;
+    private System.Collections.Generic.List<DRAircraft> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTAircraft(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRAircraft>();
-        _dataList = new System.Collections.Generic.List<DRAircraft>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRAircraft>(n);
+            _dataList = new System.Collections.Generic.List<DRAircraft>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRAircraft _v;
             _v = global::Game.Hot.DRAircraft.DeserializeDRAircraft(_buf);

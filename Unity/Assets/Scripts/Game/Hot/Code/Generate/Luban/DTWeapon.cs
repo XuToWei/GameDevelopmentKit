@@ -13,23 +13,30 @@ namespace Game.Hot
 {
 public partial class DTWeapon : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRWeapon> _dataMap;
-    private readonly System.Collections.Generic.List<DRWeapon> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRWeapon> _dataMap;
+    private System.Collections.Generic.List<DRWeapon> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTWeapon(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRWeapon>();
-        _dataList = new System.Collections.Generic.List<DRWeapon>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRWeapon>(n);
+            _dataList = new System.Collections.Generic.List<DRWeapon>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRWeapon _v;
             _v = global::Game.Hot.DRWeapon.DeserializeDRWeapon(_buf);

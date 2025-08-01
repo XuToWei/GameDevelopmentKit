@@ -13,23 +13,30 @@ namespace ET
 {
 public partial class DTUnitConfig : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRUnitConfig> _dataMap;
-    private readonly System.Collections.Generic.List<DRUnitConfig> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRUnitConfig> _dataMap;
+    private System.Collections.Generic.List<DRUnitConfig> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTUnitConfig(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRUnitConfig>();
-        _dataList = new System.Collections.Generic.List<DRUnitConfig>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRUnitConfig>(n);
+            _dataList = new System.Collections.Generic.List<DRUnitConfig>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRUnitConfig _v;
             _v = global::ET.DRUnitConfig.DeserializeDRUnitConfig(_buf);

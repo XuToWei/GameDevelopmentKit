@@ -73,6 +73,5 @@ public sealed class DRDemo :  Luban.EditorBeanBase
     public string Key;
 
 }
-
 }
 

@@ -137,6 +137,5 @@ public sealed class DRWeapon :  Luban.EditorBeanBase
     public int BulletSoundId;
 
 }
-
 }
 

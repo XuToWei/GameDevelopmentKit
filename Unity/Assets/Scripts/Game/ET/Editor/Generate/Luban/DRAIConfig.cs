@@ -146,6 +146,5 @@ public sealed class DRAIConfig :  Luban.EditorBeanBase
     public System.Collections.Generic.List<int> NodeParams;
 
 }
-
 }
 

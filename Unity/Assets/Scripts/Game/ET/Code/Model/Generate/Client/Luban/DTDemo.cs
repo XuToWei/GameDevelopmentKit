@@ -13,23 +13,30 @@ namespace ET
 {
 public partial class DTDemo : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRDemo> _dataMap;
-    private readonly System.Collections.Generic.List<DRDemo> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRDemo> _dataMap;
+    private System.Collections.Generic.List<DRDemo> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTDemo(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRDemo>();
-        _dataList = new System.Collections.Generic.List<DRDemo>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRDemo>(n);
+            _dataList = new System.Collections.Generic.List<DRDemo>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRDemo _v;
             _v = global::ET.DRDemo.DeserializeDRDemo(_buf);

@@ -13,23 +13,30 @@ namespace Game
 {
 public partial class DTScene : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRScene> _dataMap;
-    private readonly System.Collections.Generic.List<DRScene> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRScene> _dataMap;
+    private System.Collections.Generic.List<DRScene> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTScene(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRScene>();
-        _dataList = new System.Collections.Generic.List<DRScene>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRScene>(n);
+            _dataList = new System.Collections.Generic.List<DRScene>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRScene _v;
             _v = global::Game.DRScene.DeserializeDRScene(_buf);

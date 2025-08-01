@@ -93,6 +93,5 @@ public sealed class vec4 :  Luban.EditorBeanBase
     public float w;
 
 }
-
 }
 

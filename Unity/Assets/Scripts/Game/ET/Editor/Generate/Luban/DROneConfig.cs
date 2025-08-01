@@ -73,6 +73,5 @@ public sealed class DROneConfig :  Luban.EditorBeanBase
     public int Test;
 
 }
-
 }
 

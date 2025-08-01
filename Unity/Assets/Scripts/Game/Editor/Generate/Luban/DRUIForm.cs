@@ -165,6 +165,5 @@ public sealed class DRUIForm :  Luban.EditorBeanBase
     public bool PauseCoveredUIForm;
 
 }
-
 }
 

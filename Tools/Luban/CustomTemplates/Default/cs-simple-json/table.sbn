@@ -1,6 +1,9 @@
 using Luban;
 using SimpleJSON;
 {{
+    key_type = __table.key_ttype
+    value_type =  __table.value_ttype
+
     func index_type_name
         ret (declaring_type_name $0.type)
     end
@@ -34,8 +37,8 @@ using SimpleJSON;
 public partial class {{__name}} : IDataTable
 {
     {{~if __table.is_map_table ~}}
-    private readonly System.Collections.Generic.Dictionary<{{declaring_type_name __key_type}}, {{declaring_type_name __value_type}}> _dataMap;
-    private readonly System.Collections.Generic.List<{{declaring_type_name __value_type}}> _dataList;
+    private System.Collections.Generic.Dictionary<{{declaring_type_name __key_type}}, {{declaring_type_name __value_type}}> _dataMap;
+    private System.Collections.Generic.List<{{declaring_type_name __value_type}}> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> _loadFunc;
 
     public {{__name}}(System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> loadFunc)
@@ -95,7 +98,7 @@ public partial class {{__name}} : IDataTable
     }
 
     {{~else if __table.is_list_table ~}}
-    private readonly System.Collections.Generic.List<{{declaring_type_name __value_type}}> _dataList;
+    private System.Collections.Generic.List<{{declaring_type_name __value_type}}> _dataList;
     {{~if __table.is_union_index~}}
     private {{table_union_map_type_name}} _dataMapUnion;
     {{~else if !__table.index_list.empty?~}}
@@ -108,20 +111,20 @@ public partial class {{__name}} : IDataTable
     public {{__name}}(System.Func<Cysharp.Threading.Tasks.UniTask<JSONNode>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataList = new System.Collections.Generic.List<{{declaring_type_name __value_type}}>();
-        {{~if __table.is_union_index~}}
-        _dataMapUnion = new {{table_union_map_type_name}}();
-        {{~else if !__table.index_list.empty?~}}
-        {{~for idx in __table.index_list~}}
-        _dataMap_{{idx.index_field.name}} = new System.Collections.Generic.Dictionary<{{declaring_type_name idx.type}}, {{declaring_type_name __value_type}}>();
-        {{~end~}}
-        {{~end~}}
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         JSONNode _json = await _loadFunc();
-        _dataList.Clear();
+        int count = _json.Count;
+        if(_dataList == null)
+        {
+            _dataList = new System.Collections.Generic.List<{{declaring_type_name __value_type}}>(count);
+        }
+        else
+        {
+            _dataList.Clear();
+        }
         foreach(JSONNode _ele in _json.Children)
         {
             {{declaring_type_name __value_type}} _v;
@@ -129,14 +132,28 @@ public partial class {{__name}} : IDataTable
             _dataList.Add(_v);
         }
         {{~if __table.is_union_index~}}
-        _dataMapUnion.Clear();
+        if(_dataMapUnion == null)
+        {
+            _dataMapUnion = new {{table_union_map_type_name}}(count);
+        }
+        else
+        {
+            _dataMapUnion.Clear();
+        }
         foreach(var _v in _dataList)
         {
             _dataMapUnion.Add(({{table_key_list "_v"}}), _v);
         }
         {{~else if !__table.index_list.empty?~}}
         {{~for idx in __table.index_list~}}
-        _dataMap_{{idx.index_field.name}}.Clear();
+        if(_dataMap_{{idx.index_field.name}} == null)
+        {
+            _dataMap_{{idx.index_field.name}} = new System.Collections.Generic.Dictionary<{{declaring_type_name idx.type}}, {{declaring_type_name __value_type}}>(count);
+        }
+        else
+        {
+            _dataMap_{{idx.index_field.name}}.Clear();
+        }
         {{~end~}}
         foreach(var _v in _dataList)
         {
