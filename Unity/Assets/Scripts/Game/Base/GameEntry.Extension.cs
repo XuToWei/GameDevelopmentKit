@@ -19,6 +19,12 @@ namespace Game
             private set;
         }
 
+        public static CodeRunnerComponent CodeRunner
+        {
+            get;
+            private set;
+        }
+
         public static NetworkServiceComponent NetworkService
         {
             get;
@@ -53,6 +59,7 @@ namespace Game
         {
             BuiltinData = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinDataComponent>();
             Camera = UnityGameFramework.Runtime.GameEntry.GetComponent<CameraComponent>();
+            CodeRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<CodeRunnerComponent>();
             NetworkService = UnityGameFramework.Runtime.GameEntry.GetComponent<NetworkServiceComponent>();
             Screen = UnityGameFramework.Runtime.GameEntry.GetComponent<ScreenComponent>();
             SpriteCollection = UnityGameFramework.Runtime.GameEntry.GetComponent<SpriteCollectionComponent>();
