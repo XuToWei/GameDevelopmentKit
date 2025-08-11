@@ -27,6 +27,7 @@ namespace ET
                 s_StringBuilder.Append("using ProtoBuf;\n");
                 s_StringBuilder.Append("using System;\n");
                 s_StringBuilder.Append("using System.Collections.Generic;\n");
+                s_StringBuilder.Append("using GameFramework;\n");
                 s_StringBuilder.Append("\n");
                 s_StringBuilder.Append($"namespace {nameSpace}\n");
                 s_StringBuilder.Append("{\n");
@@ -263,6 +264,13 @@ namespace ET
                     sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }} = new Dictionary<{keyType}, {valueType}>();\n");
 
+                    if (IsClearType(valueType))
+                    {
+                        disposeSb.Append($"\t\t\tforeach(var item in {v}.Values)\n");
+                        disposeSb.Append("\t\t\t{\n");
+                        disposeSb.Append($"\t\t\t\tReference.Release(item);\n");
+                        disposeSb.Append("\t\t\t}\n");
+                    }
                     disposeSb.Append($"\t\t\tthis.{v}.Clear();\n");
                 }
                 catch (Exception)
@@ -286,12 +294,46 @@ namespace ET
                     sb.Append($"\t\t[ProtoMember({n})]\n");
                     sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }} = new List<{type}>();\n");
 
+                    if (IsClearType(type))
+                    {
+                        disposeSb.Append($"\t\t\tforeach(var item in {name})\n");
+                        disposeSb.Append("\t\t\t{\n");
+                        disposeSb.Append($"\t\t\t\tReference.Release(item);\n");
+                        disposeSb.Append("\t\t\t}\n");
+                    }
                     disposeSb.Append($"\t\t\tthis.{name}.Clear();\n");
                 }
                 catch (Exception)
                 {
                     Log.Warning($"ErrorLine => \"{s_CSName}\" : \"{newline}\"\n");
                     throw;
+                }
+            }
+
+            private static bool IsClearType(string type)
+            {
+                switch (type)
+                {
+                    case "short":
+                        return false;
+                    case "int":
+                        return false;
+                    case "byte[]":
+                        return false;
+                    case "uint32":
+                        return false;
+                    case "uint":
+                        return false;
+                    case "long":
+                        return false;
+                    case "ulong":
+                        return false;
+                    case "ushort":
+                        return false;
+                    case "string":
+                        return false;
+                    default:
+                        return true;
                 }
             }
 
@@ -353,6 +395,10 @@ namespace ET
                             break;
                         }
                         default:
+                            if (IsClearType(type))
+                            {
+                                disposeSb.Append($"\t\t\tReference.Release(this.{name});\n");
+                            }
                             disposeSb.Append($"\t\t\tthis.{name} = default;\n");
                             break;
                     }
