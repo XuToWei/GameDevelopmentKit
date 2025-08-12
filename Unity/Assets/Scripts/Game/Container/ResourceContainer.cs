@@ -113,5 +113,25 @@ namespace Game
                 m_CancellationTokenSource = null;
             }
         }
+
+        public void UnloadAllAssets(bool isShutdown)
+        {
+            if (!isShutdown)
+            {
+                if (m_Assets.Count > 0)
+                {
+                    foreach (var asset in m_Assets)
+                    {
+                        GameEntry.Resource.UnloadAsset(asset);
+                    }
+                    m_Assets.Clear();
+                }
+            }
+            if (m_CancellationTokenSource != null)
+            {
+                m_CancellationTokenSource.Cancel();
+                m_CancellationTokenSource = null;
+            }
+        }
     }
 }

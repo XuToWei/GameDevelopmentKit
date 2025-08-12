@@ -16,7 +16,7 @@ namespace Game
         private EntityContainer m_EntityContainer;
         private ResourceContainer m_ResourceContainer;
 
-        private void ClearUIForm()
+        private void ClearContainer()
         {
             if (m_EventContainer != null)
             {
@@ -49,20 +49,20 @@ namespace Game
         private void OnDestroy()
         {
             RemoveAllUIWidget();
-            ClearUIForm();
+            ClearContainer();
         }
 
         protected override void OnClose(bool isShutdown, object userData)
         {
             m_UIWidgetContainer?.OnClose(isShutdown, userData);
-            HideAllEntity();
-            UnsubscribeAll();
-            UnloadAllAssets();
+            HideAllEntity(isShutdown);
+            UnsubscribeAll(isShutdown);
+            UnloadAllAssets(isShutdown);
             CloseAllUIWidgets(userData, isShutdown);
             if (isShutdown)
             {
                 RemoveAllUIWidget();
-                ClearUIForm();
+                ClearContainer();
             }
             base.OnClose(isShutdown, userData);
         }
@@ -365,6 +365,13 @@ namespace Game
             if (m_ResourceContainer == null)
                 return;
             m_ResourceContainer.UnloadAllAssets();
+        }
+
+        public void UnloadAllAssets(bool isShutdown)
+        {
+            if (m_ResourceContainer == null)
+                return;
+            m_ResourceContainer.UnloadAllAssets(isShutdown);
         }
     }
 }

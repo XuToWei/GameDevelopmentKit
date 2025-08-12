@@ -12,7 +12,7 @@ namespace Game
         private EntityContainer m_EntityContainer;
         private ResourceContainer m_ResourceContainer;
 
-        private void ClearEntity()
+        private void ClearContainer()
         {
             if (m_EventContainer != null)
             {
@@ -24,21 +24,27 @@ namespace Game
                 ReferencePool.Release(m_EntityContainer);
                 m_EntityContainer = null;
             }
+            if (m_ResourceContainer != null)
+            {
+                ReferencePool.Release(m_ResourceContainer);
+                m_ResourceContainer = null;
+            }
         }
 
         protected override void OnRecycle()
         {
             base.OnRecycle();
-            ClearEntity();
+            ClearContainer();
         }
 
         protected override void OnHide(bool isShutdown, object userData)
         {
             HideAllEntity(isShutdown);
             UnsubscribeAll(isShutdown);
+            UnloadAllAssets(isShutdown);
             if (isShutdown)
             {
-                ClearEntity();
+                ClearContainer();
             }
             base.OnHide(isShutdown, userData);
         }
@@ -219,6 +225,13 @@ namespace Game
             if (m_ResourceContainer == null)
                 return;
             m_ResourceContainer.UnloadAllAssets();
+        }
+
+        public void UnloadAllAssets(bool isShutdown)
+        {
+            if (m_ResourceContainer == null)
+                return;
+            m_ResourceContainer.UnloadAllAssets(isShutdown);
         }
     }
 }
