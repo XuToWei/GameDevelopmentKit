@@ -48,7 +48,7 @@ public partial class DTWeapon : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DRWeapon> DataMap => _dataMap;
     public System.Collections.Generic.List<DRWeapon> DataList => _dataList;
-    public DRWeapon GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRWeapon GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRWeapon Get(int key) => _dataMap[key];
     public DRWeapon this[int key] => _dataMap[key];
 

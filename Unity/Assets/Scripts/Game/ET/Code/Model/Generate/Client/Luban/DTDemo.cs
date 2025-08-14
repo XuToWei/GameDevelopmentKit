@@ -48,7 +48,7 @@ public partial class DTDemo : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DRDemo> DataMap => _dataMap;
     public System.Collections.Generic.List<DRDemo> DataList => _dataList;
-    public DRDemo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRDemo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRDemo Get(int key) => _dataMap[key];
     public DRDemo this[int key] => _dataMap[key];
 

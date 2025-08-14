@@ -56,7 +56,7 @@ public partial class DTStartZoneConfig : IDataTable
     }
 
     public System.Collections.Generic.List<DRStartZoneConfig> DataList => _dataList;
-    public DRStartZoneConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartZoneConfig __v) ? __v : null;
+    public DRStartZoneConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartZoneConfig __v) ? __v : default;
 
     public void ResolveRef(Tables tables)
     {

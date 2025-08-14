@@ -48,7 +48,7 @@ public partial class DTEntity : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DREntity> DataMap => _dataMap;
     public System.Collections.Generic.List<DREntity> DataList => _dataList;
-    public DREntity GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DREntity GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DREntity Get(int key) => _dataMap[key];
     public DREntity this[int key] => _dataMap[key];
 

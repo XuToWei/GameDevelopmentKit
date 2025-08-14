@@ -48,7 +48,7 @@ public partial class DTUIForm : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DRUIForm> DataMap => _dataMap;
     public System.Collections.Generic.List<DRUIForm> DataList => _dataList;
-    public DRUIForm GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRUIForm GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRUIForm Get(int key) => _dataMap[key];
     public DRUIForm this[int key] => _dataMap[key];
 

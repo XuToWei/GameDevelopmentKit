@@ -48,7 +48,7 @@ public partial class DTAsteroid : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DRAsteroid> DataMap => _dataMap;
     public System.Collections.Generic.List<DRAsteroid> DataList => _dataList;
-    public DRAsteroid GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRAsteroid GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRAsteroid Get(int key) => _dataMap[key];
     public DRAsteroid this[int key] => _dataMap[key];
 

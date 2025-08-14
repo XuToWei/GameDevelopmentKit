@@ -56,7 +56,7 @@ public partial class DTStartProcessConfig : IDataTable
     }
 
     public System.Collections.Generic.List<DRStartProcessConfig> DataList => _dataList;
-    public DRStartProcessConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartProcessConfig __v) ? __v : null;
+    public DRStartProcessConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartProcessConfig __v) ? __v : default;
 
     public void ResolveRef(Tables tables)
     {
