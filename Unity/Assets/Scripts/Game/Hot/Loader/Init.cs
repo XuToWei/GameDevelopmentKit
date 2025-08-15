@@ -1,3 +1,4 @@
+using System.Reflection;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using UnityEngine;
@@ -46,8 +47,9 @@ namespace Game.Hot
             //AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
             if (Define.EnableHotfix && GameEntry.CodeRunner.EnableCodeBytesMode)
             {
-                await LoadCodeBytesAsync("Game.Hot.Code.dll.bytes");
-                await LoadCodeBytesAsync("Game.Hot.Code.pdb.bytes");
+                byte[] dllBytes = await LoadCodeBytesAsync("Game.Hot.Code.dll.bytes");
+                byte[] pdbBytes = await LoadCodeBytesAsync("Game.Hot.Code.pdb.bytes");
+                Assembly.Load(dllBytes, pdbBytes);
             }
             this.m_HotEntryAsset = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetGameHotAsset("HotEntry.prefab"));
             this.m_HotEntryGameObject = GameObject.Instantiate(this.m_HotEntryAsset, GameEntry.CodeRunner.transform);
