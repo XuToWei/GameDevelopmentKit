@@ -7,12 +7,6 @@ namespace Game
     /// </summary>
     public partial class GameEntry
     {
-        public static CodeRunnerComponent CodeRunner
-        {
-            get;
-            private set;
-        }
-
         public static PlatformComponent Platform
         {
             get;
@@ -27,7 +21,6 @@ namespace Game
 
         private void InitGameComponents()
         {
-            CodeRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<CodeRunnerComponent>();
             Platform = UnityGameFramework.Runtime.GameEntry.GetComponent<PlatformComponent>();
             Tables = UnityGameFramework.Runtime.GameEntry.GetComponent<TablesComponent>();
         }

@@ -143,6 +143,5 @@ public sealed class DRAircraft :  Luban.EditorBeanBase
     public int DeadSoundId;
 
 }
-
 }
 

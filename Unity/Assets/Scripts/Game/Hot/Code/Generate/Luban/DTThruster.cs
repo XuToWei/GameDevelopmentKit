@@ -13,23 +13,30 @@ namespace Game.Hot
 {
 public partial class DTThruster : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRThruster> _dataMap;
-    private readonly System.Collections.Generic.List<DRThruster> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRThruster> _dataMap;
+    private System.Collections.Generic.List<DRThruster> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTThruster(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRThruster>();
-        _dataList = new System.Collections.Generic.List<DRThruster>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRThruster>(n);
+            _dataList = new System.Collections.Generic.List<DRThruster>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRThruster _v;
             _v = global::Game.Hot.DRThruster.DeserializeDRThruster(_buf);
@@ -41,7 +48,7 @@ public partial class DTThruster : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DRThruster> DataMap => _dataMap;
     public System.Collections.Generic.List<DRThruster> DataList => _dataList;
-    public DRThruster GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRThruster GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRThruster Get(int key) => _dataMap[key];
     public DRThruster this[int key] => _dataMap[key];
 

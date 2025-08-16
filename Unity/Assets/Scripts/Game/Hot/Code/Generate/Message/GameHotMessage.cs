@@ -3,6 +3,7 @@
 using ProtoBuf;
 using System;
 using System.Collections.Generic;
+using GameFramework;
 
 namespace Game.Hot
 {

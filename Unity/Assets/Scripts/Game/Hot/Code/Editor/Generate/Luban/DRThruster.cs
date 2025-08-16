@@ -73,6 +73,5 @@ public sealed class DRThruster :  Luban.EditorBeanBase
     public float Speed;
 
 }
-
 }
 

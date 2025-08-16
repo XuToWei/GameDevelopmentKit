@@ -13,23 +13,30 @@ namespace Game
 {
 public partial class DTSound : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRSound> _dataMap;
-    private readonly System.Collections.Generic.List<DRSound> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRSound> _dataMap;
+    private System.Collections.Generic.List<DRSound> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTSound(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRSound>();
-        _dataList = new System.Collections.Generic.List<DRSound>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRSound>(n);
+            _dataList = new System.Collections.Generic.List<DRSound>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRSound _v;
             _v = global::Game.DRSound.DeserializeDRSound(_buf);
@@ -41,7 +48,7 @@ public partial class DTSound : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DRSound> DataMap => _dataMap;
     public System.Collections.Generic.List<DRSound> DataList => _dataList;
-    public DRSound GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRSound GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRSound Get(int key) => _dataMap[key];
     public DRSound this[int key] => _dataMap[key];
 
