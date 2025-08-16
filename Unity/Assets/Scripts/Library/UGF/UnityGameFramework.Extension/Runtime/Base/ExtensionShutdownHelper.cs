@@ -16,9 +16,9 @@ namespace UnityGameFramework.Extension
                 webSocketComponent.Shutdown();
             }
             CodeRunnerComponent codeRunnerComponent = GameEntry.GetComponent<CodeRunnerComponent>();
-            if(codeRunnerComponent != null && codeRunnerComponent.IsRunning)
+            if(codeRunnerComponent != null)
             {
-                GameEntry.GetComponent<CodeRunnerComponent>().StopRun();
+                GameEntry.GetComponent<CodeRunnerComponent>().Shutdown();
             }
         }
     }

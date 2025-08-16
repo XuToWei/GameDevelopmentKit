@@ -66,5 +66,13 @@ namespace UnityGameFramework.Extension
             IsRunning = false;
             DestroyImmediate(this.m_InitComponent);
         }
+
+        public void Shutdown()
+        {
+            if (IsRunning)
+            {
+                DestroyImmediate(this.m_InitComponent);
+            }
+        }
     }
 }
