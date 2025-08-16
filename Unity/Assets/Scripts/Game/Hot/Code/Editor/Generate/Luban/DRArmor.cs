@@ -89,6 +89,5 @@ public sealed class DRArmor :  Luban.EditorBeanBase
     public int Defense;
 
 }
-
 }
 

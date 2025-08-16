@@ -146,6 +146,5 @@ public sealed class DRUISound :  Luban.EditorBeanBase
     public float Volume;
 
 }
-
 }
 

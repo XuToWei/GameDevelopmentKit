@@ -17,7 +17,7 @@ using UnityEditor.U2D;
 namespace UnityGameFramework.Extension
 {
     [CreateAssetMenu(fileName = "SpriteCollection", menuName = "UGF/SpriteCollection")]
-    public class SpriteCollection : SerializedScriptableObject
+    public sealed class SpriteCollection : SerializedScriptableObject
     {
         [OdinSerialize, Searchable] [DictionaryDrawerSettings(KeyLabel = "Path", ValueLabel = "Sprite", IsReadOnly = true)]
         private Dictionary<string, Sprite> m_Sprites = new Dictionary<string, Sprite>();

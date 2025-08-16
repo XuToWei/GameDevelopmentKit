@@ -17,8 +17,8 @@ public sealed partial class DRAircraft : Luban.BeanBase
     {
         Id = _buf.ReadInt();
         ThrusterId = _buf.ReadInt();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);WeaponIds = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); WeaponIds.Add(_e0);}}
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);ArmorIds = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); ArmorIds.Add(_e0);}}
+        {int n0 = _buf.ReadSize(); WeaponIds = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); WeaponIds.Add(_e0);}}
+        {int n0 = _buf.ReadSize(); ArmorIds = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); ArmorIds.Add(_e0);}}
         DeadEffectId = _buf.ReadInt();
         DeadSoundId = _buf.ReadInt();
         PostInit();

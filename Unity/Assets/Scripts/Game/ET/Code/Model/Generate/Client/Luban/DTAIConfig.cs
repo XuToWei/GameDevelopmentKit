@@ -13,23 +13,30 @@ namespace ET
 {
 public partial class DTAIConfig : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRAIConfig> _dataMap;
-    private readonly System.Collections.Generic.List<DRAIConfig> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRAIConfig> _dataMap;
+    private System.Collections.Generic.List<DRAIConfig> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTAIConfig(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRAIConfig>();
-        _dataList = new System.Collections.Generic.List<DRAIConfig>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRAIConfig>(n);
+            _dataList = new System.Collections.Generic.List<DRAIConfig>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRAIConfig _v;
             _v = global::ET.DRAIConfig.DeserializeDRAIConfig(_buf);
@@ -41,7 +48,7 @@ public partial class DTAIConfig : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DRAIConfig> DataMap => _dataMap;
     public System.Collections.Generic.List<DRAIConfig> DataList => _dataList;
-    public DRAIConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRAIConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRAIConfig Get(int key) => _dataMap[key];
     public DRAIConfig this[int key] => _dataMap[key];
 

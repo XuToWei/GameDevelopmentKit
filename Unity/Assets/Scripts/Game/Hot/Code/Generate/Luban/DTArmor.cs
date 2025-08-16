@@ -13,23 +13,30 @@ namespace Game.Hot
 {
 public partial class DTArmor : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRArmor> _dataMap;
-    private readonly System.Collections.Generic.List<DRArmor> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRArmor> _dataMap;
+    private System.Collections.Generic.List<DRArmor> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTArmor(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRArmor>();
-        _dataList = new System.Collections.Generic.List<DRArmor>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRArmor>(n);
+            _dataList = new System.Collections.Generic.List<DRArmor>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRArmor _v;
             _v = global::Game.Hot.DRArmor.DeserializeDRArmor(_buf);
@@ -41,7 +48,7 @@ public partial class DTArmor : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DRArmor> DataMap => _dataMap;
     public System.Collections.Generic.List<DRArmor> DataList => _dataList;
-    public DRArmor GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRArmor GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRArmor Get(int key) => _dataMap[key];
     public DRArmor this[int key] => _dataMap[key];
 

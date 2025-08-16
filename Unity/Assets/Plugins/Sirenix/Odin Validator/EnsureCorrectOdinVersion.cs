@@ -15,7 +15,7 @@ namespace Sirenix.OdinValidator.Editor
 
     internal static class EnsureCorrectOdinVersion
     {
-        private const string validatorVersion = "3.3.1.11";
+        private const string validatorVersion = "3.3.1.13";
 
         private static bool IsHeadlessOrBatchMode { get { return SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Null || UnityEditorInternal.InternalEditorUtility.inBatchMode; } }
 
@@ -23,6 +23,7 @@ namespace Sirenix.OdinValidator.Editor
         private static void Init()
         {
 #if SIRENIX_INTERNAL
+            #pragma warning disable 0162 // Unreachable code detected
             return;
 #endif
 

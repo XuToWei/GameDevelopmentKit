@@ -13,7 +13,6 @@ namespace UnityGameFramework.Extension
         
         public void Dispose()
         {
-            this.Clear();
             ReferencePool.Release(this);
         }
     }

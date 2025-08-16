@@ -9,7 +9,6 @@ namespace UnityGameFramework.Runtime
     {
         public virtual void Shutdown()
         {
-            GameFrameworkEntry.Shutdown();
         }
     }
 }

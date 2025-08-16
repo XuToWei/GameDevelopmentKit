@@ -130,6 +130,5 @@ public sealed class DRScene :  Luban.EditorBeanBase
     public int BackgroundMusicId;
 
 }
-
 }
 
