@@ -121,7 +121,7 @@ namespace UnityGameFramework.Extension
             }
         }
 
-        public void Shutdown()
+        internal void Shutdown()
         {
             foreach (KeyValuePair<string, WebSocketChannel> channelPair in m_WebSocketChannels)
             {

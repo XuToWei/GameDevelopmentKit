@@ -69,7 +69,10 @@ namespace Game.Hot
             
             m_CanvasGroup.alpha = 0f;
             StopAllCoroutines();
-            StartCoroutine(m_CanvasGroup.FadeToAlpha(1f, FadeTime));
+            if (isActiveAndEnabled)
+            {
+                StartCoroutine(m_CanvasGroup.FadeToAlpha(1f, FadeTime));
+            }
         }
     }
 }
