@@ -13,23 +13,30 @@ namespace Game
 {
 public partial class DTEntity : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DREntity> _dataMap;
-    private readonly System.Collections.Generic.List<DREntity> _dataList;
+    private System.Collections.Generic.Dictionary<int, DREntity> _dataMap;
+    private System.Collections.Generic.List<DREntity> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTEntity(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DREntity>();
-        _dataList = new System.Collections.Generic.List<DREntity>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DREntity>(n);
+            _dataList = new System.Collections.Generic.List<DREntity>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DREntity _v;
             _v = global::Game.DREntity.DeserializeDREntity(_buf);
@@ -41,7 +48,7 @@ public partial class DTEntity : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DREntity> DataMap => _dataMap;
     public System.Collections.Generic.List<DREntity> DataList => _dataList;
-    public DREntity GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DREntity GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DREntity Get(int key) => _dataMap[key];
     public DREntity this[int key] => _dataMap[key];
 

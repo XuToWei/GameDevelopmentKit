@@ -133,6 +133,5 @@ public sealed class DRStartMachineConfig :  Luban.EditorBeanBase
     public string WatcherPort;
 
 }
-
 }
 

@@ -8,7 +8,7 @@ namespace UnityGameFramework.Extension
     {
         private ResourceComponent m_ResourceComponent;
 
-        public static SpriteCollectionItemObject Create(string collectionPath ,SpriteCollection target,ResourceComponent resourceComponent)
+        public static SpriteCollectionItemObject Create(string collectionPath, SpriteCollection target, ResourceComponent resourceComponent)
         {
             SpriteCollectionItemObject item = ReferencePool.Acquire<SpriteCollectionItemObject>();
             item.Initialize(collectionPath, target);

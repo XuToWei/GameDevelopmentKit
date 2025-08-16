@@ -50,6 +50,10 @@ namespace ET.Analyzer.Custom
             {
                 return;
             }
+            if (!symbol.Name.StartsWith("Log"))
+            {
+                return;
+            }
             //判断方法所在的类是不是GameFrameworkLog.ILogHelper的子类
             var classDeclaration = context.Node.GetParentClassDeclaration();
             if (classDeclaration != null)

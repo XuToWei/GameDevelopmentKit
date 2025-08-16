@@ -247,7 +247,7 @@ namespace UnityGameFramework.Runtime
 
         private void OnDestroy()
         {
-            m_ShutdownHelper.Shutdown();
+            GameFrameworkEntry.Shutdown();
         }
 
         /// <summary>
@@ -292,6 +292,7 @@ namespace UnityGameFramework.Runtime
 
         internal void Shutdown()
         {
+            m_ShutdownHelper.Shutdown();
             Destroy(gameObject);
         }
 

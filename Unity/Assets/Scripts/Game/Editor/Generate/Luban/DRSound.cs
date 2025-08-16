@@ -213,6 +213,5 @@ public sealed class DRSound :  Luban.EditorBeanBase
     public float MaxDistance;
 
 }
-
 }
 

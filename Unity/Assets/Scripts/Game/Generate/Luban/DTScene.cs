@@ -13,23 +13,30 @@ namespace Game
 {
 public partial class DTScene : IDataTable
 {
-    private readonly System.Collections.Generic.Dictionary<int, DRScene> _dataMap;
-    private readonly System.Collections.Generic.List<DRScene> _dataList;
+    private System.Collections.Generic.Dictionary<int, DRScene> _dataMap;
+    private System.Collections.Generic.List<DRScene> _dataList;
     private readonly System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> _loadFunc;
 
     public DTScene(System.Func<Cysharp.Threading.Tasks.UniTask<ByteBuf>> loadFunc)
     {
         _loadFunc = loadFunc;
-        _dataMap = new System.Collections.Generic.Dictionary<int, DRScene>();
-        _dataList = new System.Collections.Generic.List<DRScene>();
     }
 
     public async Cysharp.Threading.Tasks.UniTask LoadAsync()
     {
         ByteBuf _buf = await _loadFunc();
-        _dataMap.Clear();
-        _dataList.Clear();
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        int n = _buf.ReadSize();
+        if(_dataMap == null)
+        {
+            _dataMap = new System.Collections.Generic.Dictionary<int, DRScene>(n);
+            _dataList = new System.Collections.Generic.List<DRScene>(n);
+        }
+        else
+        {
+            _dataMap.Clear();
+            _dataList.Clear();
+        }
+        for(int i = n ; i > 0 ; --i)
         {
             DRScene _v;
             _v = global::Game.DRScene.DeserializeDRScene(_buf);
@@ -41,7 +48,7 @@ public partial class DTScene : IDataTable
 
     public System.Collections.Generic.Dictionary<int, DRScene> DataMap => _dataMap;
     public System.Collections.Generic.List<DRScene> DataList => _dataList;
-    public DRScene GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public DRScene GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRScene Get(int key) => _dataMap[key];
     public DRScene this[int key] => _dataMap[key];
 

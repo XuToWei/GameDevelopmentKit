@@ -130,6 +130,5 @@ public sealed class DRMusic :  Luban.EditorBeanBase
     public float Volume;
 
 }
-
 }
 
