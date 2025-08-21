@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using GameFramework;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace Game
 {
@@ -12,10 +12,12 @@ namespace Game
     public sealed class CommonLoopScrollRect : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDataSource
     {
         [SerializeField]
-        private GameObject m_ItemPrefab;
+        [OnValueChanged("OnItemTemplateChanged")]
+        private GameObject m_ItemTemplate;
 
         private int m_NumItems;
         private Stack<Transform> m_ItemPool = new Stack<Transform>();
+        [SerializeField]
         private LoopScrollRect m_LoopScrollRect;
 
         [IgnorePropertyDeclaration]
@@ -44,7 +46,7 @@ namespace Game
         {
             if (m_ItemPool.Count == 0)
             {
-                return Instantiate(m_ItemPrefab);
+                return Instantiate(m_ItemTemplate);
             }
             Transform candidate = m_ItemPool.Pop();
             candidate.gameObject.SetActive(true);
@@ -70,17 +72,25 @@ namespace Game
 
         private void Awake()
         {
-            m_LoopScrollRect = GetComponent<LoopScrollRect>();
             m_LoopScrollRect.prefabSource = this;
             m_LoopScrollRect.dataSource = this;
+            m_ItemPool.Push(m_ItemTemplate.transform);
+            m_ItemTemplate.SetActive(false);
         }
 
 #if UNITY_EDITOR
-        private void Start()
+        private void OnValidate()
         {
-            if (m_ItemPrefab == null)
+            m_LoopScrollRect = GetComponent<LoopScrollRect>();
+        }
+        
+        [IgnoreLogMethod]
+        private void OnItemTemplateChanged()
+        {
+            if (m_ItemTemplate != null && m_ItemTemplate.transform.parent != m_LoopScrollRect.content)
             {
-                throw new GameFrameworkException(Utility.Text.Format("ItemPrefab is not set in CommonLoopScrollRect '{0}'.", this.name));
+                Debug.LogError($"Item template must be a child of LoopScrollRect '{this.name}' content.");
+                m_ItemTemplate = null;
             }
         }
 #endif
