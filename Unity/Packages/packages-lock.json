@@ -334,6 +334,15 @@
       "dependencies": {},
       "hash": "bdd9b5b6f7556290171ad0fdd276b1bc14c462de"
     },
+    "me.qiankanglai.loopscrollrect": {
+      "version": "https://github.com/qiankanglai/LoopScrollRect.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "b07d7b59b944f46605c674069594e989f039018e"
+    },
     "me.xw.codebind": {
       "version": "https://github.com/XuToWei/CodeBind.git",
       "depth": 0,

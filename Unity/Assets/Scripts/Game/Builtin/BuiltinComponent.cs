@@ -11,7 +11,7 @@ using UnityEditor;
 
 namespace Game
 {
-    public sealed class BuiltinDataComponent : GameFrameworkComponent
+    public sealed class BuiltinComponent : GameFrameworkComponent
     {
         [SerializeField]
         private BuiltinBuildInfo m_BuildInfoRelease;
