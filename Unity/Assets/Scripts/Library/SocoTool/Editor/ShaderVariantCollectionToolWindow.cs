@@ -767,7 +767,7 @@ namespace Soco.ShaderVariantsCollection
                     #region 合并文件
                     else if (mBatchToolViewState == BatchToolViewState.MergeFile)
                     {
-                        mOtherCollectionFile = EditorGUILayout.ObjectField("需要合并的内容文件", mOtherCollectionFile, typeof(ShaderVariantCollection)) as ShaderVariantCollection;
+                        mOtherCollectionFile = EditorGUILayout.ObjectField("需要合并的内容文件", mOtherCollectionFile, typeof(ShaderVariantCollection), true) as ShaderVariantCollection;
 
                         if (GUILayout.Button("合并")
                             && mOtherCollectionFile != null
@@ -783,7 +783,7 @@ namespace Soco.ShaderVariantsCollection
                     else if (mBatchToolViewState == BatchToolViewState.ExcludeVariant)
                     {
                         EditorGUILayout.LabelField($"选择一个目标文件，假设这个文件中的变体都是有效变体，不在有效变体中的变体，将在当前操作文件中被删除（交集运算）");
-                        mOtherCollectionFile = EditorGUILayout.ObjectField("有效变体文件", mOtherCollectionFile, typeof(ShaderVariantCollection)) as ShaderVariantCollection;
+                        mOtherCollectionFile = EditorGUILayout.ObjectField("有效变体文件", mOtherCollectionFile, typeof(ShaderVariantCollection), true) as ShaderVariantCollection;
                         
                         if (GUILayout.Button("排除变体")
                             && mOtherCollectionFile != null
