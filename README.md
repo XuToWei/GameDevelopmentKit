@@ -94,3 +94,5 @@
 [SocoTools](https://github.com/crossous/SocoTools)
 
 [FolderTag](https://github.com/liyingsong99/FolderTag)
+
+[LoopScrollRect](https://github.com/qiankanglai/LoopScrollRect)
