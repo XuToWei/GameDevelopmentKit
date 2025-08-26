@@ -32,7 +32,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "73654e76d28386dbc7766f803e2cb7a243e331e6"
+      "hash": "d505624c78e6d1d2d53efd716abe7349b611681e"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -190,7 +190,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.memoryprofiler": {
-      "version": "1.1.6",
+      "version": "1.1.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {
