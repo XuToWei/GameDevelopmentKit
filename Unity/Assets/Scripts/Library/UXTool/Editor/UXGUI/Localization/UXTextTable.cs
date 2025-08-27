@@ -35,7 +35,7 @@ namespace UnityEngine.UI
         private static async UniTaskVoid ConvertTextTableAsync()
         {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-            const string tools = "./Tool";
+            const string tools = "dotnet Tool.dll";
 #else
             const string tools = ".\\Tool.exe";
 #endif
