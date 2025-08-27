@@ -15,8 +15,8 @@ namespace UnityGameFramework.Extension
     public sealed class NetworkServiceComponent : GameFrameworkComponent
     {
         private INetworkServiceHelper m_NetworkServiceHelper = null;
-        
-        public NetworkServiceState State => m_NetworkServiceHelper == null ? NetworkServiceState.UnInitialized : m_NetworkServiceHelper.State;
+
+        public int State => m_NetworkServiceHelper.State;
 
         private IEnumerator Start()
         {
@@ -110,7 +110,6 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper has been initialized.");
             }
-
             m_NetworkServiceHelper = serviceNetworkHelper;
             m_NetworkServiceHelper.OnInitialize();
         }
@@ -121,7 +120,6 @@ namespace UnityGameFramework.Extension
             {
                 return;
             }
-
             m_NetworkServiceHelper.OnShutdown();
             m_NetworkServiceHelper = null;
         }
@@ -132,7 +130,6 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-
             m_NetworkServiceHelper.Connect();
         }
 
@@ -142,7 +139,6 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-
             m_NetworkServiceHelper.Disconnect();
         }
 
@@ -152,7 +148,6 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-
             m_NetworkServiceHelper.Send(packet);
         }
 
@@ -162,13 +157,7 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-
-            if(!m_NetworkServiceHelper.IsChannel(channel))
-            {
-                return;
-            }
-
-            m_NetworkServiceHelper.OnConnected();
+            m_NetworkServiceHelper.OnConnected(channel);
         }
 
         private void OnDisconnected(object channel)
@@ -177,13 +166,7 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-
-            if(!m_NetworkServiceHelper.IsChannel(channel))
-            {
-                return;
-            }
-
-            m_NetworkServiceHelper.OnDisconnected();
+            m_NetworkServiceHelper.OnDisconnected(channel);
         }
 
         private void OnMissHeartBeat(object channel)
@@ -192,13 +175,7 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-
-            if(!m_NetworkServiceHelper.IsChannel(channel))
-            {
-                return;
-            }
-
-            m_NetworkServiceHelper.OnMissHeartBeat();
+            m_NetworkServiceHelper.OnMissHeartBeat(channel);
         }
 
         private void OnError(string errorMessage, object channel)
@@ -207,13 +184,7 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-
-            if(!m_NetworkServiceHelper.IsChannel(channel))
-            {
-                return;
-            }
-
-            m_NetworkServiceHelper.OnError(errorMessage);
+            m_NetworkServiceHelper.OnError(channel, errorMessage);
         }
 
         private void OnCustomError(string customErrorData, object channel)
@@ -222,13 +193,7 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-
-            if(!m_NetworkServiceHelper.IsChannel(channel))
-            {
-                return;
-            }
-
-            m_NetworkServiceHelper.OnCustomError(customErrorData);
+            m_NetworkServiceHelper.OnCustomError(channel, customErrorData);
         }
     }
 }
