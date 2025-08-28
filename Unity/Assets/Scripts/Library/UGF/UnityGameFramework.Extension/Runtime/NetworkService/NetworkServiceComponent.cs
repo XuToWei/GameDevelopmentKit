@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
 using GameFramework.Network;
@@ -100,9 +102,9 @@ namespace UnityGameFramework.Extension
             OnCustomError(webSocketCustomErrorEventArgs.CustomErrorData.ToString(), webSocketCustomErrorEventArgs.WebSocketChannel);
         }
 
-        public void InitServiceNetworkHelper(INetworkServiceHelper serviceNetworkHelper)
+        public void InitServiceNetworkHelper(INetworkServiceHelper networkServiceHelper)
         {
-            if (serviceNetworkHelper == null)
+            if (networkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
@@ -110,7 +112,7 @@ namespace UnityGameFramework.Extension
             {
                 throw new GameFrameworkException("ServiceNetwork helper has been initialized.");
             }
-            m_NetworkServiceHelper = serviceNetworkHelper;
+            m_NetworkServiceHelper = networkServiceHelper;
             m_NetworkServiceHelper.OnInitialize();
         }
         
@@ -124,31 +126,55 @@ namespace UnityGameFramework.Extension
             m_NetworkServiceHelper = null;
         }
 
-        public void Connect()
+        public void Connect(object userData)
         {
             if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-            m_NetworkServiceHelper.Connect();
+            m_NetworkServiceHelper.Connect(userData);
         }
 
-        public void Disconnect()
+        public void Disconnect(object userData)
         {
             if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-            m_NetworkServiceHelper.Disconnect();
+            m_NetworkServiceHelper.Disconnect(userData);
         }
 
         public void Send<T>(T packet) where T : Packet
         {
+            Send(packet, null);
+        }
+
+        public void Send<T>(T packet, object userData) where T : Packet
+        {
             if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-            m_NetworkServiceHelper.Send(packet);
+            m_NetworkServiceHelper.Send(packet, userData);
+        }
+
+        public UniTask<T2> SendAsync<T1, T2>(T1 packet) where T1 : Packet where T2 : Packet
+        {
+            return SendAsync<T1, T2>(packet, null, CancellationToken.None);
+        }
+
+        public UniTask<T2> SendAsync<T1, T2>(T1 packet, object userData) where T1 : Packet where T2 : Packet
+        {
+            return SendAsync<T1, T2>(packet, userData, CancellationToken.None);
+        }
+
+        public UniTask<T2> SendAsync<T1, T2>(T1 packet, object userData, CancellationToken cancellationToken) where T1 : Packet where T2 : Packet
+        {
+            if (m_NetworkServiceHelper == null)
+            {
+                throw new GameFrameworkException("ServiceNetwork helper is invalid.");
+            }
+            return m_NetworkServiceHelper.SendAsync<T1, T2>(packet, userData, cancellationToken);
         }
 
         private void OnConnected(object channel)
