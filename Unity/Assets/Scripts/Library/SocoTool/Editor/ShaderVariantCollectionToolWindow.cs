@@ -45,7 +45,7 @@ namespace Soco.ShaderVariantsCollection
             {
                 if (mCollectionMapper == null || mCollectionMapper.mCollection != mCollectionFile)
                 {
-                    mCollectionMapper = ScriptableObject.CreateInstance<ShaderVariantCollectionMapper>();
+                    mCollectionMapper = CreateInstance<ShaderVariantCollectionMapper>();
                     mCollectionMapper.Init(mCollectionFile);
                     if(mShaderViewSelectedShader != null)
                         CollectPassKeywordMap(collectionMapper.GetShaderVariants(mShaderViewSelectedShader));
@@ -59,7 +59,7 @@ namespace Soco.ShaderVariantsCollection
         {
             if (mCollectionMapper != null)
             {
-                ScriptableObject.DestroyImmediate(mCollectionMapper);
+                DestroyImmediate(mCollectionMapper);
                 mCollectionMapper = null;
             }
         }
@@ -165,7 +165,8 @@ namespace Soco.ShaderVariantsCollection
             CollectorList,
             MaterialFilter,
             VariantFilter,
-            MaterialFrom
+            MaterialFrom,
+            KeywordFrom
         }
         
         private int mSelectedInterfaceImplIndex;
@@ -177,6 +178,10 @@ namespace Soco.ShaderVariantsCollection
 
         private Material mTestMaterial = null;
         
+        private Shader mTestShader = null;
+        private string mTestKeyword = "";
+        private List<Material> mKeywordFromMaterialList = new List<Material>();
+        private Vector2 mTestKeywordScrollViewPos = Vector2.zero;
         #endregion
         
         #region BatchTool
@@ -184,6 +189,7 @@ namespace Soco.ShaderVariantsCollection
         {
             ExecutorList,
             MergeFile,
+            ExcludeVariant,
             SplitFile,
             MaxCount
         }
@@ -192,6 +198,7 @@ namespace Soco.ShaderVariantsCollection
         {
             new GUIContent("执行器列表", "打开执行器列表"),
             new GUIContent("合并文件", "将另一个变体收集文件的内容合并到当前文件"),
+            new GUIContent("排除变体", "排除非有效变体（有效变体放在另一个文件中）"),
             new GUIContent("分割文件", "自动将变体收集文件分割为数个文件"),
         };
 
@@ -432,25 +439,12 @@ namespace Soco.ShaderVariantsCollection
                         if (GUILayout.Button(sBatchToolViewStateStyles[(int)state], GUILayout.ExpandWidth(true)))
                         {
                             mBatchToolViewState = state;
+                            
+                            mOtherCollectionFile = null;
                         }
 
                         GUI.color = oriStateColor;
                     }
-                        
-                    // if (GUILayout.Button(, GUILayout.ExpandWidth(true)))
-                    // {
-                    //     mBatchToolViewState = BatchToolViewState.ExecutorList;
-                    // }
-                    //
-                    // if (GUILayout.Button(, GUILayout.ExpandWidth(true)))
-                    // {
-                    //     mBatchToolViewState = BatchToolViewState.MergeFile;
-                    // }
-                    //
-                    // if (GUILayout.Button(, GUILayout.ExpandWidth(true)))
-                    // {
-                    //     mBatchToolViewState = BatchToolViewState.SplitFile;
-                    // }
                 }
                 
                 if (mCurrentFeatureState == FeatureViewState.CollectionTool)
@@ -519,7 +513,11 @@ namespace Soco.ShaderVariantsCollection
                         mCollectionViewState = CollectionViewState.MaterialFrom;
                     }
                     
-                    
+                    if (mConverter.GetMaterials().Count() > 0 && GUILayout.Button(new GUIContent("keyword来源检查", "查找keyword被哪个材质收集到的"), GUILayout.ExpandWidth(true)))
+                    {
+                        mCollectionViewState = CollectionViewState.KeywordFrom;
+                    }
+
                 }
             }
             
@@ -667,7 +665,7 @@ namespace Soco.ShaderVariantsCollection
                 }
                 #endregion
                 
-                #region 项目变体收集工具F
+                #region 项目变体收集工具
 
                 if (mCurrentFeatureState == FeatureViewState.CollectionTool)
                 {
@@ -722,7 +720,40 @@ namespace Soco.ShaderVariantsCollection
                     
                 }
                 #endregion
+                #region Keyword来源
+                else if (mCollectionViewState == CollectionViewState.KeywordFrom)
+                {
+                    Shader newTestShader = EditorGUILayout.ObjectField("限定Shader(可空)", mTestShader, typeof(Shader), true) as Shader;
+                    string newTestKeyword = EditorGUILayout.TextField("待检测keyword", mTestKeyword);
 
+                    if (newTestShader != mTestShader || newTestKeyword != mTestKeyword)
+                    {
+                        mTestShader = newTestShader;
+                        mTestKeyword = newTestKeyword;
+                        mTestKeywordScrollViewPos = Vector2.zero;
+                        mKeywordFromMaterialList.Clear();
+                            
+                        if (mTestKeyword != "")
+                            mConverter.GetKeywordFromMaterial(mTestKeyword, mKeywordFromMaterialList, mTestShader);
+                    }
+                        
+                    if (mTestKeyword != "" && mKeywordFromMaterialList.Count() == 0)
+                        EditorGUILayout.LabelField("当前材质收集到这个keyword");
+                    else if (mKeywordFromMaterialList.Count() > 0)
+                    {
+                        mTestKeywordScrollViewPos = EditorGUILayout.BeginScrollView(mTestKeywordScrollViewPos);
+                        foreach (Material mat in mKeywordFromMaterialList)
+                        {
+                            if (GUILayout.Button(mat.name))
+                            {
+                                Selection.activeObject = mat;
+                                EditorGUIUtility.PingObject(mat);
+                            }
+                        }
+                        EditorGUILayout.EndScrollView();
+                    }
+                }
+                #endregion
                 #region 批处理工具
 
                 if (mCurrentFeatureState == FeatureViewState.BatchTool)
@@ -745,6 +776,23 @@ namespace Soco.ShaderVariantsCollection
                                 $"是否确认将{mOtherCollectionFile.name}的内容合并到{mCollectionFile.name}", "确认", "返回"))
                         {
                             collectionMapper.Merge(mOtherCollectionFile);
+                        }
+                    }
+                    #endregion
+                    #region 排除变体
+                    else if (mBatchToolViewState == BatchToolViewState.ExcludeVariant)
+                    {
+                        EditorGUILayout.LabelField($"选择一个目标文件，假设这个文件中的变体都是有效变体，不在有效变体中的变体，将在当前操作文件中被删除（交集运算）");
+                        mOtherCollectionFile = EditorGUILayout.ObjectField("有效变体文件", mOtherCollectionFile, typeof(ShaderVariantCollection), true) as ShaderVariantCollection;
+                        
+                        if (GUILayout.Button("排除变体")
+                            && mOtherCollectionFile != null
+                            && mOtherCollectionFile != mCollectionFile
+                            && EditorUtility.DisplayDialog("合并确认",
+                                $"是否确认将不在{mOtherCollectionFile.name}中的变体，从{mCollectionFile.name}中删除", "确认", "返回"))
+                        {
+                            int count = collectionMapper.Intersection(mOtherCollectionFile);
+                            Debug.Log($"已排除{count}个变体");
                         }
                     }
                     #endregion
