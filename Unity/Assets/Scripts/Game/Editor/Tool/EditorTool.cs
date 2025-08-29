@@ -14,7 +14,7 @@ namespace Game.Editor
             async UniTaskVoid RunAsync()
             {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-                const string TOOL = "./Tool";
+                const string TOOL = "dotnet Tool.dll";
 #else
                 const string TOOL = ".\\Tool.exe";
 #endif
@@ -22,7 +22,7 @@ namespace Game.Editor
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
                 await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1", "../Bin/");
 #else
-                await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1 --Customs=GB2312", "../Bin/");
+                await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1", "../Bin/");
 #endif
                 stopwatch.Stop();
                 UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
@@ -45,7 +45,7 @@ namespace Game.Editor
             async UniTaskVoid RunAsync()
             {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-                const string TOOL = "./Tool";
+                const string TOOL = "dotnet Tool.dll";
 #else
                 const string TOOL = ".\\Tool.exe";
 #endif
@@ -53,7 +53,7 @@ namespace Game.Editor
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
                 await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1 --Customs=Json", "../Bin/");
 #else
-                await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1 --Customs=Json,GB2312", "../Bin/");
+                await ShellTool.RunAsync($"{TOOL} --AppType=ExcelExporter --Console=1 --Customs=Json", "../Bin/");
 #endif
                 stopwatch.Stop();
                 UnityEngine.Debug.Log($"Export cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
@@ -74,7 +74,7 @@ namespace Game.Editor
         public static void Proto2CS()
         {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-            const string TOOL = "./Tool";
+            const string TOOL = "dotnet Tool.dll";
 #else
             const string TOOL = ".\\Tool.exe";
 #endif

@@ -36,7 +36,7 @@ namespace Game
 
             if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
             {
-                GameEntry.BuiltinData.OpenDialogForm(new BuiltinDialogParams
+                GameEntry.Builtin.OpenDialogForm(new BuiltinDialogParams
                 {
                     Mode = 2,
                     Title = GameEntry.Localization.GetString("UpdateResourceViaCarrierDataNetwork.Title"),
@@ -85,7 +85,7 @@ namespace Game
         {
             if (m_UpdateResourceForm == null)
             {
-                m_UpdateResourceForm = Object.Instantiate(GameEntry.BuiltinData.UpdateResourceFormTemplate);
+                m_UpdateResourceForm = Object.Instantiate(GameEntry.Builtin.UpdateResourceFormTemplate);
             }
 
             Log.Info("Start update resources...");

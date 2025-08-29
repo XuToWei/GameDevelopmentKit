@@ -91,7 +91,7 @@ namespace UnityGameFramework.Extension
         /// </summary>
         /// <param name="name">网络频道名称。</param>
         /// <returns>是否销毁网络频道成功。</returns>
-        public bool DestroyNetworkChannel(string name)
+        public bool DestroyWebSocketChannel(string name)
         {
             WebSocketChannel webSocketChannel = null;
             if (m_WebSocketChannels.TryGetValue(name ?? string.Empty, out webSocketChannel))
