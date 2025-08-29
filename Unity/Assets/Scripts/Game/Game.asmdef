@@ -27,7 +27,9 @@
         "UniTask.Extension",
         "LitMotion",
         "LitMotion.Extensions",
-        "LitMotion.Animation"
+        "LitMotion.Animation",
+        "LoopScrollRect.Runtime",
+        "ReplaceComponent.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

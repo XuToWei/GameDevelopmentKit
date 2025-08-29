@@ -7,7 +7,7 @@ namespace Game
     /// </summary>
     public partial class GameEntry
     {
-        public static BuiltinDataComponent BuiltinData
+        public static BuiltinComponent Builtin
         {
             get;
             private set;
@@ -57,7 +57,7 @@ namespace Game
 
         private static void InitExtensionComponents()
         {
-            BuiltinData = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinDataComponent>();
+            Builtin = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinComponent>();
             Camera = UnityGameFramework.Runtime.GameEntry.GetComponent<CameraComponent>();
             CodeRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<CodeRunnerComponent>();
             NetworkService = UnityGameFramework.Runtime.GameEntry.GetComponent<NetworkServiceComponent>();

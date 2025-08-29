@@ -1,13 +1,14 @@
 using System;
 using CodeBind;
+using ReplaceComponent;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Game
 {
+    [ReplaceComponent(typeof(Button))]
     [CodeBindName("ExButton")]
     public class ExButton : Button
     {

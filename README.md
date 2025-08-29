@@ -78,8 +78,6 @@
 
 - [SRDebugger](https://assetstore.unity.com/packages/tools/gui/srdebugger-console-tools-on-device-27688)
 
-- [EnhancedScroller](https://assetstore.unity.com/packages/tools/gui/enhancedscroller-36378)
-
 ***
 
 # 引用库 致谢
@@ -96,3 +94,5 @@
 [SocoTools](https://github.com/crossous/SocoTools)
 
 [FolderTag](https://github.com/liyingsong99/FolderTag)
+
+[LoopScrollRect](https://github.com/qiankanglai/LoopScrollRect)

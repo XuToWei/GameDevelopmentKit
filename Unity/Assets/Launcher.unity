@@ -990,7 +990,7 @@ GameObject:
   - component: {fileID: 513208573}
   - component: {fileID: 513208574}
   m_Layer: 0
-  m_Name: Builtin Data
+  m_Name: Builtin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

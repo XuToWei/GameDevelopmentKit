@@ -324,4 +324,16 @@ public class ShaderVariantCollectionMaterialVariantConverter
             collection.Add(variant);
         }
     }
+    
+    public void GetKeywordFromMaterial(string keyword, IList<Material> matList, Shader shader = null)
+    {
+        foreach (Material mat in GetMaterials())
+        {
+            if (shader != null && mat.shader != shader)
+                continue;
+
+            if (mat.shaderKeywords.Contains(keyword) && !matList.Contains(mat))
+                matList.Add(mat);
+        }
+    }
 }
