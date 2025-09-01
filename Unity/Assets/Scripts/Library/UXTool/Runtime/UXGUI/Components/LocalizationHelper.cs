@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using GameFramework.Localization;
 using UnityGameFramework.Runtime;
 
 public interface ILocalization
@@ -27,7 +28,7 @@ public class LocalizationHelper
     /// <summary>
     /// GameView右上角设置的预览语言
     /// </summary>
-    private static LanguageType previewLangugage = LanguageType.None;
+    private static LanguageType previewLanguage = LanguageType.None;
     public enum LanguageType
     {
         ShowKey = -3,
@@ -87,9 +88,77 @@ public class LocalizationHelper
 #endif
     }
 
+    private static Language s_UGFLanguage = Language.Unspecified;
+
     public static LanguageType GetLanguage()
     {
-        return previewLangugage == LanguageType.None ? globalLanguage : previewLangugage;
+        if (previewLanguage != LanguageType.None)
+        {
+            return previewLanguage;
+        }
+        if (s_LocalizationComponent == null)
+        {
+            return globalLanguage;
+        }
+        if (s_UGFLanguage != s_LocalizationComponent.Language)
+        {
+            s_UGFLanguage = s_LocalizationComponent.Language;
+            switch (s_LocalizationComponent.Language)
+            {
+                case Language.ChineseSimplified:
+                    globalLanguage = LanguageType.ChineseSimplified;
+                    break;
+                case Language.ChineseTraditional:
+                    globalLanguage = LanguageType.ChineseTraditional;
+                    break;
+                case Language.English:
+                    globalLanguage = LanguageType.English;
+                    break;
+                case Language.Japanese:
+                    globalLanguage = LanguageType.Japanese;
+                    break;
+                case Language.Korean:
+                    globalLanguage = LanguageType.Korean;
+                    break;
+                case Language.French:
+                    globalLanguage = LanguageType.French;
+                    break;
+                case Language.German:
+                    globalLanguage = LanguageType.German;
+                    break;
+                case Language.Spanish:
+                    globalLanguage = LanguageType.Spanish;
+                    break;
+                case Language.Russian:
+                    globalLanguage = LanguageType.Russian;
+                    break;
+                case Language.Turkish:
+                    globalLanguage = LanguageType.Turkish;
+                    break;
+                case Language.PortuguesePortugal:
+                    globalLanguage = LanguageType.PortuguesePortugal;
+                    break;
+                case Language.Vietnamese:
+                    globalLanguage = LanguageType.Vietnamese;
+                    break;
+                case Language.Thai:
+                    globalLanguage = LanguageType.Thai;
+                    break;
+                case Language.Arabic:
+                    globalLanguage = LanguageType.Arabic;
+                    break;
+                case Language.Italian:
+                    globalLanguage = LanguageType.Italian;
+                    break;
+                case Language.Indonesian:
+                    globalLanguage = LanguageType.Indonesian;
+                    break;
+                default:
+                    throw new Exception($"Language type '{s_LocalizationComponent.Language}' is invalid.");
+                    break;
+            }
+        }
+        return globalLanguage;
     }
 
     /// <summary>
@@ -98,7 +167,7 @@ public class LocalizationHelper
     /// <param name="type">语言编号</param>
     public static void SetPreviewLanguage(LanguageType type)
     {
-        previewLangugage = type;
+        previewLanguage = type;
         ChangeILocalization();
     }
     /// <summary>
