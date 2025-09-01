@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using GameFramework;
 using GameFramework.Localization;
 using UnityGameFramework.Runtime;
 
@@ -88,77 +89,9 @@ public class LocalizationHelper
 #endif
     }
 
-    private static Language s_UGFLanguage = Language.Unspecified;
-
     public static LanguageType GetLanguage()
     {
-        if (previewLanguage != LanguageType.None)
-        {
-            return previewLanguage;
-        }
-        if (s_LocalizationComponent == null)
-        {
-            return globalLanguage;
-        }
-        if (s_UGFLanguage != s_LocalizationComponent.Language)
-        {
-            s_UGFLanguage = s_LocalizationComponent.Language;
-            switch (s_LocalizationComponent.Language)
-            {
-                case Language.ChineseSimplified:
-                    globalLanguage = LanguageType.ChineseSimplified;
-                    break;
-                case Language.ChineseTraditional:
-                    globalLanguage = LanguageType.ChineseTraditional;
-                    break;
-                case Language.English:
-                    globalLanguage = LanguageType.English;
-                    break;
-                case Language.Japanese:
-                    globalLanguage = LanguageType.Japanese;
-                    break;
-                case Language.Korean:
-                    globalLanguage = LanguageType.Korean;
-                    break;
-                case Language.French:
-                    globalLanguage = LanguageType.French;
-                    break;
-                case Language.German:
-                    globalLanguage = LanguageType.German;
-                    break;
-                case Language.Spanish:
-                    globalLanguage = LanguageType.Spanish;
-                    break;
-                case Language.Russian:
-                    globalLanguage = LanguageType.Russian;
-                    break;
-                case Language.Turkish:
-                    globalLanguage = LanguageType.Turkish;
-                    break;
-                case Language.PortuguesePortugal:
-                    globalLanguage = LanguageType.PortuguesePortugal;
-                    break;
-                case Language.Vietnamese:
-                    globalLanguage = LanguageType.Vietnamese;
-                    break;
-                case Language.Thai:
-                    globalLanguage = LanguageType.Thai;
-                    break;
-                case Language.Arabic:
-                    globalLanguage = LanguageType.Arabic;
-                    break;
-                case Language.Italian:
-                    globalLanguage = LanguageType.Italian;
-                    break;
-                case Language.Indonesian:
-                    globalLanguage = LanguageType.Indonesian;
-                    break;
-                default:
-                    throw new Exception($"Language type '{s_LocalizationComponent.Language}' is invalid.");
-                    break;
-            }
-        }
-        return globalLanguage;
+        return previewLanguage == LanguageType.None ? globalLanguage : previewLanguage;
     }
 
     /// <summary>
@@ -219,11 +152,66 @@ public class LocalizationHelper
         s_EditorGetStringFunc = func;
     }
 #endif
+
     public static async UniTask InitAsync()
     {
         await UniTask.CompletedTask;
         s_LocalizationComponent = GameEntry.GetComponent<LocalizationComponent>();
         s_BaseComponent = GameEntry.GetComponent<BaseComponent>();
+        switch (s_LocalizationComponent.Language)
+        {
+            case Language.ChineseSimplified:
+                SetLanguage(LanguageType.ChineseSimplified);
+                break;
+            case Language.ChineseTraditional:
+                SetLanguage(LanguageType.ChineseTraditional);
+                break;
+            case Language.English:
+                SetLanguage(LanguageType.English);
+                break;
+            case Language.Japanese:
+                SetLanguage(LanguageType.Japanese);
+                break;
+            case Language.Korean:
+                SetLanguage(LanguageType.Korean);
+                break;
+            case Language.French:
+                SetLanguage(LanguageType.French);
+                break;
+            case Language.German:
+                SetLanguage(LanguageType.German);
+                break;
+            case Language.Spanish:
+                SetLanguage(LanguageType.Spanish);
+                break;
+            case Language.Russian:
+                SetLanguage(LanguageType.Russian);
+                break;
+            case Language.Turkish:
+                SetLanguage(LanguageType.Turkish);
+                break;
+            case Language.PortuguesePortugal:
+                SetLanguage(LanguageType.PortuguesePortugal);
+                break;
+            case Language.Vietnamese:
+                SetLanguage(LanguageType.Vietnamese);
+                break;
+            case Language.Thai:
+                SetLanguage(LanguageType.Thai);
+                break;
+            case Language.Arabic:
+                SetLanguage(LanguageType.Arabic);
+                break;
+            case Language.Italian:
+                SetLanguage(LanguageType.Italian);
+                break;
+            case Language.Indonesian:
+                SetLanguage(LanguageType.Indonesian);
+                break;
+            default:
+                throw new GameFrameworkException(Utility.Text.Format("UXTool不支持的语言类型: {0}", s_LocalizationComponent.Language));
+                break;
+        }
     }
 
     public static void Clear()
