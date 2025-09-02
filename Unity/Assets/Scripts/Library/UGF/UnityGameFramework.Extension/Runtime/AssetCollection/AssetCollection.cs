@@ -31,6 +31,7 @@ namespace UnityGameFramework.Extension
         private void OnPathChange()
         {
             m_CollectionPaths = m_CollectionPaths.Distinct().ToList();
+            Pack();
         }
 
         [Button("RefreshCollection")]
