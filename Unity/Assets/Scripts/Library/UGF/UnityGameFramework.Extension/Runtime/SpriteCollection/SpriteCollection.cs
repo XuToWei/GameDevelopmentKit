@@ -17,7 +17,7 @@ using UnityEditor.U2D;
 namespace UnityGameFramework.Extension
 {
     [CreateAssetMenu(fileName = "SpriteCollection", menuName = "UGF/SpriteCollection")]
-    public sealed class SpriteCollection : SerializedScriptableObject
+    public class SpriteCollection : SerializedScriptableObject
     {
         [OdinSerialize, Searchable] [DictionaryDrawerSettings(KeyLabel = "Path", ValueLabel = "Sprite", IsReadOnly = true)]
         private Dictionary<string, Sprite> m_Sprites = new Dictionary<string, Sprite>();
@@ -34,6 +34,9 @@ namespace UnityGameFramework.Extension
         [ListDrawerSettings(DraggableItems = false, IsReadOnly = false, HideAddButton = true)]
         [AssetsOnly]
         private List<Object> m_Objects = new List<Object>();
+        
+        [NonSerialized]
+        private readonly Dictionary<string, Sprite> m_SpritesTemp = new Dictionary<string, Sprite>();
 
         private void OnListChange()
         {
@@ -54,15 +57,49 @@ namespace UnityGameFramework.Extension
         [PropertySpace(16, 16)]
         public void Pack()
         {
-            m_Sprites.Clear();
+            bool isDirty = false;
+
+            int count = m_Objects.Count;
+            for (int i = m_Objects.Count - 1; i >= 0; i--)
+            {
+                if (!ObjectFilter(m_Objects[i]))
+                {
+                    m_Objects.RemoveAt(i);
+                }
+            }
+            m_Objects = m_Objects.Distinct().ToList();
+            isDirty |= m_Objects.Count != count;
+            m_SpritesTemp.Clear();
             for (int i = 0; i < m_Objects.Count; i++)
             {
                 Object obj = m_Objects[i];
-                HandlePackable(obj);
+                HandlePackable(obj, m_SpritesTemp);
             }
 
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
+            if (m_Sprites.Count != m_SpritesTemp.Count)
+            {
+                SetSprites(m_SpritesTemp);
+                isDirty = true;
+            }
+            else
+            {
+                foreach (KeyValuePair<string, Sprite> item in m_Sprites)
+                {
+                    if (!m_SpritesTemp.TryGetValue(item.Key, out Sprite sprite) || sprite != item.Value)
+                    {
+                        SetSprites(m_SpritesTemp);
+                        isDirty = true;
+                        break;
+                    }
+                }
+            }
+
+            m_SpritesTemp.Clear();
+            if (isDirty)
+            {
+                EditorUtility.SetDirty(this);
+                AssetDatabase.SaveAssets();
+            }
         }
 
         [SerializeField]
@@ -144,7 +181,16 @@ namespace UnityGameFramework.Extension
             AssetDatabase.Refresh();
         }
 
-        void HandlePackable(Object obj)
+        void SetSprites(Dictionary<string, Sprite> result)
+        {
+            m_Sprites.Clear();
+            foreach (var (k, v) in result)
+            {
+                m_Sprites.Add(k, v);
+            }
+        }
+
+        void HandlePackable(Object obj, Dictionary<string, Sprite> result)
         {
             string path = AssetDatabase.GetAssetPath(obj);
             if (obj is Sprite sp)
@@ -152,12 +198,12 @@ namespace UnityGameFramework.Extension
                 Object[] objects = AssetDatabase.LoadAllAssetsAtPath(path);
                 if (objects.Length == 2)
                 {
-                    m_Sprites[path] = sp;
+                    result[path] = sp;
                 }
                 else
                 {
                     string regularPath = Utility.Path.GetRegularPath(Path.Combine(path, sp.name));
-                    m_Sprites[regularPath] = sp;
+                    result[regularPath] = sp;
                 }
             }
             else if (obj is Texture2D)
@@ -165,7 +211,7 @@ namespace UnityGameFramework.Extension
                 Object[] objects = AssetDatabase.LoadAllAssetsAtPath(path);
                 if (objects.Length == 2)
                 {
-                    m_Sprites[path] = GetSprites(objects)[0];
+                    result[path] = GetSprites(objects)[0];
                 }
                 else
                 {
@@ -173,7 +219,7 @@ namespace UnityGameFramework.Extension
                     for (int j = 0; j < sprites.Length; j++)
                     {
                         string regularPath = Utility.Path.GetRegularPath(Path.Combine(path, sprites[j].name));
-                        m_Sprites[regularPath] = sprites[j];
+                        result[regularPath] = sprites[j];
                     }
                 }
             }
@@ -186,7 +232,7 @@ namespace UnityGameFramework.Extension
                     Object[] objects = AssetDatabase.LoadAllAssetsAtPath(file);
                     if (objects.Length == 2)
                     {
-                        m_Sprites[file] = GetSprites(objects)[0];
+                        result[file] = GetSprites(objects)[0];
                     }
                     else
                     {
@@ -194,7 +240,7 @@ namespace UnityGameFramework.Extension
                         for (int j = 0; j < sprites.Length; j++)
                         {
                             string regularPath = Utility.Path.GetRegularPath(Path.Combine(file, sprites[j].name));
-                            m_Sprites[regularPath] = sprites[j];
+                            result[regularPath] = sprites[j];
                         }
                     }
                 }
@@ -204,7 +250,7 @@ namespace UnityGameFramework.Extension
                 Object[] objs = spriteAtlas.GetPackables();
                 for (int i = 0; i < objs.Length; i++)
                 {
-                    HandlePackable(objs[i]);
+                    HandlePackable(objs[i], result);
                 }
             }
         }
