@@ -3,7 +3,10 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
+using Object = UnityEngine.Object;
+
 #if UNITY_EDITOR
+using System;
 using System.IO;
 using GameFramework;
 using UnityEditor;
@@ -12,7 +15,7 @@ using UnityEditor;
 namespace UnityGameFramework.Extension
 {
     [CreateAssetMenu(fileName = "AssetCollection", menuName = "UGF/AssetCollection")]
-    public class AssetCollection : SerializedScriptableObject
+    public sealed class AssetCollection : SerializedScriptableObject
     {
 #if UNITY_EDITOR
         [SerializeField]
@@ -21,17 +24,22 @@ namespace UnityGameFramework.Extension
         [OnValueChanged("OnPathChange", IncludeChildren = true)]
         [AssetsOnly]
         private List<DefaultAsset> m_CollectionPaths = new List<DefaultAsset>();
+        
+        [NonSerialized]
+        private readonly Dictionary<string, Object> m_AssetDictTemp = new Dictionary<string, Object>();
 
         private void OnPathChange()
         {
             m_CollectionPaths = m_CollectionPaths.Distinct().ToList();
+            Pack();
         }
 
         [Button("RefreshCollection")]
         public void Pack()
         {
-            var searchPatterns = (string.IsNullOrEmpty(m_CollectionPatterns) ? "*.*" : m_CollectionPatterns).Split(';', ',', '|');
-            m_AssetDict.Clear();
+            bool isDirty = false;
+            m_AssetDictTemp.Clear();
+            string[] searchPatterns = (string.IsNullOrEmpty(m_CollectionPatterns) ? "*.*" : m_CollectionPatterns).Split(';', ',', '|');
             foreach (DefaultAsset pathAsset in m_CollectionPaths)
             {
                 if(pathAsset == null || !ProjectWindowUtil.IsFolder(pathAsset.GetInstanceID()))
@@ -48,18 +56,42 @@ namespace UnityGameFramework.Extension
                         Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(file);
                         if (sprite != null)
                         {
-                            m_AssetDict.Add(file, sprite);
+                            m_AssetDictTemp.Add(file, sprite);
                         }
                         else
                         {
                             Object obj = AssetDatabase.LoadMainAssetAtPath(file);
-                            m_AssetDict.Add(file, obj);
+                            m_AssetDictTemp.Add(file, obj);
                         }
                     }
                 }
             }
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
+            if(m_AssetDictTemp.Count != m_AssetDict.Count)
+            {
+                isDirty = true;
+            }
+            else
+            {
+                foreach (KeyValuePair<string, Object> item in m_AssetDict)
+                {
+                    if(!m_AssetDictTemp.TryGetValue(item.Key, out Object v) || v != item.Value)
+                    {
+                        isDirty = true;
+                        break;
+                    }
+                }
+            }
+            if (isDirty)
+            {
+                m_AssetDict.Clear();
+                foreach (KeyValuePair<string, Object> item in m_AssetDictTemp)
+                {
+                    m_AssetDict.Add(item.Key, item.Value);
+                }
+                m_AssetDictTemp.Clear();
+                EditorUtility.SetDirty(this);
+                AssetDatabase.SaveAssets();
+            }
         }
 #endif
         [OdinSerialize, Searchable]

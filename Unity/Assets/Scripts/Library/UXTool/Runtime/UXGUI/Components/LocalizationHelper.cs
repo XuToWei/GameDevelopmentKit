@@ -210,7 +210,6 @@ public class LocalizationHelper
                 break;
             default:
                 throw new GameFrameworkException(Utility.Text.Format("UXTool不支持的语言类型: {0}", s_LocalizationComponent.Language));
-                break;
         }
     }
 
