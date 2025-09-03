@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 using Game;
@@ -28,7 +27,7 @@ namespace ET
             {
                 throw new GameFrameworkException("ETMonoEntityData ParentEntity is null!");
             }
-            if (m_UGFEntity == default || m_EntityEventTypeLongHashCode != entityData.EntityEventTypeLongHashCode || entityData.ParentEntity != m_UGFEntity.Parent)
+            if (m_UGFEntity == null || m_EntityEventTypeLongHashCode != entityData.EntityEventTypeLongHashCode || entityData.ParentEntity != m_UGFEntity.Parent)
             {
                 UGFEntityDispose();
                 m_EntityEventTypeLongHashCode = entityData.EntityEventTypeLongHashCode;
