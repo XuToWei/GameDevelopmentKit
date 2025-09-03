@@ -168,6 +168,11 @@ namespace UnityGameFramework.Extension
             return SendAsync<T1, T2>(packet, userData, CancellationToken.None);
         }
 
+        public UniTask<T2> SendAsync<T1, T2>(T1 packet, CancellationToken cancellationToken) where T1 : Packet where T2 : Packet
+        {
+            return SendAsync<T1, T2>(packet, null, cancellationToken);
+        }
+
         public UniTask<T2> SendAsync<T1, T2>(T1 packet, object userData, CancellationToken cancellationToken) where T1 : Packet where T2 : Packet
         {
             if (m_NetworkServiceHelper == null)
