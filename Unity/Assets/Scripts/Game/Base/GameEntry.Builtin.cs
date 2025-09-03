@@ -89,15 +89,6 @@ namespace Game
         }
 
         /// <summary>
-        /// 获取网络组件。
-        /// </summary>
-        public static NetworkComponent Network
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// 获取对象池组件。
         /// </summary>
         public static ObjectPoolComponent ObjectPool
@@ -180,7 +171,6 @@ namespace Game
             FileSystem = UnityGameFramework.Runtime.GameEntry.GetComponent<FileSystemComponent>();
             Fsm = UnityGameFramework.Runtime.GameEntry.GetComponent<FsmComponent>();
             Localization = UnityGameFramework.Runtime.GameEntry.GetComponent<LocalizationComponent>();
-            Network = UnityGameFramework.Runtime.GameEntry.GetComponent<NetworkComponent>();
             ObjectPool = UnityGameFramework.Runtime.GameEntry.GetComponent<ObjectPoolComponent>();
             Procedure = UnityGameFramework.Runtime.GameEntry.GetComponent<ProcedureComponent>();
             Resource = UnityGameFramework.Runtime.GameEntry.GetComponent<ResourceComponent>();
