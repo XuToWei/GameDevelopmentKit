@@ -161,7 +161,7 @@ namespace ET
                 }
             }
 
-            Log.Info("proto2cs succeed!");
+            Log.Info("proto2cs success!");
         }
     }
 }
