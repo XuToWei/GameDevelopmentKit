@@ -301,9 +301,17 @@ namespace ET
 
                     process.OutputDataReceived += (sender, args) =>
                     {
-                        if (showInfo && !string.IsNullOrEmpty(args.Data))
+                        if (!string.IsNullOrEmpty(args.Data))
                         {
-                            Log.Info(args.Data);
+                            if (args.Data.Contains("|ERROR|"))
+                            {
+                                isSuccess = false;
+                                Log.Warning($"{logHeader} : {args.Data}");
+                            }
+                            else if (showInfo)
+                            {
+                                Log.Info(args.Data);
+                            }
                         }
                     };
                     process.ErrorDataReceived += (sender, args) =>

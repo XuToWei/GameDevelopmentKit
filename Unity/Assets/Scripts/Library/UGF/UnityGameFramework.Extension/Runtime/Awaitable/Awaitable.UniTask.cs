@@ -93,15 +93,17 @@ namespace UnityGameFramework.Extension
 
             public bool MoveNext()
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    core.TrySetCanceled(cancellationToken);
+                    return false;
+                }
+
                 if (moveNext.Invoke(ref core))
                 {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        core.TrySetCanceled(cancellationToken);
-                        return false;
-                    }
                     return true;
                 }
+
                 return false;
             }
 
