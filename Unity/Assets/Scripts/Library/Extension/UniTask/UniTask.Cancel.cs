@@ -75,7 +75,14 @@ namespace Cysharp.Threading.Tasks
                     }
                     catch (Exception ex)
                     {
-                        tcs.TrySetException(ex);
+                        if (ex is OperationCanceledException cex)
+                        {
+                            tcs.TrySetCanceled(cex.CancellationToken);
+                        }
+                        else
+                        {
+                            tcs.TrySetException(ex);
+                        }
                     }
                     finally
                     {
@@ -115,7 +122,14 @@ namespace Cysharp.Threading.Tasks
                     }
                     catch (Exception ex)
                     {
-                        tcs.TrySetException(ex);
+                        if (ex is OperationCanceledException cex)
+                        {
+                            tcs.TrySetCanceled(cex.CancellationToken);
+                        }
+                        else
+                        {
+                            tcs.TrySetException(ex);
+                        }
                     }
                     finally
                     {
