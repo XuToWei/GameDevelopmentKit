@@ -71,22 +71,22 @@ namespace ET
                 throw new Exception($"{PROTO_ROOT_DIR} doesn't exist any proto.conf file!");
             }
 
-            foreach (var genConfig in genConfigs)
-            {
-                foreach (var dir in genConfig.codeOutputDirs)
-                {
-                    if (Directory.Exists(dir))
-                    {
-                        //只删除cs文件，保留meta，避免提交反复生成meta
-                        var csFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
-                        foreach (var csFile in csFiles)
-                        {
-                            Log.Info(csFile);
-                            File.Delete(csFile);
-                        }
-                    }
-                }
-            }
+            // foreach (var genConfig in genConfigs)
+            // {
+            //     foreach (var dir in genConfig.codeOutputDirs)
+            //     {
+            //         if (Directory.Exists(dir))
+            //         {
+            //             //只删除cs文件，保留meta，避免提交反复生成meta
+            //             var csFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
+            //             foreach (var csFile in csFiles)
+            //             {
+            //                 Log.Info(csFile);
+            //                 File.Delete(csFile);
+            //             }
+            //         }
+            //     }
+            // }
 
             foreach (var genConfig in genConfigs)
             {

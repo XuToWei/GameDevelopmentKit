@@ -239,11 +239,13 @@ namespace ET
                 }
 
                 string csPath = $"{path}/{csName}.cs";
-                using FileStream txt = new FileStream(csPath, FileMode.Create, FileAccess.ReadWrite);
-                using StreamWriter sw = new StreamWriter(txt);
-                sw.Write(sb.ToString().Replace("\t", "    "));
-
-                Log.Info($"proto2cs file : {csPath}");
+                sb.Replace("\t", "    ");
+                string result = sb.ToString();
+                if (!File.Exists(csPath) || !string.Equals(result, File.ReadAllText(csPath)))
+                {
+                    File.WriteAllText(csPath, result);
+                    Log.Info($"proto2cs file : {csPath}");
+                }
             }
 
             private static void MsgMap(StringBuilder sb, string newline, StringBuilder disposeSb)
