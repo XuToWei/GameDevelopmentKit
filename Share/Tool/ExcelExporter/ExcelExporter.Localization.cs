@@ -358,7 +358,7 @@ namespace ET
                 stringBuilder.AppendLine($"namespace {nameSpaceName}");
                 stringBuilder.AppendLine("{");
                 stringBuilder.AppendLine("    /// <summary>");
-                stringBuilder.AppendLine("    /// 多语言key。");
+                stringBuilder.AppendLine("    /// 多语言key");
                 stringBuilder.AppendLine("    /// </summary>");
                 stringBuilder.AppendLine($"    public static class {className}");
                 stringBuilder.AppendLine("    {");
