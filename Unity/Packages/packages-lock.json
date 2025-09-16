@@ -97,7 +97,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f4b39aad95edd3350f8f06567c9d07168ac941ec"
+      "hash": "6c62443ed6a7022de54bda2b83878a49232596d1"
     },
     "com.psygames.unitywebsocket": {
       "version": "https://github.com/psygames/UnityWebSocket.git#upm",
@@ -348,14 +348,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "dc21ade96bd3139d12d7b89217780813d902202c"
+      "hash": "f3b9b624a1df7b56711d8b497961ed22bb4d4801"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "c637d94d47683ddba39c82ca24313e474dbc9c27"
+      "hash": "e36f5c18302d5cc6483536768020874d505e8863"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
