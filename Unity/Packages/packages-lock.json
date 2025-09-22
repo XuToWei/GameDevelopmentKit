@@ -156,7 +156,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.36",
+      "version": "3.0.38",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -190,7 +190,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.memoryprofiler": {
-      "version": "1.1.8",
+      "version": "1.1.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -332,7 +332,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "bdd9b5b6f7556290171ad0fdd276b1bc14c462de"
+      "hash": "f8755d61a7b535cc626630e54478ca162ab97ff6"
     },
     "me.qiankanglai.loopscrollrect": {
       "version": "https://github.com/qiankanglai/LoopScrollRect.git",
@@ -355,7 +355,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e36f5c18302d5cc6483536768020874d505e8863"
+      "hash": "2e6b351fca816db29e9116294971af2dab6502e2"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
