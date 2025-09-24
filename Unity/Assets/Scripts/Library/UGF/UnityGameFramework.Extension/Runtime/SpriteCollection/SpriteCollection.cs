@@ -28,6 +28,11 @@ namespace UnityGameFramework.Extension
             return sprite;
         }
 #if UNITY_EDITOR
+        private void Awake()
+        {
+            Pack();
+        }
+
         [InfoBox("Can drag to 'Objects'")]
         [OdinSerialize]
         [OnValueChanged("OnListChange", includeChildren: true)]
