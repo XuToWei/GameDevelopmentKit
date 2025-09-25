@@ -77,7 +77,18 @@ namespace ThunderFireUITool
         }
         public static GameObject InitPreviewCanvas(GameObject prefab, GameObject previewCanvas)
         {
-            return Object.Instantiate(prefab, previewCanvas.transform);
+            var obj = Object.Instantiate(prefab, previewCanvas.transform);
+            // changed by gdk
+            var rectTrans = obj.GetComponent<RectTransform>();
+            if (rectTrans != null)
+            {
+                rectTrans.anchorMin = Vector2.zero;
+                rectTrans.anchorMax =Vector2.one;
+                rectTrans.sizeDelta = Vector2.zero;
+                rectTrans.anchoredPosition = Vector2.zero;
+                rectTrans.localScale = Vector3.one;
+            }
+            return obj;
         }
         public static GameObject RefreshPreviewCanvas(GameObject prefab, GameObject previewCanvas)
         {
