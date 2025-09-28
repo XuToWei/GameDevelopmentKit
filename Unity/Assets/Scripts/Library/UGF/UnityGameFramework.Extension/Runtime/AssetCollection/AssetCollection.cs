@@ -18,6 +18,11 @@ namespace UnityGameFramework.Extension
     public sealed class AssetCollection : SerializedScriptableObject
     {
 #if UNITY_EDITOR
+        private void Awake()
+        {
+            Pack();
+        }
+
         [SerializeField]
         private string m_CollectionPatterns;
         [SerializeField]

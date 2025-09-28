@@ -299,10 +299,7 @@
           "Scriban": "5.12.0"
         },
         "runtime": {
-          "Luban.Core.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "Luban.Core.dll": {}
         }
       },
       "Luban.DataLoader.Builtin/1.0.0": {
@@ -314,10 +311,7 @@
           "YamlDotNet.NetCore": "1.0.0"
         },
         "runtime": {
-          "Luban.DataLoader.Builtin.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "Luban.DataLoader.Builtin.dll": {}
         }
       },
       "Luban.DataTarget.Builtin/1.0.0": {
@@ -326,10 +320,7 @@
           "Luban.DataLoader.Builtin": "1.0.0"
         },
         "runtime": {
-          "Luban.DataTarget.Builtin.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "Luban.DataTarget.Builtin.dll": {}
         }
       }
     }

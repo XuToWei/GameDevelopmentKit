@@ -173,7 +173,10 @@ namespace ET
                         byte[] bytes = new byte[memoryStream.Length];
                         memoryStream.Seek(0, SeekOrigin.Begin);
                         _ = memoryStream.Read(bytes, 0, bytes.Length);
-                        File.WriteAllBytes(jsonFileFullPath, bytes);
+                        if (!File.Exists(jsonFileFullPath) || !File.ReadAllBytes(jsonFileFullPath).SequenceEqual(bytes))
+                        {
+                            File.WriteAllBytes(jsonFileFullPath, bytes);
+                        }
                         if (File.Exists(bytesFileFullPath))
                         {
                             File.Delete(bytesFileFullPath);
@@ -187,8 +190,11 @@ namespace ET
                             byteBuf.WriteString(kv.Key);
                             byteBuf.WriteString(kv.Value);
                         }
-                        File.WriteAllBytes(bytesFileFullPath, byteBuf.CopyData());
-                        
+                        byte[] bytes = byteBuf.CopyData();
+                        if (!File.Exists(bytesFileFullPath) || !File.ReadAllBytes(bytesFileFullPath).SequenceEqual(bytes))
+                        {
+                            File.WriteAllBytes(bytesFileFullPath, bytes);
+                        }
                         if (File.Exists(jsonFileFullPath))
                         {
                             File.Delete(jsonFileFullPath);
@@ -352,7 +358,7 @@ namespace ET
                 stringBuilder.AppendLine($"namespace {nameSpaceName}");
                 stringBuilder.AppendLine("{");
                 stringBuilder.AppendLine("    /// <summary>");
-                stringBuilder.AppendLine("    /// 多语言key。");
+                stringBuilder.AppendLine("    /// 多语言key");
                 stringBuilder.AppendLine("    /// </summary>");
                 stringBuilder.AppendLine($"    public static class {className}");
                 stringBuilder.AppendLine("    {");
