@@ -32,7 +32,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d505624c78e6d1d2d53efd716abe7349b611681e"
+      "hash": "01754c8fb47bd49697b3428993109e7a972a7968"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -97,7 +97,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f4b39aad95edd3350f8f06567c9d07168ac941ec"
+      "hash": "c44d71c9743c500fd69302e19b5fc6208b7ed64f"
     },
     "com.psygames.unitywebsocket": {
       "version": "https://github.com/psygames/UnityWebSocket.git#upm",
@@ -113,7 +113,7 @@
       "dependencies": {}
     },
     "com.unity.burst": {
-      "version": "1.8.18",
+      "version": "1.8.21",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -155,7 +155,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.36",
+      "version": "3.0.38",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -173,7 +173,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.11.2",
+      "version": "1.14.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -189,7 +189,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.memoryprofiler": {
-      "version": "1.1.8",
+      "version": "1.1.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -223,7 +223,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
-      "version": "14.0.11",
+      "version": "14.0.12",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
@@ -240,8 +240,8 @@
       "dependencies": {
         "com.unity.mathematics": "1.2.1",
         "com.unity.burst": "1.8.9",
-        "com.unity.render-pipelines.core": "14.0.11",
-        "com.unity.shadergraph": "14.0.11",
+        "com.unity.render-pipelines.core": "14.0.12",
+        "com.unity.shadergraph": "14.0.12",
         "com.unity.render-pipelines.universal-config": "14.0.9"
       }
     },
@@ -261,11 +261,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.shadergraph": {
-      "version": "14.0.11",
+      "version": "14.0.12",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
-        "com.unity.render-pipelines.core": "14.0.11",
+        "com.unity.render-pipelines.core": "14.0.12",
         "com.unity.searcher": "4.9.2"
       }
     },
@@ -319,21 +319,21 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "b07d7b59b944f46605c674069594e989f039018e"
+      "hash": "77cdcf4aa4c5ccac40b2f13a14eae83eab44c441"
     },
     "me.xw.codebind": {
       "version": "https://github.com/XuToWei/CodeBind.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "dc21ade96bd3139d12d7b89217780813d902202c"
+      "hash": "f3b9b624a1df7b56711d8b497961ed22bb4d4801"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "c637d94d47683ddba39c82ca24313e474dbc9c27"
+      "hash": "2e6b351fca816db29e9116294971af2dab6502e2"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
