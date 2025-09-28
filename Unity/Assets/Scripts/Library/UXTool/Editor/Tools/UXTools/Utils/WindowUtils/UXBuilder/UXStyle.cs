@@ -97,6 +97,7 @@ namespace ThunderFireUITool
 #if UNITY_6000_0_OR_NEWER
         public StyleEnum<TextGeneratorType> unityTextGenerator { get; set; }
         public StyleEnum<EditorTextRenderingMode> unityEditorTextRenderingMode { get; set; }
+        public StyleEnum<SliceType> unitySliceType { get; set; }
 #endif
     }
 }
