@@ -11,6 +11,7 @@ public enum HighLightType
     Square
 }
 
+// changed by gdk
 [DefaultExecutionOrder(1000)]
 public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerClickHandler
 {

@@ -27,6 +27,7 @@ public enum ObjectSelectType
     select
 }
 
+// changed by gdk
 [DefaultExecutionOrder(1000)]
 public class GuideGesture : GuideWidgetBase
 {
