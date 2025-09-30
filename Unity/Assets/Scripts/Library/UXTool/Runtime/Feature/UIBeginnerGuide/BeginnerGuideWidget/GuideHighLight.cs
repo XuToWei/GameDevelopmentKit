@@ -10,6 +10,8 @@ public enum HighLightType
     Circle,
     Square
 }
+
+[DefaultExecutionOrder(1000)]
 public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerClickHandler
 {
     private GuideFinishType guideFinishType;
@@ -113,6 +115,8 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
     }
     public void SetTarget(GameObject go)
     {
+        // changed by gdk
+        needUpdateTarget = false;
         if (go == null)
         {
             target = childObject.GetComponent<RectTransform>();
@@ -126,6 +130,8 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
                 childObject.GetComponent<RectTransform>().sizeDelta = new Vector2(go.GetComponent<RectTransform>().rect.width, go.GetComponent<RectTransform>().rect.height);
                 childObject.transform.localScale = go.transform.localScale;
                 target = go.GetComponent<RectTransform>();
+                // changed by gdk
+                needUpdateTarget = true;
             }
             else
             {
@@ -146,6 +152,43 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
         }
 
     }
+
+    // changed by gdk
+    private bool needUpdateTarget;
+    private void LateUpdate()
+    {
+        if (needUpdateTarget)
+        {
+            RectTransform childRectTransform = childObject.GetComponent<RectTransform>();
+            childRectTransform.position = target.position;
+            childRectTransform.eulerAngles = target.eulerAngles;
+            childRectTransform.sizeDelta = target.sizeDelta;
+            childRectTransform.localScale = target.localScale;
+            
+            //计算中心点// 计算宽高
+            center.x = targetCorners[0].x + (targetCorners[3].x - targetCorners[0].x) / 2;
+            center.y = targetCorners[0].y + (targetCorners[1].y - targetCorners[0].y) / 2;
+            width = (targetCorners[3].x - targetCorners[0].x) / 2;
+            height = (targetCorners[1].y - targetCorners[0].y) / 2;
+            
+            if (isCircle)
+            {
+                circleMaterial.SetVector("_Center", center);
+                circleMaterial.SetFloat("_SliderX", width);
+                circleMaterial.SetFloat("_SliderY", height);
+            }
+            else
+            {
+                transform.GetComponent<Image>().material = rectMaterial;
+                //设置材质的中心点
+                rectMaterial.SetVector("_Center", center);
+                //设置材质的宽高
+                rectMaterial.SetFloat("_SliderX", width);
+                rectMaterial.SetFloat("_SliderY", height);
+            }
+        }
+    }
+
     public void SetID(string id)
     {
         guideID = id;
