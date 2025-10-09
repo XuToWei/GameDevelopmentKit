@@ -51,12 +51,9 @@
 
 - 2.打开Unity(6000.0.59f2)项目，等待Unity编译完成
 
-- 3.打开Unity的Editor/Preferences菜单栏，按如下设置后（不要勾选'Registry packages'和'Build-in packages'），点击Regenerate project files按钮
-![](Book/png/unity_step1.png)
+- 3.使用IDE打开Kit.sln编译（导表，资源服务器，代码分析等功能需要用到）
 
-- 4.使用IDE打开Kit.sln编译（导表，资源服务器，代码分析等功能需要用到）
-
-- 5.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
+- 4.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
 
 ### Windows Build
 
