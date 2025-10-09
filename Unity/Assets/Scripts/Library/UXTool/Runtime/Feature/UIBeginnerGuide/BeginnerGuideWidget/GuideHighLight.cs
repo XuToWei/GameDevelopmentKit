@@ -10,6 +10,9 @@ public enum HighLightType
     Circle,
     Square
 }
+
+// changed by gdk
+[DefaultExecutionOrder(1000)]
 public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerClickHandler
 {
     private GuideFinishType guideFinishType;
@@ -113,6 +116,8 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
     }
     public void SetTarget(GameObject go)
     {
+        // changed by gdk
+        needUpdateTarget = false;
         if (go == null)
         {
             target = childObject.GetComponent<RectTransform>();
@@ -126,6 +131,8 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
                 childObject.GetComponent<RectTransform>().sizeDelta = new Vector2(go.GetComponent<RectTransform>().rect.width, go.GetComponent<RectTransform>().rect.height);
                 childObject.transform.localScale = go.transform.localScale;
                 target = go.GetComponent<RectTransform>();
+                // changed by gdk
+                needUpdateTarget = true;
             }
             else
             {
@@ -146,6 +153,49 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
         }
 
     }
+
+    // changed by gdk
+    private bool needUpdateTarget;
+    private void LateUpdate()
+    {
+        if (needUpdateTarget)
+        {
+            RectTransform childRectTransform = childObject.GetComponent<RectTransform>();
+            childRectTransform.position = target.position;
+            childRectTransform.eulerAngles = target.eulerAngles;
+            childRectTransform.sizeDelta = target.sizeDelta;
+            childRectTransform.localScale = target.localScale;
+            // 获取中心点
+            // GetWorldCorners:在世界空间中得到计算的矩形的角。参数角的数组
+            target.GetWorldCorners(targetCorners);
+            // 将四个角的世界坐标转为局部坐标坐标
+            for (int i = 0; i < targetCorners.Length; i++)
+            {
+                targetCorners[i] = WorldToScreenPoint(canvas, targetCorners[i]);
+            }
+            //计算中心点// 计算宽高
+            center.x = targetCorners[0].x + (targetCorners[3].x - targetCorners[0].x) / 2;
+            center.y = targetCorners[0].y + (targetCorners[1].y - targetCorners[0].y) / 2;
+            width = (targetCorners[3].x - targetCorners[0].x) / 2;
+            height = (targetCorners[1].y - targetCorners[0].y) / 2;
+            
+            if (isCircle)
+            {
+                circleMaterial.SetVector("_Center", center);
+                circleMaterial.SetFloat("_SliderX", width);
+                circleMaterial.SetFloat("_SliderY", height);
+            }
+            else
+            {
+                //设置材质的中心点
+                rectMaterial.SetVector("_Center", center);
+                //设置材质的宽高
+                rectMaterial.SetFloat("_SliderX", width);
+                rectMaterial.SetFloat("_SliderY", height);
+            }
+        }
+    }
+
     public void SetID(string id)
     {
         guideID = id;
@@ -158,7 +208,7 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
         // GetWorldCorners:在世界空间中得到计算的矩形的角。参数角的数组
         target.GetWorldCorners(targetCorners);
 
-        // 讲四个角的世界坐标转为局部坐标坐标
+        // 将四个角的世界坐标转为局部坐标坐标
         for (int i = 0; i < targetCorners.Length; i++)
         {
             targetCorners[i] = WorldToScreenPoint(canvas, targetCorners[i]);

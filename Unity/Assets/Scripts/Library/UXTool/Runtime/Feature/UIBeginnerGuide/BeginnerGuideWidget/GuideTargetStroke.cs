@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// changed by gdk
+[DefaultExecutionOrder(1000)]
 public class GuideTargetStroke : GuideWidgetBase
 {
     private GameObject target;
@@ -9,6 +11,8 @@ public class GuideTargetStroke : GuideWidgetBase
     public GameObject circle;
     public override void Init(GuideWidgetData data)
     {
+        // changed by gdk
+        needUpdateTarget = false;
         GuideTargetStrokeData targetStrokeData = data as GuideTargetStrokeData;
         if (targetStrokeData != null)
         {
@@ -19,6 +23,8 @@ public class GuideTargetStroke : GuideWidgetBase
                 transform.eulerAngles = target.transform.eulerAngles;
                 transform.localScale = target.transform.localScale;
                 transform.GetComponent<RectTransform>().sizeDelta = target.GetComponent<RectTransform>().sizeDelta;
+                // changed by gdk
+                needUpdateTarget = true;
             }
             square.SetActive(targetStrokeData.strokeType == StrokeType.Square);
             circle.SetActive(targetStrokeData.strokeType == StrokeType.Circle);
@@ -44,5 +50,21 @@ public class GuideTargetStroke : GuideWidgetBase
     }
     public override void Stop()
     {
+    }
+
+    // changed by gdk
+    private bool needUpdateTarget;
+    private Vector3 targetPosition;
+    private void LateUpdate()
+    {
+        if (needUpdateTarget)
+        {
+            RectTransform rectTransform = transform.GetComponent<RectTransform>();
+            RectTransform targetRectTransform = target.GetComponent<RectTransform>();
+            rectTransform.position = targetRectTransform.position;
+            rectTransform.eulerAngles = targetRectTransform.eulerAngles;
+            rectTransform.localScale = targetRectTransform.localScale;
+            rectTransform.sizeDelta = targetRectTransform.sizeDelta;
+        }
     }
 }
