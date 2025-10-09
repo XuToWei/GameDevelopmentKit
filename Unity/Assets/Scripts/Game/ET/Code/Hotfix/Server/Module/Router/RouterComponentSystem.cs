@@ -176,20 +176,20 @@ namespace ET.Server
                     // 这个路由连接不上，客户端会换个软路由，所以没关系
                     if (routerNode.InnerConn != innerConn)
                     {
-                        Log.Warning($"kcp router router reconnect inner conn diff1: {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
+                        Log.Warning($"kcp router router reconnect inner conn diff1: {routerNode.OuterIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
                         break;
                     }
                     
                     if (routerNode.OuterConn != outerConn)
                     {
-                        Log.Warning($"kcp router router reconnect outer conn diff1: {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
+                        Log.Warning($"kcp router router reconnect outer conn diff1: {routerNode.OuterIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
                         break;
                     }
 
                     // reconnect检查了InnerConn跟OuterConn，到这里肯定保证了是同一客户端, 如果connectid不一样，证明是两次不同的连接,可以删除老的连接
                     if (routerNode.ConnectId != connectId)
                     {
-                        Log.Warning($"kcp router router reconnect connectId diff, maybe router count too less: {connectId} {routerNode.ConnectId} {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
+                        Log.Warning($"kcp router router reconnect connectId diff, maybe router count too less: {connectId} {routerNode.ConnectId} {routerNode.OuterIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
                         self.OnError(routerNode.Id, ErrorCore.ERR_KcpRouterSame);
                         break;
                     }
@@ -243,7 +243,7 @@ namespace ET.Server
                     if (routerNode == null)
                     {
                         routerNode = self.New(realAddress, outerConn, innerConn, connectId, self.CloneAddress());
-                        Log.Info($"router create: {realAddress} {outerConn} {innerConn} {routerNode.SyncIpEndPoint}");
+                        Log.Info($"router create: {realAddress} {outerConn} {innerConn} {routerNode.OuterIpEndPoint}");
                     }
 
                     if (routerNode.Status != RouterStatus.Sync)
@@ -264,19 +264,11 @@ namespace ET.Server
                         self.OnError(routerNode.Id, ErrorCore.ERR_KcpRouterRouterSyncCountTooMuchTimes);
                         break;
                     }
-
-                    // 这里可以注释，因增加了connectid的检查，第三方很难通过检查
-                    // 校验ip，连接过程中ip不能变化
-                    //if (!Equals(routerNode.SyncIpEndPoint, self.IPEndPoint))
-                    //{
-                    //    Log.Warning($"kcp router syn ip is diff1: {routerNode.SyncIpEndPoint} {self.IPEndPoint}");
-                    //    break;
-                    //}
                     
                     // 这里因为InnerConn是0，无法保证连接是同一客户端发过来的，所以这里如果connectid不同，则break。注意逻辑跟reconnect不一样
                     if (routerNode.ConnectId != connectId)
                     {
-                        Log.Warning($"kcp router router connect connectId diff, maybe router count too less: {connectId} {routerNode.ConnectId} {routerNode.SyncIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
+                        Log.Warning($"kcp router router connect connectId diff, maybe router count too less: {connectId} {routerNode.ConnectId} {routerNode.OuterIpEndPoint} {(IPEndPoint) self.IPEndPoint}");
                         break;
                     }
 
@@ -290,7 +282,7 @@ namespace ET.Server
                     self.Cache.WriteTo(0, KcpProtocalType.RouterACK);
                     self.Cache.WriteTo(1, routerNode.InnerConn);
                     self.Cache.WriteTo(5, routerNode.OuterConn);
-                    routerNode.KcpTransport.Send(self.Cache, 0, 9, routerNode.SyncIpEndPoint, ChannelType.Accept);
+                    routerNode.KcpTransport.Send(self.Cache, 0, 9, routerNode.OuterIpEndPoint, ChannelType.Accept);
 
                     if (!routerNode.CheckOuterCount(timeNow))
                     {
@@ -323,17 +315,16 @@ namespace ET.Server
                         break;
                     }
 
-                    // 校验ip，连接过程中ip不能变化
+                    // 校验ip，连接过程中ip不能变化, 主要防止第三方攻击，一般问题不大
                     IPEndPoint ipEndPoint = (IPEndPoint) self.IPEndPoint;
-                    if (!Equals(routerNode.SyncIpEndPoint.Address, ipEndPoint.Address))
+                    if (!Equals(routerNode.OuterIpEndPoint.Address, ipEndPoint.Address))
                     {
-                        Log.Warning($"kcp router syn ip is diff3: {routerNode.SyncIpEndPoint.Address} {ipEndPoint.Address}");
-                        break;
+                        Log.Warning($"kcp router syn ip is diff3: {routerNode.OuterIpEndPoint.Address} {ipEndPoint.Address}");
                     }
                     routerNode.KcpTransport = transport;
                     
                     routerNode.LastRecvOuterTime = timeNow;
-                    routerNode.OuterIpEndPoint = self.CloneAddress();
+                    
                     // 转发到内网, 带上客户端的地址
                     self.Cache.WriteTo(0, KcpProtocalType.SYN);
                     self.Cache.WriteTo(1, outerConn);
@@ -406,12 +397,6 @@ namespace ET.Server
                         break;
                     }
 
-                    if (routerNode.Status != RouterStatus.Msg)
-                    {
-                        Log.Warning($"router node status error: {innerConn} {outerConn} {routerNode.Status}");
-                        break;
-                    }
-
                     // 比对innerConn
                     if (routerNode.InnerConn != innerConn)
                     {
@@ -419,11 +404,12 @@ namespace ET.Server
                         break;
                     }
 
-                    // 重连的时候，没有经过syn阶段，可能没有设置OuterIpEndPoint，重连请求Router的Socket跟发送消息的Socket不是同一个，所以udp出来的公网地址可能会变化
-                    if (!Equals(routerNode.OuterIpEndPoint, self.IPEndPoint))
+                    if (routerNode.Status != RouterStatus.Msg)
                     {
-                        routerNode.OuterIpEndPoint = self.CloneAddress();
+                        Log.Warning($"router node status error: {innerConn} {outerConn} {routerNode.Status}");
+                        break;
                     }
+                    
                     routerNode.KcpTransport = transport;
                     
                     routerNode.LastRecvOuterTime = timeNow;
@@ -487,8 +473,8 @@ namespace ET.Server
                     self.Cache.WriteTo(0, KcpProtocalType.RouterReconnectACK);
                     self.Cache.WriteTo(1, routerNode.InnerConn);
                     self.Cache.WriteTo(5, routerNode.OuterConn);
-                    Log.Info($"kcp router RouterAck: {outerConn} {innerConn} {routerNode.SyncIpEndPoint}");
-                    routerNode.KcpTransport.Send(self.Cache, 0, 9, routerNode.SyncIpEndPoint, ChannelType.Accept);
+                    Log.Info($"kcp router RouterAck: {outerConn} {innerConn} {routerNode.OuterIpEndPoint}");
+                    routerNode.KcpTransport.Send(self.Cache, 0, 9, routerNode.OuterIpEndPoint, ChannelType.Accept);
                     break;
                 }
 
@@ -539,12 +525,6 @@ namespace ET.Server
                         break;
                     }
 
-                    // 重连，这个字段可能为空，需要客户端发送消息上来才能设置
-                    if (routerNode.OuterIpEndPoint == null)
-                    {
-                        break;
-                    }
-
                     routerNode.LastRecvInnerTime = timeNow;
                     Log.Info($"kcp router inner fin: {outerConn} {innerConn} {routerNode.OuterIpEndPoint}");
                     routerNode.KcpTransport.Send(self.Cache, 0, messageLength, routerNode.OuterIpEndPoint, ChannelType.Accept);
@@ -577,9 +557,9 @@ namespace ET.Server
                         break;
                     }
 
-                    // 重连，这个字段可能为空，需要客户端发送消息上来才能设置
-                    if (routerNode.OuterIpEndPoint == null)
+                    if (routerNode.Status != RouterStatus.Msg)
                     {
+                        Log.Warning($"router node status is not msg: {routerNode.Status}");
                         break;
                     }
 
@@ -590,13 +570,13 @@ namespace ET.Server
             }
         }
 
-        private static RouterNode New(this RouterComponent self, string innerAddress, uint outerConn, uint innerConn, uint connectId, IPEndPoint syncEndPoint)
+        private static RouterNode New(this RouterComponent self, string innerAddress, uint outerConn, uint innerConn, uint connectId, IPEndPoint outerIpEndPoint)
         {
             RouterNode routerNode = self.AddChildWithId<RouterNode>(outerConn);
             routerNode.InnerConn = innerConn;
             routerNode.ConnectId = connectId;
             routerNode.InnerIpEndPoint = NetworkHelper.ToIPEndPoint(innerAddress);
-            routerNode.SyncIpEndPoint = syncEndPoint;
+            routerNode.OuterIpEndPoint = outerIpEndPoint;
             routerNode.InnerAddress = innerAddress;
             routerNode.LastRecvInnerTime = TimeInfo.Instance.ClientNow();
             
@@ -604,7 +584,7 @@ namespace ET.Server
 
             routerNode.Status = RouterStatus.Sync;
 
-            Log.Info($"router new: outerConn: {outerConn} innerConn: {innerConn} {syncEndPoint}");
+            Log.Info($"router new: outerConn: {outerConn} innerConn: {innerConn} {outerIpEndPoint}");
 
             return routerNode;
         }
