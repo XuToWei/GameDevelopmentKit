@@ -27,6 +27,8 @@ public enum ObjectSelectType
     select
 }
 
+// changed by gdk
+[DefaultExecutionOrder(1000)]
 public class GuideGesture : GuideWidgetBase
 {
     private GameObject GestureAnimation;
@@ -49,6 +51,8 @@ public class GuideGesture : GuideWidgetBase
 
     public override void Init(GuideWidgetData data)
     {
+        // changed by gdk
+        needUpdateTarget = false;
         gestureData = data as GuideGestureData;
         if (gestureData != null)
         {
@@ -56,6 +60,8 @@ public class GuideGesture : GuideWidgetBase
             if (gestureData.objectSelectType == ObjectSelectType.select && gestureData.selectedObject != null)
             {
                 transform.position = gestureData.selectedObject.transform.position;
+                // changed by gdk
+                needUpdateTarget = true;
             }
             if (gestureData.Open)
             {
@@ -82,6 +88,16 @@ public class GuideGesture : GuideWidgetBase
         else
         {
             LoadGesture(gesType);
+        }
+    }
+
+    // changed by gdk
+    private bool needUpdateTarget;
+    private void LateUpdate()
+    {
+        if (needUpdateTarget)
+        {
+            transform.position = gestureData.selectedObject.transform.position;
         }
     }
 
