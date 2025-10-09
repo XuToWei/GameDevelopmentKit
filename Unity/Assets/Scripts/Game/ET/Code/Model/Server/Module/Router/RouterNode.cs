@@ -14,7 +14,6 @@ namespace ET.Server
         public string InnerAddress;
         public IPEndPoint InnerIpEndPoint;
         public IPEndPoint OuterIpEndPoint;
-        public IPEndPoint SyncIpEndPoint;
         public IKcpTransport KcpTransport;
 
         public uint OuterConn
