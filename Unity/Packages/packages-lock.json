@@ -32,7 +32,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d505624c78e6d1d2d53efd716abe7349b611681e"
+      "hash": "01754c8fb47bd49697b3428993109e7a972a7968"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -163,15 +163,6 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.ide.visualstudio": {
-      "version": "2.0.23",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.test-framework": "1.1.9"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.inputsystem": {
       "version": "1.14.2",
       "depth": 0,
@@ -291,7 +282,7 @@
     },
     "com.unity.test-framework": {
       "version": "1.6.0",
-      "depth": 1,
+      "depth": 2,
       "source": "builtin",
       "dependencies": {
         "com.unity.ext.nunit": "2.0.3",
@@ -353,7 +344,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2e6b351fca816db29e9116294971af2dab6502e2"
+      "hash": "c62446198a044ea33acff0f131941559cc5ca1a5"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
