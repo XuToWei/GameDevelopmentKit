@@ -163,15 +163,6 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.ide.visualstudio": {
-      "version": "2.0.23",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.test-framework": "1.1.9"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.inputsystem": {
       "version": "1.14.2",
       "depth": 0,
@@ -333,7 +324,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2e6b351fca816db29e9116294971af2dab6502e2"
+      "hash": "190d4592e9567bd87c537b30c5fe4c4850c253d9"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
