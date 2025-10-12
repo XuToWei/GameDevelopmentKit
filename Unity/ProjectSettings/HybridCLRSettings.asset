@@ -64,5 +64,5 @@ MonoBehaviour:
   - Game.Hot.Loader
   outputLinkFile: Res/Editor/HybridCLR/Generate/link.xml
   outputAOTGenericReferenceFile: Res/Editor/HybridCLR/Generate/AOTGenericReferences.cs
-  maxGenericReferenceIteration: 10
-  maxMethodBridgeGenericIteration: 10
+  maxGenericReferenceIteration: 4
+  maxMethodBridgeGenericIteration: 4
