@@ -163,7 +163,7 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
             RectTransform childRectTransform = childObject.GetComponent<RectTransform>();
             childRectTransform.position = target.position;
             childRectTransform.eulerAngles = target.eulerAngles;
-            childRectTransform.sizeDelta = target.sizeDelta;
+            childRectTransform.sizeDelta = target.rect.size;
             childRectTransform.localScale = target.localScale;
             // 获取中心点
             // GetWorldCorners:在世界空间中得到计算的矩形的角。参数角的数组
