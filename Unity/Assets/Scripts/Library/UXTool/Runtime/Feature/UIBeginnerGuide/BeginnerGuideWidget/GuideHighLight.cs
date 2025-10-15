@@ -33,13 +33,32 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
 
     private Vector3[] targetCorners = new Vector3[4];//存储要镂空组件的四个角的数组
 
-    private Material rectMaterialClone;
-    private Material circleMaterialClone;
-    
-    private void Awake()
+    // changed by gdk
+    private Material _rectMaterialClone;
+    private Material rectMaterialClone
     {
-        rectMaterialClone = Instantiate(rectMaterial);
-        circleMaterialClone = Instantiate(circleMaterial);
+        get
+        {
+            if (_rectMaterialClone == null)
+            {
+                _rectMaterialClone = Instantiate(rectMaterial);
+            }
+            return _rectMaterialClone;
+        }
+    }
+
+    // changed by gdk
+    private Material _circleMaterialClone;
+    private Material circleMaterialClone
+    {
+        get
+        {
+            if (_circleMaterialClone == null)
+            {
+                _circleMaterialClone = Instantiate(circleMaterial);
+            }
+            return _circleMaterialClone;
+        }
     }
 
     public Vector2 WorldToScreenPoint(Canvas canvas, Vector3 world)
