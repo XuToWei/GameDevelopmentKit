@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ET
 {
     [DisallowMultipleComponent]
-    public sealed class ETMonoUIForm : AUGuiForm
+    public abstract class ETMonoUIForm : AUGuiForm
     {
         private UGFUIForm m_UGFUIForm;
         private int m_UIFormId;
