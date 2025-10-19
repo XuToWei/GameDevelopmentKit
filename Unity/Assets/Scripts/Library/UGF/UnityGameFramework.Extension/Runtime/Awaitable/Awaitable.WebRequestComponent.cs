@@ -32,8 +32,13 @@ namespace UnityGameFramework.Extension
             bool delayOneFrame = true;
             bool MoveNext(ref UniTaskCompletionSourceCore<WebRequestResult> core)
             {
+                if (!IsValid)
+                {
+                    core.TrySetException(new GameFrameworkException("Awaitable is not valid."));
+                    return false;
+                }
                 TaskInfo taskInfo = webRequestComponent.GetWebRequestInfo(serialId);
-                if (taskInfo.IsValid && taskInfo.Status != TaskStatus.Done)
+                if (taskInfo.Status != TaskStatus.Done)
                 {
                     return true;
                 }

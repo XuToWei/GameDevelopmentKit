@@ -54,7 +54,7 @@ namespace UnityGameFramework.Extension.Editor
             Utility.Path.RemoveEmptyDirectory(streamingAssetsPath);
             SpriteCollectionUtility.RefreshSpriteCollection();
             AssetCollectionUtility.RefreshAssetCollection();
-            ResourceRuleEditor.RefreshActivateResourceCollection();
+            ResourceRuleEditorUtility.RefreshResourceCollection();
             
             CallBuildEvent<UGFBuildOnPreprocessAllPlatformsAttribute>(platforms);
         }
