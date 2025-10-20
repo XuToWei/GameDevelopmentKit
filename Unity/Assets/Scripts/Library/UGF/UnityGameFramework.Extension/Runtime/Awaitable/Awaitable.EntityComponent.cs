@@ -27,14 +27,11 @@ namespace UnityGameFramework.Extension
             }
             ShowEntityEventData eventData = ReferencePool.Acquire<ShowEntityEventData>();
             eventData.UpdateEvent = updateEvent;
-            eventData.IsError = false;
-            eventData.ErrorMessage = null;
             eventData.DependencyAssetEvent = dependencyAssetEvent;
-            
+
             entityComponent.ShowEntity(entityId, entityLogicType, entityAssetName, entityGroupName, priority, userData);
             s_ShowEntityEventDataDict.Add(entityId, eventData);
 
-            bool delayOneFrame = true;
             bool MoveNext(ref UniTaskCompletionSourceCore<Entity> core)
             {
                 if (!IsValid)
@@ -48,7 +45,6 @@ namespace UnityGameFramework.Extension
                     {
                         entityComponent.HideEntity(entityId);
                     }
-                    core.TrySetCanceled(cancellationToken);
                     return false;
                 }
                 if (entityComponent.IsLoadingEntity(entityId))
@@ -58,19 +54,7 @@ namespace UnityGameFramework.Extension
                 Entity entity = entityComponent.GetEntity(entityId);
                 if (entity == null)//这里是被其他接口关闭了
                 {
-                    if (delayOneFrame)//等待一帧GF的Event.Fire，确保能接收到错误的事件处理后继续（PlayerLoopTiming.LastUpdate）
-                    {
-                        delayOneFrame = false;
-                        return true;
-                    }
-                    if (eventData.IsError)
-                    {
-                        core.TrySetException(new GameFrameworkException(eventData.ErrorMessage));
-                    }
-                    else
-                    {
-                        core.TrySetCanceled();
-                    }
+                    core.TrySetException(new GameFrameworkException(Utility.Text.Format("Show entity task is failure, entity id '{0}', asset name '{1}', entity group name '{2}'.", entityId, entityAssetName, entityGroupName)));
                 }
                 else
                 {
@@ -78,48 +62,24 @@ namespace UnityGameFramework.Extension
                 }
                 return false;
             }
-            
+
             void ReturnAction()
             {
                 s_ShowEntityEventDataDict.Remove(entityId);
                 ReferencePool.Release(eventData);
             }
-
             return NewUniTask<Entity>(MoveNext, cancellationToken, ReturnAction);
         }
-         
-         private sealed class ShowEntityEventData : IReference
-         {
-             public Action<float> UpdateEvent;
-             public bool IsError;
-             public string ErrorMessage;
-             public Action<string> DependencyAssetEvent;
 
-             public void Clear()
-             {
-                 UpdateEvent = null;
-                 IsError = false;
-                 ErrorMessage = null;
-                 DependencyAssetEvent = null;
-             }
-         }
-
-        private static void OnShowEntitySuccess(object sender, GameEventArgs e)
+        private sealed class ShowEntityEventData : IReference
         {
-            ShowEntitySuccessEventArgs ne = (ShowEntitySuccessEventArgs)e;
-            if (s_ShowEntityEventDataDict.TryGetValue(ne.Entity.Id, out ShowEntityEventData eventData))
-            {
-                eventData.IsError = false;
-            }
-        }
+            public Action<float> UpdateEvent;
+            public Action<string> DependencyAssetEvent;
 
-        private static void OnShowEntityFailure(object sender, GameEventArgs e)
-        {
-            ShowEntityFailureEventArgs ne = (ShowEntityFailureEventArgs)e;
-            if (s_ShowEntityEventDataDict.TryGetValue(ne.EntityId, out ShowEntityEventData eventData))
+            public void Clear()
             {
-                eventData.IsError = true;
-                eventData.ErrorMessage = ne.ErrorMessage;
+                UpdateEvent = null;
+                DependencyAssetEvent = null;
             }
         }
 
@@ -131,7 +91,7 @@ namespace UnityGameFramework.Extension
                 eventData.UpdateEvent?.Invoke(ne.Progress);
             }
         }
-        
+
         private static void OnShowEntityDependencyAsset(object sender, GameEventArgs e)
         {
             ShowEntityDependencyAssetEventArgs ne = (ShowEntityDependencyAssetEventArgs)e;

@@ -29,7 +29,7 @@ namespace UnityGameFramework.Extension
             
             int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm, tag, priority, eventData);
 
-            bool delayOneFrame = true;
+            int waitEventFrameCount = 1;
             bool MoveNext(ref UniTaskCompletionSourceCore<WebRequestResult> core)
             {
                 if (!IsValid)
@@ -42,9 +42,9 @@ namespace UnityGameFramework.Extension
                 {
                     return true;
                 }
-                if (delayOneFrame)//等待一帧GF的Event.Fire，确保能接收到事件处理后继续（PlayerLoopTiming.LastUpdate）
+                if (waitEventFrameCount > 0)//等待GF的Event.Fire，确保能接收到事件处理后继续（PlayerLoopTiming.LastUpdate）
                 {
-                    delayOneFrame = false;
+                    waitEventFrameCount--;
                     return true;
                 }
                 if (eventData.IsFinished)
@@ -60,7 +60,7 @@ namespace UnityGameFramework.Extension
                 }
                 else
                 {
-                    core.TrySetCanceled();
+                    core.TrySetException(new GameFrameworkException(eventData.ErrorMessage));
                 }
                 return false;
             }
@@ -88,15 +88,14 @@ namespace UnityGameFramework.Extension
             WebRequestEventData eventData = ReferencePool.Acquire<WebRequestEventData>();
             eventData.StartEvent = startEvent;
             eventData.IsFinished = false;
-            
+
             int serialId = webRequestComponent.AddWebRequest(webRequestUri, postData, tag, priority, eventData);
 
-            bool delayOneFrame = true;
             bool MoveNext(ref UniTaskCompletionSourceCore<WebRequestResult> core)
             {
                 if (!IsValid)
                 {
-                    core.TrySetCanceled();
+                    core.TrySetException(new GameFrameworkException("Awaitable is not valid."));
                     return false;
                 }
                 if (cancellationToken.IsCancellationRequested)
@@ -106,29 +105,26 @@ namespace UnityGameFramework.Extension
                     return false;
                 }
                 TaskInfo taskInfo = webRequestComponent.GetWebRequestInfo(serialId);
-                if (taskInfo.IsValid && taskInfo.Status != TaskStatus.Done)
+                if (!taskInfo.IsValid)
+                {
+                    core.TrySetException(new GameFrameworkException(Utility.Text.Format("Web request task is failure, web request serial id '{0}', web request uri '{1}'.", serialId, webRequestUri)));
+                    return false;
+                }
+                if (taskInfo.Status != TaskStatus.Done)
                 {
                     return true;
                 }
-                if (delayOneFrame)//等待一帧GF的Event.Fire，确保能接收到事件处理后继续（PlayerLoopTiming.LastUpdate）
+                if (!eventData.IsFinished)
                 {
-                    delayOneFrame = false;
                     return true;
                 }
-                if (eventData.IsFinished)
+                if (eventData.IsError)
                 {
-                    if (eventData.IsError)
-                    {
-                        core.TrySetResult(WebRequestResult.Create(eventData.ErrorMessage));
-                    }
-                    else
-                    {
-                        core.TrySetResult(WebRequestResult.Create(eventData.Bytes));
-                    }
+                    core.TrySetResult(WebRequestResult.Create(eventData.ErrorMessage));
                 }
                 else
                 {
-                    core.TrySetCanceled();
+                    core.TrySetResult(WebRequestResult.Create(eventData.Bytes));
                 }
                 return false;
             }
