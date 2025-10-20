@@ -29,10 +29,9 @@ namespace UnityGameFramework.Extension
             eventData.ErrorMessage = null;
             eventData.DownloadLength = 0;
             eventData.IsFinished = false;
-            
+
             int serialId = downloadComponent.AddDownload(downloadPath, downloadUri, tag, priority, eventData);
 
-            bool delayOneFrame = true;
             bool MoveNext(ref UniTaskCompletionSourceCore<DownloadResult> core)
             {
                 if (!IsValid)
@@ -47,29 +46,26 @@ namespace UnityGameFramework.Extension
                     return false;
                 }
                 TaskInfo taskInfo = downloadComponent.GetDownloadInfo(serialId);
-                if (taskInfo.IsValid && taskInfo.Status != TaskStatus.Done)
+                if (!taskInfo.IsValid)
+                {
+                    core.TrySetException(new GameFrameworkException(Utility.Text.Format("Download task is failure, download serial id '{0}', download path '{1}', download uri '{2}'.", serialId, downloadPath, downloadUri)));
+                    return false;
+                }
+                if (taskInfo.Status != TaskStatus.Done)
                 {
                     return true;
                 }
-                if (delayOneFrame)//等待一帧GF的Event.Fire，确保能接收到事件处理后继续（PlayerLoopTiming.LastUpdate）
+                if (!eventData.IsFinished)
                 {
-                    delayOneFrame = false;
                     return true;
                 }
-                if (eventData.IsFinished)
+                if (eventData.IsError)
                 {
-                    if (eventData.IsError)
-                    {
-                        core.TrySetResult(DownloadResult.Create(eventData.ErrorMessage));
-                    }
-                    else
-                    {
-                        core.TrySetResult(DownloadResult.Create(eventData.DownloadLength));
-                    }
+                    core.TrySetResult(DownloadResult.Create(eventData.ErrorMessage));
                 }
                 else
                 {
-                    core.TrySetCanceled();
+                    core.TrySetResult(DownloadResult.Create(eventData.DownloadLength));
                 }
                 return false;
             }

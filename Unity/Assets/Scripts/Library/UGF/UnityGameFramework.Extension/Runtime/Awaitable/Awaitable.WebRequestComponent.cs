@@ -26,10 +26,9 @@ namespace UnityGameFramework.Extension
             WebRequestEventData eventData = ReferencePool.Acquire<WebRequestEventData>();
             eventData.StartEvent = startEvent;
             eventData.IsFinished = false;
-            
+
             int serialId = webRequestComponent.AddWebRequest(webRequestUri, wwwForm, tag, priority, eventData);
 
-            int waitEventFrameCount = 1;
             bool MoveNext(ref UniTaskCompletionSourceCore<WebRequestResult> core)
             {
                 if (!IsValid)
@@ -38,29 +37,26 @@ namespace UnityGameFramework.Extension
                     return false;
                 }
                 TaskInfo taskInfo = webRequestComponent.GetWebRequestInfo(serialId);
+                if (!taskInfo.IsValid)
+                {
+                    core.TrySetException(new GameFrameworkException(Utility.Text.Format("Web request task is failure, web request serial id '{0}', web request uri '{1}'.", serialId, webRequestUri)));
+                    return false;
+                }
                 if (taskInfo.Status != TaskStatus.Done)
                 {
                     return true;
                 }
-                if (waitEventFrameCount > 0)//等待GF的Event.Fire，确保能接收到事件处理后继续（PlayerLoopTiming.LastUpdate）
+                if (!eventData.IsFinished)
                 {
-                    waitEventFrameCount--;
                     return true;
                 }
-                if (eventData.IsFinished)
+                if (eventData.IsError)
                 {
-                    if (eventData.IsError)
-                    {
-                        core.TrySetResult(WebRequestResult.Create(eventData.ErrorMessage));
-                    }
-                    else
-                    {
-                        core.TrySetResult(WebRequestResult.Create(eventData.Bytes));
-                    }
+                    core.TrySetResult(WebRequestResult.Create(eventData.ErrorMessage));
                 }
                 else
                 {
-                    core.TrySetException(new GameFrameworkException(eventData.ErrorMessage));
+                    core.TrySetResult(WebRequestResult.Create(eventData.Bytes));
                 }
                 return false;
             }
