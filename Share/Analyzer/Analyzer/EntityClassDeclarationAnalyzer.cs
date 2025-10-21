@@ -32,18 +32,29 @@ namespace ET.Analyzer
 
              string? t = namedTypeSymbol.BaseType?.BaseType?.ToString();
 
-             if (t=="ET.LSEntity")
+             if (t == "ET.LSEntity")
              {
                  foreach (SyntaxReference? declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
                  {
                      SyntaxNode classSyntax = declaringSyntaxReference.GetSyntax();
-                     Diagnostic diagnostic = Diagnostic.Create(EntityClassDeclarationAnalyzerRule.Rule, classSyntax.GetLocation(), namedTypeSymbol.Name,Definition.LSEntityType );
+                     Diagnostic diagnostic = Diagnostic.Create(EntityClassDeclarationAnalyzerRule.Rule, classSyntax.GetLocation(), namedTypeSymbol.Name, Definition.LSEntityType);
                      context.ReportDiagnostic(diagnostic);
                  }
                  return;
              }
 
-             if (namedTypeSymbol.BaseType?.ToString()!="ET.LSEntity" && t == Definition.EntityType)
+             if (t == "ET.UGFEntity")
+             {
+                 foreach (SyntaxReference? declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
+                 {
+                     SyntaxNode classSyntax = declaringSyntaxReference.GetSyntax();
+                     Diagnostic diagnostic = Diagnostic.Create(EntityClassDeclarationAnalyzerRule.Rule, classSyntax.GetLocation(), namedTypeSymbol.Name, Definition.UGFEntityType);
+                     context.ReportDiagnostic(diagnostic);
+                 }
+                 return;
+             }
+
+             if (namedTypeSymbol.BaseType?.ToString() != "ET.LSEntity" && namedTypeSymbol.BaseType?.ToString() != "ET.UGFEntity" && t == Definition.EntityType)
              {
                  foreach (SyntaxReference? declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
                  {
@@ -55,7 +66,7 @@ namespace ET.Analyzer
              }
 
              var baseType = namedTypeSymbol.BaseType?.ToString();
-             if (baseType == Definition.EntityType || baseType == Definition.LSEntityType)
+             if (baseType == Definition.EntityType || baseType == Definition.LSEntityType || baseType == Definition.UGFEntityType)
              {
                  if (namedTypeSymbol.IsGenericType)
                  {

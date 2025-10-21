@@ -39,7 +39,7 @@ namespace ET.Client
                 UnityGameFramework.Runtime.UIForm[] uiForms = GameEntry.UI.GetAllLoadedUIForms();
                 foreach (var uiForm in uiForms)
                 {
-                    if (uiForm.Logic is ETMonoUIForm etMonoUIForm)
+                    if (uiForm.Logic is ETMonoUGFUIForm etMonoUIForm)
                     {
                         etMonoUIForm.OnReload();
                     }
