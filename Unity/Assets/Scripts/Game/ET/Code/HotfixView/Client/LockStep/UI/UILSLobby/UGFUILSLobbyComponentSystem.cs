@@ -21,6 +21,12 @@ namespace ET.Client
             self.ClearBind();
         }
 
+        [UGFUIFormSystem]
+        private static void UGFUIFormOnInit(this UGFUILSLobbyComponent self)
+        {
+            
+        }
+
         public static async UniTask EnterMap(this UGFUILSLobbyComponent self)
         {
             await EnterMapHelper.Match(self.Fiber());

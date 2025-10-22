@@ -8,7 +8,7 @@ namespace ET
 
     public interface IUGFUIWidgetOnUpdateSystem : ISystemType
     {
-        void Run(UGFUIWidget o);
+        void Run(UGFUIWidget o, float elapseSeconds, float realElapseSeconds);
     }
 
     [EntitySystem]
@@ -29,12 +29,12 @@ namespace ET
             return InstanceQueueIndex.None;
         }
 
-        void IUGFUIWidgetOnUpdateSystem.Run(UGFUIWidget o)
+        void IUGFUIWidgetOnUpdateSystem.Run(UGFUIWidget o, float elapseSeconds, float realElapseSeconds)
         {
-            this.UIWidgetOnUpdate((T)o);
+            this.UIWidgetOnUpdate((T)o, elapseSeconds, realElapseSeconds);
         }
 
-        protected abstract void UIWidgetOnUpdate(T self);
+        protected abstract void UIWidgetOnUpdate(T self, float elapseSeconds, float realElapseSeconds);
     }
 }
 

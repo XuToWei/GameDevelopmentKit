@@ -198,7 +198,7 @@ namespace {{namespaceName}}
                 
                 void SpeicalProcessForArgs()
                 {
-                    if ((attributeType == "EntitySystem" || attributeType == "LSEntitySystem") && methodName == Definition.GetComponentMethod)
+                    if ((attributeType == "EntitySystem" || attributeType == "LSEntitySystem" || attributeType == "UGFUIFormSystem" || attributeType == "UGFUIWidgetSystem") && methodName == Definition.GetComponentMethod)
                     {
                         argsTypes = argsTypes.Split(',')[0];
                     }

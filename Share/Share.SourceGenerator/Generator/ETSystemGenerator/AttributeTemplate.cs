@@ -81,6 +81,30 @@ namespace ET.Generator
                             }
                         }
                 """);
+            
+            this.templates.Add("UGFUIFormSystem", 
+                $$"""
+                $attribute$
+                        public class $argsTypesUnderLine$_$methodName$System: $methodName$System<$argsTypes$>
+                        {   
+                            protected override $returnType$ $methodName$($argsTypesVars$)
+                            {
+                                $return$$argsVars0$.$methodName$($argsVarsWithout0$);
+                            }
+                        }
+                """);
+            
+            this.templates.Add("UGFUIWidgetSystem", 
+                $$"""
+                  $attribute$
+                          public class $argsTypesUnderLine$_$methodName$System: $methodName$System<$argsTypes$>
+                          {   
+                              protected override $returnType$ $methodName$($argsTypesVars$)
+                              {
+                                  $return$$argsVars0$.$methodName$($argsVarsWithout0$);
+                              }
+                          }
+                  """);
         }
 
         public string Get(string attributeType)

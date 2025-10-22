@@ -6,7 +6,9 @@
 
         public const string LSEntityType = "ET.LSEntity";
         
-        public const string UGFEntityType = "ET.UGFEntity";
+        public const string UGFUIFormType = "ET.UGFUIForm";
+        
+        public const string UGFUIWidgetType = "ET.UGFUIWidget";
         
         public const string ETTask = "UniTask";
 

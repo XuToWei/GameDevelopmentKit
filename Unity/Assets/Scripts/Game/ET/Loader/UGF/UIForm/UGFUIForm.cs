@@ -1,6 +1,6 @@
 namespace ET
 {
-    public abstract class UGFUIForm : UGFEntity, IAwake, IDestroy
+    public abstract class UGFUIForm : Entity, IAwake, IDestroy
     {
         
     }

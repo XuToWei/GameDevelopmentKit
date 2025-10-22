@@ -12,7 +12,25 @@ namespace ET
         public void Awake()
         {
             this.TypeSystems = new(InstanceQueueIndex.Max);
-            foreach (Type type in CodeTypes.Instance.GetTypes(typeof (UGFEntitySystemAttribute)))
+            foreach (Type type in CodeTypes.Instance.GetTypes(typeof (UGFUIFormSystemAttribute)))
+            {
+                SystemObject obj = (SystemObject)Activator.CreateInstance(type);
+
+                if (obj is not ISystemType iSystemType)
+                {
+                    continue;
+                }
+
+                TypeSystems.OneTypeSystems oneTypeSystems = this.TypeSystems.GetOrCreateOneTypeSystems(iSystemType.Type());
+                oneTypeSystems.Map.Add(iSystemType.SystemType(), obj);
+                int index = iSystemType.GetInstanceQueueIndex();
+                if (index > InstanceQueueIndex.None && index < InstanceQueueIndex.Max)
+                {
+                    oneTypeSystems.QueueFlag[index] = true;
+                }
+            }
+            
+            foreach (Type type in CodeTypes.Instance.GetTypes(typeof (UGFUIWidgetSystemAttribute)))
             {
                 SystemObject obj = (SystemObject)Activator.CreateInstance(type);
 
@@ -33,7 +51,7 @@ namespace ET
             foreach (var kv in CodeTypes.Instance.GetTypes())
             {
                 Type type = kv.Value;
-                if (typeof(UGFEntity).IsAssignableFrom(type))
+                if (typeof(UGFUIForm).IsAssignableFrom(type) || typeof(UGFUIWidget).IsAssignableFrom(type))
                 {
                     long hash = type.FullName.GetLongHashCode();
                     try
@@ -58,37 +76,6 @@ namespace ET
         public TypeSystems.OneTypeSystems GetOneTypeSystems(Type type)
         {
             return this.TypeSystems.GetOneTypeSystems(type);
-        }
-
-        public void UGFUIFormOnOpen(UGFUIForm ugfUIForm)
-        {
-            if (ugfUIForm is not IUGFUIFormOnOpen)
-            {
-                return;
-            }
-            
-            List<SystemObject> iUGFUIFormOnOpenSystems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof (IUGFUIFormOnOpenSystem));
-            if (iUGFUIFormOnOpenSystems == null)
-            {
-                return;
-            }
-
-            foreach (IUGFUIFormOnOpenSystem iUGFUIFormOnOpenSystem in iUGFUIFormOnOpenSystems)
-            {
-                if (iUGFUIFormOnOpenSystem == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    iUGFUIFormOnOpenSystem.Run(ugfUIForm);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
         }
 
         public void UGFUIWidgetOnInit(UGFUIWidget ugfUIWidget)
@@ -339,7 +326,7 @@ namespace ET
             }
         }
 
-        public void UGFUIWidgetOnUpdate(UGFUIWidget ugfUIWidget)
+        public void UGFUIWidgetOnUpdate(UGFUIWidget ugfUIWidget, float elapseSeconds, float realElapseSeconds)
         {
             if (ugfUIWidget is not IUGFUIWidgetOnUpdate)
             {
@@ -361,7 +348,7 @@ namespace ET
 
                 try
                 {
-                    system.Run(ugfUIWidget);
+                    system.Run(ugfUIWidget, elapseSeconds, realElapseSeconds);
                 }
                 catch (Exception e)
                 {
@@ -424,6 +411,68 @@ namespace ET
                 try
                 {
                     system.Run(ugfUIWidget);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFUIFormOnInit(UGFUIForm ugfUIForm)
+        {
+            if (ugfUIForm is not IUGFUIFormOnInit)
+            {
+                return;
+            }
+
+            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnInitSystem));
+            if (systems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFUIFormOnInitSystem system in systems)
+            {
+                if (system == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    system.Run(ugfUIForm);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFUIFormOnOpen(UGFUIForm ugfUIForm)
+        {
+            if (ugfUIForm is not IUGFUIFormOnOpen)
+            {
+                return;
+            }
+            
+            List<SystemObject> iUGFUIFormOnOpenSystems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof (IUGFUIFormOnOpenSystem));
+            if (iUGFUIFormOnOpenSystems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFUIFormOnOpenSystem iUGFUIFormOnOpenSystem in iUGFUIFormOnOpenSystems)
+            {
+                if (iUGFUIFormOnOpenSystem == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    iUGFUIFormOnOpenSystem.Run(ugfUIForm);
                 }
                 catch (Exception e)
                 {
@@ -517,37 +566,6 @@ namespace ET
                 try
                 {
                     system.Run(ugfUIForm, uiGroupDepth, depthInUIGroup);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
-        public void UGFUIFormOnInit(UGFUIForm ugfUIForm)
-        {
-            if (ugfUIForm is not IUGFUIFormOnInit)
-            {
-                return;
-            }
-
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnInitSystem));
-            if (systems == null)
-            {
-                return;
-            }
-
-            foreach (IUGFUIFormOnInitSystem system in systems)
-            {
-                if (system == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    system.Run(ugfUIForm);
                 }
                 catch (Exception e)
                 {
@@ -711,7 +729,7 @@ namespace ET
             }
         }
 
-        public void UGFUIFormOnUpdate(UGFUIForm ugfUIForm)
+        public void UGFUIFormOnUpdate(UGFUIForm ugfUIForm, float elapseSeconds, float realElapseSeconds)
         {
             if (ugfUIForm is not IUGFUIFormOnUpdate)
             {
@@ -733,7 +751,7 @@ namespace ET
 
                 try
                 {
-                    system.Run(ugfUIForm);
+                    system.Run(ugfUIForm, elapseSeconds, realElapseSeconds);
                 }
                 catch (Exception e)
                 {

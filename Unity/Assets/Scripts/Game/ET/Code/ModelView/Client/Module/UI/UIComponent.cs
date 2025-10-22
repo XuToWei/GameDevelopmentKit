@@ -5,7 +5,7 @@
     /// </summary>
     [ComponentOf]
     [EnableMethod]
-    public sealed class UGFUIComponent : Entity, IAwake, IDestroy
+    public class UIComponent : Entity, IAwake, IDestroy
     {
         
     }

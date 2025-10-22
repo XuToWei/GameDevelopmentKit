@@ -69,7 +69,7 @@ namespace ET
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
-            UGFEntitySystemSingleton.Instance.UGFUIFormOnUpdate(m_UGFUIForm);
+            UGFEntitySystemSingleton.Instance.UGFUIFormOnUpdate(m_UGFUIForm, elapseSeconds, realElapseSeconds);
         }
 
         protected override void OnDepthChanged(int uiGroupDepth, int depthInUIGroup)

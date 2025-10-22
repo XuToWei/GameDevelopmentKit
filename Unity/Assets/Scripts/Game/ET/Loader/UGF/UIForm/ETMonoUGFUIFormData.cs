@@ -15,7 +15,7 @@ namespace ET
             UGFUIForm = null;
         }
 
-        public static ETMonoUGFUIFormData Acquire(UGFUIForm ugfUIForm)
+        public static ETMonoUGFUIFormData Create(UGFUIForm ugfUIForm)
         {
             ETMonoUGFUIFormData formData = ReferencePool.Acquire<ETMonoUGFUIFormData>();
             formData.UGFUIForm = ugfUIForm;

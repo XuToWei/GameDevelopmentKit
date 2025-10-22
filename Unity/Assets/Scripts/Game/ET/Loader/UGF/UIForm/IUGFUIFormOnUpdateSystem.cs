@@ -8,7 +8,7 @@ namespace ET
 
     public interface IUGFUIFormOnUpdateSystem : ISystemType
     {
-        void Run(UGFUIForm o);
+        void Run(UGFUIForm o, float elapseSeconds, float realElapseSeconds);
     }
 
     [EntitySystem]
@@ -29,12 +29,12 @@ namespace ET
             return InstanceQueueIndex.None;
         }
 
-        void IUGFUIFormOnUpdateSystem.Run(UGFUIForm o)
+        void IUGFUIFormOnUpdateSystem.Run(UGFUIForm o, float elapseSeconds, float realElapseSeconds)
         {
-            this.UIFormOnUpdate((T)o);
+            this.UIFormOnUpdate((T)o, elapseSeconds, realElapseSeconds);
         }
 
-        protected abstract void UIFormOnUpdate(T self);
+        protected abstract void UIFormOnUpdate(T self, float elapseSeconds, float realElapseSeconds);
     }
 }
 
