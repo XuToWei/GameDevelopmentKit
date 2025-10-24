@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIWidgetOnUpdateSystem.Run(UGFUIWidget o, float elapseSeconds, float realElapseSeconds)
         {
-            this.UIWidgetOnUpdate((T)o, elapseSeconds, realElapseSeconds);
+            this.UGFUIWidgetOnUpdate((T)o, elapseSeconds, realElapseSeconds);
         }
 
-        protected abstract void UIWidgetOnUpdate(T self, float elapseSeconds, float realElapseSeconds);
+        protected abstract void UGFUIWidgetOnUpdate(T self, float elapseSeconds, float realElapseSeconds);
     }
 }
 

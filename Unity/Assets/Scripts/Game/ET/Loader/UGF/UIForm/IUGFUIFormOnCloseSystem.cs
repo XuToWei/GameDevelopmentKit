@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIFormOnCloseSystem.Run(UGFUIForm o, bool isShutdown)
         {
-            this.UIFormOnClose((T)o, isShutdown);
+            this.UGFUIFormOnClose((T)o, isShutdown);
         }
 
-        protected abstract void UIFormOnClose(T self, bool isShutdown);
+        protected abstract void UGFUIFormOnClose(T self, bool isShutdown);
     }
 }
 

@@ -9,17 +9,20 @@ namespace ET.Client
         [EntitySystem]
         private static void Awake(this UIComponent self)
         {
+            
         }
 
         [EntitySystem]
         private static void Destroy(this UIComponent self)
         {
-            self.CloseAllUIForms();
+            
         }
-
-        public static async UniTask<UGFUIForm> OpenUIFormAsync(this UIComponent self, int uiFormId)
+        
+        public static async UniTask<T> AddUIFormAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm, new()
         {
-            return null;
+            T ugfUIForm = self.AddChild<T>();
+            await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
+            return ugfUIForm;
         }
 
         public static void CloseUIForm(this UIComponent self, UGFUIForm uiForm)
@@ -32,10 +35,23 @@ namespace ET.Client
 
         public static void RefocusUIForm(this UIComponent self, UGFUIForm uiForm, object userData = null)
         {
+            
         }
 
         public static void CloseAllUIForms(this UIComponent self)
         {
+            using var removeChildIds = ListComponent<long>.Create();
+            foreach (var child in self.Children.Values)
+            {
+                if (child is UGFUIForm)
+                {
+                    removeChildIds.Add(child.Id);
+                }
+            }
+            foreach (var childId in removeChildIds)
+            {
+                self.RemoveChild(childId);
+            }
         }
     }
 }

@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIFormOnInitSystem.Run(UGFUIForm o)
         {
-            this.UIFormOnInit((T)o);
+            this.UGFUIFormOnInit((T)o);
         }
 
-        protected abstract void UIFormOnInit(T self);
+        protected abstract void UGFUIFormOnInit(T self);
     }
 }
 

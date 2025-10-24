@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIWidgetOnResumeSystem.Run(UGFUIWidget o)
         {
-            this.UIWidgetOnResume((T)o);
+            this.UGFUIWidgetOnResume((T)o);
         }
 
-        protected abstract void UIWidgetOnResume(T self);
+        protected abstract void UGFUIWidgetOnResume(T self);
     }
 }
 

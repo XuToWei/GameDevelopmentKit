@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIWidgetOnRecycleSystem.Run(UGFUIWidget o)
         {
-            this.UIWidgetOnRecycle((T)o);
+            this.UGFUIWidgetOnRecycle((T)o);
         }
 
-        protected abstract void UIWidgetOnRecycle(T self);
+        protected abstract void UGFUIWidgetOnRecycle(T self);
     }
 }
 

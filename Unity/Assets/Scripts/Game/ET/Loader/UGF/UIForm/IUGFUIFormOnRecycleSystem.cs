@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIFormOnRecycleSystem.Run(UGFUIForm o)
         {
-            this.UIFormOnRecycle((T)o);
+            this.UGFUIFormOnRecycle((T)o);
         }
 
-        protected abstract void UIFormOnRecycle(T self);
+        protected abstract void UGFUIFormOnRecycle(T self);
     }
 }
 

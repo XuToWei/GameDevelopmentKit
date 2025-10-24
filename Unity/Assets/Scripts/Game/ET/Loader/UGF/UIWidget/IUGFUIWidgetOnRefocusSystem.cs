@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIWidgetOnRefocusSystem.Run(UGFUIWidget o)
         {
-            this.UIWidgetOnRefocus((T)o);
+            this.UGFUIWidgetOnRefocus((T)o);
         }
 
-        protected abstract void UIWidgetOnRefocus(T self);
+        protected abstract void UGFUIWidgetOnRefocus(T self);
     }
 }
 

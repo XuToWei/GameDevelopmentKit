@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIWidgetOnDepthChangedSystem.Run(UGFUIWidget o, int uiGroupDepth, int depthInUIGroup)
         {
-            this.UIWidgetOnDepthChanged((T)o, uiGroupDepth, depthInUIGroup);
+            this.UGFUIWidgetOnDepthChanged((T)o, uiGroupDepth, depthInUIGroup);
         }
 
-        protected abstract void UIWidgetOnDepthChanged(T self, int uiGroupDepth, int depthInUIGroup);
+        protected abstract void UGFUIWidgetOnDepthChanged(T self, int uiGroupDepth, int depthInUIGroup);
     }
 }
 

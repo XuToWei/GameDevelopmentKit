@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIWidgetOnCloseSystem.Run(UGFUIWidget o, bool isShutdown)
         {
-            this.UIWidgetOnClose((T)o, isShutdown);
+            this.UGFUIWidgetOnClose((T)o, isShutdown);
         }
 
-        protected abstract void UIWidgetOnClose(T self, bool isShutdown);
+        protected abstract void UGFUIWidgetOnClose(T self, bool isShutdown);
     }
 }
 

@@ -1,6 +1,7 @@
 using CodeBind;
 using System.IO;
 using Cysharp.Threading.Tasks;
+using Game;
 using UnityEngine;
 
 namespace ET.Client
@@ -9,22 +10,11 @@ namespace ET.Client
     [FriendOf(typeof(UGFUILSLobbyComponent))]
     public static partial class UGFUILSLobbyComponentSystem
     {
-        [EntitySystem]
-        private static void Awake(this UGFUILSLobbyComponent self, Transform uiTransform)
-        {
-            self.InitBind(uiTransform);
-        }
-
-        [EntitySystem]
-        private static void Destroy(this UGFUILSLobbyComponent self)
-        {
-            self.ClearBind();
-        }
-
         [UGFUIFormSystem]
         private static void UGFUIFormOnInit(this UGFUILSLobbyComponent self)
         {
-            
+            self.EnterMapButton.SetAsync(self.EnterMap);
+            self.ReplayButton.Set(self.Replay);
         }
 
         public static async UniTask EnterMap(this UGFUILSLobbyComponent self)

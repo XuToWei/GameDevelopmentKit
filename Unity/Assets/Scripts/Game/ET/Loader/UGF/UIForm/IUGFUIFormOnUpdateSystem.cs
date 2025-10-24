@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIFormOnUpdateSystem.Run(UGFUIForm o, float elapseSeconds, float realElapseSeconds)
         {
-            this.UIFormOnUpdate((T)o, elapseSeconds, realElapseSeconds);
+            this.UGFUIFormOnUpdate((T)o, elapseSeconds, realElapseSeconds);
         }
 
-        protected abstract void UIFormOnUpdate(T self, float elapseSeconds, float realElapseSeconds);
+        protected abstract void UGFUIFormOnUpdate(T self, float elapseSeconds, float realElapseSeconds);
     }
 }
 

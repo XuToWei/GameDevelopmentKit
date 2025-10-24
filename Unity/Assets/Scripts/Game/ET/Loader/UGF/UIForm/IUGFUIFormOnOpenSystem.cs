@@ -31,9 +31,9 @@ namespace ET
 
         void IUGFUIFormOnOpenSystem.Run(UGFUIForm o)
         {
-            this.UIFormOnOpen((T)o);
+            this.UGFUIFormOnOpen((T)o);
         }
 
-        protected abstract void UIFormOnOpen(T self);
+        protected abstract void UGFUIFormOnOpen(T self);
     }
 }

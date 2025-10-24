@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIFormOnCoverSystem.Run(UGFUIForm o)
         {
-            this.UIFormOnCover((T)o);
+            this.UGFUIFormOnCover((T)o);
         }
 
-        protected abstract void UIFormOnCover(T self);
+        protected abstract void UGFUIFormOnCover(T self);
     }
 }
 

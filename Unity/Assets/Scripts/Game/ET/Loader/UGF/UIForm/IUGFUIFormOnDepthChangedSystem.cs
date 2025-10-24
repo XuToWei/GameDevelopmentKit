@@ -31,10 +31,10 @@ namespace ET
 
         void IUGFUIFormOnDepthChangedSystem.Run(UGFUIForm o, int uiGroupDepth, int depthInUIGroup)
         {
-            this.UIFormOnDepthChanged((T)o, uiGroupDepth, depthInUIGroup);
+            this.UGFUIFormOnDepthChanged((T)o, uiGroupDepth, depthInUIGroup);
         }
 
-        protected abstract void UIFormOnDepthChanged(T self, int uiGroupDepth, int depthInUIGroup);
+        protected abstract void UGFUIFormOnDepthChanged(T self, int uiGroupDepth, int depthInUIGroup);
     }
 }
 

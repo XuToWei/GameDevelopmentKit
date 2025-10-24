@@ -28,7 +28,8 @@
         "LitMotion",
         "LitMotion.Extensions",
         "LitMotion.Animation",
-        "LoopScrollRect.Runtime"
+        "LoopScrollRect.Runtime",
+        "Game"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
