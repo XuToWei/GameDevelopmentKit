@@ -93,17 +93,17 @@ namespace ET
             UGFEntitySystemSingleton.Instance.UGFUIWidgetOnRecycle(ugfUIWidget);
         }
 
-        public void Open()
+        internal void Open()
         {
             ugfUIForm.ETMono.OpenUIWidget(this);
         }
 
-        public void DynamicOpen()
+        internal void DynamicOpen()
         {
             ugfUIForm.ETMono.DynamicOpenUIWidget(this);
         }
 
-        public void Close()
+        internal void Close()
         {
             ugfUIForm.ETMono.CloseUIWidget(this);
         }
