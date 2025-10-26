@@ -1,6 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game;
+using UnityEngine;
 using UnityGameFramework.Runtime;
 using GameEntry = Game.GameEntry;
 
@@ -12,22 +13,24 @@ namespace ET
         private UIForm uiForm;
         private CancellationTokenSource cts;
 
-        public bool IsOpened => uiForm != null;
-        public bool Available => uiForm != null && !uiForm.Logic.Available;
+        public ETMonoUGFUIForm ETMono { get; internal set; }
+        public Transform CachedTransform { get; internal set; }
+        public bool IsOpen => this.uiForm != null;
+        public bool Available => this.uiForm != null && !this.uiForm.Logic.Available;
         public bool Visible
         {
             get
             {
-                return uiForm != null && uiForm.Logic.Visible;
+                return this.uiForm != null && this.uiForm.Logic.Visible;
             }
             set
             {
-                if (uiForm == null)
+                if (this.uiForm == null)
                 {
                     Log.Warning("UI form is not opened.");
                     return;
                 }
-                uiForm.Logic.Visible = value;
+                this.uiForm.Logic.Visible = value;
             }
         }
 
@@ -73,6 +76,13 @@ namespace ET
         public void SetUIFormInstancePriority(int priority)
         {
             GameEntry.UI.SetUIFormInstancePriority(this.uiForm, priority);
+        }
+
+        public T AddUIWidget<T>(ETMonoUGFUIWidget etMonoWidget) where T : UGFUIWidget
+        {
+            T widgetEntity = this.AddChild<T>();
+            this.ETMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
         }
     }
 }

@@ -4,6 +4,12 @@ namespace ET
 {
     public sealed class ETMonoUGFUIWidgetData : IReference
     {
+        public EntityRef<UGFUIForm> UGFUIForm
+        {
+            get;
+            private set;
+        }
+
         public EntityRef<UGFUIWidget> UGFUIWidget
         {
             get;
@@ -12,12 +18,14 @@ namespace ET
 
         public void Clear()
         {
+            UGFUIForm = null;
             UGFUIWidget = null;
         }
 
-        public static ETMonoUGFUIWidgetData Create(UGFUIWidget ugfUIWidget)
+        public static ETMonoUGFUIWidgetData Create(UGFUIForm ugfUIForm, UGFUIWidget ugfUIWidget)
         {
             ETMonoUGFUIWidgetData formData = ReferencePool.Acquire<ETMonoUGFUIWidgetData>();
+            formData.UGFUIForm = ugfUIForm;
             formData.UGFUIWidget = ugfUIWidget;
             return formData;
         }

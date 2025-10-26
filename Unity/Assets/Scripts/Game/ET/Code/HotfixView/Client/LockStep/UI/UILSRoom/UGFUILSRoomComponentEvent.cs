@@ -12,7 +12,7 @@ namespace ET.Client
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                UGFUILSRoomComponent uiLSRoom = uiForm.AddComponent<UGFUILSRoomComponent, Transform>(uiForm.Transform);
+                UGFUILSRoomComponent uiLSRoom = uiForm.AddComponent<UGFUILSRoomComponent, Transform>(uiForm.CachedTransform);
                 Room room = uiLSRoom.Room();
                 if (room.IsReplay)
                 {

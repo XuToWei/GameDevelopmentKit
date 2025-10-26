@@ -1,31 +1,28 @@
 using CodeBind;
 using Cysharp.Threading.Tasks;
+using Game;
 using UnityEngine;
 
 namespace ET.Client
 {
-    [EntitySystemOf(typeof(UGFUILoginComponent))]
-    [FriendOf(typeof(UGFUILoginComponent))]
-    public static partial class UGFUILoginComponentSystem
+    [EntitySystemOf(typeof(UILoginComponent))]
+    [FriendOf(typeof(UILoginComponent))]
+    public static partial class UILoginComponentSystem
     {
-        [EntitySystem]
-        private static void Awake(this UGFUILoginComponent self, Transform uiTransform)
+        [UGFUIFormSystem]
+        private static void UGFUIFormOnOpen(this UILoginComponent self)
         {
-            self.InitBind(uiTransform);
+            self.Mono = (MonoUILogin)self.ETMono;
+            self.Mono.LoginButton.SetAsync(self.OnLogin);
+            self.Add
         }
 
-        [EntitySystem]
-        private static void Destroy(this UGFUILoginComponent self)
-        {
-            self.ClearBind();
-        }
-
-        public static UniTask OnLogin(this UGFUILoginComponent self)
+        public static UniTask OnLogin(this UILoginComponent self)
         {
             return LoginHelper.Login(
                 self.Root(),
-                self.AccountInputField.text,
-                self.PasswordInputField.text);
+                self.Mono.AccountInputField.text,
+                self.Mono.PasswordInputField.text);
         }
     }
 }

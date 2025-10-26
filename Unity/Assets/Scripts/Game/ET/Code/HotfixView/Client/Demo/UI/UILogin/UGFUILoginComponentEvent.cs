@@ -12,7 +12,7 @@ namespace ET.Client
             public override void OnInit(UGFUIForm uiForm, object userData)
             {
                 base.OnInit(uiForm, userData);
-                var uiLogin = uiForm.AddComponent<UGFUILoginComponent, Transform>(uiForm.Transform);
+                var uiLogin = uiForm.AddComponent<UGFUILoginComponent, Transform>(uiForm.CachedTransform);
                 uiLogin.LoginButton.SetAsync(uiLogin.OnLogin);
                 uiLogin.uiWidgetTest = uiForm.AddUIWidget<UGFUIWidgetTestEvent>(uiLogin.TestWidgetTransform);
                 

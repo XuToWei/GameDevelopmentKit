@@ -26,7 +26,7 @@ namespace ET
         
         public async UniTask LoadSceneAsync(string sceneAssetName)
         {
-            await GameEntry.Scene.LoadSceneAsync(AssetUtility.GetSceneAsset(sceneAssetName), Constant.AssetPriority.SceneAsset);
+            await GameEntry.Scene.LoadSceneAsync(sceneAssetName, Constant.AssetPriority.SceneAsset);
         }
 
         public async UniTask UnloadSceneAsync(string sceneAssetName)

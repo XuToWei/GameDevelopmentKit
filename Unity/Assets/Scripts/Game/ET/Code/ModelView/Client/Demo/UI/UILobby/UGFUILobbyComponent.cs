@@ -3,9 +3,9 @@ using UnityEngine;
 namespace ET.Client
 {
     [EnableMethod]
-    [ComponentOf(typeof(UGFUIForm))]
-    public partial class UGFUILobbyComponent : Entity, IAwake<Transform>, IDestroy
+    [ComponentOf(typeof(UIComponent))]
+    public partial class UILobbyComponent : UGFUIForm, IUGFUIFormOnInit
     {
-        
+        public ETUILobby View { get; set; }
     }
 }

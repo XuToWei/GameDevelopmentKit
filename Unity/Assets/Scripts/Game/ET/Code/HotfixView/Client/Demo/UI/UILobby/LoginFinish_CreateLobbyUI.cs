@@ -7,7 +7,7 @@ namespace ET.Client
 	{
 		protected override async UniTask Run(Scene scene, LoginFinish args)
 		{
-			await scene.GetComponent<UGFUIComponent>().OpenUIFormAsync(UGFUIFormId.UILobby);
+			await scene.GetComponent<UIComponent>().AddUIFormAsync<UILobbyComponent>(UGFUIFormId.UILobby);
 		}
 	}
 }
