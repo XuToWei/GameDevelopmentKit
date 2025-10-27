@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 224438795553994780}
   - component: {fileID: 1431576037130298801}
   - component: {fileID: 1431576037130298803}
-  - component: {fileID: 6938489902435297828}
-  - component: {fileID: -5130382017284538456}
+  - component: {fileID: 1975681135986820215}
   m_Layer: 5
   m_Name: UILSRoom
   m_TagString: Untagged
@@ -80,7 +79,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 823
---- !u!114 &6938489902435297828
+--- !u!114 &1975681135986820215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,47 +88,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1386170326414932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd2cab69204e6aa44bcabf89d590162c, type: 3}
+  m_Script: {fileID: 11500000, guid: e591fbc3ede81eb45b960824b0b20e51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-5130382017284538456
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386170326414932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5452a0c3619826c4f889a047605eef79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindComponents:
-  - {fileID: 1251386679265060718}
-  - {fileID: 3677809357678589843}
-  - {fileID: 5749727612281774398}
-  - {fileID: 1594851067972007820}
-  - {fileID: 7432407593182925526}
-  - {fileID: 2616255216970716116}
-  - {fileID: 8142270086186194903}
-  - {fileID: 1526580319439999924}
-  - {fileID: 8664983122881471485}
-  - {fileID: 1273401424810570531}
-  - {fileID: 242686799324548184}
-  m_SeparatorChar: 95
-  m_BindScript: {fileID: 11500000, guid: a684f391a0a5d7a44a18dd14b303fc61, type: 3}
-  m_BindComponentNames:
-  - ProgressText
-  - PredictText
-  - FrameCountText
-  - ReplayTransform
-  - JumpToCountInputField
-  - JumpButton
-  - SpeedButton
-  - SpeedText
-  - PlayTransform
-  - SaveNameInputField
-  - SaveReplayButton
+  m_FrameCountText: {fileID: 5749727612281774398}
+  m_JumpButton: {fileID: 2616255216970716116}
+  m_JumpToCountInputField: {fileID: 7432407593182925526}
+  m_PlayTransform: {fileID: 8664983122881471485}
+  m_PredictText: {fileID: 3677809357678589843}
+  m_ProgressText: {fileID: 1251386679265060718}
+  m_ReplayTransform: {fileID: 1594851067972007820}
+  m_SaveNameInputField: {fileID: 1273401424810570531}
+  m_SaveReplayButton: {fileID: 242686799324548184}
+  m_SpeedButton: {fileID: 8142270086186194903}
+  m_SpeedText: {fileID: 1526580319439999924}
 --- !u!1 &443161762425607488
 GameObject:
   m_ObjectHideFlags: 0

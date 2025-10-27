@@ -95,9 +95,16 @@ namespace ET
             GameEntry.UI.SetUIFormInstancePriority(this.uiForm, priority);
         }
 
-        public T AddUIWidget<T>(ETMonoUGFUIWidget etMonoWidget) where T : UGFUIWidget
+        public T AddChildUIWidget<T>(ETMonoUGFUIWidget etMonoWidget) where T : UGFUIWidget
         {
             T widgetEntity = this.AddChild<T>();
+            this.ETMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddComponentUIWidget<T>(ETMonoUGFUIWidget etMonoWidget) where T : UGFUIWidget, new()
+        {
+            T widgetEntity = this.AddComponent<T>();
             this.ETMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }

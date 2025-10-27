@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 
 namespace ET.Client
@@ -18,9 +19,16 @@ namespace ET.Client
             
         }
         
-        public static async UniTask<T> AddUIFormAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm, new()
+        public static async UniTask<T> AddUIFormChildAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm, new()
         {
             T ugfUIForm = self.AddChild<T>();
+            await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
+            return ugfUIForm;
+        }
+
+        public static async UniTask<T> AddUIFormComponentAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm, new()
+        {
+            T ugfUIForm = self.AddComponent<T>();
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }
@@ -51,6 +59,19 @@ namespace ET.Client
             foreach (var childId in removeChildIds)
             {
                 self.RemoveChild(childId);
+            }
+
+            using var removeComponentTypes = ListComponent<Type>.Create();
+            foreach (var component in self.Components.Values)
+            {
+                if (component is UGFUIForm)
+                {
+                    removeComponentTypes.Add(component.GetType());
+                }
+            }
+            foreach (var componentType in removeComponentTypes)
+            {
+                self.RemoveComponent(componentType);
             }
         }
     }

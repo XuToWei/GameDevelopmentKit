@@ -1,8 +1,7 @@
 namespace ET.Client
 {
-    [EnableMethod]
     [ComponentOf(typeof(UIComponent))]
-    public partial class UILSLoginComponent : UGFUIForm<ETMonoUILSLogin>, IUGFUIFormOnOpen
+    public partial class UILSLoginComponent : UGFUIForm<ETMonoUIFormLSLogin>, IUGFUIFormOnOpen
     {
         
     }

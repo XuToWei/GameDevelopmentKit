@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 224438795553994780}
   - component: {fileID: 3539700472237229061}
   - component: {fileID: 3539700472237229083}
-  - component: {fileID: -6867697261457961253}
-  - component: {fileID: 5953124996121705981}
+  - component: {fileID: 3472859422587407956}
   m_Layer: 5
   m_Name: UIHelp
   m_TagString: Untagged
@@ -80,7 +79,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 823
---- !u!114 &-6867697261457961253
+--- !u!114 &3472859422587407956
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,27 +88,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1386170326414932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd2cab69204e6aa44bcabf89d590162c, type: 3}
+  m_Script: {fileID: 11500000, guid: 73b1367050d04ec4e8757827b914b774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5953124996121705981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386170326414932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5452a0c3619826c4f889a047605eef79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindComponents:
-  - {fileID: 476678119492089194}
-  m_SeparatorChar: 95
-  m_BindScript: {fileID: 11500000, guid: b4dd589b0dfbad34a877c9934564180c, type: 3}
-  m_BindComponentNames:
-  - DescText
+  m_DescText: {fileID: 476678119492089194}
 --- !u!1 &5924122422788570510
 GameObject:
   m_ObjectHideFlags: 0

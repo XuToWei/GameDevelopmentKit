@@ -2,7 +2,7 @@ namespace ET.Client
 {
     [EnableMethod]
     [ComponentOf(typeof(UIComponent))]
-    public partial class UILobbyComponent : UGFUIForm<ETMonoUILobby>, IUGFUIFormOnOpen
+    public partial class UILobbyComponent : UGFUIForm<ETMonoUIFormLobby>, IUGFUIFormOnOpen
     {
         
     }

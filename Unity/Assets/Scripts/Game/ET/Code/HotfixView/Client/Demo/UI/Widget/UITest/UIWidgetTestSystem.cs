@@ -7,8 +7,7 @@ namespace ET.Client
         [UGFUIWidgetSystem]
         private static void UGFUIWidgetOnOpen(this UIWidgetTest self)
         {
-            self.EtMono = (ETMonoWidgetTest)self.ETMono;
-            self.EtMono.TestTextUXText.text = "UIWidget测试成功!";
+            self.Mono.TestTextUXText.text = "UIWidget测试成功!";
         }
     }
 }

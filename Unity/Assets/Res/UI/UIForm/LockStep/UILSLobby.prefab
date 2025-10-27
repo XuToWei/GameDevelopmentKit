@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 224438795553994780}
   - component: {fileID: 1431576037130298801}
   - component: {fileID: 1431576037130298803}
-  - component: {fileID: 8389621595536951513}
-  - component: {fileID: 1546994543936884318}
+  - component: {fileID: 4049815145459177612}
   m_Layer: 5
   m_Name: UILSLobby
   m_TagString: Untagged
@@ -80,7 +79,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 823
---- !u!114 &8389621595536951513
+--- !u!114 &4049815145459177612
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,31 +88,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1386170326414932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd2cab69204e6aa44bcabf89d590162c, type: 3}
+  m_Script: {fileID: 11500000, guid: 202df017c47460d4293d9be17ba30f5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1546994543936884318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386170326414932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5452a0c3619826c4f889a047605eef79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindComponents:
-  - {fileID: 7768120852135991652}
-  - {fileID: 1888676198012664535}
-  - {fileID: 4259866312124243016}
-  m_SeparatorChar: 95
-  m_BindScript: {fileID: 11500000, guid: a9b55f148dca38a4cb64cf9bb7b26b31, type: 3}
-  m_BindComponentNames:
-  - EnterMapButton
-  - ReplayPathInputField
-  - ReplayButton
 --- !u!1 &899722670427233733
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,5 @@
 using Game;
 using GameFramework;
-using UnityEngine;
 
 namespace ET
 {
@@ -9,7 +8,6 @@ namespace ET
     /// </summary>
     /// 界面的预制体绑定代码可以直接使用此类的子类
     [EnableClass]
-    [DisallowMultipleComponent]
     public abstract class ETMonoUGFUIForm : AUGuiForm
     {
         private UGFUIForm ugfUIForm;
@@ -22,7 +20,7 @@ namespace ET
             ugfUIForm = formData.UGFUIForm;
             ugfUIForm.CachedTransform = CachedTransform;
             ugfUIForm.ETMono = this;
-            UGFEntitySystemSingleton.Instance.UGFUIFormOnOpen(ugfUIForm);
+            UGFEntitySystemSingleton.Instance.UGFUIFormOnInit(ugfUIForm);
         }
 
         protected override void OnOpen(object userData)
@@ -47,56 +45,56 @@ namespace ET
         {
             base.OnPause();
             UGFEntitySystemSingleton.Instance.UGFUIFormOnPause(ugfUIForm);
-            uiWidgetContainer.OnPause();
+            uiWidgetContainer?.OnPause();
         }
 
         protected override void OnResume()
         {
             base.OnResume();
             UGFEntitySystemSingleton.Instance.UGFUIFormOnResume(ugfUIForm);
-            uiWidgetContainer.OnResume();
+            uiWidgetContainer?.OnResume();
         }
 
         protected override void OnCover()
         {
             base.OnCover();
             UGFEntitySystemSingleton.Instance.UGFUIFormOnCover(ugfUIForm);
-            uiWidgetContainer.OnCover();
+            uiWidgetContainer?.OnCover();
         }
 
         protected override void OnReveal()
         {
             base.OnReveal();
             UGFEntitySystemSingleton.Instance.UGFUIFormOnReveal(ugfUIForm);
-            uiWidgetContainer.OnReveal();
+            uiWidgetContainer?.OnReveal();
         }
 
         protected override void OnRefocus(object userData)
         {
             base.OnRefocus(userData);
             UGFEntitySystemSingleton.Instance.UGFUIFormOnRefocus(ugfUIForm);
-            uiWidgetContainer.OnRefocus(userData);
+            uiWidgetContainer?.OnRefocus(userData);
         }
 
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(elapseSeconds, realElapseSeconds);
             UGFEntitySystemSingleton.Instance.UGFUIFormOnUpdate(ugfUIForm, elapseSeconds, realElapseSeconds);
-            uiWidgetContainer.OnUpdate(elapseSeconds, realElapseSeconds);
+            uiWidgetContainer?.OnUpdate(elapseSeconds, realElapseSeconds);
         }
 
         protected override void OnDepthChanged(int uiGroupDepth, int depthInUIGroup)
         {
             base.OnDepthChanged(uiGroupDepth, depthInUIGroup);
             UGFEntitySystemSingleton.Instance.UGFUIFormOnDepthChanged(ugfUIForm, uiGroupDepth, depthInUIGroup);
-            uiWidgetContainer.OnDepthChanged(uiGroupDepth, depthInUIGroup);
+            uiWidgetContainer?.OnDepthChanged(uiGroupDepth, depthInUIGroup);
         }
 
         protected override void OnRecycle()
         {
             base.OnRecycle();
             UGFEntitySystemSingleton.Instance.UGFUIFormOnRecycle(ugfUIForm);
-            uiWidgetContainer.OnRecycle();
+            uiWidgetContainer?.OnRecycle();
         }
 
         public void AddUIWidget(AUIWidget auiWidget, object userData = null)

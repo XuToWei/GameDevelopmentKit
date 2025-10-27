@@ -1,6 +1,5 @@
 using Game;
 using GameFramework;
-using UnityEngine;
 
 namespace ET
 {
@@ -9,7 +8,6 @@ namespace ET
     /// </summary>
     /// 界面Widget的预制体绑定代码可以直接使用此类的子类
     [EnableClass]
-    [DisallowMultipleComponent]
     public abstract class ETMonoUGFUIWidget : AUIWidget
     {
         private UGFUIForm ugfUIForm;
@@ -22,6 +20,7 @@ namespace ET
             ETMonoUGFUIWidgetData widgetData = (ETMonoUGFUIWidgetData)userData;
             ugfUIForm = widgetData.UGFUIForm;
             ugfUIWidget = widgetData.UGFUIWidget;
+            ReferencePool.Release(widgetData);
             ugfUIWidget.ETMono = this;
             ugfUIWidget.CachedTransform = CachedTransform;
             UGFEntitySystemSingleton.Instance.UGFUIWidgetOnInit(ugfUIWidget);
@@ -30,12 +29,6 @@ namespace ET
         protected override void OnOpen(object userData)
         {
             base.OnOpen(userData);
-            ETMonoUGFUIWidgetData widgetData = (ETMonoUGFUIWidgetData)userData;
-            ugfUIForm = widgetData.UGFUIForm;
-            ugfUIWidget = widgetData.UGFUIWidget;
-            ReferencePool.Release(widgetData);
-            ugfUIWidget.ETMono = this;
-            ugfUIWidget.CachedTransform = CachedTransform;
             UGFEntitySystemSingleton.Instance.UGFUIWidgetOnOpen(ugfUIWidget);
         }
 

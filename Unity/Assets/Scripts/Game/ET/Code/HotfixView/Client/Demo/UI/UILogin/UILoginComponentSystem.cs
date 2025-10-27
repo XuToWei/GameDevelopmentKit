@@ -8,10 +8,17 @@ namespace ET.Client
     public static partial class UILoginComponentSystem
     {
         [UGFUIFormSystem]
+        private static void UGFUIFormOnInit(this UILoginComponent self)
+        {
+            self.Mono.LoginButton.SetAsync(self.OnLogin);
+            self.AddComponentUIWidget<UIWidgetTest>(self.Mono.TestWidgetTest);
+        }
+        
+        [UGFUIFormSystem]
         private static void UGFUIFormOnOpen(this UILoginComponent self)
         {
             self.Mono.LoginButton.SetAsync(self.OnLogin);
-            self.AddUIWidget<UIWidgetTest>(self.Mono.TestWidget);
+            self.GetComponent<UIWidgetTest>().Open();
         }
 
         public static UniTask OnLogin(this UILoginComponent self)

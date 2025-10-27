@@ -19,6 +19,7 @@ namespace ET
         }
     }
 
+    [ComponentOf(typeof(UGFUIForm))]
     [ChildOf(typeof(UGFUIForm))]
     public abstract class UGFUIWidget : Entity, IAwake, IDestroy
     {
@@ -48,8 +49,26 @@ namespace ET
         {
             if (!this.IsDisposed)
             {
-                this.ETMono.Close();
+                if (this.Available)
+                {
+                    this.ETMono.Close();
+                }
             }
+        }
+        
+        public void Open()
+        {
+            this.ETMono.Open();
+        }
+
+        public void DynamicOpen()
+        {
+            this.ETMono.DynamicOpen();
+        }
+
+        public void Close()
+        {
+            this.ETMono.Close();
         }
     }
 }
