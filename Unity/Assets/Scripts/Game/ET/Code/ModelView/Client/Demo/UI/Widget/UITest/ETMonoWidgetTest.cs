@@ -3,7 +3,7 @@
 namespace ET.Client
 {
     [EnableClass]
-    public partial class MonoUIWidgetTest : ETMonoUGFUIWidget
+    public partial class ETMonoWidgetTest : ETMonoUGFUIWidget
     {
         public CodeBind.CSCodeBindMono Mono { get; private set; }
         public UnityEngine.Transform Transform { get; private set; }

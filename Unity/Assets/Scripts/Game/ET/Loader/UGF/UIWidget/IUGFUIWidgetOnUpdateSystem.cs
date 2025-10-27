@@ -37,4 +37,3 @@ namespace ET
         protected abstract void UGFUIWidgetOnUpdate(T self, float elapseSeconds, float realElapseSeconds);
     }
 }
-

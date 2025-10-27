@@ -37,4 +37,3 @@ namespace ET
         protected abstract void UGFUIFormOnDepthChanged(T self, int uiGroupDepth, int depthInUIGroup);
     }
 }
-

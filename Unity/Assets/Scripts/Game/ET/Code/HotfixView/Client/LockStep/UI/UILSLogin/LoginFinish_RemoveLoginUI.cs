@@ -8,7 +8,7 @@ namespace ET.Client
 		protected override async UniTask Run(Scene scene, LoginFinish args)
 		{
 			await UniTask.CompletedTask;
-			scene.GetComponent<UGFUIComponent>().CloseUIForm(UGFUIFormId.UILSLogin);
+			scene.GetComponent<UIComponent>().RemoveComponent<UILSLoginComponent>();
 		}
 	}
 }

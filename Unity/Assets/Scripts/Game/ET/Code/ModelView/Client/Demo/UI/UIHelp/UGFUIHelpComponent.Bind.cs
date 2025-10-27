@@ -2,7 +2,7 @@
 
 namespace ET.Client
 {
-    public partial class UGFUIHelpComponent : CodeBind.ICSCodeBind
+    public partial class ETMonoUIHelp : ETMonoUGFUIForm
     {
         public CodeBind.CSCodeBindMono Mono { get; private set; }
         public UnityEngine.Transform Transform { get; private set; }

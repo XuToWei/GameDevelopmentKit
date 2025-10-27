@@ -4,11 +4,11 @@ namespace ET.Client
     [FriendOf(typeof(UIWidgetTest))]
     public static partial class UIWidgetTestSystem
     {
-        [UGFUIFormSystem]
-        private static void UGFUIFormOnOpen(this UIWidgetTest self)
+        [UGFUIWidgetSystem]
+        private static void UGFUIWidgetOnOpen(this UIWidgetTest self)
         {
-            self.Mono = (MonoUIWidgetTest)self.ETMono;
-            self.Mono.TestTextUXText.text = "UIWidget测试成功!";
+            self.EtMono = (ETMonoWidgetTest)self.ETMono;
+            self.EtMono.TestTextUXText.text = "UIWidget测试成功!";
         }
     }
 }

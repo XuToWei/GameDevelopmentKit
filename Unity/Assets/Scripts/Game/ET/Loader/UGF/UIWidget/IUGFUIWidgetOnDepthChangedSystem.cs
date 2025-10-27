@@ -37,4 +37,3 @@ namespace ET
         protected abstract void UGFUIWidgetOnDepthChanged(T self, int uiGroupDepth, int depthInUIGroup);
     }
 }
-

@@ -37,4 +37,3 @@ namespace ET
         protected abstract void UGFUIFormOnPause(T self);
     }
 }
-

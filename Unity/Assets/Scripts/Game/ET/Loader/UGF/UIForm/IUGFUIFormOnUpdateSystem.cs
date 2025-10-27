@@ -37,4 +37,3 @@ namespace ET
         protected abstract void UGFUIFormOnUpdate(T self, float elapseSeconds, float realElapseSeconds);
     }
 }
-

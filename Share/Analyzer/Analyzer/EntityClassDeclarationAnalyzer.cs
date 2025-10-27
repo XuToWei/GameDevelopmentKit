@@ -43,28 +43,6 @@ namespace ET.Analyzer
                  return;
              }
 
-             if (t == "ET.UGFUIForm")
-             {
-                 foreach (SyntaxReference? declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
-                 {
-                     SyntaxNode classSyntax = declaringSyntaxReference.GetSyntax();
-                     Diagnostic diagnostic = Diagnostic.Create(EntityClassDeclarationAnalyzerRule.Rule, classSyntax.GetLocation(), namedTypeSymbol.Name, Definition.UGFUIFormType);
-                     context.ReportDiagnostic(diagnostic);
-                 }
-                 return;
-             }
-
-             if (t == "ET.UGFUIWidget")
-             {
-                 foreach (SyntaxReference? declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
-                 {
-                     SyntaxNode classSyntax = declaringSyntaxReference.GetSyntax();
-                     Diagnostic diagnostic = Diagnostic.Create(EntityClassDeclarationAnalyzerRule.Rule, classSyntax.GetLocation(), namedTypeSymbol.Name, Definition.UGFUIWidgetType);
-                     context.ReportDiagnostic(diagnostic);
-                 }
-                 return;
-             }
-
              if (namedTypeSymbol.BaseType?.ToString() != "ET.LSEntity" && namedTypeSymbol.BaseType?.ToString() != "ET.UGFUIForm" && namedTypeSymbol.BaseType?.ToString() != "ET.UGFUIWidget" && t == Definition.EntityType)
              {
                  foreach (SyntaxReference? declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
@@ -77,7 +55,7 @@ namespace ET.Analyzer
              }
 
              var baseType = namedTypeSymbol.BaseType?.ToString();
-             if (baseType == Definition.EntityType || baseType == Definition.LSEntityType || baseType == Definition.UGFUIFormType || baseType == Definition.UGFUIWidgetType)
+             if (baseType == Definition.EntityType || baseType == Definition.LSEntityType)
              {
                  if (namedTypeSymbol.IsGenericType)
                  {

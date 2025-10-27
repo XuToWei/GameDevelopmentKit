@@ -8,12 +8,29 @@ using GameEntry = Game.GameEntry;
 namespace ET
 {
     [EnableMethod]
-    public abstract class UGFUIForm : Entity, IAwake, IDestroy
+    public abstract class UGFUIForm<T> : UGFUIForm where T : ETMonoUGFUIForm
+    {
+        public T Mono { get; private set; }
+
+        private ETMonoUGFUIForm etMono;
+        public override ETMonoUGFUIForm ETMono
+        {
+            get => etMono;
+            internal set
+            {
+                etMono = value;
+                Mono = (T)etMono;
+            }
+        }
+    }
+
+    [EnableMethod]
+    public abstract class UGFUIForm : Entity, IAwake, IDestroy 
     {
         private UIForm uiForm;
         private CancellationTokenSource cts;
 
-        public ETMonoUGFUIForm ETMono { get; internal set; }
+        public virtual ETMonoUGFUIForm ETMono { get; internal set; }
         public Transform CachedTransform { get; internal set; }
         public bool IsOpen => this.uiForm != null;
         public bool Available => this.uiForm != null && !this.uiForm.Logic.Available;

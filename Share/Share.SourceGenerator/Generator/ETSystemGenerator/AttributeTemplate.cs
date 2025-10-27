@@ -85,7 +85,7 @@ namespace ET.Generator
             this.templates.Add("UGFUIFormSystem", 
                 $$"""
                 $attribute$
-                        public class $argsTypesUnderLine$_$methodName$System: $methodName$System<$argsTypes$>
+                        public class $argsTypesUnderLine$_$methodName$System: $methodName$System<$entityType$>
                         {   
                             protected override $returnType$ $methodName$($argsTypesVars$)
                             {
@@ -97,7 +97,7 @@ namespace ET.Generator
             this.templates.Add("UGFUIWidgetSystem", 
                 $$"""
                   $attribute$
-                          public class $argsTypesUnderLine$_$methodName$System: $methodName$System<$argsTypes$>
+                          public class $argsTypesUnderLine$_$methodName$System: $methodName$System<$entityType$>
                           {   
                               protected override $returnType$ $methodName$($argsTypesVars$)
                               {

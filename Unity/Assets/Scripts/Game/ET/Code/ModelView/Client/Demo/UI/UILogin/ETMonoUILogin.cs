@@ -2,7 +2,7 @@
 
 namespace ET.Client
 {
-    public partial class MonoUILogin : ETMonoUGFUIForm
+    public partial class ETMonoUILogin : ETMonoUGFUIForm
     {
         public CodeBind.CSCodeBindMono Mono { get; private set; }
         public UnityEngine.Transform Transform { get; private set; }
@@ -10,7 +10,7 @@ namespace ET.Client
         public UnityEngine.UI.InputField AccountInputField { get; private set; }
         public UnityEngine.UI.InputField PasswordInputField { get; private set; }
         public UnityEngine.UI.Button LoginButton { get; private set; }
-        public UnityEngine.Transform TestWidgetTransform { get; private set; }
+        public ETMonoUGFUIWidget TestWidget { get; private set; }
 
 
         

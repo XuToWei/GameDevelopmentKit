@@ -2,10 +2,27 @@ using UnityEngine;
 
 namespace ET
 {
+    [EnableMethod]
+    public abstract class UGFUIWidget<T> : UGFUIWidget where T : ETMonoUGFUIWidget
+    {
+        public T Mono { get; private set; }
+
+        private ETMonoUGFUIWidget etMono;
+        public override ETMonoUGFUIWidget ETMono
+        {
+            get => etMono;
+            internal set
+            {
+                etMono = value;
+                Mono = (T)etMono;
+            }
+        }
+    }
+
     [ChildOf(typeof(UGFUIForm))]
     public abstract class UGFUIWidget : Entity, IAwake, IDestroy
     {
-        public ETMonoUGFUIWidget ETMono { get; internal set; }
+        public virtual ETMonoUGFUIWidget ETMono { get; internal set; }
         public Transform CachedTransform { get; internal set; }
         public bool IsOpen => ETMono != null;
         public bool Available => ETMono != null && ETMono.Available;

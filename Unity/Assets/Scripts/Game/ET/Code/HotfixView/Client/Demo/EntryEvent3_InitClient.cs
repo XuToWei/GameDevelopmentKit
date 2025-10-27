@@ -10,10 +10,10 @@ namespace ET.Client
             //Test
             root.AddComponent<TestComponent>();
             
-            World.Instance.AddSingleton<UGFEventComponent>();
+            World.Instance.AddSingleton<UGFEntitySystemSingleton>();
             
             GlobalComponent globalComponent = root.AddComponent<GlobalComponent>();
-            root.AddComponent<UGFUIComponent>();
+            root.AddComponent<UIComponent>();
             root.AddComponent<PlayerComponent>();
             root.AddComponent<CurrentScenesComponent>();
             

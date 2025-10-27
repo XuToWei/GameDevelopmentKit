@@ -8,7 +8,7 @@ namespace ET.Client
         protected override async UniTask Run(Scene scene, AfterCreateClientScene args)
         {
             scene.AddComponent<UIComponent>();
-            scene.AddComponent<UGFEntityComponent>();
+            // scene.AddComponent<UGFEntityComponent>();
             await UniTask.CompletedTask;
         }
     }

@@ -162,7 +162,7 @@ namespace {{namespaceName}}
                 string argsVarsWithout0 = string.Join(", ", argsVarsWithout0List);
                 string argsTypesVarsWithout0 = string.Join(", ", argsTypeVarsWithout0List);
 
-                SpeicalProcessForArgs();
+                SpecialProcessForArgs();
                 
                 if (methodSymbol.ReturnType.ToDisplayString() == "void")
                 {
@@ -196,7 +196,7 @@ namespace {{namespaceName}}
                 
                 context.AddSource(fileName, code);
                 
-                void SpeicalProcessForArgs()
+                void SpecialProcessForArgs()
                 {
                     if ((attributeType == "EntitySystem" || attributeType == "LSEntitySystem" || attributeType == "UGFUIFormSystem" || attributeType == "UGFUIWidgetSystem") && methodName == Definition.GetComponentMethod)
                     {

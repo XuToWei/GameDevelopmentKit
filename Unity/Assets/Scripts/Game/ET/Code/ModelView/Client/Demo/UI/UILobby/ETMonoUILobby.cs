@@ -3,7 +3,7 @@
 namespace ET.Client
 {
     [EnableClass]
-    public partial class ETUILobby : ETMonoUGFUIForm
+    public partial class ETMonoUILobby : ETMonoUGFUIForm
     {
         public CodeBind.CSCodeBindMono Mono { get; private set; }
         public UnityEngine.Transform Transform { get; private set; }

@@ -1,7 +1,5 @@
-using CodeBind;
 using Cysharp.Threading.Tasks;
 using Game;
-using UnityEngine;
 
 namespace ET.Client
 {
@@ -12,9 +10,8 @@ namespace ET.Client
         [UGFUIFormSystem]
         private static void UGFUIFormOnOpen(this UILoginComponent self)
         {
-            self.Mono = (MonoUILogin)self.ETMono;
             self.Mono.LoginButton.SetAsync(self.OnLogin);
-            self.Add
+            self.AddUIWidget<UIWidgetTest>(self.Mono.TestWidget);
         }
 
         public static UniTask OnLogin(this UILoginComponent self)
