@@ -12,7 +12,7 @@ namespace ET
     {
         private UGFUIForm ugfUIForm;
         private UGFUIWidget ugfUIWidget;
-        internal ETMonoUGFUIForm etMonoUGFUIForm { private get; set; }
+        internal AETMonoUGFUIForm etMonoUGFUIForm { private get; set; }
 
         protected override void OnInit(object userData)
         {

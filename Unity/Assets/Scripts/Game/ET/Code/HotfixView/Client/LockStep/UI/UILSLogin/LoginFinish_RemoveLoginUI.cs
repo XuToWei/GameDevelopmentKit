@@ -8,7 +8,7 @@ namespace ET.Client
 		protected override async UniTask Run(Scene scene, LoginFinish args)
 		{
 			await UniTask.CompletedTask;
-			scene.GetComponent<UIComponent>().RemoveComponent<UILSLoginComponent>();
+			scene.GetComponent<UIComponent>().RemoveComponent<UIFormLSLoginComponent>();
 		}
 	}
 }

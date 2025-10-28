@@ -66,13 +66,13 @@ namespace ET
             return ugfEntity.Logic.CachedTransform;
         }
         
-        public async UniTask<T> OpenUIFormAsync<T>(UGFUIForm ugfuiForm, int uiFormTypeId, CancellationToken cancellationToken = default) where T : ETMonoUGFUIForm
+        public async UniTask<T> OpenUIFormAsync<T>(UGFUIForm ugfuiForm, int uiFormTypeId, CancellationToken cancellationToken = default) where T : AETMonoUGFUIForm
         {
             UnityGameFramework.Runtime.UIForm ugfUIForm = await GameEntry.UI.OpenUIFormAsync(uiFormTypeId, ETMonoUGFUIFormData.Create(ugfuiForm), cancellationToken);
             return (T)ugfUIForm.Logic;
         }
         
-        public async UniTask<T> OpenUIFormAsync<T>(UGFUIForm ugfuiForm, string uiFormAssetName, string uiGroupName, int priority, bool pauseCoveredUIForm, CancellationToken cancellationToken = default) where T : ETMonoUGFUIForm
+        public async UniTask<T> OpenUIFormAsync<T>(UGFUIForm ugfuiForm, string uiFormAssetName, string uiGroupName, int priority, bool pauseCoveredUIForm, CancellationToken cancellationToken = default) where T : AETMonoUGFUIForm
         {
             UnityGameFramework.Runtime.UIForm ugfUIForm = await GameEntry.UI.OpenUIFormAsync(uiFormAssetName, uiGroupName, priority, pauseCoveredUIForm,  ETMonoUGFUIFormData.Create(ugfuiForm), cancellationToken);
             return (T)ugfUIForm.Logic;

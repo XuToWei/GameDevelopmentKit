@@ -19,7 +19,7 @@ namespace ET.Client
             
         }
         
-        public static async UniTask<T> AddUIFormChildAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm, new()
+        public static async UniTask<T> AddUIFormChildAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm
         {
             T ugfUIForm = self.AddChild<T>();
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
@@ -31,19 +31,6 @@ namespace ET.Client
             T ugfUIForm = self.AddComponent<T>();
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
-        }
-
-        public static void CloseUIForm(this UIComponent self, UGFUIForm uiForm)
-        {
-        }
-
-        public static void CloseUIForm(this UIComponent self, int uiFormId)
-        {
-        }
-
-        public static void RefocusUIForm(this UIComponent self, UGFUIForm uiForm, object userData = null)
-        {
-            
         }
 
         public static void CloseAllUIForms(this UIComponent self)

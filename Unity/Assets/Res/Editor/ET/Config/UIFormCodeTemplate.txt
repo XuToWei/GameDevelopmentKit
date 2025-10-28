@@ -1,0 +1,7 @@
+﻿namespace ET.Client
+{
+    public class UIForm#NAME# : UGFUIForm<MonoUIForm#NAME#>, IUGFUIFormOnOpen, IUGFUIFormOnClose
+    {
+        
+    }
+}

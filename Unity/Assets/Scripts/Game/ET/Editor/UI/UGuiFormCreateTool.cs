@@ -8,12 +8,12 @@ namespace ET.Editor
 {
     public static class UGuiFormCreateTool
     {
-        private static readonly string s_UGuiFormTemplate = "Assets/Res/Editor/UI/UGuiTemplateForm-ET.prefab";
+        private const string UGuiFormTemplate = "Assets/Res/Editor/UI/UGuiTemplateForm-ET.prefab";
         
         [MenuItem("GameObject/UI/UGuiForm-ET", false, UIEditorDefine.MenuPriority)]
         public static void CreateUGuiForm()
         {
-            GameObject obj = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(s_UGuiFormTemplate));
+            GameObject obj = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(UGuiFormTemplate));
             obj.name = "UIForm";
             RectTransform rectTransform = obj.GetComponent<RectTransform>();
             rectTransform.SetParent(Selection.activeTransform);
@@ -22,6 +22,15 @@ namespace ET.Editor
             rectTransform.localPosition = Vector3.zero;
             rectTransform.anchoredPosition = Vector3.zero;
             rectTransform.sizeDelta = Vector3.zero;
+        }
+
+        public static GameObject CreateUGuiFormPrefab(string name, string savePath)
+        {
+            GameObject obj = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(UGuiFormTemplate));
+            obj.name = name;
+            GameObject prefab = PrefabUtility.SaveAsPrefabAsset(obj, savePath);
+            UnityEngine.Object.DestroyImmediate(obj);
+            return prefab;
         }
     }
 }

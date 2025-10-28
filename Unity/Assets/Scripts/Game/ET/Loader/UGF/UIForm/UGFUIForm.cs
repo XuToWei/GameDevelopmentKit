@@ -1,19 +1,22 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game;
+using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 using GameEntry = Game.GameEntry;
 
 namespace ET
 {
-    [EnableMethod]
-    public abstract class UGFUIForm<T> : UGFUIForm where T : ETMonoUGFUIForm
+    public abstract class UGFUIForm<T> : UGFUIForm where T : AETMonoUGFUIForm
     {
+        [BsonIgnore]
         public T Mono { get; private set; }
 
-        private ETMonoUGFUIForm etMono;
-        public override ETMonoUGFUIForm ETMono
+        [BsonIgnore]
+        private AETMonoUGFUIForm etMono;
+        [BsonIgnore]
+        public override AETMonoUGFUIForm ETMono
         {
             get => etMono;
             internal set
@@ -27,10 +30,14 @@ namespace ET
     [EnableMethod]
     public abstract class UGFUIForm : Entity, IAwake, IDestroy 
     {
+        [BsonIgnore]
         private UIForm uiForm;
+        [BsonIgnore]
         private CancellationTokenSource cts;
 
-        public virtual ETMonoUGFUIForm ETMono { get; internal set; }
+        [BsonIgnore]
+        public virtual AETMonoUGFUIForm ETMono { get; internal set; }
+        [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
         public bool IsOpen => this.uiForm != null;
         public bool Available => this.uiForm != null && !this.uiForm.Logic.Available;

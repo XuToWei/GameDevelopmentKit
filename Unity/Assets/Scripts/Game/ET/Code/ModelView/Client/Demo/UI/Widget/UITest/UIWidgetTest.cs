@@ -1,8 +1,8 @@
 namespace ET.Client
 {
     [EnableMethod]
-    [ComponentOf(typeof(UILoginComponent))]
-    public partial class UIWidgetTest : UGFUIWidget<ETMonoWidgetTest>, IUGFUIWidgetOnOpen
+    [ComponentOf(typeof(UIFormLoginComponent))]
+    public partial class UIWidgetTest : UGFUIWidget<MonoUIWidgetTest>, IUGFUIWidgetOnOpen
     {
         
     }
