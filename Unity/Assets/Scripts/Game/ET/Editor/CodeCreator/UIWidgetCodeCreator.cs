@@ -55,9 +55,9 @@ namespace ET.Editor
                 Debug.Log($"Generate cs:{codeFile}!");
             }
             
-            GenerateCS(UGFUIWidgetComponentCodeTemplateFile,     $"{UGFUIWidgetModelViewCodePath}/UI{uiWidgetName}/UGFUIWidget{uiWidgetName}.cs");
-            GenerateCS(UGFUIWidgetSystemCodeTemplateFile,        $"{UGFUIWidgetHotfixViewCodePath}/UI{uiWidgetName}/UGFUIWidget{uiWidgetName}System.cs");
-            GenerateCS(UGFUIWidgetEventCodeTemplateFile,         $"{UGFUIWidgetHotfixViewCodePath}/UI{uiWidgetName}/UGFUIWidget{uiWidgetName}Event.cs");
+            GenerateCS(UIWidgetComponentCodeTemplateFile,     $"{UIWidgetModelViewCodePath}/UI{uiWidgetName}/UGFUIWidget{uiWidgetName}.cs");
+            GenerateCS(UIWidgetSystemCodeTemplateFile,        $"{UIWidgetHotfixViewCodePath}/UI{uiWidgetName}/UGFUIWidget{uiWidgetName}System.cs");
+            GenerateCS(UIWidgetEventCodeTemplateFile,         $"{UIWidgetHotfixViewCodePath}/UI{uiWidgetName}/UGFUIWidget{uiWidgetName}Event.cs");
             Debug.Log("生成完毕！");
         }
     }

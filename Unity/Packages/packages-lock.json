@@ -208,7 +208,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "3.2.1",
+      "version": "3.2.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -363,7 +363,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e124766af9ce62d366cc5277f6d6569ecf582875"
+      "hash": "c32153b6910409df3bc438eb3b37981abec3f83e"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",

@@ -61,9 +61,9 @@ namespace ET.Editor
                 Debug.Log($"Generate cs:{codeFile}!");
             }
             
-            GenerateCS(UIFormCodeTemplateFile,     $"{UIFormModelViewCodePath}/UI{uiName}/UIForm{uiName}.cs");
-            GenerateCS(UIFormSystemCodeTemplateFile,        $"{UIFormHotfixViewCodePath}/UI{uiName}/UIForm{uiName}System.cs");
-            GenerateCS(MonoUIFormCodeTemplateFile,         $"{UIFormModelViewCodePath}/UI{uiName}/MonoUIForm{uiName}.cs");
+            GenerateCS(UIFormCodeTemplateFile,           $"{UIFormModelViewCodePath}/UI{uiName}/UIForm{uiName}.cs");
+            GenerateCS(UIFormSystemCodeTemplateFile,     $"{UIFormHotfixViewCodePath}/UI{uiName}/UIForm{uiName}System.cs");
+            GenerateCS(MonoUIFormCodeTemplateFile,       $"{UIFormModelViewCodePath}/UI{uiName}/MonoUIForm{uiName}.cs");
             Debug.Log("生成完毕！");
         }
 
