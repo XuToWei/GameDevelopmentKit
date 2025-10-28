@@ -65,17 +65,37 @@ namespace UnityGameFramework.Extension.Editor
                 throw new GameFrameworkException("ResourceCollection is invalid.");
             }
             m_ResourceCollection = resourceCollection;
-            OptimizeLoadType();
-            Analyze();
-            CalCombine();
-            Save();
+            try
+            {
+                EditorUtility.DisplayProgressBar("Optimize Load Type", "processing...", 0f);
+                OptimizeLoadType();
+                EditorUtility.DisplayProgressBar("Optimize Load Type", "Complete processing...", 1f);
+                EditorUtility.DisplayProgressBar("Analyze", "processing...", 0f);
+                Analyze();
+                EditorUtility.DisplayProgressBar("Analyze", "Complete processing...", 1f);
+                EditorUtility.DisplayProgressBar("Calculate Combine", "processing...", 0f);
+                CalculateCombine();
+                EditorUtility.DisplayProgressBar("Calculate Combine", "Complete processing...", 1f);
+                EditorUtility.DisplayProgressBar("Save", "processing...", 0f);
+                Save();
+                EditorUtility.DisplayProgressBar("Save", "Complete processing...", 1f);
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
+            }
         }
 
         private void OptimizeLoadType()
         {
 #if UNITY_WEBGL
-            foreach (var resource in m_ResourceCollection.GetResources())
+            var resources = m_ResourceCollection.GetResources();
+            int count = resources.Length;
+            for (int i = 0; i < count; i++)
             {
+                int cur = i + 1;
+                EditorUtility.DisplayProgressBar("Optimize Load Type", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
+                var resource = resources[i];
                 if(resource.LoadType != LoadType.LoadFromMemory &&
                    resource.LoadType != LoadType.LoadFromMemoryAndDecrypt &&
                    resource.LoadType != LoadType.LoadFromMemoryAndQuickDecrypt)
@@ -94,8 +114,12 @@ namespace UnityGameFramework.Extension.Editor
 
         private void Save()
         {
+            int count = m_CombineBundles.Count;
+            int cur = 0;
             foreach (var kv in m_CombineBundles)
             {
+                cur++;
+                EditorUtility.DisplayProgressBar("Save", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
 #if UNITY_WEBGL
                 //WebGL下不能使用LoadFromFile
                 m_ResourceCollection.AddResource(kv.Key, null, null, LoadType.LoadFromMemory, false);
@@ -110,7 +134,7 @@ namespace UnityGameFramework.Extension.Editor
             m_ResourceCollection.Save();
         }
 
-        private void CalCombine()
+        private void CalculateCombine()
         {
             m_CombineBundles.Clear();
             Dictionary<string, ABInfo> allCombines = new Dictionary<string, ABInfo>();
@@ -120,8 +144,12 @@ namespace UnityGameFramework.Extension.Editor
             int allShareRemoveByReferenceCountTooFew = 0; // 因为 ref count 太少 放弃合并
             int allFinalCombine = 0; // 最终合并的数量
 
+            int count = m_ScatteredAssets.Count;
+            int cur = 0;
             foreach (var kv in m_ScatteredAssets)
             {
+                cur++;
+                EditorUtility.DisplayProgressBar("Calculate Combine (1/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 var assetPath = kv.Key;
                 allShareCount++;
                 if (!File.Exists(assetPath))
@@ -141,9 +169,13 @@ namespace UnityGameFramework.Extension.Editor
                     allShareCanCombine++;
                 }
             }
-            
+
+            count = allCombines.Count;
+            cur = 0;
             foreach (ABInfo abInfo in allCombines.Values.ToArray())
             {
+                cur++;
+                EditorUtility.DisplayProgressBar("Calculate Combine (2/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 var bundleName = abInfo.name;
                 if (abInfo.size * abInfo.referenceCount < MIN_NO_NAME_COMBINE_SIZE)
                 {
@@ -165,8 +197,12 @@ namespace UnityGameFramework.Extension.Editor
             allFinalCombine = left.Count;
             List<string> currentCombineBundle = null;
             long currentCombineBundleSize = 0;
+            count = left.Count;
+            cur = 0;
             foreach (ABInfo abInfo in left)
             {
+                cur++;
+                EditorUtility.DisplayProgressBar("Calculate Combine (3/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 if(currentCombineBundle == null)
                 {
                     currentCombineBundle = new List<string>();
@@ -203,8 +239,11 @@ namespace UnityGameFramework.Extension.Editor
             HashSet<string> excludeAssetNames = GetFilteredAssetNames("t:Script t:SubGraphAsset");
             Asset[] assets = m_ResourceCollection.GetAssets();
             int count = assets.Length;
+            int cur = 0;
             for (int i = 0; i < count; i++)
             {
+                cur++;
+                EditorUtility.DisplayProgressBar("Analyze (1/2)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 string assetName = assets[i].Name;
                 if (string.IsNullOrEmpty(assetName))
                 {
@@ -218,8 +257,12 @@ namespace UnityGameFramework.Extension.Editor
                 m_DependencyDatas.Add(assetName, dependencyData);
             }
 
+            count = m_ScatteredAssets.Count;
+            cur = 0;
             foreach (List<Asset> scatteredAsset in m_ScatteredAssets.Values)
             {
+                cur++;
+                EditorUtility.DisplayProgressBar("Analyze (2/2)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 scatteredAsset.Sort((a, b) => String.Compare(a.Name, b.Name, StringComparison.Ordinal));
             }
         }
