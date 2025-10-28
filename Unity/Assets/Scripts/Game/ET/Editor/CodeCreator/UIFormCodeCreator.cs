@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 namespace ET.Editor
@@ -32,6 +33,7 @@ namespace ET.Editor
         {
             GenerateUICode(codeName);
             GenerateUIPrefab(codeName);
+            Debug.Log("生成完毕！");
         }
 
         private void GenerateUICode(string uiName)
@@ -64,13 +66,40 @@ namespace ET.Editor
             GenerateCS(UIFormCodeTemplateFile,           $"{UIFormModelViewCodePath}/UI{uiName}/UIForm{uiName}.cs");
             GenerateCS(UIFormSystemCodeTemplateFile,     $"{UIFormHotfixViewCodePath}/UI{uiName}/UIForm{uiName}System.cs");
             GenerateCS(MonoUIFormCodeTemplateFile,       $"{UIFormModelViewCodePath}/UI{uiName}/MonoUIForm{uiName}.cs");
-            Debug.Log("生成完毕！");
         }
 
         private void GenerateUIPrefab(string uiName)
         {
+            string prefabPath = $"{UIFormPrefabPath}/UIForm{uiName}.prefab";
+            if (File.Exists(prefabPath))
+            {
+                throw new Exception($"{prefabPath} already exist!");
+            }
             GameObject prefab = UGuiFormCreateTool.CreateUGuiFormPrefab($"UIForm{uiName}", $"{UIFormPrefabPath}/UIForm{uiName}.prefab");
             Selection.activeGameObject = prefab;
+            EditorPrefs.SetString("NeedAddComponentUIName", uiName);
+            Debug.Log($"Generate prefab:{prefabPath}!");
+        }
+
+        [DidReloadScripts]
+        private static void AddUIPrefabComponent()
+        {
+            if (!EditorPrefs.HasKey("NeedAddComponentUIName"))
+                return;
+            string uiName = EditorPrefs.GetString("NeedAddComponentUIName");
+            EditorPrefs.DeleteKey("NeedAddComponentUIName");
+            string prefabPath = $"{UIFormPrefabPath}/UIForm{uiName}.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            if (prefab == null)
+                return;
+            MonoScript classScript = AssetDatabase.LoadAssetAtPath<MonoScript>($"{UIFormModelViewCodePath}/UI{uiName}/MonoUIForm{uiName}.cs");
+            if (classScript == null)
+                return;
+            Type componentType = classScript.GetClass();
+            if (prefab.GetComponent(componentType) != null)
+                return;
+            prefab.AddComponent(componentType);
+            Debug.Log($"Add component {componentType} to {prefab.name}!");
         }
     }
 }
