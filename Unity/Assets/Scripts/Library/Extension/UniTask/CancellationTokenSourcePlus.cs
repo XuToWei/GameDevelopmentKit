@@ -7,6 +7,7 @@ namespace System.Threading
     public class CancellationTokenSourcePlus
     {
         private CancellationTokenSource cts;
+        private int tokenCount;
 
         /// <summary>
         /// 获取取消令牌
@@ -18,7 +19,9 @@ namespace System.Threading
                 if (this.cts == null)
                 {
                     this.cts = new CancellationTokenSource();
+                    this.tokenCount = 0;
                 }
+                this.tokenCount++;
                 return this.cts.Token;
             }
         }
@@ -28,8 +31,9 @@ namespace System.Threading
         /// </summary>
         public void Cancel()
         {
-            if (this.cts != null)
+            if (this.cts != null && this.tokenCount > 0)
             {
+                this.tokenCount = 0;
                 this.cts.Cancel();
                 this.cts.Dispose();
                 this.cts = null;
