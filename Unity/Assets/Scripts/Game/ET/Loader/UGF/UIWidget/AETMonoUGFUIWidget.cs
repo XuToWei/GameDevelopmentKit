@@ -8,11 +8,10 @@ namespace ET
     /// </summary>
     /// 界面Widget的预制体绑定代码可以直接使用此类的子类
     [EnableClass]
-    public abstract class ETMonoUGFUIWidget : AUIWidget
+    public abstract class AETMonoUGFUIWidget : AUIWidget
     {
         private UGFUIForm ugfUIForm;
         private UGFUIWidget ugfUIWidget;
-        internal AETMonoUGFUIForm etMonoUGFUIForm { private get; set; }
 
         protected override void OnInit(object userData)
         {
@@ -21,7 +20,7 @@ namespace ET
             ugfUIForm = widgetData.UGFUIForm;
             ugfUIWidget = widgetData.UGFUIWidget;
             ReferencePool.Release(widgetData);
-            ugfUIWidget.ETMono = this;
+            ugfUIWidget.UGFMono = this;
             ugfUIWidget.CachedTransform = CachedTransform;
             UGFEntitySystemSingleton.Instance.UGFUIWidgetOnInit(ugfUIWidget);
         }
@@ -88,17 +87,17 @@ namespace ET
 
         internal void Open()
         {
-            ugfUIForm.ETMono.OpenUIWidget(this);
+            ugfUIForm.UGFMono.OpenUIWidget(this);
         }
 
         internal void DynamicOpen()
         {
-            ugfUIForm.ETMono.DynamicOpenUIWidget(this);
+            ugfUIForm.UGFMono.DynamicOpenUIWidget(this);
         }
 
         internal void Close()
         {
-            ugfUIForm.ETMono.CloseUIWidget(this);
+            ugfUIForm.UGFMono.CloseUIWidget(this);
         }
     }
 }

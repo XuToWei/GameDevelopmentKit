@@ -4,7 +4,6 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    [DisallowMultipleComponent]
     public abstract class AEntity : EntityLogic
     {
         public int Id => Entity.Id;

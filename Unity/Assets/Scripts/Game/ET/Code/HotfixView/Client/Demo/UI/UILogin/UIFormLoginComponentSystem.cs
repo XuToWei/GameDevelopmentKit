@@ -10,9 +10,9 @@ namespace ET.Client
         [UGFUIFormSystem]
         private static void UGFUIFormOnOpen(this UIFormLoginComponent self)
         {
-            self.Mono.LoginButton.SetAsync(self.OnLogin);
-            self.Mono.LoginButton.SetAsync(self.OnLogin);
-            self.AddComponentUIWidget<UIWidgetTest>(self.Mono.TestWidgetTest);
+            self.View.LoginButton.SetAsync(self.OnLogin);
+            self.View.LoginButton.SetAsync(self.OnLogin);
+            self.AddComponentUIWidget<UIWidgetTest>(self.View.TestWidgetTest);
             self.GetComponent<UIWidgetTest>().Open();
         }
 
@@ -20,8 +20,8 @@ namespace ET.Client
         {
             return LoginHelper.Login(
                 self.Root(),
-                self.Mono.AccountInputField.text,
-                self.Mono.PasswordInputField.text);
+                self.View.AccountInputField.text,
+                self.View.PasswordInputField.text);
         }
     }
 }

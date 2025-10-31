@@ -11,18 +11,16 @@ namespace ET
     public abstract class UGFUIForm<T> : UGFUIForm where T : AETMonoUGFUIForm
     {
         [BsonIgnore]
-        public T Mono { get; private set; }
-
+        public T View { get; private set; }
+        
         [BsonIgnore]
-        private AETMonoUGFUIForm etMono;
-        [BsonIgnore]
-        public override AETMonoUGFUIForm ETMono
+        internal override AETMonoUGFUIForm UGFMono
         {
-            get => etMono;
-            internal set
+            get => base.UGFMono;
+            set
             {
-                etMono = value;
-                Mono = (T)etMono;
+                base.UGFMono = value;
+                View = (T)base.UGFMono;
             }
         }
     }
@@ -33,13 +31,12 @@ namespace ET
         [BsonIgnore]
         private UIForm uiForm;
         [BsonIgnore]
-        private CancellationTokenSource cts;
-
+        private CancellationTokenSourcePlus cts;
         [BsonIgnore]
-        public virtual AETMonoUGFUIForm ETMono { get; internal set; }
+        internal virtual AETMonoUGFUIForm UGFMono { get; set; }
         [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
-        public bool IsOpen => this.uiForm != null;
+
         public bool Available => this.uiForm != null && !this.uiForm.Logic.Available;
         public bool Visible
         {
@@ -65,7 +62,7 @@ namespace ET
                 if (this.cts != null)
                 {
                     this.cts.Cancel();
-                    this.cts.Dispose();
+                    ObjectPool.Instance.Recycle(this.cts);
                     this.cts = null;
                 }
                 if (this.uiForm != null)
@@ -79,8 +76,11 @@ namespace ET
 
         public async UniTask OpenUIFormAsync(int uiFormTypeId)
         {
-            this.cts = new CancellationTokenSource();
-            this.uiForm = await GameEntry.UI.OpenUIFormAsync(uiFormTypeId, ETMonoUGFUIFormData.Create(this), this.cts.Token);
+            if(this.cts == null)
+            {
+                this.cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
+            }
+            this.uiForm = await GameEntry.UI.OpenUIFormAsync(uiFormTypeId, ETMonoUGFUIFormData.Create(this), cancellationToken: this.cts.Token);
             if(this.uiForm == null)
             {
                 throw new System.Exception($"UGFUIForm OpenUIFormAsync failed! uiFormTypeId:'{uiFormTypeId}'.");
@@ -102,17 +102,17 @@ namespace ET
             GameEntry.UI.SetUIFormInstancePriority(this.uiForm, priority);
         }
 
-        public T AddChildUIWidget<T>(ETMonoUGFUIWidget etMonoWidget) where T : UGFUIWidget
+        public T AddChildUIWidget<T>(AETMonoUGFUIWidget etMonoWidget) where T : UGFUIWidget
         {
             T widgetEntity = this.AddChild<T>();
-            this.ETMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }
 
-        public T AddComponentUIWidget<T>(ETMonoUGFUIWidget etMonoWidget) where T : UGFUIWidget, new()
+        public T AddComponentUIWidget<T>(AETMonoUGFUIWidget etMonoWidget) where T : UGFUIWidget, new()
         {
             T widgetEntity = this.AddComponent<T>();
-            this.ETMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }
     }

@@ -43,7 +43,11 @@ namespace ET.Analyzer
                  return;
              }
 
-             if (namedTypeSymbol.BaseType?.ToString() != "ET.LSEntity" && namedTypeSymbol.BaseType?.ToString() != "ET.UGFUIForm" && namedTypeSymbol.BaseType?.ToString() != "ET.UGFUIWidget" && t == Definition.EntityType)
+             if (namedTypeSymbol.BaseType?.ToString() != "ET.LSEntity"
+                 && namedTypeSymbol.BaseType?.ToString() != "ET.UGFUIForm"
+                 && namedTypeSymbol.BaseType?.ToString() != "ET.UGFUIWidget"
+                 && namedTypeSymbol.BaseType?.ToString() != "ET.UGFEntity"
+                 && t == Definition.EntityType)
              {
                  foreach (SyntaxReference? declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
                  {

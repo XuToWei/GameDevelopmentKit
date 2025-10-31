@@ -11,8 +11,8 @@ namespace ET.Client
         [UGFUIFormSystem]
         private static void UGFUIFormOnOpen(this UIFormLSLobbyComponent self)
         {
-            self.Mono.EnterMapButton.SetAsync(self.EnterMap);
-            self.Mono.ReplayButton.Set(self.Replay);
+            self.View.EnterMapButton.SetAsync(self.EnterMap);
+            self.View.ReplayButton.Set(self.Replay);
         }
 
         public static async UniTask EnterMap(this UIFormLSLobbyComponent self)
@@ -22,7 +22,7 @@ namespace ET.Client
 
         public static void Replay(this UIFormLSLobbyComponent self)
         {
-            byte[] bytes = File.ReadAllBytes(self.Mono.ReplayPathInputField.text);
+            byte[] bytes = File.ReadAllBytes(self.View.ReplayPathInputField.text);
             
             Replay replay = MemoryPackHelper.Deserialize(typeof (Replay), bytes, 0, bytes.Length) as Replay;
             Log.Debug($"start replay: {replay.Snapshots.Count} {replay.FrameInputs.Count} {replay.UnitInfos.Count}");

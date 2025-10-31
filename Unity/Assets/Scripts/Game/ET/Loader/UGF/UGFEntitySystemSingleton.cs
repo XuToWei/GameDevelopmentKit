@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityGameFramework.Runtime;
 
 namespace ET
 {
@@ -752,6 +754,285 @@ namespace ET
                 try
                 {
                     system.Run(ugfUIForm, elapseSeconds, realElapseSeconds);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFEntityOnInit(UGFEntity ugfEntity)
+        {
+            if (ugfEntity is not IUGFEntityOnInit)
+            {
+                return;
+            }
+
+            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnInitSystem));
+            if (systems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFEntityOnInitSystem system in systems)
+            {
+                if (system == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    system.Run(ugfEntity);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFEntityOnShow(UGFEntity ugfEntity)
+        {
+            if (ugfEntity is not IUGFEntityOnShow)
+            {
+                return;
+            }
+
+            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnShowSystem));
+            if (systems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFEntityOnShowSystem system in systems)
+            {
+                if (system == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    system.Run(ugfEntity);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFEntityOnHide(UGFEntity ugfEntity, bool isShutdown)
+        {
+            if (ugfEntity is not IUGFEntityOnHide)
+            {
+                return;
+            }
+
+            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnHideSystem));
+            if (systems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFEntityOnHideSystem system in systems)
+            {
+                if (system == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    system.Run(ugfEntity, isShutdown);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFEntityOnRecycle(UGFEntity ugfEntity)
+        {
+            if (ugfEntity is not IUGFEntityOnRecycle)
+            {
+                return;
+            }
+
+            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnRecycleSystem));
+            if (systems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFEntityOnRecycleSystem system in systems)
+            {
+                if (system == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    system.Run(ugfEntity);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFEntityOnAttached(UGFEntity ugfEntity, UGFEntity childEntity, Transform parentTransform)
+        {
+            if (ugfEntity is not IUGFEntityOnAttached)
+            {
+                return;
+            }
+
+            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnAttachedSystem));
+            if (systems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFEntityOnAttachedSystem system in systems)
+            {
+                if (system == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    system.Run(ugfEntity, childEntity, parentTransform);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFEntityOnDetached(UGFEntity ugfEntity, UGFEntity childEntity)
+        {
+            if (ugfEntity is not IUGFEntityOnDetached)
+            {
+                return;
+            }
+
+            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnDetachedSystem));
+            if (systems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFEntityOnDetachedSystem system in systems)
+            {
+                if (system == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    system.Run(ugfEntity, childEntity);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFEntityOnAttachTo(UGFEntity ugfEntity, UGFEntity parentEntity, Transform parentTransform)
+        {
+            if (ugfEntity is not IUGFEntityOnAttachTo)
+            {
+                return;
+            }
+
+            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnAttachToSystem));
+            if (systems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFEntityOnAttachToSystem system in systems)
+            {
+                if (system == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    system.Run(ugfEntity, parentEntity, parentTransform);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFEntityOnDetachFrom(UGFEntity ugfEntity, UGFEntity parentEntity)
+        {
+            if (ugfEntity is not IUGFEntityOnDetachFrom)
+            {
+                return;
+            }
+
+            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnDetachFromSystem));
+            if (systems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFEntityOnDetachFromSystem system in systems)
+            {
+                if (system == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    system.Run(ugfEntity, parentEntity);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public void UGFEntityOnUpdate(UGFEntity ugfEntity, float elapseSeconds, float realElapseSeconds)
+        {
+            if (ugfEntity is not IUGFEntityOnUpdate)
+            {
+                return;
+            }
+
+            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnUpdateSystem));
+            if (systems == null)
+            {
+                return;
+            }
+
+            foreach (IUGFEntityOnUpdateSystem system in systems)
+            {
+                if (system == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    system.Run(ugfEntity, elapseSeconds, realElapseSeconds);
                 }
                 catch (Exception e)
                 {

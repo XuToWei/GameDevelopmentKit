@@ -1,20 +1,23 @@
+using CodeBind;
+using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 
 namespace ET
 {
     [EnableMethod]
-    public abstract class UGFUIWidget<T> : UGFUIWidget where T : ETMonoUGFUIWidget
+    public abstract class UGFUIWidget<T> : UGFUIWidget where T : MonoBehaviour
     {
-        public T Mono { get; private set; }
+        [BsonIgnore]
+        public T View { get; private set; }
 
-        private ETMonoUGFUIWidget etMono;
-        public override ETMonoUGFUIWidget ETMono
+        [BsonIgnore]
+        public override AETMonoUGFUIWidget UGFMono
         {
-            get => etMono;
+            get => base.UGFMono;
             internal set
             {
-                etMono = value;
-                Mono = (T)etMono;
+                base.UGFMono = value;
+                View = base.UGFMono.GetComponent<T>();
             }
         }
     }
@@ -23,25 +26,26 @@ namespace ET
     [ChildOf(typeof(UGFUIForm))]
     public abstract class UGFUIWidget : Entity, IAwake, IDestroy
     {
-        public virtual ETMonoUGFUIWidget ETMono { get; internal set; }
+        [BsonIgnore]
+        public virtual AETMonoUGFUIWidget UGFMono { get; internal set; }
+        [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
-        public bool IsOpen => ETMono != null;
-        public bool Available => ETMono != null && ETMono.Available;
 
+        public bool Available => UGFMono != null && UGFMono.Available;
         public bool Visible
         {
             get
             {
-                return ETMono !=  null && ETMono.Visible;
+                return UGFMono !=  null && UGFMono.Visible;
             }
             set
             {
-                if (ETMono == null)
+                if (UGFMono == null)
                 {
                     Log.Warning("UI widget is not opened.");
                     return;
                 }
-                ETMono.Visible = value;
+                UGFMono.Visible = value;
             }
         }
 
@@ -51,24 +55,24 @@ namespace ET
             {
                 if (this.Available)
                 {
-                    this.ETMono.Close();
+                    this.UGFMono.Close();
                 }
             }
         }
         
         public void Open()
         {
-            this.ETMono.Open();
+            this.UGFMono.Open();
         }
 
         public void DynamicOpen()
         {
-            this.ETMono.DynamicOpen();
+            this.UGFMono.DynamicOpen();
         }
 
         public void Close()
         {
-            this.ETMono.Close();
+            this.UGFMono.Close();
         }
     }
 }

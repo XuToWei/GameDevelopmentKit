@@ -12,17 +12,17 @@ namespace ET.Client
             Room room = self.Room();
             if (room.IsReplay)
             {
-                self.Mono.ReplayTransform.gameObject.SetActive(true);
-                self.Mono.PlayTransform.gameObject.SetActive(false);
-                self.Mono.JumpButton.Set(self.JumpReplay);
-                self.Mono.SpeedButton.Set(self.OnReplaySpeedClicked);
-                self.Mono.FrameCountText.text = self.Room().Replay.FrameInputs.Count.ToString();
+                self.View.ReplayTransform.gameObject.SetActive(true);
+                self.View.PlayTransform.gameObject.SetActive(false);
+                self.View.JumpButton.Set(self.JumpReplay);
+                self.View.SpeedButton.Set(self.OnReplaySpeedClicked);
+                self.View.FrameCountText.text = self.Room().Replay.FrameInputs.Count.ToString();
             }
             else
             {
-                self.Mono.ReplayTransform.gameObject.SetActive(false);
-                self.Mono.PlayTransform.gameObject.SetActive(true);
-                self.Mono.SaveReplayButton.Set(self.OnSaveReplay);
+                self.View.ReplayTransform.gameObject.SetActive(false);
+                self.View.PlayTransform.gameObject.SetActive(true);
+                self.View.SaveReplayButton.Set(self.OnSaveReplay);
             }
         }
 
@@ -33,7 +33,7 @@ namespace ET.Client
             if (self.frame != room.AuthorityFrame)
             {
                 self.frame = room.AuthorityFrame;
-                self.Mono.FrameCountText.text = room.AuthorityFrame.ToString();
+                self.View.FrameCountText.text = room.AuthorityFrame.ToString();
             }
 
             if (!room.IsReplay)
@@ -41,14 +41,14 @@ namespace ET.Client
                 if (self.predictFrame != room.PredictionFrame)
                 {
                     self.predictFrame = room.PredictionFrame;
-                    self.Mono.PredictText.text = room.PredictionFrame.ToString();
+                    self.View.PredictText.text = room.PredictionFrame.ToString();
                 }
             }
         }
 
         private static void JumpReplay(this UIFormLSRoomComponent self)
         {
-            int toFrame = int.Parse(self.Mono.JumpToCountInputField.text);
+            int toFrame = int.Parse(self.View.JumpToCountInputField.text);
             LSClientHelper.JumpReplay(self.Room(), toFrame);
         }
 
@@ -56,12 +56,12 @@ namespace ET.Client
         {
             LSReplayUpdater lsReplayUpdater = self.Room().GetComponent<LSReplayUpdater>();
             lsReplayUpdater.ChangeReplaySpeed();
-            self.Mono.SpeedText.text = $"X{lsReplayUpdater.ReplaySpeed}";
+            self.View.SpeedText.text = $"X{lsReplayUpdater.ReplaySpeed}";
         }
 
         private static void OnSaveReplay(this UIFormLSRoomComponent self)
         {
-            string name = self.Mono.SaveNameInputField.text;
+            string name = self.View.SaveNameInputField.text;
 
             LSClientHelper.SaveReplay(self.Room(), name);
         }

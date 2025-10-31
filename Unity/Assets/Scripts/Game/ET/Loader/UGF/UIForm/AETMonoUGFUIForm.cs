@@ -19,7 +19,7 @@ namespace ET
             ETMonoUGFUIFormData formData = (ETMonoUGFUIFormData)userData;
             ugfUIForm = formData.UGFUIForm;
             ugfUIForm.CachedTransform = CachedTransform;
-            ugfUIForm.ETMono = this;
+            ugfUIForm.UGFMono = this;
             UGFEntitySystemSingleton.Instance.UGFUIFormOnInit(ugfUIForm);
         }
 
@@ -30,7 +30,7 @@ namespace ET
             ugfUIForm = formData.UGFUIForm;
             ReferencePool.Release(formData);
             ugfUIForm.CachedTransform = CachedTransform;
-            ugfUIForm.ETMono = this;
+            ugfUIForm.UGFMono = this;
             UGFEntitySystemSingleton.Instance.UGFUIFormOnOpen(ugfUIForm);
         }
 

@@ -4,6 +4,10 @@ using System.Threading;
 
 namespace Cysharp.Threading.Tasks
 {
+    /// <summary>
+    /// 自动重置的UniTask完成源
+    /// 扩展了完成、取消、异常的回调
+    /// </summary>
     public class AutoResetUniTaskCompletionSourcePlus : IUniTaskSource, ITaskPoolNode<AutoResetUniTaskCompletionSourcePlus>, IPromise
     {
         static TaskPool<AutoResetUniTaskCompletionSourcePlus> pool;

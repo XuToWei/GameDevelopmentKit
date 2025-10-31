@@ -37,6 +37,7 @@ namespace UnityGameFramework.Extension.Editor
         private readonly MethodInfo m_GetStorageMemorySizeLongMethod;
         private readonly object[] m_ParamCache;
         private readonly Dictionary<string, string[]> m_DependencyCachePool;
+        private readonly Dictionary<string, long> m_AssetSizeCache;
 
         [MenuItem("Game Framework/Resource Tools/Resource Optimize", false, 52)]
         static void StartOptimize()
@@ -56,6 +57,7 @@ namespace UnityGameFramework.Extension.Editor
             m_GetStorageMemorySizeLongMethod = typeof(EditorWindow).Assembly.GetType("UnityEditor.TextureUtil").GetMethod("GetStorageMemorySizeLong", BindingFlags.Static | BindingFlags.Public);
             m_ParamCache = new object[1];
             m_DependencyCachePool = new Dictionary<string, string[]>();
+            m_AssetSizeCache = new Dictionary<string, long>();
         }
 
         public void Optimize(ResourceCollection resourceCollection)
@@ -343,20 +345,27 @@ namespace UnityGameFramework.Extension.Editor
 
         private long GetAssetSize(string assetPath)
         {
+            if (m_AssetSizeCache.TryGetValue(assetPath, out long size))
+            {
+                return size;
+            }
             Type type = AssetDatabase.GetMainAssetTypeAtPath(assetPath);
             if (type == typeof(Texture2D))
             {
                 //记录精准的贴图大小
                 Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(assetPath);
                 m_ParamCache[0] = texture2D;
-                long size = (long)m_GetStorageMemorySizeLongMethod.Invoke(null, m_ParamCache);
+                size = (long)m_GetStorageMemorySizeLongMethod.Invoke(null, m_ParamCache);
+                m_AssetSizeCache.Add(assetPath, size);
                 Resources.UnloadAsset(texture2D);
                 return size;
             }
             else
             {
                 //直接使用文件长度
-                return new FileInfo(assetPath).Length;
+                size = new FileInfo(assetPath).Length;
+                m_AssetSizeCache.Add(assetPath, size);
+                return size;
             }
         }
 

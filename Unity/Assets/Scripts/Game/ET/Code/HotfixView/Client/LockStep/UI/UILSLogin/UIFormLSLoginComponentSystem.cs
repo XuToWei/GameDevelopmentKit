@@ -10,15 +10,15 @@ namespace ET.Client
         [UGFUIFormSystem]
         private static void UGFUIFormOnOpen(this UIFormLSLoginComponent self)
         {
-            self.Mono.LoginButton.Set(self.OnLogin);
+            self.View.LoginButton.Set(self.OnLogin);
         }
 
         public static void OnLogin(this UIFormLSLoginComponent self)
         {
             LoginHelper.Login(
                 self.Root(), 
-                self.Mono.AccountInputField.text, 
-                self.Mono.PasswordInputField.text).Forget();
+                self.View.AccountInputField.text, 
+                self.View.PasswordInputField.text).Forget();
         }
     }
 }
