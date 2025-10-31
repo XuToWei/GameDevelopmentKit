@@ -8,7 +8,7 @@ namespace ET
     /// <summary>
     /// ET使用的GF的Entity
     /// </summary>
-    /// 不包含任何逻辑，ET的Entity持有Monobehaviour处理
+    /// 不包含任何逻辑，ET的Entity持有MonoBehaviour处理
     internal sealed class ETMonoUGFEntity : AEntity
     {
         private UGFEntity ugfEntity;
