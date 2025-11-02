@@ -1,0 +1,10 @@
+﻿using UnityEngine;
+
+namespace ET.Client
+{
+    //[ComponentOf(typeof(XXX))]
+    public class GFEntity#NAME# : UGFEntity<MonoEntity#NAME#>
+    {
+        
+    }
+}

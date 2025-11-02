@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ET
 {
     [EnableClass]
-    public abstract class AMonoView : MonoBehaviour
+    public abstract class AETMonoUGFEntity : MonoBehaviour
     {
         
     }

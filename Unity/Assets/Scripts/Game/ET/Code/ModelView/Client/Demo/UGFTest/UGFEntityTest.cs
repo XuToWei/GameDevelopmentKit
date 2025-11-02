@@ -1,7 +1,7 @@
 namespace ET.Client
 {
     [EnableMethod]
-    public class UGFEntityTest : UGFEntity<ViewTest>, IUGFEntityOnShow
+    public class UGFEntityTest : UGFEntity<EntityTest>, IUGFEntityOnShow
     {
         
     }

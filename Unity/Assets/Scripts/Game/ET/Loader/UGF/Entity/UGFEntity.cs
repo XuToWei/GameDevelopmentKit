@@ -7,7 +7,7 @@ using GameEntry = Game.GameEntry;
 
 namespace ET
 {
-    public abstract class UGFEntity<T> : UGFEntity where T : AMonoView
+    public abstract class UGFEntity<T> : UGFEntity where T : AETMonoUGFEntity
     {
         [BsonIgnore]
         public T View { get; private set; }
