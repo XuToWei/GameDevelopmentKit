@@ -6,6 +6,10 @@
 
         public const string LSEntityType = "ET.LSEntity";
         
+        public const string UGFUIFormType = "ET.UGFUIForm";
+        
+        public const string UGFUIWidgetType = "ET.UGFUIWidget";
+        
         public const string ETTask = "UniTask";
 
         public const string ETTaskFullName = "Cysharp.Threading.Tasks.UniTask";

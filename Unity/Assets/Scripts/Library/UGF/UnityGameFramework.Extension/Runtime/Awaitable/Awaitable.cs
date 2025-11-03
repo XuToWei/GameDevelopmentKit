@@ -22,13 +22,9 @@ namespace UnityGameFramework.Extension
             }
             
             EventComponent eventComponent = GameEntry.GetComponent<EventComponent>();
-            eventComponent.Subscribe(OpenUIFormSuccessEventArgs.EventId, OnOpenUIFormSuccess);
-            eventComponent.Subscribe(OpenUIFormFailureEventArgs.EventId, OnOpenUIFormFailure);
             eventComponent.Subscribe(OpenUIFormUpdateEventArgs.EventId, OnOpenUIFormUpdate);
             eventComponent.Subscribe(OpenUIFormDependencyAssetEventArgs.EventId, OnOpenUIFormDependencyAsset);
 
-            eventComponent.Subscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
-            eventComponent.Subscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFailure);
             eventComponent.Subscribe(ShowEntityUpdateEventArgs.EventId, OnShowEntityUpdate);
             eventComponent.Subscribe(ShowEntityDependencyAssetEventArgs.EventId, OnShowEntityDependencyAsset);
 
@@ -47,7 +43,7 @@ namespace UnityGameFramework.Extension
             eventComponent.Subscribe(DownloadFailureEventArgs.EventId, OnDownloadFailure);
             eventComponent.Subscribe(DownloadStartEventArgs.EventId, OnDownloadStart);
             eventComponent.Subscribe(DownloadUpdateEventArgs.EventId, OnDownloadUpdate);
-            
+
             eventComponent.Subscribe(LoadDictionarySuccessEventArgs.EventId, OnLoadDictionarySuccess);
             eventComponent.Subscribe(LoadDictionaryFailureEventArgs.EventId, OnLoadDictionaryFailure);
             eventComponent.Subscribe(LoadDictionaryUpdateEventArgs.EventId, OnLoadDictionaryUpdate);

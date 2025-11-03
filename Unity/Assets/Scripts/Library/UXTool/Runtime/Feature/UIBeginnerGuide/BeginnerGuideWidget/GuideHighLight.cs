@@ -33,6 +33,34 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
 
     private Vector3[] targetCorners = new Vector3[4];//存储要镂空组件的四个角的数组
 
+    // changed by gdk
+    private Material _rectMaterialClone;
+    private Material rectMaterialClone
+    {
+        get
+        {
+            if (_rectMaterialClone == null)
+            {
+                _rectMaterialClone = Instantiate(rectMaterial);
+            }
+            return _rectMaterialClone;
+        }
+    }
+
+    // changed by gdk
+    private Material _circleMaterialClone;
+    private Material circleMaterialClone
+    {
+        get
+        {
+            if (_circleMaterialClone == null)
+            {
+                _circleMaterialClone = Instantiate(circleMaterial);
+            }
+            return _circleMaterialClone;
+        }
+    }
+
     public Vector2 WorldToScreenPoint(Canvas canvas, Vector3 world)
     {
         //把世界坐标转化为屏幕坐标
@@ -85,17 +113,17 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
     {
         InitTarget();
         //设置材质的中心点
-        rectMaterial.SetVector("_Center", center);
+        rectMaterialClone.SetVector("_Center", center);
         //设置材质的宽高
-        rectMaterial.SetFloat("_SliderX", width);
-        rectMaterial.SetFloat("_SliderY", height);
+        rectMaterialClone.SetFloat("_SliderX", width);
+        rectMaterialClone.SetFloat("_SliderY", height);
     }
     private void SetCircleHighLightArea()
     {
         InitTarget();
-        circleMaterial.SetVector("_Center", center);
-        circleMaterial.SetFloat("_SliderX", width);
-        circleMaterial.SetFloat("_SliderY", height);
+        circleMaterialClone.SetVector("_Center", center);
+        circleMaterialClone.SetFloat("_SliderX", width);
+        circleMaterialClone.SetFloat("_SliderY", height);
 
     }
     public bool IsRaycastLocationValid(Vector2 sp, Camera eventCamera)
@@ -126,12 +154,12 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
         {
             if (UseCustomTarget)
             {
-                childObject.transform.position = go.transform.position;
-                childObject.transform.eulerAngles = go.transform.eulerAngles;
-                childObject.GetComponent<RectTransform>().sizeDelta = new Vector2(go.GetComponent<RectTransform>().rect.width, go.GetComponent<RectTransform>().rect.height);
-                childObject.transform.localScale = go.transform.localScale;
-                target = go.GetComponent<RectTransform>();
                 // changed by gdk
+                target = go.GetComponent<RectTransform>();
+                childObject.transform.position = target.position;
+                childObject.transform.eulerAngles = target.eulerAngles;
+                childObject.GetComponent<RectTransform>().sizeDelta = target.rect.size;
+                childObject.transform.localScale = target.localScale;
                 needUpdateTarget = true;
             }
             else
@@ -143,12 +171,12 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
         InitTarget();
         if (isCircle)
         {
-            transform.GetComponent<Image>().material = circleMaterial;
+            transform.GetComponent<Image>().material = circleMaterialClone;
             SetCircleHighLightArea();
         }
         else
         {
-            transform.GetComponent<Image>().material = rectMaterial;
+            transform.GetComponent<Image>().material = rectMaterialClone;
             SetRectHighLightArea();
         }
 
@@ -181,17 +209,17 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
             
             if (isCircle)
             {
-                circleMaterial.SetVector("_Center", center);
-                circleMaterial.SetFloat("_SliderX", width);
-                circleMaterial.SetFloat("_SliderY", height);
+                circleMaterialClone.SetVector("_Center", center);
+                circleMaterialClone.SetFloat("_SliderX", width);
+                circleMaterialClone.SetFloat("_SliderY", height);
             }
             else
             {
                 //设置材质的中心点
-                rectMaterial.SetVector("_Center", center);
+                rectMaterialClone.SetVector("_Center", center);
                 //设置材质的宽高
-                rectMaterial.SetFloat("_SliderX", width);
-                rectMaterial.SetFloat("_SliderY", height);
+                rectMaterialClone.SetFloat("_SliderX", width);
+                rectMaterialClone.SetFloat("_SliderY", height);
             }
         }
     }

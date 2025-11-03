@@ -1,3 +1,4 @@
+using GameFramework;
 using UnityEngine;
 
 namespace Game
@@ -20,6 +21,7 @@ namespace Game
             base.OnShow(userData);
             ItemEntityData itemEntityData = (ItemEntityData)userData;
             CachedTransform.SetParent(itemEntityData.ParentTransform);
+            ReferencePool.Release(itemEntityData);
             CachedTransform.localPosition = Vector3.zero;
             CachedTransform.localRotation = Quaternion.identity;
             CachedTransform.localScale = Vector3.one;
@@ -27,8 +29,11 @@ namespace Game
 
         protected override void OnHide(bool isShutdown, object userData)
         {
+            if (!isShutdown)
+            {
+                CachedTransform.SetParent(m_OriginalTransform);
+            }
             base.OnHide(isShutdown, userData);
-            CachedTransform.SetParent(m_OriginalTransform);
         }
     }
 }

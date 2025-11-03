@@ -8,10 +8,6 @@
         "Game.ET.Code.Hotfix",
         "Game.ET.Code.ModelView",
         "Game.ET.Loader",
-        "Game",
-        "GameFramework",
-        "UnityGameFramework.Runtime",
-        "UnityGameFramework.Extension",
         "Unity.Mathematics",
         "UnityEngine.UI",
         "LubanLib",
@@ -32,7 +28,8 @@
         "LitMotion",
         "LitMotion.Extensions",
         "LitMotion.Animation",
-        "LoopScrollRect.Runtime"
+        "LoopScrollRect.Runtime",
+        "Game"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

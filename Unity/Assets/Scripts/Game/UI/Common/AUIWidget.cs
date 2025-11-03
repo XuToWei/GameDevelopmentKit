@@ -12,7 +12,7 @@ namespace Game
         private bool m_Available = false;
         private bool m_Visible = false;
 
-        public bool IsOpen
+        public bool Available
         {
             get
             {
@@ -156,7 +156,7 @@ namespace Game
         /// 设置界面的可见性。
         /// </summary>
         /// <param name="visible">界面的可见性。</param>
-        protected internal virtual void InternalSetVisible(bool visible)
+        protected virtual void InternalSetVisible(bool visible)
         {
             gameObject.SetActive(visible);
         }

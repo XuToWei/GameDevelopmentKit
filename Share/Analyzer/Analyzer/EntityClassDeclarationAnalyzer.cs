@@ -32,18 +32,22 @@ namespace ET.Analyzer
 
              string? t = namedTypeSymbol.BaseType?.BaseType?.ToString();
 
-             if (t=="ET.LSEntity")
+             if (t == "ET.LSEntity")
              {
                  foreach (SyntaxReference? declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
                  {
                      SyntaxNode classSyntax = declaringSyntaxReference.GetSyntax();
-                     Diagnostic diagnostic = Diagnostic.Create(EntityClassDeclarationAnalyzerRule.Rule, classSyntax.GetLocation(), namedTypeSymbol.Name,Definition.LSEntityType );
+                     Diagnostic diagnostic = Diagnostic.Create(EntityClassDeclarationAnalyzerRule.Rule, classSyntax.GetLocation(), namedTypeSymbol.Name, Definition.LSEntityType);
                      context.ReportDiagnostic(diagnostic);
                  }
                  return;
              }
 
-             if (namedTypeSymbol.BaseType?.ToString()!="ET.LSEntity" && t == Definition.EntityType)
+             if (namedTypeSymbol.BaseType?.ToString() != "ET.LSEntity"
+                 && namedTypeSymbol.BaseType?.ToString() != "ET.UGFUIForm"
+                 && namedTypeSymbol.BaseType?.ToString() != "ET.UGFUIWidget"
+                 && namedTypeSymbol.BaseType?.ToString() != "ET.UGFEntity"
+                 && t == Definition.EntityType)
              {
                  foreach (SyntaxReference? declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
                  {

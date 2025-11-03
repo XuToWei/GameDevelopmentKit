@@ -1,4 +1,6 @@
-using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Game;
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 using UnityGameFramework.Runtime;
@@ -6,136 +8,209 @@ using GameEntry = Game.GameEntry;
 
 namespace ET
 {
-    [ChildOf]
-    public sealed class UGFUIForm : Entity, IAwake<int, ETMonoUIForm>, IDestroy
+    public abstract class UGFUIForm<T> : UGFUIForm where T : AETMonoUGFUIForm
     {
         [BsonIgnore]
-        public UIForm UIForm { get; private set; }
-        public int UIFormId { get; private set; }
+        public T View { get; private set; }
+        
         [BsonIgnore]
-        public Transform Transform { get; private set; }
-        /// <summary>
-        /// 界面是否开启
-        /// </summary>
-        public bool IsOpen => this.m_ETMonoUIForm.IsOpen;
-        [BsonIgnore]
-        private ETMonoUIForm m_ETMonoUIForm;
-        private HashSetComponent<Transform> m_UIWidgetTransforms;
-        public ListComponent<EntityRef<UGFUIWidget>> UIWidgets { get; private set; }
-
-        internal void OnAwake(int uiFormId, ETMonoUIForm ugfETUIForm)
+        internal override AETMonoUGFUIForm UGFMono
         {
-            UIFormId = uiFormId;
-            m_ETMonoUIForm = ugfETUIForm;
-            UIForm = ugfETUIForm.UIForm;
-            Transform = ugfETUIForm.CachedTransform;
-        }
-
-        internal void OnDestroy()
-        {
-            ETMonoUIForm etMonoUIForm = m_ETMonoUIForm;
-            UIFormId = default;
-            m_ETMonoUIForm = default;
-            UIForm = default;
-            Transform = default;
-            m_UIWidgetTransforms?.Dispose();
-            m_UIWidgetTransforms = null;
-            UIWidgets?.Dispose();
-            UIWidgets = null;
-            if (etMonoUIForm != default && etMonoUIForm.IsOpen)
+            get => base.UGFMono;
+            set
             {
-                GameEntry.UI.CloseUIForm(etMonoUIForm.UIForm);
+                base.UGFMono = value;
+                View = (T)base.UGFMono;
             }
-        }
-
-        internal UGFUIWidget AddUIWidget<T>(Transform transform, object userData) where T : IUGFUIWidgetEvent
-        {
-            if (m_UIWidgetTransforms == null)
-            {
-                m_UIWidgetTransforms = HashSetComponent<Transform>.Create();
-            }
-            else if (m_UIWidgetTransforms.Contains(transform))
-            {
-                throw new Exception($"Add UIWidget fail, {transform.name} is already in the UGFUIForm:'{Transform.name}'!");
-            }
-            m_UIWidgetTransforms.Add(transform);
-            UGFUIWidget ugfUIWidget = AddChild<UGFUIWidget, Transform, long>(transform, typeof(T).FullName.GetLongHashCode(),true);
-            if (UIWidgets == null)
-            {
-                UIWidgets = ListComponent<EntityRef<UGFUIWidget>>.Create();
-            }
-            UIWidgets.Add(ugfUIWidget);
-            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventTypeLongHashCode).OnInit(ugfUIWidget, userData);
-            return ugfUIWidget;
-        }
-
-        internal void RemoveUIWidget(UGFUIWidget ugfUIWidget)
-        {
-            m_UIWidgetTransforms.Remove(ugfUIWidget.Transform);
-            UIWidgets.Remove(ugfUIWidget);
-        }
-
-        internal void OpenUIWidget(UGFUIWidget ugfUIWidget, object userData)
-        {
-            ugfUIWidget.IsOpen = true;
-            ugfUIWidget.Visible = true;
-            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventTypeLongHashCode).OnOpen(ugfUIWidget, userData);
-        }
-
-        internal void DynamicOpenUIWidget(UGFUIWidget ugfUIWidget, object userData)
-        {
-            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventTypeLongHashCode).OnOpen(ugfUIWidget, userData);
-            UGFUIForm ugfUIForm = ugfUIWidget.GetParent<UGFUIForm>();
-            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventTypeLongHashCode).OnDepthChanged(ugfUIWidget, ugfUIForm.UIForm.UIGroup.Depth, ugfUIForm.UIForm.DepthInUIGroup);
-        }
-
-        internal void CloseUIWidget(UGFUIWidget ugfUIWidget, object userData, bool isShutdown)
-        {
-            ugfUIWidget.Visible = false;
-            ugfUIWidget.IsOpen = false;
-            UGFEventComponent.Instance.GetUIWidgetEvent(ugfUIWidget.WidgetEventTypeLongHashCode).OnClose(ugfUIWidget, isShutdown, userData);
         }
     }
-    
-    [EntitySystemOf(typeof(UGFUIForm))]
-    [FriendOf(typeof(UGFUIForm))]
-    public static partial class UGFUIFormSystem
+
+    [EnableMethod]
+    public abstract class UGFUIForm : Entity
     {
-        [EntitySystem]
-        private static void Awake(this UGFUIForm self, int uiFormId, ETMonoUIForm ugfETUIForm)
+        [BsonIgnore]
+        private UIForm uiForm;
+        [BsonIgnore]
+        private CancellationTokenSourcePlus cts;
+        [BsonIgnore]
+        internal virtual AETMonoUGFUIForm UGFMono { get; set; }
+        [BsonIgnore]
+        public Transform CachedTransform { get; internal set; }
+
+        public bool Available => this.uiForm != null && !this.uiForm.Logic.Available;
+        public bool Visible
         {
-            self.OnAwake(uiFormId, ugfETUIForm);
+            get
+            {
+                return this.uiForm != null && this.uiForm.Logic.Visible;
+            }
+            set
+            {
+                if (this.uiForm == null)
+                {
+                    Log.Warning("UI form is not opened.");
+                    return;
+                }
+                this.uiForm.Logic.Visible = value;
+            }
         }
 
-        [EntitySystem]
-        private static void Destroy(this UGFUIForm self)
+        public override void Dispose()
         {
-            self.OnDestroy();
+            if (!this.IsDisposed)
+            {
+                if (this.cts != null)
+                {
+                    this.cts.Cancel();
+                    ObjectPool.Instance.Recycle(this.cts);
+                    this.cts = null;
+                }
+                if (this.uiForm != null)
+                {
+                    GameEntry.UI.CloseUIForm(this.uiForm);
+                    this.uiForm = null;
+                }
+            }
+            base.Dispose();
         }
 
-        public static UGFUIWidget AddUIWidget<T>(this UGFUIForm self, Transform transform, object userData = default) where T : IUGFUIWidgetEvent
+        public async UniTask OpenUIFormAsync(int uiFormTypeId)
         {
-            return self.AddUIWidget<T>(transform, userData);
+            if(this.cts == null)
+            {
+                this.cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
+            }
+            this.uiForm = await GameEntry.UI.OpenUIFormAsync(uiFormTypeId, ETMonoUGFUIFormData.Create(this), cancellationToken: this.cts.Token);
+            if(this.uiForm == null)
+            {
+                throw new System.Exception($"UGFUIForm OpenUIFormAsync failed! uiFormTypeId:'{uiFormTypeId}'.");
+            }
         }
 
-        public static void RemoveUIWidget(this UGFUIForm self, UGFUIWidget ugfUIWidget)
+        public void RefocusUIForm()
         {
-            self.RemoveUIWidget(ugfUIWidget);
+            GameEntry.UI.RefocusUIForm(this.uiForm);
         }
 
-        public static void OpenUIWidget(this UGFUIForm self, UGFUIWidget ugfUIWidget, object userData = default)
+        public void SetUIFormInstanceLocked(bool locked)
         {
-            self.OpenUIWidget(ugfUIWidget, userData);
+            GameEntry.UI.SetUIFormInstanceLocked(this.uiForm, locked);
         }
 
-        public static void DynamicOpenUIWidget(this UGFUIForm self, UGFUIWidget ugfUIWidget, object userData = default)
+        public void SetUIFormInstancePriority(int priority)
         {
-            self.DynamicOpenUIWidget(ugfUIWidget, userData);
+            GameEntry.UI.SetUIFormInstancePriority(this.uiForm, priority);
         }
 
-        public static void CloseUIWidget(this UGFUIForm self, UGFUIWidget ugfUIWidget, object userData = default, bool isShutdown = false)
+        public T AddChildUIWidget<T>(AETMonoUGFUIWidget etMonoWidget, bool isFromPool = false) where T : UGFUIWidget, IAwake
         {
-            self.CloseUIWidget(ugfUIWidget, userData, isShutdown);
+            T widgetEntity = this.AddChild<T>(isFromPool);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddChildUIWidget<T, A>(AETMonoUGFUIWidget etMonoWidget, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>
+        {
+            T widgetEntity = this.AddChild<T, A>(a, isFromPool);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddChildUIWidget<T, A, B>(AETMonoUGFUIWidget etMonoWidget, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>
+        {
+            T widgetEntity = this.AddChild<T, A, B>(a, b, isFromPool);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddChildUIWidget<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>
+        {
+            T widgetEntity = this.AddChild<T, A, B, C>(a, b, c, isFromPool);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddChildUIWidgetWithId<T>(AETMonoUGFUIWidget etMonoWidget, long id, bool isFromPool = false) where T : UGFUIWidget, IAwake
+        {
+            T widgetEntity = this.AddChildWithId<T>(id, isFromPool);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+        public T AddChildUIWidgetWithId<T, A>(AETMonoUGFUIWidget etMonoWidget, long id, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>
+        {
+            T widgetEntity = this.AddChildWithId<T, A>(id, a, isFromPool);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddChildUIWidgetWithId<T, A, B>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>
+        {
+            T widgetEntity = this.AddChildWithId<T, A, B>(id, a, b, isFromPool);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddChildUIWidgetWithId<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>
+        {
+            T widgetEntity = this.AddChildWithId<T, A, B, C>(id, a, b, c, isFromPool);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddComponentUIWidget<T>(AETMonoUGFUIWidget etMonoWidget) where T : UGFUIWidget, IAwake, new()
+        {
+            T widgetEntity = this.AddComponent<T>();
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddComponentUIWidget<T, A>(AETMonoUGFUIWidget etMonoWidget, A a) where T : UGFUIWidget, IAwake<A>, new()
+        {
+            T widgetEntity = this.AddComponent<T, A>(a);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddComponentUIWidget<T, A, B>(AETMonoUGFUIWidget etMonoWidget, A a, B b) where T : UGFUIWidget, IAwake<A, B>, new()
+        {
+            T widgetEntity = this.AddComponent<T, A, B>(a, b);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddComponentUIWidget<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, A a, B b, C c) where T : UGFUIWidget, IAwake<A, B, C>, new()
+        {
+            T widgetEntity = this.AddComponent<T, A, B, C>(a, b, c);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddComponentUIWidgetWithId<T>(AETMonoUGFUIWidget etMonoWidget, long id) where T : UGFUIWidget, IAwake, new()
+        {
+            T widgetEntity = this.AddComponentWithId<T>(id);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddComponentUIWidgetWithId<T, A>(AETMonoUGFUIWidget etMonoWidget, long id, A a) where T : UGFUIWidget, IAwake<A>, new()
+        {
+            T widgetEntity = this.AddComponentWithId<T, A>(id, a);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddComponentUIWidgetWithId<T, A, B>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b) where T : UGFUIWidget, IAwake<A, B>, new()
+        {
+            T widgetEntity = this.AddComponentWithId<T, A, B>(id, a, b);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
+        }
+
+        public T AddComponentUIWidgetWithId<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, C c) where T : UGFUIWidget, IAwake<A, B, C>, new()
+        {
+            T widgetEntity = this.AddComponentWithId<T, A, B, C>(id, a, b, c);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            return widgetEntity;
         }
     }
 }

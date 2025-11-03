@@ -90,8 +90,7 @@ GameObject:
   - component: {fileID: 224438795553994780}
   - component: {fileID: 3539700472237229061}
   - component: {fileID: 3539700472237229083}
-  - component: {fileID: 8615424934045461035}
-  - component: {fileID: 4866732994263802900}
+  - component: {fileID: 5782333337610204875}
   m_Layer: 5
   m_Name: UILSLogin
   m_TagString: Untagged
@@ -159,7 +158,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 823
---- !u!114 &8615424934045461035
+--- !u!114 &5782333337610204875
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,31 +167,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1386170326414932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd2cab69204e6aa44bcabf89d590162c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d15b494353a42044b8ae77184a02195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4866732994263802900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386170326414932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5452a0c3619826c4f889a047605eef79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindComponents:
-  - {fileID: 114341495829030012}
-  - {fileID: 114663064108016614}
-  - {fileID: 114630311973242952}
-  m_SeparatorChar: 95
-  m_BindScript: {fileID: 11500000, guid: c635abf8be58d764087fae2f80df759b, type: 3}
-  m_BindComponentNames:
-  - AccountInputField
-  - PasswordInputField
-  - LoginButton
+  m_AccountInputField: {fileID: 114341495829030012}
+  m_LoginButton: {fileID: 114630311973242952}
+  m_PasswordInputField: {fileID: 114663064108016614}
 --- !u!1 &1568484768885604
 GameObject:
   m_ObjectHideFlags: 0

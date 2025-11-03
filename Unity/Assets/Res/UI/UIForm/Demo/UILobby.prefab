@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 224438795553994780}
   - component: {fileID: 1431576037130298801}
   - component: {fileID: 1431576037130298803}
-  - component: {fileID: -3970582739654965883}
-  - component: {fileID: 1692804090655075691}
+  - component: {fileID: 2113622616472843547}
   m_Layer: 5
   m_Name: UILobby
   m_TagString: Untagged
@@ -80,7 +79,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 823
---- !u!114 &-3970582739654965883
+--- !u!114 &2113622616472843547
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,27 +88,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1386170326414932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd2cab69204e6aa44bcabf89d590162c, type: 3}
+  m_Script: {fileID: 11500000, guid: 08cfcc6e9cbf0064691b72e10810f92f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1692804090655075691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386170326414932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5452a0c3619826c4f889a047605eef79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindComponents:
-  - {fileID: 1003626380862230063}
-  m_SeparatorChar: 95
-  m_BindScript: {fileID: 11500000, guid: bdd13edeb1a192d488c493427453ddb8, type: 3}
-  m_BindComponentNames:
-  - EnterMapButton
+  m_EnterMapButton: {fileID: 1003626380862230063}
 --- !u!1 &899722670427233733
 GameObject:
   m_ObjectHideFlags: 0

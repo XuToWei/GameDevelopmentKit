@@ -6,9 +6,9 @@ namespace Game
 {
     public static partial class UIExtension
     {
-        public static bool HasUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
+        public static bool HasUIForm(this UIComponent uiComponent, int uiFormTypeId, string uiGroupName = null)
         {
-            DRUIForm drUIForm = GameEntry.Tables.DTUIForm.GetOrDefault(uiFormId);
+            DRUIForm drUIForm = GameEntry.Tables.DTUIForm.GetOrDefault(uiFormTypeId);
             if (drUIForm == null)
             {
                 return false;
@@ -30,9 +30,9 @@ namespace Game
         }
 
         [CanBeNull]
-        public static UIForm GetUIForm(this UIComponent uiComponent, int uiFormId, string uiGroupName = null)
+        public static UIForm GetUIForm(this UIComponent uiComponent, int uiFormTypeId, string uiGroupName = null)
         {
-            DRUIForm drUIForm = GameEntry.Tables.DTUIForm.GetOrDefault(uiFormId);
+            DRUIForm drUIForm = GameEntry.Tables.DTUIForm.GetOrDefault(uiFormTypeId);
             if (drUIForm == null)
             {
                 return null;
@@ -66,12 +66,12 @@ namespace Game
             return uiForm;
         }
 
-        public static int? OpenUIForm(this UIComponent uiComponent, int uiFormId, object userData = null)
+        public static int? OpenUIForm(this UIComponent uiComponent, int uiFormTypeId, object userData = null)
         {
-            DRUIForm drUIForm = GameEntry.Tables.DTUIForm.GetOrDefault(uiFormId);
+            DRUIForm drUIForm = GameEntry.Tables.DTUIForm.GetOrDefault(uiFormTypeId);
             if (drUIForm == null)
             {
-                Log.Warning("Can not load UI form '{0}' from data table.", uiFormId.ToString());
+                Log.Warning("Can not load UI form '{0}' from data table.", uiFormTypeId.ToString());
                 return null;
             }
 
