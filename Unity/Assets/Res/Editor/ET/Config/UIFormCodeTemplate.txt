@@ -1,8 +1,0 @@
-﻿namespace ET.Client
-{
-    //[ComponentOf(typeof(XXX))]
-    public class UIForm#NAME# : UGFUIForm<MonoUIForm#NAME#>, IAwake, IDestroy, IUGFUIFormOnOpen, IUGFUIFormOnClose
-    {
-        
-    }
-}
