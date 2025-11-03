@@ -1,0 +1,8 @@
+﻿namespace ET.Client
+{
+    //[ComponentOf(typeof(XXX))]
+    public class UIWidget#NAME# : UGFUIWidget<MonoUIWidget#NAME#>, IAwake, IDestroy, IUGFUIWidgetOnOpen, IUGFUIWidgetOnClose
+    {
+        
+    }
+}

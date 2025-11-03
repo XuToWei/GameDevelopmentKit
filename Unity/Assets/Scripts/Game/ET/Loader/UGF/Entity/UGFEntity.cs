@@ -25,7 +25,7 @@ namespace ET
     }
 
     [EnableMethod]
-    public abstract class UGFEntity : Entity, IAwake, IDestroy
+    public abstract class UGFEntity : Entity
     {
         [BsonIgnore]
         private UnityGameFramework.Runtime.Entity ugfEntity;

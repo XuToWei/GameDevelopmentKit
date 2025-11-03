@@ -1,4 +1,3 @@
-using CodeBind;
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 
@@ -24,7 +23,7 @@ namespace ET
 
     [ComponentOf(typeof(UGFUIForm))]
     [ChildOf(typeof(UGFUIForm))]
-    public abstract class UGFUIWidget : Entity, IAwake, IDestroy
+    public abstract class UGFUIWidget : Entity
     {
         [BsonIgnore]
         public virtual AETMonoUGFUIWidget UGFMono { get; internal set; }

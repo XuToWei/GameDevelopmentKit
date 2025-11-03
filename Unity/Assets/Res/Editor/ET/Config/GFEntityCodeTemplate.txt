@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-
-namespace ET.Client
+﻿namespace ET.Client
 {
     //[ComponentOf(typeof(XXX))]
-    public class GFEntity#NAME# : UGFEntity<MonoEntity#NAME#>
+    public class GFEntity#NAME# : UGFEntity<MonoGFEntity#NAME#>, IAwake, IDestroy, IUGFEntityOnShow, IUGFEntityOnHide
     {
         
     }

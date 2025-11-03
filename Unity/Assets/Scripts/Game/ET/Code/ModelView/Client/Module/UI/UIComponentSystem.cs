@@ -3,8 +3,8 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Client
 {
-    [EntitySystemOf(typeof(UIComponent))]
     [FriendOf(typeof(UIComponent))]
+    [EntitySystemOf(typeof(UIComponent))]
     public static partial class UIComponentSystem
     {
         [EntitySystem]
@@ -18,17 +18,57 @@ namespace ET.Client
         {
             
         }
-        
-        public static async UniTask<T> AddUIFormChildAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm
+
+        public static async UniTask<T> AddUIFormChildAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm, IAwake
         {
             T ugfUIForm = self.AddChild<T>();
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }
+        public static async UniTask<T> AddUIFormChildAsync<T, A>(this UIComponent self, int uiFormTypeId, A a) where T : UGFUIForm, IAwake<A>
+        {
+            T ugfUIForm = self.AddChild<T, A>(a);
+            await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
+            return ugfUIForm;
+        }
+        
+        public static async UniTask<T> AddUIFormChildAsync<T, A, B>(this UIComponent self, int uiFormTypeId, A a, B b) where T : UGFUIForm, IAwake<A, B>
+        {
+            T ugfUIForm = self.AddChild<T, A, B>(a, b);
+            await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
+            return ugfUIForm;
+        }
 
-        public static async UniTask<T> AddUIFormComponentAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm, new()
+        public static async UniTask<T> AddUIFormChildAsync<T, A, B, C>(this UIComponent self, int uiFormTypeId, A a, B b, C c) where T : UGFUIForm, IAwake<A, B, C>
+        {
+            T ugfUIForm = self.AddChild<T, A, B, C>(a, b, c);
+            await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
+            return ugfUIForm;
+        }
+
+        public static async UniTask<T> AddUIFormComponentAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm, IAwake, new()
         {
             T ugfUIForm = self.AddComponent<T>();
+            await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
+            return ugfUIForm;
+        }
+        public static async UniTask<T> AddUIFormComponentAsync<T, A>(this UIComponent self, int uiFormTypeId, A a) where T : UGFUIForm, IAwake<A>, new()
+        {
+            T ugfUIForm = self.AddComponent<T, A>(a);
+            await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
+            return ugfUIForm;
+        }
+
+        public static async UniTask<T> AddUIFormComponentAsync<T, A, B>(this UIComponent self, int uiFormTypeId, A a, B b) where T : UGFUIForm, IAwake<A, B>, new()
+        {
+            T ugfUIForm = self.AddComponent<T, A, B>(a, b);
+            await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
+            return ugfUIForm;
+        }
+
+        public static async UniTask<T> AddUIFormComponentAsync<T, A, B, C>(this UIComponent self, int uiFormTypeId, A a, B b, C c) where T : UGFUIForm, IAwake<A, B, C>, new()
+        {
+            T ugfUIForm = self.AddComponent<T, A, B, C>(a, b, c);
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }

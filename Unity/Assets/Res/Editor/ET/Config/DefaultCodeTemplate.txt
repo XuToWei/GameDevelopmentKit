@@ -1,5 +1,6 @@
 ﻿namespace ET#NAMESPACE#
 {
+    //[ComponentOf(typeof(XXX))]
     public class #NAME# : Entity, IAwake
     {
         

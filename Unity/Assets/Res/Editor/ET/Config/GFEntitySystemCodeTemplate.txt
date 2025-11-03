@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-
-namespace ET.Client
+﻿namespace ET.Client
 {
-    [EntitySystemOf(typeof(GFEntity#NAME#))]
     [FriendOf(typeof(GFEntity#NAME#))]
+    [EntitySystemOf(typeof(GFEntity#NAME#))]
     public static partial class GFEntity#NAME#System
     {
         [EntitySystem]

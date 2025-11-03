@@ -16,9 +16,8 @@ namespace ET.Editor
         private const string UIFormHotfixViewCodePath         = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Game/UI";
 
         private const string UIFormPrefabPath                 = "Assets/Res/UI/UIForm";
+        private const string AddUIFormNameKey                 = "NeedAddComponentUIFormName";
 
-        private string m_AddComponentName;
-        
         public void OnEnable()
         {
             
@@ -32,11 +31,11 @@ namespace ET.Editor
         public void GenerateCode(string codeName)
         {
             GenerateUICode(codeName);
-            GenerateUIPrefab(codeName);
+            GenerateUIFormPrefab(codeName);
             Debug.Log("生成完毕！");
         }
 
-        private void GenerateUICode(string uiName)
+        private void GenerateUICode(string uiFormName)
         {
             void GenerateCS(string templateFile, string codeFile)
             {
@@ -58,41 +57,42 @@ namespace ET.Editor
                     Directory.CreateDirectory(dirName);
                 }
                 string template = File.ReadAllText(templateFile);
-                string codeStr = template.Replace("#NAME#", uiName);
+                string codeStr = template.Replace("#NAME#", uiFormName);
                 File.WriteAllText(codeFile, codeStr);
                 Debug.Log($"Generate cs:{codeFile}!");
             }
             
-            GenerateCS(UIFormCodeTemplateFile,           $"{UIFormModelViewCodePath}/UI{uiName}/UIForm{uiName}.cs");
-            GenerateCS(UIFormSystemCodeTemplateFile,     $"{UIFormHotfixViewCodePath}/UI{uiName}/UIForm{uiName}System.cs");
-            GenerateCS(MonoUIFormCodeTemplateFile,       $"{UIFormModelViewCodePath}/UI{uiName}/MonoUIForm{uiName}.cs");
+            GenerateCS(UIFormCodeTemplateFile,           $"{UIFormModelViewCodePath}/UI{uiFormName}/UIForm{uiFormName}.cs");
+            GenerateCS(UIFormSystemCodeTemplateFile,     $"{UIFormHotfixViewCodePath}/UI{uiFormName}/UIForm{uiFormName}System.cs");
+            GenerateCS(MonoUIFormCodeTemplateFile,       $"{UIFormModelViewCodePath}/UI{uiFormName}/MonoUIForm{uiFormName}.cs");
         }
 
-        private void GenerateUIPrefab(string uiName)
+        private void GenerateUIFormPrefab(string uiFormName)
         {
-            string prefabPath = $"{UIFormPrefabPath}/UIForm{uiName}.prefab";
+            string prefabPath = $"{UIFormPrefabPath}/UIForm{uiFormName}.prefab";
             if (File.Exists(prefabPath))
             {
-                throw new Exception($"{prefabPath} already exist!");
+                Debug.LogWarning($"{prefabPath} already exist!");
+                return;
             }
-            GameObject prefab = UGuiFormCreateTool.CreateUGuiFormPrefab($"UIForm{uiName}", $"{UIFormPrefabPath}/UIForm{uiName}.prefab");
+            GameObject prefab = UGuiFormCreateTool.CreateUGuiFormPrefab($"UIForm{uiFormName}", $"{UIFormPrefabPath}/UIForm{uiFormName}.prefab");
             Selection.activeGameObject = prefab;
-            EditorPrefs.SetString("NeedAddComponentUIName", uiName);
+            EditorPrefs.SetString(AddUIFormNameKey, uiFormName);
             Debug.Log($"Generate prefab:{prefabPath}!");
         }
 
         [DidReloadScripts]
-        private static void AddUIPrefabComponent()
+        private static void AddUIFormPrefabComponent()
         {
-            if (!EditorPrefs.HasKey("NeedAddComponentUIName"))
+            if (!EditorPrefs.HasKey(AddUIFormNameKey))
                 return;
-            string uiName = EditorPrefs.GetString("NeedAddComponentUIName");
-            EditorPrefs.DeleteKey("NeedAddComponentUIName");
-            string prefabPath = $"{UIFormPrefabPath}/UIForm{uiName}.prefab";
+            string uiFormName = EditorPrefs.GetString(AddUIFormNameKey);
+            EditorPrefs.DeleteKey(AddUIFormNameKey);
+            string prefabPath = $"{UIFormPrefabPath}/UIForm{uiFormName}.prefab";
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (prefab == null)
                 return;
-            MonoScript classScript = AssetDatabase.LoadAssetAtPath<MonoScript>($"{UIFormModelViewCodePath}/UI{uiName}/MonoUIForm{uiName}.cs");
+            MonoScript classScript = AssetDatabase.LoadAssetAtPath<MonoScript>($"{UIFormModelViewCodePath}/UI{uiFormName}/MonoUIForm{uiFormName}.cs");
             if (classScript == null)
                 return;
             Type componentType = classScript.GetClass();

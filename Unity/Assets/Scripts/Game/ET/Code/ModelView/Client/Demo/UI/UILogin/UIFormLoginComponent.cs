@@ -1,7 +1,7 @@
 namespace ET.Client
 {
     [ComponentOf(typeof(UIComponent))]
-    public class UIFormLoginComponent : UGFUIForm<MonoUIFormLogin>, IUGFUIFormOnOpen
+    public class UIFormLoginComponent : UGFUIForm<MonoUIFormLogin>, IAwake, IUGFUIFormOnOpen
     {
         
     }

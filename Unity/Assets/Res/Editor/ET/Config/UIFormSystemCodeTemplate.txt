@@ -1,7 +1,7 @@
 ﻿namespace ET.Client
 {
-    [EntitySystemOf(typeof(UIForm#NAME#))]
     [FriendOf(typeof(UIForm#NAME#))]
+    [EntitySystemOf(typeof(UIForm#NAME#))]
     public static partial class UIForm#NAME#System
     {
         [EntitySystem]

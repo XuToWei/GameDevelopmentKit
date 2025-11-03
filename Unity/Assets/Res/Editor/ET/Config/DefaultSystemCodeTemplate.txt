@@ -1,7 +1,7 @@
 ﻿namespace ET#NAMESPACE#
 {
-    [EntitySystemOf(typeof(#NAME#))]
     [FriendOf(typeof(#NAME#))]
+    [EntitySystemOf(typeof(#NAME#))]
     public static partial class #NAME#System
     {
         [EntitySystem]

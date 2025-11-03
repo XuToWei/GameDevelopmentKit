@@ -8,10 +8,10 @@ namespace ET.Editor
     {
         private const string UIWidgetComponentCodeTemplateFile      = "Assets/Res/Editor/ET/Config/UIWidgetCodeTemplate.txt";
         private const string UIWidgetSystemCodeTemplateFile         = "Assets/Res/Editor/ET/Config/UIWidgetSystemCodeTemplate.txt";
-        private const string UIWidgetEventCodeTemplateFile          = "Assets/Res/Editor/ET/Config/UIWidgetEventCodeTemplate.txt";
+        private const string MonoUIWidgetCodeTemplateFile          = "Assets/Res/Editor/ET/Config/MonoUIWidgetCodeTemplate.txt";
 
-        private const string UIWidgetModelViewCodePath              = "Assets/Scripts/Game/ET/Code/ModelView/Client/Game/UI/Widget";
-        private const string UIWidgetHotfixViewCodePath             = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Game/UI/Widget";
+        private const string UIWidgetModelViewCodePath              = "Assets/Scripts/Game/ET/Code/ModelView/Client/Game/UI";
+        private const string UIWidgetHotfixViewCodePath             = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Game/UI";
 
         public void OnEnable()
         {
@@ -55,9 +55,9 @@ namespace ET.Editor
                 Debug.Log($"Generate cs:{codeFile}!");
             }
             
-            GenerateCS(UIWidgetComponentCodeTemplateFile,     $"{UIWidgetModelViewCodePath}/UI{uiWidgetName}/UGFUIWidget{uiWidgetName}.cs");
-            GenerateCS(UIWidgetSystemCodeTemplateFile,        $"{UIWidgetHotfixViewCodePath}/UI{uiWidgetName}/UGFUIWidget{uiWidgetName}System.cs");
-            GenerateCS(UIWidgetEventCodeTemplateFile,         $"{UIWidgetHotfixViewCodePath}/UI{uiWidgetName}/UGFUIWidget{uiWidgetName}Event.cs");
+            GenerateCS(UIWidgetComponentCodeTemplateFile,     $"{UIWidgetModelViewCodePath}/UI{uiWidgetName}/UIWidget{uiWidgetName}.cs");
+            GenerateCS(UIWidgetSystemCodeTemplateFile,        $"{UIWidgetHotfixViewCodePath}/UI{uiWidgetName}/UIWidget{uiWidgetName}System.cs");
+            GenerateCS(MonoUIWidgetCodeTemplateFile,         $"{UIWidgetModelViewCodePath}/UI{uiWidgetName}/MonoUIWidget{uiWidgetName}.cs");
             Debug.Log("生成完毕！");
         }
     }
