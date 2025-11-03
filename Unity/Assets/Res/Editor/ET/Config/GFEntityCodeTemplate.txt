@@ -1,0 +1,8 @@
+﻿namespace ET.Client
+{
+    //[ComponentOf(typeof(XXX))]
+    public class GFEntity#NAME# : UGFEntity<MonoGFEntity#NAME#>, IAwake, IDestroy, IUGFEntityOnShow, IUGFEntityOnHide
+    {
+        
+    }
+}

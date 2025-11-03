@@ -1,0 +1,31 @@
+﻿namespace ET.Client
+{
+    [FriendOf(typeof(GFEntity#NAME#))]
+    [EntitySystemOf(typeof(GFEntity#NAME#))]
+    public static partial class GFEntity#NAME#System
+    {
+        [EntitySystem]
+        private static void Awake(this GFEntity#NAME# self)
+        {
+           
+        }
+
+        [EntitySystem]
+        private static void Destroy(this GFEntity#NAME# self)
+        {
+            
+        }
+
+        [UGFEntitySystem]
+        private static void UGFEntityOnShow(this GFEntity#NAME# self)
+        {
+           
+        }
+
+        [UGFEntitySystem]
+        private static void UGFEntityOnHide(this GFEntity#NAME# self, bool isShutdown)
+        {
+           
+        }
+    }
+}

@@ -219,7 +219,10 @@ public class GuideGesture : GuideWidgetBase
         }
         if (gestureData.UseCustomGesture == true)
         {
-            GestureAnimator.Play("Base Layer.start");
+            if (GestureAnimator != null)
+            {
+                GestureAnimator.Play("Base Layer.start");
+            }
             return;
         }
         if (GestureAnimator != null)

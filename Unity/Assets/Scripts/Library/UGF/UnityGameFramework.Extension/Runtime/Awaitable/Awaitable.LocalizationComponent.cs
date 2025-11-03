@@ -27,22 +27,22 @@ namespace UnityGameFramework.Extension
             {
                 if (!IsValid)
                 {
-                    core.TrySetCanceled();
+                    core.TrySetException(new GameFrameworkException("Awaitable is not valid."));
                     return false;
                 }
-                if (eventData.IsFinished)
+                if (!eventData.IsFinished)
                 {
-                    if (eventData.IsError)
-                    {
-                        core.TrySetException(new GameFrameworkException(eventData.ErrorMessage));
-                    }
-                    else
-                    {
-                        core.TrySetResult(null);
-                    }
-                    return false;
+                    return true;
                 }
-                return true;
+                if (eventData.IsError)
+                {
+                    core.TrySetException(new GameFrameworkException(eventData.ErrorMessage));
+                }
+                else
+                {
+                    core.TrySetResult(null);
+                }
+                return false;
             }
             
             void ReturnAction()

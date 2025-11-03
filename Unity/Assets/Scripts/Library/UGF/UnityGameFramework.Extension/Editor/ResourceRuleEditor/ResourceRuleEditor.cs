@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,13 +10,14 @@ using UnityEditor.Callbacks;
 using UnityEditorInternal;
 using UnityGameFramework.Editor.ResourceTools;
 using GFResource = UnityGameFramework.Editor.ResourceTools.Resource;
+using Object = UnityEngine.Object;
 
 namespace UnityGameFramework.Extension.Editor
 {
     /// <summary>
     /// Resource 规则编辑器，支持按规则配置自动生成 ResourceCollection.xml
     /// </summary>
-    public class ResourceRuleEditor : EditorWindow
+    internal class ResourceRuleEditor : EditorWindow
     {
         private static readonly Regex ResourceNameRegex = new Regex(@"^([A-Za-z0-9\._-]+/)*[A-Za-z0-9\._-]+$");
         private static readonly Regex ResourceVariantRegex = new Regex(@"^[a-z0-9_-]+$");
@@ -27,7 +29,7 @@ namespace UnityGameFramework.Extension.Editor
         private ReorderableList m_RuleList;
         private Vector2 m_ScrollPosition = Vector2.zero;
 
-        private readonly string m_SourceAssetExceptTypeFilter = "t:Script";
+        private readonly string m_SourceAssetExceptTypeFilter = "t:Script t:SubGraphAsset";
         private string[] m_SourceAssetExceptTypeFilterGUIDArray;
 
         private readonly string m_SourceAssetExceptLabelFilter = "l:ResourceExclusive";
@@ -42,7 +44,7 @@ namespace UnityGameFramework.Extension.Editor
         }
         
         [MenuItem("Game Framework/Resource Tools/Refresh Activate Resource Collection", false, 51)]
-        public static void RefreshActivateResourceCollection()
+        static void RefreshActivateResourceCollection()
         {
             ResourceRuleEditorUtility.RefreshResourceCollection();
         }
@@ -80,7 +82,7 @@ namespace UnityGameFramework.Extension.Editor
         }
 
         [OnOpenAsset]
-        public static bool OnOpenAsset(int instanceID, int line)
+        internal static bool OnOpenAsset(int instanceID, int line)
         {
             var config = EditorUtility.InstanceIDToObject (instanceID) as ResourceRuleEditorData;
             if (config != null)
@@ -459,7 +461,7 @@ namespace UnityGameFramework.Extension.Editor
 
         #region Refresh ResourceCollection.xml
 
-        public void RefreshResourceCollection()
+        internal void RefreshResourceCollection()
         {
             if (m_Configuration == null)
             {
@@ -467,7 +469,7 @@ namespace UnityGameFramework.Extension.Editor
             }
             if (!CheckRule())
             {
-                return;
+                throw new Exception("Refresh ResourceCollection.xml check rule fail.");
             }
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptTypeFilter);
             m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptLabelFilter);
@@ -479,14 +481,14 @@ namespace UnityGameFramework.Extension.Editor
             }
             else
             {
-                Debug.Log("Refresh ResourceCollection.xml fail");
+                throw new Exception("Refresh ResourceCollection.xml fail");
             }
 
             ResourceOptimize optimize = new ResourceOptimize();
             optimize.Optimize(m_ResourceCollection);
         }
 
-        public void RefreshResourceCollection(string configPath)
+        internal void RefreshResourceCollection(string configPath)
         {
             if (m_Configuration == null || !m_CurrentConfigPath.Equals(configPath))
             {
@@ -502,7 +504,7 @@ namespace UnityGameFramework.Extension.Editor
             }
             else
             {
-                Debug.Log("Refresh ResourceCollection.xml fail");
+                throw new Exception("Refresh ResourceCollection.xml fail");
             }
         }
 
