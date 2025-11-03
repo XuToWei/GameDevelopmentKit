@@ -90,8 +90,7 @@ GameObject:
   - component: {fileID: 224438795553994780}
   - component: {fileID: 3539700472237229061}
   - component: {fileID: 3539700472237229083}
-  - component: {fileID: 7000139577207080798}
-  - component: {fileID: 7040096392785719028}
+  - component: {fileID: 5519435032765625553}
   m_Layer: 5
   m_Name: UILogin
   m_TagString: Untagged
@@ -160,7 +159,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 823
---- !u!114 &7000139577207080798
+--- !u!114 &5519435032765625553
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,33 +168,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1386170326414932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd2cab69204e6aa44bcabf89d590162c, type: 3}
+  m_Script: {fileID: 11500000, guid: 93c744c9cfb25624381fb252ea28bd44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7040096392785719028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386170326414932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5452a0c3619826c4f889a047605eef79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindComponents:
-  - {fileID: 114341495829030012}
-  - {fileID: 114663064108016614}
-  - {fileID: 114630311973242952}
-  - {fileID: 1037235677285731511}
-  m_SeparatorChar: 95
-  m_BindScript: {fileID: 11500000, guid: 3b70aeffd4109a94981d0460bf28dae9, type: 3}
-  m_BindComponentNames:
-  - AccountInputField
-  - PasswordInputField
-  - LoginButton
-  - TestWidgetTransform
+  m_AccountInputField: {fileID: 114341495829030012}
+  m_LoginButton: {fileID: 114630311973242952}
+  m_PasswordInputField: {fileID: 114663064108016614}
+  m_TestWidgetTest: {fileID: 6405259872730308600}
 --- !u!1 &1568484768885604
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,9 +678,9 @@ GameObject:
   - component: {fileID: 1037235677285731511}
   - component: {fileID: 1092261389943544741}
   - component: {fileID: 6031483739973178292}
-  - component: {fileID: 9125144615314857091}
+  - component: {fileID: 6405259872730308600}
   m_Layer: 5
-  m_Name: TestWidget_Transform
+  m_Name: Test_WidgetTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -820,7 +799,7 @@ MonoBehaviour:
   m_FlipEdgeVertical: 5
   m_FlipFillCenter: 3
   m_FlipDirection: 3
---- !u!114 &9125144615314857091
+--- !u!114 &6405259872730308600
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -829,15 +808,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 439861144302407794}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5452a0c3619826c4f889a047605eef79, type: 3}
+  m_Script: {fileID: 11500000, guid: ebeb87198b3354845810d6af7534973f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindComponents:
-  - {fileID: 4086908342663274008}
-  m_SeparatorChar: 95
-  m_BindScript: {fileID: 11500000, guid: 683178e4e6cb00e48a84ee8418379484, type: 3}
-  m_BindComponentNames:
-  - TestTextUXText
+  m_TestTextUXText: {fileID: 4086908342663274008}
 --- !u!1 &3179223850441754030
 GameObject:
   m_ObjectHideFlags: 0

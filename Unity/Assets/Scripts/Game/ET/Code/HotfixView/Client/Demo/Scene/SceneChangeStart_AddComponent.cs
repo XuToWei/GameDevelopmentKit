@@ -1,7 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Game;
-using UnityGameFramework.Extension;
 
 namespace ET.Client
 {
@@ -15,15 +14,8 @@ namespace ET.Client
                 Scene currentScene = root.CurrentScene();
 
                 // 切换到map场景
-                foreach (var sceneAssetName in GameEntry.Scene.GetLoadingSceneAssetNames())
-                {
-                    await GameEntry.Scene.UnloadSceneAsync(sceneAssetName);
-                }
-                foreach (var sceneAssetName in GameEntry.Scene.GetLoadedSceneAssetNames())
-                {
-                    await GameEntry.Scene.UnloadSceneAsync(sceneAssetName);
-                }
-                await GameEntry.Scene.LoadSceneAsync(AssetUtility.GetSceneAsset(currentScene.Name));
+                await UGFComponent.Instance.UnloadAllScenesAsync();
+                await UGFComponent.Instance.LoadSceneAsync(AssetUtility.GetSceneAsset(currentScene.Name));
                 
                 currentScene.AddComponent<OperaComponent>();
             }

@@ -1,51 +1,114 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Game;
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
+using GameEntry = Game.GameEntry;
 
 namespace ET
 {
-    [ChildOf]
-    public sealed class UGFEntity : Entity, IAwake<long, ETMonoEntity>, IDestroy
+    public abstract class UGFEntity<T> : UGFEntity where T : AETMonoUGFEntity
     {
         [BsonIgnore]
-        public UnityGameFramework.Runtime.Entity Entity { get; private set; }
-        public long EntityEventTypeLongHashCode { get; private set; }
+        public T View { get; private set; }
+
         [BsonIgnore]
-        public Transform Transform { get; private set; }
-        public bool IsShow => ETMonoEntity.IsShow;
-        [BsonIgnore]
-        public ETMonoEntity ETMonoEntity { get; private set; }
-        
-        internal void OnAwake(long entityEventTypeLongHashCode, ETMonoEntity etMonoEntity)
+        internal override ETMonoUGFEntity UGFMono
         {
-            ETMonoEntity = etMonoEntity;
-            EntityEventTypeLongHashCode = entityEventTypeLongHashCode;
-            Transform = etMonoEntity.CachedTransform;
-            Entity = etMonoEntity.Entity;
-        }
-        
-        internal void OnDestroy()
-        {
-            ETMonoEntity = default;
-            EntityEventTypeLongHashCode = default;
-            Transform = default;
-            Entity = default;
+            get => base.UGFMono;
+            set
+            {
+                base.UGFMono = value;
+                this.View = value.GetComponent<T>();
+            }
         }
     }
 
-    [EntitySystemOf(typeof(UGFEntity))]
-    [FriendOf(typeof(UGFEntity))]
-    public static partial class UGFEntitySystem
+    [EnableMethod]
+    public abstract class UGFEntity : Entity
     {
-        [EntitySystem]
-        private static void Awake(this UGFEntity self, long entityEventTypLongHashCode, ETMonoEntity etMonoEntity)
+        [BsonIgnore]
+        private UnityGameFramework.Runtime.Entity ugfEntity;
+        [BsonIgnore]
+        private CancellationTokenSourcePlus cts;
+        [BsonIgnore]
+        internal virtual ETMonoUGFEntity UGFMono { get; set; }
+        [BsonIgnore]
+        public Transform CachedTransform { get; internal set; }
+
+        public bool Available => this.ugfEntity != null && !this.ugfEntity.Logic.Available;
+        public bool Visible
         {
-            self.OnAwake(entityEventTypLongHashCode, etMonoEntity);
+            get
+            {
+                return this.ugfEntity != null && this.ugfEntity.Logic.Visible;
+            }
+            set
+            {
+                if (this.ugfEntity == null)
+                {
+                    Log.Warning("Entity is not shown.");
+                    return;
+                }
+                this.ugfEntity.Logic.Visible = value;
+            }
         }
 
-        [EntitySystem]
-        private static void Destroy(this UGFEntity self)
+        public override void Dispose()
         {
-            self.OnDestroy();
+            if (!this.IsDisposed)
+            {
+                if (this.cts != null)
+                {
+                    this.cts.Cancel();
+                    ObjectPool.Instance.Recycle(this.cts);
+                    this.cts = null;
+                }
+                if (this.ugfEntity != null)
+                {
+                    GameEntry.Entity.HideEntity(this.ugfEntity);
+                    this.ugfEntity = null;
+                }
+            }
+            base.Dispose();
+        }
+
+        public async UniTask ShowEntityAsync(int entityTypeId)
+        {
+            if (this.cts == null)
+            {
+                this.cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
+            }
+            this.ugfEntity = await GameEntry.Entity.ShowEntityAsync<ETMonoUGFEntity>(entityTypeId, ETMonoUGFEntityData.Create(this), cancellationToken: this.cts.Token);
+            if(this.ugfEntity == null)
+            {
+                throw new System.Exception($"UGFEntity ShowEntityAsync failed! entityTypeId:'{entityTypeId}'.");
+            }
+        }
+
+        public void SetEntityVisible(bool visible)
+        {
+            if (this.ugfEntity != null)
+            {
+                this.ugfEntity.Logic.Visible = visible;
+            }
+        }
+
+        public void AttachToParent(UGFEntity parentEntity)
+        {
+            if (this.ugfEntity != null && parentEntity.ugfEntity != null)
+            {
+                GameEntry.Entity.AttachEntity(this.ugfEntity, parentEntity.ugfEntity);
+            }
+        }
+
+        public void DetachFromParent()
+        {
+            if (this.ugfEntity != null)
+            {
+                GameEntry.Entity.DetachEntity(this.ugfEntity);
+            }
         }
     }
 }
+

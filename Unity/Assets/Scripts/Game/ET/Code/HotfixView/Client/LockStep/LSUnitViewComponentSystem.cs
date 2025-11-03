@@ -1,8 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using Game;
 using UnityEngine;
-using UnityGameFramework.Extension;
-using GameEntry = Game.GameEntry;
 
 namespace ET.Client
 {
@@ -29,7 +27,7 @@ namespace ET.Client
             foreach (long playerId in room.PlayerIds)
             {
                 LSUnit lsUnit = lsUnitComponent.GetChild<LSUnit>(playerId);
-                GameObject prefab = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
+                GameObject prefab = await UGFComponent.Instance.LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
 
                 GameObject unitGo = UnityEngine.Object.Instantiate(prefab);
                 unitGo.transform.position = lsUnit.Position.ToVector();

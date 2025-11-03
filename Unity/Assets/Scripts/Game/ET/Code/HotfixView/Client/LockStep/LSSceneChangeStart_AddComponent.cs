@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using Game;
-using UnityGameFramework.Extension;
 
 namespace ET.Client
 {
@@ -10,17 +9,16 @@ namespace ET.Client
         protected override async UniTask Run(Scene clientScene, LSSceneChangeStart args)
         {
             Room room = clientScene.GetComponent<Room>();
-            room.AddComponent<UGFUIComponent>();
-            room.AddComponent<UGFEntityComponent>();
+            room.AddComponent<UIComponent>();
             
             // 创建loading界面
             
             
             // 创建房间UI
-            await room.GetComponent<UGFUIComponent>().OpenUIFormAsync(UGFUIFormId.UILSRoom);
+            await room.GetComponent<UIComponent>().AddUIFormComponentAsync<UIFormLSRoomComponent>(UGFUIFormId.UILSRoom);
             
             // 加载场景资源
-            await GameEntry.Scene.LoadSceneAsync(AssetUtility.GetSceneAsset(room.Name));
+            await UGFComponent.Instance.LoadSceneAsync(AssetUtility.GetSceneAsset(room.Name));
         }
     }
 }

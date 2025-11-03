@@ -36,22 +36,7 @@ namespace ET.Client
         {
             public override void Handle(OnCodeReload args)
             {
-                UnityGameFramework.Runtime.UIForm[] uiForms = GameEntry.UI.GetAllLoadedUIForms();
-                foreach (var uiForm in uiForms)
-                {
-                    if (uiForm.Logic is ETMonoUIForm etMonoUIForm)
-                    {
-                        etMonoUIForm.OnReload();
-                    }
-                }
-                UnityGameFramework.Runtime.Entity[] entities = GameEntry.Entity.GetAllLoadedEntities();
-                foreach (var entity in entities)
-                {
-                    if (entity.Logic is ETMonoEntity etMonoEntity)
-                    {
-                        etMonoEntity.OnReload();
-                    }
-                }
+                
             }
         }
     }

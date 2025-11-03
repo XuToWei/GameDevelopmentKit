@@ -18,7 +18,7 @@ namespace ET.Client
                 room.AddComponent<LSOperaComponent>();
             }
             
-            clientScene.GetComponent<UGFUIComponent>().CloseUIForm(UGFUIFormId.UILSLobby);
+            clientScene.GetComponent<UIComponent>().RemoveComponent<UIFormLSLobbyComponent>();
         }
     }
 }

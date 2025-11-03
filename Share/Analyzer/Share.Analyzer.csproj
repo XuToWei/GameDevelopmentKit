@@ -22,7 +22,7 @@
         <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
     </ItemGroup>
 
-<!--    <Target Name="PostBuild" AfterTargets="PostBuildEvent">-->
-<!--        <Copy SourceFiles="$(TargetDir)/$(TargetName).dll" DestinationFolder="$(ProjectDir)/../../Unity/Assets/Plugins/" ContinueOnError="false" />-->
-<!--    </Target>-->
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Copy SourceFiles="$(TargetDir)/$(TargetName).dll" DestinationFolder="$(ProjectDir)/../../Unity/Assets/Plugins/" ContinueOnError="false" />
+    </Target>
 </Project>

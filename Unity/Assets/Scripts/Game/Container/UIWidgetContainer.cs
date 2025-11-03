@@ -77,7 +77,7 @@ namespace Game
             {
                 throw new GameFrameworkException(Utility.Text.Format("Can't open UIWidget, UIWidget '{0}' not in the container '{1}'!", uiWidget.name, Owner.Name));
             }
-            if (uiWidget.IsOpen)
+            if (uiWidget.Available)
             {
                 throw new GameFrameworkException(Utility.Text.Format("Can't open UIWidget, UIWidget '{0}' is already opened!", uiWidget.name));
             }
@@ -105,7 +105,7 @@ namespace Game
             {
                 throw new GameFrameworkException(Utility.Text.Format("Can't open UIWidget, UIWidget '{0}' not in the container '{1}'!", uiWidget.name, Owner.Name));
             }
-            if (!uiWidget.IsOpen)
+            if (!uiWidget.Available)
             {
                 throw new GameFrameworkException(Utility.Text.Format("Can't close UIWidget, UIWidget '{0}' is not opened!", uiWidget.name));
             }
@@ -118,7 +118,7 @@ namespace Game
             {
                 foreach (var uiWidget in m_UIWidgets)
                 {
-                    if (uiWidget.IsOpen)
+                    if (uiWidget.Available)
                     {
                         uiWidget.OnClose(isShutdown, userData);
                     }
@@ -146,7 +146,7 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                if (uiWidget.IsOpen)
+                if (uiWidget.Available)
                 {
                     uiWidget.OnClose(isShutdown, userData);
                 }
@@ -160,7 +160,7 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                if (uiWidget.IsOpen)
+                if (uiWidget.Available)
                 {
                     uiWidget.OnPause();
                 }
@@ -174,7 +174,7 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                if (uiWidget.IsOpen)
+                if (uiWidget.Available)
                 {
                     uiWidget.OnResume();
                 }
@@ -188,7 +188,7 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                if (uiWidget.IsOpen)
+                if (uiWidget.Available)
                 {
                     uiWidget.OnCover();
                 }
@@ -202,7 +202,7 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                if (uiWidget.IsOpen)
+                if (uiWidget.Available)
                 {
                     uiWidget.OnReveal();
                 }
@@ -217,7 +217,7 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                if (uiWidget.IsOpen)
+                if (uiWidget.Available)
                 {
                     uiWidget.OnRefocus(userData);
                 }
@@ -233,7 +233,7 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                if (uiWidget.IsOpen)
+                if (uiWidget.Available)
                 {
                     uiWidget.OnUpdate(elapseSeconds, realElapseSeconds);
                 }
@@ -249,7 +249,7 @@ namespace Game
         {
             foreach (var uiWidget in m_UIWidgets)
             {
-                if (uiWidget.IsOpen)
+                if (uiWidget.Available)
                 {
                     uiWidget.OnDepthChanged(uiGroupDepth, depthInUIGroup);
                 }

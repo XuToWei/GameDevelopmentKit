@@ -4,6 +4,10 @@ using System.Threading;
 
 namespace Cysharp.Threading.Tasks
 {
+    /// <summary>
+    /// 自动重置的UniTask完成源
+    /// 扩展了完成、取消、异常的回调
+    /// </summary>
     public class AutoResetUniTaskCompletionSourcePlus : IUniTaskSource, ITaskPoolNode<AutoResetUniTaskCompletionSourcePlus>, IPromise
     {
         static TaskPool<AutoResetUniTaskCompletionSourcePlus> pool;
@@ -19,6 +23,7 @@ namespace Cysharp.Threading.Tasks
         }
 
         UniTaskCompletionSourceCore<AsyncUnit> core;
+        short version;
 
         AutoResetUniTaskCompletionSourcePlus()
         {
@@ -31,6 +36,7 @@ namespace Cysharp.Threading.Tasks
             {
                 result = new AutoResetUniTaskCompletionSourcePlus();
             }
+            result.version = result.core.Version;
             TaskTracker.TrackActiveTask(result, 2);
             return result;
         }
@@ -104,25 +110,46 @@ namespace Cysharp.Threading.Tasks
         [DebuggerHidden]
         public bool TrySetResult()
         {
-            onResultAction?.Invoke();
-            onResultAction = null;
-            return core.TrySetResult(AsyncUnit.Default);
+            if (version == core.Version && core.TrySetResult(AsyncUnit.Default))
+            {
+                if (onResultAction != null)
+                {
+                    onResultAction.Invoke();
+                    onResultAction = null;
+                }
+                return true;
+            }
+            return false;
         }
 
         [DebuggerHidden]
         public bool TrySetCanceled(CancellationToken cancellationToken = default)
         {
-            onCancelAction?.Invoke();
-            onCancelAction = null;
-            return core.TrySetCanceled(cancellationToken);
+            if (version == core.Version && core.TrySetCanceled(cancellationToken))
+            {
+                if (onCancelAction != null)
+                {
+                    onCancelAction.Invoke();
+                    onCancelAction = null;
+                }
+                return true;
+            }
+            return false;
         }
 
         [DebuggerHidden]
         public bool TrySetException(Exception exception)
         {
-            onExceptionAction?.Invoke();
-            onExceptionAction = null;
-            return core.TrySetException(exception);
+            if (version == core.Version && core.TrySetException(exception))
+            {
+                if (onExceptionAction != null)
+                {
+                    onExceptionAction.Invoke();
+                    onExceptionAction = null;
+                }
+                return true;
+            }
+            return false;
         }
 
         [DebuggerHidden]
@@ -159,10 +186,10 @@ namespace Cysharp.Threading.Tasks
         [DebuggerHidden]
         bool TryReturn()
         {
-            TaskTracker.RemoveTracking(this);
             onExceptionAction = null;
             onCancelAction = null;
             onResultAction = null;
+            TaskTracker.RemoveTracking(this);
             core.Reset();
             return pool.TryPush(this);
         }
@@ -183,6 +210,7 @@ namespace Cysharp.Threading.Tasks
         }
 
         UniTaskCompletionSourceCore<T> core;
+        short version;
 
         AutoResetUniTaskCompletionSourcePlus()
         {
@@ -195,6 +223,7 @@ namespace Cysharp.Threading.Tasks
             {
                 result = new AutoResetUniTaskCompletionSourcePlus<T>();
             }
+            result.version = result.core.Version;
             TaskTracker.TrackActiveTask(result, 2);
             return result;
         }
@@ -268,25 +297,46 @@ namespace Cysharp.Threading.Tasks
         [DebuggerHidden]
         public bool TrySetResult(T result)
         {
-            onResultAction?.Invoke();
-            onResultAction = null;
-            return core.TrySetResult(result);
+            if (version == core.Version && core.TrySetResult(result))
+            {
+                if (onResultAction != null)
+                {
+                    onResultAction.Invoke();
+                    onResultAction = null;
+                }
+                return true;
+            }
+            return false;
         }
 
         [DebuggerHidden]
         public bool TrySetCanceled(CancellationToken cancellationToken = default)
         {
-            onCancelAction?.Invoke();
-            onCancelAction = null;
-            return core.TrySetCanceled(cancellationToken);
+            if (version == core.Version && core.TrySetCanceled(cancellationToken))
+            {
+                if (onCancelAction != null)
+                {
+                    onCancelAction.Invoke();
+                    onCancelAction = null;
+                }
+                return true;
+            }
+            return false;
         }
 
         [DebuggerHidden]
         public bool TrySetException(Exception exception)
         {
-            onExceptionAction?.Invoke();
-            onExceptionAction = null;
-            return core.TrySetException(exception);
+            if (version == core.Version && core.TrySetException(exception))
+            {
+                if (onExceptionAction != null)
+                {
+                    onExceptionAction.Invoke();
+                    onExceptionAction = null;
+                }
+                return true;
+            }
+            return false;
         }
 
         [DebuggerHidden]
@@ -329,10 +379,10 @@ namespace Cysharp.Threading.Tasks
         [DebuggerHidden]
         bool TryReturn()
         {
-            TaskTracker.RemoveTracking(this);
             onExceptionAction = null;
             onCancelAction = null;
             onResultAction = null;
+            TaskTracker.RemoveTracking(this);
             core.Reset();
             return pool.TryPush(this);
         }
