@@ -24,12 +24,12 @@ namespace UnityGameFramework.Extension.Editor
             var window = GetWindow<DefaultSettingEditor>("Default Setting Editor", true);
             window.minSize = new Vector2(500f, 600f);
         }
-        
-        [MenuItem("Game Framework/Default Setting Editor", true)]
-        private static bool OpenValidateFunction()
-        {
-            return !EditorApplication.isPlayingOrWillChangePlaymode;
-        }
+
+        // [MenuItem("Game Framework/Default Setting Editor", true)]
+        // private static bool OpenValidateFunction()
+        // {
+        //     return !EditorApplication.isPlayingOrWillChangePlaymode;
+        // }
 
         private void OnEnable()
         {
