@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
@@ -9,8 +8,6 @@ namespace Game
 {
     public abstract class AExUGuiForm : AUGuiForm
     {
-        private CancellationTokenSource m_CancellationTokenSource;
-        
         private UIWidgetContainer m_UIWidgetContainer;
         private EventContainer m_EventContainer;
         private EntityContainer m_EntityContainer;
