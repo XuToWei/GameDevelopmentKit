@@ -61,8 +61,12 @@ namespace Cysharp.Threading.Tasks
                 
                 void CancelAction()
                 {
-                    cancelAction?.Invoke();
-                    tcs.TrySetCanceled(token);
+                    if (tcs != null)
+                    {
+                        cancelAction?.Invoke();
+                        tcs.TrySetCanceled(token);
+                        tcs = null;
+                    }
                 }
                 
                 async UniTaskVoid RunTask()
@@ -71,17 +75,29 @@ namespace Cysharp.Threading.Tasks
                     try
                     {
                         await task;
-                        tcs.TrySetResult();
+                        if (tcs != null)
+                        {
+                            tcs.TrySetResult();
+                            tcs = null;
+                        }
                     }
                     catch (Exception ex)
                     {
-                        if (ex is OperationCanceledException cex)
+                        if (ex is OperationCanceledException oce)
                         {
-                            tcs.TrySetCanceled(cex.CancellationToken);
+                            if (tcs != null)
+                            {
+                                tcs.TrySetCanceled(oce.CancellationToken);
+                                tcs = null;
+                            }
                         }
                         else
                         {
-                            tcs.TrySetException(ex);
+                            if (tcs != null)
+                            {
+                                tcs.TrySetException(ex);
+                                tcs = null;
+                            }
                         }
                     }
                     finally
@@ -108,8 +124,12 @@ namespace Cysharp.Threading.Tasks
                 
                 void CancelAction()
                 {
-                    cancelAction?.Invoke();
-                    tcs.TrySetCanceled(token);
+                    if (tcs != null)
+                    {
+                        cancelAction?.Invoke();
+                        tcs.TrySetCanceled(token);
+                        tcs = null;
+                    }
                 }
                 
                 async UniTaskVoid RunTask()
@@ -118,17 +138,29 @@ namespace Cysharp.Threading.Tasks
                     try
                     {
                         T result = await task;
-                        tcs.TrySetResult(result);
+                        if (tcs != null)
+                        {
+                            tcs.TrySetResult(result);
+                            tcs = null;
+                        }
                     }
                     catch (Exception ex)
                     {
-                        if (ex is OperationCanceledException cex)
+                        if (ex is OperationCanceledException oce)
                         {
-                            tcs.TrySetCanceled(cex.CancellationToken);
+                            if (tcs != null)
+                            {
+                                tcs.TrySetCanceled(oce.CancellationToken);
+                                tcs = null;
+                            }
                         }
                         else
                         {
-                            tcs.TrySetException(ex);
+                            if (tcs != null)
+                            {
+                                tcs.TrySetException(ex);
+                                tcs = null;
+                            }
                         }
                     }
                     finally
