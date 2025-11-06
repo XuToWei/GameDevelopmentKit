@@ -105,7 +105,7 @@ namespace ET
             GameEntry.UI.SetUIFormInstancePriority(this.uiForm, priority);
         }
 
-        public async UniTask<T> LoadMonoUIWidgetAsync<T>(int uiEntityTypeId) where T : UGFUIWidget, IAwake, new()
+        public async UniTask<T> LoadUIWidgetAsync<T>(int uiEntityTypeId) where T : UGFUIWidget, IAwake, new()
         {
             var ugfEntity = this.AddChild<CommonUGFEntity>(true);
             await ugfEntity.ShowUIEntityAsync(uiEntityTypeId);
