@@ -3,7 +3,7 @@
 namespace ET
 {
     /// <summary>
-    /// 多语言key。
+    /// 多语言key
     /// </summary>
     public static class LocalizationKey
     {

@@ -3,7 +3,7 @@
 namespace Game.Hot
 {
     /// <summary>
-    /// UI音乐编号。
+    /// UI音乐编号
     /// </summary>
     public static class UISoundId
     {

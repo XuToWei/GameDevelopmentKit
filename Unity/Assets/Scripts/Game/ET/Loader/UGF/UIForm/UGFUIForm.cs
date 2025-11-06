@@ -82,7 +82,8 @@ namespace ET
             {
                 this.cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
             }
-            this.uiForm = await GameEntry.UI.OpenUIFormAsync(uiFormTypeId, ETMonoUGFUIFormData.Create(this), cancellationToken: this.cts.Token);
+            this.uiForm = await GameEntry.UI.OpenUIFormAsync(uiFormTypeId, ETMonoUGFUIFormData.Create(this), cancellationToken: this.cts.MallocToken());
+            this.cts.FreeToken();
             if(this.uiForm == null)
             {
                 throw new System.Exception($"UGFUIForm OpenUIFormAsync failed! uiFormTypeId:'{uiFormTypeId}'.");
@@ -104,27 +105,24 @@ namespace ET
             GameEntry.UI.SetUIFormInstancePriority(this.uiForm, priority);
         }
 
+        public async UniTask<T> LoadMonoUIWidgetAsync<T>(int uiEntityTypeId) where T : UGFUIWidget, IAwake, new()
+        {
+            var ugfEntity = this.AddChild<CommonUGFEntity>(true);
+            await ugfEntity.ShowUIEntityAsync(uiEntityTypeId);
+            var monoUIWidget = ugfEntity.CachedTransform.GetComponent<AETMonoUGFUIWidget>();
+            if (monoUIWidget == null)
+            {
+                ugfEntity.Dispose();
+                throw new Exception($"LoadMonoUIWidgetAsync failed! not found AETMonoUGFUIWidget! uiEntityTypeId:'{uiEntityTypeId}'.");
+            }
+            return this.AddComponentUIWidget<T>(monoUIWidget, true);
+        }
+
         public T AddChildUIWidget<T>(AETMonoUGFUIWidget etMonoWidget, bool isFromPool = false) where T : UGFUIWidget, IAwake
         {
             T widgetEntity = this.AddChild<T>(isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
-        }
-
-        public async UniTask<T> AddChildUIWidgetAsync<T>(string widgetAssetName, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddChildUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddChildUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddChildUIWidget<T>(etMonoWidget, isFromPool);
         }
 
         public T AddChildUIWidget<T, A>(AETMonoUGFUIWidget etMonoWidget, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>
@@ -134,43 +132,11 @@ namespace ET
             return widgetEntity;
         }
 
-        public async UniTask<T> AddChildUIWidgetAsync<T, A>(string widgetAssetName, A a, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddChildUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddChildUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddChildUIWidget<T, A>(etMonoWidget, a, isFromPool);
-        }
-
         public T AddChildUIWidget<T, A, B>(AETMonoUGFUIWidget etMonoWidget, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>
         {
             T widgetEntity = this.AddChild<T, A, B>(a, b, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
-        }
-
-        public async UniTask<T> AddChildUIWidgetAsync<T, A, B>(string widgetAssetName, A a, B b, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddChildUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddChildUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddChildUIWidget<T, A, B>(etMonoWidget, a, b, isFromPool);
         }
 
         public T AddChildUIWidget<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>
@@ -180,43 +146,11 @@ namespace ET
             return widgetEntity;
         }
 
-        public async UniTask<T> AddChildUIWidgetAsync<T, A, B, C>(string widgetAssetName, A a, B b, C c, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddChildUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddChildUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddChildUIWidget<T, A, B, C>(etMonoWidget, a, b, c, isFromPool);
-        }
-
         public T AddChildUIWidgetWithId<T>(AETMonoUGFUIWidget etMonoWidget, long id, bool isFromPool = false) where T : UGFUIWidget, IAwake
         {
             T widgetEntity = this.AddChildWithId<T>(id, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
-        }
-
-        public async UniTask<T> AddChildUIWidgetWithIdAsync<T>(string widgetAssetName, long id, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddChildUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddChildUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddChildUIWidgetWithId<T>(etMonoWidget, id, isFromPool);
         }
 
         public T AddChildUIWidgetWithId<T, A>(AETMonoUGFUIWidget etMonoWidget, long id, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>
@@ -226,43 +160,11 @@ namespace ET
             return widgetEntity;
         }
 
-        public async UniTask<T> AddChildUIWidgetWithIdAsync<T, A>(string widgetAssetName, long id, A a, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddChildUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddChildUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddChildUIWidgetWithId<T, A>(etMonoWidget, id, a, isFromPool);
-        }
-
         public T AddChildUIWidgetWithId<T, A, B>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>
         {
             T widgetEntity = this.AddChildWithId<T, A, B>(id, a, b, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
-        }
-
-        public async UniTask<T> AddChildUIWidgetWithIdAsync<T, A, B>(string widgetAssetName, long id, A a, B b, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddChildUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddChildUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddChildUIWidgetWithId<T, A, B>(etMonoWidget, id, a, b, isFromPool);
         }
 
         public T AddChildUIWidgetWithId<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>
@@ -272,43 +174,11 @@ namespace ET
             return widgetEntity;
         }
 
-        public async UniTask<T> AddChildUIWidgetWithIdAsync<T, A, B, C>(string widgetAssetName, long id, A a, B b, C c, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddChildUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddChildUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddChildUIWidgetWithId<T, A, B, C>(etMonoWidget, id, a, b, c, isFromPool);
-        }
-
         public T AddComponentUIWidget<T>(AETMonoUGFUIWidget etMonoWidget, bool isFromPool = false) where T : UGFUIWidget, IAwake, new()
         {
             T widgetEntity = this.AddComponent<T>(isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
-        }
-
-        public async UniTask<T> AddComponentUIWidgetAsync<T>(string widgetAssetName, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake, new()
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddComponentUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddComponentUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddComponentUIWidget<T>(etMonoWidget, isFromPool);
         }
 
         public T AddComponentUIWidget<T, A>(AETMonoUGFUIWidget etMonoWidget, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>, new()
@@ -318,43 +188,11 @@ namespace ET
             return widgetEntity;
         }
 
-        public async UniTask<T> AddComponentUIWidgetAsync<T, A>(string widgetAssetName, A a, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>, new()
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddComponentUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddComponentUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddComponentUIWidget<T, A>(etMonoWidget, a, isFromPool);
-        }
-
         public T AddComponentUIWidget<T, A, B>(AETMonoUGFUIWidget etMonoWidget, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>, new()
         {
             T widgetEntity = this.AddComponent<T, A, B>(a, b, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
-        }
-
-        public async UniTask<T> AddComponentUIWidgetAsync<T, A, B>(string widgetAssetName, A a, B b, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>, new()
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddComponentUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddComponentUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddComponentUIWidget<T, A, B>(etMonoWidget, a, b, isFromPool);
         }
 
         public T AddComponentUIWidget<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>, new()
@@ -364,43 +202,11 @@ namespace ET
             return widgetEntity;
         }
 
-        public async UniTask<T> AddComponentUIWidgetAsync<T, A, B, C>(string widgetAssetName, A a, B b, C c, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>, new()
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddComponentUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddComponentUIWidgetAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddComponentUIWidget<T, A, B, C>(etMonoWidget, a, b, c, isFromPool);
-        }
-
         public T AddComponentUIWidgetWithId<T>(AETMonoUGFUIWidget etMonoWidget, long id, bool isFromPool = false) where T : UGFUIWidget, IAwake, new()
         {
             T widgetEntity = this.AddComponentWithId<T>(id, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
-        }
-
-        public async UniTask<T> AddComponentUIWidgetWithIdAsync<T>(string widgetAssetName, long id, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake, new()
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddComponentUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddComponentUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddComponentUIWidgetWithId<T>(etMonoWidget, id, isFromPool);
         }
 
         public T AddComponentUIWidgetWithId<T, A>(AETMonoUGFUIWidget etMonoWidget, long id, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>, new()
@@ -410,22 +216,6 @@ namespace ET
             return widgetEntity;
         }
 
-        public async UniTask<T> AddComponentUIWidgetWithIdAsync<T, A>(string widgetAssetName, long id, A a, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>, new()
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddComponentUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddComponentUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddComponentUIWidgetWithId<T, A>(etMonoWidget, id, a, isFromPool);
-        }
-
         public T AddComponentUIWidgetWithId<T, A, B>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>, new()
         {
             T widgetEntity = this.AddComponentWithId<T, A, B>(id, a, b, isFromPool);
@@ -433,43 +223,11 @@ namespace ET
             return widgetEntity;
         }
 
-        public async UniTask<T> AddComponentUIWidgetWithIdAsync<T, A, B>(string widgetAssetName, long id, A a, B b, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>, new()
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddComponentUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddComponentUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddComponentUIWidgetWithId<T, A, B>(etMonoWidget, id, a, b, isFromPool);
-        }
-
         public T AddComponentUIWidgetWithId<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>, new()
         {
             T widgetEntity = this.AddComponentWithId<T, A, B, C>(id, a, b, c, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
-        }
-
-        public async UniTask<T> AddComponentUIWidgetWithIdAsync<T, A, B, C>(string widgetAssetName, long id, A a, B b, C c, CancellationToken cancellationToken = default, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>, new()
-        {
-            GameObject etMonoWidgetGameObject = await GameEntry.Resource.LoadAssetAsync<GameObject>(widgetAssetName, cancellationToken: cancellationToken);
-            if(etMonoWidgetGameObject == null)
-            {
-                throw new Exception($"AddComponentUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not found.");
-            }
-            AETMonoUGFUIWidget etMonoWidget = etMonoWidgetGameObject.GetComponent<AETMonoUGFUIWidget>();
-            if(etMonoWidget == null)
-            {
-                GameEntry.Resource.UnloadAsset(etMonoWidgetGameObject);
-                throw new Exception($"AddComponentUIWidgetWithIdAsync failed! widgetAssetName:'{widgetAssetName}' is not a UGFUIWidget.");
-            }
-            return AddComponentUIWidgetWithId<T, A, B, C>(etMonoWidget, id, a, b, c, isFromPool);
         }
     }
 }

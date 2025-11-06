@@ -3,7 +3,7 @@
 namespace ET.Client
 {
     /// <summary>
-    /// UI音乐编号。
+    /// UI音乐编号
     /// </summary>
     public static class UGFUISoundId
     {
