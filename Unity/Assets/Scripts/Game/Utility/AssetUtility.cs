@@ -49,6 +49,11 @@ namespace Game
             return Utility.Text.Format("Assets/Res/Entity/{0}.prefab", assetName);
         }
 
+        public static string GetUIEntityAsset(string assetName)
+        {
+            return Utility.Text.Format("Assets/Res/UI/UIEntity/{0}.prefab", assetName);
+        }
+
         public static string GetUIFormAsset(string assetName)
         {
             return Utility.Text.Format("Assets/Res/UI/UIForm/{0}.prefab", assetName);

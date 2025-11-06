@@ -24,12 +24,12 @@ namespace UnityGameFramework.Extension.Editor
             var window = GetWindow<DefaultSettingEditor>("Default Setting Editor", true);
             window.minSize = new Vector2(500f, 600f);
         }
-        
-        [MenuItem("Game Framework/Default Setting Editor", true)]
-        private static bool OpenValidateFunction()
-        {
-            return !EditorApplication.isPlayingOrWillChangePlaymode;
-        }
+
+        // [MenuItem("Game Framework/Default Setting Editor", true)]
+        // private static bool OpenValidateFunction()
+        // {
+        //     return !EditorApplication.isPlayingOrWillChangePlaymode;
+        // }
 
         private void OnEnable()
         {
@@ -45,6 +45,10 @@ namespace UnityGameFramework.Extension.Editor
 
         private void OnGUI()
         {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                EditorGUILayout.HelpBox("Can't modify in playmode.", MessageType.Warning);
+            }
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             {
                 EditorGUILayout.LabelField("Value", GUILayout.Width(200f));
@@ -123,18 +127,14 @@ namespace UnityGameFramework.Extension.Editor
                 return;
             }
 
-            using (FileStream fileStream = new FileStream(m_FilePath, FileMode.Open, FileAccess.Read))
-            {
-                m_Serializer.Deserialize(fileStream);
-            }
+            using FileStream fileStream = new FileStream(m_FilePath, FileMode.Open, FileAccess.Read);
+            m_Serializer.Deserialize(fileStream);
         }
 
         private void Save()
         {
-            using (FileStream fileStream = new FileStream(m_FilePath, FileMode.Create, FileAccess.Write))
-            {
-                m_Serializer.Serialize(fileStream, m_Settings);
-            }
+            using FileStream fileStream = new FileStream(m_FilePath, FileMode.Create, FileAccess.Write);
+            m_Serializer.Serialize(fileStream, m_Settings);
         }
     }
 }

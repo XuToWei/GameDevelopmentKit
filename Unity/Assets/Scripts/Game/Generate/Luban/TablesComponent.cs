@@ -20,6 +20,7 @@ public partial class TablesComponent
     public DTUISound DTUISound { private set; get; }
     public DTMusic DTMusic { private set; get; }
     public DTOneConfig DTOneConfig { private set; get; }
+    public DTUIEntity DTUIEntity { private set; get; }
     private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
     public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
     public IDataTable GetDataTable(string tableName) => _tables.TryGetValue(tableName, out var v) ? v : null;
@@ -52,6 +53,9 @@ public partial class TablesComponent
         DTOneConfig = new DTOneConfig(() => loader("dtoneconfig"));
         loadTasks.Add(DTOneConfig.LoadAsync());
         _tables.Add("DTOneConfig", DTOneConfig);
+        DTUIEntity = new DTUIEntity(() => loader("dtuientity"));
+        loadTasks.Add(DTUIEntity.LoadAsync());
+        _tables.Add("DTUIEntity", DTUIEntity);
 
         await Cysharp.Threading.Tasks.UniTask.WhenAll(loadTasks);
 
@@ -69,6 +73,7 @@ public partial class TablesComponent
         DTUISound.ResolveRef(this);
         DTMusic.ResolveRef(this);
         DTOneConfig.ResolveRef(this);
+        DTUIEntity.ResolveRef(this);
         PostResolveRef();
     }
 

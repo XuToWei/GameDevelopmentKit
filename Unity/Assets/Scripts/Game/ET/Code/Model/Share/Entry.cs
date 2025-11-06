@@ -41,7 +41,6 @@ namespace ET
             World.Instance.AddSingleton<NetServices>();
             World.Instance.AddSingleton<NavmeshComponent>();
             World.Instance.AddSingleton<LogMsg>();
-            World.Instance.AddSingleton<UGFComponent>();
 
             // 创建需要reload的code singleton
             CodeTypes.Instance.CreateCode();

@@ -1,8 +1,10 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game;
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
+using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
 using GameEntry = Game.GameEntry;
 
@@ -80,7 +82,8 @@ namespace ET
             {
                 this.cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
             }
-            this.uiForm = await GameEntry.UI.OpenUIFormAsync(uiFormTypeId, ETMonoUGFUIFormData.Create(this), cancellationToken: this.cts.Token);
+            this.uiForm = await GameEntry.UI.OpenUIFormAsync(uiFormTypeId, ETMonoUGFUIFormData.Create(this), cancellationToken: this.cts.MallocToken());
+            this.cts.FreeToken();
             if(this.uiForm == null)
             {
                 throw new System.Exception($"UGFUIForm OpenUIFormAsync failed! uiFormTypeId:'{uiFormTypeId}'.");
@@ -100,6 +103,19 @@ namespace ET
         public void SetUIFormInstancePriority(int priority)
         {
             GameEntry.UI.SetUIFormInstancePriority(this.uiForm, priority);
+        }
+
+        public async UniTask<T> LoadUIWidgetAsync<T>(int uiEntityTypeId) where T : UGFUIWidget, IAwake, new()
+        {
+            var ugfEntity = this.AddChild<CommonUGFEntity>(true);
+            await ugfEntity.ShowUIEntityAsync(uiEntityTypeId);
+            var monoUIWidget = ugfEntity.CachedTransform.GetComponent<AETMonoUGFUIWidget>();
+            if (monoUIWidget == null)
+            {
+                ugfEntity.Dispose();
+                throw new Exception($"LoadMonoUIWidgetAsync failed! not found AETMonoUGFUIWidget! uiEntityTypeId:'{uiEntityTypeId}'.");
+            }
+            return this.AddComponentUIWidget<T>(monoUIWidget, true);
         }
 
         public T AddChildUIWidget<T>(AETMonoUGFUIWidget etMonoWidget, bool isFromPool = false) where T : UGFUIWidget, IAwake
@@ -136,6 +152,7 @@ namespace ET
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }
+
         public T AddChildUIWidgetWithId<T, A>(AETMonoUGFUIWidget etMonoWidget, long id, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>
         {
             T widgetEntity = this.AddChildWithId<T, A>(id, a, isFromPool);
@@ -157,58 +174,58 @@ namespace ET
             return widgetEntity;
         }
 
-        public T AddComponentUIWidget<T>(AETMonoUGFUIWidget etMonoWidget) where T : UGFUIWidget, IAwake, new()
+        public T AddComponentUIWidget<T>(AETMonoUGFUIWidget etMonoWidget, bool isFromPool = false) where T : UGFUIWidget, IAwake, new()
         {
-            T widgetEntity = this.AddComponent<T>();
+            T widgetEntity = this.AddComponent<T>(isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }
 
-        public T AddComponentUIWidget<T, A>(AETMonoUGFUIWidget etMonoWidget, A a) where T : UGFUIWidget, IAwake<A>, new()
+        public T AddComponentUIWidget<T, A>(AETMonoUGFUIWidget etMonoWidget, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>, new()
         {
-            T widgetEntity = this.AddComponent<T, A>(a);
+            T widgetEntity = this.AddComponent<T, A>(a, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }
 
-        public T AddComponentUIWidget<T, A, B>(AETMonoUGFUIWidget etMonoWidget, A a, B b) where T : UGFUIWidget, IAwake<A, B>, new()
+        public T AddComponentUIWidget<T, A, B>(AETMonoUGFUIWidget etMonoWidget, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>, new()
         {
-            T widgetEntity = this.AddComponent<T, A, B>(a, b);
+            T widgetEntity = this.AddComponent<T, A, B>(a, b, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }
 
-        public T AddComponentUIWidget<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, A a, B b, C c) where T : UGFUIWidget, IAwake<A, B, C>, new()
+        public T AddComponentUIWidget<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>, new()
         {
-            T widgetEntity = this.AddComponent<T, A, B, C>(a, b, c);
+            T widgetEntity = this.AddComponent<T, A, B, C>(a, b, c, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }
 
-        public T AddComponentUIWidgetWithId<T>(AETMonoUGFUIWidget etMonoWidget, long id) where T : UGFUIWidget, IAwake, new()
+        public T AddComponentUIWidgetWithId<T>(AETMonoUGFUIWidget etMonoWidget, long id, bool isFromPool = false) where T : UGFUIWidget, IAwake, new()
         {
-            T widgetEntity = this.AddComponentWithId<T>(id);
+            T widgetEntity = this.AddComponentWithId<T>(id, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }
 
-        public T AddComponentUIWidgetWithId<T, A>(AETMonoUGFUIWidget etMonoWidget, long id, A a) where T : UGFUIWidget, IAwake<A>, new()
+        public T AddComponentUIWidgetWithId<T, A>(AETMonoUGFUIWidget etMonoWidget, long id, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>, new()
         {
-            T widgetEntity = this.AddComponentWithId<T, A>(id, a);
+            T widgetEntity = this.AddComponentWithId<T, A>(id, a, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }
 
-        public T AddComponentUIWidgetWithId<T, A, B>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b) where T : UGFUIWidget, IAwake<A, B>, new()
+        public T AddComponentUIWidgetWithId<T, A, B>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>, new()
         {
-            T widgetEntity = this.AddComponentWithId<T, A, B>(id, a, b);
+            T widgetEntity = this.AddComponentWithId<T, A, B>(id, a, b, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }
 
-        public T AddComponentUIWidgetWithId<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, C c) where T : UGFUIWidget, IAwake<A, B, C>, new()
+        public T AddComponentUIWidgetWithId<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>, new()
         {
-            T widgetEntity = this.AddComponentWithId<T, A, B, C>(id, a, b, c);
+            T widgetEntity = this.AddComponentWithId<T, A, B, C>(id, a, b, c, isFromPool);
             this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
             return widgetEntity;
         }

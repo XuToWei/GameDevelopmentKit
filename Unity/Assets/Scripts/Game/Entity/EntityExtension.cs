@@ -43,6 +43,25 @@ namespace Game
             return entityId;
         }
 
+        public static int? ShowUIEntity<T>(this EntityComponent entityComponent, int entityTypeId, object userData = null) where T : EntityLogic
+        {
+            return entityComponent.ShowEntity(entityTypeId, typeof (T), userData);
+        }
+
+        public static int? ShowUIEntity(this EntityComponent entityComponent, int entityTypeId, Type logicType, object userData = null)
+        {
+            DRUIEntity drUIEntity = GameEntry.Tables.DTUIEntity.GetOrDefault(entityTypeId);
+            if (drUIEntity == null)
+            {
+                Log.Warning("Can not load ui entity id '{0}' from data table.", entityTypeId.ToString());
+                return null;
+            }
+
+            int entityId = entityComponent.GenerateSerialId();
+            entityComponent.ShowEntity(entityId, logicType, AssetUtility.GetUIEntityAsset(drUIEntity.AssetName), drUIEntity.EntityGroupName, drUIEntity.Priority, userData);
+            return entityId;
+        }
+
         public static int GenerateSerialId(this EntityComponent entityComponent)
         {
             return --s_SerialId;
