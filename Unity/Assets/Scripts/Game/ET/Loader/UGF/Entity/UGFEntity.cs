@@ -79,10 +79,25 @@ namespace ET
             {
                 this.cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
             }
-            this.ugfEntity = await GameEntry.Entity.ShowEntityAsync<ETMonoUGFEntity>(entityTypeId, ETMonoUGFEntityData.Create(this), cancellationToken: this.cts.Token);
+            this.ugfEntity = await GameEntry.Entity.ShowEntityAsync<ETMonoUGFEntity>(entityTypeId, ETMonoUGFEntityData.Create(this), cancellationToken: this.cts.MallocToken());
+            this.cts.FreeToken();
             if(this.ugfEntity == null)
             {
                 throw new System.Exception($"UGFEntity ShowEntityAsync failed! entityTypeId:'{entityTypeId}'.");
+            }
+        }
+
+        public async UniTask ShowUIEntityAsync(int entityTypeId)
+        {
+            if (this.cts == null)
+            {
+                this.cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
+            }
+            this.ugfEntity = await GameEntry.Entity.ShowUIEntityAsync<ETMonoUGFEntity>(entityTypeId, ETMonoUGFEntityData.Create(this), cancellationToken: this.cts.MallocToken());
+            this.cts.FreeToken();
+            if(this.ugfEntity == null)
+            {
+                throw new System.Exception($"UGFEntity ShowUIEntityAsync failed! entityTypeId:'{entityTypeId}'.");
             }
         }
 

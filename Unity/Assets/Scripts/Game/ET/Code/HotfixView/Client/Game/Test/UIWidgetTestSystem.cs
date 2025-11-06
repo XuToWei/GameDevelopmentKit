@@ -1,7 +1,7 @@
 namespace ET.Client
 {
-    [EntitySystemOf(typeof(UIWidgetTest))]
     [FriendOf(typeof(UIWidgetTest))]
+    [EntitySystemOf(typeof(UIWidgetTest))]
     public static partial class UIWidgetTestSystem
     {
         [UGFUIWidgetSystem]
