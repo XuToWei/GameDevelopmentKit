@@ -21,8 +21,8 @@ namespace ET
         }
     }
 
-    [ComponentOf(typeof(UGFUIForm))]
     [ChildOf(typeof(UGFUIForm))]
+    [ComponentOf(typeof(UGFUIForm))]
     public abstract class UGFUIWidget : Entity
     {
         [BsonIgnore]
