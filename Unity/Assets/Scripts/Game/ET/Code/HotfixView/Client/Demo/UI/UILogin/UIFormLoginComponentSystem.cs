@@ -12,8 +12,14 @@ namespace ET.Client
         {
             self.View.LoginButton.SetAsync(self.OnLogin);
             self.View.LoginButton.SetAsync(self.OnLogin);
-            self.AddComponentUIWidget<UIWidgetTest>(self.View.TestWidgetTest);
-            self.GetComponent<UIWidgetTest>().Open();
+            var uiWidget = self.AddComponentUIWidget<UIWidgetTest>(self.View.TestWidgetTest);
+            uiWidget.Open();
+        }
+
+        [UGFUIFormSystem]
+        private static void UGFUIFormOnClose(this UIFormLoginComponent self)
+        {
+            
         }
 
         public static UniTask OnLogin(this UIFormLoginComponent self)

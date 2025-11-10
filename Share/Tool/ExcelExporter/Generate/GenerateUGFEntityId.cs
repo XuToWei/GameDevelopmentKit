@@ -10,38 +10,45 @@ namespace ET
     public static class GenerateUGFEntityId
     {
         private static readonly string s_LubanEntityAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtentity.json");
+        private static readonly string s_LubanUIEntityAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtuientity.json");
 
         public static void GenerateCode()
         {
             if (ExcelExporter.ExcelExporter_Luban.IsEnableET)
             {
-                GenerateCS("ET.Client", "UGFEntityId",
+                GenerateCS(s_LubanEntityAsset, "ET.Client", "UGFEntityId",
                     Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFEntityId.cs"));
+                
+                GenerateCS(s_LubanUIEntityAsset, "ET.Client", "UGFUIEntityId",
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/ET/Code/ModelView/Client/Generate/UGF/UGFUIEntityId.cs"));
             }
 
             if (ExcelExporter.ExcelExporter_Luban.IsEnableGameHot)
             {
-                GenerateCS("Game.Hot", "EntityId",
+                GenerateCS(s_LubanEntityAsset, "Game.Hot", "EntityId",
                     Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/UGF/EntityId.cs"));
+                
+                GenerateCS(s_LubanUIEntityAsset, "Game.Hot", "UIEntityId",
+                    Path.GetFullPath("../Unity/Assets/Scripts/Game/Hot/Code/Generate/UGF/UIEntityId.cs"));
             }
         }
         
-        private static void GenerateCS(string nameSpaceName, string className, string codeFile)
+        private static void GenerateCS(string entityAsset, string nameSpaceName, string className, string codeFile)
         {
             if (string.IsNullOrEmpty(nameSpaceName))
             {
-                throw new Exception($"Generate UGFEntityId code fail, namespace is empty.");
+                throw new Exception($"Generate {className} code fail, namespace is empty.");
             }
             if (string.IsNullOrEmpty(className))
             {
-                throw new Exception($"Generate UGFEntityId code fail, class name is empty.");
+                throw new Exception($"Generate {className} code fail, class name is empty.");
             }
             if (string.IsNullOrEmpty(codeFile))
             {
-                throw new Exception($"Generate UGFEntityId code fail, code file is empty.");
+                throw new Exception($"Generate {className} code fail, code file is empty.");
             }
             
-            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(s_LubanEntityAsset));
+            JSONNode jsonNode = JSONNode.Parse(File.ReadAllText(entityAsset));
             List<DREntity> drEntities = new List<DREntity>();
             foreach (var childNode in jsonNode.Children)
             {
