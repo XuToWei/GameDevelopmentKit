@@ -99,5 +99,10 @@ namespace ET
         {
             ugfUIForm.UGFMono.CloseUIWidget(this);
         }
+
+        internal void Remove()
+        {
+            ugfUIForm.UGFMono.RemoveUIWidget(this);
+        }
     }
 }

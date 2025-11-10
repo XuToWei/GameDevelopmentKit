@@ -10,10 +10,10 @@ namespace ET
         public T View { get; private set; }
 
         [BsonIgnore]
-        public override AETMonoUGFUIWidget UGFMono
+        internal override AETMonoUGFUIWidget UGFMono
         {
             get => base.UGFMono;
-            internal set
+            set
             {
                 base.UGFMono = value;
                 View = base.UGFMono.GetComponent<T>();
@@ -26,39 +26,46 @@ namespace ET
     public abstract class UGFUIWidget : Entity
     {
         [BsonIgnore]
-        public virtual AETMonoUGFUIWidget UGFMono { get; internal set; }
+        internal virtual AETMonoUGFUIWidget UGFMono { get; set; }
         [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
 
-        public bool Available => UGFMono != null && UGFMono.Available;
+        public bool IsAdded => this.UGFMono != null && this.UGFMono.IsAdded;
+        public bool Available =>  this.UGFMono != null && this.UGFMono.Available;
         public bool Visible
         {
             get
             {
-                return UGFMono !=  null && UGFMono.Visible;
+                return this.UGFMono != null && this.UGFMono.Visible;
             }
             set
             {
-                if (UGFMono == null)
+                if (this.UGFMono == null)
                 {
                     Log.Warning("UI widget is not opened.");
                     return;
                 }
-                UGFMono.Visible = value;
+                this.UGFMono.Visible = value;
             }
         }
 
         public override void Dispose()
         {
-            if (!this.IsDisposed)
+            bool isDisposed = this.IsDisposed;
+            base.Dispose();
+            if (!isDisposed && this.Available)
             {
                 if (this.Available)
                 {
                     this.UGFMono.Close();
                 }
+                if (this.IsAdded)
+                {
+                    this.UGFMono.Remove();
+                }
             }
         }
-        
+
         public void Open()
         {
             this.UGFMono.Open();
@@ -72,6 +79,11 @@ namespace ET
         public void Close()
         {
             this.UGFMono.Close();
+        }
+
+        public void Remove()
+        {
+            this.UGFMono.Remove();
         }
     }
 }

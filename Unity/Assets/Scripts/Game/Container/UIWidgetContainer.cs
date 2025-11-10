@@ -38,6 +38,7 @@ namespace Game
                 throw new GameFrameworkException(Utility.Text.Format("Can't duplicate add UIWidget : '{0}'!", uiWidget.CachedTransform.name));
             }
             m_UIWidgets.Add(uiWidget);
+            uiWidget.OnAdd(Owner.UIForm);
             uiWidget.OnInit(userData);
         }
 
@@ -47,7 +48,11 @@ namespace Game
             {
                 throw new GameFrameworkException("Can't remove empty!");
             }
-            if (!m_UIWidgets.Remove(uiWidget))
+            if (m_UIWidgets.Remove(uiWidget))
+            {
+                uiWidget.OnRemove();
+            }
+            else
             {
                 throw new GameFrameworkException(Utility.Text.Format("UIWidget : '{0}' not in container.", uiWidget.CachedTransform.name));
             }
@@ -57,6 +62,10 @@ namespace Game
         {
             if (m_UIWidgets.Count > 0)
             {
+                foreach (var uiWidget in m_UIWidgets)
+                {
+                    uiWidget.OnRemove();
+                }
                 m_UIWidgets.Clear();
             }
         }

@@ -8,10 +8,26 @@ namespace Game
     [DisallowMultipleComponent]
     public abstract class AUIWidget : MonoBehaviour
     {
+        private UIForm m_UIFormOwner;
         private Transform m_CachedTransform = null;
         private bool m_Available = false;
         private bool m_Visible = false;
+        private bool m_IsAdded = false;
 
+        /// <summary>
+        /// 所属的界面。
+        /// </summary>
+        public UIForm UIFormOwner
+        {
+            get
+            {
+                return m_UIFormOwner;
+            }
+        }
+        
+        /// <summary>
+        /// 获取界面是否可用。
+        /// </summary>
         public bool Available
         {
             get
@@ -44,6 +60,17 @@ namespace Game
                 InternalSetVisible(value);
             }
         }
+        
+        /// <summary>
+        /// 获取界面是否已添加到界面管理器。
+        /// </summary>
+        public bool IsAdded
+        {
+            get
+            {
+                return m_IsAdded;
+            }
+        }
 
         /// <summary>
         /// 获取已缓存的 Transform。
@@ -54,6 +81,18 @@ namespace Game
             {
                 return m_CachedTransform;
             }
+        }
+
+        protected internal virtual void OnAdd(UIForm uiForm)
+        {
+            m_UIFormOwner = uiForm;
+            m_IsAdded = true;
+        }
+
+        protected internal virtual void OnRemove()
+        {
+            m_IsAdded = false;
+            m_UIFormOwner = null;
         }
 
         /// <summary>

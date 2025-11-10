@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game;
@@ -36,7 +37,7 @@ namespace ET
         [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
 
-        public bool Available => this.ugfEntity != null && !this.ugfEntity.Logic.Available;
+        public bool Available => this.ugfEntity != null && this.ugfEntity.Logic.Available;
         public bool Visible
         {
             get
@@ -56,7 +57,9 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsDisposed)
+            bool isDisposed = this.IsDisposed;
+            base.Dispose();
+            if (!isDisposed)
             {
                 if (this.cts != null)
                 {
@@ -64,13 +67,12 @@ namespace ET
                     ObjectPool.Instance.Recycle(this.cts);
                     this.cts = null;
                 }
-                if (this.ugfEntity != null)
+                if (this.Available)
                 {
                     GameEntry.Entity.HideEntity(this.ugfEntity);
                     this.ugfEntity = null;
                 }
             }
-            base.Dispose();
         }
 
         public async UniTask ShowEntityAsync(int entityTypeId)
@@ -83,7 +85,7 @@ namespace ET
             this.cts.FreeToken();
             if(this.ugfEntity == null)
             {
-                throw new System.Exception($"UGFEntity ShowEntityAsync failed! entityTypeId:'{entityTypeId}'.");
+                throw new Exception($"UGFEntity ShowEntityAsync failed! entityTypeId:'{entityTypeId}'.");
             }
         }
 
@@ -97,7 +99,7 @@ namespace ET
             this.cts.FreeToken();
             if(this.ugfEntity == null)
             {
-                throw new System.Exception($"UGFEntity ShowUIEntityAsync failed! entityTypeId:'{entityTypeId}'.");
+                throw new Exception($"UGFEntity ShowUIEntityAsync failed! entityTypeId:'{entityTypeId}'.");
             }
         }
 

@@ -38,7 +38,7 @@ namespace ET
         [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
 
-        public bool Available => this.uiForm != null && !this.uiForm.Logic.Available;
+        public bool Available => this.uiForm != null && this.uiForm.Logic.Available;
         public bool Visible
         {
             get
@@ -58,7 +58,9 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsDisposed)
+            bool isDisposed = this.IsDisposed;
+            base.Dispose();
+            if (!isDisposed)
             {
                 if (this.cts != null)
                 {
@@ -66,13 +68,12 @@ namespace ET
                     ObjectPool.Instance.Recycle(this.cts);
                     this.cts = null;
                 }
-                if (this.uiForm != null)
+                if (this.Available)
                 {
                     GameEntry.UI.CloseUIForm(this.uiForm);
                     this.uiForm = null;
                 }
             }
-            base.Dispose();
         }
 
         public async UniTask OpenUIFormAsync(int uiFormTypeId)
@@ -85,7 +86,7 @@ namespace ET
             this.cts.FreeToken();
             if(this.uiForm == null)
             {
-                throw new System.Exception($"UGFUIForm OpenUIFormAsync failed! uiFormTypeId:'{uiFormTypeId}'.");
+                throw new Exception($"UGFUIForm OpenUIFormAsync failed! uiFormTypeId:'{uiFormTypeId}'.");
             }
         }
 

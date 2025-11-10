@@ -2,6 +2,7 @@
 
 namespace ET.Client
 {
+    [Sirenix.OdinInspector.InfoBox("BindData exist empty.", Sirenix.OdinInspector.InfoMessageType.Warning, VisibleIf = "CheckBindDataExitEmpty")]
     public partial class MonoUIFormLogin
     {
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
@@ -20,5 +21,13 @@ namespace ET.Client
         public ET.Client.MonoUIWidgetTest TestWidgetTest => m_TestWidgetTest;
 
 
+        private bool CheckBindDataExitEmpty()
+        {
+            if (this.m_AccountInputField == null) return true;
+            if (this.m_LoginButton == null) return true;
+            if (this.m_PasswordInputField == null) return true;
+            if (this.m_TestWidgetTest == null) return true;
+            return false;
+        }
     }
 }
