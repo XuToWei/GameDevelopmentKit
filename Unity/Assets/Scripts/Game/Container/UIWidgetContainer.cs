@@ -27,7 +27,7 @@ namespace Game
             Owner = null;
         }
 
-        public void AddUIWidget(AUIWidget uiWidget, object userData)
+        public void AddUIWidget(AUIWidget uiWidget, object userData = null)
         {
             if (uiWidget == null)
             {
@@ -38,8 +38,13 @@ namespace Game
                 throw new GameFrameworkException(Utility.Text.Format("Can't duplicate add UIWidget : '{0}'!", uiWidget.CachedTransform.name));
             }
             m_UIWidgets.Add(uiWidget);
-            uiWidget.OnAdd(Owner.UIForm);
+            uiWidget.SetUIFormOwner(Owner.UIForm);
             uiWidget.OnInit(userData);
+        }
+
+        public bool HasUIWidget(AUIWidget uiWidget)
+        {
+            return m_UIWidgets.Contains(uiWidget);
         }
 
         public void RemoveUIWidget(AUIWidget uiWidget)
@@ -48,11 +53,7 @@ namespace Game
             {
                 throw new GameFrameworkException("Can't remove empty!");
             }
-            if (m_UIWidgets.Remove(uiWidget))
-            {
-                uiWidget.OnRemove();
-            }
-            else
+            if (!m_UIWidgets.Remove(uiWidget))
             {
                 throw new GameFrameworkException(Utility.Text.Format("UIWidget : '{0}' not in container.", uiWidget.CachedTransform.name));
             }
@@ -62,10 +63,6 @@ namespace Game
         {
             if (m_UIWidgets.Count > 0)
             {
-                foreach (var uiWidget in m_UIWidgets)
-                {
-                    uiWidget.OnRemove();
-                }
                 m_UIWidgets.Clear();
             }
         }
@@ -76,7 +73,7 @@ namespace Game
         /// <param name="uiWidget"></param>
         /// <param name="userData"></param>
         /// <exception cref="GameFrameworkException"></exception>
-        public void OpenUIWidget(AUIWidget uiWidget, object userData)
+        public void OpenUIWidget(AUIWidget uiWidget, object userData = null)
         {
             if (uiWidget == null)
             {
@@ -98,13 +95,13 @@ namespace Game
         /// </summary>
         /// <param name="uiWidget"></param>
         /// <param name="userData"></param>
-        public void DynamicOpenUIWidget(AUIWidget uiWidget, object userData)
+        public void DynamicOpenUIWidget(AUIWidget uiWidget, object userData = null)
         {
             OpenUIWidget(uiWidget, userData);
             uiWidget.OnDepthChanged(Owner.UIForm.UIGroup.Depth, Owner.UIForm.DepthInUIGroup);
         }
 
-        public void CloseUIWidget(AUIWidget uiWidget, object userData, bool isShutdown)
+        public void CloseUIWidget(AUIWidget uiWidget, bool isShutdown, object userData = null)
         {
             if (uiWidget == null)
             {
@@ -121,7 +118,7 @@ namespace Game
             uiWidget.OnClose(isShutdown, userData);
         }
 
-        public void CloseAllUIWidgets(object userData, bool isShutdown)
+        public void CloseAllUIWidgets(bool isShutdown, object userData = null)
         {
             if (m_UIWidgets.Count > 0)
             {

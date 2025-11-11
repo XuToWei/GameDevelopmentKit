@@ -106,6 +106,15 @@ namespace ET
             uiWidgetContainer.AddUIWidget(auiWidget, userData);
         }
 
+        public bool HasUIWidget(AUIWidget auiWidget)
+        {
+            if (uiWidgetContainer == null)
+            {
+                return false;
+            }
+            return uiWidgetContainer.HasUIWidget(auiWidget);
+        }
+
         public void RemoveUIWidget(AUIWidget auiWidget)
         {
             if (uiWidgetContainer == null)
@@ -152,20 +161,20 @@ namespace ET
             uiWidgetContainer.DynamicOpenUIWidget(auiWidget, userData);
         }
 
-        public void CloseUIWidget(AUIWidget uiWidget, object userData = null, bool isShutdown = false)
+        public void CloseUIWidget(AUIWidget uiWidget, bool isShutdown = false, object userData = null)
         {
             if (uiWidgetContainer == null)
             {
                 throw new GameFrameworkException("Container is empty!");
             }
-            uiWidgetContainer.CloseUIWidget(uiWidget, userData, isShutdown);
+            uiWidgetContainer.CloseUIWidget(uiWidget, isShutdown, userData);
         }
 
-        public void CloseAllUIWidgets(object userData = null, bool isShutdown = false)
+        public void CloseAllUIWidgets(bool isShutdown = false, object userData = null)
         {
             if (uiWidgetContainer == null)
                 return;
-            uiWidgetContainer.CloseAllUIWidgets(userData, isShutdown);
+            uiWidgetContainer.CloseAllUIWidgets(isShutdown, userData);
         }
     }
 }

@@ -20,8 +20,16 @@ namespace ET
             get => base.UGFMono;
             set
             {
-                base.UGFMono = value;
-                View = (T)base.UGFMono;
+                if(value == null)
+                {
+                    base.UGFMono = null;
+                    this.View = null;
+                }
+                else
+                {
+                    base.UGFMono = value;
+                    this.View = (T)base.UGFMono;
+                }
             }
         }
     }
@@ -37,8 +45,9 @@ namespace ET
         internal virtual AETMonoUGFUIForm UGFMono { get; set; }
         [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
-
+        [BsonIgnore]
         public bool Available => this.uiForm != null && this.uiForm.Logic.Available;
+        [BsonIgnore]
         public bool Visible
         {
             get

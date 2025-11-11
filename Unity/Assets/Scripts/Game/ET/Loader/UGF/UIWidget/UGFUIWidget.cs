@@ -15,8 +15,16 @@ namespace ET
             get => base.UGFMono;
             set
             {
-                base.UGFMono = value;
-                View = base.UGFMono.GetComponent<T>();
+                if (value == null)
+                {
+                    base.UGFMono = null;
+                    this.View = null;
+                }
+                else
+                {
+                    base.UGFMono = value;
+                    this.View = base.UGFMono.GetComponent<T>();
+                }
             }
         }
     }
@@ -29,9 +37,9 @@ namespace ET
         internal virtual AETMonoUGFUIWidget UGFMono { get; set; }
         [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
-
-        public bool IsAdded => this.UGFMono != null && this.UGFMono.IsAdded;
+        [BsonIgnore]
         public bool Available =>  this.UGFMono != null && this.UGFMono.Available;
+        [BsonIgnore]
         public bool Visible
         {
             get
@@ -59,7 +67,7 @@ namespace ET
                 {
                     this.UGFMono.Close();
                 }
-                if (this.IsAdded)
+                if (this.UGFMono != null && this.UGFMono.Has())
                 {
                     this.UGFMono.Remove();
                 }

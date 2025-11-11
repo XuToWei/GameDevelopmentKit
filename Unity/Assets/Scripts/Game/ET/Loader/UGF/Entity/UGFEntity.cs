@@ -19,8 +19,16 @@ namespace ET
             get => base.UGFMono;
             set
             {
-                base.UGFMono = value;
-                this.View = value.GetComponent<T>();
+                if (value == null)
+                {
+                    base.UGFMono = null;
+                    this.View = null;
+                }
+                else
+                {
+                    base.UGFMono = value;
+                    this.View = value.GetComponent<T>();
+                }
             }
         }
     }
@@ -36,8 +44,9 @@ namespace ET
         internal virtual ETMonoUGFEntity UGFMono { get; set; }
         [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
-
+        [BsonIgnore]
         public bool Available => this.ugfEntity != null && this.ugfEntity.Logic.Available;
+        [BsonIgnore]
         public bool Visible
         {
             get

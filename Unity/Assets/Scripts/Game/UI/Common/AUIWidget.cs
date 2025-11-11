@@ -12,7 +12,6 @@ namespace Game
         private Transform m_CachedTransform = null;
         private bool m_Available = false;
         private bool m_Visible = false;
-        private bool m_IsAdded = false;
 
         /// <summary>
         /// 所属的界面。
@@ -60,17 +59,6 @@ namespace Game
                 InternalSetVisible(value);
             }
         }
-        
-        /// <summary>
-        /// 获取界面是否已添加到界面管理器。
-        /// </summary>
-        public bool IsAdded
-        {
-            get
-            {
-                return m_IsAdded;
-            }
-        }
 
         /// <summary>
         /// 获取已缓存的 Transform。
@@ -83,16 +71,9 @@ namespace Game
             }
         }
 
-        protected internal virtual void OnAdd(UIForm uiForm)
+        internal void SetUIFormOwner(UIForm uiForm)
         {
             m_UIFormOwner = uiForm;
-            m_IsAdded = true;
-        }
-
-        protected internal virtual void OnRemove()
-        {
-            m_IsAdded = false;
-            m_UIFormOwner = null;
         }
 
         /// <summary>
