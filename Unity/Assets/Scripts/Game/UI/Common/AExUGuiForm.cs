@@ -55,7 +55,7 @@ namespace Game
             HideAllEntity(isShutdown);
             UnsubscribeAll(isShutdown);
             UnloadAllAssets(isShutdown);
-            CloseAllUIWidgets(userData, isShutdown);
+            CloseAllUIWidgets(isShutdown, userData);
             if (isShutdown)
             {
                 RemoveAllUIWidget();
@@ -115,6 +115,15 @@ namespace Game
             m_UIWidgetContainer.AddUIWidget(auiWidget, userData);
         }
 
+        public bool HasUIWidget(AUIWidget uiWidget)
+        {
+            if(m_UIWidgetContainer == null)
+            {
+                return false;
+            }
+            return m_UIWidgetContainer.HasUIWidget(uiWidget);
+        }
+
         public void RemoveUIWidget(AUIWidget auiWidget)
         {
             if (m_UIWidgetContainer == null)
@@ -161,20 +170,20 @@ namespace Game
             m_UIWidgetContainer.DynamicOpenUIWidget(auiWidget, userData);
         }
 
-        public void CloseUIWidget(AUIWidget uiWidget, object userData = null, bool isShutdown = false)
+        public void CloseUIWidget(AUIWidget uiWidget, bool isShutdown = false, object userData = null)
         {
             if (m_UIWidgetContainer == null)
             {
                 throw new GameFrameworkException("Container is empty!");
             }
-            m_UIWidgetContainer.CloseUIWidget(uiWidget, userData, isShutdown);
+            m_UIWidgetContainer.CloseUIWidget(uiWidget, isShutdown, userData);
         }
 
-        public void CloseAllUIWidgets(object userData = null, bool isShutdown = false)
+        public void CloseAllUIWidgets(bool isShutdown = false, object userData = null)
         {
             if (m_UIWidgetContainer == null)
                 return;
-            m_UIWidgetContainer.CloseAllUIWidgets(userData, isShutdown);
+            m_UIWidgetContainer.CloseAllUIWidgets(isShutdown, userData);
         }
 
         public void Subscribe(int id, EventHandler<GameEventArgs> handler)
