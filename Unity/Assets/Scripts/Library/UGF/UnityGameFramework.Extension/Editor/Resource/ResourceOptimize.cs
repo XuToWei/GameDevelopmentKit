@@ -67,25 +67,10 @@ namespace UnityGameFramework.Extension.Editor
                 throw new GameFrameworkException("ResourceCollection is invalid.");
             }
             m_ResourceCollection = resourceCollection;
-            try
-            {
-                EditorUtility.DisplayProgressBar("OptimizeLoadType", "processing...", 0f);
-                OptimizeLoadType();
-                EditorUtility.DisplayProgressBar("OptimizeLoadType", "Complete processing...", 1f);
-                EditorUtility.DisplayProgressBar("Analyze", "processing...", 0f);
-                Analyze();
-                EditorUtility.DisplayProgressBar("Analyze", "Complete processing...", 1f);
-                EditorUtility.DisplayProgressBar("CalculateCombine", "processing...", 0f);
-                CalculateCombine();
-                EditorUtility.DisplayProgressBar("CalculateCombine", "Complete processing...", 1f);
-                EditorUtility.DisplayProgressBar("Save", "processing...", 0f);
-                Save();
-                EditorUtility.DisplayProgressBar("Save", "Complete processing...", 1f);
-            }
-            finally
-            {
-                EditorUtility.ClearProgressBar();
-            }
+            OptimizeLoadType();
+            Analyze();
+            CalculateCombine();
+            Save();
         }
 
         private void OptimizeLoadType()
@@ -112,6 +97,7 @@ namespace UnityGameFramework.Extension.Editor
                 }
             }
 #endif
+            EditorUtility.ClearProgressBar();
         }
 
         private void Save()
@@ -134,6 +120,7 @@ namespace UnityGameFramework.Extension.Editor
                 }
             }
             m_ResourceCollection.Save();
+            EditorUtility.ClearProgressBar();
         }
 
         private void CalculateCombine()
@@ -237,6 +224,7 @@ namespace UnityGameFramework.Extension.Editor
                       $"最终{allFinalCombine}个share ab，" +
                       $"合并成{m_CombineBundles.Count}个share_combine，" +
                       $"因为这次合并操作，总共减少了{(m_CombineBundles.Count > 0 ? allShareRemoveByNoName + allFinalCombine - m_CombineBundles.Count : 0)}个share bundle");
+            EditorUtility.ClearProgressBar();
         }
 
         private void Analyze()
@@ -275,6 +263,7 @@ namespace UnityGameFramework.Extension.Editor
                 EditorUtility.DisplayProgressBar("Analyze (2/2)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 scatteredAsset.Sort((a, b) => String.Compare(a.Name, b.Name, StringComparison.Ordinal));
             }
+            EditorUtility.ClearProgressBar();
         }
 
         private void AnalyzeAsset(string assetName, Asset hostAsset, HashSet<string> excludeAssetNames, ref DependencyData dependencyData)

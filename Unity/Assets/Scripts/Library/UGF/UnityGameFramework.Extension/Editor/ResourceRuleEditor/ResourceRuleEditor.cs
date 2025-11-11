@@ -89,6 +89,7 @@ namespace UnityGameFramework.Extension.Editor
                     isSuccess = false;
                 }
             }
+            EditorUtility.ClearProgressBar();
             return isSuccess;
         }
 
@@ -225,6 +226,8 @@ namespace UnityGameFramework.Extension.Editor
                 m_CurrentConfigIndex = m_AllConfigPaths.ToList().FindIndex(0, _ => string.Equals(m_CurrentConfigPath, _));
             }
             m_RuleList = null;
+            
+            EditorUtility.ClearProgressBar();
         }
 
         private T LoadAssetAtPath<T>(string path) where T : Object
@@ -478,37 +481,18 @@ namespace UnityGameFramework.Extension.Editor
 
         internal void RefreshResourceCollection()
         {
-            EditorUtility.DisplayProgressBar("Load", "processing...", 0f);
             if (m_Configuration == null)
             {
                 Load();
             }
-            EditorUtility.DisplayProgressBar("Load", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("CheckRule", "processing...", 0f);
             if (!CheckRule())
             {
                 throw new Exception("Refresh ResourceCollection.xml check rule fail.");
             }
-            EditorUtility.DisplayProgressBar("CheckRule", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("FindExceptTypeAssets", "processing...", 0f);
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptTypeFilter);
-            EditorUtility.DisplayProgressBar("FindExceptTypeAssets", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("FindExceptLabelAssets", "processing...", 0f);
             m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptLabelFilter);
-            EditorUtility.DisplayProgressBar("FindExceptLabelAssets", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("AnalysisResourceFilters", "processing...", 0f);
             AnalysisResourceFilters();
-            EditorUtility.DisplayProgressBar("AnalysisResourceFilters", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("CheckRemoveEmptyResource", "processing...", 0f);
             CheckRemoveEmptyResource();
-            EditorUtility.DisplayProgressBar("CheckRemoveEmptyResource", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("SaveCollection", "processing...", 0f);
             if (SaveCollection())
             {
                 Debug.Log("Refresh ResourceCollection.xml success");
@@ -517,7 +501,6 @@ namespace UnityGameFramework.Extension.Editor
             {
                 throw new Exception("Refresh ResourceCollection.xml fail");
             }
-            EditorUtility.DisplayProgressBar("SaveCollection", "processing...", 1f);
         }
 
         internal void RefreshResourceCollectionWithOptimize()
@@ -529,38 +512,19 @@ namespace UnityGameFramework.Extension.Editor
 
         internal void RefreshResourceCollection(string configPath)
         {
-            EditorUtility.DisplayProgressBar("Load", "processing...", 0f);
             if (m_Configuration == null || !m_CurrentConfigPath.Equals(configPath))
             {
                 m_CurrentConfigPath = configPath;
                 Load();
             }
-            EditorUtility.DisplayProgressBar("Load", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("CheckRule", "processing...", 0f);
             if (!CheckRule())
             {
                 throw new Exception("Refresh ResourceCollection.xml check rule fail.");
             }
-            EditorUtility.DisplayProgressBar("CheckRule", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("FindExceptTypeAssets", "processing...", 0f);
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptTypeFilter);
-            EditorUtility.DisplayProgressBar("FindExceptTypeAssets", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("FindExceptLabelAssets", "processing...", 0f);
             m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptLabelFilter);
-            EditorUtility.DisplayProgressBar("FindExceptLabelAssets", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("AnalysisResourceFilters", "processing...", 0f);
             AnalysisResourceFilters();
-            EditorUtility.DisplayProgressBar("AnalysisResourceFilters", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("CheckRemoveEmptyResource", "processing...", 0f);
             CheckRemoveEmptyResource();
-            EditorUtility.DisplayProgressBar("CheckRemoveEmptyResource", "processing...", 1f);
-            
-            EditorUtility.DisplayProgressBar("SaveCollection", "processing...", 0f);
             if (SaveCollection())
             {
                 Debug.Log("Refresh ResourceCollection.xml success");
@@ -569,7 +533,6 @@ namespace UnityGameFramework.Extension.Editor
             {
                 throw new Exception("Refresh ResourceCollection.xml fail");
             }
-            EditorUtility.DisplayProgressBar("SaveCollection", "processing...", 1f);
         }
 
         internal void RefreshResourceCollectionWithOptimize(string configPath)
@@ -622,6 +585,7 @@ namespace UnityGameFramework.Extension.Editor
                     m_ResourceCollection.RemoveResource(resource.Name, resource.Variant);
                 }
             }
+            EditorUtility.ClearProgressBar();
         }
 
         private void AnalysisResourceFilters()
@@ -715,6 +679,7 @@ namespace UnityGameFramework.Extension.Editor
                     }
                 }
             }
+            EditorUtility.ClearProgressBar();
         }
 
         private void ApplyResourceFilter(ref List<string> signedResourceList, ResourceRule resourceRule, string resourceName, string singleAssetGUID = "", string childDirectoryPath = "")
