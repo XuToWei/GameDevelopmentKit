@@ -19,56 +19,56 @@ namespace ET.Client
             
         }
 
-        public static async UniTask<T> AddUIFormChildAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm, IAwake
+        public static async UniTask<T> AddUIFormChildAsync<T>(this UIComponent self, int uiFormTypeId, bool isFromPool = false) where T : UGFUIForm, IAwake
         {
-            T ugfUIForm = self.AddChild<T>();
+            T ugfUIForm = self.AddChild<T>(isFromPool);
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }
-        public static async UniTask<T> AddUIFormChildAsync<T, A>(this UIComponent self, int uiFormTypeId, A a) where T : UGFUIForm, IAwake<A>
+        public static async UniTask<T> AddUIFormChildAsync<T, A>(this UIComponent self, int uiFormTypeId, A a, bool isFromPool = false) where T : UGFUIForm, IAwake<A>
         {
-            T ugfUIForm = self.AddChild<T, A>(a);
+            T ugfUIForm = self.AddChild<T, A>(a, isFromPool);
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }
         
-        public static async UniTask<T> AddUIFormChildAsync<T, A, B>(this UIComponent self, int uiFormTypeId, A a, B b) where T : UGFUIForm, IAwake<A, B>
+        public static async UniTask<T> AddUIFormChildAsync<T, A, B>(this UIComponent self, int uiFormTypeId, A a, B b, bool isFromPool = false) where T : UGFUIForm, IAwake<A, B>
         {
-            T ugfUIForm = self.AddChild<T, A, B>(a, b);
+            T ugfUIForm = self.AddChild<T, A, B>(a, b, isFromPool);
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }
 
-        public static async UniTask<T> AddUIFormChildAsync<T, A, B, C>(this UIComponent self, int uiFormTypeId, A a, B b, C c) where T : UGFUIForm, IAwake<A, B, C>
+        public static async UniTask<T> AddUIFormChildAsync<T, A, B, C>(this UIComponent self, int uiFormTypeId, A a, B b, C c, bool isFromPool = false) where T : UGFUIForm, IAwake<A, B, C>
         {
-            T ugfUIForm = self.AddChild<T, A, B, C>(a, b, c);
+            T ugfUIForm = self.AddChild<T, A, B, C>(a, b, c, isFromPool);
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }
 
-        public static async UniTask<T> AddUIFormComponentAsync<T>(this UIComponent self, int uiFormTypeId) where T : UGFUIForm, IAwake, new()
+        public static async UniTask<T> AddUIFormComponentAsync<T>(this UIComponent self, int uiFormTypeId, bool isFromPool = false) where T : UGFUIForm, IAwake, new()
         {
-            T ugfUIForm = self.AddComponent<T>();
+            T ugfUIForm = self.AddComponent<T>(isFromPool);
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }
-        public static async UniTask<T> AddUIFormComponentAsync<T, A>(this UIComponent self, int uiFormTypeId, A a) where T : UGFUIForm, IAwake<A>, new()
+        public static async UniTask<T> AddUIFormComponentAsync<T, A>(this UIComponent self, int uiFormTypeId, A a, bool isFromPool = false) where T : UGFUIForm, IAwake<A>, new()
         {
-            T ugfUIForm = self.AddComponent<T, A>(a);
-            await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
-            return ugfUIForm;
-        }
-
-        public static async UniTask<T> AddUIFormComponentAsync<T, A, B>(this UIComponent self, int uiFormTypeId, A a, B b) where T : UGFUIForm, IAwake<A, B>, new()
-        {
-            T ugfUIForm = self.AddComponent<T, A, B>(a, b);
+            T ugfUIForm = self.AddComponent<T, A>(a, isFromPool);
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }
 
-        public static async UniTask<T> AddUIFormComponentAsync<T, A, B, C>(this UIComponent self, int uiFormTypeId, A a, B b, C c) where T : UGFUIForm, IAwake<A, B, C>, new()
+        public static async UniTask<T> AddUIFormComponentAsync<T, A, B>(this UIComponent self, int uiFormTypeId, A a, B b, bool isFromPool = false) where T : UGFUIForm, IAwake<A, B>, new()
         {
-            T ugfUIForm = self.AddComponent<T, A, B, C>(a, b, c);
+            T ugfUIForm = self.AddComponent<T, A, B>(a, b, isFromPool);
+            await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
+            return ugfUIForm;
+        }
+
+        public static async UniTask<T> AddUIFormComponentAsync<T, A, B, C>(this UIComponent self, int uiFormTypeId, A a, B b, C c, bool isFromPool = false) where T : UGFUIForm, IAwake<A, B, C>, new()
+        {
+            T ugfUIForm = self.AddComponent<T, A, B, C>(a, b, c, isFromPool);
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }
