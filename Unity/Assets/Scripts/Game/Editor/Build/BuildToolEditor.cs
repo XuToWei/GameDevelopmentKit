@@ -52,7 +52,7 @@ namespace Game.Editor
                     }
                 }
                 
-                if (GUILayout.Button("Build Resource"))
+                if (GUILayout.Button("Build Resource With Refresh Optimize Collection"))
                 {
                     if (SwitchActiveBuildTarget(m_Platform))
                     {
