@@ -69,15 +69,15 @@ namespace UnityGameFramework.Extension.Editor
             m_ResourceCollection = resourceCollection;
             try
             {
-                EditorUtility.DisplayProgressBar("Optimize Load Type", "processing...", 0f);
+                EditorUtility.DisplayProgressBar("OptimizeLoadType", "processing...", 0f);
                 OptimizeLoadType();
-                EditorUtility.DisplayProgressBar("Optimize Load Type", "Complete processing...", 1f);
+                EditorUtility.DisplayProgressBar("OptimizeLoadType", "Complete processing...", 1f);
                 EditorUtility.DisplayProgressBar("Analyze", "processing...", 0f);
                 Analyze();
                 EditorUtility.DisplayProgressBar("Analyze", "Complete processing...", 1f);
-                EditorUtility.DisplayProgressBar("Calculate Combine", "processing...", 0f);
+                EditorUtility.DisplayProgressBar("CalculateCombine", "processing...", 0f);
                 CalculateCombine();
-                EditorUtility.DisplayProgressBar("Calculate Combine", "Complete processing...", 1f);
+                EditorUtility.DisplayProgressBar("CalculateCombine", "Complete processing...", 1f);
                 EditorUtility.DisplayProgressBar("Save", "processing...", 0f);
                 Save();
                 EditorUtility.DisplayProgressBar("Save", "Complete processing...", 1f);
@@ -96,7 +96,7 @@ namespace UnityGameFramework.Extension.Editor
             for (int i = 0; i < count; i++)
             {
                 int cur = i + 1;
-                EditorUtility.DisplayProgressBar("Optimize Load Type", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
+                EditorUtility.DisplayProgressBar("OptimizeLoadType", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 var resource = resources[i];
                 if(resource.LoadType != LoadType.LoadFromMemory &&
                    resource.LoadType != LoadType.LoadFromMemoryAndDecrypt &&
@@ -151,7 +151,7 @@ namespace UnityGameFramework.Extension.Editor
             foreach (var kv in m_ScatteredAssets)
             {
                 cur++;
-                EditorUtility.DisplayProgressBar("Calculate Combine (1/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
+                EditorUtility.DisplayProgressBar("CalculateCombine (1/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 var assetPath = kv.Key;
                 allShareCount++;
                 if (!File.Exists(assetPath))
@@ -185,7 +185,7 @@ namespace UnityGameFramework.Extension.Editor
             foreach (ABInfo abInfo in allCombines.Values.ToArray())
             {
                 cur++;
-                EditorUtility.DisplayProgressBar("Calculate Combine (2/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
+                EditorUtility.DisplayProgressBar("CalculateCombine (2/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 var bundleName = abInfo.name;
                 if (abInfo.size * abInfo.referenceCount < MIN_NO_NAME_COMBINE_SIZE)
                 {
@@ -212,7 +212,7 @@ namespace UnityGameFramework.Extension.Editor
             foreach (ABInfo abInfo in left)
             {
                 cur++;
-                EditorUtility.DisplayProgressBar("Calculate Combine (3/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
+                EditorUtility.DisplayProgressBar("CalculateCombine (3/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 if(currentCombineBundle == null)
                 {
                     currentCombineBundle = new List<string>();
@@ -246,7 +246,7 @@ namespace UnityGameFramework.Extension.Editor
             m_AnalyzedStamps.Clear();
             m_DependencyCachePool.Clear();
 
-            HashSet<string> excludeAssetNames = GetFilteredAssetNames("t:Script t:SubGraphAsset");
+            HashSet<string> excludeAssetNames = GetFilteredAssetNames("t:Script t:SubGraphAsset t:Preset");
             Asset[] assets = m_ResourceCollection.GetAssets();
             int count = assets.Length;
             int cur = 0;
