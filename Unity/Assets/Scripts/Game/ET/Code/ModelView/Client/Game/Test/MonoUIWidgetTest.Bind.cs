@@ -2,14 +2,24 @@
 
 namespace ET.Client
 {
+    [Sirenix.OdinInspector.InfoBox("BindData exist empty.", Sirenix.OdinInspector.InfoMessageType.Warning, VisibleIf = "CheckBindDataExitEmpty")]
     public partial class MonoUIWidgetTest
     {
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
-        private UnityEngine.UI.UXText m_TestTextUXText;
+        private UnityEngine.UI.Button m_TestButton;
+        [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
+        private UnityEngine.UI.UXText m_TestUXText;
 
 
-        public UnityEngine.UI.UXText TestTextUXText => m_TestTextUXText;
+        public UnityEngine.UI.Button TestButton => m_TestButton;
+        public UnityEngine.UI.UXText TestUXText => m_TestUXText;
 
 
+        private bool CheckBindDataExitEmpty()
+        {
+            if (this.m_TestButton == null) return true;
+            if (this.m_TestUXText == null) return true;
+            return false;
+        }
     }
 }

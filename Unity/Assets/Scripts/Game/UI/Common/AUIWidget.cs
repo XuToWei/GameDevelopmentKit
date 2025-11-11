@@ -8,10 +8,25 @@ namespace Game
     [DisallowMultipleComponent]
     public abstract class AUIWidget : MonoBehaviour
     {
+        private UIForm m_UIFormOwner;
         private Transform m_CachedTransform = null;
         private bool m_Available = false;
         private bool m_Visible = false;
 
+        /// <summary>
+        /// 所属的界面。
+        /// </summary>
+        public UIForm UIFormOwner
+        {
+            get
+            {
+                return m_UIFormOwner;
+            }
+        }
+        
+        /// <summary>
+        /// 获取界面是否可用。
+        /// </summary>
         public bool Available
         {
             get
@@ -54,6 +69,11 @@ namespace Game
             {
                 return m_CachedTransform;
             }
+        }
+
+        internal void SetUIFormOwner(UIForm uiForm)
+        {
+            m_UIFormOwner = uiForm;
         }
 
         /// <summary>

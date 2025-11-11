@@ -4,7 +4,6 @@ using Cysharp.Threading.Tasks;
 using Game;
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
-using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
 using GameEntry = Game.GameEntry;
 
@@ -21,8 +20,16 @@ namespace ET
             get => base.UGFMono;
             set
             {
-                base.UGFMono = value;
-                View = (T)base.UGFMono;
+                if(value == null)
+                {
+                    base.UGFMono = null;
+                    this.View = null;
+                }
+                else
+                {
+                    base.UGFMono = value;
+                    this.View = (T)base.UGFMono;
+                }
             }
         }
     }
@@ -38,8 +45,9 @@ namespace ET
         internal virtual AETMonoUGFUIForm UGFMono { get; set; }
         [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
-
-        public bool Available => this.uiForm != null && !this.uiForm.Logic.Available;
+        [BsonIgnore]
+        public bool Available => this.uiForm != null && this.uiForm.Logic.Available;
+        [BsonIgnore]
         public bool Visible
         {
             get
@@ -59,7 +67,9 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsDisposed)
+            bool isDisposed = this.IsDisposed;
+            base.Dispose();
+            if (!isDisposed)
             {
                 if (this.cts != null)
                 {
@@ -67,13 +77,12 @@ namespace ET
                     ObjectPool.Instance.Recycle(this.cts);
                     this.cts = null;
                 }
-                if (this.uiForm != null)
+                if (this.Available)
                 {
                     GameEntry.UI.CloseUIForm(this.uiForm);
                     this.uiForm = null;
                 }
             }
-            base.Dispose();
         }
 
         public async UniTask OpenUIFormAsync(int uiFormTypeId)
@@ -86,7 +95,7 @@ namespace ET
             this.cts.FreeToken();
             if(this.uiForm == null)
             {
-                throw new System.Exception($"UGFUIForm OpenUIFormAsync failed! uiFormTypeId:'{uiFormTypeId}'.");
+                throw new Exception($"UGFUIForm OpenUIFormAsync failed! uiFormTypeId:'{uiFormTypeId}'.");
             }
         }
 
@@ -105,7 +114,20 @@ namespace ET
             GameEntry.UI.SetUIFormInstancePriority(this.uiForm, priority);
         }
 
-        public async UniTask<T> LoadUIWidgetAsync<T>(int uiEntityTypeId) where T : UGFUIWidget, IAwake, new()
+        public async UniTask<T> LoadChildUIWidgetAsync<T>(int uiEntityTypeId) where T : UGFUIWidget, IAwake
+        {
+            var ugfEntity = this.AddChild<CommonUGFEntity>(true);
+            await ugfEntity.ShowUIEntityAsync(uiEntityTypeId);
+            var monoUIWidget = ugfEntity.CachedTransform.GetComponent<AETMonoUGFUIWidget>();
+            if (monoUIWidget == null)
+            {
+                ugfEntity.Dispose();
+                throw new Exception($"LoadMonoUIWidgetAsync failed! not found AETMonoUGFUIWidget! uiEntityTypeId:'{uiEntityTypeId}'.");
+            }
+            return this.AddChildUIWidget<T>(monoUIWidget, true);
+        }
+
+        public async UniTask<T> LoadComponentUIWidgetAsync<T>(int uiEntityTypeId) where T : UGFUIWidget, IAwake, new()
         {
             var ugfEntity = this.AddChild<CommonUGFEntity>(true);
             await ugfEntity.ShowUIEntityAsync(uiEntityTypeId);
