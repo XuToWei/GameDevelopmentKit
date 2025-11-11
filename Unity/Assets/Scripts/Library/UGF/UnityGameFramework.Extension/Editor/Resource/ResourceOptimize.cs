@@ -170,6 +170,14 @@ namespace UnityGameFramework.Extension.Editor
                     });
                     allShareCanCombine++;
                 }
+                else//太大的直接单个打包
+                {
+                    List<string> bundle = new List<string>()
+                    {
+                        assetPath
+                    };
+                    m_CombineBundles[GetNewCombineName(bundle)] = bundle;
+                }
             }
 
             count = allCombines.Count;

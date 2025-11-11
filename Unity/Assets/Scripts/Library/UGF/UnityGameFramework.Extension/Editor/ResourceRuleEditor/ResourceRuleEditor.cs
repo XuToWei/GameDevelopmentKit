@@ -483,9 +483,13 @@ namespace UnityGameFramework.Extension.Editor
             {
                 throw new Exception("Refresh ResourceCollection.xml fail");
             }
+        }
 
-            ResourceOptimize optimize = new ResourceOptimize();
-            optimize.Optimize(m_ResourceCollection);
+        internal void RefreshResourceCollectionWithOptimize()
+        {
+            RefreshResourceCollection();
+            ResourceOptimize resourceOptimize = new ResourceOptimize();
+            resourceOptimize.Optimize(m_ResourceCollection);
         }
 
         internal void RefreshResourceCollection(string configPath)
@@ -498,6 +502,7 @@ namespace UnityGameFramework.Extension.Editor
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptTypeFilter);
             m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptLabelFilter);
             AnalysisResourceFilters();
+            CheckRemoveEmptyResource();
             if (SaveCollection())
             {
                 Debug.Log("Refresh ResourceCollection.xml success");
@@ -506,6 +511,13 @@ namespace UnityGameFramework.Extension.Editor
             {
                 throw new Exception("Refresh ResourceCollection.xml fail");
             }
+        }
+
+        internal void RefreshResourceCollectionWithOptimize(string configPath)
+        {
+            RefreshResourceCollection(configPath);
+            ResourceOptimize resourceOptimize = new ResourceOptimize();
+            resourceOptimize.Optimize(m_ResourceCollection);
         }
 
         private GFResource[] GetResources()
