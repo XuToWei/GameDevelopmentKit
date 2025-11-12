@@ -61,7 +61,7 @@ namespace ET
         {
             bool isDisposed = this.IsDisposed;
             base.Dispose();
-            if (!isDisposed && this.Available)
+            if (!isDisposed)
             {
                 if (this.Available)
                 {

@@ -124,7 +124,9 @@ namespace ET
                 ugfEntity.Dispose();
                 throw new Exception($"LoadMonoUIWidgetAsync failed! not found AETMonoUGFUIWidget! uiEntityTypeId:'{uiEntityTypeId}'.");
             }
-            return this.AddChildUIWidget<T>(monoUIWidget, true);
+            T uiWidget = this.AddChildUIWidget<T>(monoUIWidget, true);
+            uiWidget.AddChild(ugfEntity);
+            return uiWidget;
         }
 
         public async UniTask<T> LoadComponentUIWidgetAsync<T>(int uiEntityTypeId) where T : UGFUIWidget, IAwake, new()
