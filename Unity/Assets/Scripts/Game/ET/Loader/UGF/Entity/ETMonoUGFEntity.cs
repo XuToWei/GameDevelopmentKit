@@ -12,7 +12,6 @@ namespace ET
     internal sealed class ETMonoUGFEntity : AEntity
     {
         private UGFEntity ugfEntity;
-        private Transform cachedParentTransform;
 
         protected override void OnInit(object userData)
         {
@@ -20,7 +19,6 @@ namespace ET
             ETMonoUGFEntityData entityData = (ETMonoUGFEntityData)userData;
             ugfEntity = entityData.UGFEntity;
             ugfEntity.CachedTransform = CachedTransform;
-            cachedParentTransform = CachedTransform.parent;
             UGFEntitySystemSingleton.Instance.UGFEntityOnInit(ugfEntity);
         }
 
@@ -37,7 +35,6 @@ namespace ET
         protected override void OnHide(bool isShutdown, object userData)
         {
             UGFEntitySystemSingleton.Instance.UGFEntityOnHide(ugfEntity, isShutdown);
-            CachedTransform.SetParent(cachedParentTransform, true);
             base.OnHide(isShutdown, userData);
         }
 

@@ -54,6 +54,7 @@ namespace ET.Client
             uiWidget.CachedTransform.SetParent(self.View.Test2RectTransform);
             uiWidget.CachedTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             uiWidget.CachedTransform.localScale = Vector3.one;
+            uiWidget.Open();
         }
     }
 }
