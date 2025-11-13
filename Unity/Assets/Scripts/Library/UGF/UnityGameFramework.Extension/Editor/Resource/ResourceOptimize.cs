@@ -31,6 +31,7 @@ namespace UnityGameFramework.Extension.Editor
         private ResourceCollection m_ResourceCollection;
 
         private readonly Dictionary<string, DependencyData> m_DependencyDatas;
+        //key：冗余资源路径，value：引用该资源的主资源
         private readonly Dictionary<string, List<Asset>> m_ScatteredAssets;
         private readonly HashSet<Stamp> m_AnalyzedStamps;
         private readonly Dictionary<string, List<string>> m_CombineBundles;
@@ -149,50 +150,61 @@ namespace UnityGameFramework.Extension.Editor
                 long byteSize = GetAssetSize(assetPath);
                 if (byteSize < MAX_COMBINE_SHARE_AB_ITEM_SIZE)
                 {
-                    allCombines.Add(assetPath, new ABInfo()
-                    {
-                        name = assetPath,
-                        size = byteSize,
-                        referenceCount = kv.Value.Count
-                    });
+                    allCombines.Add(assetPath, new ABInfo(assetPath, byteSize, kv.Value.Count));
                     allShareCanCombine++;
                 }
-                else//太大的直接单个打包
+                else
                 {
-                    List<string> bundle = new List<string>()
+                    //太大的直接单个打包
+                    if(kv.Value.Count > 1)
                     {
-                        assetPath
-                    };
-                    m_CombineBundles[GetNewCombineName(bundle)] = bundle;
+                        List<string> bundle = new List<string>()
+                        {
+                            assetPath
+                        };
+                        m_CombineBundles[GetNewCombineName(bundle)] = bundle;
+                    }
                 }
             }
 
             count = allCombines.Count;
             cur = 0;
-            foreach (ABInfo abInfo in allCombines.Values.ToArray())
+            HashSet<string> removedKeys = new HashSet<string>();
+            foreach (ABInfo abInfo in allCombines.Values)
             {
                 cur++;
                 EditorUtility.DisplayProgressBar("CalculateCombine (2/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
-                var bundleName = abInfo.name;
-                if (abInfo.size * abInfo.referenceCount < MIN_NO_NAME_COMBINE_SIZE)
+                var bundleName = abInfo.Name;
+                if (abInfo.Size * abInfo.ReferenceCount < MIN_NO_NAME_COMBINE_SIZE)
                 {
                     allShareRemoveByNoName++;
-                    allCombines.Remove(bundleName);
+                    removedKeys.Add(bundleName);
                 }
-                else 
+                else
                 {
-                    if (abInfo.referenceCount < MAX_COMBINE_SHARE_MIN_REFERENCE_COUNT)
+                    if (abInfo.ReferenceCount < MAX_COMBINE_SHARE_MIN_REFERENCE_COUNT)
                     {
                         allShareRemoveByReferenceCountTooFew++;
-                        allCombines.Remove(bundleName);
+                        removedKeys.Add(bundleName);
                     }
                 }
             }
+            foreach (var key in removedKeys)
+            {
+                allCombines.Remove(key);
+            }
 
             List<ABInfo> left =  allCombines.Values.ToList();
-            left.Sort((a,b) => a.size.CompareTo(b.size));
+            left.Sort((a,b) =>
+            {
+                if(a.ReferenceCount == b.ReferenceCount)
+                {
+                    return a.Size.CompareTo(b.Size);
+                }
+                return a.ReferenceCount.CompareTo(b.ReferenceCount);
+            });
             allFinalCombine = left.Count;
-            List<string> currentCombineBundle = null;
+            List<string> currentCombineBundle = new List<string>();
             long currentCombineBundleSize = 0;
             count = left.Count;
             cur = 0;
@@ -200,21 +212,16 @@ namespace UnityGameFramework.Extension.Editor
             {
                 cur++;
                 EditorUtility.DisplayProgressBar("CalculateCombine (3/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
-                if(currentCombineBundle == null)
-                {
-                    currentCombineBundle = new List<string>();
-                    currentCombineBundleSize = 0;
-                }
-                currentCombineBundle.Add(abInfo.name);
-                currentCombineBundleSize += abInfo.size;
+                currentCombineBundle.Add(abInfo.Name);
+                currentCombineBundleSize += abInfo.Size;
                 if (currentCombineBundleSize > MAX_COMBINE_SHARE_AB_SIZE)
                 {
                     m_CombineBundles[GetNewCombineName(currentCombineBundle)] = currentCombineBundle;
-                    currentCombineBundle = null;
+                    currentCombineBundle.Clear();
                     currentCombineBundleSize = 0;
                 }
             }
-            if (currentCombineBundle != null && currentCombineBundle.Count > 0)
+            if (currentCombineBundle.Count > 0)
             {
                 m_CombineBundles[GetNewCombineName(currentCombineBundle)] = currentCombineBundle;
             }
