@@ -195,13 +195,20 @@ namespace UnityGameFramework.Extension.Editor
             }
 
             List<ABInfo> left =  allCombines.Values.ToList();
+            //优先用名字排序，这样相同目录（往往是相同资源的依赖）的尽可能规划到一起
             left.Sort((a,b) =>
             {
-                if(a.ReferenceCount == b.ReferenceCount)
+                int c1 = string.Compare(a.Name, b.Name, StringComparison.Ordinal);
+                if(c1 == 0)
                 {
-                    return a.Size.CompareTo(b.Size);
+                    int c2 = a.ReferenceCount.CompareTo(b.ReferenceCount);
+                    if (c2 == 0)
+                    {
+                        return a.Size.CompareTo(b.Size);
+                    }
+                    return c2;
                 }
-                return a.ReferenceCount.CompareTo(b.ReferenceCount);
+                return c1;
             });
             allFinalCombine = left.Count;
             List<string> currentCombineBundle = new List<string>();

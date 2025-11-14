@@ -223,7 +223,7 @@ namespace UnityGameFramework.Extension.Editor
             }
             else
             {
-                m_CurrentConfigIndex = m_AllConfigPaths.ToList().FindIndex(0, _ => string.Equals(m_CurrentConfigPath, _));
+                m_CurrentConfigIndex = m_AllConfigPaths.ToList().FindIndex(0, str => string.Equals(m_CurrentConfigPath, str, StringComparison.Ordinal));
             }
             m_RuleList = null;
             
