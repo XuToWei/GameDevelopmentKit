@@ -224,7 +224,7 @@ namespace UnityGameFramework.Extension.Editor
                 if (currentCombineBundleSize > MAX_COMBINE_SHARE_AB_SIZE)
                 {
                     m_CombineBundles[GetNewCombineName(currentCombineBundle)] = currentCombineBundle;
-                    currentCombineBundle.Clear();
+                    currentCombineBundle = new List<string>();
                     currentCombineBundleSize = 0;
                 }
             }
