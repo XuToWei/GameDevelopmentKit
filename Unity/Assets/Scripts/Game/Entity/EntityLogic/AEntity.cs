@@ -7,6 +7,7 @@ namespace Game
     public abstract class AEntity : EntityLogic
     {
         public int Id => Entity.Id;
+        private Transform m_CachedParentTransform;
 
 #if UNITY_EDITOR
         private string m_GameObjectName;
@@ -15,6 +16,7 @@ namespace Game
         protected override void OnInit(object userData)
         {
             base.OnInit(userData);
+            m_CachedParentTransform = CachedTransform.parent;
 #if UNITY_EDITOR
             m_GameObjectName = CachedTransform.name;
 #endif
@@ -30,6 +32,10 @@ namespace Game
 
         protected override void OnHide(bool isShutdown, object userData)
         {
+            if (m_CachedParentTransform != CachedTransform.parent)
+            {
+                CachedTransform.SetParent(m_CachedParentTransform, true);
+            }
 #if UNITY_EDITOR
             Name = m_GameObjectName;
 #endif

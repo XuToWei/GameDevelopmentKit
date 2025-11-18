@@ -29,11 +29,13 @@ namespace UnityGameFramework.Extension.Editor
         private ReorderableList m_RuleList;
         private Vector2 m_ScrollPosition = Vector2.zero;
 
-        private readonly string m_SourceAssetExceptTypeFilter = "t:Script t:SubGraphAsset";
+        private readonly string m_SourceAssetExceptTypeFilter = "t:Script t:SubGraphAsset t:Preset";
         private string[] m_SourceAssetExceptTypeFilterGUIDArray;
 
         private readonly string m_SourceAssetExceptLabelFilter = "l:ResourceExclusive";
         private string[] m_SourceAssetExceptLabelFilterGUIDArray;
+        
+        private Dictionary<string, string> m_AssetGuidCache;
 
         [MenuItem("Game Framework/Resource Tools/Resource Rule Editor", false, 50)]
         static void Open()
@@ -48,12 +50,21 @@ namespace UnityGameFramework.Extension.Editor
         {
             ResourceRuleEditorUtility.RefreshResourceCollection();
         }
+ 
+        [MenuItem("Game Framework/Resource Tools/Refresh Activate Resource Collection With Optimize", false, 53)]
+        static void RefreshActivateResourceCollectionWithOptimize()
+        {
+            ResourceRuleEditorUtility.RefreshResourceCollection();
+        }
 
         private bool CheckRule()
         {
             bool isSuccess = true;
+            int count = m_Configuration.rules.Count;
             for (int i = 0; i < m_Configuration.rules.Count; i++)
             {
+                int cur = i + 1;
+                EditorUtility.DisplayProgressBar("CheckRule", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 ResourceRule rule = m_Configuration.rules[i];
                 if(!rule.valid)
                     continue;
@@ -78,6 +89,7 @@ namespace UnityGameFramework.Extension.Editor
                     isSuccess = false;
                 }
             }
+            EditorUtility.ClearProgressBar();
             return isSuccess;
         }
 
@@ -154,8 +166,12 @@ namespace UnityGameFramework.Extension.Editor
             m_Configuration = LoadAssetAtPath<ResourceRuleEditorData>(m_CurrentConfigPath);
             
             bool hasActivate = false;
+            int count = m_AllConfigPaths.Count;
+            int cur = 0;
             foreach (var configPath in m_AllConfigPaths)
             {
+                cur++;
+                EditorUtility.DisplayProgressBar("Load", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 ResourceRuleEditorData ruleEditorData = LoadAssetAtPath<ResourceRuleEditorData>(configPath);
                 if (hasActivate)
                 {
@@ -207,9 +223,11 @@ namespace UnityGameFramework.Extension.Editor
             }
             else
             {
-                m_CurrentConfigIndex = m_AllConfigPaths.ToList().FindIndex(0, _ => string.Equals(m_CurrentConfigPath, _));
+                m_CurrentConfigIndex = m_AllConfigPaths.ToList().FindIndex(0, str => string.Equals(m_CurrentConfigPath, str, StringComparison.Ordinal));
             }
             m_RuleList = null;
+            
+            EditorUtility.ClearProgressBar();
         }
 
         private T LoadAssetAtPath<T>(string path) where T : Object
@@ -483,9 +501,13 @@ namespace UnityGameFramework.Extension.Editor
             {
                 throw new Exception("Refresh ResourceCollection.xml fail");
             }
+        }
 
-            ResourceOptimize optimize = new ResourceOptimize();
-            optimize.Optimize(m_ResourceCollection);
+        internal void RefreshResourceCollectionWithOptimize()
+        {
+            RefreshResourceCollection();
+            ResourceOptimize resourceOptimize = new ResourceOptimize();
+            resourceOptimize.Optimize(m_ResourceCollection);
         }
 
         internal void RefreshResourceCollection(string configPath)
@@ -495,9 +517,14 @@ namespace UnityGameFramework.Extension.Editor
                 m_CurrentConfigPath = configPath;
                 Load();
             }
+            if (!CheckRule())
+            {
+                throw new Exception("Refresh ResourceCollection.xml check rule fail.");
+            }
             m_SourceAssetExceptTypeFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptTypeFilter);
             m_SourceAssetExceptLabelFilterGUIDArray = AssetDatabase.FindAssets(m_SourceAssetExceptLabelFilter);
             AnalysisResourceFilters();
+            CheckRemoveEmptyResource();
             if (SaveCollection())
             {
                 Debug.Log("Refresh ResourceCollection.xml success");
@@ -506,6 +533,13 @@ namespace UnityGameFramework.Extension.Editor
             {
                 throw new Exception("Refresh ResourceCollection.xml fail");
             }
+        }
+
+        internal void RefreshResourceCollectionWithOptimize(string configPath)
+        {
+            RefreshResourceCollection(configPath);
+            ResourceOptimize resourceOptimize = new ResourceOptimize();
+            resourceOptimize.Optimize(m_ResourceCollection);
         }
 
         private GFResource[] GetResources()
@@ -540,21 +574,31 @@ namespace UnityGameFramework.Extension.Editor
         private void CheckRemoveEmptyResource()
         {
             GFResource[] resources = GetResources();
+            int count = resources.Length;
+            int cur = 0;
             foreach (GFResource resource in resources)
             {
+                cur++;
+                EditorUtility.DisplayProgressBar("OptimizeLoadType", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 if (resource.GetFirstAsset() == null)
                 {
                     m_ResourceCollection.RemoveResource(resource.Name, resource.Variant);
                 }
             }
+            EditorUtility.ClearProgressBar();
         }
 
         private void AnalysisResourceFilters()
         {
+            m_AssetGuidCache = new Dictionary<string, string>(StringComparer.Ordinal);
             m_ResourceCollection = new ResourceCollection();
             List<string> signedAssetBundleList = new List<string>();
+            int count = m_Configuration.rules.Count;
+            int cur = 0;
             foreach (ResourceRule resourceRule in m_Configuration.rules)
             {
+                cur++;
+                EditorUtility.DisplayProgressBar("AnalysisResourceFilters", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
                 if (resourceRule.variant == "")
                     resourceRule.variant = null;
                 if (resourceRule.valid)
@@ -582,13 +626,13 @@ namespace UnityGameFramework.Extension.Editor
                                 FileInfo[] assetFiles = new DirectoryInfo(resourceRule.assetsDirectoryPath).GetFiles(patterns[i], SearchOption.AllDirectories);
                                 foreach (FileInfo file in assetFiles)
                                 {
-                                    if (file.Extension.Contains("meta"))
+                                    if (file.Extension.Contains("meta", StringComparison.Ordinal))
                                         continue;
                                     string relativeAssetName = file.FullName.Substring(Application.dataPath.Length + 1);
-                                    string relativeAssetNameWithoutExtension = GameFramework.Utility.Path.GetRegularPath(relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
+                                    string relativeAssetNameWithoutExtension = Utility.Path.GetRegularPath(relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
                                     string assetName = Path.Combine("Assets", relativeAssetName);
-                                    string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-                                    if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                                    string assetGUID = AssetPathToGUID(assetName);
+                                    if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID, StringComparer.Ordinal) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID, StringComparer.Ordinal))
                                     {
                                         ApplyResourceFilter(ref signedAssetBundleList, resourceRule, relativeAssetNameWithoutExtension, assetGUID);
                                     }
@@ -602,8 +646,7 @@ namespace UnityGameFramework.Extension.Editor
                             foreach (DirectoryInfo directory in assetDirectories)
                             {
                                 string relativeDirectoryName = directory.FullName.Substring(Application.dataPath.Length + 1);
-
-                                ApplyResourceFilter(ref signedAssetBundleList, resourceRule, GameFramework.Utility.Path.GetRegularPath(relativeDirectoryName), string.Empty, directory.FullName);
+                                ApplyResourceFilter(ref signedAssetBundleList, resourceRule, Utility.Path.GetRegularPath(relativeDirectoryName), string.Empty, directory.FullName);
                             }
                         }
                             break;
@@ -618,13 +661,13 @@ namespace UnityGameFramework.Extension.Editor
                                     FileInfo[] assetFiles = new DirectoryInfo(directory.FullName).GetFiles(patterns[i], SearchOption.AllDirectories);
                                     foreach (FileInfo file in assetFiles)
                                     {
-                                        if (file.Extension.Contains("meta"))
+                                        if (file.Extension.Contains("meta", StringComparison.Ordinal))
                                             continue;
                                         string relativeAssetName = file.FullName.Substring(Application.dataPath.Length + 1);
-                                        string relativeAssetNameWithoutExtension = GameFramework.Utility.Path.GetRegularPath(relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
+                                        string relativeAssetNameWithoutExtension = Utility.Path.GetRegularPath(relativeAssetName.Substring(0, relativeAssetName.LastIndexOf('.')));
                                         string assetName = Path.Combine("Assets", relativeAssetName);
-                                        string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-                                        if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                                        string assetGUID = AssetPathToGUID(assetName);
+                                        if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID, StringComparer.Ordinal) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID, StringComparer.Ordinal))
                                         {
                                             ApplyResourceFilter(ref signedAssetBundleList, resourceRule, relativeAssetNameWithoutExtension, assetGUID);
                                         }
@@ -636,16 +679,18 @@ namespace UnityGameFramework.Extension.Editor
                     }
                 }
             }
+            EditorUtility.ClearProgressBar();
         }
 
         private void ApplyResourceFilter(ref List<string> signedResourceList, ResourceRule resourceRule, string resourceName, string singleAssetGUID = "", string childDirectoryPath = "")
         {
-            if (!signedResourceList.Contains(Path.Combine(resourceRule.assetsDirectoryPath, resourceName)))
+            string resourcePath = Path.Combine(resourceRule.assetsDirectoryPath, resourceName);
+            if (!signedResourceList.Contains(resourcePath, StringComparer.Ordinal))
             {
-                signedResourceList.Add(Path.Combine(resourceRule.assetsDirectoryPath, resourceName));
+                signedResourceList.Add(resourcePath);
                 foreach (GFResource oldResource in GetResources())
                 {
-                    if (oldResource.Name == resourceName && string.IsNullOrEmpty(oldResource.Variant))
+                    if (string.Equals(oldResource.Name, resourceName, StringComparison.Ordinal) && string.IsNullOrEmpty(oldResource.Variant))
                     {
                         RenameResource(oldResource.Name, oldResource.Variant, resourceName, resourceRule.variant);
                         break;
@@ -675,11 +720,11 @@ namespace UnityGameFramework.Extension.Editor
                             FileInfo[] assetFiles = new DirectoryInfo(childDirectoryPath).GetFiles(patterns[i], SearchOption.AllDirectories);
                             foreach (FileInfo file in assetFiles)
                             {
-                                if (file.Extension.Contains("meta"))
+                                if (file.Extension.Contains("meta", StringComparison.Ordinal))
                                     continue;
                                 string assetName = Path.Combine("Assets", file.FullName.Substring(Application.dataPath.Length + 1));
-                                string assetGUID = AssetDatabase.AssetPathToGUID(assetName);
-                                if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID))
+                                string assetGUID = AssetPathToGUID(assetName);
+                                if (!m_SourceAssetExceptTypeFilterGUIDArray.Contains(assetGUID, StringComparer.Ordinal) && !m_SourceAssetExceptLabelFilterGUIDArray.Contains(assetGUID, StringComparer.Ordinal))
                                 {
                                     AssignAsset(assetGUID, resourceName, resourceRule.variant);
                                 }
@@ -700,6 +745,17 @@ namespace UnityGameFramework.Extension.Editor
         private bool SaveCollection()
         {
             return m_ResourceCollection.Save();
+        }
+
+        private string AssetPathToGUID(string assetName)
+        {
+            if (m_AssetGuidCache.TryGetValue(assetName, out string guid))
+            {
+                return guid;
+            }
+            guid = AssetDatabase.AssetPathToGUID(assetName);
+            m_AssetGuidCache.Add(assetName, guid);
+            return guid;
         }
 
         #endregion

@@ -94,7 +94,7 @@ namespace UnityGameFramework.Editor.ResourceTools
             m_CircularDependencyDatas.Clear();
             m_AnalyzedStamps.Clear();
 
-            HashSet<string> excludeAssetNames = GetFilteredAssetNames("t:Script t:SubGraphAsset");
+            HashSet<string> excludeAssetNames = GetFilteredAssetNames("t:Script t:SubGraphAsset t:Preset");
             Asset[] assets = m_ResourceCollection.GetAssets();
             int count = assets.Length;
             for (int i = 0; i < count; i++)

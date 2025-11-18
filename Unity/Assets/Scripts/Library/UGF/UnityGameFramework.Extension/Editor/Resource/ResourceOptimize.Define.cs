@@ -6,9 +6,20 @@ namespace UnityGameFramework.Extension.Editor
     {
         private class ABInfo {
 
-            public string name;
-            public long size;
-            public int referenceCount;
+            private readonly string m_Name;
+            private readonly long m_Size;
+            private readonly int m_ReferenceCount;
+
+            public string Name => m_Name;
+            public long Size => m_Size;
+            public int ReferenceCount => m_ReferenceCount;
+  
+            public ABInfo(string name, long size, int referenceCount)
+            {
+                this.m_Name = name;
+                this.m_Size = size;
+                this.m_ReferenceCount = referenceCount;
+            }
         }
         
         [StructLayout(LayoutKind.Auto)]
@@ -23,21 +34,8 @@ namespace UnityGameFramework.Extension.Editor
                 m_DependencyAssetName = dependencyAssetName;
             }
 
-            public string HostAssetName
-            {
-                get
-                {
-                    return m_HostAssetName;
-                }
-            }
-
-            public string DependencyAssetName
-            {
-                get
-                {
-                    return m_DependencyAssetName;
-                }
-            }
+            public string HostAssetName => m_HostAssetName;
+            public string DependencyAssetName => m_DependencyAssetName;
         }
     }
 }
