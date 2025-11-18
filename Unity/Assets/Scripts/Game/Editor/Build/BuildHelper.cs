@@ -103,7 +103,7 @@ namespace Game.Editor
         public static void BuildResource(Platform platform)
         {
             Debug.Log("start refresh resource collection");
-            ResourceRuleEditorUtility.RefreshResourceCollection();
+            ResourceRuleEditorUtility.RefreshResourceCollectionWithOptimize();
             Debug.Log("finish refresh resource collection");
             
             Debug.Log("start build resource");
