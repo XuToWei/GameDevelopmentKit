@@ -2,24 +2,34 @@
 
 namespace ET.Client
 {
-    [Sirenix.OdinInspector.InfoBox("BindData exist empty.", Sirenix.OdinInspector.InfoMessageType.Warning, VisibleIf = "CheckBindDataExitEmpty")]
     public partial class MonoUIWidgetTest
     {
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
-        private UnityEngine.UI.Button m_TestButton;
-        [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.UXText m_TestUXText;
+        [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
+        private UnityEngine.UI.Button m_TestCloseButton;
+        [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
+        private UnityEngine.UI.Button m_TestReopenButton;
 
 
-        public UnityEngine.UI.Button TestButton => m_TestButton;
         public UnityEngine.UI.UXText TestUXText => m_TestUXText;
+        public UnityEngine.UI.Button TestCloseButton => m_TestCloseButton;
+        public UnityEngine.UI.Button TestReopenButton => m_TestReopenButton;
 
+
+#if UNITY_EDITOR
+        [Sirenix.OdinInspector.HideLabel, Sirenix.OdinInspector.ReadOnly, Sirenix.OdinInspector.ShowInInspector]
+        [Sirenix.OdinInspector.GUIColor(1,0.8f,0), Sirenix.OdinInspector.PropertyOrder(-99999)]
+        [Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
+        private string BindDataExitEmptyWarning => "BindData exit empty, please check.";
 
         private bool CheckBindDataExitEmpty()
         {
-            if (this.m_TestButton == null) return true;
             if (this.m_TestUXText == null) return true;
+            if (this.m_TestCloseButton == null) return true;
+            if (this.m_TestReopenButton == null) return true;
             return false;
         }
+#endif
     }
 }

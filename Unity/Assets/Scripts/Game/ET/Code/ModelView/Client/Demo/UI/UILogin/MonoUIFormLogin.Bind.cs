@@ -2,7 +2,6 @@
 
 namespace ET.Client
 {
-    [Sirenix.OdinInspector.InfoBox("BindData exist empty.", Sirenix.OdinInspector.InfoMessageType.Warning, VisibleIf = "CheckBindDataExitEmpty")]
     public partial class MonoUIFormLogin
     {
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
@@ -13,13 +12,25 @@ namespace ET.Client
         private UnityEngine.UI.InputField m_PasswordInputField;
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private ET.Client.MonoUIWidgetTest m_TestWidgetTest;
+        [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
+        private UnityEngine.RectTransform m_Test1RectTransform;
+        [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
+        private UnityEngine.RectTransform m_Test2RectTransform;
 
 
         public UnityEngine.UI.InputField AccountInputField => m_AccountInputField;
         public UnityEngine.UI.Button LoginButton => m_LoginButton;
         public UnityEngine.UI.InputField PasswordInputField => m_PasswordInputField;
         public ET.Client.MonoUIWidgetTest TestWidgetTest => m_TestWidgetTest;
+        public UnityEngine.RectTransform Test1RectTransform => m_Test1RectTransform;
+        public UnityEngine.RectTransform Test2RectTransform => m_Test2RectTransform;
 
+
+#if UNITY_EDITOR
+        [Sirenix.OdinInspector.HideLabel, Sirenix.OdinInspector.ReadOnly, Sirenix.OdinInspector.ShowInInspector]
+        [Sirenix.OdinInspector.GUIColor(1,0.8f,0), Sirenix.OdinInspector.PropertyOrder(-99999)]
+        [Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
+        private string BindDataExitEmptyWarning => "BindData exit empty, please check.";
 
         private bool CheckBindDataExitEmpty()
         {
@@ -27,7 +38,10 @@ namespace ET.Client
             if (this.m_LoginButton == null) return true;
             if (this.m_PasswordInputField == null) return true;
             if (this.m_TestWidgetTest == null) return true;
+            if (this.m_Test1RectTransform == null) return true;
+            if (this.m_Test2RectTransform == null) return true;
             return false;
         }
+#endif
     }
 }
