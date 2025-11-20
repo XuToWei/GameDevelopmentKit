@@ -46,8 +46,8 @@ public partial class DTUIEntity : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.Dictionary<int, DRUIEntity> DataMap => _dataMap;
-    public System.Collections.Generic.List<DRUIEntity> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyDictionary<int, DRUIEntity> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<DRUIEntity> DataList => _dataList;
     public DRUIEntity GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRUIEntity Get(int key) => _dataMap[key];
     public DRUIEntity this[int key] => _dataMap[key];

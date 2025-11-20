@@ -55,7 +55,7 @@ public partial class DTStartSceneConfig : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.List<DRStartSceneConfig> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyList<DRStartSceneConfig> DataList => _dataList;
     public DRStartSceneConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartSceneConfig __v) ? __v : default;
 
     public void ResolveRef(Tables tables)

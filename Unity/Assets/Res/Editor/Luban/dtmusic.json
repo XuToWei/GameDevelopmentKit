@@ -1,22 +1,16 @@
 [
   {
     "Id": 1,
-    "CSName": "Menu",
-    "Desc": "菜单音乐",
     "AssetName": "music_menu",
     "Volume": 0.5
   },
   {
     "Id": 2,
-    "CSName": "Background",
-    "Desc": "战斗音乐",
     "AssetName": "music_background",
     "Volume": 0.5
   },
   {
     "Id": 3,
-    "CSName": "About",
-    "Desc": "关于音乐",
     "AssetName": "music_about",
     "Volume": 0.5
   }

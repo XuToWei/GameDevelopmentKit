@@ -46,8 +46,8 @@ public partial class DTThruster : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.Dictionary<int, DRThruster> DataMap => _dataMap;
-    public System.Collections.Generic.List<DRThruster> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyDictionary<int, DRThruster> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<DRThruster> DataList => _dataList;
     public DRThruster GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRThruster Get(int key) => _dataMap[key];
     public DRThruster this[int key] => _dataMap[key];
