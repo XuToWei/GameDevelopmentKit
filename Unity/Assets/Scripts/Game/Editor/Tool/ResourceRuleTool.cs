@@ -30,6 +30,7 @@ namespace Game.Editor
                 EditorUtility.SetDirty(ruleEditorData);
             }
             AssetDatabase.SaveAssets();
+            Debug.Log($"Activate Resource Rule : {ruleDataAsset} !");
         }
 
         public static void ActivateRule_ET()
