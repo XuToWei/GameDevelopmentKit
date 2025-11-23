@@ -46,8 +46,8 @@ public partial class DTScene : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.Dictionary<int, DRScene> DataMap => _dataMap;
-    public System.Collections.Generic.List<DRScene> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyDictionary<int, DRScene> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<DRScene> DataList => _dataList;
     public DRScene GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRScene Get(int key) => _dataMap[key];
     public DRScene this[int key] => _dataMap[key];

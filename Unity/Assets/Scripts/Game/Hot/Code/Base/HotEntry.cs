@@ -16,6 +16,9 @@ namespace Game.Hot
             InitComponents();
             
             HotComponentEntry.Initialize();
+            
+            // 开启流程（入口）
+            Procedure.StartProcedure<ProcedureLaunch>();
         }
 
         private void Update()

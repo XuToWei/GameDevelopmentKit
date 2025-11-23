@@ -41,10 +41,12 @@ public sealed partial class DRAircraft : Luban.BeanBase
     /// 武器编号0
     /// </summary>
     public readonly System.Collections.Generic.List<int> WeaponIds;
+    public System.Collections.Generic.List<DRWeapon> WeaponIds_Ref { private set; get; }
     /// <summary>
     /// 装甲编号0
     /// </summary>
     public readonly System.Collections.Generic.List<int> ArmorIds;
+    public System.Collections.Generic.List<DRArmor> ArmorIds_Ref { private set; get; }
     /// <summary>
     /// 死亡特效编号
     /// </summary>
@@ -58,6 +60,12 @@ public sealed partial class DRAircraft : Luban.BeanBase
 
     public  void ResolveRef(TablesComponent tables)
     {
+        WeaponIds_Ref = new System.Collections.Generic.List<DRWeapon>();
+        foreach (var _v in WeaponIds) { WeaponIds_Ref.Add(tables.DTWeapon.GetOrDefault(_v)); }
+
+        ArmorIds_Ref = new System.Collections.Generic.List<DRArmor>();
+        foreach (var _v in ArmorIds) { ArmorIds_Ref.Add(tables.DTArmor.GetOrDefault(_v)); }
+
         PostResolveRef();
     }
 

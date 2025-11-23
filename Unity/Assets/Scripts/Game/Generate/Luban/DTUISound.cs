@@ -46,8 +46,8 @@ public partial class DTUISound : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.Dictionary<int, DRUISound> DataMap => _dataMap;
-    public System.Collections.Generic.List<DRUISound> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyDictionary<int, DRUISound> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<DRUISound> DataList => _dataList;
     public DRUISound GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRUISound Get(int key) => _dataMap[key];
     public DRUISound this[int key] => _dataMap[key];

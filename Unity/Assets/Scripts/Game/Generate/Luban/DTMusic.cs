@@ -46,8 +46,8 @@ public partial class DTMusic : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.Dictionary<int, DRMusic> DataMap => _dataMap;
-    public System.Collections.Generic.List<DRMusic> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyDictionary<int, DRMusic> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<DRMusic> DataList => _dataList;
     public DRMusic GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRMusic Get(int key) => _dataMap[key];
     public DRMusic this[int key] => _dataMap[key];

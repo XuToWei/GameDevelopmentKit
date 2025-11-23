@@ -55,7 +55,7 @@ public partial class DTStartMachineConfig : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.List<DRStartMachineConfig> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyList<DRStartMachineConfig> DataList => _dataList;
     public DRStartMachineConfig Get(string StartConfig, int Id) => _dataMapUnion.TryGetValue((StartConfig, Id), out DRStartMachineConfig __v) ? __v : default;
 
     public void ResolveRef(Tables tables)
