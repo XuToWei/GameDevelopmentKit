@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using GameFramework;
 using GameFramework.Fsm;
+using Sirenix.OdinInspector;
 using UnityGameFramework.Extension;
 
 namespace Game.Hot
@@ -23,7 +24,21 @@ namespace Game.Hot
                 return (ProcedureBase)m_ProcedureFsm.CurrentState;
             }
         }
-        
+
+        [ShowInInspector]
+        public string CurrentProcedureName
+        {
+            get
+            {
+                if (m_ProcedureFsm == null)
+                {
+                    throw new GameFrameworkException("You must initialize procedure first.");
+                }
+                return m_ProcedureFsm.CurrentState.GetType().FullName;
+            }
+        }
+
+        [ShowInInspector]
         public float CurrentProcedureTime
         {
             get
@@ -62,8 +77,6 @@ namespace Game.Hot
             }
             m_FsmManager = fsmManager;
             m_ProcedureFsm = m_FsmManager.CreateFsm(this, procedures.ToArray());
-            // 开启流程（入口）
-            StartProcedure<ProcedureLaunch>();
         }
 
         protected override void OnShutdown()
