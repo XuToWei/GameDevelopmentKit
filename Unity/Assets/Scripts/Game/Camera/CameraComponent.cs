@@ -13,6 +13,8 @@ namespace Game
 
         [ShowInInspector]
         [ReadOnly]
+        private Camera m_DefaultSceneCamera;
+
         private Camera m_SceneCamera;
 
         /// <summary>
@@ -24,6 +26,13 @@ namespace Game
         /// 场景相机
         /// </summary>
         public Camera SceneCamera => m_SceneCamera;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            m_SceneCamera = m_DefaultSceneCamera;
+            m_DefaultSceneCamera.enabled = true;
+        }
 
         private IEnumerator Start()
         {
@@ -40,6 +49,7 @@ namespace Game
                 return;
             }
             m_SceneCamera = eventArgs.SceneCamera;
+            m_DefaultSceneCamera.enabled = false;
         }
 
         private void OnSceneCameraDisable(object sender, GameEventArgs e)
@@ -51,7 +61,8 @@ namespace Game
             }
             if (m_SceneCamera == eventArgs.SceneCamera)
             {
-                m_SceneCamera = null;
+                m_SceneCamera = m_DefaultSceneCamera;
+                m_DefaultSceneCamera.enabled = true;
             }
         }
     }

@@ -46,8 +46,8 @@ public partial class DTAircraft : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.Dictionary<int, DRAircraft> DataMap => _dataMap;
-    public System.Collections.Generic.List<DRAircraft> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyDictionary<int, DRAircraft> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<DRAircraft> DataList => _dataList;
     public DRAircraft GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRAircraft Get(int key) => _dataMap[key];
     public DRAircraft this[int key] => _dataMap[key];

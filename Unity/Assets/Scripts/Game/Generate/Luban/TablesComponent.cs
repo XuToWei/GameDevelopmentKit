@@ -19,7 +19,6 @@ public partial class TablesComponent
     public DTSound DTSound { private set; get; }
     public DTUISound DTUISound { private set; get; }
     public DTMusic DTMusic { private set; get; }
-    public DTOneConfig DTOneConfig { private set; get; }
     public DTUIEntity DTUIEntity { private set; get; }
     private System.Collections.Generic.Dictionary<string, IDataTable> _tables;
     public System.Collections.Generic.IEnumerable<IDataTable> DataTables => _tables.Values;
@@ -50,9 +49,6 @@ public partial class TablesComponent
         DTMusic = new DTMusic(() => loader("dtmusic"));
         loadTasks.Add(DTMusic.LoadAsync());
         _tables.Add("DTMusic", DTMusic);
-        DTOneConfig = new DTOneConfig(() => loader("dtoneconfig"));
-        loadTasks.Add(DTOneConfig.LoadAsync());
-        _tables.Add("DTOneConfig", DTOneConfig);
         DTUIEntity = new DTUIEntity(() => loader("dtuientity"));
         loadTasks.Add(DTUIEntity.LoadAsync());
         _tables.Add("DTUIEntity", DTUIEntity);
@@ -72,7 +68,6 @@ public partial class TablesComponent
         DTSound.ResolveRef(this);
         DTUISound.ResolveRef(this);
         DTMusic.ResolveRef(this);
-        DTOneConfig.ResolveRef(this);
         DTUIEntity.ResolveRef(this);
         PostResolveRef();
     }

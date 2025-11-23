@@ -46,8 +46,8 @@ public partial class DTArmor : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.Dictionary<int, DRArmor> DataMap => _dataMap;
-    public System.Collections.Generic.List<DRArmor> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyDictionary<int, DRArmor> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<DRArmor> DataList => _dataList;
     public DRArmor GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRArmor Get(int key) => _dataMap[key];
     public DRArmor this[int key] => _dataMap[key];

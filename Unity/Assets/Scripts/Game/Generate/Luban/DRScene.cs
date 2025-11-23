@@ -18,6 +18,7 @@ public sealed partial class DRScene : Luban.BeanBase
         Id = _buf.ReadInt();
         AssetName = _buf.ReadString();
         BackgroundMusicId = _buf.ReadInt();
+        BackgroundMusicId_Ref = null;
         PostInit();
     }
 
@@ -38,11 +39,13 @@ public sealed partial class DRScene : Luban.BeanBase
     /// 背景音乐编号
     /// </summary>
     public readonly int BackgroundMusicId;
+    public DRMusic BackgroundMusicId_Ref { private set; get; }
     public const int __ID__ = -1646966626;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(TablesComponent tables)
     {
+        BackgroundMusicId_Ref = tables.DTMusic.GetOrDefault(BackgroundMusicId);
         PostResolveRef();
     }
 

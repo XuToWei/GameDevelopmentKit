@@ -7,7 +7,7 @@ using SimpleJSON;
 
 namespace ET
 {
-    public static class GenerateUGFAllSoundId
+    public static class GenerateUGFSoundId
     {
         private static readonly string s_LubanMusicAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtmusic.json");
         private static readonly string s_LubanUISoundAsset = Path.GetFullPath("../Unity/Assets/Res/Editor/Luban/dtuisound.json");
