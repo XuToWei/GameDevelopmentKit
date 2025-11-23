@@ -36,10 +36,7 @@
           "Luban.Core": "1.0.0"
         },
         "runtime": {
-          "Luban.DataValidator.Builtin.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "Luban.DataValidator.Builtin.dll": {}
         }
       }
     }
