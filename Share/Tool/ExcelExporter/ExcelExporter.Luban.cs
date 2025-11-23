@@ -254,7 +254,7 @@ namespace ET
                         }
                     }
 
-                    GenerateUGFAllSoundId.GenerateCode();
+                    GenerateUGFSoundId.GenerateCode();
                     GenerateUGFEntityId.GenerateCode();
                     GenerateUGFUIFormId.GenerateCode();
                     GenerateUGFSceneId.GenerateCode();

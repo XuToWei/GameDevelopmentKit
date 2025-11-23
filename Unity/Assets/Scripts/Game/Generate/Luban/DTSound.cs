@@ -46,8 +46,8 @@ public partial class DTSound : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.Dictionary<int, DRSound> DataMap => _dataMap;
-    public System.Collections.Generic.List<DRSound> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyDictionary<int, DRSound> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<DRSound> DataList => _dataList;
     public DRSound GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRSound Get(int key) => _dataMap[key];
     public DRSound this[int key] => _dataMap[key];

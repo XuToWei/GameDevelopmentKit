@@ -46,8 +46,8 @@ public partial class DTUnitConfig : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.Dictionary<int, DRUnitConfig> DataMap => _dataMap;
-    public System.Collections.Generic.List<DRUnitConfig> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyDictionary<int, DRUnitConfig> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<DRUnitConfig> DataList => _dataList;
     public DRUnitConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRUnitConfig Get(int key) => _dataMap[key];
     public DRUnitConfig this[int key] => _dataMap[key];

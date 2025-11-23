@@ -46,8 +46,8 @@ public partial class DTAIConfig : IDataTable
         PostInit();
     }
 
-    public System.Collections.Generic.Dictionary<int, DRAIConfig> DataMap => _dataMap;
-    public System.Collections.Generic.List<DRAIConfig> DataList => _dataList;
+    public System.Collections.Generic.IReadOnlyDictionary<int, DRAIConfig> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<DRAIConfig> DataList => _dataList;
     public DRAIConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public DRAIConfig Get(int key) => _dataMap[key];
     public DRAIConfig this[int key] => _dataMap[key];

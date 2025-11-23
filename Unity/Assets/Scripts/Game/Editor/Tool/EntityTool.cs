@@ -11,12 +11,18 @@ namespace Game.Editor
 {
     public static class EntityTool
     {
-        private const string COMMON_ENTITY_XLSX = "../Design/Excel/Game/Datas/Entity.xlsx";
-        private const string COMMON_ENTITY_ASSET_PATH = "Assets/Res/Entity";
-        
+#if UNITY_ET
+        private const string COMMON_ENTITY_XLSX = "../Design/Excel/ET/Datas/Game/Entity.xlsx";
+        private const string UI_ENTITY_XLSX = "../Design/Excel/ET/Datas/Game/UIEntity.xlsx";
+#elif UNITY_GAMEHOT
+        private const string COMMON_ENTITY_XLSX = "../Design/Excel/GameHot/Datas/Game/Entity.xlsx";
+        private const string UI_ENTITY_XLSX = "../Design/Excel/GameHot/Datas/Game/UIEntity.xlsx";
+#else
+         private const string COMMON_ENTITY_XLSX = "../Design/Excel/Game/Datas/Entity.xlsx";
         private const string UI_ENTITY_XLSX = "../Design/Excel/Game/Datas/UIEntity.xlsx";
+#endif
+        private const string COMMON_ENTITY_ASSET_PATH = "Assets/Res/Entity";
         private const string UI_ENTITY_ASSET_PATH = "Assets/Res/UI/UIEntity";
-
         private const string NO_ADD_ENTITY_SHEET = "~未添加的实体";
 
         [MenuItem("Game/Entity Tool/Write Entity To Tables")]
