@@ -2,7 +2,6 @@ using System;
 using System.Reflection;
 using GameFramework;
 using GameFramework.Fsm;
-using Sirenix.OdinInspector;
 using UnityGameFramework.Extension;
 
 namespace Game.Hot
@@ -11,6 +10,34 @@ namespace Game.Hot
     {
         private IFsmManager m_FsmManager;
         private IFsm<ProcedureComponent> m_ProcedureFsm;
+        
+#if UNITY_EDITOR
+        [Sirenix.OdinInspector.ShowInInspector]
+        private string m_EditorCurrentProcedureName
+        {
+            get
+            {
+                if (m_ProcedureFsm != null && m_ProcedureFsm.CurrentState != null)
+                {
+                    return m_ProcedureFsm.CurrentState.GetType().FullName;
+                }
+                return string.Empty;
+            }
+        }
+
+        [Sirenix.OdinInspector.ShowInInspector]
+        private float m_EditorCurrentProcedureTime
+        {
+            get
+            {
+                if (m_ProcedureFsm != null)
+                {
+                    return m_ProcedureFsm.CurrentStateTime;
+                }
+                return 0f;
+            }
+        }
+#endif
 
         public ProcedureBase CurrentProcedure
         {
@@ -25,20 +52,6 @@ namespace Game.Hot
             }
         }
 
-        [ShowInInspector]
-        public string CurrentProcedureName
-        {
-            get
-            {
-                if (m_ProcedureFsm == null)
-                {
-                    throw new GameFrameworkException("You must initialize procedure first.");
-                }
-                return m_ProcedureFsm.CurrentState.GetType().FullName;
-            }
-        }
-
-        [ShowInInspector]
         public float CurrentProcedureTime
         {
             get

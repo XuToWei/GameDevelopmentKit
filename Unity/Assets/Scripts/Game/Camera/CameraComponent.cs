@@ -1,7 +1,8 @@
 using System.Collections;
+using GameFramework;
 using GameFramework.Event;
-using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityGameFramework.Runtime;
 
 namespace Game
@@ -11,10 +12,10 @@ namespace Game
         [SerializeField]
         private Camera m_UICamera;
 
-        [ShowInInspector]
-        [ReadOnly]
+        [SerializeField]
         private Camera m_DefaultSceneCamera;
 
+        private Camera m_CurrentSceneCamera;
         private Camera m_SceneCamera;
 
         /// <summary>
@@ -25,13 +26,12 @@ namespace Game
         /// <summary>
         /// 场景相机
         /// </summary>
-        public Camera SceneCamera => m_SceneCamera;
+        public Camera CurrentSceneCamera => m_CurrentSceneCamera;
 
         protected override void Awake()
         {
             base.Awake();
-            m_SceneCamera = m_DefaultSceneCamera;
-            m_DefaultSceneCamera.enabled = true;
+            SetCurrentSceneCamera(m_DefaultSceneCamera);
         }
 
         private IEnumerator Start()
@@ -39,6 +39,28 @@ namespace Game
             yield return new WaitForEndOfFrame();
             GameEntry.Event.Subscribe(SceneCameraEnableEventArgs.EventId, OnSceneCameraEnable);
             GameEntry.Event.Subscribe(SceneCameraDisableEventArgs.EventId, OnSceneCameraDisable);
+        }
+        
+        private void SetCurrentSceneCamera(Camera sceneCamera)
+        {
+            m_CurrentSceneCamera = sceneCamera;
+            if (m_CurrentSceneCamera == m_DefaultSceneCamera)
+            {
+                m_DefaultSceneCamera.enabled = true;
+            }
+            else
+            {
+                m_DefaultSceneCamera.enabled = false;
+                var currentCameraData = m_CurrentSceneCamera.GetUniversalAdditionalCameraData();
+                if (currentCameraData.renderType != CameraRenderType.Base)
+                {
+                    throw new GameFrameworkException("Scene camera must be base camera.");
+                }
+                if(!currentCameraData.cameraStack.Contains(m_UICamera))
+                {
+                    currentCameraData.cameraStack.Add(m_UICamera);
+                }
+            }
         }
 
         private void OnSceneCameraEnable(object sender, GameEventArgs e)
@@ -48,8 +70,7 @@ namespace Game
             {
                 return;
             }
-            m_SceneCamera = eventArgs.SceneCamera;
-            m_DefaultSceneCamera.enabled = false;
+            SetCurrentSceneCamera(eventArgs.SceneCamera);
         }
 
         private void OnSceneCameraDisable(object sender, GameEventArgs e)
@@ -61,8 +82,7 @@ namespace Game
             }
             if (m_SceneCamera == eventArgs.SceneCamera)
             {
-                m_SceneCamera = m_DefaultSceneCamera;
-                m_DefaultSceneCamera.enabled = true;
+                SetCurrentSceneCamera(m_DefaultSceneCamera);
             }
         }
     }
