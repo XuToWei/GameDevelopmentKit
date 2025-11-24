@@ -29,7 +29,8 @@
         "LitMotion.Extensions",
         "LitMotion.Animation",
         "LoopScrollRect.Runtime",
-        "ReplaceComponent.Runtime"
+        "ReplaceComponent.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
