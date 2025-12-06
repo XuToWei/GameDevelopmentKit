@@ -19,13 +19,13 @@ namespace UnityGameFramework.Extension.Editor
         public static void RefreshResourceCollectionWithOptimize()
         {
             ResourceRuleEditor ruleEditor = ScriptableObject.CreateInstance<ResourceRuleEditor>();
-            ruleEditor.RefreshResourceCollection();
+            ruleEditor.RefreshResourceCollectionWithOptimize();
         }
 
         public static void RefreshResourceCollectionWithOptimize(string configPath)
         {
             ResourceRuleEditor ruleEditor = ScriptableObject.CreateInstance<ResourceRuleEditor>();
-            ruleEditor.RefreshResourceCollection(configPath);
+            ruleEditor.RefreshResourceCollectionWithOptimize(configPath);
         }
     }
 }
