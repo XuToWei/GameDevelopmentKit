@@ -27,6 +27,23 @@ namespace UnityGameFramework.Extension
             m_Sprites.TryGetValue(path, out Sprite sprite);
             return sprite;
         }
+
+        public Dictionary<string, Sprite>.KeyCollection Names
+        {
+            get
+            {
+                return m_Sprites.Keys;
+            }
+        }
+
+        public Dictionary<string, Sprite>.ValueCollection Sprites
+        {
+            get
+            {
+                return m_Sprites.Values;
+            }
+        }
+
 #if UNITY_EDITOR
         private void Awake()
         {
