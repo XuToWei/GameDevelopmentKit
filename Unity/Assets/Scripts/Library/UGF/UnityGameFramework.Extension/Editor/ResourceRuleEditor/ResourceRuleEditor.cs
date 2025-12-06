@@ -54,7 +54,7 @@ namespace UnityGameFramework.Extension.Editor
         [MenuItem("Game Framework/Resource Tools/Refresh Activate Resource Collection With Optimize", false, 53)]
         static void RefreshActivateResourceCollectionWithOptimize()
         {
-            ResourceRuleEditorUtility.RefreshResourceCollection();
+            ResourceRuleEditorUtility.RefreshResourceCollectionWithOptimize();
         }
 
         private bool CheckRule()

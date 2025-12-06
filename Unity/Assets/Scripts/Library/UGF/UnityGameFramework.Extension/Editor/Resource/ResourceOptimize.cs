@@ -7,6 +7,7 @@ using System.Text;
 using GameFramework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityGameFramework.Editor.ResourceTools;
 
 namespace UnityGameFramework.Extension.Editor
@@ -69,6 +70,7 @@ namespace UnityGameFramework.Extension.Editor
             }
             m_ResourceCollection = resourceCollection;
             OptimizeLoadType();
+            OptimizeSprite();
             Analyze();
             CalculateCombine();
             Save();
@@ -101,6 +103,58 @@ namespace UnityGameFramework.Extension.Editor
             EditorUtility.ClearProgressBar();
         }
 
+        private void OptimizeSprite()
+        {
+            var sprite2Collection = new Dictionary<string, string>();
+            var searchInFolders = new string[] { "Assets/Res" };
+            var scGuids = AssetDatabase.FindAssets("t:SpriteCollection", searchInFolders);
+            foreach (string scGuid in scGuids)
+            {
+                var scPath = AssetDatabase.GUIDToAssetPath(scGuid);
+                var sc = AssetDatabase.LoadAssetAtPath<SpriteCollection>(scPath);
+                sc.Pack();
+                foreach (Sprite sprite in sc.Sprites)
+                {
+                    string spritePath = AssetDatabase.GetAssetPath(sprite);
+                    string spriteGuide = AssetDatabase.AssetPathToGUID(spritePath);
+                    if (!sprite2Collection.TryAdd(spriteGuide, scPath))
+                    {
+                        throw new GameFrameworkException($"[{spritePath}]被重复添加进不同的SpriteCollection（[{sprite2Collection[spriteGuide]}]，[{scPath}]），请检查清理！");
+                    }
+                }
+            }
+            foreach (var asset in m_ResourceCollection.GetAssets())
+            {
+                if (sprite2Collection.ContainsKey(asset.Guid) || scGuids.Contains(asset.Guid))
+                {
+                    asset.Resource.UnassignAsset(asset);
+                }
+            }
+            foreach (var scGuid in scGuids)
+            {
+                var scPath = AssetDatabase.GUIDToAssetPath(scGuid);
+                var sc = AssetDatabase.LoadAssetAtPath<SpriteCollection>(scPath);
+                var assets = new List<string>();
+                assets.Add(scPath);
+                foreach (var spritePath in sc.Names)
+                {
+                    assets.Add(spritePath);
+                }
+                assets.Sort(string.CompareOrdinal);
+                var newBundleName = GetNewCombineName(assets);
+#if UNITY_WEBGL
+                //WebGL下不能使用LoadFromFile
+                m_ResourceCollection.AddResource(newBundleName, null, null, LoadType.LoadFromMemory, false);
+#else
+                m_ResourceCollection.AddResource(newBundleName, null, null, LoadType.LoadFromFile, false);
+#endif
+                foreach (var asset in assets)
+                {
+                    m_ResourceCollection.AssignAsset(AssetDatabase.AssetPathToGUID(asset), newBundleName, null);
+                }
+            }
+        }
+
         private void Save()
         {
             int count = m_CombineBundles.Count;
@@ -113,7 +167,7 @@ namespace UnityGameFramework.Extension.Editor
                 //WebGL下不能使用LoadFromFile
                 m_ResourceCollection.AddResource(kv.Key, null, null, LoadType.LoadFromMemory, false);
 #else
-                m_ResourceCollection.AddResource(kv.Key, null, null, LoadType.LoadFromFile, true);
+                m_ResourceCollection.AddResource(kv.Key, null, null, LoadType.LoadFromFile, false);
 #endif
                 foreach (var name in kv.Value)
                 {
@@ -211,7 +265,7 @@ namespace UnityGameFramework.Extension.Editor
                 return c1;
             });
             allFinalCombine = left.Count;
-            List<string> currentCombineBundle = new List<string>();
+            List<string> currentCombineBundles = new List<string>();
             long currentCombineBundleSize = 0;
             count = left.Count;
             cur = 0;
@@ -219,18 +273,18 @@ namespace UnityGameFramework.Extension.Editor
             {
                 cur++;
                 EditorUtility.DisplayProgressBar("CalculateCombine (3/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
-                currentCombineBundle.Add(abInfo.Name);
+                currentCombineBundles.Add(abInfo.Name);
                 currentCombineBundleSize += abInfo.Size;
                 if (currentCombineBundleSize > MAX_COMBINE_SHARE_AB_SIZE)
                 {
-                    m_CombineBundles[GetNewCombineName(currentCombineBundle)] = currentCombineBundle;
-                    currentCombineBundle = new List<string>();
+                    m_CombineBundles[GetNewCombineName(currentCombineBundles)] = currentCombineBundles;
+                    currentCombineBundles = new List<string>();
                     currentCombineBundleSize = 0;
                 }
             }
-            if (currentCombineBundle.Count > 0)
+            if (currentCombineBundles.Count > 0)
             {
-                m_CombineBundles[GetNewCombineName(currentCombineBundle)] = currentCombineBundle;
+                m_CombineBundles[GetNewCombineName(currentCombineBundles)] = currentCombineBundles;
             }
             Debug.Log($"总共有share ab的数量{allShareCount}，大小合格的数量{allShareCanCombine}，" +
                       $"因为ab太小和引用计数太少而被取消包名的数量{allShareRemoveByNoName}，" +
