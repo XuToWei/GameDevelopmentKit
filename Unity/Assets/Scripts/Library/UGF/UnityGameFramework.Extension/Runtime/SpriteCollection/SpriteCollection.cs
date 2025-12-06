@@ -128,7 +128,7 @@ namespace UnityGameFramework.Extension
         [FolderPath]
         [FoldoutGroup("Create Atlas", true)]
         [PropertyOrder(1)]
-        [OnValueChanged("AtlasFolderChanged")]
+        [OnValueChanged(nameof(AtlasFolderChanged))]
         private string m_AtlasFolder = "Assets/Res/UI/UIAtlas";
 
         void AtlasFolderChanged()
