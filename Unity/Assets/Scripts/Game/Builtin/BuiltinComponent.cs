@@ -15,16 +15,16 @@ namespace Game
     {
         [SerializeField]
         private BuiltinBuildInfo m_BuildInfoRelease;
-        
+
         [SerializeField]
         private BuiltinBuildInfo m_BuildInfoDebug;
 
         [SerializeField]
         private BuiltinLocalizationDictionary[] m_LocalizationDictionaries;
-        
+
         [SerializeField]
         private BuiltinUpdateResourceForm m_UpdateResourceFormTemplate;
-        
+
         [SerializeField]
         private BuiltinDialogForm m_DialogFormTemplate;
 
@@ -60,6 +60,7 @@ namespace Game
         }
 
 #if UNITY_EDITOR
+        [IgnoreLogMethod]
         [Button("Collect All Localization Dictionary")]
         public void CollectAllLocalizationDictionary()
         {
@@ -86,11 +87,11 @@ namespace Game
             {
                 if (dictionary.Language == Language.Unspecified)
                 {
-                    Log.Error("Language({0}) is Unspecified!", dictionary.Language);
+                    Debug.LogErrorFormat("Language({0}) is Unspecified!", dictionary.Language);
                 }
                 else if (!allLanguages.Add(dictionary.Language))
                 {
-                    Log.Error("Language({0}) is duplicate!", dictionary.Language);
+                    Debug.LogErrorFormat("Language({0}) is duplicate!", dictionary.Language);
                 }
                 foreach (var key in dictionary.Dictionary.Keys)
                 {
@@ -103,7 +104,7 @@ namespace Game
                 {
                     if (!allKeys.Contains(key))
                     {
-                        Log.Error("Dictionary({0}) key {1} is missing!", dictionary.name, key);
+                        Debug.LogErrorFormat("Dictionary({0}) key {1} is missing!", dictionary.name, key);
                     }
                 }
             }

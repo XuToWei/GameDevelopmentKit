@@ -16,7 +16,6 @@ namespace Game
         private Camera m_DefaultSceneCamera;
 
         private Camera m_CurrentSceneCamera;
-        private Camera m_SceneCamera;
 
         /// <summary>
         /// UI相机
@@ -80,7 +79,7 @@ namespace Game
             {
                 return;
             }
-            if (m_SceneCamera == eventArgs.SceneCamera)
+            if (m_CurrentSceneCamera == eventArgs.SceneCamera)
             {
                 SetCurrentSceneCamera(m_DefaultSceneCamera);
             }
