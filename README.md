@@ -170,7 +170,7 @@
 ## 📞 支持
 
 - **文档**: [项目文档](Book/)
-- **问题反馈**: [GitHub Issues](https://github.com/your-repo/issues)
+- **问题反馈**: [GitHub Issues](https://github.com/XuToWei/GameDevelopmentKit/issues)
 - **QQ交流群**: 949482664
 
 ---
