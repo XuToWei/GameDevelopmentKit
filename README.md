@@ -1,201 +1,95 @@
-# GameDevelopmentKit
+# GameDevelopmentKit的介绍：
+努力提供完善的双端开发工具
 
-[![Unity](https://img.shields.io/badge/Unity-6000.0.59f2-blue.svg)](https://unity3d.com/get-unity/download)
-[![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![QQ群](https://img.shields.io/badge/QQ群-949482664-orange.svg)](https://qm.qq.com/cgi-bin/qm/qr?k=your_qq_group_key)
+服务端以[ET8.1框架](https://github.com/egametang/ET)为基础
 
-**GameDevelopmentKit** 是一个专业的游戏开发解决方案，提供完整的客户端-服务端开发框架，集成了现代游戏开发的最佳实践。
+客户端以[UnityGameFramework框架（GF）](https://github.com/EllanJiang/UnityGameFramework)为基础，将ET框架子模块化入GF，完善ET的客户端功能
 
-## 🚀 核心特性
+配置工具使用[Luban](https://github.com/focus-creative-games/luban)
 
-- **服务端**: 基于 [ET 8.1](https://github.com/egametang/ET) 高性能分布式游戏服务器框架
-- **客户端**: 基于 [UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework) 与 ET 深度集成
-- **配置管理**: 集成 [Luban](https://github.com/focus-creative-games/luban) 高效配置生成工具
-- **热更新**: 基于 [HybridCLR](https://github.com/focus-creative-games/hybridclr) 的完整热更新解决方案
-- **异步编程**: 全面采用 [UniTask](https://github.com/Cysharp/UniTask) 异步编程方案
+使用[HybridCLR](https://github.com/focus-creative-games/hybridclr)热更新
 
-## 💡 为什么选择 GameDevelopmentKit
+***
 
-> 🎯 **解决游戏开发痛点，提升10倍开发效率**
+## 交流QQ群：949482664
 
-### 🚀 告别重复劳动，专注创意实现
-**痛点**: 每个项目都要重新搭建框架，配置繁琐，UI绑定代码写到手软
-- ✅ **一键解决资源绑定**: [CodeBind 工具](https://github.com/XuToWei/CodeBind)真正做到**"解决代码与资源映射的最后一公里"**
-- ✅ **智能状态管理**: 一行代码 `STATE_CONTROLLER_CODE_BIND` 自动生成状态数据，**告别繁琐的 UI 状态控制**
-- ✅ **全自动代码生成**: ETUI、GFEntity、Proto 代码一键生成，从此不再写模板代码
+# 细节
 
-### 🎛️ 真正的架构自由度
-**痛点**: 技术选型困难，架构固化后难以调整，团队成员技能差异大
-- ✅ **想用什么用什么**: ET 逻辑？GF 逻辑？热更？非热更？**选择随心所欲**，甚至可以只用 GF
-- ✅ **渐进式升级**: 现有 Unity 项目也能无缝接入，不用推倒重来
-- ✅ **团队友好**: 不同技能水平的开发者都能快速上手，降低学习成本
+1.以GFUI为基础的[ETUI](Unity/Assets/Scripts/Game/ET/Loader/UGF/UIForm)
 
-### ⚡ 性能与开发效率兼得
-**痛点**: 性能优化复杂，配置导表慢如蜗牛，异步编程门槛高
-- ✅ **多线程导表**: Luban 优化方案让大型项目配置导入**速度大幅提升**
-- ✅ **现代异步方案**: UniTask 全面替换 ETTask，**对非 ET 部分支持更全面**
-- ✅ **企业级性能**: ET 8.1 分布式架构，天然支撑大型多人在线游戏
+2.以GFEntity为基础的[ETEntity](Unity/Assets/Scripts/Game/ET/Loader/UGF/Entity)
 
-### 🌍 从开发到发布的完整闭环
-**痛点**: 热更新复杂易出错，多语言支持繁琐，打包发布流程混乱
-- ✅ **生产级热更新**: HybridCLR 完整集成，代码和资源热更新不再是难题
-- ✅ **自动多语言**: **导表自动生成多语言配置**，支持编辑器预览，本地化工作变简单
-- ✅ **一键部署**: 打包、上传资源服务器一气呵成，**方便开发期间快速出包测试**
+3.使用极其灵活方便的[代码绑定工具](https://github.com/XuToWei/CodeBind)，解决代码与资源映射的最后一公里，极力推荐！
 
-### 🛡️ 久经商业验证的稳定基础
-**优势**: 不是玩具项目，而是真正的生产力工具
-- 🏆 **商业项目验证**: 已在多个商业游戏项目中稳定运行
-- 🔧 **持续更新维护**: 基于 ET 8.1 最新版本，紧跟技术发展
-- 👥 **活跃社区支持**: QQ 群 949482664，问题能得到及时解答
+4.配置灵活易扩展的[状态控制器](https://github.com/XuToWei/StateController)，加上宏"STATE_CONTROLLER_CODE_BIND"即可代码绑定时自动生成状态数据的代码，一行代码就能控制繁琐的UI状态，极力推荐与[代码绑定工具](https://github.com/XuToWei/CodeBind)结合使用！
 
-## 💬 社区支持
+5.[模块切换](Book/Project%E7%BB%93%E6%9E%84.md)方便，ET逻辑或GF逻辑，热更或非热更选择随心所欲，当然也可以只用GF，可以按需选用ET或GF分支开发即可
 
-- **QQ交流群**: 949482664
+6.项目全面使用[UniTask](https://github.com/Cysharp/UniTask)异步方案，已替换ETTask，对非ET的部分支持更全面，扩展支持了GF，推荐使用
 
-## ✨ 核心功能
+7.[基于Luban优化过后的导表工具](Book/Luban%E9%85%8D%E7%BD%AE.md)，简化Luban使用步骤，可以灵活的修改导出配置，支持多线程导表速度大幅提升
 
-### 🎨 UI系统
-- **ETUI**: 基于 GFUI 的 [ET UI 解决方案](Unity/Assets/Scripts/Game/ET/Loader/UGF/UIForm)，无缝融合 ET 和 GF 的 UI 开发模式
-- **智能状态控制**: 配置灵活易扩展的 [状态控制器](https://github.com/XuToWei/StateController)，加上宏 `STATE_CONTROLLER_CODE_BIND` 即可代码绑定时自动生成状态数据，**一行代码控制繁琐的 UI 状态**，**极力推荐与代码绑定工具结合使用！**
+8.完善的[多语言](Book/%E5%A4%9A%E8%AF%AD%E8%A8%80.md)支持，导表自动生成多语言配置，支持编辑器配置和预览
 
-### 🏗️ 实体系统  
-- **ETEntity**: 基于 GFEntity 的 [实体管理系统](Unity/Assets/Scripts/Game/ET/Loader/UGF/Entity)，完善 ET 的客户端功能
-- **模块自由切换**: [灵活的模块架构](Book/Project%E7%BB%93%E6%9E%84.md)，**ET 逻辑或 GF 逻辑，热更或非热更选择随心所欲**，也可以只使用 GF，按需选用 ET 或 GF 分支开发
+9.完善的[热更新](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)流程和工具支持，基于HybridCLR
 
-### ⚡ 极致开发工具链
-- **代码资源绑定**: 使用极其灵活方便的 [代码绑定工具](https://github.com/XuToWei/CodeBind)，**解决代码与资源映射的最后一公里，极力推荐！**
-- **优化导表系统**: [基于 Luban 优化的导表工具](Book/Luban%E9%85%8D%E7%BD%AE.md)，简化 Luban 使用步骤，可以灵活修改导出配置，**支持多线程导表速度大幅提升**
-- **智能代码生成**:
-  - [ET 代码生成工具](Book/ET%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7.md) - 便捷生成 ETUI 和 GFEntity 代码
-  - [Proto 生成工具](Book/Proto%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7.md) - 支持 ET 和 GF 两种格式的 proto 代码生成
-- **开发效率工具**: [自定义 Toolbar 工具](Book/%E8%87%AA%E5%AE%9A%E4%B9%89Toolbar.md)，提升日常开发体验
+10.[Proto生成工具](Book/Proto%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7.md)，支持ET和GF两种格式的proto代码生成
 
-### 🌐 完善国际化支持
-- **多语言系统**: 完善的 [多语言解决方案](Book/%E5%A4%9A%E8%AF%AD%E8%A8%80.md)，**导表自动生成多语言配置**
-- **可视化配置**: 支持编辑器内配置和实时预览，降低本地化工作复杂度
+11.[ET代码生成工具](Book/ET%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7.md)，可以很方便的生成ETUI和GFEntity的代码
 
-### 🔄 生产级热更新
-- **HybridCLR 集成**: 完善的 [热更新流程](Book/HybridCLR%E7%83%AD%E6%9B%B4.md) 和工具支持，基于 HybridCLR 的完整解决方案
-- **一键部署**: [一键打包工具](Book/%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85.md)，**上传资源服务器，方便开发期间出包测试**
+12.[自定义Toolbar工具](Book/%E8%87%AA%E5%AE%9A%E4%B9%89Toolbar.md)
 
-### 🚀 现代异步编程
-- **UniTask 全面集成**: 项目全面使用 [UniTask](https://github.com/Cysharp/UniTask) 异步方案，**已替换 ETTask**，对非 ET 部分支持更全面，扩展支持了 GF，推荐使用
-- **ET 动态事件**: [ET 动态事件系统](Book/ET%E5%8A%A8%E6%80%81%E4%BA%8B%E4%BB%B6.md)，提供更灵活的事件处理机制
+13.[ET动态事件](Book/ET%E5%8A%A8%E6%80%81%E4%BA%8B%E4%BB%B6.md)
 
-## 🛠️ 快速开始
+14.[一键打包](Book/%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85.md)，上传资源服务器，方便开发期间出包测试
 
-### 环境要求
+# 运行步骤
 
-| 工具 | 版本 | 说明 |
-|------|------|------|
-| Unity | 6000.0.59f2+ | 客户端开发环境 |
-| .NET | 8.0+ | 服务端运行环境 |
-| MongoDB | 4.0+ | 数据库（服务器功能需要） |
+### Unity Editor
 
-### 开发环境设置
+- 1.安装 [.net8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)，服务器功能需要安装[MongoDB](https://www.mongodb.com/)
 
-#### 1. 环境准备
-- **安装 .NET 8.0**: 从 [官方网站](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) 下载并安装 .NET 8.0 SDK
-- **安装 MongoDB**（可选，用于服务器功能）: 从 [官方网站](https://www.mongodb.com/) 下载并安装 MongoDB
+- 2.打开Unity(6000.0.59f2)项目，等待Unity编译完成
 
-#### 2. 项目启动
-1. **获取项目**
-   - 克隆或下载本项目到本地目录
-   - 进入项目根目录
+- 3.使用IDE打开Kit.sln编译（导表，资源服务器，代码分析等功能需要用到）
 
-2. **Unity 项目设置**
-   - 使用 Unity 6000.0.59f2 打开项目
-   - 等待 Unity 完成编译
+- 4.点击Unity编辑器运行按钮旁的Launcher按钮即可运行ET的Demo
 
-3. **编译支持工具**
-   - 使用 IDE 打开 `Kit.sln` 解决方案文件
-   - 编译解决方案（导表、资源服务器等功能依赖）
+### Windows Build
 
-4. **运行 Demo**
-   - 在 Unity 编辑器中点击运行按钮旁的 `Launcher` 按钮
-   - 启动 ET Demo
+- 1.[代码热更处理](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)
 
-### 生产环境部署
+- 2.[一键打包](Book/%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85.md)，运行程序即可
 
-#### Windows 平台构建
-1. **配置热更新**
-   - 参考 [HybridCLR 热更新指南](Book/HybridCLR%E7%83%AD%E6%9B%B4.md)
+***
 
-2. **一键打包**
-   - 使用 [一键打包工具](Book/%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85.md)
-   - 自动生成可执行程序
+# TODO && Features
 
----
+- [X] Demo
 
-## 🗺️ 开发路线图
+***
 
-- [x] **基础 Demo** - 完整的客户端-服务端通信示例
-- [ ] **文档完善** - 详细的开发文档和 API 参考
-- [ ] **性能优化** - 内存管理和渲染优化
-- [ ] **单元测试** - 完整的测试覆盖率
-- [ ] **CI/CD** - 自动化构建和部署流程
+### 该项目依赖以下收费插件（请自行购买安装）：
 
-## 📦 依赖项
+- [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)
 
-### 开源依赖（免费）
-| 库名 | 版本 | 用途 |
-|------|------|------|
-| [UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework) | Latest | 客户端框架基础 |
-| [ET](https://github.com/egametang/ET) | [8.1](https://github.com/egametang/ET/commit/faa825d22a5b05d727f4878dfe34600628942579) | 服务端框架 |
-| [Luban](https://github.com/focus-creative-games/luban) | Latest | 配置生成工具 |
-| [UniTask](https://github.com/Cysharp/UniTask) | Latest | 异步编程支持 |
-| [HybridCLR](https://github.com/focus-creative-games/hybridclr) | Latest | 热更新解决方案 |
-| [UGFExtensions](https://github.com/FingerCaster/UGFExtensions) | Latest | UGF 框架扩展 |
-| [SocoTools](https://github.com/crossous/SocoTools) | Latest | 开发辅助工具 |
-| [FolderTag](https://github.com/liyingsong99/FolderTag) | Latest | 文件夹标记工具 |
-| [LoopScrollRect](https://github.com/qiankanglai/LoopScrollRect) | Latest | 循环滚动列表 |
-| [CodeBind](https://github.com/XuToWei/CodeBind) | Latest | 代码绑定工具 |
-| [StateController](https://github.com/XuToWei/StateController) | Latest | 状态控制器 |
+- [SRDebugger](https://assetstore.unity.com/packages/tools/gui/srdebugger-console-tools-on-device-27688)
 
-### 商业插件（需购买）
-> ⚠️ **注意**: 以下插件需要从 Unity Asset Store 购买
+***
 
-- [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041) - 高级序列化和检查器工具
-- [SRDebugger](https://assetstore.unity.com/packages/tools/gui/srdebugger-console-tools-on-device-27688) - 运行时调试控制台
+# 引用库 致谢
+[UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
 
-## 📄 许可证
+[ET](https://github.com/egametang/ET)（版本：[8.1](https://github.com/egametang/ET/commit/faa825d22a5b05d727f4878dfe34600628942579)）
 
-本项目采用 MIT 许可证。详情请参阅 [LICENSE](LICENSE) 文件。
+[Luban](https://github.com/focus-creative-games/luban)
 
-## 🙏 致谢
+[UniTask](https://github.com/Cysharp/UniTask)
 
-感谢以下开源项目和社区贡献者的支持，使得 GameDevelopmentKit 能够为游戏开发者提供更好的开发体验。
+[UGFExtensions](https://github.com/FingerCaster/UGFExtensions)
 
-## 📞 支持
+[SocoTools](https://github.com/crossous/SocoTools)
 
-- **文档**: [项目文档](Book/)
-- **问题反馈**: [GitHub Issues](https://github.com/XuToWei/GameDevelopmentKit/issues)
-- **QQ交流群**: 949482664
+[FolderTag](https://github.com/liyingsong99/FolderTag)
 
----
-
-## ⭐ 如果对你有帮助，请点个 Star！
-
-<div align="center">
-
-💖 **感谢你阅读到这里！** 如果 **GameDevelopmentKit** 对你的项目有帮助，请考虑给我们一个 ⭐ **Star**
-
-你的支持是我们持续改进的动力！🚀
-
-[![GitHub stars](https://img.shields.io/github/stars/XuToWei/GameDevelopmentKit?style=social)](https://github.com/XuToWei/GameDevelopmentKit/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/XuToWei/GameDevelopmentKit?style=social)](https://github.com/XuToWei/GameDevelopmentKit/network)
-
-**分享给你的朋友们，让更多开发者受益！** 📢
-
-</div>
-
----
-
-<div align="center">
-
-**GameDevelopmentKit** - 让游戏开发更简单 🎮
-
-Made with ❤️ by the GameDev Community
-
-</div>
+[LoopScrollRect](https://github.com/qiankanglai/LoopScrollRect)
