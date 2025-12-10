@@ -57,6 +57,10 @@ namespace UnityGameFramework.Extension.Editor
                     m_Controller.OutputPackageSelected = true;
                     m_Controller.OutputFullSelected = false;
                     m_Controller.OutputPackedSelected = false;
+#if UNITY_WEBGL
+                    // WebGL文件名带MD5防止缓存
+                    m_Controller.OutputPackageWithMD5 = true;
+#endif
                 }
                 else
                 {
