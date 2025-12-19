@@ -1,3 +1,4 @@
+using System.IO;
 using Cysharp.Threading.Tasks;
 using UnityEngine.UI;
 using UnityGameFramework.Extension;
@@ -18,6 +19,16 @@ namespace Game
         }
         
         /// <summary>
+        /// 设置精灵，collectionPath与spritePath相同的路径和文件名时候使用此方法
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="spritePath">精灵名称</param>
+        public static UniTask SetSpriteAsync(this Image image, string spritePath)
+        {
+            return GameEntry.SpriteCollection.SetSpriteAsync(WaitSetImage.Create(image, Path.ChangeExtension(spritePath, ".asset"), spritePath));
+        }
+        
+        /// <summary>
         /// 设置精灵
         /// </summary>
         /// <param name="image"></param>
@@ -25,7 +36,17 @@ namespace Game
         /// <param name="spritePath">精灵名称</param>
         public static void SetSprite(this Image image, string collectionPath, string spritePath)
         {
-            GameEntry.SpriteCollection.SetSprite(WaitSetImage.Create(image,collectionPath,spritePath));
+            GameEntry.SpriteCollection.SetSprite(WaitSetImage.Create(image, collectionPath,spritePath));
+        }
+        
+        /// <summary>
+        /// 设置精灵，collectionPath与spritePath相同的路径和文件名时候使用此方法
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="spritePath">精灵名称</param>
+        public static void SetSprite(this Image image, string spritePath)
+        {
+            GameEntry.SpriteCollection.SetSprite(WaitSetImage.Create(image, Path.ChangeExtension(spritePath, ".asset"), spritePath));
         }
     }
 }
