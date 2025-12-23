@@ -366,13 +366,6 @@
       "dependencies": {},
       "hash": "b64ffe39905bec0e098be1598875938e0a2e8586"
     },
-    "me.xw.protobufunity": {
-      "version": "https://github.com/XuToWei/Protobuf-Unity.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "edb6f89f22472bac82dd27c3bd40906aeff0cb94"
-    },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
