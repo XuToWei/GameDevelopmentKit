@@ -440,11 +440,8 @@ namespace UnityEngine.UI
         {
             if (language == LocalizationHelper.LanguageType.NoWord && !ignoreLocalization)
             {
-                text = "";
-                for (int i = 0; i < origin_len; i++)
-                {
-                    text += '□';
-                }
+                // changed by gdk
+                text = new string('□', origin_len);
                 return;
             }
             string id = localizationType == LocalizationHelper.TextLocalizationType.RuntimeUse ? localizationID : m_previewID;

@@ -26,7 +26,7 @@ namespace UnityGameFramework.Extension
         [SerializeField]
         private string m_CollectionPatterns;
         [SerializeField]
-        [OnValueChanged("OnPathChange", IncludeChildren = true)]
+        [OnValueChanged(nameof(OnPathChange), IncludeChildren = true)]
         [AssetsOnly]
         private List<DefaultAsset> m_CollectionPaths = new List<DefaultAsset>();
         

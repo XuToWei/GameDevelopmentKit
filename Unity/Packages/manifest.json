@@ -27,6 +27,7 @@
     "com.yasirkula.runtimeinspector": "https://github.com/yasirkula/UnityRuntimeInspector.git",
     "me.qiankanglai.loopscrollrect": "https://github.com/qiankanglai/LoopScrollRect.git",
     "me.xw.codebind": "https://github.com/XuToWei/CodeBind.git",
+    "me.xw.protobufunity": "https://github.com/XuToWei/Protobuf-Unity.git",
     "me.xw.statecontroller": "https://github.com/XuToWei/StateController.git",
     "me.xw.toolbarextension": "https://github.com/XuToWei/ToolbarExtension.git",
     "com.unity.modules.ai": "1.0.0",

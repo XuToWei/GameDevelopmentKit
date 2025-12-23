@@ -32,7 +32,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "01754c8fb47bd49697b3428993109e7a972a7968"
+      "hash": "fcef6dfe8ed715cc60a7618a1d2ad62bcace3a80"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -41,7 +41,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "8b76751edaaf8ba86698977a89861561f5799f47"
+      "hash": "9a7535a3fad66ebec5458a8b22f6ad023c960fd3"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
@@ -50,7 +50,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "3ff52e4735481da36428d361afe28b85eca96e2d"
+      "hash": "4e30651290ab5c914237f2af4e3bdbef661feb93"
     },
     "com.coffee.ui-particle": {
       "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
@@ -60,7 +60,7 @@
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "4b98abd7469b10d55c9c623830cb6e1518f72731"
+      "hash": "c54f63cb18a22382215b142b63e232f0f86fff58"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -97,7 +97,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "c44d71c9743c500fd69302e19b5fc6208b7ed64f"
+      "hash": "9fae2bebcf8768398905aba0e64a25f2384b4556"
     },
     "com.psygames.unitywebsocket": {
       "version": "https://github.com/psygames/UnityWebSocket.git#upm",
@@ -294,7 +294,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "160da9f371f8fd02ea2b24acdb8e86bc6c627f20"
+      "hash": "34cd04c2dac9e240bea2ca4f71dc4a6eb0dec50f"
     },
     "com.yasirkula.runtimeinspector": {
       "version": "https://github.com/yasirkula/UnityRuntimeInspector.git",
@@ -310,21 +310,28 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "77cdcf4aa4c5ccac40b2f13a14eae83eab44c441"
+      "hash": "48735bdc5e6d9451b3015e54f2b1f858c404df3e"
     },
     "me.xw.codebind": {
       "version": "https://github.com/XuToWei/CodeBind.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "29b7a18194725c13a6ab1ec339253854a3bd78cb"
+      "hash": "b64ffe39905bec0e098be1598875938e0a2e8586"
+    },
+    "me.xw.protobufunity": {
+      "version": "https://github.com/XuToWei/Protobuf-Unity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "edb6f89f22472bac82dd27c3bd40906aeff0cb94"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "eab89e568d2af9ecc32c6c5567f443944dbfd634"
+      "hash": "fd60f6791a72968c1131eafeaeb27167a9147d7e"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",

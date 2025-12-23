@@ -52,13 +52,19 @@ namespace UnityGameFramework.Extension
 
         [InfoBox("Can drag to 'Objects'")]
         [OdinSerialize]
-        [OnValueChanged("OnListChange", includeChildren: true)]
+        [OnValueChanged(nameof(OnListChange), includeChildren: true)]
         [ListDrawerSettings(DraggableItems = false, IsReadOnly = false, HideAddButton = true)]
         [AssetsOnly]
+        [Tooltip("收集Sprite的对象列表（Sprite，Folder，SpriteAtlas）")]
         private List<Object> m_Objects = new List<Object>();
-        
+
         [NonSerialized]
         private readonly Dictionary<string, Sprite> m_SpritesTemp = new Dictionary<string, Sprite>();
+
+        /// <summary>
+        /// 收集Sprite的对象列表（Sprite，Folder，SpriteAtlas）
+        /// </summary>
+        public List<Object> Objects => m_Objects;
 
         private void OnListChange()
         {
@@ -128,7 +134,7 @@ namespace UnityGameFramework.Extension
         [FolderPath]
         [FoldoutGroup("Create Atlas", true)]
         [PropertyOrder(1)]
-        [OnValueChanged("AtlasFolderChanged")]
+        [OnValueChanged(nameof(AtlasFolderChanged))]
         private string m_AtlasFolder = "Assets/Res/UI/UIAtlas";
 
         void AtlasFolderChanged()

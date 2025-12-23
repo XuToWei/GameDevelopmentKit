@@ -16,7 +16,6 @@
         "Coffee.SoftMaskForUGUI",
         "Coffee.UnmaskForUGUI",
         "ZString",
-        "protobuf-net",
         "EnhancedScroller",
         "Leihuo.UXTools.Runtime",
         "StateController",
@@ -25,7 +24,8 @@
         "LitMotion",
         "LitMotion.Extensions",
         "LitMotion.Animation",
-        "LoopScrollRect.Runtime"
+        "LoopScrollRect.Runtime",
+        "Protobuf"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

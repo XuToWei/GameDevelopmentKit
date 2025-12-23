@@ -12,3 +12,26 @@ message SCHeartBeatTest
 {
 	repeated int32 A = 1;
 }
+
+message SCTest
+{
+	repeated TestClass A = 1;
+	repeated string B = 2;
+}
+
+message TestClass
+{
+	repeated int32 A = 1;
+	repeated string B = 2;
+	repeated TestClass2 C = 3;
+	TestClass2 D = 4;
+	map<int32, TestClass2> E = 5;
+}
+
+message TestClass2
+{
+	repeated int32 A = 1;
+	repeated string B = 2;
+	map<int32, int64> C = 3;
+	string D = 4;
+}
