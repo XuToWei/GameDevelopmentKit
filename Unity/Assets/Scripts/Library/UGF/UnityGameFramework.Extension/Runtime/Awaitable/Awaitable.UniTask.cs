@@ -111,10 +111,10 @@ namespace UnityGameFramework.Extension
             {
                 TaskTracker.RemoveTracking(this);
                 core.Reset();
-                moveNext = default;
+                moveNext = null;
                 returnAction?.Invoke();
-                returnAction = default;
-                cancellationToken = default;
+                returnAction = null;
+                cancellationToken = CancellationToken.None;
                 return pool.TryPush(this);
             }
         }
