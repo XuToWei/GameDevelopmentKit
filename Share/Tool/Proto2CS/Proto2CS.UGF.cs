@@ -53,6 +53,7 @@ namespace ET
                 string s = File.ReadAllText(protoFile);
                 
                 bool isMsgStart = false;
+                bool isPacketMsg = false;
                 bool isEnumStart = false;
                 int lineNum = 0;
                 StringBuilder msgDisposeSb = new StringBuilder();
@@ -85,10 +86,7 @@ namespace ET
                     {
                         string parentClass = "";
                         isMsgStart = true;
-
-                        msgDisposeSb.Clear();
-                        msgDisposeSb.Append($"\t\tpublic override void Clear()\n");
-                        msgDisposeSb.Append("\t\t{\n");
+                        isPacketMsg = true;
 
                         string msgName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
                         string[] ss = newline.Split(s_SplitStrings, StringSplitOptions.RemoveEmptyEntries);
@@ -119,7 +117,8 @@ namespace ET
                             }
                             else
                             {
-                                throw new Exception("\n");
+                                isPacketMsg = false;
+                                s_StringBuilder.Append(" : IReference\n");
                             }
                         }
                         else
@@ -130,8 +129,22 @@ namespace ET
                         if (newline.Contains("{"))
                         {
                             s_StringBuilder.Append("\t{\n");
-                            s_StringBuilder.Append($"\t\tpublic override int Id => {s_StartOpcode};\n");
+                            if (isPacketMsg)
+                            {
+                                s_StringBuilder.Append($"\t\tpublic override int Id => {s_StartOpcode};\n");
+                            }
                         }
+
+                        msgDisposeSb.Clear();
+                        if (isPacketMsg)
+                        {
+                            msgDisposeSb.Append($"\t\tpublic override void Clear()\n");
+                        }
+                        else
+                        {
+                            msgDisposeSb.Append($"\t\tpublic void Clear()\n");
+                        }
+                        msgDisposeSb.Append("\t\t{\n");
 
                         continue;
                     }
@@ -143,7 +156,7 @@ namespace ET
 
                         s_StringBuilder.Append($"\t// proto file : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)} (line:{lineNum})\n");
                         s_StringBuilder.Append($"\tpublic enum {enumName}");
-                        
+
                         continue;
                     }
 
@@ -152,7 +165,10 @@ namespace ET
                         if (newline.StartsWith("{"))
                         {
                             s_StringBuilder.Append("\t{\n");
-                            s_StringBuilder.Append($"\t\tpublic override int Id => {s_StartOpcode};\n");
+                            if (isPacketMsg)
+                            {
+                                s_StringBuilder.Append($"\t\tpublic override int Id => {s_StartOpcode};\n");
+                            }
                             continue;
                         }
 
@@ -270,7 +286,7 @@ namespace ET
                     {
                         disposeSb.Append($"\t\t\tforeach(var item in {v}.Values)\n");
                         disposeSb.Append("\t\t\t{\n");
-                        disposeSb.Append($"\t\t\t\tReference.Release(item);\n");
+                        disposeSb.Append($"\t\t\t\tReferencePool.Release(item);\n");
                         disposeSb.Append("\t\t\t}\n");
                     }
                     disposeSb.Append($"\t\t\tthis.{v}.Clear();\n");
@@ -300,7 +316,7 @@ namespace ET
                     {
                         disposeSb.Append($"\t\t\tforeach(var item in {name})\n");
                         disposeSb.Append("\t\t\t{\n");
-                        disposeSb.Append($"\t\t\t\tReference.Release(item);\n");
+                        disposeSb.Append($"\t\t\t\tReferencePool.Release(item);\n");
                         disposeSb.Append("\t\t\t}\n");
                     }
                     disposeSb.Append($"\t\t\tthis.{name}.Clear();\n");
@@ -399,7 +415,10 @@ namespace ET
                         default:
                             if (IsClearType(type))
                             {
-                                disposeSb.Append($"\t\t\tReference.Release(this.{name});\n");
+                                disposeSb.Append($"\t\t\tif(this.{name} != null)\n");
+                                disposeSb.Append("\t\t\t{\n");
+                                disposeSb.Append($"\t\t\t\tReferencePool.Release(this.{name});\n");
+                                disposeSb.Append("\t\t\t}\n");
                             }
                             disposeSb.Append($"\t\t\tthis.{name} = default;\n");
                             break;

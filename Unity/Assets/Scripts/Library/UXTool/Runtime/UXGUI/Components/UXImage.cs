@@ -350,11 +350,7 @@ namespace UnityEngine.UI
             int languageIndex = (int)language;
             if (languageIndex >= 0 && sprite != null && !ignoreLocalization)
             {
-                base.sprite = ResourceManager.Load<Sprite>($"{UXGUIConfig.LocalizationFolder}/{language}/{origin_name}.png");
-                if (sprite == null)
-                {
-                    base.sprite = ResourceManager.Load<Sprite>(UXGUIConfig.UXGUINeedReplaceSpritePathReplace);
-                }
+                ResourceManager.LoadSprite(this, $"{UXGUIConfig.LocalizationFolder}/{language}/{origin_name}.png");
             }
         }
 

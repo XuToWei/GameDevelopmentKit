@@ -10,6 +10,11 @@ namespace Game
 {
     public static partial class UGuiExtension
     {
+        /// <summary>
+        /// 缓存的 WaitForEndOfFrame 对象，避免每帧分配
+        /// </summary>
+        private static readonly WaitForEndOfFrame s_WaitForEndOfFrame = new WaitForEndOfFrame();
+
         public static IEnumerator FadeToAlpha(this CanvasGroup canvasGroup, float alpha, float duration)
         {
             float time = 0f;
@@ -18,7 +23,7 @@ namespace Game
             {
                 time += Time.deltaTime;
                 canvasGroup.alpha = Mathf.Lerp(originalAlpha, alpha, time / duration);
-                yield return new WaitForEndOfFrame();
+                yield return s_WaitForEndOfFrame;
             }
 
             canvasGroup.alpha = alpha;
@@ -32,7 +37,7 @@ namespace Game
             {
                 time += Time.deltaTime;
                 slider.value = Mathf.Lerp(originalValue, value, time / duration);
-                yield return new WaitForEndOfFrame();
+                yield return s_WaitForEndOfFrame;
             }
 
             slider.value = value;
