@@ -47,7 +47,10 @@ namespace UnityGameFramework.Extension
 #if UNITY_EDITOR
         private void Awake()
         {
-            Pack();
+            if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(this)))
+            {
+                Pack();
+            }
         }
 
         [InfoBox("Can drag to 'Objects'")]
