@@ -86,6 +86,7 @@ namespace Game
             {
                 m_CachedTransform = transform;
             }
+            InternalSetVisible(false);
         }
 
         /// <summary>
