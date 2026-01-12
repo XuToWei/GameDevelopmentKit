@@ -129,8 +129,8 @@
       "dependencies": {
         "com.unity.burst": "1.8.23",
         "com.unity.mathematics": "1.3.2",
-        "com.unity.nuget.mono-cecil": "1.11.5",
         "com.unity.test-framework": "1.4.6",
+        "com.unity.nuget.mono-cecil": "1.11.5",
         "com.unity.test-framework.performance": "3.0.3"
       },
       "url": "https://packages.unity.com"
@@ -185,11 +185,11 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.editorcoroutines": "1.0.0",
+        "com.unity.burst": "1.8.0",
         "com.unity.collections": "1.2.3",
         "com.unity.mathematics": "1.2.1",
-        "com.unity.burst": "1.8.0",
-        "com.unity.profiling.core": "1.0.0"
+        "com.unity.profiling.core": "1.0.0",
+        "com.unity.editorcoroutines": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -372,6 +372,13 @@
       "source": "git",
       "dependencies": {},
       "hash": "edb6f89f22472bac82dd27c3bd40906aeff0cb94"
+    },
+    "me.xw.reactivebinding": {
+      "version": "https://github.com/XuToWei/ReactiveBinding.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "df529686698dcf7dad5ded072c8e78a698601f70"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
