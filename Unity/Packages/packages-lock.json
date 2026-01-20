@@ -364,7 +364,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "b64ffe39905bec0e098be1598875938e0a2e8586"
+      "hash": "d2be8583c8790c9dec00355e7fdb4ffc36efeefc"
     },
     "me.xw.protobufunity": {
       "version": "https://github.com/XuToWei/Protobuf-Unity.git",
@@ -385,7 +385,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "fd60f6791a72968c1131eafeaeb27167a9147d7e"
+      "hash": "889687aacf5a0a592e494d31838dc107c1db4e31"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
