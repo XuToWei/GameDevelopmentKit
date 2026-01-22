@@ -364,14 +364,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d2be8583c8790c9dec00355e7fdb4ffc36efeefc"
+      "hash": "e7522ea5ad3ef4f69c5c3df5f0b9d24cb9c8b923"
     },
     "me.xw.protobufunity": {
       "version": "https://github.com/XuToWei/Protobuf-Unity.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "edb6f89f22472bac82dd27c3bd40906aeff0cb94"
+      "hash": "749522159547e3aa80110e3ea747f294f0e2caf3"
     },
     "me.xw.reactivebinding": {
       "version": "https://github.com/XuToWei/ReactiveBinding.git",
@@ -385,7 +385,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "889687aacf5a0a592e494d31838dc107c1db4e31"
+      "hash": "70eee1ee18304328efb281a716fac722dcdf11cb"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
