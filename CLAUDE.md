@@ -158,6 +158,191 @@ Unity/Assets/Scripts/
 
 **ETEntity**: GF-based Entity system integrated with ET (see `Unity/Assets/Scripts/Game/ET/Loader/UGF/Entity`)
 
+## UI创建流程
+
+### 创建新UI的步骤
+
+#### 第一步：创建预制体
+
+在`Unity/Assets/Res/UI/UIForm/Hot/`目录下创建预制体（如TestForm.prefab）
+
+#### 第二步：添加UI配置到Luban
+
+1. 编辑Excel文件：`Design/Excel/GameHot/Datas/Game/UI.xlsx`
+2. 在UIForm表中添加新行：
+   - `Id`: 唯一ID (如 103)
+   - `CSName`: C#类名 (如 TestForm)
+   - `Desc`: 描述
+   - `AssetName`: 资源路径 (如 Hot/TestForm)
+   - `UIGroupName`: UI分组 (Default/Pop)
+   - `AllowMultiInstance`: 是否允许多实例
+   - `PauseCoveredUIForm`: 是否暂停被覆盖的UI
+3. 运行Luban导出工具，自动生成`UIFormId.cs`
+
+#### 第三步：创建UI代码（二选一）
+
+**GameHot模式**
+
+创建UI逻辑类（`Game/Hot/Code/UI/`）：
+```csharp
+public class TestForm : StarForceUIForm
+{
+    [SerializeField]
+    private Button m_TestButton = null;
+
+    public void OnTestButtonClick()
+    {
+        // 按钮点击逻辑
+    }
+
+    protected override void OnOpen(object userData)
+    {
+        base.OnOpen(userData);
+    }
+
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        base.OnClose(isShutdown, userData);
+    }
+}
+```
+
+将脚本挂载到预制体，打开UI：
+```csharp
+GameEntry.UI.OpenUIForm(UIFormId.TestForm);
+```
+
+**ET框架模式（ETUI）**
+
+创建Model层（`ET/Code/ModelView/Client/`）：
+```csharp
+[ComponentOf(typeof(UIComponent))]
+public class UIFormTestComponent : UGFUIForm<MonoUIFormTest>,
+    IAwake, IUGFUIFormOnInit, IUGFUIFormOnOpen, IUGFUIFormOnClose
+{
+}
+```
+
+创建Hotfix层（`ET/Code/HotfixView/Client/`）：
+```csharp
+[EntitySystemOf(typeof(UIFormTestComponent))]
+public static partial class UIFormTestComponentSystem
+{
+    [UGFUIFormSystem]
+    private static void UGFUIFormOnOpen(this UIFormTestComponent self)
+    {
+        // 打开逻辑
+    }
+}
+```
+
+### UI生命周期方法
+
+- `OnInit`: 初始化（仅首次）
+- `OnOpen`: 每次打开时调用
+- `OnUpdate`: 每帧更新
+- `OnPause/OnResume`: 被覆盖/恢复时
+- `OnClose`: 关闭时调用
+- `OnRecycle`: 回收到对象池
+
+### UI关键文件位置
+
+| 功能 | 路径 |
+|------|------|
+| UIFormId定义 | `Game/Hot/Code/Generate/UGF/UIFormId.cs` |
+| Luban配置 | `Res/Editor/Luban/dtuiform.json` |
+| UI预制体 | `Res/UI/UIForm/Hot/*.prefab` |
+| UI代码 | `Game/Hot/Code/UI/*.cs` |
+| ET UI框架 | `Game/ET/Loader/UGF/UIForm/` |
+
+## Entity创建流程
+
+### 创建新Entity的步骤
+
+#### 第一步：创建预制体
+
+在`Unity/Assets/Res/Entity/`目录下创建预制体（如NewEntity.prefab）
+
+#### 第二步：添加Entity配置到Luban
+
+1. 编辑Excel文件：`Design/Excel/GameHot/Datas/Game/Entity.xlsx`
+2. 在Entity表中添加新行：
+   - `Id`: 唯一ID (如 10000)
+   - `CSName`: C#常量名 (如 NewEntity)
+   - `Desc`: 描述
+   - `AssetName`: 预制体名称
+   - `EntityGroupName`: Entity分组
+   - `Priority`: 优先级
+3. 运行Luban导出工具，自动生成`EntityId.cs`
+
+#### 第三步：创建Entity代码（二选一）
+
+**GameHot模式**
+
+创建EntityLogic（`Game/Hot/Code/Entity/EntityLogic/`）：
+```csharp
+public class NewEntity : Entity
+{
+    protected override void OnShow(object userData)
+    {
+        base.OnShow(userData);
+    }
+
+    protected override void OnHide(bool isShutdown, object userData)
+    {
+        base.OnHide(isShutdown, userData);
+    }
+}
+```
+
+显示Entity：
+```csharp
+GameEntry.Entity.ShowEntity<NewEntity>(EntityId.NewEntity);
+```
+
+**ET框架模式（ETEntity）**
+
+创建Model层（`ET/Code/ModelView/Client/`）：
+```csharp
+[ComponentOf(typeof(UGFEntityComponent))]
+public class UGFEntityTestComponent : UGFEntity<MonoUGFEntityTest>,
+    IAwake, IUGFEntityOnInit, IUGFEntityOnShow, IUGFEntityOnHide
+{
+}
+```
+
+创建Hotfix层（`ET/Code/HotfixView/Client/`）：
+```csharp
+[EntitySystemOf(typeof(UGFEntityTestComponent))]
+public static partial class UGFEntityTestComponentSystem
+{
+    [UGFEntitySystem]
+    private static void UGFEntityOnShow(this UGFEntityTestComponent self)
+    {
+        // 显示逻辑
+    }
+}
+```
+
+### Entity生命周期方法
+
+- `OnInit`: 首次创建时初始化
+- `OnShow`: 显示时调用，接收EntityData
+- `OnUpdate`: 每帧更新
+- `OnHide`: 隐藏时调用
+- `OnRecycle`: 回收到对象池
+
+### Entity关键文件位置
+
+| 功能 | 路径 |
+|------|------|
+| EntityId定义 | `Game/Hot/Code/Generate/UGF/EntityId.cs` |
+| Luban配置 | `Res/Editor/Luban/dtentity.json` |
+| Entity预制体 | `Res/Entity/*.prefab` |
+| EntityData | `Game/Hot/Code/Entity/EntityData/*.cs` |
+| EntityLogic | `Game/Hot/Code/Entity/EntityLogic/*.cs` |
+| ET Entity框架 | `Game/ET/Loader/UGF/Entity/` |
+
 ## Tools
 
 - **Luban Config Export**: Multi-threaded config export tool (Book/Luban配置.md)
