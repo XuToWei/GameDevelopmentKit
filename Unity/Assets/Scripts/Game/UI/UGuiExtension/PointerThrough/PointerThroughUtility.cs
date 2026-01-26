@@ -56,5 +56,22 @@ namespace Game
                 ExecuteEvents.ExecuteHierarchy(target, eventData, functor);
             }
         }
+
+        /// <summary>
+        /// 检查指针是否在目标RectTransform区域内
+        /// </summary>
+        public static bool IsPointerInsideTarget(GameObject target, PointerEventData eventData)
+        {
+            if (target == null)
+            {
+                return false;
+            }
+            var rectTransform = target.GetComponent<RectTransform>();
+            if (rectTransform == null)
+            {
+                return false;
+            }
+            return RectTransformUtility.RectangleContainsScreenPoint(rectTransform, eventData.position, eventData.enterEventCamera);
+        }
     }
 }

@@ -21,6 +21,8 @@ namespace Game
         IDropHandler,
         IScrollHandler
     {
+        private GameObject m_EnteredTarget;
+
         public void OnPointerClick(PointerEventData eventData)
         {
             PointerThroughUtility.ExecuteThrough(gameObject, eventData, ExecuteEvents.pointerClickHandler);
@@ -39,16 +41,44 @@ namespace Game
         public void OnPointerMove(PointerEventData eventData)
         {
             PointerThroughUtility.ExecuteThrough(gameObject, eventData, ExecuteEvents.pointerMoveHandler);
+
+            if (m_EnteredTarget != null && !PointerThroughUtility.IsPointerInsideTarget(m_EnteredTarget, eventData))
+            {
+                ExecuteEvents.ExecuteHierarchy(m_EnteredTarget, eventData, ExecuteEvents.pointerExitHandler);
+                m_EnteredTarget = null;
+            }
+            if (m_EnteredTarget == null)
+            {
+                OnPointerEnter(eventData);
+            }
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            PointerThroughUtility.ExecuteThrough(gameObject, eventData, ExecuteEvents.pointerEnterHandler);
+            if (m_EnteredTarget != null)
+            {
+                return;
+            }
+            if (PointerThroughUtility.TryGetThroughTarget(gameObject, eventData, out var target))
+            {
+                if (PointerThroughUtility.IsPointerInsideTarget(target, eventData))
+                {
+                    m_EnteredTarget = target;
+                    ExecuteEvents.ExecuteHierarchy(target, eventData, ExecuteEvents.pointerEnterHandler);
+                }
+            }
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            PointerThroughUtility.ExecuteThrough(gameObject, eventData, ExecuteEvents.pointerExitHandler);
+            if (m_EnteredTarget != null)
+            {
+                if (!PointerThroughUtility.IsPointerInsideTarget(m_EnteredTarget, eventData))
+                {
+                    ExecuteEvents.ExecuteHierarchy(m_EnteredTarget, eventData, ExecuteEvents.pointerExitHandler);
+                }
+                m_EnteredTarget = null;
+            }
         }
 
         public void OnInitializePotentialDrag(PointerEventData eventData)
@@ -79,6 +109,11 @@ namespace Game
         public void OnScroll(PointerEventData eventData)
         {
             PointerThroughUtility.ExecuteThrough(gameObject, eventData, ExecuteEvents.scrollHandler);
+        }
+
+        private void OnDisable()
+        {
+            m_EnteredTarget = null;
         }
     }
 }
