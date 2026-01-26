@@ -10,6 +10,7 @@ public class GuideHighLightButton : Button
     {
         if (eventData.button == PointerEventData.InputButton.Left && IsActive() && IsInteractable())
         {
+            s_RaycastResults.Clear();
             EventSystem.current.RaycastAll(eventData, s_RaycastResults);
             var current = eventData.pointerCurrentRaycast.gameObject;
             //排除自己和自己的父节点
