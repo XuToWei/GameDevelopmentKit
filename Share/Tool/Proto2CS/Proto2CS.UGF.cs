@@ -13,6 +13,7 @@ namespace ET
             private static string s_CSName;
             private static List<string> s_CSOutDirs;
             private static int s_StartOpcode;
+            private static string s_NameSpace;
             private static StringBuilder s_StringBuilder;
 
             public static void Start(string codeName, List<string> outDirs, int opcode, string nameSpace)
@@ -20,7 +21,9 @@ namespace ET
                 s_CSName = codeName;
                 s_CSOutDirs = outDirs;
                 s_StartOpcode = opcode;
+                s_NameSpace = nameSpace;
 
+                s_MsgOpcode.Clear();
                 s_StringBuilder = new StringBuilder();
                 s_StringBuilder.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
                 s_StringBuilder.Append("\n");
@@ -35,27 +38,44 @@ namespace ET
 
             public static void Stop()
             {
-                s_StringBuilder.Append("\tpublic static partial class " + s_CSName + "Id\n\t{\n");
-                foreach (OpcodeInfo info in s_MsgOpcode)
-                {
-                    s_StringBuilder.Append($"\t\t public const ushort {info.name} = {info.opcode};\n");
-                }
-                s_StringBuilder.Append("\t}\n");
                 s_StringBuilder.Append("}\n");
                 foreach (var csOutDir in s_CSOutDirs)
                 {
                     GenerateCS(s_StringBuilder, csOutDir, s_CSName);
+                }
+
+                GenerateOpcode();
+            }
+
+            private static void GenerateOpcode()
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
+                sb.Append("\n");
+                sb.Append($"namespace {s_NameSpace}\n");
+                sb.Append("{\n");
+                sb.Append($"\tpublic static partial class {s_CSName}Id\n\t{{\n");
+                foreach (OpcodeInfo info in s_MsgOpcode)
+                {
+                    sb.Append($"\t\t public const ushort {info.name} = {info.opcode};\n");
+                }
+                sb.Append("\t}\n");
+                sb.Append("}\n");
+                foreach (var csOutDir in s_CSOutDirs)
+                {
+                    GenerateCS(sb, csOutDir, s_CSName + "Id");
                 }
             }
 
             public static void Proto2CS(string protoFile)
             {
                 string s = File.ReadAllText(protoFile);
-                
+
                 bool isMsgStart = false;
                 bool isPacketMsg = false;
                 bool isEnumStart = false;
                 int lineNum = 0;
+                string msgName = string.Empty;
                 StringBuilder msgDisposeSb = new StringBuilder();
                 foreach (string line in s.Split('\n'))
                 {
@@ -88,7 +108,7 @@ namespace ET
                         isMsgStart = true;
                         isPacketMsg = true;
 
-                        string msgName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
+                        msgName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
                         string[] ss = newline.Split(s_SplitStrings, StringSplitOptions.RemoveEmptyEntries);
 
                         if (ss.Length == 2)
@@ -131,7 +151,7 @@ namespace ET
                             s_StringBuilder.Append("\t{\n");
                             if (isPacketMsg)
                             {
-                                s_StringBuilder.Append($"\t\tpublic override int Id => {s_StartOpcode};\n");
+                                s_StringBuilder.Append($"\t\tpublic override int Id => {s_CSName}Id.{msgName};\n");
                             }
                         }
 
@@ -167,7 +187,7 @@ namespace ET
                             s_StringBuilder.Append("\t{\n");
                             if (isPacketMsg)
                             {
-                                s_StringBuilder.Append($"\t\tpublic override int Id => {s_StartOpcode};\n");
+                                s_StringBuilder.Append($"\t\tpublic override int Id => {s_CSName}Id.{msgName};\n");
                             }
                             continue;
                         }

@@ -14,7 +14,7 @@ namespace Game.Hot
     [Serializable, ProtoContract(Name = @"CSHeartBeatTest")]
     public partial class CSHeartBeatTest : CSPacketBase
     {
-        public override int Id => 30001;
+        public override int Id => GameHotMessageId.CSHeartBeatTest;
         /// <summary>
         /// 测试A
         /// </summary>
@@ -39,7 +39,7 @@ namespace Game.Hot
     [Serializable, ProtoContract(Name = @"SCHeartBeatTest")]
     public partial class SCHeartBeatTest : SCPacketBase
     {
-        public override int Id => 30002;
+        public override int Id => GameHotMessageId.SCHeartBeatTest;
         [ProtoMember(1)]
         public List<int> A { get; set; } = new List<int>();
         public override void Clear()
@@ -52,7 +52,7 @@ namespace Game.Hot
     [Serializable, ProtoContract(Name = @"SCTest")]
     public partial class SCTest : SCPacketBase
     {
-        public override int Id => 30003;
+        public override int Id => GameHotMessageId.SCTest;
         [ProtoMember(1)]
         public List<TestClass> A { get; set; } = new List<TestClass>();
         [ProtoMember(2)]
@@ -129,7 +129,7 @@ namespace Game.Hot
     [Serializable, ProtoContract(Name = @"CSHeartBeatTest22")]
     public partial class CSHeartBeatTest22 : CSPacketBase
     {
-        public override int Id => 30006;
+        public override int Id => GameHotMessageId.CSHeartBeatTest22;
         /// <summary>
         /// 测试A
         /// </summary>
@@ -148,7 +148,7 @@ namespace Game.Hot
     [Serializable, ProtoContract(Name = @"SCHeartBeatTest22")]
     public partial class SCHeartBeatTest22 : SCPacketBase
     {
-        public override int Id => 30007;
+        public override int Id => GameHotMessageId.SCHeartBeatTest22;
         [ProtoMember(1)]
         public List<int> A { get; set; } = new List<int>();
         public override void Clear()
@@ -167,14 +167,4 @@ namespace Game.Hot
         B = 2,
     }
 
-    public static partial class GameHotMessageId
-    {
-         public const ushort CSHeartBeatTest = 30001;
-         public const ushort SCHeartBeatTest = 30002;
-         public const ushort SCTest = 30003;
-         public const ushort TestClass = 30004;
-         public const ushort TestClass2 = 30005;
-         public const ushort CSHeartBeatTest22 = 30006;
-         public const ushort SCHeartBeatTest22 = 30007;
-    }
 }

@@ -16,6 +16,7 @@ namespace ET
             private static string s_CSName;
             private static List<string> s_CSOutDirs;
             private static int s_StartOpcode;
+            private static string s_NameSpace;
             private static StringBuilder s_StringBuilder;
 
             public static void Start(string codeName, List<string> outDirs, int opcode, string nameSpace)
@@ -23,7 +24,8 @@ namespace ET
                 s_CSName = codeName;
                 s_CSOutDirs = outDirs;
                 s_StartOpcode = opcode;
-                
+                s_NameSpace = nameSpace;
+
                 s_MsgOpcode.Clear();
                 s_StringBuilder = new StringBuilder();
                 s_StringBuilder.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
@@ -37,16 +39,32 @@ namespace ET
 
             public static void Stop()
             {
-                s_StringBuilder.Append("\tpublic static partial class " + s_CSName + "\n\t{\n");
-                foreach (OpcodeInfo info in s_MsgOpcode)
-                {
-                    s_StringBuilder.Append($"\t\t public const ushort {info.name} = {info.opcode};\n");
-                }
-                s_StringBuilder.Append("\t}\n");
                 s_StringBuilder.Append("}\n");
                 foreach (var csOutDir in s_CSOutDirs)
                 {
                     GenerateCS(s_StringBuilder, csOutDir, s_CSName);
+                }
+
+                GenerateOpcode();
+            }
+
+            private static void GenerateOpcode()
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
+                sb.Append("\n");
+                sb.Append($"namespace {s_NameSpace}\n");
+                sb.Append("{\n");
+                sb.Append($"\tpublic static partial class {s_CSName}\n\t{{\n");
+                foreach (OpcodeInfo info in s_MsgOpcode)
+                {
+                    sb.Append($"\t\t public const ushort {info.name} = {info.opcode};\n");
+                }
+                sb.Append("\t}\n");
+                sb.Append("}\n");
+                foreach (var csOutDir in s_CSOutDirs)
+                {
+                    GenerateCS(sb, csOutDir, s_CSName + "_Id");
                 }
             }
 
