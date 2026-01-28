@@ -46,10 +46,13 @@ namespace UnityGameFramework.Extension
 #if UNITY_EDITOR
         private void Awake()
         {
-            if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(this)))
-            {
-                Pack();
-            }
+            if (EditorApplication.isCompiling)
+                return;
+            if (!EditorApplication.isPlaying)
+                return;
+            if (string.IsNullOrEmpty(AssetDatabase.GetAssetPath(this)))
+                return;
+            Pack();
         }
 
         [SerializeField]
