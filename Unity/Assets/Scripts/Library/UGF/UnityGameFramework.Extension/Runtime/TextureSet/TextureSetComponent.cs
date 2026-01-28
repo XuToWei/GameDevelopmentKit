@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.ObjectPool;
 using UnityEngine;
@@ -45,20 +46,19 @@ namespace UnityGameFramework.Extension
         private LinkedList<LoadTextureObject> m_LoadTextureObjectsLinkedList;
 
         /// <summary>
-        /// 序号
+        /// 正在加载的图片路径集合
         /// </summary>
-        [ReadOnly]
-        [ShowInInspector]
-        [PropertyOrder(int.MaxValue - 1)]
-        private int m_SerialId = 0;
+        private HashSet<string> m_TextureBeingLoaded;
 
         /// <summary>
-        /// 取消加载序号集合
+        /// 等待设置的对象集合
         /// </summary>
-        [ReadOnly]
-        [ShowInInspector]
-        [PropertyOrder(int.MaxValue - 1)]
-        private HashSet<int> m_CancelIds;
+        private Dictionary<string, HashSet<ISetTexture2dObject>> m_WaitSetObjects;
+
+        /// <summary>
+        /// 正在加载的图片TCS集合
+        /// </summary>
+        private Dictionary<string, AutoResetUniTaskCompletionSource<bool>> m_TextureLoadingTcs;
 
         [ReadOnly]
         [ShowInInspector]
@@ -106,7 +106,9 @@ namespace UnityGameFramework.Extension
             ObjectPoolComponent objectPoolComponent = GameEntry.GetComponent<ObjectPoolComponent>();
             m_TexturePool = objectPoolComponent.CreateMultiSpawnObjectPool<TextureItemObject>("TexturePool", m_AutoReleaseInterval, m_PoolCapacity, m_PoolExpireTime, 0);
             m_LoadTextureObjectsLinkedList = new LinkedList<LoadTextureObject>();
-            m_CancelIds = new HashSet<int>();
+            m_TextureBeingLoaded = new HashSet<string>();
+            m_WaitSetObjects = new Dictionary<string, HashSet<ISetTexture2dObject>>();
+            m_TextureLoadingTcs = new Dictionary<string, AutoResetUniTaskCompletionSource<bool>>();
             InitializedFileSystem();
             InitializedResources();
             InitializedWeb();
@@ -148,19 +150,6 @@ namespace UnityGameFramework.Extension
             m_CheckCanReleaseTime = 0f;
         }
 
-        private void SetTexture(ISetTexture2dObject setTexture2dObject, Texture2D texture, int serialId)
-        {
-            m_LoadTextureObjectsLinkedList.AddLast(LoadTextureObject.Create(setTexture2dObject, texture));
-            if (!m_CancelIds.Contains(serialId))
-            {
-                setTexture2dObject.SetTexture(texture);
-            }
-            else
-            {
-                m_CancelIds.Remove(serialId);
-            }
-        }
-        
         private void SetTexture(ISetTexture2dObject setTexture2dObject, Texture2D texture)
         {
             m_LoadTextureObjectsLinkedList.AddLast(LoadTextureObject.Create(setTexture2dObject, texture));
@@ -168,18 +157,33 @@ namespace UnityGameFramework.Extension
         }
 
         /// <summary>
-        /// 取消设置图片。
+        /// 移除正在加载的设置图片对象
         /// </summary>
-        /// <param name="id"></param>
-        public void CancelSetTexture(int id)
+        /// <param name="setTexture2dObject">设置图片对象</param>
+        public void RemoveLoadingSetTexture(ISetTexture2dObject setTexture2dObject)
         {
-            if (id < 0)
+            if (m_WaitSetObjects.TryGetValue(setTexture2dObject.Texture2dFilePath, out HashSet<ISetTexture2dObject> awaitSets))
             {
-                Log.Error($"Cancel Id:{id} is  not invalid! id must >= 0");
-                return;
+                if (awaitSets.Remove(setTexture2dObject))
+                {
+                    ReferencePool.Release(setTexture2dObject);
+                }
             }
+        }
 
-            m_CancelIds.Add(id);
+        /// <summary>
+        /// 移除所有正在加载的设置图片对象
+        /// </summary>
+        public void RemoveAllLoadingSetTexture()
+        {
+            foreach (var awaitSets in m_WaitSetObjects.Values)
+            {
+                foreach (var awaitSet in awaitSets)
+                {
+                    ReferencePool.Release(awaitSet);
+                }
+                awaitSets.Clear();
+            }
         }
     }
 }
