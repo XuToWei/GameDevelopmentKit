@@ -3,6 +3,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
+using UnityGameFramework.Runtime;
 using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
@@ -23,8 +24,17 @@ namespace UnityGameFramework.Extension
 
         public T GetAsset<T>(string path) where T : Object
         {
-            m_AssetDict.TryGetValue(path, out Object obj);
-            return (T)obj;
+            if (!m_AssetDict.TryGetValue(path, out Object obj))
+            {
+                Log.Error("AssetCollection GetAsset can not find asset at path '{0}'.", path);
+                return null;
+            }
+            T result = obj as T;
+            if (result == null)
+            {
+                Log.Error("AssetCollection GetAsset at path '{0}' is not of type {1}.", path, typeof(T).FullName);
+            }
+            return result;
         }
 
         public Dictionary<string, Object>.KeyCollection Names

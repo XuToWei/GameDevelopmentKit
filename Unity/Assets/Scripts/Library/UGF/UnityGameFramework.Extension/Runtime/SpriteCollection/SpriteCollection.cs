@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.U2D;
+using UnityGameFramework.Runtime;
 using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
@@ -24,7 +25,11 @@ namespace UnityGameFramework.Extension
 
         public Sprite GetSprite(string path)
         {
-            m_Sprites.TryGetValue(path, out Sprite sprite);
+            if (!m_Sprites.TryGetValue(path, out Sprite sprite))
+            {
+                Log.Error("SpriteCollection GetSprite can not find sprite at path '{0}'", path);
+                return null;
+            }
             return sprite;
         }
 
