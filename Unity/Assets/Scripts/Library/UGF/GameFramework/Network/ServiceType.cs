@@ -20,6 +20,11 @@ namespace GameFramework.Network
         /// <summary>
         /// 使用同步接收的 TCP 网络服务。
         /// </summary>
-        TcpWithSyncReceive
+        TcpWithSyncReceive,
+
+        /// <summary>
+        /// WebSocket 网络服务。
+        /// </summary>
+        WebSocket
     }
 }

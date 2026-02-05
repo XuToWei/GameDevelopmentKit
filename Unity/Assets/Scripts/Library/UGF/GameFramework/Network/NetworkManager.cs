@@ -250,6 +250,10 @@ namespace GameFramework.Network
                     networkChannel = new TcpWithSyncReceiveNetworkChannel(name, networkChannelHelper);
                     break;
 
+                case ServiceType.WebSocket:
+                    networkChannel = new WebSocketNetworkChannel(name, networkChannelHelper);
+                    break;
+
                 default:
                     throw new GameFrameworkException(Utility.Text.Format("Not supported service type '{0}'.", serviceType));
             }
@@ -324,13 +328,13 @@ namespace GameFramework.Network
             }
         }
 
-        private void OnNetworkChannelError(NetworkChannelBase networkChannel, NetworkErrorCode errorCode, SocketError socketErrorCode, string errorMessage)
+        private void OnNetworkChannelError(NetworkChannelBase networkChannel, NetworkErrorCode errorCode, int internalErrorCode, string errorMessage)
         {
             if (m_NetworkErrorEventHandler != null)
             {
                 lock (m_NetworkErrorEventHandler)
                 {
-                    NetworkErrorEventArgs networkErrorEventArgs = NetworkErrorEventArgs.Create(networkChannel, errorCode, socketErrorCode, errorMessage);
+                    NetworkErrorEventArgs networkErrorEventArgs = NetworkErrorEventArgs.Create(networkChannel, errorCode, internalErrorCode, errorMessage);
                     m_NetworkErrorEventHandler(this, networkErrorEventArgs);
                     ReferencePool.Release(networkErrorEventArgs);
                 }

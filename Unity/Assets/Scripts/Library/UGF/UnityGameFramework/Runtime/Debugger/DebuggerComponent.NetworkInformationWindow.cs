@@ -5,9 +5,11 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System.Net.Sockets;
 using GameFramework;
 using GameFramework.Network;
 using UnityEngine;
+using UnityWebSocket;
 
 namespace UnityGameFramework.Runtime
 {
@@ -49,8 +51,19 @@ namespace UnityGameFramework.Runtime
                 {
                     DrawItem("Service Type", networkChannel.ServiceType.ToString());
                     DrawItem("Address Family", networkChannel.AddressFamily.ToString());
-                    DrawItem("Local Address", networkChannel.Connected ? networkChannel.Socket.LocalEndPoint.ToString() : "Unavailable");
-                    DrawItem("Remote Address", networkChannel.Connected ? networkChannel.Socket.RemoteEndPoint.ToString() : "Unavailable");
+                    switch (networkChannel.ServiceType)
+                    {
+                        case ServiceType.Tcp:
+                        case ServiceType.TcpWithSyncReceive:
+                            Socket socket = (Socket)networkChannel.Handle;
+                            DrawItem("Local Address", networkChannel.Connected ? socket.LocalEndPoint.ToString() : "Unavailable");
+                            DrawItem("Remote Address", networkChannel.Connected ? socket.RemoteEndPoint.ToString() : "Unavailable");
+                            break;
+                        case ServiceType.WebSocket:
+                            WebSocket webSocket = (WebSocket)networkChannel.Handle;
+                            DrawItem("URL", networkChannel.Connected ? webSocket.Address : "Unavailable");
+                            break;
+                    }
                     DrawItem("Send Packet", Utility.Text.Format("{0} / {1}", networkChannel.SendPacketCount, networkChannel.SentPacketCount));
                     DrawItem("Receive Packet", Utility.Text.Format("{0} / {1}", networkChannel.ReceivePacketCount, networkChannel.ReceivedPacketCount));
                     DrawItem("Miss Heart Beat Count", networkChannel.MissHeartBeatCount.ToString());

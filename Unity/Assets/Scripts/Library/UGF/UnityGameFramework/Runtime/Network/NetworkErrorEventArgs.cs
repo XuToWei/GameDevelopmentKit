@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
@@ -8,7 +8,6 @@
 using GameFramework;
 using GameFramework.Event;
 using GameFramework.Network;
-using System.Net.Sockets;
 
 namespace UnityGameFramework.Runtime
 {
@@ -29,6 +28,7 @@ namespace UnityGameFramework.Runtime
         {
             NetworkChannel = null;
             ErrorCode = NetworkErrorCode.Unknown;
+            InternalErrorCode = 0;
             ErrorMessage = null;
         }
 
@@ -62,9 +62,9 @@ namespace UnityGameFramework.Runtime
         }
 
         /// <summary>
-        /// 获取 Socket 错误码。
+        /// 获取内部错误码。
         /// </summary>
-        public SocketError SocketErrorCode
+        public int InternalErrorCode
         {
             get;
             private set;
@@ -89,7 +89,7 @@ namespace UnityGameFramework.Runtime
             NetworkErrorEventArgs networkErrorEventArgs = ReferencePool.Acquire<NetworkErrorEventArgs>();
             networkErrorEventArgs.NetworkChannel = e.NetworkChannel;
             networkErrorEventArgs.ErrorCode = e.ErrorCode;
-            networkErrorEventArgs.SocketErrorCode = e.SocketErrorCode;
+            networkErrorEventArgs.InternalErrorCode = e.InternalErrorCode;
             networkErrorEventArgs.ErrorMessage = e.ErrorMessage;
             return networkErrorEventArgs;
         }
@@ -101,6 +101,7 @@ namespace UnityGameFramework.Runtime
         {
             NetworkChannel = null;
             ErrorCode = NetworkErrorCode.Unknown;
+            InternalErrorCode = 0;
             ErrorMessage = null;
         }
     }

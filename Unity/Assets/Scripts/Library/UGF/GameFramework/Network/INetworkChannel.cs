@@ -7,7 +7,6 @@
 
 using System;
 using System.Net;
-using System.Net.Sockets;
 
 namespace GameFramework.Network
 {
@@ -25,9 +24,9 @@ namespace GameFramework.Network
         }
 
         /// <summary>
-        /// 获取网络频道所使用的 Socket。
+        /// 获取网络频道所使用的连接对象。
         /// </summary>
-        Socket Socket
+        object Handle
         {
             get;
         }
@@ -148,6 +147,19 @@ namespace GameFramework.Network
         /// <param name="port">远程主机的端口号。</param>
         /// <param name="userData">用户自定义数据。</param>
         void Connect(IPAddress ipAddress, int port, object userData);
+
+        /// <summary>
+        /// 连接到远程主机。
+        /// </summary>
+        /// <param name="url">远程主机的 URL 地址。</param>
+        void Connect(string url);
+
+        /// <summary>
+        /// 连接到远程主机。
+        /// </summary>
+        /// <param name="url">远程主机的 URL 地址。</param>
+        /// <param name="userData">用户自定义数据。</param>
+        void Connect(string url, object userData);
 
         /// <summary>
         /// 关闭网络频道。

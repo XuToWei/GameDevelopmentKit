@@ -16,7 +16,7 @@ namespace GameFramework.Network
         /// <summary>
         /// TCP 网络频道。
         /// </summary>
-        private sealed class TcpNetworkChannel : NetworkChannelBase
+        private sealed class TcpNetworkChannel : SocketNetworkChannelBase
         {
             private readonly AsyncCallback m_ConnectCallback;
             private readonly AsyncCallback m_SendCallback;
@@ -56,12 +56,13 @@ namespace GameFramework.Network
             {
                 base.Connect(ipAddress, port, userData);
                 m_Socket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
                 if (m_Socket == null)
                 {
                     string errorMessage = "Initialize network channel failure.";
                     if (NetworkChannelError != null)
                     {
-                        NetworkChannelError(this, NetworkErrorCode.SocketError, SocketError.Success, errorMessage);
+                        NetworkChannelError(this, NetworkErrorCode.SocketError, (int)SocketError.Success, errorMessage);
                         return;
                     }
 
@@ -94,7 +95,7 @@ namespace GameFramework.Network
                     if (NetworkChannelError != null)
                     {
                         SocketException socketException = exception as SocketException;
-                        NetworkChannelError(this, NetworkErrorCode.ConnectError, socketException != null ? socketException.SocketErrorCode : SocketError.Success, exception.ToString());
+                        NetworkChannelError(this, NetworkErrorCode.ConnectError, socketException != null ? (int)socketException.SocketErrorCode : (int)SocketError.Success, exception.ToString());
                         return;
                     }
 
@@ -119,7 +120,7 @@ namespace GameFramework.Network
                     if (NetworkChannelError != null)
                     {
                         SocketException socketException = exception as SocketException;
-                        NetworkChannelError(this, NetworkErrorCode.ConnectError, socketException != null ? socketException.SocketErrorCode : SocketError.Success, exception.ToString());
+                        NetworkChannelError(this, NetworkErrorCode.ConnectError, socketException != null ? (int)socketException.SocketErrorCode : (int)SocketError.Success, exception.ToString());
                         return;
                     }
 
@@ -162,7 +163,7 @@ namespace GameFramework.Network
                     if (NetworkChannelError != null)
                     {
                         SocketException socketException = exception as SocketException;
-                        NetworkChannelError(this, NetworkErrorCode.SendError, socketException != null ? socketException.SocketErrorCode : SocketError.Success, exception.ToString());
+                        NetworkChannelError(this, NetworkErrorCode.SendError, socketException != null ? (int)socketException.SocketErrorCode : (int)SocketError.Success, exception.ToString());
                         return;
                     }
 
@@ -189,7 +190,7 @@ namespace GameFramework.Network
                     if (NetworkChannelError != null)
                     {
                         SocketException socketException = exception as SocketException;
-                        NetworkChannelError(this, NetworkErrorCode.SendError, socketException != null ? socketException.SocketErrorCode : SocketError.Success, exception.ToString());
+                        NetworkChannelError(this, NetworkErrorCode.SendError, socketException != null ? (int)socketException.SocketErrorCode : (int)SocketError.Success, exception.ToString());
                         return;
                     }
 
@@ -219,7 +220,7 @@ namespace GameFramework.Network
                     if (NetworkChannelError != null)
                     {
                         SocketException socketException = exception as SocketException;
-                        NetworkChannelError(this, NetworkErrorCode.ReceiveError, socketException != null ? socketException.SocketErrorCode : SocketError.Success, exception.ToString());
+                        NetworkChannelError(this, NetworkErrorCode.ReceiveError, socketException != null ? (int)socketException.SocketErrorCode : (int)SocketError.Success, exception.ToString());
                         return;
                     }
 
@@ -246,7 +247,7 @@ namespace GameFramework.Network
                     if (NetworkChannelError != null)
                     {
                         SocketException socketException = exception as SocketException;
-                        NetworkChannelError(this, NetworkErrorCode.ReceiveError, socketException != null ? socketException.SocketErrorCode : SocketError.Success, exception.ToString());
+                        NetworkChannelError(this, NetworkErrorCode.ReceiveError, socketException != null ? (int)socketException.SocketErrorCode : (int)SocketError.Success, exception.ToString());
                         return;
                     }
 

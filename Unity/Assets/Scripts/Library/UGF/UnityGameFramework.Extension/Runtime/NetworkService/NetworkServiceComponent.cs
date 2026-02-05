@@ -29,12 +29,6 @@ namespace UnityGameFramework.Extension
             eventComponent.Subscribe(NetworkMissHeartBeatEventArgs.EventId, OnNetworkMissHeartBeat);
             eventComponent.Subscribe(NetworkErrorEventArgs.EventId, OnNetworkError);
             eventComponent.Subscribe(NetworkCustomErrorEventArgs.EventId, OnNetworkCustomError);
-
-            eventComponent.Subscribe(WebSocketConnectedEventArgs.EventId, OnWebSocketConnected);
-            eventComponent.Subscribe(WebSocketClosedEventArgs.EventId, OnWebSocketClosed);
-            eventComponent.Subscribe(WebSocketMissHeartBeatEventArgs.EventId, OnWebSocketMissHeartBeat);
-            eventComponent.Subscribe(WebSocketErrorEventArgs.EventId, OnWebSocketError);
-            eventComponent.Subscribe(WebSocketCustomErrorEventArgs.EventId, OnWebSocketCustomError);
         }
 
         private void OnDestroy()
@@ -70,36 +64,6 @@ namespace UnityGameFramework.Extension
         {
             NetworkCustomErrorEventArgs networkCustomErrorEventArgs = (NetworkCustomErrorEventArgs)args;
             OnCustomError(networkCustomErrorEventArgs.CustomErrorData.ToString(), networkCustomErrorEventArgs.NetworkChannel);
-        }
-
-        private void OnWebSocketConnected(object sender, GameEventArgs args)
-        {
-            WebSocketConnectedEventArgs webSocketConnectedEventArgs = (WebSocketConnectedEventArgs)args;
-            OnConnected(webSocketConnectedEventArgs.WebSocketChannel);
-        }
-
-        private void OnWebSocketClosed(object sender, GameEventArgs args)
-        {
-            WebSocketClosedEventArgs webSocketClosedEventArgs = (WebSocketClosedEventArgs)args;
-            OnDisconnected(webSocketClosedEventArgs.WebSocketChannel);
-        }
-
-        private void OnWebSocketMissHeartBeat(object sender, GameEventArgs args)
-        {
-            WebSocketMissHeartBeatEventArgs webSocketMissHeartBeatEventArgs = (WebSocketMissHeartBeatEventArgs)args;
-            OnMissHeartBeat(webSocketMissHeartBeatEventArgs.WebSocketChannel);
-        }
-
-        private void OnWebSocketError(object sender, GameEventArgs args)
-        {
-            WebSocketErrorEventArgs webSocketErrorEventArgs = (WebSocketErrorEventArgs)args;
-            OnError(webSocketErrorEventArgs.ErrorMessage, webSocketErrorEventArgs.WebSocketChannel);
-        }
-
-        private void OnWebSocketCustomError(object sender, GameEventArgs args)
-        {
-            WebSocketCustomErrorEventArgs webSocketCustomErrorEventArgs = (WebSocketCustomErrorEventArgs)args;
-            OnCustomError(webSocketCustomErrorEventArgs.CustomErrorData.ToString(), webSocketCustomErrorEventArgs.WebSocketChannel);
         }
 
         public void InitServiceNetworkHelper(INetworkServiceHelper networkServiceHelper)
