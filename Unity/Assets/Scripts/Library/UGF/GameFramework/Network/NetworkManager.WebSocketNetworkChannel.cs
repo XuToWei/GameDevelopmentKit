@@ -126,75 +126,34 @@ namespace GameFramework.Network
             /// <returns>是否处理成功。</returns>
             protected override bool ProcessSend()
             {
-                if (m_WebSocket == null || m_WebSocket.ReadyState != WebSocketState.Open)
+                if (base.ProcessSend())
                 {
-                    return false;
+                    SendAsync();
+                    return true;
                 }
 
-                if (m_SendPacketPool.Count <= 0)
+                return false;
+            }
+
+            private void SendAsync()
+            {
+                try
                 {
-                    return false;
+                    byte[] data = m_SendState.Stream.ToArray();
+                    m_WebSocket.SendAsync(data);
+                    m_SentPacketCount++;
                 }
-
-                while (m_SendPacketPool.Count > 0)
+                catch (Exception exception)
                 {
-                    Packet packet = null;
-                    lock (m_SendPacketPool)
+                    m_Active = false;
+                    if (NetworkChannelError != null)
                     {
-                        packet = m_SendPacketPool.Dequeue();
+                        NetworkChannelError(this, NetworkErrorCode.SendError, InternalErrorSuccess, exception.ToString());
+                        return;
                     }
 
-                    bool serializeResult = false;
-                    try
-                    {
-                        m_SendState.Stream.SetLength(0);
-                        m_SendState.Stream.Position = 0;
-                        serializeResult = m_NetworkChannelHelper.Serialize(packet, m_SendState.Stream);
-                    }
-                    catch (Exception exception)
-                    {
-                        m_Active = false;
-                        if (NetworkChannelError != null)
-                        {
-                            NetworkChannelError(this, NetworkErrorCode.SerializeError, InternalErrorSuccess, exception.ToString());
-                            return false;
-                        }
-
-                        throw;
-                    }
-
-                    if (!serializeResult)
-                    {
-                        string errorMessage = "Serialized packet failure.";
-                        if (NetworkChannelError != null)
-                        {
-                            NetworkChannelError(this, NetworkErrorCode.SerializeError, InternalErrorSuccess, errorMessage);
-                            return false;
-                        }
-
-                        throw new GameFrameworkException(errorMessage);
-                    }
-
-                    try
-                    {
-                        byte[] data = m_SendState.Stream.ToArray();
-                        m_WebSocket.SendAsync(data);
-                        m_SentPacketCount++;
-                    }
-                    catch (Exception exception)
-                    {
-                        m_Active = false;
-                        if (NetworkChannelError != null)
-                        {
-                            NetworkChannelError(this, NetworkErrorCode.SendError, InternalErrorSuccess, exception.ToString());
-                            return false;
-                        }
-
-                        throw;
-                    }
+                    throw;
                 }
-
-                return true;
             }
 
             /// <summary>

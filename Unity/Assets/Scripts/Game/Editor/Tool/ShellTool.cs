@@ -10,7 +10,11 @@ namespace Game.Editor
     public static class ShellTool
     {
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-        private static readonly List<string> s_DefaultUnixEnvironmentVars = new List<string>() { "/usr/local/share/dotnet" };
+        private static readonly List<string> s_DefaultUnixEnvironmentVars = new List<string>()
+        {
+            "/usr/local/share/dotnet",
+            "/opt/homebrew/opt/dotnet@8/bin"
+        };
 #endif
 
         public static void Run(string cmd, string workDirectory, string encodingName = null, List<string> environmentVars = null)

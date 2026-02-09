@@ -90,6 +90,11 @@ namespace UnityGameFramework.Extension
             m_NetworkServiceHelper = null;
         }
 
+        public void Connect()
+        {
+            Connect(null);
+        }
+
         public void Connect(object userData)
         {
             if (m_NetworkServiceHelper == null)
@@ -97,6 +102,11 @@ namespace UnityGameFramework.Extension
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
             m_NetworkServiceHelper.Connect(userData);
+        }
+
+        public void Disconnect()
+        {
+            Disconnect(null);
         }
 
         public void Disconnect(object userData)

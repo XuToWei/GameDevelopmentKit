@@ -8,6 +8,8 @@ namespace Game.Hot
         protected override void OnEnter(IFsm<ProcedureComponent> procedureOwner)
         {
             base.OnEnter(procedureOwner);
+            GameEntry.NetworkService.InitServiceNetworkHelper(new NetworkServiceHelper());
+            GameEntry.NetworkService.Connect();
             Log.Debug("开始 GameHot！");
         }
 
