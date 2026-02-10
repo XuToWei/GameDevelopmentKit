@@ -20,7 +20,7 @@ namespace ET
         private bool isSending;
 
         private bool isConnected;
-        
+
         private CancellationTokenSource cancellationTokenSource = new();
 
         public WChannel(long id, IPEndPoint ipEndPoint, WService service)
@@ -174,7 +174,7 @@ namespace ET
                 this.OnError(ErrorCore.ERR_WebsocketRecvError);
             }
         }
-        
+
         private void OnRead(MemoryBuffer memoryStream)
         {
             try
@@ -187,15 +187,15 @@ namespace ET
                 this.OnError(ErrorCore.ERR_PacketParserError);
             }
         }
-        
+
         private void OnError(int error)
         {
             Log.Info($"WChannel error: {error} {this.RemoteAddress}");
-			
+
             long channelId = this.Id;
-			
+
             this.Service.Remove(channelId);
-			
+
             this.Service.ErrorCallback(channelId, error);
         }
     }
