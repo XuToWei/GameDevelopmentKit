@@ -10,6 +10,7 @@ namespace Game
     {
         private AUIForm m_UIFormOwner;
         private Transform m_CachedTransform = null;
+        private bool m_Initialized = false;
         private bool m_Available = false;
         private bool m_Visible = false;
 
@@ -21,6 +22,17 @@ namespace Game
             get
             {
                 return m_UIFormOwner;
+            }
+        }
+
+        /// <summary>
+        /// 获取界面是否初始化完成。
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                return m_Initialized;
             }
         }
 
@@ -42,13 +54,13 @@ namespace Game
         {
             get
             {
-                return m_Available && m_Visible;
+                return m_Initialized && m_Visible;
             }
             set
             {
-                if (!m_Available)
+                if (!m_Initialized)
                 {
-                    Log.Warning("UI widget '{0}' is not available.", this.gameObject.name);
+                    Log.Warning("UI widget '{0}' is not initialized.", this.gameObject.name);
                     return;
                 }
                 if (m_Visible == value)
@@ -57,14 +69,6 @@ namespace Game
                 }
                 m_Visible = value;
                 InternalSetVisible(value);
-            }
-        }
-
-        public bool InternalVisible
-        {
-            get
-            {
-                return m_Visible;
             }
         }
 
@@ -94,6 +98,7 @@ namespace Game
             {
                 m_CachedTransform = transform;
             }
+            m_Initialized = true;
             m_Visible = gameObject.activeInHierarchy;
         }
 

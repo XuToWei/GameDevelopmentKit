@@ -68,7 +68,7 @@ namespace ET
             {
                 foreach (AUIWidget uiWidget in m_UIWidgetContainer.UIWidgets)
                 {
-                    if (uiWidget.InternalVisible && !uiWidget.Available)
+                    if (uiWidget.Visible && !uiWidget.Available)
                     {
                         m_UIWidgetContainer.OpenUIWidget(uiWidget);
                     }
