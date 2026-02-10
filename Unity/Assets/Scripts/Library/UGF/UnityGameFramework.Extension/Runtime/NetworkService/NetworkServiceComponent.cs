@@ -132,28 +132,28 @@ namespace UnityGameFramework.Extension
             m_NetworkServiceHelper.Send(packet, userData);
         }
 
-        public UniTask<T2> SendAsync<T1, T2>(T1 packet) where T1 : Packet where T2 : Packet
+        public UniTask<T> SendAsync<T>(Packet packet) where T : Packet
         {
-            return SendAsync<T1, T2>(packet, null, CancellationToken.None);
+            return SendAsync<T>(packet, null, CancellationToken.None);
         }
 
-        public UniTask<T2> SendAsync<T1, T2>(T1 packet, object userData) where T1 : Packet where T2 : Packet
+        public UniTask<T> SendAsync<T>(Packet packet, object userData) where T : Packet
         {
-            return SendAsync<T1, T2>(packet, userData, CancellationToken.None);
+            return SendAsync<T>(packet, userData, CancellationToken.None);
         }
 
-        public UniTask<T2> SendAsync<T1, T2>(T1 packet, CancellationToken cancellationToken) where T1 : Packet where T2 : Packet
+        public UniTask<T> SendAsync<T>(Packet packet, CancellationToken cancellationToken) where T : Packet
         {
-            return SendAsync<T1, T2>(packet, null, cancellationToken);
+            return SendAsync<T>(packet, null, cancellationToken);
         }
 
-        public UniTask<T2> SendAsync<T1, T2>(T1 packet, object userData, CancellationToken cancellationToken) where T1 : Packet where T2 : Packet
+        public UniTask<T> SendAsync<T>(Packet packet, object userData, CancellationToken cancellationToken) where T : Packet
         {
             if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-            return m_NetworkServiceHelper.SendAsync<T1, T2>(packet, userData, cancellationToken);
+            return m_NetworkServiceHelper.SendAsync<T>(packet, userData, cancellationToken);
         }
 
         private void OnConnected(object channel)

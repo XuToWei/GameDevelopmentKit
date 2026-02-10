@@ -7,9 +7,7 @@ namespace Game.Hot
          public const ushort CSHeartBeatTest = 30001;
          public const ushort SCHeartBeatTest = 30002;
          public const ushort SCTest = 30003;
-         public const ushort TestClass = 30004;
-         public const ushort TestClass2 = 30005;
-         public const ushort CSHeartBeatTest22 = 30006;
-         public const ushort SCHeartBeatTest22 = 30007;
+         public const ushort CSHeartBeatTest22 = 30004;
+         public const ushort SCHeartBeatTest22 = 30005;
     }
 }
