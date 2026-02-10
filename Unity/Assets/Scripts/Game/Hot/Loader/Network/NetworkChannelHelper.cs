@@ -281,7 +281,14 @@ namespace Game
                 return;
             }
 
-            Log.Info("Network channel '{0}' error, error code is '{1}', error message is '{2}'.", ne.NetworkChannel.Name, ne.ErrorCode.ToString(), ne.ErrorMessage);
+            if (ne.NetworkChannel.Handle is Socket)
+            {
+                Log.Info("Network channel '{0}' error, error code is '{1}', error message is '{2}'.", ne.NetworkChannel.Name, (SocketError)ne.ErrorCode, ne.ErrorMessage);
+            }
+            else
+            {
+                Log.Info("Network channel '{0}' error, error code is '{1}', error message is '{2}'.", ne.NetworkChannel.Name, ne.ErrorCode, ne.ErrorMessage);
+            }
 
             ne.NetworkChannel.Close();
         }
