@@ -1,3 +1,4 @@
+#if !UNITY_ET
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,9 +23,9 @@ namespace ET
         private bool isSending;
 
         private bool isConnected;
-        
+
         private CancellationTokenSource cancellationTokenSource = new();
-        
+
         public WChannel(long id, HttpListenerWebSocketContext webSocketContext, WService service)
         {
             this.Service = service;
@@ -68,7 +69,7 @@ namespace ET
             this.webSocket.Dispose();
         }
 
-        private async UniTask ConnectAsync(string url)
+        private async UniTaskVoid ConnectAsync(string url)
         {
             try
             {
@@ -95,7 +96,7 @@ namespace ET
             }
         }
 
-        private async UniTask StartSend()
+        private async UniTaskVoid StartSend()
         {
             if (this.IsDisposed)
             {
@@ -152,7 +153,7 @@ namespace ET
 
         private readonly byte[] cache = new byte[ushort.MaxValue];
 
-        public async UniTask StartRecv()
+        public async UniTaskVoid StartRecv()
         {
             if (this.IsDisposed)
             {
@@ -206,7 +207,7 @@ namespace ET
                 this.OnError(ErrorCore.ERR_WebsocketRecvError);
             }
         }
-        
+
         private void OnRead(MemoryBuffer memoryStream)
         {
             try
@@ -219,16 +220,17 @@ namespace ET
                 this.OnError(ErrorCore.ERR_PacketParserError);
             }
         }
-        
+
         private void OnError(int error)
         {
             Log.Info($"WChannel error: {error} {this.RemoteAddress}");
-			
+
             long channelId = this.Id;
-			
+
             this.Service.Remove(channelId);
-			
+
             this.Service.ErrorCallback(channelId, error);
         }
     }
 }
+#endif
