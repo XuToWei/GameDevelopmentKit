@@ -6,7 +6,7 @@ using UnityGameFramework.Runtime;
 namespace Game
 {
     [DisallowMultipleComponent]
-    public abstract class AUGuiForm : UIFormLogic
+    public abstract class AUIForm : UIFormLogic
     {
         public const int DepthFactor = 100;
 

@@ -18,8 +18,7 @@ namespace ET.Client
         private static void UGFUIFormOnOpen(this UIFormLoginComponent self)
         {
             self.View.LoginButton.SetAsync(self.OnLogin);
-            var uiWidget = self.AddComponentUIWidget<UIWidgetTest>(self.View.TestWidgetTest);
-            uiWidget.Open();
+            self.View.TestWidgetTest.UGFUIWidget.Open();
             self.LoadTest1().Forget();
             self.LoadTest2().Forget();
             Log.Debug("Login界面OnOpen");

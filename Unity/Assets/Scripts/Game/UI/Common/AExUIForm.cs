@@ -2,16 +2,32 @@ using System;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using GameFramework.Event;
+using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    public abstract class AExUGuiForm : AUGuiForm
+    public abstract class AExUIForm : AUIForm
     {
         private UIWidgetContainer m_UIWidgetContainer;
         private EventContainer m_EventContainer;
         private EntityContainer m_EntityContainer;
         private ResourceContainer m_ResourceContainer;
+
+        protected override void OnInit(object userData)
+        {
+            base.OnInit(userData);
+            // 初始化所有UIWidget
+            UGFList<AExUIWidget> uiWidgets = new UGFList<AExUIWidget>();
+            GetComponentsInChildren(true, uiWidgets);
+            foreach (AExUIWidget uiWidget in uiWidgets)
+            {
+                if(uiWidget.UIFormOwner != null || uiWidget.GetComponentInParent<AExUIForm>() != this)
+                    continue;
+                AddUIWidget(uiWidget, userData);
+            }
+            uiWidgets.Dispose();
+        }
 
         private void ClearContainer()
         {
@@ -43,7 +59,7 @@ namespace Game
             m_UIWidgetContainer?.OnRecycle();
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             RemoveAllUIWidget();
             ClearContainer();

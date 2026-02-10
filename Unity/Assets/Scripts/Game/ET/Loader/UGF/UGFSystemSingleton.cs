@@ -4,15 +4,16 @@ using UnityEngine;
 
 namespace ET
 {
-    public class UGFEntitySystemSingleton : Singleton<UGFEntitySystemSingleton>, ISingletonAwake
+    public class UGFSystemSingleton : Singleton<UGFSystemSingleton>, ISingletonAwake
     {
-        private TypeSystems TypeSystems { get; set; }
-        
-        private readonly DoubleMap<Type, long> ugfTypeLongHashCode = new();
+        private TypeSystems m_TypeSystems { get; set; }
+
+        private readonly DoubleMap<Type, long> m_UGFTypeLongHashCode = new();
+        private readonly DoubleMap<Type, Type> m_MonoTypeWidgetType = new();
         
         public void Awake()
         {
-            this.TypeSystems = new(InstanceQueueIndex.Max);
+            this.m_TypeSystems = new(InstanceQueueIndex.Max);
             foreach (Type type in CodeTypes.Instance.GetTypes(typeof (UGFUIFormSystemAttribute)))
             {
                 SystemObject obj = (SystemObject)Activator.CreateInstance(type);
@@ -22,7 +23,7 @@ namespace ET
                     continue;
                 }
 
-                TypeSystems.OneTypeSystems oneTypeSystems = this.TypeSystems.GetOrCreateOneTypeSystems(iSystemType.Type());
+                TypeSystems.OneTypeSystems oneTypeSystems = this.m_TypeSystems.GetOrCreateOneTypeSystems(iSystemType.Type());
                 oneTypeSystems.Map.Add(iSystemType.SystemType(), obj);
                 int index = iSystemType.GetInstanceQueueIndex();
                 if (index > InstanceQueueIndex.None && index < InstanceQueueIndex.Max)
@@ -40,7 +41,7 @@ namespace ET
                     continue;
                 }
 
-                TypeSystems.OneTypeSystems oneTypeSystems = this.TypeSystems.GetOrCreateOneTypeSystems(iSystemType.Type());
+                TypeSystems.OneTypeSystems oneTypeSystems = this.m_TypeSystems.GetOrCreateOneTypeSystems(iSystemType.Type());
                 oneTypeSystems.Map.Add(iSystemType.SystemType(), obj);
                 int index = iSystemType.GetInstanceQueueIndex();
                 if (index > InstanceQueueIndex.None && index < InstanceQueueIndex.Max)
@@ -57,12 +58,26 @@ namespace ET
                     long hash = type.FullName.GetLongHashCode();
                     try
                     {
-                        this.ugfTypeLongHashCode.Add(type, type.FullName.GetLongHashCode());
+                        this.m_UGFTypeLongHashCode.Add(type, type.FullName.GetLongHashCode());
                     }
                     catch (Exception e)
                     {
-                        Type sameHashType = this.ugfTypeLongHashCode.GetKeyByValue(hash);
-                        throw new Exception($"long hash add fail: {type.FullName} {sameHashType.FullName}", e);
+                        Type sameHashType = this.m_UGFTypeLongHashCode.GetKeyByValue(hash);
+                        throw new Exception($"long hash add to ugfTypeLongHashCode fail: {type.FullName} {sameHashType.FullName}", e);
+                    }
+                    
+                    if (!type.IsAbstract && typeof(UGFUIWidget).IsAssignableFrom(type))
+                    {
+                        try
+                        {
+                            Type monoType = type.BaseType.GetGenericArguments()[0];
+                            this.m_MonoTypeWidgetType.Add(monoType, type);
+                        }
+                        catch (Exception e)
+                        {
+                            Type sameHashType = this.m_UGFTypeLongHashCode.GetKeyByValue(hash);
+                            throw new Exception($"long hash add to monoToWidgetType fail: {type.FullName} {sameHashType.FullName}", e);
+                        }
                     }
                 }
             }
@@ -70,13 +85,17 @@ namespace ET
         
         public long GetLongHashCode(Type type)
         {
-            return this.ugfTypeLongHashCode.GetValueByKey(type);
+            return this.m_UGFTypeLongHashCode.GetValueByKey(type);
         }
 
-        
+        public Type GetWidgetType(Type monoType)
+        {
+            return this.m_MonoTypeWidgetType.GetValueByKey(monoType);
+        }
+
         public TypeSystems.OneTypeSystems GetOneTypeSystems(Type type)
         {
-            return this.TypeSystems.GetOneTypeSystems(type);
+            return this.m_TypeSystems.GetOneTypeSystems(type);
         }
 
         public void UGFUIWidgetOnInit(UGFUIWidget ugfUIWidget)
@@ -86,7 +105,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnInitSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnInitSystem));
             if (systems == null)
             {
                 return;
@@ -117,7 +136,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnOpenSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnOpenSystem));
             if (systems == null)
             {
                 return;
@@ -148,7 +167,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnCloseSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnCloseSystem));
             if (systems == null)
             {
                 return;
@@ -179,7 +198,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnPauseSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnPauseSystem));
             if (systems == null)
             {
                 return;
@@ -210,7 +229,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnResumeSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnResumeSystem));
             if (systems == null)
             {
                 return;
@@ -241,7 +260,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnCoverSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnCoverSystem));
             if (systems == null)
             {
                 return;
@@ -272,7 +291,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnRevealSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnRevealSystem));
             if (systems == null)
             {
                 return;
@@ -303,7 +322,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnRefocusSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnRefocusSystem));
             if (systems == null)
             {
                 return;
@@ -334,7 +353,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnUpdateSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnUpdateSystem));
             if (systems == null)
             {
                 return;
@@ -365,7 +384,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnDepthChangedSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnDepthChangedSystem));
             if (systems == null)
             {
                 return;
@@ -396,7 +415,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnRecycleSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnRecycleSystem));
             if (systems == null)
             {
                 return;
@@ -427,7 +446,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnInitSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnInitSystem));
             if (systems == null)
             {
                 return;
@@ -458,7 +477,7 @@ namespace ET
                 return;
             }
             
-            List<SystemObject> iUGFUIFormOnOpenSystems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof (IUGFUIFormOnOpenSystem));
+            List<SystemObject> iUGFUIFormOnOpenSystems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof (IUGFUIFormOnOpenSystem));
             if (iUGFUIFormOnOpenSystems == null)
             {
                 return;
@@ -489,7 +508,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnCloseSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnCloseSystem));
             if (systems == null)
             {
                 return;
@@ -520,7 +539,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnCoverSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnCoverSystem));
             if (systems == null)
             {
                 return;
@@ -551,7 +570,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnDepthChangedSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnDepthChangedSystem));
             if (systems == null)
             {
                 return;
@@ -582,7 +601,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnRevealSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnRevealSystem));
             if (systems == null)
             {
                 return;
@@ -613,7 +632,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnPauseSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnPauseSystem));
             if (systems == null)
             {
                 return;
@@ -644,7 +663,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnRecycleSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnRecycleSystem));
             if (systems == null)
             {
                 return;
@@ -675,7 +694,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnRefocusSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnRefocusSystem));
             if (systems == null)
             {
                 return;
@@ -706,7 +725,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnResumeSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnResumeSystem));
             if (systems == null)
             {
                 return;
@@ -737,7 +756,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnUpdateSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnUpdateSystem));
             if (systems == null)
             {
                 return;
@@ -768,7 +787,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnInitSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnInitSystem));
             if (systems == null)
             {
                 return;
@@ -799,7 +818,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnShowSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnShowSystem));
             if (systems == null)
             {
                 return;
@@ -830,7 +849,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnHideSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnHideSystem));
             if (systems == null)
             {
                 return;
@@ -861,7 +880,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnRecycleSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnRecycleSystem));
             if (systems == null)
             {
                 return;
@@ -892,7 +911,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnAttachedSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnAttachedSystem));
             if (systems == null)
             {
                 return;
@@ -923,7 +942,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnDetachedSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnDetachedSystem));
             if (systems == null)
             {
                 return;
@@ -954,7 +973,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnAttachToSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnAttachToSystem));
             if (systems == null)
             {
                 return;
@@ -985,7 +1004,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnDetachFromSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnDetachFromSystem));
             if (systems == null)
             {
                 return;
@@ -1016,7 +1035,7 @@ namespace ET
                 return;
             }
 
-            List<SystemObject> systems = this.TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnUpdateSystem));
+            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnUpdateSystem));
             if (systems == null)
             {
                 return;

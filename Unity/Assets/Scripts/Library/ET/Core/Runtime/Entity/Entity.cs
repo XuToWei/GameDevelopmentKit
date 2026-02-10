@@ -866,6 +866,16 @@ namespace ET
             return entity;
         }
 
+        public Entity AddChild(Type type, bool isFromPool = false)
+        {
+            Entity component = Entity.Create(type, isFromPool);
+            component.Id = IdGenerater.Instance.GenerateId();
+            component.Parent = this;
+
+            EntitySystemSingleton.Instance.Awake(component);
+            return component;
+        }
+
         public T AddChild<T>(bool isFromPool = false) where T : Entity, IAwake
         {
             Type type = typeof (T);

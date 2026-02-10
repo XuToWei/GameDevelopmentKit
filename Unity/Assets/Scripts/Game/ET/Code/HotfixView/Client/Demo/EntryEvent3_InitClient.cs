@@ -11,7 +11,7 @@ namespace ET.Client
             root.AddComponent<TestComponent>();
             
             World.Instance.AddSingleton<UGFComponent>();
-            World.Instance.AddSingleton<UGFEntitySystemSingleton>();
+            World.Instance.AddSingleton<UGFSystemSingleton>();
             
             GlobalComponent globalComponent = root.AddComponent<GlobalComponent>();
             root.AddComponent<UIComponent>();

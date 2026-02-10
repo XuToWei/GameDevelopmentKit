@@ -364,7 +364,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e7522ea5ad3ef4f69c5c3df5f0b9d24cb9c8b923"
+      "hash": "fb636d1db98d7cc7c9690ce01b64c3bcdd732b1a"
     },
     "me.xw.protobufunity": {
       "version": "https://github.com/XuToWei/Protobuf-Unity.git",
