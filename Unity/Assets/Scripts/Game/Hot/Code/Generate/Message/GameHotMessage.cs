@@ -170,14 +170,11 @@ namespace Game.Hot
 
     // 测试枚举
     // proto file : GameHot/GameHot2.proto (line:16)
-    [ShowInInspector]
     public enum TestEnum    {
         /// <summary>
         /// 测试A
         /// </summary>
-        [ShowInInspector]
         A = 1,
-        [ShowInInspector]
         B = 2,
     }
 

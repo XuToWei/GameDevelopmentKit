@@ -181,7 +181,6 @@ namespace ET
                         string enumName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
 
                         s_StringBuilder.Append($"\t// proto file : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)} (line:{lineNum})\n");
-                        s_StringBuilder.Append("\t[ShowInInspector]\n");
                         s_StringBuilder.Append($"\tpublic enum {enumName}");
 
                         continue;
@@ -468,7 +467,6 @@ namespace ET
                     string name = ss[0];
                     int n = int.Parse(ss[1]);
 
-                    sb.Append("\t\t[ShowInInspector]\n");
                     sb.Append($"\t\t{name} = {n},\n");
                 }
                 catch (Exception)

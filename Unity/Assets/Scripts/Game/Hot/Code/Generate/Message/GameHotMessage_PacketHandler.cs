@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using GameFramework;
 using GameFramework.Network;
-using Game.Hot;
+using Game;
 
 namespace Game.Hot.GameHotMessage
 {
