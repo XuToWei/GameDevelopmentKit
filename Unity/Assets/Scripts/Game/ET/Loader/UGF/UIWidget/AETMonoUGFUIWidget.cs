@@ -30,7 +30,7 @@ namespace ET
             m_UGFUIWidget = widgetData.UGFUIWidget;
             ReferencePool.Release(widgetData);
             m_UGFUIWidget.UGFMono = this;
-            m_UGFUIWidget.CachedTransform = CachedTransform;
+            m_UGFUIWidget.CachedRectTransform = CachedRectTransform;
             UGFSystemSingleton.Instance.UGFUIWidgetOnInit(m_UGFUIWidget);
 
             UGFList<AETMonoUGFUIWidget> monoUIWidgets = new UGFList<AETMonoUGFUIWidget>();

@@ -42,7 +42,7 @@ namespace ET
         [BsonIgnore]
         public UGFUIWidget ParentUGFUIForm { get; internal set; }
         [BsonIgnore]
-        public Transform CachedTransform { get; internal set; }
+        public RectTransform CachedRectTransform { get; internal set; }
         [BsonIgnore]
         public bool Available =>  this.UGFMono != null && this.UGFMono.Available;
         [BsonIgnore]

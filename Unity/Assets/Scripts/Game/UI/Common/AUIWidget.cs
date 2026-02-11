@@ -6,10 +6,11 @@ namespace Game
 {
     [CodeBind]
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(RectTransform))]
     public abstract class AUIWidget : MonoBehaviour
     {
         private AUIForm m_UIFormOwner;
-        private Transform m_CachedTransform = null;
+        private RectTransform m_CachedRectTransform = null;
         private bool m_Initialized = false;
         private bool m_Available = false;
         private bool m_Visible = false;
@@ -75,11 +76,11 @@ namespace Game
         /// <summary>
         /// 获取已缓存的 Transform。
         /// </summary>
-        public Transform CachedTransform
+        public RectTransform CachedRectTransform
         {
             get
             {
-                return m_CachedTransform;
+                return m_CachedRectTransform;
             }
         }
 
@@ -94,9 +95,9 @@ namespace Game
         /// <param name="userData">用户自定义数据。</param>
         protected internal virtual void OnInit(object userData)
         {
-            if (m_CachedTransform == null)
+            if (m_CachedRectTransform == null)
             {
-                m_CachedTransform = transform;
+                m_CachedRectTransform = GetComponent<RectTransform>();
             }
             m_Initialized = true;
             m_Visible = gameObject.activeInHierarchy;
