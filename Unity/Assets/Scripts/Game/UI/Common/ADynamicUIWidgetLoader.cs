@@ -8,15 +8,24 @@ using UnityGameFramework.Extension;
 namespace ET
 {
     [RequireComponent(typeof(RectTransform))]
-    public sealed partial class DynamicUIWidgetLoader : MonoBehaviour
+    public abstract partial class ADynamicUIWidgetLoader : MonoBehaviour
     {
         [SerializeField, ReadOnly]
         private string m_UIWidgetAssetPath;
+
+        private AUIWidget m_UIWidget;
 
         /// <summary>
         /// UIWidget资源路径
         /// </summary>
         public string UIWidgetAssetPath => m_UIWidgetAssetPath;
+
+        /// <summary>
+        /// 动态加载的UIWidget实例
+        /// </summary>
+        public AUIWidget UIWidget => m_UIWidget;
+
+        public bool IsLoaded => m_UIWidget != null;
 
         private void Start()
         {
@@ -48,6 +57,11 @@ namespace ET
             uiWidgetRectTransform.pivot = new Vector2(0.5f, 0.5f);
             uiWidgetRectTransform.anchoredPosition3D = Vector3.zero;
             uiWidgetRectTransform.sizeDelta = Vector2.zero;
+
+            m_UIWidget = uiWidget;
+            OnUIWidgetLoaded(uiWidget);
         }
+
+        protected abstract void OnUIWidgetLoaded(AUIWidget uiWidget);
     }
 }

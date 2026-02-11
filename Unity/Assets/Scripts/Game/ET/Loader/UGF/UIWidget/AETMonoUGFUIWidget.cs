@@ -169,7 +169,7 @@ namespace ET
             m_UGFUIForm.UGFMono.RemoveUIWidget(this);
         }
         
-        public void AddUIWidget(AUIWidget auiWidget, ETMonoUGFUIWidgetData widgetData)
+        public void AddUIWidget(AETMonoUGFUIWidget auiWidget, ETMonoUGFUIWidgetData widgetData)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -178,7 +178,7 @@ namespace ET
             m_UIWidgetContainer.AddUIWidget(auiWidget, widgetData);
         }
 
-        public bool HasUIWidget(AUIWidget auiWidget)
+        public bool HasUIWidget(AETMonoUGFUIWidget auiWidget)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -187,7 +187,7 @@ namespace ET
             return m_UIWidgetContainer.HasUIWidget(auiWidget);
         }
 
-        public void RemoveUIWidget(AUIWidget auiWidget)
+        public void RemoveUIWidget(AETMonoUGFUIWidget auiWidget)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -209,7 +209,7 @@ namespace ET
         /// <param name="auiWidget"></param>
         /// <param name="userData"></param>
         /// <exception cref="GameFrameworkException"></exception>
-        public void OpenUIWidget(AUIWidget auiWidget)
+        public void OpenUIWidget(AETMonoUGFUIWidget auiWidget)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -224,7 +224,7 @@ namespace ET
         /// <param name="auiWidget"></param>
         /// <param name="userData"></param>
         /// <exception cref="GameFrameworkException"></exception>
-        public void DynamicOpenUIWidget(AUIWidget auiWidget, object userData = null)
+        public void DynamicOpenUIWidget(AETMonoUGFUIWidget auiWidget, object userData = null)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -233,7 +233,7 @@ namespace ET
             m_UIWidgetContainer.DynamicOpenUIWidget(auiWidget, userData);
         }
 
-        public void CloseUIWidget(AUIWidget uiWidget, bool isShutdown = false, object userData = null)
+        public void CloseUIWidget(AETMonoUGFUIWidget uiWidget, bool isShutdown = false, object userData = null)
         {
             if (m_UIWidgetContainer == null)
             {

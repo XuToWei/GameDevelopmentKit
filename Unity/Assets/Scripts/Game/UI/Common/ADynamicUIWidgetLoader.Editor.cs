@@ -7,103 +7,72 @@ using UnityEngine;
 
 namespace ET
 {
-    public partial class DynamicUIWidgetLoader
+    public partial class ADynamicUIWidgetLoader
     {
         [ShowInInspector, NonSerialized]
-        [OnValueChanged(nameof(OnUIWidgetChanged))]
-        private AUIWidget m_UIWidget;
+        [OnValueChanged(nameof(OnUIWidgetAssetChanged))]
+        private AUIWidget m_UIWidgetAsset;
 
         [HideInInspector, SerializeField]
-        private string m_UIWidgetGUID;
+        private string m_UIWidgetAssetGUID;
 
         private void OnValidate()
         {
-            string assetPath = string.Empty;
-            if (string.IsNullOrEmpty(m_UIWidgetGUID))
+            if (string.IsNullOrEmpty(m_UIWidgetAssetGUID))
             {
-                m_UIWidget = null;
+                m_UIWidgetAsset = null;
+                m_UIWidgetAssetPath = string.Empty;
             }
             else
             {
-                assetPath = AssetDatabase.GUIDToAssetPath(m_UIWidgetGUID);
+                string assetPath = AssetDatabase.GUIDToAssetPath(m_UIWidgetAssetGUID);
                 if (string.IsNullOrEmpty(assetPath))
                 {
-                    m_UIWidget = null;
+                    m_UIWidgetAsset = null;
+                    m_UIWidgetAssetPath = string.Empty;
                 }
                 else
                 {
                     GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
                     if (go == null)
                     {
-                        m_UIWidget = null;
+                        m_UIWidgetAsset = null;
+                        m_UIWidgetAssetPath = string.Empty;
                     }
                     else
                     {
-                        m_UIWidget = go.GetComponent<AUIWidget>();
+                        m_UIWidgetAsset = go.GetComponent<AUIWidget>();
+                        if (m_UIWidgetAsset == null)
+                        {
+                            m_UIWidgetAssetPath = string.Empty;
+                        }
+                        else
+                        {
+                            m_UIWidgetAssetPath = assetPath;
+                        }
                     }
-                }
-            }
-
-            bool isDirty = false;
-            if (m_UIWidget == null)
-            {
-                if (m_UIWidgetAssetPath != string.Empty)
-                {
-                    m_UIWidgetAssetPath = string.Empty;
-                    isDirty = true;
-                }
-            }
-            else
-            {
-                if (m_UIWidgetAssetPath != assetPath)
-                {
-                    m_UIWidgetAssetPath = assetPath;
-                    isDirty = true;
                 }
             }
 
             ShowUIWidget();
-
-            if (isDirty)
-            {
-                ShowUIWidget();
-                EditorUtility.SetDirty(this);
-                AssetDatabase.SaveAssets();
-            }
         }
 
-        private void OnUIWidgetChanged()
+        private void OnUIWidgetAssetChanged()
         {
-            bool isDirty = false;
-            if (m_UIWidget == null)
+            if (m_UIWidgetAsset == null)
             {
-                if (m_UIWidgetGUID != string.Empty)
-                {
-                    isDirty = true;
-                    m_UIWidgetGUID = string.Empty;
-                }
-                if(m_UIWidgetAssetPath != string.Empty)
-                {
-                    isDirty = true;
-                    m_UIWidgetAssetPath = string.Empty;
-                }
+                m_UIWidgetAssetGUID = string.Empty;
+                m_UIWidgetAssetPath = string.Empty;
             }
             else
             {
-                string assetPath = AssetDatabase.GetAssetPath(m_UIWidget);
-                if(m_UIWidgetAssetPath != assetPath)
-                {
-                    isDirty = true;
-                    m_UIWidgetAssetPath = assetPath;
-                }
+                string assetPath = AssetDatabase.GetAssetPath(m_UIWidgetAsset);
+                m_UIWidgetAssetPath = assetPath;
                 string guid = AssetDatabase.AssetPathToGUID(assetPath);
-                if (m_UIWidgetGUID != guid)
-                {
-                    isDirty = true;
-                    m_UIWidgetGUID = guid;
-                }
+                m_UIWidgetAssetGUID = guid;
+
                 RectTransform rectTransform = GetComponent<RectTransform>();
-                RectTransform uiWidgetRectTransform = m_UIWidget.GetComponent<RectTransform>();
+                RectTransform uiWidgetRectTransform = m_UIWidgetAsset.GetComponent<RectTransform>();
                 rectTransform.localRotation = uiWidgetRectTransform.localRotation;
                 rectTransform.localPosition = uiWidgetRectTransform.localPosition;
                 rectTransform.localScale = uiWidgetRectTransform.localScale;
@@ -114,12 +83,7 @@ namespace ET
                 rectTransform.sizeDelta = uiWidgetRectTransform.sizeDelta;
             }
 
-            if (isDirty)
-            {
-                ShowUIWidget();
-                EditorUtility.SetDirty(this);
-                AssetDatabase.SaveAssets();
-            }
+            ShowUIWidget();
         }
 
         private void ShowUIWidget()
@@ -139,7 +103,7 @@ namespace ET
                 return;
 
             AUIWidget auiWidget = GetComponentInChildren<AUIWidget>(true);
-            if (m_UIWidget == null)
+            if (m_UIWidgetAsset == null)
             {
                 if (auiWidget != null)
                 {
@@ -150,16 +114,16 @@ namespace ET
 
             if (auiWidget != null)
             {
-                if (auiWidget.GetType() == m_UIWidget.GetType())
+                if (auiWidget.GetType() == m_UIWidgetAsset.GetType())
                     return;
 
-                if (auiWidget.GetType() != m_UIWidget.GetType())
+                if (auiWidget.GetType() != m_UIWidgetAsset.GetType())
                 {
                     DestroyImmediate(auiWidget.gameObject);
                 }
             }
 
-            GameObject uiWidgetInstance = Instantiate(m_UIWidget.gameObject, transform);
+            GameObject uiWidgetInstance = Instantiate(m_UIWidgetAsset.gameObject, transform);
             RectTransform uiWidgetRectTransform = uiWidgetInstance.GetComponent<RectTransform>();
             uiWidgetInstance.hideFlags = HideFlags.DontSave;
             uiWidgetRectTransform.localRotation = Quaternion.identity;

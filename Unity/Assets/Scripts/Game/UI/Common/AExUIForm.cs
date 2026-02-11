@@ -122,7 +122,7 @@ namespace Game
             m_UIWidgetContainer?.OnDepthChanged(uiGroupDepth, depthInUIGroup);
         }
 
-        public void AddUIWidget(AUIWidget auiWidget, object userData = null)
+        public void AddUIWidget(AExUIWidget auiWidget, object userData = null)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -131,7 +131,7 @@ namespace Game
             m_UIWidgetContainer.AddUIWidget(auiWidget, userData);
         }
 
-        public bool HasUIWidget(AUIWidget uiWidget)
+        public bool HasUIWidget(AExUIWidget uiWidget)
         {
             if(m_UIWidgetContainer == null)
             {
@@ -140,7 +140,7 @@ namespace Game
             return m_UIWidgetContainer.HasUIWidget(uiWidget);
         }
 
-        public void RemoveUIWidget(AUIWidget auiWidget)
+        public void RemoveUIWidget(AExUIWidget auiWidget)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -162,7 +162,7 @@ namespace Game
         /// <param name="auiWidget"></param>
         /// <param name="userData"></param>
         /// <exception cref="GameFrameworkException"></exception>
-        public void OpenUIWidget(AUIWidget auiWidget, object userData = null)
+        public void OpenUIWidget(AExUIWidget auiWidget, object userData = null)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -177,7 +177,7 @@ namespace Game
         /// <param name="auiWidget"></param>
         /// <param name="userData"></param>
         /// <exception cref="GameFrameworkException"></exception>
-        public void DynamicOpenUIWidget(AUIWidget auiWidget, object userData = null)
+        public void DynamicOpenUIWidget(AExUIWidget auiWidget, object userData = null)
         {
             if (m_UIWidgetContainer == null)
             {
@@ -186,7 +186,7 @@ namespace Game
             m_UIWidgetContainer.DynamicOpenUIWidget(auiWidget, userData);
         }
 
-        public void CloseUIWidget(AUIWidget uiWidget, bool isShutdown = false, object userData = null)
+        public void CloseUIWidget(AExUIWidget uiWidget, bool isShutdown = false, object userData = null)
         {
             if (m_UIWidgetContainer == null)
             {
