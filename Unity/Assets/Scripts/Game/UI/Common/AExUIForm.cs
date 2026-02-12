@@ -65,6 +65,23 @@ namespace Game
             ClearContainer();
         }
 
+        protected override void OnOpen(object userData)
+        {
+            base.OnOpen(userData);
+            if (m_UIWidgetContainer != null)
+            {
+                UGFList<AUIWidget> uiWidgets = UGFList<AUIWidget>.Create();
+                m_UIWidgetContainer.GetAllUIWidgets(uiWidgets);
+                foreach (AUIWidget uiWidget in uiWidgets)
+                {
+                    if (uiWidget.Visible && !uiWidget.Available)
+                    {
+                        m_UIWidgetContainer.OpenUIWidget(uiWidget);
+                    }
+                }
+            }
+        }
+
         protected override void OnClose(bool isShutdown, object userData)
         {
             m_UIWidgetContainer?.OnClose(isShutdown, userData);

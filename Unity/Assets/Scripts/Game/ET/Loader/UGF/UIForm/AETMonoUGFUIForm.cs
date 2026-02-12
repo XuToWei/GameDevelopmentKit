@@ -46,11 +46,16 @@ namespace ET
             m_UGFUIForm.UGFMono = this;
             UGFSystemSingleton.Instance.UGFUIFormOnOpen(m_UGFUIForm);
 
-            foreach (AUIWidget uiWidget in m_UIWidgetContainer.UIWidgets)
+            if (m_UIWidgetContainer != null)
             {
-                if (uiWidget.Visible && !uiWidget.Available)
+                UGFList<AUIWidget> uiWidgets = UGFList<AUIWidget>.Create();
+                m_UIWidgetContainer.GetAllUIWidgets(uiWidgets);
+                foreach (AUIWidget uiWidget in uiWidgets)
                 {
-                    m_UIWidgetContainer.OpenUIWidget(uiWidget);
+                    if (uiWidget.Visible && !uiWidget.Available)
+                    {
+                        m_UIWidgetContainer.OpenUIWidget(uiWidget);
+                    }
                 }
             }
         }

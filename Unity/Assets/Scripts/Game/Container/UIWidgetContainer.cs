@@ -20,6 +20,19 @@ namespace Game
             uiWidgetContainer.UIFormOwner = uiFormOwner;
             return uiWidgetContainer;
         }
+        
+        public void GetAllUIWidgets(List<AUIWidget> results)
+        {
+            if (results == null)
+            {
+                throw new GameFrameworkException("Results is invalid.");
+            }
+            results.Clear();
+            foreach (AUIWidget uiWidget in m_UIWidgets)
+            {
+                results.Add(uiWidget);
+            }
+        }
 
         public void Clear()
         {

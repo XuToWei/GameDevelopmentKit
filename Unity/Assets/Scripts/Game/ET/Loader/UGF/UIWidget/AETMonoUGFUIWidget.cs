@@ -66,7 +66,9 @@ namespace ET
 
             if (m_UIWidgetContainer != null)
             {
-                foreach (AUIWidget uiWidget in m_UIWidgetContainer.UIWidgets)
+                UGFList<AUIWidget> uiWidgets = UGFList<AUIWidget>.Create();
+                m_UIWidgetContainer.GetAllUIWidgets(uiWidgets);
+                foreach (AUIWidget uiWidget in uiWidgets)
                 {
                     if (uiWidget.Visible && !uiWidget.Available)
                     {
