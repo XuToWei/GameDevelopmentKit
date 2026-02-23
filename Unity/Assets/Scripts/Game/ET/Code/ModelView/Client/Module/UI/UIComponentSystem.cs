@@ -52,6 +52,7 @@ namespace ET.Client
             await ugfUIForm.OpenUIFormAsync(uiFormTypeId);
             return ugfUIForm;
         }
+
         public static async UniTask<T> AddUIFormComponentAsync<T, A>(this UIComponent self, int uiFormTypeId, A a, bool isFromPool = false) where T : UGFUIForm, IAwake<A>, new()
         {
             T ugfUIForm = self.AddComponent<T, A>(a, isFromPool);

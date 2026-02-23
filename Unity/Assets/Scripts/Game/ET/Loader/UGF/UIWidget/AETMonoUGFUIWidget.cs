@@ -32,16 +32,6 @@ namespace ET
             m_UGFUIWidget.UGFMono = this;
             m_UGFUIWidget.CachedRectTransform = CachedRectTransform;
             UGFSystemSingleton.Instance.UGFUIWidgetOnInit(m_UGFUIWidget);
-
-            UGFList<AETMonoUGFUIWidget> monoUIWidgets = new UGFList<AETMonoUGFUIWidget>();
-            GetComponentsInChildren(true, monoUIWidgets);
-            foreach (AETMonoUGFUIWidget monoUIWidget in monoUIWidgets)
-            {
-                if (monoUIWidget == this || monoUIWidget.UIFormOwner != null || monoUIWidget.GetComponentInParent<AETMonoUGFUIWidget>(true) != this)
-                    continue;
-                m_UGFUIWidget.AddChildUIWidget(monoUIWidget, true);
-            }
-            monoUIWidgets.Dispose();
         }
 
         private void ClearContainer()
@@ -62,31 +52,26 @@ namespace ET
         protected override void OnOpen(object userData)
         {
             base.OnOpen(userData);
-            UGFSystemSingleton.Instance.UGFUIWidgetOnOpen(m_UGFUIWidget);
 
-            if (m_UIWidgetContainer != null)
+            UGFList<AETMonoUGFUIWidget> monoUIWidgets = UGFList<AETMonoUGFUIWidget>.Create();
+            GetComponentsInChildren(true, monoUIWidgets);
+            foreach (AETMonoUGFUIWidget monoUIWidget in monoUIWidgets)
             {
-                UGFList<AUIWidget> uiWidgets = UGFList<AUIWidget>.Create();
-                m_UIWidgetContainer.GetAllUIWidgets(uiWidgets);
-                foreach (AUIWidget uiWidget in uiWidgets)
-                {
-                    if (uiWidget.Visible && !uiWidget.Available)
-                    {
-                        m_UIWidgetContainer.OpenUIWidget(uiWidget);
-                    }
-                }
+                if (monoUIWidget == this || monoUIWidget.UIFormOwner != null || monoUIWidget.GetComponentInParent<AETMonoUGFUIWidget>(true) != this)
+                    continue;
+                m_UGFUIWidget.AddChildUIWidget(monoUIWidget, true);
             }
+            monoUIWidgets.Dispose();
+
+            UGFSystemSingleton.Instance.UGFUIWidgetOnOpen(m_UGFUIWidget);
         }
 
         protected override void OnClose(bool isShutdown, object userData)
         {
             m_UIWidgetContainer?.OnClose(isShutdown, userData);
             UGFSystemSingleton.Instance.UGFUIWidgetOnClose(m_UGFUIWidget, isShutdown);
-            if (isShutdown)
-            {
-                RemoveAllUIWidget();
-                ClearContainer();
-            }
+            RemoveAllUIWidget();
+            ClearContainer();
             base.OnClose(isShutdown, userData);
         }
 

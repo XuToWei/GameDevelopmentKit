@@ -14,6 +14,25 @@ namespace Game
         private EntityContainer m_EntityContainer;
         private ResourceContainer m_ResourceContainer;
 
+        /// <summary>
+        /// 打开所有的UIWidget
+        /// </summary>
+        public void OpenAllUIWidget()
+        {
+            if (m_UIWidgetContainer == null)
+                return;
+            UGFList<AUIWidget> uiWidgets = UGFList<AUIWidget>.Create();
+            m_UIWidgetContainer.GetAllUIWidgets(uiWidgets);
+            foreach (AUIWidget uiWidget in uiWidgets)
+            {
+                if (!uiWidget.Available)
+                {
+                    m_UIWidgetContainer.OpenUIWidget(uiWidget);
+                }
+            }
+            uiWidgets.Dispose();
+        }
+
         protected override void OnInit(object userData)
         {
             base.OnInit(userData);
@@ -65,30 +84,12 @@ namespace Game
             ClearContainer();
         }
 
-        protected override void OnOpen(object userData)
-        {
-            base.OnOpen(userData);
-            if (m_UIWidgetContainer != null)
-            {
-                UGFList<AUIWidget> uiWidgets = UGFList<AUIWidget>.Create();
-                m_UIWidgetContainer.GetAllUIWidgets(uiWidgets);
-                foreach (AUIWidget uiWidget in uiWidgets)
-                {
-                    if (uiWidget.Visible && !uiWidget.Available)
-                    {
-                        m_UIWidgetContainer.OpenUIWidget(uiWidget);
-                    }
-                }
-            }
-        }
-
         protected override void OnClose(bool isShutdown, object userData)
         {
             m_UIWidgetContainer?.OnClose(isShutdown, userData);
             HideAllEntity(isShutdown);
             UnsubscribeAll(isShutdown);
             UnloadAllAssets(isShutdown);
-            CloseAllUIWidgets(isShutdown, userData);
             if (isShutdown)
             {
                 RemoveAllUIWidget();

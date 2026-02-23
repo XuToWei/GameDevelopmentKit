@@ -66,7 +66,11 @@ namespace Game
             {
                 throw new GameFrameworkException("Can't remove empty!");
             }
-            if (!m_UIWidgets.Remove(uiWidget))
+            if (m_UIWidgets.Remove(uiWidget))
+            {
+                uiWidget.SetUIFormOwner(null);
+            }
+            else
             {
                 throw new GameFrameworkException(Utility.Text.Format("UIWidget : '{0}' not in container.", uiWidget.CachedRectTransform.name));
             }
@@ -76,6 +80,10 @@ namespace Game
         {
             if (m_UIWidgets.Count > 0)
             {
+                foreach (AUIWidget uiWidget in m_UIWidgets)
+                {
+                    uiWidget.SetUIFormOwner(null);
+                }
                 m_UIWidgets.Clear();
             }
         }

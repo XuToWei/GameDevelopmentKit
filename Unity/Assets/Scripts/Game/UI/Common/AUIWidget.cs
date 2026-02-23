@@ -84,7 +84,7 @@ namespace Game
             }
         }
 
-        internal void SetUIFormOwner(AUIForm uiForm)
+        internal virtual void SetUIFormOwner(AUIForm uiForm)
         {
             m_UIFormOwner = uiForm;
         }

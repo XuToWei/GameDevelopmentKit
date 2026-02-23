@@ -10,6 +10,7 @@ namespace Game
     public abstract class AExUIWidget : AUIWidget
     {
         private AExUIWidget m_ParentUIWidget;
+        private AExUIForm m_UIForm;
         private UIWidgetContainer m_UIWidgetContainer;
         private EventContainer m_EventContainer;
         private EntityContainer m_EntityContainer;
@@ -19,6 +20,80 @@ namespace Game
         /// 父UIWidget
         /// </summary>
         public AExUIWidget ParentUIWidget => m_ParentUIWidget;
+
+        /// <summary>
+        /// 父UIForm
+        /// </summary>
+        public AExUIForm UIForm => m_UIForm;
+
+        /// <summary>
+        /// 打开所有UIWidget
+        /// </summary>
+        /// <param name="userData">userData</param>
+        public void OpenAllUIWidgets(object userData = null)
+        {
+            if (m_UIWidgetContainer == null)
+                return;
+            UGFList<AUIWidget> uiWidgets = UGFList<AUIWidget>.Create();
+            m_UIWidgetContainer.GetAllUIWidgets(uiWidgets);
+            foreach (AUIWidget uiWidget in uiWidgets)
+            {
+                if (!uiWidget.Available)
+                {
+                    m_UIWidgetContainer.OpenUIWidget(uiWidget, userData);
+                }
+            }
+            uiWidgets.Dispose();
+        }
+
+        /// <summary>
+        /// 打开
+        /// </summary>
+        /// <param name="userData">userData</param>
+        public void Open(object userData = null)
+        {
+            if(m_ParentUIWidget != null)
+            {
+                m_ParentUIWidget.OpenUIWidget(this, userData);
+                return;
+            }
+
+            if (m_UIForm != null)
+            {
+                m_UIForm.OpenUIWidget(this, userData);
+                return;
+            }
+
+            throw new GameFrameworkException("UI widget is invalid.");
+        }
+
+        /// <summary>
+        /// 尝试打开
+        /// </summary>
+        /// <param name="userData">userData</param>
+        public void TryOpen(object userData = null)
+        {
+            if (Available)
+                return;
+
+            if(m_ParentUIWidget != null)
+            {
+                m_ParentUIWidget.OpenUIWidget(this, userData);
+                return;
+            }
+
+            if (m_UIForm != null)
+            {
+                m_UIForm.OpenUIWidget(this, userData);
+                return;
+            }
+        }
+
+        internal override void SetUIFormOwner(AUIForm uiForm)
+        {
+            base.SetUIFormOwner(uiForm);
+            m_UIForm = uiForm as AExUIForm;
+        }
 
         private void ClearContainer()
         {
@@ -69,23 +144,6 @@ namespace Game
         {
             RemoveAllUIWidget();
             ClearContainer();
-        }
-
-        protected internal override void OnOpen(object userData)
-        {
-            base.OnOpen(userData);
-            if (m_UIWidgetContainer != null)
-            {
-                UGFList<AUIWidget> uiWidgets = UGFList<AUIWidget>.Create();
-                m_UIWidgetContainer.GetAllUIWidgets(uiWidgets);
-                foreach (AUIWidget uiWidget in uiWidgets)
-                {
-                    if (uiWidget.Visible && !uiWidget.Available)
-                    {
-                        m_UIWidgetContainer.OpenUIWidget(uiWidget);
-                    }
-                }
-            }
         }
 
         protected internal override void OnClose(bool isShutdown, object userData)
