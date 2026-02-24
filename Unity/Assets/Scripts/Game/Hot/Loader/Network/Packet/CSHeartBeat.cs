@@ -23,6 +23,7 @@ namespace Game
 
         public override void Clear()
         {
+            base.Clear();
         }
     }
 }

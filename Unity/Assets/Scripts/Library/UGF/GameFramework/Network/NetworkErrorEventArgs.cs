@@ -1,11 +1,9 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
-
-using System.Net.Sockets;
 
 namespace GameFramework.Network
 {
@@ -21,7 +19,7 @@ namespace GameFramework.Network
         {
             NetworkChannel = null;
             ErrorCode = NetworkErrorCode.Unknown;
-            SocketErrorCode = SocketError.Success;
+            InternalErrorCode = 0;
             ErrorMessage = null;
         }
 
@@ -44,9 +42,9 @@ namespace GameFramework.Network
         }
 
         /// <summary>
-        /// 获取 Socket 错误码。
+        /// 获取内部错误码。
         /// </summary>
-        public SocketError SocketErrorCode
+        public int InternalErrorCode
         {
             get;
             private set;
@@ -66,15 +64,15 @@ namespace GameFramework.Network
         /// </summary>
         /// <param name="networkChannel">网络频道。</param>
         /// <param name="errorCode">错误码。</param>
-        /// <param name="socketErrorCode">Socket 错误码。</param>
+        /// <param name="internalErrorCode">内部错误码。</param>
         /// <param name="errorMessage">错误信息。</param>
         /// <returns>创建的网络错误事件。</returns>
-        public static NetworkErrorEventArgs Create(INetworkChannel networkChannel, NetworkErrorCode errorCode, SocketError socketErrorCode, string errorMessage)
+        public static NetworkErrorEventArgs Create(INetworkChannel networkChannel, NetworkErrorCode errorCode, int internalErrorCode, string errorMessage)
         {
             NetworkErrorEventArgs networkErrorEventArgs = ReferencePool.Acquire<NetworkErrorEventArgs>();
             networkErrorEventArgs.NetworkChannel = networkChannel;
             networkErrorEventArgs.ErrorCode = errorCode;
-            networkErrorEventArgs.SocketErrorCode = socketErrorCode;
+            networkErrorEventArgs.InternalErrorCode = internalErrorCode;
             networkErrorEventArgs.ErrorMessage = errorMessage;
             return networkErrorEventArgs;
         }
@@ -86,7 +84,7 @@ namespace GameFramework.Network
         {
             NetworkChannel = null;
             ErrorCode = NetworkErrorCode.Unknown;
-            SocketErrorCode = SocketError.Success;
+            InternalErrorCode = 0;
             ErrorMessage = null;
         }
     }

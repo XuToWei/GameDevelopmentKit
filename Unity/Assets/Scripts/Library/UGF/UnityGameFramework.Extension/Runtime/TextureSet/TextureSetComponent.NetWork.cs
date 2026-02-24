@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GameFramework;
 using GameFramework.Event;
 using UnityEngine;
@@ -22,32 +23,57 @@ namespace UnityGameFramework.Extension
         /// </summary>
         /// <param name="setTexture2dObject">需要设置图片的对象</param>
         /// <param name="saveFilePath">保存网络图片到本地的路径</param>
-        public int SetTextureByNetwork(ISetTexture2dObject setTexture2dObject, string saveFilePath = null)
+        public void SetTextureByNetwork(ISetTexture2dObject setTexture2dObject, string saveFilePath = null)
         {
-            int serialId = -1;
-            if (m_TexturePool.CanSpawn(setTexture2dObject.Texture2dFilePath))
+            string texturePath = setTexture2dObject.Texture2dFilePath;
+            if (m_TexturePool.CanSpawn(texturePath))
             {
-                var texture = (Texture2D)m_TexturePool.Spawn(setTexture2dObject.Texture2dFilePath).Target;
+                var texture = (Texture2D)m_TexturePool.Spawn(texturePath).Target;
                 SetTexture(setTexture2dObject, texture);
-            }
-            else
-            {
-                serialId = m_SerialId++;
-                m_WebRequestComponent.AddWebRequest(setTexture2dObject.Texture2dFilePath, WebGetTextureData.Create(setTexture2dObject,this,saveFilePath,serialId));
+                return;
             }
 
-            return serialId;
+            // 本地文件系统有，优先从本地加载
+            if (!string.IsNullOrEmpty(saveFilePath) && HasFile(saveFilePath))
+            {
+                SetTextureByFileSystem(setTexture2dObject, saveFilePath);
+                return;
+            }
+
+            if (!m_WaitSetObjects.TryGetValue(texturePath, out var awaitSets))
+            {
+                awaitSets = new HashSet<ISetTexture2dObject>();
+                m_WaitSetObjects.Add(texturePath, awaitSets);
+            }
+            awaitSets.Add(setTexture2dObject);
+
+            if (!m_TextureBeingLoaded.Add(texturePath))
+            {
+                return;
+            }
+
+            m_WebRequestComponent.AddWebRequest(texturePath, WebGetTextureData.Create(setTexture2dObject, this, saveFilePath));
         }
-        
+
         private void OnWebGetTextureFailure(object sender, GameEventArgs e)
         {
-            WebRequestFailureEventArgs webRequestSuccessEventArgs = (WebRequestFailureEventArgs)e;
-            WebGetTextureData webGetTextureData = webRequestSuccessEventArgs.UserData as WebGetTextureData;
+            WebRequestFailureEventArgs webRequestFailureEventArgs = (WebRequestFailureEventArgs)e;
+            WebGetTextureData webGetTextureData = webRequestFailureEventArgs.UserData as WebGetTextureData;
             if (webGetTextureData == null || webGetTextureData.UserData != this)
             {
                 return;
             }
-            Log.Error("Can not download Texture2D from '{1}' with error message '{2}'.",webRequestSuccessEventArgs.WebRequestUri,webRequestSuccessEventArgs.ErrorMessage);
+            string texturePath = webGetTextureData.SetTexture2dObject.Texture2dFilePath;
+            m_TextureBeingLoaded.Remove(texturePath);
+            if (m_WaitSetObjects.TryGetValue(texturePath, out HashSet<ISetTexture2dObject> awaitSets))
+            {
+                foreach (var awaitSet in awaitSets)
+                {
+                    ReferencePool.Release(awaitSet);
+                }
+                awaitSets.Clear();
+            }
+            Log.Error("Can not download Texture2D from '{0}' with error message '{1}'.", webRequestFailureEventArgs.WebRequestUri, webRequestFailureEventArgs.ErrorMessage);
             ReferencePool.Release(webGetTextureData);
         }
 
@@ -59,6 +85,8 @@ namespace UnityGameFramework.Extension
             {
                 return;
             }
+
+            string texturePath = webGetTextureData.SetTexture2dObject.Texture2dFilePath;
             Texture2D tex = new Texture2D(0, 0, TextureFormat.RGBA32, false);
             var bytes = webRequestSuccessEventArgs.GetWebResponseBytes();
             tex.LoadImage(bytes);
@@ -66,8 +94,18 @@ namespace UnityGameFramework.Extension
             {
                 SaveTexture(webGetTextureData.FilePath, bytes);
             }
-            m_TexturePool.Register(TextureItemObject.Create(webGetTextureData.SetTexture2dObject.Texture2dFilePath, tex, TextureLoad.FromNet), true);
-            SetTexture(webGetTextureData.SetTexture2dObject, tex,webGetTextureData.SerialId);
+            m_TexturePool.Register(TextureItemObject.Create(texturePath, tex, TextureLoad.FromNet), false);
+            m_TextureBeingLoaded.Remove(texturePath);
+
+            if (m_WaitSetObjects.TryGetValue(texturePath, out HashSet<ISetTexture2dObject> awaitSets))
+            {
+                foreach (ISetTexture2dObject awaitSet in awaitSets)
+                {
+                    m_TexturePool.Spawn(texturePath);
+                    SetTexture(awaitSet, tex);
+                }
+                awaitSets.Clear();
+            }
             ReferencePool.Release(webGetTextureData);
         }
     }

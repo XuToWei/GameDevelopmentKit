@@ -29,12 +29,6 @@ namespace UnityGameFramework.Extension
             eventComponent.Subscribe(NetworkMissHeartBeatEventArgs.EventId, OnNetworkMissHeartBeat);
             eventComponent.Subscribe(NetworkErrorEventArgs.EventId, OnNetworkError);
             eventComponent.Subscribe(NetworkCustomErrorEventArgs.EventId, OnNetworkCustomError);
-
-            eventComponent.Subscribe(WebSocketConnectedEventArgs.EventId, OnWebSocketConnected);
-            eventComponent.Subscribe(WebSocketClosedEventArgs.EventId, OnWebSocketClosed);
-            eventComponent.Subscribe(WebSocketMissHeartBeatEventArgs.EventId, OnWebSocketMissHeartBeat);
-            eventComponent.Subscribe(WebSocketErrorEventArgs.EventId, OnWebSocketError);
-            eventComponent.Subscribe(WebSocketCustomErrorEventArgs.EventId, OnWebSocketCustomError);
         }
 
         private void OnDestroy()
@@ -72,36 +66,6 @@ namespace UnityGameFramework.Extension
             OnCustomError(networkCustomErrorEventArgs.CustomErrorData.ToString(), networkCustomErrorEventArgs.NetworkChannel);
         }
 
-        private void OnWebSocketConnected(object sender, GameEventArgs args)
-        {
-            WebSocketConnectedEventArgs webSocketConnectedEventArgs = (WebSocketConnectedEventArgs)args;
-            OnConnected(webSocketConnectedEventArgs.WebSocketChannel);
-        }
-
-        private void OnWebSocketClosed(object sender, GameEventArgs args)
-        {
-            WebSocketClosedEventArgs webSocketClosedEventArgs = (WebSocketClosedEventArgs)args;
-            OnDisconnected(webSocketClosedEventArgs.WebSocketChannel);
-        }
-
-        private void OnWebSocketMissHeartBeat(object sender, GameEventArgs args)
-        {
-            WebSocketMissHeartBeatEventArgs webSocketMissHeartBeatEventArgs = (WebSocketMissHeartBeatEventArgs)args;
-            OnMissHeartBeat(webSocketMissHeartBeatEventArgs.WebSocketChannel);
-        }
-
-        private void OnWebSocketError(object sender, GameEventArgs args)
-        {
-            WebSocketErrorEventArgs webSocketErrorEventArgs = (WebSocketErrorEventArgs)args;
-            OnError(webSocketErrorEventArgs.ErrorMessage, webSocketErrorEventArgs.WebSocketChannel);
-        }
-
-        private void OnWebSocketCustomError(object sender, GameEventArgs args)
-        {
-            WebSocketCustomErrorEventArgs webSocketCustomErrorEventArgs = (WebSocketCustomErrorEventArgs)args;
-            OnCustomError(webSocketCustomErrorEventArgs.CustomErrorData.ToString(), webSocketCustomErrorEventArgs.WebSocketChannel);
-        }
-
         public void InitServiceNetworkHelper(INetworkServiceHelper networkServiceHelper)
         {
             if (networkServiceHelper == null)
@@ -126,6 +90,11 @@ namespace UnityGameFramework.Extension
             m_NetworkServiceHelper = null;
         }
 
+        public void Connect()
+        {
+            Connect(null);
+        }
+
         public void Connect(object userData)
         {
             if (m_NetworkServiceHelper == null)
@@ -133,6 +102,11 @@ namespace UnityGameFramework.Extension
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
             m_NetworkServiceHelper.Connect(userData);
+        }
+
+        public void Disconnect()
+        {
+            Disconnect(null);
         }
 
         public void Disconnect(object userData)
@@ -158,28 +132,28 @@ namespace UnityGameFramework.Extension
             m_NetworkServiceHelper.Send(packet, userData);
         }
 
-        public UniTask<T2> SendAsync<T1, T2>(T1 packet) where T1 : Packet where T2 : Packet
+        public UniTask<T> SendAsync<T>(Packet packet) where T : Packet
         {
-            return SendAsync<T1, T2>(packet, null, CancellationToken.None);
+            return SendAsync<T>(packet, null, CancellationToken.None);
         }
 
-        public UniTask<T2> SendAsync<T1, T2>(T1 packet, object userData) where T1 : Packet where T2 : Packet
+        public UniTask<T> SendAsync<T>(Packet packet, object userData) where T : Packet
         {
-            return SendAsync<T1, T2>(packet, userData, CancellationToken.None);
+            return SendAsync<T>(packet, userData, CancellationToken.None);
         }
 
-        public UniTask<T2> SendAsync<T1, T2>(T1 packet, CancellationToken cancellationToken) where T1 : Packet where T2 : Packet
+        public UniTask<T> SendAsync<T>(Packet packet, CancellationToken cancellationToken) where T : Packet
         {
-            return SendAsync<T1, T2>(packet, null, cancellationToken);
+            return SendAsync<T>(packet, null, cancellationToken);
         }
 
-        public UniTask<T2> SendAsync<T1, T2>(T1 packet, object userData, CancellationToken cancellationToken) where T1 : Packet where T2 : Packet
+        public UniTask<T> SendAsync<T>(Packet packet, object userData, CancellationToken cancellationToken) where T : Packet
         {
             if (m_NetworkServiceHelper == null)
             {
                 throw new GameFrameworkException("ServiceNetwork helper is invalid.");
             }
-            return m_NetworkServiceHelper.SendAsync<T1, T2>(packet, userData, cancellationToken);
+            return m_NetworkServiceHelper.SendAsync<T>(packet, userData, cancellationToken);
         }
 
         private void OnConnected(object channel)

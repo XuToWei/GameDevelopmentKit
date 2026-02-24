@@ -13,8 +13,10 @@ using ProtoBuf.Meta;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Sockets;
 using System.Reflection;
 using UnityGameFramework.Runtime;
+using UnityWebSocket;
 
 namespace Game
 {
@@ -100,8 +102,12 @@ namespace Game
         /// </summary>
         public void PrepareForConnecting()
         {
-            m_NetworkChannel.Socket.ReceiveBufferSize = 1024 * 64;
-            m_NetworkChannel.Socket.SendBufferSize = 1024 * 64;
+            Socket socket = m_NetworkChannel.Handle as Socket;
+            if (socket != null)
+            {
+                socket.ReceiveBufferSize = 1024 * 64;
+                socket.SendBufferSize = 1024 * 64;
+            }
         }
 
         /// <summary>
@@ -223,7 +229,19 @@ namespace Game
                 return;
             }
 
-            Log.Info("Network channel '{0}' connected, local address '{1}', remote address '{2}'.", ne.NetworkChannel.Name, ne.NetworkChannel.Socket.LocalEndPoint.ToString(), ne.NetworkChannel.Socket.RemoteEndPoint.ToString());
+            Socket socket = m_NetworkChannel.Handle as Socket;
+            if(socket != null)
+            {
+                Log.Info("Network channel '{0}' connected, local address '{1}', remote address '{2}'.", ne.NetworkChannel.Name, socket.LocalEndPoint.ToString(), socket.RemoteEndPoint.ToString());
+                return;
+            }
+
+            WebSocket webSocket = m_NetworkChannel.Handle as WebSocket;
+            if (webSocket != null)
+            {
+                Log.Info("Network channel '{0}' connected, url '{1}'.", ne.NetworkChannel.Name, webSocket.Address);
+                return;
+            }
         }
 
         private void OnNetworkClosed(object sender, GameEventArgs e)
@@ -263,7 +281,14 @@ namespace Game
                 return;
             }
 
-            Log.Info("Network channel '{0}' error, error code is '{1}', error message is '{2}'.", ne.NetworkChannel.Name, ne.ErrorCode.ToString(), ne.ErrorMessage);
+            if (ne.NetworkChannel.Handle is Socket)
+            {
+                Log.Info("Network channel '{0}' error, error code is '{1}', error message is '{2}'.", ne.NetworkChannel.Name, (SocketError)ne.ErrorCode, ne.ErrorMessage);
+            }
+            else
+            {
+                Log.Info("Network channel '{0}' error, error code is '{1}', error message is '{2}'.", ne.NetworkChannel.Name, ne.ErrorCode, ne.ErrorMessage);
+            }
 
             ne.NetworkChannel.Close();
         }

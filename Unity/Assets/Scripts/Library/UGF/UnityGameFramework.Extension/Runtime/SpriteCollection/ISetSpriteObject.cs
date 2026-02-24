@@ -8,11 +8,11 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 精灵名称
         /// </summary>
-        string SpritePath { get;}
+        string SpritePath { get; }
         /// <summary>
         /// 精灵所在收集器地址
         /// </summary>
-        string CollectionPath { get;}
+        string CollectionPath { get; }
         /// <summary>
         /// 设置精灵
         /// </summary>

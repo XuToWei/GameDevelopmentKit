@@ -6,7 +6,8 @@
         "UniTask",
         "MemoryPack",
         "ET.ThirdParty",
-        "UniTask.Extension"
+        "UniTask.Extension",
+        "UnityWebSocket.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

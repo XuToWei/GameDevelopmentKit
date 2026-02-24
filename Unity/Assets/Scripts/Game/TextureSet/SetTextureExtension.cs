@@ -22,14 +22,14 @@ namespace Game
             GameEntry.TextureSet.SetTextureByFileSystem(SetRawImage.Create(rawImage, file));
         }
 
-        public static int SetTextureByNetwork(this RawImage rawImage, string file, string saveFilePath = null)
+        public static void SetTextureByNetwork(this RawImage rawImage, string file, string saveFilePath = null)
         {
-            return GameEntry.TextureSet.SetTextureByNetwork(SetRawImage.Create(rawImage, file), saveFilePath);
+           GameEntry.TextureSet.SetTextureByNetwork(SetRawImage.Create(rawImage, file), saveFilePath);
         }
 
-        public static int SetTextureByResources(this RawImage rawImage, string file)
+        public static void SetTextureByResources(this RawImage rawImage, string file)
         {
-            return GameEntry.TextureSet.SetTextureByResources(SetRawImage.Create(rawImage, file));
+            GameEntry.TextureSet.SetTextureByResources(SetRawImage.Create(rawImage, file));
         }
     }
 }

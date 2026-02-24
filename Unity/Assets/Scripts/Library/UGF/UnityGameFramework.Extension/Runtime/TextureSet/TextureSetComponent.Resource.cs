@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GameFramework;
 using GameFramework.Resource;
 using UnityEngine;
@@ -23,8 +24,18 @@ namespace UnityGameFramework.Extension
         private void OnLoadAssetFailure(string assetName, LoadResourceStatus status, string errormessage, object userdata)
         {
             ResourceData resourceData = (ResourceData) userdata;
+            string texturePath = resourceData.SetTexture2dObject.Texture2dFilePath;
+            m_TextureBeingLoaded.Remove(texturePath);
+            if (m_WaitSetObjects.TryGetValue(texturePath, out HashSet<ISetTexture2dObject> awaitSets))
+            {
+                foreach (var awaitSet in awaitSets)
+                {
+                    ReferencePool.Release(awaitSet);
+                }
+                awaitSets.Clear();
+            }
             ReferencePool.Release(resourceData);
-            Log.Error("Can not load Texture2D from '{1}' with error message '{2}'.", assetName, errormessage);
+            Log.Error("Can not load Texture2D from '{0}' with error message '{1}'.", assetName, errormessage);
         }
 
         private void OnLoadAssetSuccess(string assetName, object asset, float duration, object userdata)
@@ -33,20 +44,23 @@ namespace UnityGameFramework.Extension
             Texture2D texture = asset as Texture2D;
             if (texture != null)
             {
-                if (!m_TexturePool.CanSpawn(resourceData.SetTexture2dObject.Texture2dFilePath))
-                {
-                    m_TexturePool.Register(TextureItemObject.Create(resourceData.SetTexture2dObject.Texture2dFilePath, texture, TextureLoad.FromResource, m_ResourceComponent), true);
-                }
-                else
-                {
-                    m_TexturePool.Spawn(resourceData.SetTexture2dObject.Texture2dFilePath);
-                }
+                string texturePath = resourceData.SetTexture2dObject.Texture2dFilePath;
+                m_TexturePool.Register(TextureItemObject.Create(texturePath, texture, TextureLoad.FromResource, m_ResourceComponent), false);
+                m_TextureBeingLoaded.Remove(texturePath);
 
-                SetTexture(resourceData.SetTexture2dObject, texture, resourceData.SerialId);
+                if (m_WaitSetObjects.TryGetValue(texturePath, out HashSet<ISetTexture2dObject> awaitSets))
+                {
+                    foreach (ISetTexture2dObject awaitSet in awaitSets)
+                    {
+                        m_TexturePool.Spawn(texturePath);
+                        SetTexture(awaitSet, texture);
+                    }
+                    awaitSets.Clear();
+                }
             }
             else
             {
-                Log.Error(new GameFrameworkException($"Load Texture2D failure asset type is {asset.GetType()}."));
+                Log.Error("Load Texture2D failure asset type is '{0}'.", asset.GetType());
             }
 
             ReferencePool.Release(resourceData);
@@ -56,21 +70,29 @@ namespace UnityGameFramework.Extension
         /// 通过资源系统设置图片
         /// </summary>
         /// <param name="setTexture2dObject">需要设置图片的对象</param>
-        public int SetTextureByResources(ISetTexture2dObject setTexture2dObject)
+        public void SetTextureByResources(ISetTexture2dObject setTexture2dObject)
         {
-            int serialId = -1;
-            if (m_TexturePool.CanSpawn(setTexture2dObject.Texture2dFilePath))
+            string texturePath = setTexture2dObject.Texture2dFilePath;
+            if (m_TexturePool.CanSpawn(texturePath))
             {
-                var texture = (Texture2D) m_TexturePool.Spawn(setTexture2dObject.Texture2dFilePath).Target;
+                var texture = (Texture2D) m_TexturePool.Spawn(texturePath).Target;
                 SetTexture(setTexture2dObject, texture);
-            }
-            else
-            {
-                serialId = m_SerialId++;
-                m_ResourceComponent.LoadAsset(setTexture2dObject.Texture2dFilePath, typeof(Texture2D), m_LoadAssetCallbacks, ResourceData.Create(setTexture2dObject, serialId));
+                return;
             }
 
-            return serialId;
+            if (!m_WaitSetObjects.TryGetValue(texturePath, out var awaitSets))
+            {
+                awaitSets = new HashSet<ISetTexture2dObject>();
+                m_WaitSetObjects.Add(texturePath, awaitSets);
+            }
+            awaitSets.Add(setTexture2dObject);
+
+            if (!m_TextureBeingLoaded.Add(texturePath))
+            {
+                return;
+            }
+
+            m_ResourceComponent.LoadAsset(texturePath, typeof(Texture2D), m_LoadAssetCallbacks, ResourceData.Create(setTexture2dObject));
         }
     }
 }

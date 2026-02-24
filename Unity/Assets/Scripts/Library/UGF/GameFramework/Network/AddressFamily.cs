@@ -25,6 +25,11 @@ namespace GameFramework.Network
         /// <summary>
         /// IP 版本 6。
         /// </summary>
-        IPv6
+        IPv6,
+
+        /// <summary>
+        /// URL。
+        /// </summary>
+        URL
     }
 }

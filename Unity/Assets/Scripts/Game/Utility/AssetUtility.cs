@@ -26,7 +26,7 @@ namespace Game
 
         public static string GetLocalizationAsset(string assetName)
         {
-            return Utility.Text.Format("Assets/GameMain/Localization/{0}/{1}", GameEntry.Localization.Language, assetName);
+            return Utility.Text.Format("Assets/Res/Localization/{0}/{1}", GameEntry.Localization.Language, assetName);
         }
 
         public static string GetMusicAsset(string assetName)

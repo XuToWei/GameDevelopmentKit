@@ -1,3 +1,4 @@
+#if !UNITY_ET
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace ET
         
         public override void Create(long id, IPEndPoint ipEndpoint)
         {
-			ClientWebSocket webSocket = new();
+            ClientWebSocket webSocket = new();
             WChannel channel = new(id, webSocket, ipEndpoint, this);
             this.channels[channel.Id] = channel;
         }
@@ -95,7 +96,7 @@ namespace ET
             this.httpListener = null;
         }
 
-        private async UniTask StartAccept(IEnumerable<string> prefixs)
+        private async UniTaskVoid StartAccept(IEnumerable<string> prefixs)
         {
             try
             {
@@ -152,3 +153,4 @@ namespace ET
         }
     }
 }
+#endif

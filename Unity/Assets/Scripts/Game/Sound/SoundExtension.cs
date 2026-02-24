@@ -7,6 +7,7 @@
 
 using GameFramework;
 using GameFramework.Sound;
+using UnityEngine;
 using UnityGameFramework.Runtime;
 
 namespace Game
@@ -63,6 +64,23 @@ namespace Game
             playSoundParams.VolumeInSoundGroup = drSound.Volume;
             playSoundParams.SpatialBlend = drSound.SpatialBlend;
             return soundComponent.PlaySound(AssetUtility.GetSoundAsset(drSound.AssetName), drSound.SoundGroupName, Constant.AssetPriority.SoundAsset, playSoundParams, bindingAEntity != null ? bindingAEntity.Entity : null, userData);
+        }
+
+        public static int? PlaySound(this SoundComponent soundComponent, int soundId, Vector3 worldPosition, object userData = null)
+        {
+            DRSound drSound = GameEntry.Tables.DTSound.GetOrDefault(soundId);
+            if (drSound == null)
+            {
+                Log.Warning("Can not load sound '{0}' from data table.", soundId.ToString());
+                return null;
+            }
+
+            PlaySoundParams playSoundParams = PlaySoundParams.Create();
+            playSoundParams.Priority = drSound.Priority;
+            playSoundParams.Loop = drSound.Loop;
+            playSoundParams.VolumeInSoundGroup = drSound.Volume;
+            playSoundParams.SpatialBlend = drSound.SpatialBlend;
+            return soundComponent.PlaySound(AssetUtility.GetSoundAsset(drSound.AssetName), drSound.SoundGroupName, Constant.AssetPriority.SoundAsset, playSoundParams, worldPosition, userData);
         }
 
         public static int? PlayUISound(this SoundComponent soundComponent, int uiSoundId, object userData = null)

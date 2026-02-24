@@ -10,11 +10,6 @@ namespace UnityGameFramework.Extension
         public override void Shutdown()
         {
             base.Shutdown();
-            WebSocketComponent webSocketComponent = GameEntry.GetComponent<WebSocketComponent>();
-            if (webSocketComponent != null)
-            {
-                webSocketComponent.Shutdown();
-            }
             CodeRunnerComponent codeRunnerComponent = GameEntry.GetComponent<CodeRunnerComponent>();
             if(codeRunnerComponent != null)
             {

@@ -49,12 +49,6 @@ namespace Game
             private set;
         }
 
-        public static WebSocketComponent WebSocket
-        {
-            get;
-            private set;
-        }
-
         private static void InitExtensionComponents()
         {
             Builtin = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinComponent>();
@@ -64,7 +58,6 @@ namespace Game
             Screen = UnityGameFramework.Runtime.GameEntry.GetComponent<ScreenComponent>();
             SpriteCollection = UnityGameFramework.Runtime.GameEntry.GetComponent<SpriteCollectionComponent>();
             TextureSet = UnityGameFramework.Runtime.GameEntry.GetComponent<TextureSetComponent>();
-            WebSocket  = UnityGameFramework.Runtime.GameEntry.GetComponent<WebSocketComponent>();
         }
     }
 }

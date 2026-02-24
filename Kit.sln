@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.Tool", "Share\Tool\Sh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.FileServer", "Share\FileServer\Share.FileServer.csproj", "{2CF9A444-C227-40A6-89A8-A31D7A131694}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.SourceGenerator", "Share\Share.SourceGenerator\Share.SourceGenerator.csproj", "{EE473828-55A5-4134-8515-D805CD576CF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.SourceGenerator", "Share\SourceGenerator\Share.SourceGenerator.csproj", "{EE473828-55A5-4134-8515-D805CD576CF0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNet.Core", "DotNet\Core\DotNet.Core.csproj", "{FE5BD9E4-B8AA-4A19-8AD5-CEBF30F15005}"
 EndProject
