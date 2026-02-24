@@ -6,24 +6,37 @@ namespace Game
 {
     [CodeBind]
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(RectTransform))]
     public abstract class AUIWidget : MonoBehaviour
     {
-        private UIForm m_UIFormOwner;
-        private Transform m_CachedTransform = null;
+        private AUIForm m_UIFormOwner;
+        private RectTransform m_CachedRectTransform = null;
+        private bool m_Initialized = false;
         private bool m_Available = false;
         private bool m_Visible = false;
 
         /// <summary>
         /// 所属的界面。
         /// </summary>
-        public UIForm UIFormOwner
+        public AUIForm UIFormOwner
         {
             get
             {
                 return m_UIFormOwner;
             }
         }
-        
+
+        /// <summary>
+        /// 获取界面是否初始化完成。
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                return m_Initialized;
+            }
+        }
+
         /// <summary>
         /// 获取界面是否可用。
         /// </summary>
@@ -42,13 +55,13 @@ namespace Game
         {
             get
             {
-                return m_Available && m_Visible;
+                return m_Initialized && m_Visible;
             }
             set
             {
-                if (!m_Available)
+                if (!m_Initialized)
                 {
-                    Log.Warning("UI widget '{0}' is not available.", this.gameObject.name);
+                    Log.Warning("UI widget '{0}' is not initialized.", this.gameObject.name);
                     return;
                 }
                 if (m_Visible == value)
@@ -63,15 +76,15 @@ namespace Game
         /// <summary>
         /// 获取已缓存的 Transform。
         /// </summary>
-        public Transform CachedTransform
+        public RectTransform CachedRectTransform
         {
             get
             {
-                return m_CachedTransform;
+                return m_CachedRectTransform;
             }
         }
 
-        internal void SetUIFormOwner(UIForm uiForm)
+        public virtual void SetUIFormOwner(AUIForm uiForm)
         {
             m_UIFormOwner = uiForm;
         }
@@ -82,10 +95,12 @@ namespace Game
         /// <param name="userData">用户自定义数据。</param>
         protected internal virtual void OnInit(object userData)
         {
-            if (m_CachedTransform == null)
+            if (m_CachedRectTransform == null)
             {
-                m_CachedTransform = transform;
+                m_CachedRectTransform = GetComponent<RectTransform>();
             }
+            m_Initialized = true;
+            m_Visible = gameObject.activeInHierarchy;
         }
 
         /// <summary>

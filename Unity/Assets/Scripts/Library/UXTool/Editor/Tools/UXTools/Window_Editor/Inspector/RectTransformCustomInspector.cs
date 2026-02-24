@@ -91,7 +91,7 @@ namespace ThunderFireUITool
                 }
 
                 imNormalInspector.style.top = 40;
-                container.style.height = 250f;
+                container.style.paddingBottom = 40;
             }
 
             container.Add(imNormalInspector);

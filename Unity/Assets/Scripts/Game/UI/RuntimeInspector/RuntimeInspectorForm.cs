@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Game
 {
     [MonoCodeBind]
-    public sealed partial class RuntimeInspectorForm : AExUGuiForm
+    public sealed partial class RuntimeInspectorForm : AUIForm
     {
         protected override void OnInit(object userData)
         {

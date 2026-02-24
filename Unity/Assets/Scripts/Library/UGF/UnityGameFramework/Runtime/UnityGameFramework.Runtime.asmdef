@@ -2,7 +2,8 @@
     "name": "UnityGameFramework.Runtime",
     "rootNamespace": "",
     "references": [
-        "GameFramework"
+        "GameFramework",
+        "UnityWebSocket.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

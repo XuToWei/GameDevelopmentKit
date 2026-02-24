@@ -4,34 +4,20 @@ using UnityEngine.UI;
 
 public class GuideHighLightButton : Button
 {
-    private List<RaycastResult> m_RaycastResults;
-    private bool m_ClickPassThrough;
-    /// <summary>
-    /// 是否点击穿透
-    /// </summary>
-    public bool clickPassThrough
-    {
-        set
-        {
-            if (value && m_RaycastResults == null)
-            {
-                m_RaycastResults = new List<RaycastResult>();
-            }
-            m_ClickPassThrough = value;
-        }
-    }
+    private static readonly List<RaycastResult> s_RaycastResults = new List<RaycastResult>();
 
     public override void OnPointerClick(PointerEventData eventData)
     {
-        if (m_ClickPassThrough && eventData.button == PointerEventData.InputButton.Left && IsActive() && IsInteractable())
+        if (eventData.button == PointerEventData.InputButton.Left && IsActive() && IsInteractable())
         {
-            EventSystem.current.RaycastAll(eventData, m_RaycastResults);
+            s_RaycastResults.Clear();
+            EventSystem.current.RaycastAll(eventData, s_RaycastResults);
             var current = eventData.pointerCurrentRaycast.gameObject;
             //排除自己和自己的父节点
             bool isAfterSelf = false;
-            foreach (var t in m_RaycastResults)
+            foreach (var t in s_RaycastResults)
             {
-                if (current == t.gameObject)
+                if (!isAfterSelf && current == t.gameObject)
                 {
                     isAfterSelf = true;
                     continue;
@@ -43,7 +29,7 @@ public class GuideHighLightButton : Button
                     break;
                 }
             }
-            m_RaycastResults.Clear();
+            s_RaycastResults.Clear();
         }
         base.OnPointerClick(eventData);
     }

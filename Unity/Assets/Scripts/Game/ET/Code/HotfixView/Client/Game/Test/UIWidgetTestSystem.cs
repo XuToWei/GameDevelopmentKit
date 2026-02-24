@@ -8,16 +8,11 @@ namespace ET.Client
     public static partial class UIWidgetTestSystem
     {
         [UGFUIWidgetSystem]
-        private static void UGFUIWidgetOnInit(this UIWidgetTest self)
-        {
-            self.View.TestReopenButton.SetAsync(self.OnClickTestReopenButton);
-            self.View.TestCloseButton.Set(self.OnClickTestCloseButton);
-            Log.Info("UIWidget测试OnInit");
-        }
-        
-        [UGFUIWidgetSystem]
         private static void UGFUIWidgetOnOpen(this UIWidgetTest self)
         {
+            self.OpenAllUIWidgets();
+            self.View.TestReopenButton.SetAsync(self.OnClickTestReopenButton);
+            self.View.TestCloseButton.Set(self.OnClickTestCloseButton);
             self.View.TestUXText.text = "UIWidget测试成功!";
             Log.Info("UIWidget测试OnOpen");
         }

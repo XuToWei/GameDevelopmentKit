@@ -38,80 +38,85 @@ namespace ET
     public abstract class UGFUIForm : Entity
     {
         [BsonIgnore]
-        private UIForm uiForm;
+        private UIForm m_UIForm;
         [BsonIgnore]
-        private CancellationTokenSourcePlus cts;
+        private CancellationTokenSourcePlus m_Cts;
         [BsonIgnore]
         internal virtual AETMonoUGFUIForm UGFMono { get; set; }
         [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
         [BsonIgnore]
-        public bool Available => this.uiForm != null && this.uiForm.Logic.Available;
+        public bool Available => this.m_UIForm != null && this.m_UIForm.Logic.Available;
         [BsonIgnore]
         public bool Visible
         {
             get
             {
-                return this.uiForm != null && this.uiForm.Logic.Visible;
+                return this.m_UIForm != null && this.m_UIForm.Logic.Visible;
             }
             set
             {
-                if (this.uiForm == null)
+                if (this.m_UIForm == null)
                 {
                     Log.Warning("UI form is not opened.");
                     return;
                 }
-                this.uiForm.Logic.Visible = value;
+                this.m_UIForm.Logic.Visible = value;
             }
         }
 
         public override void Dispose()
         {
             bool isDisposed = this.IsDisposed;
-            base.Dispose();
             if (!isDisposed)
             {
-                if (this.cts != null)
+                if (this.m_Cts != null)
                 {
-                    this.cts.Cancel();
-                    ObjectPool.Instance.Recycle(this.cts);
-                    this.cts = null;
+                    this.m_Cts.Cancel();
+                    ObjectPool.Instance.Recycle(this.m_Cts);
+                    this.m_Cts = null;
                 }
                 if (this.Available)
                 {
-                    GameEntry.UI.CloseUIForm(this.uiForm);
-                    this.uiForm = null;
+                    GameEntry.UI.CloseUIForm(this.m_UIForm);
+                    this.m_UIForm = null;
                 }
             }
+            base.Dispose();
         }
 
         public async UniTask OpenUIFormAsync(int uiFormTypeId)
         {
-            if(this.cts == null)
+            if(this.m_Cts == null)
             {
-                this.cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
+                this.m_Cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
             }
-            this.uiForm = await GameEntry.UI.OpenUIFormAsync(uiFormTypeId, ETMonoUGFUIFormData.Create(this), cancellationToken: this.cts.MallocToken());
-            this.cts.FreeToken();
-            if(this.uiForm == null)
+            this.m_UIForm = await GameEntry.UI.OpenUIFormAsync(uiFormTypeId, ETMonoUGFUIFormData.Create(this), cancellationToken: this.m_Cts.MallocToken());
+            this.m_Cts.FreeToken();
+            if(this.m_UIForm == null)
             {
                 throw new Exception($"UGFUIForm OpenUIFormAsync failed! uiFormTypeId:'{uiFormTypeId}'.");
             }
         }
 
+        public void OpenAllUIWidgets()
+        {
+            this.UGFMono.OpenAllUIWidgets();
+        }
+
         public void RefocusUIForm()
         {
-            GameEntry.UI.RefocusUIForm(this.uiForm);
+            GameEntry.UI.RefocusUIForm(this.m_UIForm);
         }
 
         public void SetUIFormInstanceLocked(bool locked)
         {
-            GameEntry.UI.SetUIFormInstanceLocked(this.uiForm, locked);
+            GameEntry.UI.SetUIFormInstanceLocked(this.m_UIForm, locked);
         }
 
         public void SetUIFormInstancePriority(int priority)
         {
-            GameEntry.UI.SetUIFormInstancePriority(this.uiForm, priority);
+            GameEntry.UI.SetUIFormInstancePriority(this.m_UIForm, priority);
         }
 
         public async UniTask<T> LoadChildUIWidgetAsync<T>(int uiEntityTypeId) where T : UGFUIWidget, IAwake
@@ -142,115 +147,123 @@ namespace ET
             return this.AddComponentUIWidget<T>(monoUIWidget, true);
         }
 
+        public UGFUIWidget AddChildUIWidget(AETMonoUGFUIWidget etMonoWidget, bool isFromPool = false)
+        {
+            Type type = UGFSystemSingleton.Instance.GetWidgetType(etMonoWidget.GetType());
+            UGFUIWidget widgetEntity = (UGFUIWidget)this.AddChild(type, isFromPool);
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
+            return widgetEntity;
+        }
+
         public T AddChildUIWidget<T>(AETMonoUGFUIWidget etMonoWidget, bool isFromPool = false) where T : UGFUIWidget, IAwake
         {
             T widgetEntity = this.AddChild<T>(isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddChildUIWidget<T, A>(AETMonoUGFUIWidget etMonoWidget, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>
         {
             T widgetEntity = this.AddChild<T, A>(a, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddChildUIWidget<T, A, B>(AETMonoUGFUIWidget etMonoWidget, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>
         {
             T widgetEntity = this.AddChild<T, A, B>(a, b, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddChildUIWidget<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>
         {
             T widgetEntity = this.AddChild<T, A, B, C>(a, b, c, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddChildUIWidgetWithId<T>(AETMonoUGFUIWidget etMonoWidget, long id, bool isFromPool = false) where T : UGFUIWidget, IAwake
         {
             T widgetEntity = this.AddChildWithId<T>(id, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddChildUIWidgetWithId<T, A>(AETMonoUGFUIWidget etMonoWidget, long id, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>
         {
             T widgetEntity = this.AddChildWithId<T, A>(id, a, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddChildUIWidgetWithId<T, A, B>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>
         {
             T widgetEntity = this.AddChildWithId<T, A, B>(id, a, b, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddChildUIWidgetWithId<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>
         {
             T widgetEntity = this.AddChildWithId<T, A, B, C>(id, a, b, c, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddComponentUIWidget<T>(AETMonoUGFUIWidget etMonoWidget, bool isFromPool = false) where T : UGFUIWidget, IAwake, new()
         {
             T widgetEntity = this.AddComponent<T>(isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddComponentUIWidget<T, A>(AETMonoUGFUIWidget etMonoWidget, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>, new()
         {
             T widgetEntity = this.AddComponent<T, A>(a, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddComponentUIWidget<T, A, B>(AETMonoUGFUIWidget etMonoWidget, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>, new()
         {
             T widgetEntity = this.AddComponent<T, A, B>(a, b, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddComponentUIWidget<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>, new()
         {
             T widgetEntity = this.AddComponent<T, A, B, C>(a, b, c, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddComponentUIWidgetWithId<T>(AETMonoUGFUIWidget etMonoWidget, long id, bool isFromPool = false) where T : UGFUIWidget, IAwake, new()
         {
             T widgetEntity = this.AddComponentWithId<T>(id, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddComponentUIWidgetWithId<T, A>(AETMonoUGFUIWidget etMonoWidget, long id, A a, bool isFromPool = false) where T : UGFUIWidget, IAwake<A>, new()
         {
             T widgetEntity = this.AddComponentWithId<T, A>(id, a, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddComponentUIWidgetWithId<T, A, B>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B>, new()
         {
             T widgetEntity = this.AddComponentWithId<T, A, B>(id, a, b, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
 
         public T AddComponentUIWidgetWithId<T, A, B, C>(AETMonoUGFUIWidget etMonoWidget, long id, A a, B b, C c, bool isFromPool = false) where T : UGFUIWidget, IAwake<A, B, C>, new()
         {
             T widgetEntity = this.AddComponentWithId<T, A, B, C>(id, a, b, c, isFromPool);
-            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(this, widgetEntity));
+            this.UGFMono.AddUIWidget(etMonoWidget, ETMonoUGFUIWidgetData.Create(widgetEntity));
             return widgetEntity;
         }
     }

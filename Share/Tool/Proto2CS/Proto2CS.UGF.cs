@@ -13,6 +13,7 @@ namespace ET
             private static string s_CSName;
             private static List<string> s_CSOutDirs;
             private static int s_StartOpcode;
+            private static string s_NameSpace;
             private static StringBuilder s_StringBuilder;
 
             public static void Start(string codeName, List<string> outDirs, int opcode, string nameSpace)
@@ -20,7 +21,9 @@ namespace ET
                 s_CSName = codeName;
                 s_CSOutDirs = outDirs;
                 s_StartOpcode = opcode;
+                s_NameSpace = nameSpace;
 
+                s_MsgOpcode.Clear();
                 s_StringBuilder = new StringBuilder();
                 s_StringBuilder.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
                 s_StringBuilder.Append("\n");
@@ -28,6 +31,7 @@ namespace ET
                 s_StringBuilder.Append("using System;\n");
                 s_StringBuilder.Append("using System.Collections.Generic;\n");
                 s_StringBuilder.Append("using GameFramework;\n");
+                s_StringBuilder.Append("using Sirenix.OdinInspector;\n");
                 s_StringBuilder.Append("\n");
                 s_StringBuilder.Append($"namespace {nameSpace}\n");
                 s_StringBuilder.Append("{\n");
@@ -35,27 +39,45 @@ namespace ET
 
             public static void Stop()
             {
-                s_StringBuilder.Append("\tpublic static partial class " + s_CSName + "Id\n\t{\n");
-                foreach (OpcodeInfo info in s_MsgOpcode)
-                {
-                    s_StringBuilder.Append($"\t\t public const ushort {info.name} = {info.opcode};\n");
-                }
-                s_StringBuilder.Append("\t}\n");
                 s_StringBuilder.Append("}\n");
                 foreach (var csOutDir in s_CSOutDirs)
                 {
                     GenerateCS(s_StringBuilder, csOutDir, s_CSName);
+                }
+
+                GenerateOpcode();
+                GeneratePacketHandlerCode();
+            }
+
+            private static void GenerateOpcode()
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
+                sb.Append("\n");
+                sb.Append($"namespace {s_NameSpace}\n");
+                sb.Append("{\n");
+                sb.Append($"\tpublic static partial class {s_CSName}Id\n\t{{\n");
+                foreach (OpcodeInfo info in s_MsgOpcode)
+                {
+                    sb.Append($"\t\t public const ushort {info.name} = {info.opcode};\n");
+                }
+                sb.Append("\t}\n");
+                sb.Append("}\n");
+                foreach (var csOutDir in s_CSOutDirs)
+                {
+                    GenerateCS(sb, csOutDir, s_CSName + "Id");
                 }
             }
 
             public static void Proto2CS(string protoFile)
             {
                 string s = File.ReadAllText(protoFile);
-                
+
                 bool isMsgStart = false;
                 bool isPacketMsg = false;
                 bool isEnumStart = false;
                 int lineNum = 0;
+                string msgName = string.Empty;
                 StringBuilder msgDisposeSb = new StringBuilder();
                 foreach (string line in s.Split('\n'))
                 {
@@ -88,7 +110,7 @@ namespace ET
                         isMsgStart = true;
                         isPacketMsg = true;
 
-                        string msgName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
+                        msgName = newline.Split(s_SplitChars, StringSplitOptions.RemoveEmptyEntries)[1];
                         string[] ss = newline.Split(s_SplitStrings, StringSplitOptions.RemoveEmptyEntries);
 
                         if (ss.Length == 2)
@@ -100,20 +122,21 @@ namespace ET
                         {
                             throw new Exception($"Proto_UGF error : {protoFile}'s opcode is larger then max opcode:{OpcodeRangeDefine.MaxOpcode}!");
                         }
-                        s_MsgOpcode.Add(new OpcodeInfo() { name = msgName, opcode = ++s_StartOpcode });
 
                         s_StringBuilder.Append($"\t// proto file : {protoFile.Replace("\\", "/").Split("/")[^2]}/{Path.GetFileName(protoFile)} (line:{lineNum})\n");
-                        s_StringBuilder.Append($"\t[Serializable, ProtoContract(Name = @\"{msgName}\")]\n");
+                        s_StringBuilder.Append($"\t[Serializable, ProtoContract(Name = @\"{msgName}\"), ShowInInspector]\n");
                         s_StringBuilder.Append($"\tpublic partial class {msgName}");
                         if (string.IsNullOrEmpty(parentClass))
                         {
                             if (msgName.StartsWith("CS", StringComparison.OrdinalIgnoreCase))
                             {
                                 s_StringBuilder.Append(" : CSPacketBase\n");
+                                s_MsgOpcode.Add(new OpcodeInfo() { name = msgName, opcode = ++s_StartOpcode });
                             }
                             else if (msgName.StartsWith("SC", StringComparison.OrdinalIgnoreCase))
                             {
                                 s_StringBuilder.Append(" : SCPacketBase\n");
+                                s_MsgOpcode.Add(new OpcodeInfo() { name = msgName, opcode = ++s_StartOpcode });
                             }
                             else
                             {
@@ -131,7 +154,8 @@ namespace ET
                             s_StringBuilder.Append("\t{\n");
                             if (isPacketMsg)
                             {
-                                s_StringBuilder.Append($"\t\tpublic override int Id => {s_StartOpcode};\n");
+                                s_StringBuilder.Append("\t\t[ShowInInspector]\n");
+                                s_StringBuilder.Append($"\t\tpublic override int Id => {s_CSName}Id.{msgName};\n");
                             }
                         }
 
@@ -139,12 +163,14 @@ namespace ET
                         if (isPacketMsg)
                         {
                             msgDisposeSb.Append($"\t\tpublic override void Clear()\n");
+                            msgDisposeSb.Append("\t\t{\n");
+                            msgDisposeSb.Append($"\t\t\tbase.Clear();\n");
                         }
                         else
                         {
                             msgDisposeSb.Append($"\t\tpublic void Clear()\n");
+                            msgDisposeSb.Append("\t\t{\n");
                         }
-                        msgDisposeSb.Append("\t\t{\n");
 
                         continue;
                     }
@@ -167,7 +193,8 @@ namespace ET
                             s_StringBuilder.Append("\t{\n");
                             if (isPacketMsg)
                             {
-                                s_StringBuilder.Append($"\t\tpublic override int Id => {s_StartOpcode};\n");
+                                s_StringBuilder.Append("\t\t[ShowInInspector]\n");
+                                s_StringBuilder.Append($"\t\tpublic override int Id => {s_CSName}Id.{msgName};\n");
                             }
                             continue;
                         }
@@ -279,7 +306,7 @@ namespace ET
                     string v = ss[0];
                     string n = ss[1];
                 
-                    sb.Append($"\t\t[ProtoMember({n})]\n");
+                    sb.Append($"\t\t[ProtoMember({n}), ShowInInspector]\n");
                     sb.Append($"\t\tpublic Dictionary<{keyType}, {valueType}> {v} {{ get; set; }} = new Dictionary<{keyType}, {valueType}>();\n");
 
                     if (IsClearType(valueType))
@@ -309,7 +336,7 @@ namespace ET
                     string name = ss[2];
                     int n = int.Parse(ss[3]);
 
-                    sb.Append($"\t\t[ProtoMember({n})]\n");
+                    sb.Append($"\t\t[ProtoMember({n}), ShowInInspector]\n");
                     sb.Append($"\t\tpublic List<{type}> {name} {{ get; set; }} = new List<{type}>();\n");
 
                     if (IsClearType(type))
@@ -403,7 +430,7 @@ namespace ET
                     int n = int.Parse(ss[2]);
                     string typeCs = ConvertType(type);
 
-                    sb.Append($"\t\t[ProtoMember({n})]\n");
+                    sb.Append($"\t\t[ProtoMember({n}), ShowInInspector]\n");
                     sb.Append($"\t\tpublic {typeCs} {name} {{ get; set; }}\n");
 
                     switch (typeCs)
@@ -446,6 +473,56 @@ namespace ET
                 {
                     Log.Warning($"ErrorLine => \"{s_CSName}\" : \"{newline}\"\n");
                     throw;
+                }
+            }
+            
+            private static void GeneratePacketHandlerCode()
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("// This is an automatically generated class by Share.Tool. Please do not modify it.\n");
+                sb.Append("\n");
+                sb.Append("using ProtoBuf;\n");
+                sb.Append("using System;\n");
+                sb.Append("using System.Collections.Generic;\n");
+                sb.Append("using GameFramework;\n");
+                sb.Append("using GameFramework.Network;\n");
+                sb.Append("using Game;\n");
+                sb.Append("\n");
+                sb.Append($"namespace {s_NameSpace}.{s_CSName}\n");
+                sb.Append("{\n");
+                foreach (var opcodeInfo in s_MsgOpcode)
+                {
+                    if (!opcodeInfo.name.StartsWith("SC", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+                    sb.Append($"\tpublic sealed partial class {opcodeInfo.name}_Handler : PacketHandlerBase\n");
+                    sb.Append("\t{\n");
+                    sb.Append($"\t\tpublic override int Id => {s_CSName}Id.{opcodeInfo.name};\n");
+                    sb.Append($"\t\tpublic override void Handle(object sender, Packet packet)\n");
+                    sb.Append("\t\t{\n");
+                    sb.Append($"\t\t\t{opcodeInfo.name} rsp = ({opcodeInfo.name})packet;\n");
+                    sb.Append($"\t\t\tOnHandle(sender, rsp);\n");
+                    sb.Append("\t\t\tGameEntry.Event.FireNow(sender, OnHandelPacketEventArgs.Create(rsp));\n");
+                    sb.Append("\t\t}\n");
+                    sb.Append($"\t\tpartial void OnHandle(object sender, {opcodeInfo.name} packet);\n");
+                    sb.Append("\t}\n");
+                    sb.Append("\n");
+                }
+                sb.Append("}\n");
+                
+                foreach (string outDir in s_CSOutDirs)
+                {
+                    if (!string.IsNullOrEmpty(outDir) && !Directory.Exists(outDir))
+                    {
+                        Directory.CreateDirectory(outDir);
+                    }
+                    string csPath = $"{outDir}/{s_CSName}_PacketHandler.cs";
+                    using FileStream txt = new FileStream(csPath, FileMode.Create, FileAccess.ReadWrite);
+                    using StreamWriter sw = new StreamWriter(txt);
+                    sw.Write(sb.ToString().Replace("\t", "    "));
+
+                    Log.Info($"proto2cs file : {csPath}");
                 }
             }
         }

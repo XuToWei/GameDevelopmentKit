@@ -22,6 +22,16 @@ namespace UnityGameFramework.Extension
 
         private void OnLoadAssetFailure(string assetName, LoadResourceStatus status, string errormessage, object userdata)
         {
+            ISetSpriteObject setSpriteObject = (ISetSpriteObject)userdata;
+            m_SpriteCollectionBeingLoaded.Remove(setSpriteObject.CollectionPath);
+            if (m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out HashSet<ISetSpriteObject> awaitSets))
+            {
+                foreach (var awaitSet in awaitSets)
+                {
+                    ReferencePool.Release(awaitSet);
+                }
+                awaitSets.Clear();
+            }
             Log.Error("Can not load SpriteCollection from '{0}' with error message '{1}'.", assetName, errormessage);
         }
 
@@ -31,16 +41,11 @@ namespace UnityGameFramework.Extension
             SpriteCollection collection = (SpriteCollection)asset;
             m_SpriteCollectionPool.Register(SpriteCollectionItemObject.Create(setSpriteObject.CollectionPath, collection, m_ResourceComponent), false);
             m_SpriteCollectionBeingLoaded.Remove(setSpriteObject.CollectionPath);
-            
-            if(m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out HashSet<ISetSpriteObject> awaitSets))
+
+            if (m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out HashSet<ISetSpriteObject> awaitSets))
             {
                 if (awaitSets.Count > 0)
                 {
-                    if (!awaitSets.Contains(setSpriteObject))
-                    {
-                        ReferencePool.Release(setSpriteObject);
-                        return;
-                    }
                     foreach (ISetSpriteObject awaitSet in awaitSets)
                     {
                         m_SpriteCollectionPool.Spawn(setSpriteObject.CollectionPath);
@@ -79,29 +84,6 @@ namespace UnityGameFramework.Extension
             }
 
             m_ResourceComponent.LoadAsset(setSpriteObject.CollectionPath, typeof(SpriteCollection), m_LoadAssetCallbacks, setSpriteObject);
-        }
-
-        public void RemoveLoadingSetSprite(ISetSpriteObject setSpriteObject)
-        {
-            if (m_WaitSetObjects.TryGetValue(setSpriteObject.CollectionPath, out HashSet<ISetSpriteObject> awaitSets))
-            {
-                if (awaitSets.Contains(setSpriteObject))
-                {
-                    awaitSets.Remove(setSpriteObject);
-                }
-            }
-        }
-        
-        public void RemoveAllLoadingSetSprite()
-        {
-            foreach (var awaitSets in m_WaitSetObjects.Values)
-            {
-                foreach (var awaitSet in awaitSets)
-                {
-                    ReferencePool.Release(awaitSet);
-                }
-                awaitSets.Clear();
-            }
         }
     }
 }

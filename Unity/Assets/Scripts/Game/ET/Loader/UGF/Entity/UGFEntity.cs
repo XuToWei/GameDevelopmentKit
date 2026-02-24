@@ -37,62 +37,62 @@ namespace ET
     public abstract class UGFEntity : Entity
     {
         [BsonIgnore]
-        private UnityGameFramework.Runtime.Entity ugfEntity;
+        private UnityGameFramework.Runtime.Entity m_UGFEntity;
         [BsonIgnore]
-        private CancellationTokenSourcePlus cts;
+        private CancellationTokenSourcePlus m_Cts;
         [BsonIgnore]
         internal virtual ETMonoUGFEntity UGFMono { get; set; }
         [BsonIgnore]
         public Transform CachedTransform { get; internal set; }
         [BsonIgnore]
-        public bool Available => this.ugfEntity != null && this.ugfEntity.Logic.Available;
+        public bool Available => this.m_UGFEntity != null && this.m_UGFEntity.Logic.Available;
         [BsonIgnore]
         public bool Visible
         {
             get
             {
-                return this.ugfEntity != null && this.ugfEntity.Logic.Visible;
+                return this.m_UGFEntity != null && this.m_UGFEntity.Logic.Visible;
             }
             set
             {
-                if (this.ugfEntity == null)
+                if (this.m_UGFEntity == null)
                 {
                     Log.Warning("Entity is not shown.");
                     return;
                 }
-                this.ugfEntity.Logic.Visible = value;
+                this.m_UGFEntity.Logic.Visible = value;
             }
         }
 
         public override void Dispose()
         {
             bool isDisposed = this.IsDisposed;
-            base.Dispose();
             if (!isDisposed)
             {
-                if (this.cts != null)
+                if (this.m_Cts != null)
                 {
-                    this.cts.Cancel();
-                    ObjectPool.Instance.Recycle(this.cts);
-                    this.cts = null;
+                    this.m_Cts.Cancel();
+                    ObjectPool.Instance.Recycle(this.m_Cts);
+                    this.m_Cts = null;
                 }
                 if (this.Available)
                 {
-                    GameEntry.Entity.HideEntity(this.ugfEntity);
-                    this.ugfEntity = null;
+                    GameEntry.Entity.HideEntity(this.m_UGFEntity);
+                    this.m_UGFEntity = null;
                 }
             }
+            base.Dispose();
         }
 
         public async UniTask ShowEntityAsync(int entityTypeId)
         {
-            if (this.cts == null)
+            if (this.m_Cts == null)
             {
-                this.cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
+                this.m_Cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
             }
-            this.ugfEntity = await GameEntry.Entity.ShowEntityAsync<ETMonoUGFEntity>(entityTypeId, ETMonoUGFEntityData.Create(this), cancellationToken: this.cts.MallocToken());
-            this.cts.FreeToken();
-            if(this.ugfEntity == null)
+            this.m_UGFEntity = await GameEntry.Entity.ShowEntityAsync<ETMonoUGFEntity>(entityTypeId, ETMonoUGFEntityData.Create(this), cancellationToken: this.m_Cts.MallocToken());
+            this.m_Cts.FreeToken();
+            if(this.m_UGFEntity == null)
             {
                 throw new Exception($"UGFEntity ShowEntityAsync failed! entityTypeId:'{entityTypeId}'.");
             }
@@ -100,13 +100,13 @@ namespace ET
 
         public async UniTask ShowUIEntityAsync(int entityTypeId)
         {
-            if (this.cts == null)
+            if (this.m_Cts == null)
             {
-                this.cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
+                this.m_Cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
             }
-            this.ugfEntity = await GameEntry.Entity.ShowUIEntityAsync<ETMonoUGFEntity>(entityTypeId, ETMonoUGFEntityData.Create(this), cancellationToken: this.cts.MallocToken());
-            this.cts.FreeToken();
-            if(this.ugfEntity == null)
+            this.m_UGFEntity = await GameEntry.Entity.ShowUIEntityAsync<ETMonoUGFEntity>(entityTypeId, ETMonoUGFEntityData.Create(this), cancellationToken: this.m_Cts.MallocToken());
+            this.m_Cts.FreeToken();
+            if(this.m_UGFEntity == null)
             {
                 throw new Exception($"UGFEntity ShowUIEntityAsync failed! entityTypeId:'{entityTypeId}'.");
             }
@@ -114,25 +114,25 @@ namespace ET
 
         public void SetEntityVisible(bool visible)
         {
-            if (this.ugfEntity != null)
+            if (this.m_UGFEntity != null)
             {
-                this.ugfEntity.Logic.Visible = visible;
+                this.m_UGFEntity.Logic.Visible = visible;
             }
         }
 
         public void AttachToParent(UGFEntity parentEntity)
         {
-            if (this.ugfEntity != null && parentEntity.ugfEntity != null)
+            if (this.m_UGFEntity != null && parentEntity.m_UGFEntity != null)
             {
-                GameEntry.Entity.AttachEntity(this.ugfEntity, parentEntity.ugfEntity);
+                GameEntry.Entity.AttachEntity(this.m_UGFEntity, parentEntity.m_UGFEntity);
             }
         }
 
         public void DetachFromParent()
         {
-            if (this.ugfEntity != null)
+            if (this.m_UGFEntity != null)
             {
-                GameEntry.Entity.DetachEntity(this.ugfEntity);
+                GameEntry.Entity.DetachEntity(this.m_UGFEntity);
             }
         }
     }
