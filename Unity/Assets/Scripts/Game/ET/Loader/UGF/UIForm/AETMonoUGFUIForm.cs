@@ -16,15 +16,6 @@ namespace ET
 
         public UGFUIForm UGFUIForm => m_UGFUIForm;
 
-        protected override void OnInit(object userData)
-        {
-            base.OnInit(userData);
-            ETMonoUGFUIFormData formData = (ETMonoUGFUIFormData)userData;
-            m_UGFUIForm = formData.UGFUIForm;
-            m_UGFUIForm.UGFMono = this;
-            m_UGFUIForm.CachedTransform = CachedTransform;
-        }
-
         protected override void OnOpen(object userData)
         {
             base.OnOpen(userData);
