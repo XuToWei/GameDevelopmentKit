@@ -89,10 +89,118 @@ namespace Game
             }
         }
 
-        internal override void SetUIFormOwner(AUIForm uiForm)
+        /// <summary>
+        /// 动态打开
+        /// </summary>
+        /// <param name="userData">userData</param>
+        public void DynamicOpen(object userData = null)
+        {
+            if(m_ParentUIWidget != null)
+            {
+                m_ParentUIWidget.DynamicOpenUIWidget(this, userData);
+                return;
+            }
+
+            if (m_UIForm != null)
+            {
+                m_UIForm.DynamicOpenUIWidget(this, userData);
+                return;
+            }
+
+            throw new GameFrameworkException("UI widget is invalid.");
+        }
+
+        /// <summary>
+        /// 尝试动态打开
+        /// </summary>
+        /// <param name="userData">userData</param>
+        public void TryDynamicOpen(object userData = null)
+        {
+            if (Available)
+                return;
+
+            if(m_ParentUIWidget != null)
+            {
+                m_ParentUIWidget.DynamicOpenUIWidget(this, userData);
+                return;
+            }
+
+            if (m_UIForm != null)
+            {
+                m_UIForm.DynamicOpenUIWidget(this, userData);
+                return;
+            }
+        }
+
+        public override void SetUIFormOwner(AUIForm uiForm)
         {
             base.SetUIFormOwner(uiForm);
             m_UIForm = uiForm as AExUIForm;
+        }
+
+        public void Close()
+        {
+            if(m_ParentUIWidget != null)
+            {
+                m_ParentUIWidget.CloseUIWidget(this);
+                return;
+            }
+
+            if (m_UIForm != null)
+            {
+                m_UIForm.CloseUIWidget(this);
+                return;
+            }
+
+            throw new GameFrameworkException("UI widget is invalid.");
+        }
+
+        public void TryClose()
+        {
+            if (!Available)
+                return;
+
+            if(m_ParentUIWidget != null)
+            {
+                m_ParentUIWidget.CloseUIWidget(this);
+                return;
+            }
+
+            if (m_UIForm != null)
+            {
+                m_UIForm.CloseUIWidget(this);
+                return;
+            }
+        }
+
+        public bool Has()
+        {
+            if(m_ParentUIWidget != null)
+            {
+                return m_ParentUIWidget.HasUIWidget(this);
+            }
+
+            if (m_UIForm != null)
+            {
+                return m_UIForm.HasUIWidget(this);
+            }
+
+            return false;
+        }
+
+        public void Remove()
+        {
+            if(m_ParentUIWidget != null)
+            {
+                m_ParentUIWidget.RemoveUIWidget(this);
+                return;
+            }
+
+            if (m_UIForm != null)
+            {
+                m_UIForm.RemoveUIWidget(this);
+                return;
+            }
         }
 
         private void ClearContainer()
@@ -142,7 +250,7 @@ namespace Game
 
         protected virtual void OnDestroy()
         {
-            RemoveAllUIWidget();
+            RemoveAllUIWidgets();
             ClearContainer();
         }
 
@@ -155,7 +263,7 @@ namespace Game
             CloseAllUIWidgets(isShutdown, userData);
             if (isShutdown)
             {
-                RemoveAllUIWidget();
+                RemoveAllUIWidgets();
                 ClearContainer();
             }
             base.OnClose(isShutdown, userData);
@@ -232,7 +340,7 @@ namespace Game
             aExUIWidget.m_ParentUIWidget = null;
         }
 
-        public void RemoveAllUIWidget()
+        public void RemoveAllUIWidgets()
         {
             if (m_UIWidgetContainer == null)
                 return;
@@ -242,7 +350,7 @@ namespace Game
                 AExUIWidget aExUIWidget = (AExUIWidget)uiWidget;
                 aExUIWidgets.Add(aExUIWidget);
             }
-            m_UIWidgetContainer.RemoveAllUIWidget();
+            m_UIWidgetContainer.RemoveAllUIWidgets();
             foreach (AExUIWidget aExUIWidget in aExUIWidgets)
             {
                 aExUIWidget.m_ParentUIWidget = null;

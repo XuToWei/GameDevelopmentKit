@@ -171,7 +171,7 @@ namespace Game
         {
             if (m_UIWidgetContainer == null)
                 return;
-            m_UIWidgetContainer.RemoveAllUIWidget();
+            m_UIWidgetContainer.RemoveAllUIWidgets();
         }
 
         /// <summary>

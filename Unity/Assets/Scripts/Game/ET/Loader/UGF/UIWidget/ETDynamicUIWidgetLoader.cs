@@ -15,7 +15,7 @@ namespace ET
             AETMonoUGFUIWidget parentUIWidget = uiWidget.GetComponentInParent<AETMonoUGFUIWidget>();
             if (parentUIWidget != null)
             {
-                parentUIWidget.UGFUIForm.AddChildUIWidget(monoUIWidget);
+                parentUIWidget.UGFUIWidget.AddChildUIWidget(monoUIWidget);
                 if (monoUIWidget.enabled)
                 {
                     parentUIWidget.DynamicOpenUIWidget(monoUIWidget);
