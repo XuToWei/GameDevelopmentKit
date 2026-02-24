@@ -8,12 +8,6 @@ namespace ET.Client
     public static partial class UIWidgetTestSystem
     {
         [UGFUIWidgetSystem]
-        private static void UGFUIWidgetOnInit(this UIWidgetTest self)
-        {
-            Log.Info("UIWidget测试OnInit");
-        }
-        
-        [UGFUIWidgetSystem]
         private static void UGFUIWidgetOnOpen(this UIWidgetTest self)
         {
             self.OpenAllUIWidgets();

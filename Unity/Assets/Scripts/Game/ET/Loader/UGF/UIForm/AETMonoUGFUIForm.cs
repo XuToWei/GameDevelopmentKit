@@ -23,7 +23,6 @@ namespace ET
             m_UGFUIForm = formData.UGFUIForm;
             m_UGFUIForm.UGFMono = this;
             m_UGFUIForm.CachedTransform = CachedTransform;
-            UGFSystemSingleton.Instance.UGFUIFormOnInit(m_UGFUIForm);
         }
 
         protected override void OnOpen(object userData)

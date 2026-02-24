@@ -27,7 +27,6 @@ namespace ET
             ReferencePool.Release(widgetData);
             m_UGFUIWidget.UGFMono = this;
             m_UGFUIWidget.CachedRectTransform = CachedRectTransform;
-            UGFSystemSingleton.Instance.UGFUIWidgetOnInit(m_UGFUIWidget);
         }
 
         private void ClearContainer()

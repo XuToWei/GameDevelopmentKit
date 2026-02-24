@@ -98,37 +98,6 @@ namespace ET
             return this.m_TypeSystems.GetOneTypeSystems(type);
         }
 
-        public void UGFUIWidgetOnInit(UGFUIWidget ugfUIWidget)
-        {
-            if (ugfUIWidget is not IUGFUIWidgetOnInit)
-            {
-                return;
-            }
-
-            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIWidget.GetType(), typeof(IUGFUIWidgetOnInitSystem));
-            if (systems == null)
-            {
-                return;
-            }
-
-            foreach (IUGFUIWidgetOnInitSystem system in systems)
-            {
-                if (system == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    system.Run(ugfUIWidget);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
         public void UGFUIWidgetOnOpen(UGFUIWidget ugfUIWidget)
         {
             if (ugfUIWidget is not IUGFUIWidgetOnOpen)
@@ -431,37 +400,6 @@ namespace ET
                 try
                 {
                     system.Run(ugfUIWidget);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
-        public void UGFUIFormOnInit(UGFUIForm ugfUIForm)
-        {
-            if (ugfUIForm is not IUGFUIFormOnInit)
-            {
-                return;
-            }
-
-            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfUIForm.GetType(), typeof(IUGFUIFormOnInitSystem));
-            if (systems == null)
-            {
-                return;
-            }
-
-            foreach (IUGFUIFormOnInitSystem system in systems)
-            {
-                if (system == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    system.Run(ugfUIForm);
                 }
                 catch (Exception e)
                 {

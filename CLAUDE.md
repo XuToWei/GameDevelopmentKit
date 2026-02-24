@@ -218,7 +218,7 @@ GameEntry.UI.OpenUIForm(UIFormId.TestForm);
 ```csharp
 [ComponentOf(typeof(UIComponent))]
 public class UIFormTestComponent : UGFUIForm<MonoUIFormTest>,
-    IAwake, IUGFUIFormOnInit, IUGFUIFormOnOpen, IUGFUIFormOnClose
+    IAwake, IUGFUIFormOnOpen, IUGFUIFormOnClose
 {
 }
 ```

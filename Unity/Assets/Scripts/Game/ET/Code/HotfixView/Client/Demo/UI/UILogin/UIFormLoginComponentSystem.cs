@@ -9,12 +9,6 @@ namespace ET.Client
     public static partial class UIFormLoginComponentSystem
     {
         [UGFUIFormSystem]
-        private static void UGFUIFormOnInit(this UIFormLoginComponent self)
-        {
-            Log.Debug("Login界面OnInit");
-        }
-
-        [UGFUIFormSystem]
         private static void UGFUIFormOnOpen(this UIFormLoginComponent self)
         {
             self.OpenAllUIWidgets();
