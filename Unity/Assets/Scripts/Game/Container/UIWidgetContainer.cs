@@ -130,11 +130,11 @@ namespace Game
         {
             if (uiWidget == null)
             {
-                throw new GameFrameworkException("Can't open empty!");
+                throw new GameFrameworkException("Can't close empty!");
             }
             if (!m_UIWidgets.Contains(uiWidget))
             {
-                throw new GameFrameworkException(Utility.Text.Format("Can't open UIWidget, UIWidget '{0}' not in the container '{1}'!", uiWidget.name, UIFormOwner.Name));
+                throw new GameFrameworkException(Utility.Text.Format("Can't close UIWidget, UIWidget '{0}' not in the container '{1}'!", uiWidget.name, UIFormOwner.Name));
             }
             if (!uiWidget.Available)
             {

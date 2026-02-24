@@ -52,7 +52,7 @@ namespace Game
         /// <param name="userData">userData</param>
         public void Open(object userData = null)
         {
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.OpenUIWidget(this, userData);
                 return;
@@ -76,7 +76,7 @@ namespace Game
             if (Available)
                 return;
 
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.OpenUIWidget(this, userData);
                 return;
@@ -95,7 +95,7 @@ namespace Game
         /// <param name="userData">userData</param>
         public void DynamicOpen(object userData = null)
         {
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.DynamicOpenUIWidget(this, userData);
                 return;
@@ -119,7 +119,7 @@ namespace Game
             if (Available)
                 return;
 
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.DynamicOpenUIWidget(this, userData);
                 return;
@@ -140,7 +140,7 @@ namespace Game
 
         public void Close()
         {
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.CloseUIWidget(this);
                 return;
@@ -160,7 +160,7 @@ namespace Game
             if (!Available)
                 return;
 
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.CloseUIWidget(this);
                 return;
@@ -175,7 +175,7 @@ namespace Game
 
         public bool Has()
         {
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 return m_ParentUIWidget.HasUIWidget(this);
             }
@@ -190,7 +190,7 @@ namespace Game
 
         public void Remove()
         {
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.RemoveUIWidget(this);
                 return;
@@ -201,6 +201,8 @@ namespace Game
                 m_UIForm.RemoveUIWidget(this);
                 return;
             }
+
+            throw new GameFrameworkException("UI widget is invalid.");
         }
 
         private void ClearContainer()
@@ -323,7 +325,7 @@ namespace Game
 
         public bool HasUIWidget(AExUIWidget uiWidget)
         {
-            if(m_UIWidgetContainer == null)
+            if (m_UIWidgetContainer == null)
             {
                 return false;
             }

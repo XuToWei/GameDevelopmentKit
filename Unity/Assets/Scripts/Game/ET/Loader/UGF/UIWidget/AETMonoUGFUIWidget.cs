@@ -147,7 +147,7 @@ namespace ET
 
         internal void Open()
         {
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.OpenUIWidget(this);
                 return;
@@ -167,7 +167,7 @@ namespace ET
             if (Available)
                 return;
 
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.OpenUIWidget(this);
                 return;
@@ -182,7 +182,7 @@ namespace ET
 
         internal void DynamicOpen()
         {
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.DynamicOpenUIWidget(this);
                 return;
@@ -202,7 +202,7 @@ namespace ET
             if (Available)
                 return;
 
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.DynamicOpenUIWidget(this);
                 return;
@@ -223,7 +223,7 @@ namespace ET
 
         internal void Close()
         {
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.CloseUIWidget(this);
                 return;
@@ -243,7 +243,7 @@ namespace ET
             if (!Available)
                 return;
 
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.CloseUIWidget(this);
                 return;
@@ -258,7 +258,7 @@ namespace ET
 
         internal bool Has()
         {
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 return m_ParentUIWidget.HasUIWidget(this);
             }
@@ -273,7 +273,7 @@ namespace ET
 
         internal void Remove()
         {
-            if(m_ParentUIWidget != null)
+            if (m_ParentUIWidget != null)
             {
                 m_ParentUIWidget.RemoveUIWidget(this);
                 return;
@@ -284,6 +284,8 @@ namespace ET
                  m_UIForm.RemoveUIWidget(this);
                  return;
             }
+
+            throw new GameFrameworkException("UI widget is invalid.");
         }
 
         internal void AddUIWidget(AETMonoUGFUIWidget aUIWidget, ETMonoUGFUIWidgetData widgetData)

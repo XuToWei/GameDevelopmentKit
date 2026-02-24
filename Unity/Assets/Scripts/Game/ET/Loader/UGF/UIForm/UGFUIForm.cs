@@ -127,7 +127,7 @@ namespace ET
             if (monoUIWidget == null)
             {
                 ugfEntity.Dispose();
-                throw new Exception($"LoadMonoUIWidgetAsync failed! not found AETMonoUGFUIWidget! uiEntityTypeId:'{uiEntityTypeId}'.");
+                throw new Exception($"LoadChildUIWidgetAsync failed! not found AETMonoUGFUIWidget! uiEntityTypeId:'{uiEntityTypeId}'.");
             }
             T uiWidget = this.AddChildUIWidget<T>(monoUIWidget, true);
             uiWidget.AddChild(ugfEntity);
@@ -142,7 +142,7 @@ namespace ET
             if (monoUIWidget == null)
             {
                 ugfEntity.Dispose();
-                throw new Exception($"LoadMonoUIWidgetAsync failed! not found AETMonoUGFUIWidget! uiEntityTypeId:'{uiEntityTypeId}'.");
+                throw new Exception($"LoadComponentUIWidgetAsync failed! not found AETMonoUGFUIWidget! uiEntityTypeId:'{uiEntityTypeId}'.");
             }
             return this.AddComponentUIWidget<T>(monoUIWidget, true);
         }
