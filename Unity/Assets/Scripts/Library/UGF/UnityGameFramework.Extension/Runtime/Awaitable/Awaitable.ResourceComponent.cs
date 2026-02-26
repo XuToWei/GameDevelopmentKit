@@ -193,5 +193,23 @@ namespace UnityGameFramework.Extension
             }
             loadAssetInfo.DependencyAssetEvent.Invoke(dependencyAssetName);
         }
+
+        /// <summary>
+        /// 更新资源组（可等待）
+        /// 注意不要调用StopUpdateResources
+        /// </summary>
+        /// <param name="resourceComponent">资源组件</param>
+        /// <param name="resourceGroupName">资源组名称</param>
+        /// <returns></returns>
+        public static UniTask<bool> UpdateResourcesAsync(this ResourceComponent resourceComponent, string resourceGroupName)
+        {
+            AutoResetUniTaskCompletionSource<bool> tcs = AutoResetUniTaskCompletionSource<bool>.Create();
+            void OnUpdateResourcesComplete(IResourceGroup resourceGroup, bool result)
+            {
+                tcs.TrySetResult(result);
+            }
+            resourceComponent.UpdateResources(resourceGroupName, OnUpdateResourcesComplete);
+            return tcs.Task;
+        }
     }
 }
