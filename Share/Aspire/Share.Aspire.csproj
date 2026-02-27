@@ -24,10 +24,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.MongoDB" Version="13.1.2" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\..\DotNet\Model\DotNet.Model.csproj" IsAspireProjectResource="false" />
     </ItemGroup>
 
