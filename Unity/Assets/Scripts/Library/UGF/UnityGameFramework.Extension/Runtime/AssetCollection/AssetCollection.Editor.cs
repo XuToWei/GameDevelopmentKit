@@ -15,12 +15,13 @@ namespace UnityGameFramework.Extension
     {
         private void Awake()
         {
-            if (EditorApplication.isCompiling)
+            if (EditorApplication.isUpdating ||
+                EditorApplication.isCompiling ||
+                !EditorApplication.isPlaying ||
+                string.IsNullOrEmpty(AssetDatabase.GetAssetPath(this)))
+            {
                 return;
-            if (!EditorApplication.isPlaying)
-                return;
-            if (string.IsNullOrEmpty(AssetDatabase.GetAssetPath(this)))
-                return;
+            }
             Pack();
         }
 
