@@ -292,7 +292,15 @@ namespace UnityGameFramework.Runtime
 
         internal void Shutdown()
         {
-            m_ShutdownHelper.Shutdown();
+            try
+            {
+                m_ShutdownHelper.Shutdown();
+            }
+            catch (Exception exception)
+            {
+                Log.Error("ShutdownHelper '{0}' shutdown error with exception '{1}'.", m_ShutdownHelperTypeName, exception);
+            }
+
             Destroy(gameObject);
         }
 
