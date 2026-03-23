@@ -50,10 +50,28 @@ namespace ET
                 }
             }
             
+            foreach (Type type in CodeTypes.Instance.GetTypes(typeof (UGFEntitySystemAttribute)))
+            {
+                SystemObject obj = (SystemObject)Activator.CreateInstance(type);
+
+                if (obj is not ISystemType iSystemType)
+                {
+                    continue;
+                }
+
+                TypeSystems.OneTypeSystems oneTypeSystems = this.m_TypeSystems.GetOrCreateOneTypeSystems(iSystemType.Type());
+                oneTypeSystems.Map.Add(iSystemType.SystemType(), obj);
+                int index = iSystemType.GetInstanceQueueIndex();
+                if (index > InstanceQueueIndex.None && index < InstanceQueueIndex.Max)
+                {
+                    oneTypeSystems.QueueFlag[index] = true;
+                }
+            }
+
             foreach (var kv in CodeTypes.Instance.GetTypes())
             {
                 Type type = kv.Value;
-                if (typeof(UGFUIForm).IsAssignableFrom(type) || typeof(UGFUIWidget).IsAssignableFrom(type))
+                if (typeof(UGFUIForm).IsAssignableFrom(type) || typeof(UGFUIWidget).IsAssignableFrom(type) || typeof(UGFEntity).IsAssignableFrom(type))
                 {
                     long hash = type.FullName.GetLongHashCode();
                     try
