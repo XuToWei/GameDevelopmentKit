@@ -1,0 +1,34 @@
+<MudNavMenu Bordered="true">
+    <MudNavLink Href="/" Match="NavLinkMatch.All"
+                Icon="@Icons.Material.Filled.Dashboard">仪表盘</MudNavLink>
+
+    <MudNavGroup Title="服务器" Icon="@Icons.Material.Filled.Dns" Expanded="true">
+        <MudNavLink Href="/servers" Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.Storage">服务器列表</MudNavLink>
+        <MudNavLink Href="/servers/agents" Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.Cloud">Agent 监控</MudNavLink>
+        <MudNavLink Href="/servers/fibers" Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.AccountTree">Fiber 监控</MudNavLink>
+        <MudNavLink Href="/servers/scenes" Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.Map">Scene 监控</MudNavLink>
+    </MudNavGroup>
+
+    <MudNavLink Href="/players" Match="NavLinkMatch.Prefix"
+                Icon="@Icons.Material.Filled.People">玩家管理</MudNavLink>
+
+    <MudNavGroup Title="版本" Icon="@Icons.Material.Filled.NewReleases" Expanded="false">
+        <MudNavLink Href="/versions" Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.ListAlt">版本列表</MudNavLink>
+        <MudNavLink Href="/versions/history" Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.History">激活历史</MudNavLink>
+    </MudNavGroup>
+
+    <MudNavLink Href="/config" Match="NavLinkMatch.All"
+                Icon="@Icons.Material.Filled.Settings">配置管理</MudNavLink>
+
+    <MudNavLink Href="/hotreload" Match="NavLinkMatch.All"
+                Icon="@Icons.Material.Filled.Refresh">热更新</MudNavLink>
+
+    <MudNavLink Href="/logs" Match="NavLinkMatch.All"
+                Icon="@Icons.Material.Filled.Article">日志</MudNavLink>
+</MudNavMenu>

@@ -1,0 +1,175 @@
+@page "/players/{PlayerId:long}"
+@inject NavigationManager Navigation
+@inject PlayerService PlayerService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<PageTitle>玩家详情 - @(_player?.Name ?? "未知")</PageTitle>
+
+<MudStack Row="true" AlignItems="AlignItems.Center" Class="mb-4">
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="@(() => Navigation.NavigateTo("/players"))" />
+    <MudText Typo="Typo.h5">@(_player?.Name ?? "未知玩家")</MudText>
+    @if (_player != null)
+    {
+        @if (_player.IsBanned)
+        {
+            <MudChip T="string" Color="Color.Error" Size="Size.Small">已封禁</MudChip>
+        }
+        else if (_player.IsOnline)
+        {
+            <MudChip T="string" Color="Color.Success" Size="Size.Small">在线</MudChip>
+        }
+        else
+        {
+            <MudChip T="string" Color="Color.Default" Size="Size.Small">离线</MudChip>
+        }
+    }
+    <MudSpacer />
+    @if (_player != null)
+    {
+        @if (_player.IsOnline)
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Warning" StartIcon="@Icons.Material.Filled.Logout"
+                       OnClick="KickPlayer">踢出</MudButton>
+        }
+        @if (_player.IsBanned)
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Success" StartIcon="@Icons.Material.Filled.LockOpen"
+                       OnClick="UnbanPlayer">解封</MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Error" StartIcon="@Icons.Material.Filled.Block"
+                       OnClick="BanPlayer">封禁</MudButton>
+        }
+    }
+</MudStack>
+
+@if (_player == null)
+{
+    <MudAlert Severity="Severity.Info">未找到玩家 ID @PlayerId 的信息</MudAlert>
+}
+else
+{
+    <MudGrid>
+        @* 基本信息 *@
+        <MudItem xs="12" md="6">
+            <MudCard Elevation="2">
+                <MudCardHeader>
+                    <CardHeaderContent><MudText Typo="Typo.h6">基本信息</MudText></CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudSimpleTable Dense="true" Hover="true">
+                        <tbody>
+                            <tr><td><strong>玩家ID</strong></td><td>@_player.Id</td></tr>
+                            <tr><td><strong>名称</strong></td><td>@_player.Name</td></tr>
+                            <tr><td><strong>等级</strong></td><td>@_player.Level</td></tr>
+                            <tr><td><strong>注册时间</strong></td><td>@_player.RegisterTime.ToString("yyyy-MM-dd HH:mm:ss")</td></tr>
+                            <tr><td><strong>最后登录</strong></td><td>@_player.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")</td></tr>
+                        </tbody>
+                    </MudSimpleTable>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        @* 连接信息 *@
+        <MudItem xs="12" md="6">
+            <MudCard Elevation="2">
+                <MudCardHeader>
+                    <CardHeaderContent><MudText Typo="Typo.h6">连接信息</MudText></CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudSimpleTable Dense="true" Hover="true">
+                        <tbody>
+                            <tr>
+                                <td><strong>在线状态</strong></td>
+                                <td>
+                                    @if (_player.IsOnline)
+                                    {
+                                        <MudChip T="string" Color="Color.Success" Size="Size.Small">在线</MudChip>
+                                    }
+                                    else
+                                    {
+                                        <MudChip T="string" Color="Color.Default" Size="Size.Small">离线</MudChip>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>当前服务器</strong></td>
+                                <td>
+                                    @if (_player.CurrentServerId != 0)
+                                    {
+                                        <MudLink Href="@($"/servers/{_player.CurrentServerId}")">Server-@_player.CurrentServerId</MudLink>
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </MudSimpleTable>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        @* 封禁信息 *@
+        @if (_player.IsBanned)
+        {
+            <MudItem xs="12">
+                <MudAlert Severity="Severity.Error" Icon="@Icons.Material.Filled.Block">
+                    <MudStack Spacing="1">
+                        <MudText><strong>封禁原因:</strong> @(string.IsNullOrEmpty(_player.BanReason) ? "未指定" : _player.BanReason)</MudText>
+                        <MudText><strong>到期时间:</strong> @(_player.BanExpireTime == default ? "永久" : _player.BanExpireTime.ToString("yyyy-MM-dd HH:mm:ss"))</MudText>
+                    </MudStack>
+                </MudAlert>
+            </MudItem>
+        }
+    </MudGrid>
+}
+
+@code {
+    [Parameter]
+    public long PlayerId { get; set; }
+
+    private PlayerInfo _player;
+
+    protected override void OnInitialized()
+    {
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        _player = PlayerService.GetPlayerById(PlayerId);
+    }
+
+    private async Task KickPlayer()
+    {
+        if (_player == null) return;
+        var confirm = await DialogService.ShowMessageBox("踢出玩家", $"确定要将 {_player.Name} 踢出服务器吗？", "确定", "取消");
+        if (confirm != true) return;
+        var success = await PlayerService.KickPlayerAsync(_player.Id);
+        Snackbar.Add(success ? $"已将 {_player.Name} 踢出服务器" : "操作失败", success ? Severity.Warning : Severity.Error);
+        RefreshData();
+    }
+
+    private async Task BanPlayer()
+    {
+        if (_player == null) return;
+        var confirm = await DialogService.ShowMessageBox("封禁玩家", $"确定要封禁 {_player.Name} 吗？（7天）", "确定", "取消");
+        if (confirm != true) return;
+        var success = await PlayerService.BanPlayerAsync(_player.Id, "管理员手动封禁", DateTime.UtcNow.AddDays(7));
+        Snackbar.Add(success ? $"已封禁 {_player.Name}（7天）" : "操作失败", success ? Severity.Error : Severity.Error);
+        RefreshData();
+    }
+
+    private Task UnbanPlayer()
+    {
+        if (_player == null) return Task.CompletedTask;
+        var success = PlayerService.UnbanPlayer(_player.Id);
+        Snackbar.Add(success ? $"已解封 {_player.Name}" : "操作失败", success ? Severity.Success : Severity.Error);
+        RefreshData();
+        return Task.CompletedTask;
+    }
+}

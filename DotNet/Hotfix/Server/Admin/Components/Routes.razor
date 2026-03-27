@@ -1,0 +1,37 @@
+<CascadingAuthenticationState>
+    <Router AppAssembly="typeof(Routes).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
+                <NotAuthorized>
+                    @if (context.User.Identity?.IsAuthenticated != true)
+                    {
+                        <RedirectToLogin />
+                    }
+                    else
+                    {
+                        <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center justify-center" Style="height:60vh;">
+                            <MudStack AlignItems="AlignItems.Center" Spacing="4">
+                                <MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Large" Color="Color.Error" />
+                                <MudText Typo="Typo.h4">无权访问</MudText>
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/">返回首页</MudButton>
+                            </MudStack>
+                        </MudContainer>
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>未找到页面</PageTitle>
+            <LayoutView Layout="typeof(Layout.MainLayout)">
+                <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center justify-center" Style="height:60vh;">
+                    <MudStack AlignItems="AlignItems.Center" Spacing="4">
+                        <MudIcon Icon="@Icons.Material.Filled.SearchOff" Size="Size.Large" />
+                        <MudText Typo="Typo.h4">404 - 页面未找到</MudText>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/">返回首页</MudButton>
+                    </MudStack>
+                </MudContainer>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

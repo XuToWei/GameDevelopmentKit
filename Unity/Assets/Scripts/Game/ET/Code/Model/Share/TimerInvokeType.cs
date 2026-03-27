@@ -15,5 +15,8 @@
         public const int SessionAcceptTimeout = 203;
         
         public const int RoomUpdate = 301;
+
+        // Agent 心跳
+        public const int AgentHeartbeat = 401;
     }
 }

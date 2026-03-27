@@ -17,6 +17,9 @@ namespace ET
         
         Demo,
         LockStep,
+
+        Admin,
+        Agent,
     }
 
     public class Options: Singleton<Options>

@@ -14,6 +14,10 @@ namespace ET.Server
                 {
                     continue;
                 }
+                if (startProcessConfig.Id == Options.Instance.Process)
+                {
+                    continue;
+                }
                 if (!WatcherHelper.IsThisMachine(startProcessConfig.InnerIP, localIP))
                 {
                     continue;

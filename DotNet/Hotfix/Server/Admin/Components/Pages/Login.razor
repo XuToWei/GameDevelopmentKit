@@ -1,0 +1,94 @@
+@page "/login"
+@layout Microsoft.AspNetCore.Components.LayoutComponentBase
+@inject NavigationManager Navigation
+@inject AuthService AuthService
+
+<PageTitle>登录 - 游戏管理后台</PageTitle>
+
+<div class="login-background">
+    <MudCard Style="width:400px;" Elevation="8">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudStack AlignItems="AlignItems.Center" Spacing="2">
+                    <MudIcon Icon="@Icons.Material.Filled.SportsEsports" Size="Size.Large" Color="Color.Primary" />
+                    <MudText Typo="Typo.h5">游戏管理后台</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">请登录以继续</MudText>
+                </MudStack>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTextField @bind-Value="_username" Label="用户名" Variant="Variant.Outlined"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Person"
+                          Class="mb-3" />
+            <MudTextField @bind-Value="_password" Label="密码" Variant="Variant.Outlined"
+                          InputType="InputType.Password"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Lock"
+                          OnKeyDown="OnPasswordKeyDown" />
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <MudAlert Severity="Severity.Error" Class="mt-3">@_errorMessage</MudAlert>
+            }
+        </MudCardContent>
+        <MudCardActions Class="d-flex justify-center pb-4">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
+                       FullWidth="true" OnClick="HandleLogin" Disabled="_loading"
+                       Class="mx-4">
+                @if (_loading)
+                {
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                }
+                登 录
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</div>
+
+@code {
+    private string _username = "";
+    private string _password = "";
+    private string _errorMessage = "";
+    private bool _loading;
+
+    protected override void OnInitialized()
+    {
+        if (AuthService.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    private void OnPasswordKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            _ = HandleLogin();
+        }
+    }
+
+    private async Task HandleLogin()
+    {
+        if (_loading) return;
+        _loading = true;
+        _errorMessage = null;
+        StateHasChanged();
+
+        await Task.Yield();
+
+        var response = AuthService.Login(new LoginRequest
+        {
+            Username = _username,
+            Password = _password,
+        });
+
+        if (response.Success)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            _errorMessage = response.ErrorMessage;
+        }
+
+        _loading = false;
+    }
+}

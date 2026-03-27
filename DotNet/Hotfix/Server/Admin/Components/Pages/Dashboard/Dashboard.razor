@@ -1,0 +1,229 @@
+@page "/"
+@inject ServerMonitorService MonitorService
+@inject ServerMonitorNotifier Notifier
+@inject ProcessManagerService ProcessManager
+@inject VersionService VersionService
+@inject AgentActorService AgentService
+@implements IDisposable
+
+<PageTitle>仪表盘 - 游戏管理后台</PageTitle>
+
+<MudText Typo="Typo.h5" Class="mb-4">仪表盘</MudText>
+
+@* 状态概览卡片 *@
+<MudGrid>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="dashboard-card" Elevation="2">
+            <MudCardContent>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <div>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">服务器</MudText>
+                        <MudText Typo="Typo.h4">@_runningServers / @_totalServers</MudText>
+                    </div>
+                    <MudIcon Icon="@Icons.Material.Filled.Dns" Size="Size.Large" Color="Color.Success" />
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="dashboard-card" Elevation="2">
+            <MudCardContent>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <div>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">在线玩家</MudText>
+                        <MudText Typo="Typo.h4">@_onlinePlayers</MudText>
+                    </div>
+                    <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Large" Color="Color.Info" />
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="dashboard-card" Elevation="2">
+            <MudCardContent>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <div>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">维护模式</MudText>
+                        <MudText Typo="Typo.h4">@(ProcessManager.MaintenanceMode ? "已开启" : "关闭")</MudText>
+                    </div>
+                    <MudIcon Icon="@Icons.Material.Filled.Engineering" Size="Size.Large"
+                             Color="@(ProcessManager.MaintenanceMode ? Color.Warning : Color.Default)" />
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="dashboard-card" Elevation="2">
+            <MudCardContent>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <div>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">活跃版本</MudText>
+                        <MudText Typo="Typo.h4">@_activeVersionCount</MudText>
+                    </div>
+                    <MudIcon Icon="@Icons.Material.Filled.NewReleases" Size="Size.Large" Color="Color.Primary" />
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="dashboard-card" Elevation="2">
+            <MudCardContent>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <div>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">Agent</MudText>
+                        <MudText Typo="Typo.h4">@_onlineAgents / @_totalAgents</MudText>
+                    </div>
+                    <MudIcon Icon="@Icons.Material.Filled.Cloud" Size="Size.Large"
+                             Color="@(_onlineAgents == _totalAgents ? Color.Success : Color.Warning)" />
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@* 快捷入口 *@
+<MudText Typo="Typo.h6" Class="mt-6 mb-3">快捷操作</MudText>
+<MudGrid>
+    <MudItem xs="6" sm="4" md="2">
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary" FullWidth="true"
+                   StartIcon="@Icons.Material.Filled.Dns" Href="/servers" Class="py-4">
+            服务器管理
+        </MudButton>
+    </MudItem>
+    <MudItem xs="6" sm="4" md="2">
+        <MudButton Variant="Variant.Outlined" Color="Color.Info" FullWidth="true"
+                   StartIcon="@Icons.Material.Filled.People" Href="/players" Class="py-4">
+            玩家管理
+        </MudButton>
+    </MudItem>
+    <MudItem xs="6" sm="4" md="2">
+        <MudButton Variant="Variant.Outlined" Color="Color.Warning" FullWidth="true"
+                   StartIcon="@Icons.Material.Filled.Refresh" Href="/hotreload" Class="py-4">
+            热更新
+        </MudButton>
+    </MudItem>
+    <MudItem xs="6" sm="4" md="2">
+        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" FullWidth="true"
+                   StartIcon="@Icons.Material.Filled.NewReleases" Href="/versions" Class="py-4">
+            版本管理
+        </MudButton>
+    </MudItem>
+    <MudItem xs="6" sm="4" md="2">
+        <MudButton Variant="Variant.Outlined" Color="Color.Tertiary" FullWidth="true"
+                   StartIcon="@Icons.Material.Filled.Settings" Href="/config" Class="py-4">
+            配置管理
+        </MudButton>
+    </MudItem>
+    <MudItem xs="6" sm="4" md="2">
+        <MudButton Variant="Variant.Outlined" Color="Color.Default" FullWidth="true"
+                   StartIcon="@Icons.Material.Filled.Article" Href="/logs" Class="py-4">
+            查看日志
+        </MudButton>
+    </MudItem>
+</MudGrid>
+
+@* 服务器状态列表 *@
+<MudText Typo="Typo.h6" Class="mt-6 mb-3">服务器状态</MudText>
+@if (_servers.Any())
+{
+    <MudTable Items="_servers" Dense="true" Hover="true" Elevation="2">
+        <HeaderContent>
+            <MudTh>进程ID</MudTh>
+            <MudTh>名称</MudTh>
+            <MudTh>状态</MudTh>
+            <MudTh>在线人数</MudTh>
+            <MudTh>CPU</MudTh>
+            <MudTh>内存</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.ProcessId</MudTd>
+            <MudTd><MudLink Href="@($"/servers/{context.ProcessId}")">@context.Name</MudLink></MudTd>
+            <MudTd>
+                <MudChip T="string" Color="@GetStatusColor(context.Status)" Size="Size.Small" Class="status-chip">
+                    @GetStatusText(context.Status)
+                </MudChip>
+            </MudTd>
+            <MudTd>@context.PlayerCount</MudTd>
+            <MudTd>@context.CpuUsage.ToString("F1")%</MudTd>
+            <MudTd>@FormatMemory(context.MemoryUsage) / @FormatMemory(context.MemoryTotal)</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+else
+{
+    <MudAlert Severity="Severity.Info">暂无已管理的服务器进程。通过 Aspire 或服务器管理页面启动服务器。</MudAlert>
+}
+
+@code {
+    private int _totalServers;
+    private int _runningServers;
+    private int _onlinePlayers;
+    private int _activeVersionCount;
+    private int _totalAgents;
+    private int _onlineAgents;
+    private List<ServerInfo> _servers = new();
+
+    protected override void OnInitialized()
+    {
+        Notifier.OnServerStatusChanged += OnNotified;
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        _servers = Notifier.GetServers();
+        if (!_servers.Any())
+        {
+            _servers = MonitorService.GetServerStatus();
+        }
+        _totalServers = _servers.Count;
+        _runningServers = _servers.Count(s => s.Status == ServerStatus.Running);
+        _onlinePlayers = _servers.Sum(s => s.PlayerCount);
+        _activeVersionCount = VersionService.GetAllVersions().Count(v => v.IsActive);
+        var agents = ET.Tables.Instance.DTStartSceneConfig.Agents;
+        _totalAgents = agents.Count;
+        _onlineAgents = agents.Count(a => AgentService.IsAgentAlive(a.Process));
+    }
+
+    private void OnNotified()
+    {
+        InvokeAsync(() =>
+        {
+            RefreshData();
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        Notifier.OnServerStatusChanged -= OnNotified;
+    }
+
+    private Color GetStatusColor(ServerStatus status) => status switch
+    {
+        ServerStatus.Running => Color.Success,
+        ServerStatus.Starting => Color.Warning,
+        ServerStatus.Stopping => Color.Warning,
+        ServerStatus.Stopped => Color.Default,
+        ServerStatus.Error => Color.Error,
+        _ => Color.Default,
+    };
+
+    private string GetStatusText(ServerStatus status) => status switch
+    {
+        ServerStatus.Running => "运行中",
+        ServerStatus.Starting => "启动中",
+        ServerStatus.Stopping => "停止中",
+        ServerStatus.Stopped => "已停止",
+        ServerStatus.Error => "异常",
+        _ => "未知",
+    };
+
+    private string FormatMemory(long bytes)
+    {
+        if (bytes <= 0) return "0 B";
+        if (bytes < 1_000_000) return $"{bytes / 1_000.0:F1} KB";
+        if (bytes < 1_000_000_000) return $"{bytes / 1_000_000.0:F0} MB";
+        return $"{bytes / 1_000_000_000.0:F1} GB";
+    }
+}

@@ -1,0 +1,74 @@
+@inherits LayoutComponentBase
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<MudThemeProvider @bind-IsDarkMode="_isDarkMode" Theme="_theme" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1" Dense="true">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+                       OnClick="@ToggleDrawer" />
+        <MudText Typo="Typo.h6" Class="ml-2">游戏管理后台</MudText>
+        <MudSpacer />
+        @if (AuthService.CurrentUser != null)
+        {
+            <MudChip T="string" Color="Color.Success" Size="Size.Small" Icon="@Icons.Material.Filled.Circle">
+                @AuthService.CurrentUser.Username (@AuthService.CurrentUser.Role)
+            </MudChip>
+        }
+        <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" OnClick="HandleLogout" />
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Variant="DrawerVariant.Mini"
+               OpenMiniOnHover="true">
+        <NavMenu />
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.False" Class="pa-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+    private bool _isDarkMode = true;
+
+    private MudTheme _theme = new()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Primary = "#1976d2",
+            Secondary = "#00bcd4",
+            AppbarBackground = "#1976d2",
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = "#42a5f5",
+            Secondary = "#26c6da",
+            Surface = "#1e1e2d",
+            Background = "#151521",
+            AppbarBackground = "#1e1e2d",
+            DrawerBackground = "#1a1a2e",
+            DrawerText = "rgba(255,255,255,0.75)",
+            TextPrimary = "rgba(255,255,255,0.87)",
+            TextSecondary = "rgba(255,255,255,0.55)",
+            ActionDefault = "rgba(255,255,255,0.55)",
+        },
+    };
+
+    private void ToggleDrawer()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void HandleLogout()
+    {
+        AuthService.Logout();
+        Navigation.NavigateTo("/login");
+    }
+}

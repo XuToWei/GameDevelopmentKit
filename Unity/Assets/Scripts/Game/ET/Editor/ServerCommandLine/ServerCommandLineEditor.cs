@@ -5,13 +5,6 @@ using UnityEngine;
 
 namespace ET.Editor
 {
-    public enum DevelopMode
-    {
-        正式 = 0,
-        开发 = 1,
-        压测 = 2,
-    }
-    
     public class ServerCommandLineEditor: EditorWindow
     {
         [MenuItem("ET/Server Tool")]
@@ -23,7 +16,6 @@ namespace ET.Editor
         private int selectStartConfigIndex = 1;
         private string[] startConfigs;
         private string startConfig;
-        private DevelopMode developMode;
 
         private void OnEnable()
         {
@@ -42,9 +34,8 @@ namespace ET.Editor
 
         private void OnGUI()
         {
-            selectStartConfigIndex = EditorGUILayout.Popup(selectStartConfigIndex, this.startConfigs);
+            selectStartConfigIndex = EditorGUILayout.Popup("起服模式：", selectStartConfigIndex, this.startConfigs);
             this.startConfig = this.startConfigs[this.selectStartConfigIndex];
-            this.developMode = (DevelopMode) EditorGUILayout.EnumPopup("起服模式：", this.developMode);
 
             string dotnet = "dotnet.exe";
             

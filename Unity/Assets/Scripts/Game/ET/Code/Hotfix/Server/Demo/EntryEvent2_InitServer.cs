@@ -10,6 +10,8 @@ namespace ET.Server
             switch (Options.Instance.AppType)
             {
                 case AppType.Server:
+                case AppType.Admin:
+                case AppType.Agent:
                 {
                     int process = root.Fiber.Process;
                     var startProcessConfig = Tables.Instance.DTStartProcessConfig.Get(Options.Instance.StartConfig, process);

@@ -1,0 +1,273 @@
+@page "/servers"
+@inject ProcessManagerService ProcessManager
+@inject ServerMonitorService MonitorService
+@inject ServerMonitorNotifier Notifier
+@inject AgentActorService AgentService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@implements IDisposable
+
+<PageTitle>服务器管理 - 游戏管理后台</PageTitle>
+
+<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-4">
+    <MudText Typo="Typo.h5">服务器管理</MudText>
+    <MudStack Row="true" Spacing="2">
+        <MudSwitch Value="ProcessManager.MaintenanceMode" Color="Color.Warning" Label="维护模式"
+                   T="bool" ValueChanged="OnMaintenanceModeChanged" />
+        <MudButton Variant="Variant.Filled" Color="Color.Success" StartIcon="@Icons.Material.Filled.PlayArrow"
+                   OnClick="StartAll" Disabled="ProcessManager.MaintenanceMode">全部启动</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Material.Filled.Stop"
+                   OnClick="StopAll">全部停止</MudButton>
+        <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
+    </MudStack>
+</MudStack>
+
+@if (ProcessManager.MaintenanceMode)
+{
+    <MudAlert Severity="Severity.Warning" Class="mb-4" Icon="@Icons.Material.Filled.Engineering">
+        维护模式已开启 - 新玩家将无法登录，服务器无法启动
+    </MudAlert>
+}
+
+@if (_agents.Any())
+{
+    <MudStack Row="true" Spacing="2" Class="mb-3">
+        @foreach (var agent in _agents)
+        {
+            <MudChip T="string" Size="Size.Small"
+                     Color="@(agent.Online ? Color.Success : Color.Error)"
+                     Icon="@(agent.Online ? Icons.Material.Filled.Cloud : Icons.Material.Filled.CloudOff)">
+                Agent-@agent.ProcessId (@agent.MachineId) @(agent.Online ? "在线" : "离线")
+            </MudChip>
+        }
+    </MudStack>
+}
+
+<MudTable Items="_servers" Dense="true" Hover="true" Elevation="2" Loading="_loading"
+          GroupBy="@(_groupByMachine ? _machineGroupDef : null)">
+    <ToolBarContent>
+        <MudTextField @bind-Value="_searchString" Placeholder="搜索服务器..." Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
+                      Immediate="true" Class="mt-0" />
+        <MudSpacer />
+        <MudToggleIconButton @bind-Toggled="_groupByMachine" Size="Size.Small" Class="mr-2"
+                             Icon="@Icons.Material.Filled.ViewList" ToggledIcon="@Icons.Material.Filled.ViewModule" />
+        <MudText Typo="Typo.body2" Color="Color.Secondary">
+            共 @_servers.Count 个服务器，@_servers.Count(s => s.Status == ServerStatus.Running) 个运行中
+        </MudText>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<ServerInfo, object>(x => x.ProcessId)">进程ID</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ServerInfo, object>(x => x.Name)">名称</MudTableSortLabel></MudTh>
+        <MudTh>状态</MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ServerInfo, object>(x => x.PlayerCount)">在线人数</MudTableSortLabel></MudTh>
+        <MudTh>内网地址</MudTh>
+        <MudTh>外网地址</MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ServerInfo, object>(x => x.CpuUsage)">CPU</MudTableSortLabel></MudTh>
+        <MudTh>内存</MudTh>
+        <MudTh>操作</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="进程ID">@context.ProcessId</MudTd>
+        <MudTd DataLabel="名称">
+            <MudLink Href="@($"/servers/{context.ProcessId}")">@(string.IsNullOrEmpty(context.Name) ? $"Process-{context.ProcessId}" : context.Name)</MudLink>
+        </MudTd>
+        <MudTd DataLabel="状态">
+            <MudChip T="string" Color="@GetStatusColor(context.Status)" Size="Size.Small" Class="status-chip">
+                @GetStatusText(context.Status)
+            </MudChip>
+        </MudTd>
+        <MudTd DataLabel="在线人数">@context.PlayerCount</MudTd>
+        <MudTd DataLabel="内网地址">@FormatAddress(context.InnerIP, context.InnerPort)</MudTd>
+        <MudTd DataLabel="外网地址">@FormatAddress(context.OuterIP, context.OuterPort)</MudTd>
+        <MudTd DataLabel="CPU">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                <MudProgressLinear Value="@context.CpuUsage" Color="@GetCpuColor(context.CpuUsage)"
+                                   Style="width:60px;" Size="Size.Small" />
+                <MudText Typo="Typo.body2">@context.CpuUsage.ToString("F1")%</MudText>
+            </MudStack>
+        </MudTd>
+        <MudTd DataLabel="内存">@FormatMemory(context.MemoryUsage) / @FormatMemory(context.MemoryTotal)</MudTd>
+        <MudTd DataLabel="操作">
+            @if (context.Status == ServerStatus.Running)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Stop" Color="Color.Error" Size="Size.Small"
+                               OnClick="@(() => StopServer(context))" />
+                <MudIconButton Icon="@Icons.Material.Filled.RestartAlt" Color="Color.Warning" Size="Size.Small"
+                               OnClick="@(() => RestartServer(context))" />
+            }
+            else if (context.Status == ServerStatus.Stopped || context.Status == ServerStatus.Error)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.PlayArrow" Color="Color.Success" Size="Size.Small"
+                               OnClick="@(() => StartServer(context))" />
+            }
+            <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Primary" Size="Size.Small"
+                           Href="@($"/servers/{context.ProcessId}")" />
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>暂无已管理的服务器进程</MudText>
+    </NoRecordsContent>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new[] { 10, 25, 50 }" />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private bool _loading;
+    private string _searchString = "";
+    private List<ServerInfo> _servers = new();
+    private List<AgentStatus> _agents = new();
+    private bool _groupByMachine;
+
+    private record AgentStatus(int ProcessId, int MachineId, bool Online);
+
+    private readonly TableGroupDefinition<ServerInfo> _machineGroupDef = new()
+    {
+        GroupName = "机器",
+        Selector = s =>
+        {
+            var processConfig = ET.Tables.Instance.DTStartProcessConfig.Get(ET.Options.Instance.StartConfig, s.ProcessId);
+            return processConfig?.MachineId ?? 0;
+        }
+    };
+
+    protected override void OnInitialized()
+    {
+        ProcessManager.OnProcessStatusChanged += OnStatusChanged;
+        Notifier.OnServerStatusChanged += OnNotified;
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        _servers = MonitorService.GetServerStatus();
+        _agents = ET.Tables.Instance.DTStartSceneConfig.Agents
+            .Select(a => new AgentStatus(a.Process, a.StartProcessConfig.MachineId, AgentService.IsAgentAlive(a.Process)))
+            .ToList();
+        StateHasChanged();
+    }
+
+    private void OnStatusChanged()
+    {
+        InvokeAsync(() =>
+        {
+            RefreshData();
+        });
+    }
+
+    private void OnNotified()
+    {
+        InvokeAsync(() =>
+        {
+            RefreshData();
+        });
+    }
+
+    private void OnMaintenanceModeChanged(bool enabled)
+    {
+        ProcessManager.SetMaintenanceMode(enabled);
+        Snackbar.Add(enabled ? "维护模式已开启" : "维护模式已关闭", enabled ? Severity.Warning : Severity.Success);
+    }
+
+    private Color GetStatusColor(ServerStatus status) => status switch
+    {
+        ServerStatus.Running => Color.Success,
+        ServerStatus.Starting => Color.Warning,
+        ServerStatus.Stopping => Color.Warning,
+        ServerStatus.Stopped => Color.Default,
+        ServerStatus.Error => Color.Error,
+        _ => Color.Default,
+    };
+
+    private string GetStatusText(ServerStatus status) => status switch
+    {
+        ServerStatus.Running => "运行中",
+        ServerStatus.Starting => "启动中",
+        ServerStatus.Stopping => "停止中",
+        ServerStatus.Stopped => "已停止",
+        ServerStatus.Error => "异常",
+        _ => "未知",
+    };
+
+    private Color GetCpuColor(double cpu) => cpu > 80 ? Color.Error : cpu > 50 ? Color.Warning : Color.Success;
+
+    private string FormatMemory(long bytes)
+    {
+        if (bytes <= 0) return "0 B";
+        if (bytes < 1_000_000) return $"{bytes / 1_000.0:F1} KB";
+        if (bytes < 1_000_000_000) return $"{bytes / 1_000_000.0:F0} MB";
+        return $"{bytes / 1_000_000_000.0:F1} GB";
+    }
+
+    private string FormatAddress(string ip, int port)
+    {
+        if (string.IsNullOrEmpty(ip)) return "-";
+        return $"{ip}:{port}";
+    }
+
+    private async Task StartServer(ServerInfo server)
+    {
+        _loading = true;
+        StateHasChanged();
+        var success = await ProcessManager.StartServerAsync(server.ProcessId);
+        _loading = false;
+        if (success)
+            Snackbar.Add($"服务器 {server.ProcessId} 启动指令已发送", Severity.Success);
+        else
+            Snackbar.Add($"服务器 {server.ProcessId} 启动失败", Severity.Error);
+        RefreshData();
+    }
+
+    private async Task StopServer(ServerInfo server)
+    {
+        var confirm = await DialogService.ShowMessageBox("确认停止", $"确定要停止服务器 {server.ProcessId} 吗？", "确定", "取消");
+        if (confirm != true) return;
+        _loading = true;
+        StateHasChanged();
+        var success = await ProcessManager.StopServerAsync(server.ProcessId);
+        _loading = false;
+        Snackbar.Add(success ? $"服务器 {server.ProcessId} 已停止" : $"停止失败", success ? Severity.Info : Severity.Error);
+        RefreshData();
+    }
+
+    private async Task RestartServer(ServerInfo server)
+    {
+        var confirm = await DialogService.ShowMessageBox("确认重启", $"确定要重启服务器 {server.ProcessId} 吗？", "确定", "取消");
+        if (confirm != true) return;
+        _loading = true;
+        StateHasChanged();
+        var success = await ProcessManager.RestartServerAsync(server.ProcessId);
+        _loading = false;
+        Snackbar.Add(success ? $"服务器 {server.ProcessId} 已重启" : "重启失败", success ? Severity.Success : Severity.Error);
+        RefreshData();
+    }
+
+    private async Task StartAll()
+    {
+        _loading = true;
+        StateHasChanged();
+        var count = await ProcessManager.StartAllServersAsync();
+        _loading = false;
+        Snackbar.Add($"已启动 {count} 个服务器", Severity.Success);
+        RefreshData();
+    }
+
+    private async Task StopAll()
+    {
+        var confirm = await DialogService.ShowMessageBox("确认停止", "确定要停止所有服务器吗？这将断开所有玩家连接。", "确定", "取消");
+        if (confirm != true) return;
+        _loading = true;
+        StateHasChanged();
+        var count = await ProcessManager.StopAllServersAsync();
+        _loading = false;
+        Snackbar.Add($"已停止 {count} 个服务器", Severity.Info);
+        RefreshData();
+    }
+
+    public void Dispose()
+    {
+        ProcessManager.OnProcessStatusChanged -= OnStatusChanged;
+        Notifier.OnServerStatusChanged -= OnNotified;
+    }
+}

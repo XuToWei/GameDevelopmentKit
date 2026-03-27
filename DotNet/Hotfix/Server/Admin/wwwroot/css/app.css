@@ -1,0 +1,44 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+    height: 100%;
+    overflow: hidden;
+}
+
+#app {
+    height: 100vh;
+}
+
+.mud-table-cell {
+    white-space: nowrap;
+}
+
+.status-chip {
+    min-width: 72px;
+    justify-content: center;
+}
+
+.dashboard-card {
+    transition: transform 0.15s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+}
+
+.log-container {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.login-background {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 50%, #01579b 100%);
+}

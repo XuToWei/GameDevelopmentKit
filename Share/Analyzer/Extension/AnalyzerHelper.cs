@@ -597,9 +597,6 @@ namespace ET.Analyzer
         /// <summary>
         /// 检查是不是过滤路径
         /// </summary>
-        /// <param name="filePath"></param>
-        /// <param name="filterPaths"></param>
-        /// <returns></returns>
         public static bool IsFilterPath(this string filePath, HashSet<string> filterPaths)
         {
             if (string.IsNullOrEmpty(filePath))

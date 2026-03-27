@@ -1,0 +1,260 @@
+@page "/servers/{ProcessId:int}"
+@inject NavigationManager Navigation
+@inject ServerMonitorService MonitorService
+@inject ServerMonitorNotifier Notifier
+@inject ProcessManagerService ProcessManager
+@inject ISnackbar Snackbar
+@implements IDisposable
+
+<PageTitle>服务器详情 - Process @ProcessId</PageTitle>
+
+<MudStack Row="true" AlignItems="AlignItems.Center" Class="mb-4">
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="@(() => Navigation.NavigateTo("/servers"))" />
+    <MudText Typo="Typo.h5">@(_server?.Name ?? $"Process-{ProcessId}")</MudText>
+    @if (_server != null)
+    {
+        <MudChip T="string" Color="@GetStatusColor(_server.Status)" Size="Size.Small" Class="status-chip">
+            @GetStatusText(_server.Status)
+        </MudChip>
+    }
+    <MudSpacer />
+    <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
+    @if (_server?.Status == ServerStatus.Running)
+    {
+        <MudButton Variant="Variant.Outlined" Color="Color.Warning" StartIcon="@Icons.Material.Filled.RestartAlt"
+                   OnClick="RestartServer">重启</MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Error" StartIcon="@Icons.Material.Filled.Stop"
+                   OnClick="StopServer">停止</MudButton>
+    }
+    else if (_server?.Status is ServerStatus.Stopped or ServerStatus.Error)
+    {
+        <MudButton Variant="Variant.Filled" Color="Color.Success" StartIcon="@Icons.Material.Filled.PlayArrow"
+                   OnClick="StartServer">启动</MudButton>
+    }
+</MudStack>
+
+@if (_server == null)
+{
+    <MudAlert Severity="Severity.Info">未找到进程 @ProcessId 的信息。该服务器可能未被管理。</MudAlert>
+}
+else
+{
+    @* 基本信息 *@
+    <MudGrid>
+        <MudItem xs="12" md="6">
+            <MudCard Elevation="2">
+                <MudCardHeader>
+                    <CardHeaderContent><MudText Typo="Typo.h6">基本信息</MudText></CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudSimpleTable Dense="true" Hover="true">
+                        <tbody>
+                            <tr><td><strong>进程ID</strong></td><td>@_server.ProcessId</td></tr>
+                            <tr><td><strong>名称</strong></td><td>@(string.IsNullOrEmpty(_server.Name) ? "-" : _server.Name)</td></tr>
+                            <tr><td><strong>内网地址</strong></td><td>@FormatAddress(_server.InnerIP, _server.InnerPort)</td></tr>
+                            <tr><td><strong>外网地址</strong></td><td>@FormatAddress(_server.OuterIP, _server.OuterPort)</td></tr>
+                            <tr><td><strong>启动时间</strong></td><td>@(_server.Status == ServerStatus.Running ? _server.StartTime.ToString("yyyy-MM-dd HH:mm:ss") : "-")</td></tr>
+                            <tr><td><strong>在线人数</strong></td><td>@_server.PlayerCount</td></tr>
+                        </tbody>
+                    </MudSimpleTable>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6">
+            <MudCard Elevation="2">
+                <MudCardHeader>
+                    <CardHeaderContent><MudText Typo="Typo.h6">性能指标</MudText></CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudStack Spacing="4">
+                        <div>
+                            <MudStack Row="true" Justify="Justify.SpaceBetween">
+                                <MudText Typo="Typo.body2">CPU 使用率</MudText>
+                                <MudText Typo="Typo.body2">@_server.CpuUsage.ToString("F1")%</MudText>
+                            </MudStack>
+                            <MudProgressLinear Value="@_server.CpuUsage" Color="@GetCpuColor(_server.CpuUsage)" Size="Size.Medium" Rounded="true" />
+                        </div>
+                        <div>
+                            <MudStack Row="true" Justify="Justify.SpaceBetween">
+                                <MudText Typo="Typo.body2">内存使用</MudText>
+                                <MudText Typo="Typo.body2">@FormatMemory(_server.MemoryUsage) / @FormatMemory(_server.MemoryTotal)</MudText>
+                            </MudStack>
+                            <MudProgressLinear Value="@GetMemoryPercent()" Color="@GetMemoryColor()" Size="Size.Medium" Rounded="true" />
+                        </div>
+                        <MudSimpleTable Dense="true">
+                            <tbody>
+                                <tr><td><strong>Fiber 数量</strong></td><td>@_fibers.Count</td></tr>
+                                <tr><td><strong>Scene 数量</strong></td><td>@_scenes.Count</td></tr>
+                                <tr><td><strong>Entity 总数</strong></td><td>@_fibers.Sum(f => f.EntityCount)</td></tr>
+                            </tbody>
+                        </MudSimpleTable>
+                    </MudStack>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    @* Fiber 列表 *@
+    <MudText Typo="Typo.h6" Class="mt-6 mb-3">Fiber 列表</MudText>
+    @if (_fibers.Any())
+    {
+        <MudTable Items="_fibers" Dense="true" Hover="true" Elevation="2">
+            <HeaderContent>
+                <MudTh>ID</MudTh>
+                <MudTh>Zone</MudTh>
+                <MudTh>类型</MudTh>
+                <MudTh>名称</MudTh>
+                <MudTh>调度器</MudTh>
+                <MudTh>Entity 数</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Id</MudTd>
+                <MudTd>@context.Zone</MudTd>
+                <MudTd><MudChip T="string" Size="Size.Small" Color="Color.Info">@context.SceneType</MudChip></MudTd>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.SchedulerType</MudTd>
+                <MudTd>@context.EntityCount</MudTd>
+            </RowTemplate>
+        </MudTable>
+    }
+    else
+    {
+        <MudAlert Severity="Severity.Info" Dense="true">暂无 Fiber 数据（ET 进程未连接或未响应）</MudAlert>
+    }
+
+    @* Scene 列表 *@
+    <MudText Typo="Typo.h6" Class="mt-6 mb-3">Scene 列表</MudText>
+    @if (_scenes.Any())
+    {
+        <MudTable Items="_scenes" Dense="true" Hover="true" Elevation="2">
+            <HeaderContent>
+                <MudTh>ID</MudTh>
+                <MudTh>Zone</MudTh>
+                <MudTh>类型</MudTh>
+                <MudTh>名称</MudTh>
+                <MudTh>内网地址</MudTh>
+                <MudTh>外网地址</MudTh>
+                <MudTh>玩家数</MudTh>
+                <MudTh>Fiber ID</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Id</MudTd>
+                <MudTd>@context.Zone</MudTd>
+                <MudTd><MudChip T="string" Size="Size.Small" Color="Color.Secondary">@context.SceneType</MudChip></MudTd>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.InnerAddress</MudTd>
+                <MudTd>@context.OuterAddress</MudTd>
+                <MudTd>@context.PlayerCount</MudTd>
+                <MudTd>@context.FiberId</MudTd>
+            </RowTemplate>
+        </MudTable>
+    }
+    else
+    {
+        <MudAlert Severity="Severity.Info" Dense="true">暂无 Scene 数据（ET 进程未连接或未响应）</MudAlert>
+    }
+}
+
+@code {
+    [Parameter]
+    public int ProcessId { get; set; }
+
+    private ServerInfo _server;
+    private List<FiberInfo> _fibers = new();
+    private List<SceneInfo> _scenes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Notifier.OnServerStatusChanged += OnNotified;
+        Notifier.OnFibersChanged += OnNotified;
+        Notifier.OnScenesChanged += OnNotified;
+        await RefreshData();
+    }
+
+    private async Task RefreshData()
+    {
+        _server = MonitorService.GetServerDetails(ProcessId);
+        _fibers = Notifier.GetFibers(ProcessId);
+        _scenes = Notifier.GetScenes(ProcessId);
+        if (!_fibers.Any())
+        {
+            _fibers = await MonitorService.GetFibersAsync(ProcessId);
+        }
+        if (!_scenes.Any())
+        {
+            _scenes = await MonitorService.GetScenesAsync(ProcessId);
+        }
+        StateHasChanged();
+    }
+
+    private void OnNotified()
+    {
+        InvokeAsync(RefreshData);
+    }
+
+    public void Dispose()
+    {
+        Notifier.OnServerStatusChanged -= OnNotified;
+        Notifier.OnFibersChanged -= OnNotified;
+        Notifier.OnScenesChanged -= OnNotified;
+    }
+
+    private Color GetStatusColor(ServerStatus status) => status switch
+    {
+        ServerStatus.Running => Color.Success,
+        ServerStatus.Starting => Color.Warning,
+        ServerStatus.Stopping => Color.Warning,
+        ServerStatus.Stopped => Color.Default,
+        ServerStatus.Error => Color.Error,
+        _ => Color.Default,
+    };
+
+    private string GetStatusText(ServerStatus status) => status switch
+    {
+        ServerStatus.Running => "运行中",
+        ServerStatus.Starting => "启动中",
+        ServerStatus.Stopping => "停止中",
+        ServerStatus.Stopped => "已停止",
+        ServerStatus.Error => "异常",
+        _ => "未知",
+    };
+
+    private Color GetCpuColor(double cpu) => cpu > 80 ? Color.Error : cpu > 50 ? Color.Warning : Color.Success;
+    private double GetMemoryPercent() => _server is { MemoryTotal: > 0 } ? _server.MemoryUsage * 100.0 / _server.MemoryTotal : 0;
+    private Color GetMemoryColor() => GetMemoryPercent() > 80 ? Color.Error : GetMemoryPercent() > 50 ? Color.Warning : Color.Success;
+
+    private string FormatMemory(long bytes)
+    {
+        if (bytes <= 0) return "0 B";
+        if (bytes < 1_000_000_000) return $"{bytes / 1_000_000.0:F0} MB";
+        return $"{bytes / 1_000_000_000.0:F1} GB";
+    }
+
+    private string FormatAddress(string ip, int port)
+    {
+        if (string.IsNullOrEmpty(ip)) return "-";
+        return $"{ip}:{port}";
+    }
+
+    private async Task StartServer()
+    {
+        var success = await ProcessManager.StartServerAsync(ProcessId);
+        Snackbar.Add(success ? "启动指令已发送" : "启动失败", success ? Severity.Success : Severity.Error);
+        await RefreshData();
+    }
+
+    private async Task StopServer()
+    {
+        var success = await ProcessManager.StopServerAsync(ProcessId);
+        Snackbar.Add(success ? "已停止" : "停止失败", success ? Severity.Info : Severity.Error);
+        await RefreshData();
+    }
+
+    private async Task RestartServer()
+    {
+        var success = await ProcessManager.RestartServerAsync(ProcessId);
+        Snackbar.Add(success ? "已重启" : "重启失败", success ? Severity.Success : Severity.Error);
+        await RefreshData();
+    }
+}
