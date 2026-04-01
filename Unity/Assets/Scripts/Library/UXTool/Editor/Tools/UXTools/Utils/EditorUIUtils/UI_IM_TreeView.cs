@@ -9,15 +9,15 @@ namespace ThunderFireUITool
 {
     public static partial class EditorUIUtils
     {
-        public abstract class UIIMTreeView<T> : TreeView where T : TreeViewItem
+        public abstract class UIIMTreeView<T> : TreeView<int> where T : TreeViewItem<int>
         {
             //图标宽度
             protected const float KIconWidth = 18f;
             //列表高度
             protected const float KRowHeights = 20f;
 
-            private TreeViewItem _assetRoot;
-            public TreeViewItem AssetRoot
+            private TreeViewItem<int> _assetRoot;
+            public TreeViewItem<int> AssetRoot
             {
                 get => _assetRoot;
                 set
@@ -27,7 +27,7 @@ namespace ThunderFireUITool
                 }
             }
 
-            protected UIIMTreeView(TreeViewState state = null) : base(state ?? new TreeViewState(), new MultiColumnHeader(new MultiColumnHeaderState(new[] { new MultiColumnHeaderState.Column() })))
+            protected UIIMTreeView(TreeViewState<int> state = null) : base(state ?? new TreeViewState<int>(), new MultiColumnHeader(new MultiColumnHeaderState(new[] { new MultiColumnHeaderState.Column() })))
             {
                 rowHeight = KRowHeights;
                 columnIndexForTreeFoldouts = 0;
@@ -36,12 +36,12 @@ namespace ThunderFireUITool
                 customFoldoutYOffset = (KRowHeights - EditorGUIUtility.singleLineHeight) * 0.5f; // center foldout in the row since we also center content. See RowGUI
                 extraSpaceBeforeIconAndLabel = KIconWidth;
 
-                AssetRoot = new TreeViewItem
+                AssetRoot = new TreeViewItem<int>
                 {
                     id = 0,
                     depth = -1,
                     displayName = "Result",
-                    children = new List<TreeViewItem>()
+                    children = new List<TreeViewItem<int>>()
                 };
             }
 
@@ -79,7 +79,7 @@ namespace ThunderFireUITool
                 return new MultiColumnHeader(new MultiColumnHeaderState(columns.ToArray()));
             }
 
-            protected override TreeViewItem BuildRoot()
+            protected override TreeViewItem<int> BuildRoot()
             {
                 SetupDepthsFromParentsAndChildren(AssetRoot);
                 return AssetRoot;
@@ -106,7 +106,7 @@ namespace ThunderFireUITool
             public abstract List<MultiColumnHeaderState.Column> CreateDefaultMultiColumns();
         }
 
-        public static T1 CreateTreeView<T1, T2>(params object[] args) where T1 : UIIMTreeView<T2> where T2 : TreeViewItem, new()
+        public static T1 CreateTreeView<T1, T2>(params object[] args) where T1 : UIIMTreeView<T2> where T2 : TreeViewItem<int>, new()
         {
             var treeView = Activator.CreateInstance(typeof(T1), args) as T1;
             if (treeView == null) return null;

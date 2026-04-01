@@ -55,7 +55,7 @@ public static class SceneHierarchyUtility
                 .GetType()
                 .GetMethod("ExpandTreeViewItem", BindingFlags.NonPublic | BindingFlags.Instance);
         }
-        expandTreeViewItem.Invoke(sceneHierarchy, new object[] { go.GetInstanceID(), expand });
+        expandTreeViewItem.Invoke(sceneHierarchy, new object[] { go.GetEntityId(), expand });
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public static class SceneHierarchyUtility
                 .GetType()
                 .GetMethod("SetExpandedRecursive", BindingFlags.Public | BindingFlags.Instance);
         }
-        setExpandedRecursive.Invoke(sceneHierarchy, new object[] { go.GetInstanceID(), expand });
+        setExpandedRecursive.Invoke(sceneHierarchy, new object[] { go.GetEntityId(), expand });
     }
 
     private static object GetSceneHierarchy()

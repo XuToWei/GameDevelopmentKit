@@ -37,7 +37,7 @@ namespace ThunderFireUITool
 
         public AssetTreeView m_AssetTreeView;
 
-        [SerializeField] private TreeViewState m_TreeViewState;
+        [SerializeField] private TreeViewState<int> m_TreeViewState;
 
         public static List<Transform> referenceGoTransList = new List<Transform>();
 
@@ -115,7 +115,7 @@ namespace ThunderFireUITool
                 }
             };
             
-            GameObject obj = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+            GameObject obj = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             if (obj != null)
             {
                 if (referenceGoTransList.Contains(obj.transform))

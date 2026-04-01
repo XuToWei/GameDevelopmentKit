@@ -200,7 +200,7 @@ namespace ThunderFireUITool
         }
         private static void OnHierarchyGUI(int instanceID, Rect selectionRect)
         {
-            GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+            GameObject go = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             if (go == null) return;
 
             //子节点(也就是各个面板根节点)有特殊显示样式

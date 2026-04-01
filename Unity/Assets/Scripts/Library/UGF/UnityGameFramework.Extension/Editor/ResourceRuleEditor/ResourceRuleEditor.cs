@@ -96,7 +96,7 @@ namespace UnityGameFramework.Extension.Editor
         [OnOpenAsset]
         internal static bool OnOpenAsset(int instanceID, int line)
         {
-            var config = EditorUtility.InstanceIDToObject (instanceID) as ResourceRuleEditorData;
+            var config = EditorUtility.EntityIdToObject(instanceID) as ResourceRuleEditorData;
             if (config != null)
             {
                 ResourceRuleEditor window = GetWindow<ResourceRuleEditor>(true, "Resource Rule Editor", true);

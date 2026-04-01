@@ -466,7 +466,7 @@ namespace ThunderFireUITool
         }
         private void OnHierarchyGUI(int instanceID, Rect selectionRect)
         {
-            GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+            GameObject go = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             if (go == null) return;
             //Debug.Log(go.transform);
             //子节点(也就是各个面板根节点)有特殊显示样式
@@ -618,7 +618,7 @@ namespace ThunderFireUITool
                     textDatas[GetTransformRoute(trans)] = textData;
                     if(text.font != null) 
                     {
-                        textfont[GetTransformRoute(trans)] = AssetDatabase.GetAssetPath(text.font.GetInstanceID());
+                        textfont[GetTransformRoute(trans)] = AssetDatabase.GetAssetPath(text.font);
                     }
                 }
 
@@ -629,7 +629,7 @@ namespace ThunderFireUITool
                     imageDatas[GetTransformRoute(trans)] = imageData;
                     if (image.sprite != null)
                     {
-                        imageSprite[GetTransformRoute(trans)] = AssetDatabase.GetAssetPath(image.sprite.GetInstanceID());
+                        imageSprite[GetTransformRoute(trans)] = AssetDatabase.GetAssetPath(image.sprite);
                     }
                 }
             }

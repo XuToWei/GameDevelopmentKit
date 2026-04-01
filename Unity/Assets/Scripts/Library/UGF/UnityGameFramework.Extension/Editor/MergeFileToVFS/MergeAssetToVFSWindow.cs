@@ -35,7 +35,7 @@ namespace UnityGameFramework.Extension
         [OnOpenAsset]
         public static bool OnOpenAsset(int instanceID, int line)
         {
-            var config = EditorUtility.InstanceIDToObject(instanceID) as MergeAssetScriptableObject;
+            var config = EditorUtility.EntityIdToObject(instanceID) as MergeAssetScriptableObject;
             if (config != null)
             {
                 MergeAssetToVFSWindow window = GetWindow<MergeAssetToVFSWindow>(true, "Merge Asset To VFS", true);

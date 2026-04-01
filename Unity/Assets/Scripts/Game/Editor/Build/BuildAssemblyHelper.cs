@@ -30,13 +30,8 @@ namespace Game.Editor
         {
             //防止编辑器关闭了Auto Refresh
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            SynchronizationContext lastSynchronizationContext = null;
-            if (Application.isPlaying) //运行时编译需要UnitySynchronizationContext
-            {
-                lastSynchronizationContext = SynchronizationContext.Current;
-                SynchronizationContext.SetSynchronizationContext(s_UnitySynchronizationContext);
-            }
-            else
+            SynchronizationContext lastSynchronizationContext = SynchronizationContext.Current;
+            if (lastSynchronizationContext != s_UnitySynchronizationContext)
             {
                 SynchronizationContext.SetSynchronizationContext(s_UnitySynchronizationContext);
             }
@@ -58,7 +53,7 @@ namespace Game.Editor
             }
             finally
             {
-                if (Application.isPlaying && lastSynchronizationContext != null)
+                if (lastSynchronizationContext != SynchronizationContext.Current)
                 {
                     SynchronizationContext.SetSynchronizationContext(lastSynchronizationContext);
                 }

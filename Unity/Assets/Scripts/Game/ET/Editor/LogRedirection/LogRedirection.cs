@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditorInternal;
+using UnityEngine;
 
 namespace ET
 {
@@ -23,7 +24,7 @@ namespace ET
             }
 
             Regex logFileRegex = new(@"((Log\.cs)|(UnityLogger\.cs)|(YooLogger\.cs))");
-            string codePath = AssetDatabase.GetAssetPath(instanceID);
+            string codePath = AssetDatabase.GetAssetPath((EntityId)instanceID);
             if (logFileRegex.IsMatch(codePath))
             {
                 var content = GetStackTrace();

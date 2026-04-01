@@ -459,7 +459,7 @@ namespace ThunderFireUITool
             foreach (var sprite in sprites)
             {
                 Texture2D texture = sprite.texture;
-                string texturePath = AssetDatabase.GetAssetPath(texture.GetInstanceID());
+                string texturePath = AssetDatabase.GetAssetPath(texture);
 
                 Texture2D textureForRead = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false, false);
                 ImageConversion.LoadImage(textureForRead, File.ReadAllBytes(texturePath));

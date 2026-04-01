@@ -99,5 +99,11 @@ namespace ThunderFireUITool
         public StyleEnum<EditorTextRenderingMode> unityEditorTextRenderingMode { get; set; }
         public StyleEnum<SliceType> unitySliceType { get; set; }
 #endif
+#if UNITY_6000_3_OR_NEWER
+        public StyleRatio aspectRatio { get; set; }
+        public StyleList<FilterFunction> filter { get; set; }
+        public StyleMaterialDefinition unityMaterial { get; set; }
+        public StyleTextAutoSize unityTextAutoSize { get; set; }
+#endif
     }
 }

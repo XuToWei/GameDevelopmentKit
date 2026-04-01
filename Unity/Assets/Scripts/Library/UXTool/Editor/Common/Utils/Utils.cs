@@ -653,7 +653,7 @@ namespace ThunderFireUITool
 
         public static void DrawGreenRect(int instanceID, Rect selectionRect, string text)
         {
-            GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+            GameObject go = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             Rect rect = new Rect(selectionRect)
             {
                 width = selectionRect.width + (PrefabUtility.IsAnyPrefabInstanceRoot(go) ? 0 : 20)
