@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using GameFramework;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -7,18 +8,21 @@ using UnityEngine.UI;
 namespace UnityGameFramework.Extension
 {
     [Serializable]
-    public class WaitSetImage : ISetSpriteObject
+    public class WaitableSetImage : ISetSpriteObject
     {
         [ShowInInspector]
         private Image m_Image;
 
-        public static WaitSetImage Create(Image obj, string collection, string spritePath)
+        private AutoResetUniTaskCompletionSource m_Tcs;
+
+        public static WaitableSetImage Create(Image obj, string collection, string spritePath, AutoResetUniTaskCompletionSource tcs)
         {
-            WaitSetImage waitSetImage = ReferencePool.Acquire<WaitSetImage>();
-            waitSetImage.m_Image = obj;
-            waitSetImage.SpritePath = spritePath;
-            waitSetImage.CollectionPath = collection;
-            return waitSetImage;
+            WaitableSetImage waitableSetImage = ReferencePool.Acquire<WaitableSetImage>();
+            waitableSetImage.m_Image = obj;
+            waitableSetImage.m_Tcs = tcs;
+            waitableSetImage.SpritePath = spritePath;
+            waitableSetImage.CollectionPath = collection;
+            return waitableSetImage;
         }
 
         [ShowInInspector]
@@ -37,6 +41,12 @@ namespace UnityGameFramework.Extension
                 m_Image.sprite = sprite;
                 CurSprite = sprite;
             }
+
+            if (m_Tcs != null)
+            {
+                m_Tcs.TrySetResult();
+                m_Tcs = null;
+            }
         }
 
         public bool IsCanRelease()
@@ -47,6 +57,11 @@ namespace UnityGameFramework.Extension
         public void Clear()
         {
             m_Image = null;
+            if (m_Tcs != null)
+            {
+                m_Tcs.TrySetCanceled();
+                m_Tcs = null;
+            }
             SpritePath = null;
             CollectionPath = null;
             CurSprite = null;

@@ -7,12 +7,14 @@ using UnityEngine.UI;
 namespace UnityGameFramework.Extension
 {
     [Serializable]
-    public class SetRawImage : ISetTexture2dObject
+    public class WaitSetRawImage : ISetTexture2dObject
     {
         [ShowInInspector]
         private RawImage m_RawImage;
+
         [ShowInInspector] 
         private Texture2D Texture2D { get; set; }
+
         [ShowInInspector]
         public string Texture2dFilePath { get; private set; }
 
@@ -30,9 +32,9 @@ namespace UnityGameFramework.Extension
             return m_RawImage == null || m_RawImage.texture == null || m_RawImage.texture != Texture2D;
         }
 
-        public static SetRawImage Create(RawImage rawImage, string filePath)
+        public static WaitSetRawImage Create(RawImage rawImage, string filePath)
         {
-            SetRawImage item = ReferencePool.Acquire<SetRawImage>();
+            WaitSetRawImage item = ReferencePool.Acquire<WaitSetRawImage>();
             item.m_RawImage = rawImage;
             item.Texture2dFilePath = filePath;
             return item;

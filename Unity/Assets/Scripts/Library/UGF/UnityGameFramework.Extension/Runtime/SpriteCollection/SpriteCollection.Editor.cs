@@ -100,6 +100,7 @@ namespace UnityGameFramework.Extension
                 }
                 m_CollectionObjects.Add(collectionObject);
             }
+            m_CollectionObjects.Reverse();
             return isDirty;
         }
 
@@ -138,6 +139,7 @@ namespace UnityGameFramework.Extension
                         found = true;
                         isDirty = true;
                         m_CollectionObjects.RemoveAt(i);
+                        break;
                     }
                 }
                 if (found)
@@ -146,6 +148,7 @@ namespace UnityGameFramework.Extension
                 }
                 m_CollectionGUIDs.Add(guid);
             }
+            m_CollectionGUIDs.Reverse();
             if(isDirty)
             {
                 EditorUtility.SetDirty(this);

@@ -3,20 +3,21 @@ using GameFramework;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityGameFramework.Extension;
 
-namespace UnityGameFramework.Extension
+namespace Game
 {
     [Serializable]
-    public class WaitSetImage : ISetSpriteObject
+    public class WaitSetUXImage : ISetSpriteObject
     {
         [ShowInInspector]
-        private Image m_Image;
+        private UXImage m_UXImage;
 
-        public static WaitSetImage Create(Image obj, string collection, string spritePath)
+        public static WaitSetUXImage Create(UXImage obj, string collection, string spriteName)
         {
-            WaitSetImage waitSetImage = ReferencePool.Acquire<WaitSetImage>();
-            waitSetImage.m_Image = obj;
-            waitSetImage.SpritePath = spritePath;
+            WaitSetUXImage waitSetImage = ReferencePool.Acquire<WaitSetUXImage>();
+            waitSetImage.m_UXImage = obj;
+            waitSetImage.SpritePath = spriteName;
             waitSetImage.CollectionPath = collection;
             return waitSetImage;
         }
@@ -32,21 +33,21 @@ namespace UnityGameFramework.Extension
 
         public void SetSprite(Sprite sprite)
         {
-            if (m_Image != null)
+            if (m_UXImage != null)
             {
-                m_Image.sprite = sprite;
+                m_UXImage.sprite = sprite;
                 CurSprite = sprite;
             }
         }
 
         public bool IsCanRelease()
         {
-            return m_Image == null || m_Image.sprite != CurSprite && CurSprite != null;
+            return m_UXImage == null || m_UXImage.sprite != CurSprite && CurSprite != null;
         }
 
         public void Clear()
         {
-            m_Image = null;
+            m_UXImage = null;
             SpritePath = null;
             CollectionPath = null;
             CurSprite = null;

@@ -53,12 +53,7 @@ namespace UnityGameFramework.Extension
         /// <summary>
         /// 等待设置的对象集合
         /// </summary>
-        private Dictionary<string, HashSet<ISetTexture2dObject>> m_WaitSetObjects;
-
-        /// <summary>
-        /// 正在加载的图片TCS集合
-        /// </summary>
-        private Dictionary<string, AutoResetUniTaskCompletionSource<bool>> m_TextureLoadingTcs;
+        private Dictionary<string, UGFHashSet<ISetTexture2dObject>> m_WaitSetObjects;
 
         [ReadOnly]
         [ShowInInspector]
@@ -107,8 +102,7 @@ namespace UnityGameFramework.Extension
             m_TexturePool = objectPoolComponent.CreateMultiSpawnObjectPool<TextureItemObject>("TexturePool", m_AutoReleaseInterval, m_PoolCapacity, m_PoolExpireTime, 0);
             m_LoadTextureObjectsLinkedList = new LinkedList<LoadTextureObject>();
             m_TextureBeingLoaded = new HashSet<string>();
-            m_WaitSetObjects = new Dictionary<string, HashSet<ISetTexture2dObject>>();
-            m_TextureLoadingTcs = new Dictionary<string, AutoResetUniTaskCompletionSource<bool>>();
+            m_WaitSetObjects = new Dictionary<string, UGFHashSet<ISetTexture2dObject>>();
             InitializedFileSystem();
             InitializedResources();
             InitializedWeb();
@@ -162,11 +156,17 @@ namespace UnityGameFramework.Extension
         /// <param name="setTexture2dObject">设置图片对象</param>
         public void RemoveLoadingSetTexture(ISetTexture2dObject setTexture2dObject)
         {
-            if (m_WaitSetObjects.TryGetValue(setTexture2dObject.Texture2dFilePath, out HashSet<ISetTexture2dObject> awaitSets))
+            if (m_WaitSetObjects.TryGetValue(setTexture2dObject.Texture2dFilePath, out UGFHashSet<ISetTexture2dObject> awaitSets))
             {
                 if (awaitSets.Remove(setTexture2dObject))
                 {
                     ReferencePool.Release(setTexture2dObject);
+                }
+
+                if (awaitSets.Count == 0)
+                {
+                    m_WaitSetObjects.Remove(setTexture2dObject.Texture2dFilePath);
+                    awaitSets.Dispose();
                 }
             }
         }
@@ -182,8 +182,9 @@ namespace UnityGameFramework.Extension
                 {
                     ReferencePool.Release(awaitSet);
                 }
-                awaitSets.Clear();
+                awaitSets.Dispose();
             }
+            m_WaitSetObjects.Clear();
         }
     }
 }

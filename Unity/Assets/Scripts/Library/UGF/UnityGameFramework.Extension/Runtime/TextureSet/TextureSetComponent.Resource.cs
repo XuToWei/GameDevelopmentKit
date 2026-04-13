@@ -26,13 +26,13 @@ namespace UnityGameFramework.Extension
             ResourceData resourceData = (ResourceData) userdata;
             string texturePath = resourceData.SetTexture2dObject.Texture2dFilePath;
             m_TextureBeingLoaded.Remove(texturePath);
-            if (m_WaitSetObjects.TryGetValue(texturePath, out HashSet<ISetTexture2dObject> awaitSets))
+            if (m_WaitSetObjects.Remove(texturePath, out UGFHashSet<ISetTexture2dObject> awaitSets))
             {
                 foreach (var awaitSet in awaitSets)
                 {
                     ReferencePool.Release(awaitSet);
                 }
-                awaitSets.Clear();
+                awaitSets.Dispose();
             }
             ReferencePool.Release(resourceData);
             Log.Error("Can not load Texture2D from '{0}' with error message '{1}'.", assetName, errormessage);
@@ -47,15 +47,14 @@ namespace UnityGameFramework.Extension
                 string texturePath = resourceData.SetTexture2dObject.Texture2dFilePath;
                 m_TexturePool.Register(TextureItemObject.Create(texturePath, texture, TextureLoad.FromResource, m_ResourceComponent), false);
                 m_TextureBeingLoaded.Remove(texturePath);
-
-                if (m_WaitSetObjects.TryGetValue(texturePath, out HashSet<ISetTexture2dObject> awaitSets))
+                if (m_WaitSetObjects.Remove(texturePath, out UGFHashSet<ISetTexture2dObject> awaitSets))
                 {
                     foreach (ISetTexture2dObject awaitSet in awaitSets)
                     {
                         m_TexturePool.Spawn(texturePath);
                         SetTexture(awaitSet, texture);
                     }
-                    awaitSets.Clear();
+                    awaitSets.Dispose();
                 }
             }
             else
@@ -75,14 +74,14 @@ namespace UnityGameFramework.Extension
             string texturePath = setTexture2dObject.Texture2dFilePath;
             if (m_TexturePool.CanSpawn(texturePath))
             {
-                var texture = (Texture2D) m_TexturePool.Spawn(texturePath).Target;
+                var texture = (Texture2D)m_TexturePool.Spawn(texturePath).Target;
                 SetTexture(setTexture2dObject, texture);
                 return;
             }
 
             if (!m_WaitSetObjects.TryGetValue(texturePath, out var awaitSets))
             {
-                awaitSets = new HashSet<ISetTexture2dObject>();
+                awaitSets = UGFHashSet<ISetTexture2dObject>.Create();
                 m_WaitSetObjects.Add(texturePath, awaitSets);
             }
             awaitSets.Add(setTexture2dObject);
