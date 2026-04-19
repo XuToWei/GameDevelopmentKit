@@ -15,15 +15,6 @@ namespace ET
 
         public UGFEntity UGFEntity => m_UGFEntity;
 
-        protected override void OnInit(object userData)
-        {
-            base.OnInit(userData);
-            ETMonoUGFEntityData entityData = (ETMonoUGFEntityData)userData;
-            m_UGFEntity = entityData.UGFEntity;
-            m_UGFEntity.CachedTransform = CachedTransform;
-            UGFSystemSingleton.Instance.UGFEntityOnInit(m_UGFEntity);
-        }
-
         protected override void OnShow(object userData)
         {
             base.OnShow(userData);
@@ -31,6 +22,7 @@ namespace ET
             m_UGFEntity = entityData.UGFEntity;
             ReferencePool.Release(entityData);
             m_UGFEntity.CachedTransform = CachedTransform;
+            m_UGFEntity.UGFMono = this;
             UGFSystemSingleton.Instance.UGFEntityOnShow(m_UGFEntity);
         }
 
