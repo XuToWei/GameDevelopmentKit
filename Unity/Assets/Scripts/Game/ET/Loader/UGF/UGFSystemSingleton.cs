@@ -736,37 +736,6 @@ namespace ET
             }
         }
 
-        public void UGFEntityOnInit(UGFEntity ugfEntity)
-        {
-            if (ugfEntity is not IUGFEntityOnInit)
-            {
-                return;
-            }
-
-            List<SystemObject> systems = this.m_TypeSystems.GetSystems(ugfEntity.GetType(), typeof(IUGFEntityOnInitSystem));
-            if (systems == null)
-            {
-                return;
-            }
-
-            foreach (IUGFEntityOnInitSystem system in systems)
-            {
-                if (system == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    system.Run(ugfEntity);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
         public void UGFEntityOnShow(UGFEntity ugfEntity)
         {
             if (ugfEntity is not IUGFEntityOnShow)
