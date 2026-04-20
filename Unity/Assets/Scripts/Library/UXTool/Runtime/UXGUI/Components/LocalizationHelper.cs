@@ -126,9 +126,9 @@ public class LocalizationHelper
 #if UNITY_EDITOR
         if (s_LocalizationComponent != null)
         {
-            if(!string.Equals(s_BaseComponent.EditorLanguage.ToString(), languageType.ToString()))
+            if(languageType >= 0 && !string.Equals(s_LocalizationComponent.Language.ToString(), languageType.ToString()))
             {
-                throw new Exception($"UXTool设置语言 {languageType} 错误（编辑器语言为：{s_BaseComponent.EditorLanguage}）!");
+                throw new Exception($"UXTool设置语言 {languageType} 错误（GF语言为：{s_LocalizationComponent.Language}）!");
             }
         }
         else
@@ -144,7 +144,6 @@ public class LocalizationHelper
     }
 
     private static LocalizationComponent s_LocalizationComponent;
-    private static BaseComponent s_BaseComponent;
 #if UNITY_EDITOR
     private static Func<LanguageType, string, string, string> s_EditorGetStringFunc;
     public static void SetEditorGetStringFunc(Func<LanguageType, string, string, string> func)
@@ -157,7 +156,6 @@ public class LocalizationHelper
     {
         await UniTask.CompletedTask;
         s_LocalizationComponent = GameEntry.GetComponent<LocalizationComponent>();
-        s_BaseComponent = GameEntry.GetComponent<BaseComponent>();
         switch (s_LocalizationComponent.Language)
         {
             case Language.ChineseSimplified:
@@ -216,6 +214,5 @@ public class LocalizationHelper
     public static void Clear()
     {
         s_LocalizationComponent = null;
-        s_BaseComponent = null;
     }
 }
