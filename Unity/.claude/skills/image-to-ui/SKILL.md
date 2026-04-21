@@ -167,6 +167,75 @@ Canvas (1080x2340)
           txt_play [Text] (240x55) "PLAY"
 ```
 
+### 第六步：Sprite匹配
+
+分两步执行：
+
+**6a. 预解析sprite元数据**（每个项目只需跑一次，sprite没变化不用重跑）：
+
+解析九宫格border信息：
+```bash
+py -3 "{skill_base_dir}/scripts/parse_sprite_borders.py" "sprite目录" "borders.json输出路径" ["sprite目录2" ...]
+```
+
+识别白图/纯色sprite：
+```bash
+py -3 "{skill_base_dir}/scripts/parse_white_sprites.py" "sprite目录" "whites.json输出路径" ["sprite目录2" ...]
+```
+
+**6b. 运行sprite匹配**：
+
+```bash
+py -3 "{skill_base_dir}/scripts/sprite_matcher.py" "效果图路径" "sprite_match.json输出路径" "sprite目录" --borders "borders.json" --whites "whites.json" --debug-dir "debug输出目录"
+```
+
+所有路径通过参数传入。`--borders`、`--whites`、`--debug-dir` 为可选参数。不需要ui_hierarchy.json——匹配器自动在截图中搜索所有sprite的位置和大小。`--debug-dir` 指定后，每匹配完一层会生成一张debug图片（`layer_0.png`、`layer_1.png`...），当前层匹配用彩色粗框+半透明填充标注，之前层用细框灰显。
+
+输出文件 `sprite_match.json` 保存到同一输出目录。
+
+#### 匹配原理
+
+逐层匹配，完全自主：
+
+**Layer 0 — 直接匹配**：对截图直接搜索所有sprite（普通→9-slice→白图依次尝试）。普通sprite用多尺度模板匹配（0.25x~4.0x），9-slice用四角patch定位，白图用alpha形状匹配均匀色块。找到的是最顶层不被遮挡的sprite。像素级验证（diff≤1）才确认。
+
+**Layer 1+ — 合成匹配**：将前面所有已匹配sprite合成为一张overlay（Porter-Duff alpha compositing），然后对每个候选sprite：将其渲染到目标位置作为底层，overlay叠在上面，合成结果与截图像素比较。每层同样按普通→9-slice→白图顺序尝试所有sprite。
+
+**重复**：每层结束后将新匹配加入已匹配列表，重建overlay，继续下一层，直到某层零匹配为止。
+
+**最终处理**：去重（同位同大小保留最优）+ 构建覆盖树（rect几何包含关系确定parent-child）。
+
+#### 输出结构
+
+`sprite_match.json` 包含完整的覆盖关系树（parentId/children基于rect几何包含关系确定）：
+
+```json
+{
+  "summary": {
+    "total_matches": 15,
+    "perfect_matches": 12,
+    "slice_matches": 3,
+    "white_matches": 2
+  },
+  "nodes": [
+    {
+      "node_id": 1,
+      "rect": { "x": 200, "y": 500, "width": 300, "height": 80 },
+      "parentId": null,
+      "children": [2],
+      "match": {
+        "sprite_path": "SuperCasual/Components/Button/Button01_l_Green.png",
+        "match_ratio": 1.0,
+        "perfect": true,
+        "scale": 1.5,
+        "is_9slice": false,
+        "is_white": false
+      }
+    }
+  ]
+}
+```
+
 ## 其他原则
 
 **parentId和children必须双向一致**：如果节点A的children包含B，则B的parentId必须是A。
