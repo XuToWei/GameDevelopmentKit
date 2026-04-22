@@ -22,13 +22,15 @@ import os
 import sys
 import time
 
-PERFECT_MATCH_THRESHOLD = 0.9999
 MIN_MATCH_PIXELS = 16
 WHITE_COLOR_STD_MAX = 3.0
-MATCH_THRESHOLD_LAYER0 = 0.95
-MATCH_THRESHOLD_DEEP = 0.75
-SCALES = [1.0, 0.5, 2.0, 0.75, 1.5, 0.67, 1.33, 0.33, 3.0, 0.25, 4.0]
-MIN_TEMPLATE_DIM = 4
+CORR_THRESHOLD = 0.85
+VERIFY_MEDIAN_MAX = 20
+DEFAULT_MAX_DIFF = 40
+ERODE_PX = 3
+SCALES = [0.5, 0.75, 1.0, 1.33, 1.5, 2.0, 3.0]
+MIN_TEMPLATE_DIM = 8
+MAX_CANDIDATES = 50
 MAX_LAYERS = 10
 
 LAYER_COLORS_BGR = [
@@ -201,22 +203,67 @@ def prepare_template(sprite_img, tw, th, border=None):
     return resized[:, :, :3].copy() if resized.shape[2] >= 3 else resized, None
 
 
-def verify_pixel_match(screenshot, template_bgr, alpha_mask, x, y):
+def make_mask_3ch(alpha_mask):
+    if alpha_mask is None:
+        return None
+    m = alpha_mask.astype(np.uint8) * 255
+    return cv2.merge([m, m, m])
+
+
+def erode_mask(alpha_mask, px=ERODE_PX):
+    if alpha_mask is None or px <= 0:
+        return alpha_mask
+    kernel = np.ones((px * 2 + 1, px * 2 + 1), np.uint8)
+    return cv2.erode(alpha_mask.astype(np.uint8), kernel).astype(bool)
+
+
+def extract_peaks(result_map, threshold, tw, th, max_peaks=MAX_CANDIDATES):
+    """Extract top peaks from matchTemplate result using NMS."""
+    locs = np.where(result_map >= threshold)
+    if len(locs[0]) == 0:
+        return []
+    scores = result_map[locs]
+    order = np.argsort(-scores)[:max_peaks * 10]
+    ys = locs[0][order]
+    xs = locs[1][order]
+    scores = scores[order]
+
+    peaks = []
+    for i in range(len(ys)):
+        y, x, s = int(ys[i]), int(xs[i]), float(scores[i])
+        too_close = False
+        for py, px, _ in peaks:
+            if abs(y - py) < th and abs(x - px) < tw:
+                too_close = True
+                break
+        if not too_close:
+            peaks.append((y, x, s))
+            if len(peaks) >= max_peaks:
+                break
+    return peaks
+
+
+def verify_pixel_match(screenshot, template_bgr, alpha_mask, x, y, max_diff=DEFAULT_MAX_DIFF):
     th, tw = template_bgr.shape[:2]
     sh, sw = screenshot.shape[:2]
     if x < 0 or y < 0 or x + tw > sw or y + th > sh:
-        return 0.0, 0
+        return 999.0, 0.0, 0
     region = screenshot[y:y + th, x:x + tw]
-    if alpha_mask is not None:
-        valid_count = np.count_nonzero(alpha_mask)
+    vmask = erode_mask(alpha_mask)
+    if vmask is not None:
+        valid_count = np.count_nonzero(vmask)
     else:
         valid_count = tw * th
-        alpha_mask = np.ones((th, tw), dtype=bool)
+        vmask = np.ones((th, tw), dtype=bool)
     if valid_count < MIN_MATCH_PIXELS:
-        return 0.0, 0
+        return 999.0, 0.0, 0
     diff = np.abs(region.astype(np.int16) - template_bgr.astype(np.int16))
-    matched = np.count_nonzero((diff.max(axis=2) <= 1) & alpha_mask)
-    return matched / valid_count, valid_count
+    per_px_max = diff.max(axis=2)
+    masked_diffs = per_px_max[vmask]
+    median_diff = float(np.median(masked_diffs))
+    matched = np.count_nonzero(masked_diffs <= max_diff)
+    ratio = matched / valid_count
+    return median_diff, ratio, valid_count
 
 
 # ──────────────────── 九宫辅助 ────────────────────
@@ -254,7 +301,7 @@ def _find_9slice_size(img, border, target_img, tl_x, tl_y, tw_max, th_max):
             d = diff[ref_mask]
         else:
             d = diff.reshape(-1, diff.shape[-1]) if len(diff.shape) == 3 else diff.ravel()
-        return d.size > 0 and d.max() <= 1
+        return d.size > 0 and d.max() <= DEFAULT_MAX_DIFF
 
     widths = []
     for rw in range(L + R + 1, min(tw_max - tl_x + 1, L + R + 801)):
@@ -280,6 +327,7 @@ def _find_9slice_size(img, border, target_img, tl_x, tl_y, tw_max, th_max):
 def deduplicate_matches(matches):
     if not matches:
         return matches
+    matches = sorted(matches, key=lambda m: m.get('median_diff', 999))
     keep = []
     for m in matches:
         r = m['rect']
@@ -288,10 +336,20 @@ def deduplicate_matches(matches):
             kr = k['rect']
             if (abs(r['x'] - kr['x']) <= 2 and abs(r['y'] - kr['y']) <= 2 and
                     abs(r['width'] - kr['width']) <= 2 and abs(r['height'] - kr['height']) <= 2):
-                if m['valid_pixels'] > k['valid_pixels']:
-                    keep[i] = m
                 dup = True
                 break
+            ix1 = max(r['x'], kr['x'])
+            iy1 = max(r['y'], kr['y'])
+            ix2 = min(r['x'] + r['width'], kr['x'] + kr['width'])
+            iy2 = min(r['y'] + r['height'], kr['y'] + kr['height'])
+            if ix2 > ix1 and iy2 > iy1:
+                inter = (ix2 - ix1) * (iy2 - iy1)
+                area_m = r['width'] * r['height']
+                area_k = kr['width'] * kr['height']
+                smaller = min(area_m, area_k)
+                if smaller > 0 and inter / smaller > 0.3:
+                    dup = True
+                    break
         if not dup:
             keep.append(m)
     return keep
@@ -383,62 +441,59 @@ def _get_sprite(match, sprites, white_sprites):
 
 # ──────────────────── 合成验证 ────────────────────
 
-def composite_verify(template_bgr, alpha_mask, px, py, tw, th, overlay, screenshot):
-    """
-    候选sprite(template_bgr)放在(px,py)作底层，overlay叠在上面，
-    合成结果与screenshot比较。
-    """
+def composite_verify(template_bgr, alpha_mask, px, py, tw, th, overlay, screenshot,
+                     max_diff=DEFAULT_MAX_DIFF):
     sh, sw = screenshot.shape[:2]
     if px < 0 or py < 0 or px + tw > sw or py + th > sh:
-        return 0.0, 0
+        return 999.0, 0.0, 0
     canvas = template_bgr.copy()
     overlay_crop = overlay[py:py + th, px:px + tw]
     alpha_composite_onto(canvas, overlay_crop, 0, 0)
     crop = screenshot[py:py + th, px:px + tw]
-    vmask = alpha_mask if alpha_mask is not None else np.ones((th, tw), dtype=bool)
-    vc = np.count_nonzero(vmask)
+    vmask = erode_mask(alpha_mask) if alpha_mask is not None else np.ones((th, tw), dtype=bool)
+    overlay_alpha = overlay_crop[:, :, 3] if overlay_crop.shape[2] == 4 else np.zeros((th, tw), np.uint8)
+    visible = vmask & (overlay_alpha < 250)
+    vc = np.count_nonzero(visible)
     if vc < MIN_MATCH_PIXELS:
-        return 0.0, 0
+        return 999.0, 0.0, 0
     diff = np.abs(canvas.astype(np.int16) - crop.astype(np.int16))
-    mc = np.count_nonzero((diff.max(axis=2) <= 1) & vmask)
-    return mc / vc, vc
+    per_px_max = diff.max(axis=2)
+    masked_diffs = per_px_max[visible]
+    median_diff = float(np.median(masked_diffs))
+    mc = np.count_nonzero(masked_diffs <= max_diff)
+    ratio = mc / vc
+    return median_diff, ratio, vc
 
 
 # ──────────────────── 单层匹配 ────────────────────
 
 def match_one_layer(layer_num, sprites, sliced_indices, white_sprites,
-                    screenshot, overlay, all_existing):
-    """
-    在一层内按 普通→九宫→白图 优先级尝试所有切图。
-    layer_num=0 时 overlay=None（直接比较）。
-    返回本层新匹配列表。
-    """
+                    screenshot, overlay, all_existing, max_diff=DEFAULT_MAX_DIFF):
     is_direct = overlay is None
     matches = []
 
-    # ── 1. 普通 sprite ──
-    print(f"    normal sprites...")
+    normal_count = len(sprites) - len(sliced_indices)
+    print(f"  [1/3] normal sprites (0/{normal_count})...", flush=True)
     normal = _match_normal(sprites, sliced_indices, screenshot, overlay,
-                           all_existing + matches, is_direct)
+                           all_existing + matches, is_direct, max_diff=max_diff)
     matches.extend(normal)
-    print(f"      found {len(normal)}")
+    print(f"  [1/3] normal sprites: found {len(normal)}")
 
-    # ── 2. 九宫格 sprite ──
-    print(f"    9-slice sprites...")
+    slice_count = len(sliced_indices)
+    print(f"  [2/3] 9-slice sprites (0/{slice_count})...", flush=True)
     sliced = _match_9slice(sprites, sliced_indices, screenshot, overlay,
-                           all_existing + matches, is_direct)
+                           all_existing + matches, is_direct, max_diff=max_diff)
     matches.extend(sliced)
-    print(f"      found {len(sliced)}")
+    print(f"  [2/3] 9-slice sprites: found {len(sliced)}")
 
-    # 去重后再做白图（白图需要准确的覆盖信息）
     matches = deduplicate_matches(matches)
 
-    # ── 3. 白图 sprite ──
-    print(f"    white sprites...")
+    white_count = len(white_sprites)
+    print(f"  [3/3] white sprites (0/{white_count})...", flush=True)
     white = _match_white(white_sprites, screenshot, overlay,
-                         all_existing + matches, is_direct)
+                         all_existing + matches, is_direct, max_diff=max_diff)
     matches.extend(white)
-    print(f"      found {len(white)}")
+    print(f"  [3/3] white sprites: found {len(white)}")
 
     matches = deduplicate_matches(matches)
     return matches
@@ -446,20 +501,23 @@ def match_one_layer(layer_num, sprites, sliced_indices, white_sprites,
 
 # ── 普通 sprite 匹配 ──
 
-def _match_normal(sprites, sliced_indices, screenshot, overlay, existing, is_direct):
+
+def _match_normal(sprites, sliced_indices, screenshot, overlay, existing, is_direct,
+                  max_diff=DEFAULT_MAX_DIFF):
     sh, sw = screenshot.shape[:2]
     sliced_set = set(sliced_indices)
-    threshold = MATCH_THRESHOLD_LAYER0 if is_direct else MATCH_THRESHOLD_DEEP
     matches = []
     total = len(sprites) - len(sliced_set)
     processed = 0
+    t_start = time.time()
 
     for sidx, sp in enumerate(sprites):
         if sidx in sliced_set:
             continue
         processed += 1
-        if processed % 100 == 0:
-            print(f"      progress: {processed}/{total}")
+        name = os.path.basename(sp['rel_path'])
+        sys.stdout.write(f"\r  [1/3] normal ({processed}/{total}) {name[:40]:<40} matched:{len(matches)}")
+        sys.stdout.flush()
 
         for scale in SCALES:
             tw = max(1, round(sp['w'] * scale))
@@ -468,56 +526,62 @@ def _match_normal(sprites, sliced_indices, screenshot, overlay, existing, is_dir
                 continue
 
             tpl, amask = prepare_template(sp['img'], tw, th)
-            if amask is not None:
-                vpx = np.count_nonzero(amask)
-                if vpx < MIN_MATCH_PIXELS:
-                    continue
-                mu8 = amask.astype(np.uint8) * 255
-                res = cv2.matchTemplate(screenshot, tpl, cv2.TM_CCORR_NORMED, mask=mu8)
-            else:
-                res = cv2.matchTemplate(screenshot, tpl, cv2.TM_CCOEFF_NORMED)
+            if amask is not None and np.count_nonzero(amask) < MIN_MATCH_PIXELS:
+                continue
 
-            locs = np.where(res >= threshold)
-            for py, px in zip(*locs):
-                px, py = int(px), int(py)
+            mask_3ch = make_mask_3ch(amask)
+            if mask_3ch is not None:
+                res = cv2.matchTemplate(screenshot, tpl, cv2.TM_CCORR_NORMED, mask=mask_3ch)
+            else:
+                res = cv2.matchTemplate(screenshot, tpl, cv2.TM_CCORR_NORMED)
+
+            peaks = extract_peaks(res, CORR_THRESHOLD, tw, th)
+            for cy, cx, _ in peaks:
+                px, py = int(cx), int(cy)
                 if _is_dup_pos(px, py, tw, th, existing + matches):
                     continue
                 if not is_direct:
-                    cand = {'x': px, 'y': py, 'width': tw, 'height': th}
-                    if not any(_rects_overlap(cand, e['rect']) for e in existing):
+                    cand_r = {'x': px, 'y': py, 'width': tw, 'height': th}
+                    if not any(_rects_overlap(cand_r, e['rect']) for e in existing):
                         continue
 
                 if is_direct:
-                    ratio, vp = verify_pixel_match(screenshot, tpl, amask, px, py)
+                    med_d, ratio, vp = verify_pixel_match(screenshot, tpl, amask, px, py,
+                                                          max_diff=max_diff)
                 else:
-                    ratio, vp = composite_verify(tpl, amask, px, py, tw, th,
-                                                 overlay, screenshot)
-                if ratio >= PERFECT_MATCH_THRESHOLD:
+                    med_d, ratio, vp = composite_verify(tpl, amask, px, py, tw, th,
+                                                        overlay, screenshot, max_diff=max_diff)
+                if med_d <= VERIFY_MEDIAN_MAX:
                     matches.append({
                         'sprite_idx': sidx, 'is_white': False, 'is_9slice': False,
                         'rect': {'x': px, 'y': py, 'width': tw, 'height': th},
-                        'match_ratio': round(ratio, 6), 'perfect': True,
+                        'match_ratio': round(ratio, 6), 'median_diff': round(med_d, 2),
+                        'perfect': bool(med_d <= 3),
                         'valid_pixels': vp, 'scale': round(scale, 4),
                     })
+    elapsed = time.time() - t_start
+    sys.stdout.write(f"\r  [1/3] normal ({total}/{total}) done in {elapsed:.1f}s{' ':40}\n")
+    sys.stdout.flush()
     return matches
 
 
 # ── 九宫格 sprite 匹配 ──
 
-def _match_9slice(sprites, sliced_indices, screenshot, overlay, existing, is_direct):
+def _match_9slice(sprites, sliced_indices, screenshot, overlay, existing, is_direct,
+                  max_diff=DEFAULT_MAX_DIFF):
     sh, sw = screenshot.shape[:2]
     matches = []
+    total = len(sliced_indices)
+    t_start = time.time()
 
-    if is_direct:
-        target = screenshot
-    else:
-        target = screenshot
-
-    for sidx in sliced_indices:
+    for si, sidx in enumerate(sliced_indices):
         sp = sprites[sidx]
         border = sp['border']
         if not border:
             continue
+        name = os.path.basename(sp['rel_path'])
+        sys.stdout.write(f"\r  [2/3] 9-slice ({si+1}/{total}) {name[:40]:<40} matched:{len(matches)}")
+        sys.stdout.flush()
         img = sp['img']
         h, w = img.shape[:2]
         L = min(border['left'], w - 1)
@@ -531,40 +595,45 @@ def _match_9slice(sprites, sliced_indices, screenshot, overlay, existing, is_dir
         if tl_bgr is None:
             continue
 
-        if tl_mask is not None:
-            mu8 = tl_mask.astype(np.uint8) * 255
-            res = cv2.matchTemplate(target, tl_bgr, cv2.TM_CCORR_NORMED, mask=mu8)
+        mask_3ch = make_mask_3ch(tl_mask)
+        if mask_3ch is not None:
+            res = cv2.matchTemplate(screenshot, tl_bgr, cv2.TM_CCORR_NORMED, mask=mask_3ch)
         else:
-            res = cv2.matchTemplate(target, tl_bgr, cv2.TM_CCOEFF_NORMED)
+            res = cv2.matchTemplate(screenshot, tl_bgr, cv2.TM_CCORR_NORMED)
+        tl_locs = extract_peaks(res, CORR_THRESHOLD, L, T)
 
-        threshold = MATCH_THRESHOLD_LAYER0 if is_direct else MATCH_THRESHOLD_DEEP
-        tl_locs = np.where(res >= threshold)
-
-        for tl_y, tl_x in zip(*tl_locs):
-            tl_x, tl_y = int(tl_x), int(tl_y)
-            sizes = _find_9slice_size(img, border, target, tl_x, tl_y, sw, sh)
+        for cy, cx, _ in tl_locs:
+            tl_x, tl_y = int(cx), int(cy)
+            if tl_x < 0 or tl_y < 0:
+                continue
+            sizes = _find_9slice_size(img, border, screenshot, tl_x, tl_y, sw, sh)
             for (rw, rh) in sizes:
                 if _is_dup_pos(tl_x, tl_y, rw, rh, existing + matches):
                     continue
                 tpl, amask = prepare_template(sp['img'], rw, rh, border=border)
                 if is_direct:
-                    ratio, vp = verify_pixel_match(screenshot, tpl, amask, tl_x, tl_y)
+                    med_d, ratio, vp = verify_pixel_match(screenshot, tpl, amask, tl_x, tl_y,
+                                                          max_diff=max_diff)
                 else:
-                    ratio, vp = composite_verify(tpl, amask, tl_x, tl_y, rw, rh,
-                                                 overlay, screenshot)
-                if ratio >= PERFECT_MATCH_THRESHOLD:
+                    med_d, ratio, vp = composite_verify(tpl, amask, tl_x, tl_y, rw, rh,
+                                                        overlay, screenshot, max_diff=max_diff)
+                if med_d <= VERIFY_MEDIAN_MAX:
                     matches.append({
                         'sprite_idx': sidx, 'is_white': False, 'is_9slice': True,
                         'rect': {'x': tl_x, 'y': tl_y, 'width': rw, 'height': rh},
-                        'match_ratio': round(ratio, 6), 'perfect': True,
+                        'match_ratio': round(ratio, 6), 'median_diff': round(med_d, 2),
+                        'perfect': bool(med_d <= 3),
                         'valid_pixels': vp, 'scale': round(rw / sp['w'], 4),
                     })
+    elapsed = time.time() - t_start
+    sys.stdout.write(f"\r  [2/3] 9-slice ({total}/{total}) done in {elapsed:.1f}s{' ':40}\n")
+    sys.stdout.flush()
     return matches
 
 
 # ── 白图 sprite 匹配 ──
 
-def _match_white(white_sprites, screenshot, overlay, existing, is_direct):
+def _match_white(white_sprites, screenshot, overlay, existing, is_direct, max_diff=DEFAULT_MAX_DIFF):
     sh, sw = screenshot.shape[:2]
     if not white_sprites:
         return []
@@ -584,8 +653,12 @@ def _match_white(white_sprites, screenshot, overlay, existing, is_direct):
     uncov_u8 = uncovered.astype(np.uint8) * 255
     contours, _ = cv2.findContours(uncov_u8, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+    total_contours = len(contours)
+    t_start = time.time()
     matches = []
-    for contour in contours:
+    for ci, contour in enumerate(contours):
+        sys.stdout.write(f"\r  [3/3] white: region ({ci+1}/{total_contours}) matched:{len(matches)}")
+        sys.stdout.flush()
         x, y, w, h = cv2.boundingRect(contour)
         if w < MIN_TEMPLATE_DIM or h < MIN_TEMPLATE_DIM:
             continue
@@ -627,9 +700,9 @@ def _match_white(white_sprites, screenshot, overlay, existing, is_direct):
                 tpl_bgr = np.zeros((h, w, 3), dtype=np.uint8)
                 mean_bgr = cpx.mean(axis=0).round().astype(np.uint8)
                 tpl_bgr[opaque] = mean_bgr
-                ratio, _ = composite_verify(tpl_bgr, opaque, x, y, w, h,
-                                            overlay, screenshot)
-                if ratio < PERFECT_MATCH_THRESHOLD:
+                med_d, ratio, _ = composite_verify(tpl_bgr, opaque, x, y, w, h,
+                                            overlay, screenshot, max_diff=max_diff)
+                if med_d > VERIFY_MEDIAN_MAX:
                     continue
                 cov = cc / np.count_nonzero(rect_mask)
 
@@ -649,6 +722,9 @@ def _match_white(white_sprites, screenshot, overlay, existing, is_direct):
                 }
         if best:
             matches.append(best)
+    elapsed = time.time() - t_start
+    sys.stdout.write(f"\r  [3/3] white: done in {elapsed:.1f}s{' ':40}\n")
+    sys.stdout.flush()
     return matches
 
 
@@ -699,7 +775,7 @@ def generate_layer_debug(screenshot, layer_num, layer_matches, all_matches_befor
 # ──────────────────── 主流程 ────────────────────
 
 def match_sprites(screenshot_path, output_path, sprite_dirs, borders_path, whites_path,
-                   debug_dir=None):
+                   debug_dir=None, max_diff=DEFAULT_MAX_DIFF):
     t0 = time.time()
 
     screenshot = cv2.imread(screenshot_path)
@@ -707,7 +783,7 @@ def match_sprites(screenshot_path, output_path, sprite_dirs, borders_path, white
         print(f"ERROR: Cannot read screenshot: {screenshot_path}")
         sys.exit(1)
     sh, sw = screenshot.shape[:2]
-    print(f"Screenshot: {sw}x{sh}")
+    print(f"Screenshot: {sw}x{sh}, max_diff: {max_diff}")
 
     borders_map = {}
     if borders_path:
@@ -742,7 +818,7 @@ def match_sprites(screenshot_path, output_path, sprite_dirs, borders_path, white
 
         layer_matches = match_one_layer(
             layer, sprites, sliced_indices, white_sprites,
-            screenshot, overlay, all_matches)
+            screenshot, overlay, all_matches, max_diff=max_diff)
 
         if not layer_matches:
             print(f"  Layer {layer}: no matches, done")
@@ -750,8 +826,15 @@ def match_sprites(screenshot_path, output_path, sprite_dirs, borders_path, white
 
         for m in layer_matches:
             m['layer'] = layer
+        count_before = len(all_matches)
         all_matches.extend(layer_matches)
-        print(f"  Layer {layer} total: {len(layer_matches)} matches")
+        all_matches = deduplicate_matches(all_matches)
+        new_count = len(all_matches) - count_before
+        print(f"  Layer {layer}: {len(layer_matches)} raw, {new_count} new after dedup")
+
+        if new_count <= 0:
+            print(f"  No new unique matches, done")
+            break
 
         if debug_dir:
             generate_layer_debug(screenshot, layer, layer_matches,
@@ -772,6 +855,7 @@ def match_sprites(screenshot_path, output_path, sprite_dirs, borders_path, white
                 'sprite_path': sp['rel_path'] if sp else '',
                 'sprite_size': [sp['w'], sp['h']] if sp else [0, 0],
                 'match_ratio': m['match_ratio'],
+                'median_diff': m.get('median_diff', 0.0),
                 'perfect': m['perfect'],
                 'valid_pixels': m['valid_pixels'],
                 'scale': m['scale'],
@@ -808,8 +892,19 @@ def match_sprites(screenshot_path, output_path, sprite_dirs, borders_path, white
     }
 
     os.makedirs(os.path.dirname(output_path) or '.', exist_ok=True)
+
+    class NumpyEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, (np.integer,)):
+                return int(obj)
+            if isinstance(obj, (np.floating,)):
+                return float(obj)
+            if isinstance(obj, (np.bool_,)):
+                return bool(obj)
+            return super().default(obj)
+
     with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
+        json.dump(output, f, ensure_ascii=False, indent=2, cls=NumpyEncoder)
 
     print(f"\nDone in {elapsed:.1f}s")
     print(f"Total: {len(match_nodes)} (perfect:{perfect} 9slice:{slices} white:{whites} layers:{layer})")
@@ -824,6 +919,8 @@ if __name__ == '__main__':
     parser.add_argument('--borders', help='9-slice borders JSON')
     parser.add_argument('--whites', help='White sprites JSON')
     parser.add_argument('--debug-dir', help='Directory to save per-layer debug images')
+    parser.add_argument('--max-diff', type=int, default=DEFAULT_MAX_DIFF,
+                        help=f'Max per-channel pixel diff for verification (default {DEFAULT_MAX_DIFF})')
     args = parser.parse_args()
     match_sprites(args.screenshot, args.output, args.sprite_dirs,
-                  args.borders, args.whites, args.debug_dir)
+                  args.borders, args.whites, args.debug_dir, args.max_diff)
