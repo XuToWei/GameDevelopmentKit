@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "cn.lys.aibridge": "https://github.com/XuToWei/AIBridge-Extension.git",
     "com.annulusgames.lit-motion": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
     "com.annulusgames.lit-motion.animation": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
     "com.baracuda.preprocessor-symbol-definition-files": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
@@ -15,7 +16,7 @@
     "com.psygames.unitywebsocket": "https://github.com/psygames/UnityWebSocket.git#upm",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.editoriterationprofiler": "https://github.com/Unity-Technologies/com.unity.editoriterationprofiler.git",
-    "com.unity.ide.rider": "3.0.39",
+    "com.unity.ide.rider": "3.0.40",
     "com.unity.inputsystem": "1.19.0",
     "com.unity.memoryprofiler": "1.1.12",
     "com.unity.multiplayer.center": "1.0.1",
@@ -32,7 +33,6 @@
     "me.xw.statecontroller": "https://github.com/XuToWei/StateController.git",
     "me.xw.toolbarextension": "https://github.com/XuToWei/ToolbarExtension.git",
     "com.unity.modules.accessibility": "1.0.0",
-    "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -58,7 +58,6 @@
     "com.unity.modules.unitywebrequestaudio": "1.0.0",
     "com.unity.modules.unitywebrequesttexture": "1.0.0",
     "com.unity.modules.unitywebrequestwww": "1.0.0",
-    "com.unity.modules.vectorgraphics": "1.0.0",
     "com.unity.modules.vehicles": "1.0.0",
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.wind": "1.0.0"

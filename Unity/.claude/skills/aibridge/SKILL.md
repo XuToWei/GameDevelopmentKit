@@ -1,9 +1,9 @@
 ﻿---
 name: aibridge
-description: "Unity CLI Tool. Execute compile, asset search, gameobject manipulation, transform operations, component inspection, scene/prefab management, screenshot capture, and GIF recording. Supports multi-command execution and runtime extension."
-commands: [compile, asset, gameobject, transform, inspector, selection, scene, prefab, screenshot, gameview, get_logs, focus, batch, multi, menu_item, editor]
-capabilities: [asset-lookup, scene-editing, build-automation, visual-verification, component-inspection, hierarchy-manipulation, prefab-management, console-monitoring, editor-control]
-triggers: [unity, compile, gameobject, transform, component, scene, prefab, screenshot, gif, console, log, asset, hierarchy, inspector, selection, menu, editor, focus, batch, gameview, resolution]
+description: "Unity CLI 工具。执行编译、资源搜索、游戏对象操作、变换操作、组件检查、场景/预制体管理、截图捕获和 GIF 录制。支持多命令执行、运行时扩展和脚本自动化。"
+commands: [compile, asset, gameobject, transform, inspector, selection, scene, prefab, screenshot, gameview, get_logs, focus, batch, multi, menu_item, editor, script]
+capabilities: [asset-lookup, scene-editing, build-automation, visual-verification, component-inspection, hierarchy-manipulation, prefab-management, console-monitoring, editor-control, script-automation]
+triggers: [unity, compile, gameobject, transform, component, scene, prefab, screenshot, gif, console, log, asset, hierarchy, inspector, selection, menu, editor, focus, batch, gameview, resolution, script, automation]
 ---
 
 # AI Bridge Unity Skill
@@ -96,12 +96,46 @@ $CLI asset read_text --assetPath "Assets/Scripts/Player.cs" --startLine 1 --maxL
 
 **Note:** `format=paths` returns Unity asset paths only (efficient). `format=full` returns asset objects with metadata.
 
-### `batch` - Batch Commands
+### `batch` - 脚本自动化执行
 
-```bash
-$CLI batch execute --commands '[{"type":"editor","params":{"action":"log","message":"Step 1"}}]'
-$CLI batch from_file --file "commands.json"
+**用途**：自动化 Unity 编辑器操作和 CLI 命令执行，支持编译暂停/恢复
+
+**Actions**：
+- `from_text` - 直接执行脚本文本（自动写入 Cache 临时目录）
+- `from_file` - 执行已有脚本文件（.txt 格式）
+
+**脚本语法**：
 ```
+log "消息"              # 输出日志
+delay 毫秒数            # 延迟执行
+call [CLI命令] [参数]   # 调用 AIBridge CLI（可选 --timeout 毫秒数）
+menu 菜单路径           # 执行编辑器菜单项
+# 注释                 # 行注释
+```
+
+**使用示例**：
+```bash
+# 直接执行脚本文本
+$CLI batch from_text --text "call editor log 'Hello'\ndelay 1000"
+
+# 执行并保存脚本到 Cache 目录
+$CLI batch from_text --text "..." --name "my_script" --keep-file
+
+# 执行已有脚本文件
+$CLI batch from_file --file "script.txt"
+```
+
+**脚本示例**：
+```
+# 自动化构建流程
+log "开始构建"
+call compile unity
+delay 2000
+call scene get_hierarchy --depth 2
+menu File/Save Project
+```
+
+**典型场景**：编译流程、场景批处理、资源管理、重复任务自动化
 
 ### `compile` - Compilation Operations
 
