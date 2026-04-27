@@ -13,13 +13,6 @@ namespace Game.Editor
     public static class BuildAssemblyHelper
     {
         public static string BuildOutputDir => "./Temp/Bin/Debug";
-        private static SynchronizationContext s_UnitySynchronizationContext;
-
-        [InitializeOnLoadMethod]
-        static void Initialize()
-        {
-            s_UnitySynchronizationContext = SynchronizationContext.Current;
-        }
 
         public static string GetBuildTargetDir(BuildTarget target)
         {
@@ -30,34 +23,19 @@ namespace Game.Editor
         {
             //防止编辑器关闭了Auto Refresh
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            SynchronizationContext lastSynchronizationContext = SynchronizationContext.Current;
-            if (lastSynchronizationContext != s_UnitySynchronizationContext)
-            {
-                SynchronizationContext.SetSynchronizationContext(s_UnitySynchronizationContext);
-            }
-            try
-            {
-                string outDir = GetBuildTargetDir(target);
-                Directory.CreateDirectory(outDir);
-                BuildTargetGroup group = BuildPipeline.GetBuildTargetGroup(target);
-                ScriptCompilationSettings scriptCompilationSettings = new ScriptCompilationSettings();
-                scriptCompilationSettings.group = group;
-                scriptCompilationSettings.target = target;
-                scriptCompilationSettings.extraScriptingDefines = extraScriptingDefines;
-                scriptCompilationSettings.options = options;
-                PlayerBuildInterface.CompilePlayerScripts(scriptCompilationSettings, outDir);
+            string outDir = GetBuildTargetDir(target);
+            Directory.CreateDirectory(outDir);
+            BuildTargetGroup group = BuildPipeline.GetBuildTargetGroup(target);
+            ScriptCompilationSettings scriptCompilationSettings = new ScriptCompilationSettings();
+            scriptCompilationSettings.group = group;
+            scriptCompilationSettings.target = target;
+            scriptCompilationSettings.extraScriptingDefines = extraScriptingDefines;
+            scriptCompilationSettings.options = options;
+            PlayerBuildInterface.CompilePlayerScripts(scriptCompilationSettings, outDir);
 #if UNITY_2022
-                EditorUtility.ClearProgressBar();
+            EditorUtility.ClearProgressBar();
 #endif
-                Debug.Log("compile finish!!!");
-            }
-            finally
-            {
-                if (lastSynchronizationContext != SynchronizationContext.Current)
-                {
-                    SynchronizationContext.SetSynchronizationContext(lastSynchronizationContext);
-                }
-            }
+            Debug.Log("compile finish!!!");
         }
 
         public static void CopyHotUpdateDlls(BuildTarget target, string desDir, string[] dllNames)

@@ -39,8 +39,7 @@ namespace UnityGameFramework.Extension
             }
         }
     }
-    
-           
+
     public enum TextureLoad
     {
         /// <summary>

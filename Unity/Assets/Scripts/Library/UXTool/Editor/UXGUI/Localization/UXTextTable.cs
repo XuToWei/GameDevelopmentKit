@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 // using UnityEditor.SceneManagement;
 using ThunderFireUITool;
 using Game.Editor;
-using MiniExcelLibs;
+using OfficeOpenXml;
 using UnityEditor;
 
 namespace UnityEngine.UI
@@ -171,9 +171,8 @@ namespace UnityEngine.UI
         [MenuItem(ThunderFireUIToolConfig.Menu_Localization + "/写入所有文本表格Key (Write All Text Table Key)", false, 54)]
         private static void WriteAllTextTableKey()
         {
-            MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, null, ThunderFireUIToolConfig.NoTranslateTextTableSheet, ExcelType.XLSX, overwriteSheet: true);
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[]{ ThunderFireUIToolConfig.RootPath });
-            List<object> insertList = new List<object>();
+            List<string[]> insertList = new List<string[]>();
             foreach (var guid in guids)
             {
                 string filePath = AssetDatabase.GUIDToAssetPath(guid);
@@ -185,22 +184,36 @@ namespace UnityEngine.UI
                     {
                         if (EditorLocalizationTool.GetString(EditorLocalizationTool.ReadyLanguageTypes[0], item[0], null) == null)
                         {
-                            var value = new { key = item[0], ChineseSimplified = item[2]};
-                            insertList.Add(value);
+                            insertList.Add(new[] { item[0], item[2] });
                         }
                     }
                 }
             }
             // changed by gdk
-            if (insertList.Count > 0)
+            string textTablePath = ThunderFireUIToolConfig.TextTablePath;
+            string sheetName = ThunderFireUIToolConfig.NoTranslateTextTableSheet;
+            using (var package = new ExcelPackage(new FileInfo(textTablePath)))
             {
-                //使用miniexcel把key写入ThunderFireUIToolConfig.TextTablePath
-                MiniExcel.Insert(ThunderFireUIToolConfig.TextTablePath, insertList.ToArray(), ThunderFireUIToolConfig.NoTranslateTextTableSheet, ExcelType.XLSX, overwriteSheet: true);
-                Debug.Log($"未翻译的文本写入：{ThunderFireUIToolConfig.TextTablePath}@{ThunderFireUIToolConfig.NoTranslateTextTableSheet}！");
-            }
-            else
-            {
-                Debug.Log("没有未翻译的文本！");
+                var ws = package.Workbook.Worksheets[sheetName];
+                if (ws != null)
+                    package.Workbook.Worksheets.Delete(ws);
+                ws = package.Workbook.Worksheets.Add(sheetName);
+                if (insertList.Count > 0)
+                {
+                    ws.Cells[1, 1].Value = "key";
+                    ws.Cells[1, 2].Value = "ChineseSimplified";
+                    for (int i = 0; i < insertList.Count; i++)
+                    {
+                        ws.Cells[i + 2, 1].Value = insertList[i][0];
+                        ws.Cells[i + 2, 2].Value = insertList[i][1];
+                    }
+                    Debug.Log($"未翻译的文本写入：{textTablePath}@{sheetName}！");
+                }
+                else
+                {
+                    Debug.Log("没有未翻译的文本！");
+                }
+                package.Save();
             }
         }
     }

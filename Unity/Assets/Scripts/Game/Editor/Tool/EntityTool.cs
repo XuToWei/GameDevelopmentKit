@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
-using System.Linq;
 using GameFramework;
-using MiniExcelLibs;
+using OfficeOpenXml;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,116 +26,151 @@ namespace Game.Editor
         [MenuItem("Game/Entity Tool/Write Entity To Tables")]
         public static void WriteCommonEntityToTables()
         {
-            MiniExcel.Insert(COMMON_ENTITY_XLSX, null, NO_ADD_ENTITY_SHEET, ExcelType.XLSX, overwriteSheet: true);
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[]{ COMMON_ENTITY_ASSET_PATH });
             if (guids.Length < 1)
                 return;
-            List<string> sheetNames = MiniExcel.GetSheetNames(COMMON_ENTITY_XLSX);
-            if (sheetNames.Count < 1)
-                return;
             List<string> entityAssetNames = new List<string>();
             int maxEntityId = 0;
-            foreach (string sheetName in sheetNames)
+            using (var package = new ExcelPackage(new FileInfo(COMMON_ENTITY_XLSX)))
             {
-                if(sheetName.StartsWith('~'))
-                    continue;
-                var rows = MiniExcel.Query(COMMON_ENTITY_XLSX, sheetName: sheetName, excelType: ExcelType.XLSX,  startCell: "A4");
-                foreach (var row in rows)
+                foreach (var ws in package.Workbook.Worksheets)
                 {
-                    ExpandoObject rowObj = (ExpandoObject)row;
-                    dynamic assetName = rowObj.FirstOrDefault(item => item.Key == "E").Value;
-                    if (!string.IsNullOrEmpty(assetName))
+                    if (ws.Name.StartsWith("~"))
+                        continue;
+                    if (ws.Dimension == null)
+                        continue;
+                    for (int row = 4; row <= ws.Dimension.End.Row; row++)
                     {
-                        entityAssetNames.Add(assetName);
+                        string assetName = ws.Cells[row, 5].GetValue<string>();
+                        if (!string.IsNullOrEmpty(assetName))
+                        {
+                            entityAssetNames.Add(assetName);
+                        }
+                        int entityId = ws.Cells[row, 2].GetValue<int>();
+                        maxEntityId = Mathf.Max(maxEntityId, entityId);
                     }
-                    dynamic entityId = rowObj.FirstOrDefault(item => item.Key == "B").Value;
-                    maxEntityId = Mathf.Max(maxEntityId, (int)entityId);
                 }
             }
-            List<object> insertList = new List<object>();
+            List<object[]> insertList = new List<object[]>();
             foreach (var guid in guids)
             {
                 string entityAsset = AssetDatabase.GUIDToAssetPath(guid);
                 string entityAssetName = Utility.Path.GetRegularPath(entityAsset).Replace(COMMON_ENTITY_ASSET_PATH, "");
                 if (entityAssetNames.Contains(entityAssetName))
                     continue;
-                var value = new
+                insertList.Add(new object[]
                 {
-                    Id = ++maxEntityId,
-                    CSName = Path.GetFileNameWithoutExtension(entityAsset),
-                    Desc = "",
-                    AssetName = entityAssetName,
-                    EntityGroupName = "Default",
-                    Priority = 0,
-                };
-                insertList.Add(value);
+                    ++maxEntityId,
+                    Path.GetFileNameWithoutExtension(entityAsset),
+                    "",
+                    entityAssetName,
+                    "Default",
+                    0,
+                });
             }
             if (insertList.Count > 0)
             {
-                MiniExcel.Insert(COMMON_ENTITY_XLSX, insertList.ToArray(), NO_ADD_ENTITY_SHEET, ExcelType.XLSX, overwriteSheet: true);
+                string[] headers = { "Id", "CSName", "Desc", "AssetName", "EntityGroupName", "Priority" };
+                InsertToSheet(COMMON_ENTITY_XLSX, NO_ADD_ENTITY_SHEET, headers, insertList);
                 Debug.Log($"未添加的实体写入：{COMMON_ENTITY_XLSX}@{NO_ADD_ENTITY_SHEET}！");
             }
             else
             {
+                ClearSheet(COMMON_ENTITY_XLSX, NO_ADD_ENTITY_SHEET);
                 Debug.Log("没有添加的实体！");
             }
         }
-        
+
         [MenuItem("Game/Entity Tool/Write UIEntity To Tables")]
         public static void WriteUIEntityToTables()
         {
-            MiniExcel.Insert(UI_ENTITY_XLSX, null, NO_ADD_ENTITY_SHEET, ExcelType.XLSX, overwriteSheet: true);
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[]{ UI_ENTITY_ASSET_PATH });
             if (guids.Length < 1)
                 return;
-            List<string> sheetNames = MiniExcel.GetSheetNames(UI_ENTITY_XLSX);
-            if (sheetNames.Count < 1)
-                return;
             List<string> entityAssetNames = new List<string>();
             int maxEntityId = 0;
-            foreach (string sheetName in sheetNames)
+            using (var package = new ExcelPackage(new FileInfo(UI_ENTITY_XLSX)))
             {
-                if(sheetName.StartsWith('~'))
-                    continue;
-                var rows = MiniExcel.Query(UI_ENTITY_XLSX, sheetName: sheetName, excelType: ExcelType.XLSX,  startCell: "A4");
-                foreach (var row in rows)
+                foreach (var ws in package.Workbook.Worksheets)
                 {
-                    ExpandoObject rowObj = (ExpandoObject)row;
-                    dynamic assetName = rowObj.FirstOrDefault(item => item.Key == "E").Value;
-                    if (!string.IsNullOrEmpty(assetName))
+                    if (ws.Name.StartsWith("~"))
+                        continue;
+                    if (ws.Dimension == null)
+                        continue;
+                    for (int row = 4; row <= ws.Dimension.End.Row; row++)
                     {
-                        entityAssetNames.Add(assetName);
+                        string assetName = ws.Cells[row, 5].GetValue<string>();
+                        if (!string.IsNullOrEmpty(assetName))
+                        {
+                            entityAssetNames.Add(assetName);
+                        }
+                        int entityId = ws.Cells[row, 2].GetValue<int>();
+                        maxEntityId = Mathf.Max(maxEntityId, entityId);
                     }
-                    dynamic entityId = rowObj.FirstOrDefault(item => item.Key == "B").Value;
-                    maxEntityId = Mathf.Max(maxEntityId, (int)entityId);
                 }
             }
-            List<object> insertList = new List<object>();
+            List<object[]> insertList = new List<object[]>();
             foreach (var guid in guids)
             {
                 string entityAsset = AssetDatabase.GUIDToAssetPath(guid);
                 string entityAssetName = Utility.Path.GetRegularPath(entityAsset).Replace(UI_ENTITY_ASSET_PATH, "");
                 if (entityAssetNames.Contains(entityAssetName))
                     continue;
-                var value = new
+                insertList.Add(new object[]
                 {
-                    Id = ++maxEntityId,
-                    CSName = Path.GetFileNameWithoutExtension(entityAsset),
-                    Desc = "",
-                    AssetName = entityAssetName,
-                    EntityGroupName = "UI",
-                    Priority = 0,
-                };
-                insertList.Add(value);
+                    ++maxEntityId,
+                    Path.GetFileNameWithoutExtension(entityAsset),
+                    "",
+                    entityAssetName,
+                    "UI",
+                    0,
+                });
             }
             if (insertList.Count > 0)
             {
-                MiniExcel.Insert(UI_ENTITY_XLSX, insertList.ToArray(), NO_ADD_ENTITY_SHEET, ExcelType.XLSX, overwriteSheet: true);
+                string[] headers = { "Id", "CSName", "Desc", "AssetName", "EntityGroupName", "Priority" };
+                InsertToSheet(UI_ENTITY_XLSX, NO_ADD_ENTITY_SHEET, headers, insertList);
                 Debug.Log($"未添加的实体写入：{UI_ENTITY_XLSX}@{NO_ADD_ENTITY_SHEET}！");
             }
             else
             {
+                ClearSheet(UI_ENTITY_XLSX, NO_ADD_ENTITY_SHEET);
                 Debug.Log("没有添加的实体！");
+            }
+        }
+
+        private static void ClearSheet(string filePath, string sheetName)
+        {
+            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            {
+                var ws = package.Workbook.Worksheets[sheetName];
+                if (ws != null)
+                    package.Workbook.Worksheets.Delete(ws);
+                package.Workbook.Worksheets.Add(sheetName);
+                package.Save();
+            }
+        }
+
+        private static void InsertToSheet(string filePath, string sheetName, string[] headers, List<object[]> data)
+        {
+            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            {
+                var ws = package.Workbook.Worksheets[sheetName];
+                if (ws != null)
+                    package.Workbook.Worksheets.Delete(ws);
+                ws = package.Workbook.Worksheets.Add(sheetName);
+                for (int col = 0; col < headers.Length; col++)
+                {
+                    ws.Cells[1, col + 1].Value = headers[col];
+                }
+                for (int i = 0; i < data.Count; i++)
+                {
+                    for (int col = 0; col < data[i].Length; col++)
+                    {
+                        ws.Cells[i + 2, col + 1].Value = data[i][col];
+                    }
+                }
+                package.Save();
             }
         }
     }

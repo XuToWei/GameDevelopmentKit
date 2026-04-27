@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+#if !UNITY_EDITOR
 using System.Threading;
+#endif
 
 namespace ET
 {
@@ -13,7 +14,10 @@ namespace ET
 
         public MainThreadScheduler(FiberManager fiberManager)
         {
+            //防止Unity编辑器找不到正确的上下文
+#if !UNITY_EDITOR
             SynchronizationContext.SetSynchronizationContext(this.threadSynchronizationContext);
+#endif
             this.fiberManager = fiberManager;
         }
 
@@ -25,7 +29,9 @@ namespace ET
 
         public void Update()
         {
+#if !UNITY_EDITOR
             SynchronizationContext.SetSynchronizationContext(this.threadSynchronizationContext);
+#endif
             this.threadSynchronizationContext.Update();
             
             int count = this.idQueue.Count;
@@ -48,15 +54,19 @@ namespace ET
                 }
                 
                 Fiber.Instance = fiber;
+#if !UNITY_EDITOR
                 SynchronizationContext.SetSynchronizationContext(fiber.ThreadSynchronizationContext);
+#endif
                 fiber.Update();
                 Fiber.Instance = null;
                 
                 this.idQueue.Enqueue(id);
             }
-            
+
+#if !UNITY_EDITOR
             // Fiber调度完成，要还原成默认的上下文，否则unity的回调会找不到正确的上下文
             SynchronizationContext.SetSynchronizationContext(this.threadSynchronizationContext);
+#endif
         }
 
         public void LateUpdate()
@@ -81,7 +91,9 @@ namespace ET
                 }
 
                 Fiber.Instance = fiber;
+#if !UNITY_EDITOR
                 SynchronizationContext.SetSynchronizationContext(fiber.ThreadSynchronizationContext);
+#endif
                 fiber.LateUpdate();
                 Fiber.Instance = null;
                 
@@ -93,9 +105,11 @@ namespace ET
                 this.addIds.TryDequeue(out int result);
                 this.idQueue.Enqueue(result);
             }
-            
+
+#if !UNITY_EDITOR
             // Fiber调度完成，要还原成默认的上下文，否则unity的回调会找不到正确的上下文
             SynchronizationContext.SetSynchronizationContext(this.threadSynchronizationContext);
+#endif
         }
 
 

@@ -47,6 +47,42 @@ WHITE_SOURCE_OVERLAY_MONO_MIN_RATIO = 0.95
 UNDERLAY_BORDER_COVERAGE_MIN = 0.9
 UNDERLAY_MATCH_RATIO_MIN = 0.93
 UNDERLAY_SMALL_MATCH_RATIO_MIN = 0.95
+DEFAULT_LAYER0_FUZZY_SCALES = [0.9, 1.0, 1.1]
+LAYER0_FUZZY_MAX_DIFF = 24
+LAYER0_FUZZY_MATCH_RATIO_MIN = 0.9
+LAYER0_FUZZY_SMALL_MATCH_RATIO_MIN = 0.95
+LAYER0_FUZZY_CORR_THRESHOLD = 0.75
+LAYER0_FUZZY_MAX_CANDIDATES = 12
+LAYER0_FUZZY_REFINE_SCALE_DELTAS = [0.0, -0.05, 0.05, -0.03, 0.03, -0.02, 0.02, -0.01, 0.01]
+LAYER0_FUZZY_REFINE_POS_DELTAS = [-1, 0, 1]
+LAYER0_FUZZY_REFINE_MIN_RATIO = 0.8
+LAYER0_FUZZY_REFINE_MAX_PEAKS = 4
+LAYER0_FUZZY_LOCAL_DIFF_MAX_AREA_RATIO = 0.22
+LAYER0_FUZZY_LOCAL_DIFF_MAX_GROUPS = 3
+LAYER0_FUZZY_LOCAL_DIFF_MAX_GROUP_AREA_RATIO = 0.16
+LAYER0_FUZZY_LOCAL_DIFF_MAX_BBOX_AREA_RATIO = 0.22
+LAYER0_FUZZY_LOCAL_DIFF_MIN_FILL_RATIO = 0.28
+LAYER0_FUZZY_LOCAL_DIFF_BORDER_BAND_PX = 3
+LAYER0_FUZZY_LOCAL_DIFF_CLEAN_RATIO = 0.98
+LAYER0_FUZZY_FOCUSED_DIFF_MAX_AREA_RATIO = 0.4
+LAYER0_FUZZY_FOCUSED_DIFF_MAX_GROUPS = 8
+LAYER0_FUZZY_FOCUSED_DIFF_BORDER_CLEAN_MIN = 0.98
+LAYER0_FUZZY_FOCUSED_DIFF_CLEAN_RATIO = 0.995
+LAYER0_FUZZY_FOCUSED_DIFF_INSET_PX = 10
+LAYER0_FUZZY_MAJORITY_RATIO_MIN = 0.66
+LAYER0_FUZZY_MAJORITY_CORR_MIN = 0.93
+LAYER0_FUZZY_MAJORITY_MEDIAN_MAX = 4.0
+LAYER_FUZZY_MAX_DIFF = 24
+LAYER_FUZZY_MATCH_RATIO_MIN = 0.9
+LAYER_FUZZY_SMALL_MATCH_RATIO_MIN = 0.95
+LAYER_FUZZY_MAJORITY_RATIO_MIN = 0.9
+LAYER_FUZZY_MAJORITY_CORR_MIN = 0.98
+LAYER_FUZZY_MAJORITY_MEDIAN_MAX = 2.0
+LAYER_FUZZY_OCCLUSION_RATIO_MIN = 0.03
+WHITE_FUZZY_UNIFORM_REGION_MIN_PIXELS = 256
+WHITE_FUZZY_UNIFORM_REGION_MAX_DIFF = 6
+WHITE_FUZZY_UNIFORM_REGION_RATIO_MIN = 0.985
+WHITE_FUZZY_MIN_OCCLUSION_RATIO = 0.08
 WHITE_DIRECT_COMPONENT_THRESHOLD = 0.9
 BORDER_DIRECT_COMPONENT_THRESHOLD = 0.88
 SPECIAL_DIRECT_COMPONENT_MAX = 32
@@ -89,10 +125,16 @@ TEXT_EXCLUSION_GROUP_MAX_H = 140
 TEXT_EXCLUSION_GROUP_MAX_AREA_RATIO = 0.06
 TEXT_EXCLUSION_GROUP_MAX_FILL = 0.55
 TEXT_EXCLUSION_GROUP_MIN_ASPECT = 1.8
+TEXT_EXCLUSION_COMPACT_GROUP_MAX_FILL = 0.18
+TEXT_EXCLUSION_COMPACT_GROUP_MAX_W = 36
+TEXT_EXCLUSION_COMPACT_GROUP_MAX_H = 28
+TEXT_EXCLUSION_COMPACT_GROUP_MIN_W = 10
+TEXT_EXCLUSION_COMPACT_GROUP_MIN_H = 10
 TEXT_CANDIDATE_OVERLAP_MIN = 0.55
 TEXT_CANDIDATE_SOURCE_MAX_DIM = 96
 TEXT_CANDIDATE_COVERAGE_MAX = 0.72
 TEXT_CANDIDATE_COMPONENTS_MIN = 2
+TEXT_RESCUE_REGION_OVERLAP_MIN = 0.5
 NINESLICE_EDGE_SAMPLE_SPAN = 3
 NINESLICE_MAX_SIZE_CANDIDATES = 32
 
@@ -108,6 +150,8 @@ LAYER_COLORS_BGR = [
     (200, 200, 0),    # layer 8: cyan
     (128, 128, 255),  # layer 9: pink
 ]
+TEXT_DEBUG_COLOR_BGR = (255, 0, 180)
+TEXT_GROUP_DEBUG_COLOR_BGR = (0, 180, 255)
 
 
 # ──────────────────── 九宫格渲染 ────────────────────
@@ -178,11 +222,12 @@ def load_sprites(sprite_dirs, borders_map, whites_map):
                 rel_path = os.path.relpath(fpath, sprite_dir).replace('\\', '/')
                 border = borders_map.get(rel_path)
                 idx = len(sprites)
+                auto_white_source = _is_binary_black_white_source(img)
                 entry = {
                     'path': fpath, 'rel_path': rel_path, 'img': img,
                     'w': w, 'h': h, 'ar': w / h, 'border': border,
                     'base_sprite_idx': idx,
-                    'is_white_source': rel_path in whites_map,
+                    'is_white_source': rel_path in whites_map or auto_white_source,
                 }
                 entry.update(compute_sprite_metadata(img))
                 sprites.append(entry)
@@ -217,6 +262,85 @@ def compute_sprite_metadata(img):
         'opaque_pixels': opaque_pixels,
         'component_count': max(0, int(labels)),
     }
+
+
+def _is_binary_black_white_source(img):
+    bgra = ensure_bgra(img)
+    alpha = bgra[:, :, 3] > 250
+    if not np.any(alpha):
+        return False
+    pixels = bgra[:, :, :3][alpha].astype(np.int16)
+    channel_span = pixels.max(axis=1) - pixels.min(axis=1)
+    if np.any(channel_span > WHITE_COLOR_STD_MAX):
+        return False
+    luminance = pixels.mean(axis=1)
+    is_black = luminance <= WHITE_SOURCE_UNIFORM_MAX_DIFF
+    is_white = luminance >= 255 - WHITE_SOURCE_UNIFORM_MAX_DIFF
+    return bool(np.all(is_black | is_white))
+
+
+def normalize_match_scales(scales, default=None):
+    if default is None:
+        default = DEFAULT_LAYER0_FUZZY_SCALES
+    if scales is None:
+        values = default
+    elif isinstance(scales, str):
+        values = [p.strip() for p in scales.split(',') if p.strip()]
+    else:
+        values = scales
+    normalized = []
+    seen = set()
+    for value in values:
+        try:
+            scale = round(float(value), 4)
+        except (TypeError, ValueError):
+            continue
+        if scale <= 0:
+            continue
+        if scale in seen:
+            continue
+        seen.add(scale)
+        normalized.append(scale)
+    if normalized:
+        return normalized
+    return [round(float(v), 4) for v in default]
+
+
+def parse_match_scales_arg(scales_arg):
+    if scales_arg is None:
+        return None
+    parts = [p.strip() for p in str(scales_arg).split(',') if p.strip()]
+    if not parts:
+        return None
+    return normalize_match_scales(parts)
+
+
+
+def _clip_rect(rect, sw, sh):
+    x = max(0, int(rect.get('x', 0)))
+    y = max(0, int(rect.get('y', 0)))
+    w = int(rect.get('width', 0))
+    h = int(rect.get('height', 0))
+    if w <= 0 or h <= 0 or x >= sw or y >= sh:
+        return None
+    w = min(w, sw - x)
+    h = min(h, sh - y)
+    if w <= 0 or h <= 0:
+        return None
+    clipped = {'x': x, 'y': y, 'width': w, 'height': h}
+    if rect.get('text') is not None:
+        clipped['text'] = rect.get('text')
+    return clipped
+
+
+def _expand_rect(rect, pad, sw, sh):
+    return _clip_rect({
+        'x': int(rect.get('x', 0)) - pad,
+        'y': int(rect.get('y', 0)) - pad,
+        'width': int(rect.get('width', 0)) + pad * 2,
+        'height': int(rect.get('height', 0)) + pad * 2,
+        'text': rect.get('text'),
+    }, sw, sh)
 
 
 def get_9slice_target_min_size(img, border):
@@ -308,72 +432,6 @@ def erode_mask(alpha_mask, px=ERODE_PX):
     return cv2.erode(alpha_mask.astype(np.uint8), kernel).astype(bool)
 
 
-def detect_text_regions(screenshot_bgr):
-    gray = cv2.cvtColor(screenshot_bgr, cv2.COLOR_BGR2GRAY)
-    dark = cv2.adaptiveThreshold(
-        gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV,
-        TEXT_EXCLUSION_BLOCK_SIZE, TEXT_EXCLUSION_C)
-    light = cv2.adaptiveThreshold(
-        255 - gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV,
-        TEXT_EXCLUSION_BLOCK_SIZE, TEXT_EXCLUSION_C)
-    raw = (dark > 0) | (light > 0)
-
-    filtered = np.zeros_like(raw, dtype=np.uint8)
-    num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(raw.astype(np.uint8), connectivity=8)
-    for label in range(1, num_labels):
-        x, y, w, h, area = stats[label]
-        if area < TEXT_EXCLUSION_MIN_AREA or area > TEXT_EXCLUSION_MAX_AREA:
-            continue
-        if w > TEXT_EXCLUSION_MAX_BBOX_W or h > TEXT_EXCLUSION_MAX_BBOX_H:
-            continue
-        fill_ratio = area / max(1, w * h)
-        if fill_ratio > TEXT_EXCLUSION_MAX_FILL:
-            continue
-        filtered[labels == label] = 255
-
-    if not np.any(filtered):
-        return []
-
-    kernel = np.ones((TEXT_EXCLUSION_GROUP_DILATE_Y, TEXT_EXCLUSION_GROUP_DILATE_X), np.uint8)
-    grouped = cv2.dilate(filtered, kernel)
-    num_groups, group_labels, group_stats, _ = cv2.connectedComponentsWithStats(grouped, connectivity=8)
-    sh, sw = screenshot_bgr.shape[:2]
-    max_group_area = int(sh * sw * TEXT_EXCLUSION_GROUP_MAX_AREA_RATIO)
-    regions = []
-
-    for label in range(1, num_groups):
-        x, y, w, h, _ = group_stats[label]
-        if w < TEXT_EXCLUSION_GROUP_MIN_W or h < TEXT_EXCLUSION_GROUP_MIN_H or h > TEXT_EXCLUSION_GROUP_MAX_H:
-            continue
-        if w * h > max_group_area:
-            continue
-
-        core_mask = (group_labels == label) & (filtered > 0)
-        core_area = int(np.count_nonzero(core_mask))
-        if core_area <= 0:
-            continue
-
-        fill_ratio = core_area / max(1, w * h)
-        component_ids = np.unique(labels[core_mask])
-        component_ids = component_ids[component_ids != 0]
-        component_count = int(component_ids.size)
-        aspect = w / max(1, h)
-
-        if fill_ratio > TEXT_EXCLUSION_GROUP_MAX_FILL:
-            continue
-        if component_count < TEXT_EXCLUSION_GROUP_MIN_COMPONENTS and aspect < TEXT_EXCLUSION_GROUP_MIN_ASPECT:
-            continue
-
-        pad = 4
-        regions.append({
-            'x': max(0, int(x - pad)),
-            'y': max(0, int(y - pad)),
-            'width': min(sw - max(0, int(x - pad)), int(w + pad * 2)),
-            'height': min(sh - max(0, int(y - pad)), int(h + pad * 2)),
-        })
-    return regions
-
-
 def _rect_intersection_area(a, b):
     ix1 = max(a['x'], b['x'])
     iy1 = max(a['y'], b['y'])
@@ -384,20 +442,16 @@ def _rect_intersection_area(a, b):
     return (ix2 - ix1) * (iy2 - iy1)
 
 
-def _text_overlap_ratio(rect, text_regions):
+def _is_text_like_false_positive(sprite, rect, text_regions):
+    if not text_regions:
+        return False
     area = max(1, rect['width'] * rect['height'])
     overlap = 0
     for region in text_regions:
         overlap += _rect_intersection_area(rect, region)
         if overlap >= area:
             break
-    return min(1.0, overlap / area)
-
-
-def _is_text_like_false_positive(sprite, rect, text_regions):
-    if not text_regions:
-        return False
-    overlap_ratio = _text_overlap_ratio(rect, text_regions)
+    overlap_ratio = min(1.0, overlap / area)
     if overlap_ratio < TEXT_CANDIDATE_OVERLAP_MIN:
         return False
 
@@ -500,6 +554,328 @@ def collect_candidate_peaks(result_map, tw, th):
     _append(strong, False)
     _append(rescue, True)
     return merged
+
+
+def collect_layer0_fuzzy_candidate_peaks(result_map, tw, th):
+    strong = extract_peaks(result_map, CORR_THRESHOLD, tw, th, max_peaks=LAYER0_FUZZY_MAX_CANDIDATES)
+    rescue = extract_top_peaks(
+        result_map, tw, th,
+        max_peaks=max(4, LAYER0_FUZZY_MAX_CANDIDATES // 3),
+        min_threshold=LAYER0_FUZZY_CORR_THRESHOLD,
+    )
+
+    merged = []
+
+    def _append(peaks, force_rescue):
+        for y, x, score in peaks:
+            if any(abs(y - py) < th and abs(x - px) < tw for py, px, _, _ in merged):
+                continue
+            merged.append((y, x, score, force_rescue or score < CORR_THRESHOLD))
+            if len(merged) >= LAYER0_FUZZY_MAX_CANDIDATES:
+                break
+
+    _append(strong, False)
+    if len(merged) < LAYER0_FUZZY_MAX_CANDIDATES:
+        _append(rescue, True)
+    return merged[:LAYER0_FUZZY_MAX_CANDIDATES]
+
+
+def _layer0_fuzzy_rank(verify):
+    return (
+        1 if verify.get('accepted') else 0,
+        1 if verify.get('majority_rescued') else 0,
+        1 if verify.get('perfect') else 0,
+        float(verify.get('match_ratio', 0.0)),
+        -float(verify.get('median_diff', 999.0)),
+        -float(verify.get('text_ratio', 0.0)),
+    )
+
+
+def _should_accept_layer0_fuzzy_majority(score, verify):
+    if verify.get('accepted'):
+        return True
+    if float(score) < LAYER0_FUZZY_MAJORITY_CORR_MIN:
+        return False
+    if float(verify.get('median_diff', 999.0)) > LAYER0_FUZZY_MAJORITY_MEDIAN_MAX:
+        return False
+    if float(verify.get('match_ratio', 0.0)) < LAYER0_FUZZY_MAJORITY_RATIO_MIN:
+        return False
+    if int(verify.get('valid_pixels', 0)) < MIN_MATCH_PIXELS:
+        return False
+    verify['accepted'] = True
+    verify['majority_rescued'] = True
+    return True
+
+
+def _should_accept_fuzzy_majority(score, verify):
+    if verify.get('accepted'):
+        return True
+    if float(score) < LAYER_FUZZY_MAJORITY_CORR_MIN:
+        return False
+    if float(verify.get('median_diff', 999.0)) > LAYER_FUZZY_MAJORITY_MEDIAN_MAX:
+        return False
+    if float(verify.get('match_ratio', 0.0)) < LAYER_FUZZY_MAJORITY_RATIO_MIN:
+        return False
+    if int(verify.get('valid_pixels', 0)) < MIN_MATCH_PIXELS:
+        return False
+    verify['accepted'] = True
+    verify['majority_rescued'] = True
+    return True
+
+
+def _should_accept_common_fuzzy(score, verify, is_direct):
+    if is_direct:
+        return _should_accept_layer0_fuzzy_majority(score, verify)
+    return _should_accept_fuzzy_majority(score, verify)
+
+
+def _evaluate_layer0_fuzzy_candidate(screenshot, tpl, amask, px, py, text_regions,
+                                     min_ratio=LAYER0_FUZZY_MATCH_RATIO_MIN,
+                                     small_ratio=LAYER0_FUZZY_SMALL_MATCH_RATIO_MIN):
+    th, tw = tpl.shape[:2]
+    cand_r = {'x': px, 'y': py, 'width': tw, 'height': th}
+    verify = verify_pixel_match(
+        screenshot, tpl, amask, px, py, max_diff=LAYER0_FUZZY_MAX_DIFF,
+        min_match_ratio=min_ratio, small_match_ratio=small_ratio,
+        allow_text_rescue=False,
+        allow_local_diff_rescue=True)
+    return cand_r, verify
+
+
+def _is_fuzzy_match_entry(match):
+    return bool(match.get('fuzzy_match') or match.get('layer0_fuzzy'))
+
+
+def _compute_candidate_occlusion_ratio(alpha_mask, overlay, px, py, tw, th, exclusion_mask=None):
+    if overlay is None or tw <= 0 or th <= 0:
+        return 0.0
+    sh, sw = overlay.shape[:2]
+    if px < 0 or py < 0 or px + tw > sw or py + th > sh:
+        return 0.0
+    if alpha_mask is None:
+        visible_mask = np.ones((th, tw), dtype=bool)
+    else:
+        visible_mask = erode_mask(alpha_mask)
+        if visible_mask is None or np.count_nonzero(visible_mask) < MIN_MATCH_PIXELS:
+            visible_mask = alpha_mask.astype(bool)
+    visible_count = int(np.count_nonzero(visible_mask))
+    if visible_count < MIN_MATCH_PIXELS:
+        return 0.0
+    overlay_crop = overlay[py:py + th, px:px + tw]
+    occluded = np.zeros((th, tw), dtype=bool)
+    if overlay_crop.shape[2] >= 4:
+        occluded |= overlay_crop[:, :, 3] > 0
+    if exclusion_mask is not None:
+        occluded |= exclusion_mask.astype(bool)
+    return float(np.count_nonzero(visible_mask & occluded) / visible_count)
+
+
+def _is_large_uniform_visible_region(region_bgr, visible_mask):
+    visible_mask = visible_mask.astype(bool)
+    visible_count = int(np.count_nonzero(visible_mask))
+    if visible_count < WHITE_FUZZY_UNIFORM_REGION_MIN_PIXELS:
+        return False
+    pixels = region_bgr[visible_mask].astype(np.float32)
+    if pixels.size <= 0:
+        return False
+    median_bgr = np.median(pixels, axis=0)
+    diff = np.abs(pixels - median_bgr).max(axis=1)
+    uniform_ratio = float(np.count_nonzero(diff <= WHITE_FUZZY_UNIFORM_REGION_MAX_DIFF) / diff.size)
+    return uniform_ratio >= WHITE_FUZZY_UNIFORM_REGION_RATIO_MIN
+
+
+def _match_generic_fuzzy(sprites, screenshot, existing, overlay, text_regions, fuzzy_scales=None,
+                         stage_label='fuzzy', allow_white=True, allow_9slice=True,
+                         allow_original=True):
+    sh, sw = screenshot.shape[:2]
+    matches = []
+    total = len(sprites)
+    t_start = time.time()
+    fuzzy_scales = normalize_match_scales(fuzzy_scales)
+    is_direct = overlay is None
+    matched_keys = set()
+    for e in existing:
+        matched_keys.add((bool(e.get('is_white')), int(e.get('white_idx', -1)), int(e.get('sprite_idx', -1))))
+
+    for sidx, sp in enumerate(sprites):
+        sprite_key = (bool(sp.get('is_white_source')), int(sp.get('white_idx', -1)), int(sp.get('base_sprite_idx', -1)))
+        if sprite_key in matched_keys:
+            continue
+        name = os.path.basename(sp['rel_path'])
+        sys.stdout.write(
+            f"\r  [1.5/4] {stage_label} ({sidx+1}/{total}) {name[:40]:<40} matched:{len(matches)}"
+        )
+        sys.stdout.flush()
+
+        is_white_source = bool(sp.get('is_white_source'))
+        is_border = bool(sp.get('border'))
+        if not allow_original and not is_white_source and not is_border:
+            continue
+        if is_white_source and not allow_white:
+            continue
+        if is_border and not allow_9slice:
+            continue
+
+        min_ratio = LAYER0_FUZZY_MATCH_RATIO_MIN
+        small_ratio = LAYER0_FUZZY_SMALL_MATCH_RATIO_MIN
+
+        for scale in fuzzy_scales:
+            tw = max(1, round(sp['w'] * scale))
+            th = max(1, round(sp['h'] * scale))
+            if tw < MIN_TEMPLATE_DIM or th < MIN_TEMPLATE_DIM or tw > sw or th > sh:
+                continue
+
+            tpl, amask = prepare_template(sp['img'], tw, th, border=sp['border'])
+            if amask is not None and np.count_nonzero(amask) < MIN_MATCH_PIXELS:
+                continue
+
+            mask_3ch = make_mask_3ch(amask)
+            if mask_3ch is not None:
+                res = cv2.matchTemplate(screenshot, tpl, cv2.TM_CCORR_NORMED, mask=mask_3ch)
+            else:
+                res = cv2.matchTemplate(screenshot, tpl, cv2.TM_CCORR_NORMED)
+
+            peaks = collect_layer0_fuzzy_candidate_peaks(res, tw, th)
+            for peak_idx, (cy, cx, score, rescue_candidate) in enumerate(peaks):
+                px, py = int(cx), int(cy)
+                if _is_dup_pos(px, py, tw, th, existing + matches):
+                    continue
+
+                if is_white_source:
+                    cand_r = {'x': px, 'y': py, 'width': tw, 'height': th}
+                    if _is_text_like_false_positive(sp, cand_r, text_regions):
+                        continue
+                    if not is_direct:
+                        if not any(_rects_overlap(cand_r, e['rect']) for e in existing):
+                            continue
+                        exclusion_mask = build_fuzzy_exclusion_mask(existing, px, py, tw, th)
+                    else:
+                        exclusion_mask = None
+
+                    if is_direct:
+                        verify = verify_solid_shape_match(screenshot, amask, px, py)
+                    else:
+                        verify = composite_verify_solid_shape(
+                            amask, px, py, tw, th, overlay, screenshot,
+                            exclusion_mask=exclusion_mask)
+                else:
+                    cand_r, verify = _evaluate_layer0_fuzzy_candidate(
+                        screenshot, tpl, amask, px, py, text_regions,
+                        min_ratio=min_ratio, small_ratio=small_ratio)
+                    if not is_direct:
+                        exclusion_mask = build_fuzzy_exclusion_mask(existing, px, py, tw, th)
+                        verify = composite_verify(
+                            tpl, amask, px, py, tw, th, overlay, screenshot, max_diff=LAYER0_FUZZY_MAX_DIFF,
+                            min_match_ratio=min_ratio, small_match_ratio=small_ratio,
+                            allow_text_rescue=False,
+                            allow_local_diff_rescue=True,
+                            exclusion_mask=exclusion_mask)
+
+                best_rect = cand_r
+                best_verify = verify
+                best_scale = scale
+
+                if peak_idx < LAYER0_FUZZY_REFINE_MAX_PEAKS and (
+                        verify.get('accepted') or verify.get('match_ratio', 0.0) >= LAYER0_FUZZY_REFINE_MIN_RATIO):
+                    if is_white_source:
+                        pass
+                    else:
+                        refined = _refine_layer0_fuzzy_candidate(
+                            sp, screenshot, px, py, tw, th, scale, text_regions,
+                            min_ratio=min_ratio, small_ratio=small_ratio)
+                        if refined is not None and _layer0_fuzzy_rank(refined['verify']) > _layer0_fuzzy_rank(best_verify):
+                            best_rect = refined['rect']
+                            best_verify = refined['verify']
+                            best_scale = refined['scale']
+
+                if _is_dup_pos(best_rect['x'], best_rect['y'], best_rect['width'], best_rect['height'],
+                               existing + matches):
+                    continue
+                if not _should_accept_fuzzy_majority(score, best_verify):
+                    continue
+
+                matches.append({
+                    'sprite_idx': sidx,
+                    'white_idx': sp.get('white_idx', -1) if is_white_source else -1,
+                    'is_white': is_white_source,
+                    'is_9slice': bool(sp.get('border')),
+                    'rect': best_rect,
+                    'match_ratio': round(best_verify['match_ratio'], 6),
+                    'median_diff': round(best_verify['median_diff'], 2),
+                    'perfect': bool(best_verify['perfect']),
+                    'valid_pixels': best_verify['valid_pixels'],
+                    'scale': round(best_scale, 4),
+                    'candidate_score': round(float(score), 6),
+                    'rescue_candidate': bool(rescue_candidate),
+                    'text_rescued': bool(best_verify.get('text_rescued', False)),
+                    'text_pixels': int(best_verify.get('text_pixels', 0)),
+                    'text_ratio': round(float(best_verify.get('text_ratio', 0.0)), 6),
+                    'text_groups': best_verify.get('text_groups', []),
+                    'text_overlay_patch': best_verify.get('text_overlay_patch'),
+                    'majority_rescued': bool(best_verify.get('majority_rescued', False)),
+                    'render_in_overlay': False,
+                    'layer0_fuzzy': True,
+                })
+                matched_keys.add(sprite_key)
+
+    elapsed = time.time() - t_start
+    sys.stdout.write(f"\r  [1.5/4] {stage_label} ({total}/{total}) done in {elapsed:.1f}s{' ':32}\n")
+    sys.stdout.flush()
+    return matches
+
+
+def _refine_layer0_fuzzy_candidate(sprite, screenshot, base_x, base_y, base_tw, base_th,
+                                   base_scale, text_regions,
+                                   min_ratio=LAYER0_FUZZY_MATCH_RATIO_MIN,
+                                   small_ratio=LAYER0_FUZZY_SMALL_MATCH_RATIO_MIN):
+    sh, sw = screenshot.shape[:2]
+    center_x = base_x + base_tw / 2.0
+    center_y = base_y + base_th / 2.0
+    template_cache = {}
+    best = None
+    best_rank = None
+
+    for delta in LAYER0_FUZZY_REFINE_SCALE_DELTAS:
+        scale = round(base_scale + delta, 4)
+        if scale <= 0:
+            continue
+        tw = max(1, round(sprite['w'] * scale))
+        th = max(1, round(sprite['h'] * scale))
+        if tw < MIN_TEMPLATE_DIM or th < MIN_TEMPLATE_DIM or tw > sw or th > sh:
+            continue
+
+        cache_key = (tw, th)
+        if cache_key not in template_cache:
+            tpl, amask = prepare_template(sprite['img'], tw, th)
+            if amask is not None and np.count_nonzero(amask) < MIN_MATCH_PIXELS:
+                template_cache[cache_key] = None
+            else:
+                template_cache[cache_key] = (tpl, amask)
+        cached = template_cache[cache_key]
+        if cached is None:
+            continue
+        tpl, amask = cached
+
+        anchor_x = int(round(center_x - tw / 2.0))
+        anchor_y = int(round(center_y - th / 2.0))
+        for dx in LAYER0_FUZZY_REFINE_POS_DELTAS:
+            for dy in LAYER0_FUZZY_REFINE_POS_DELTAS:
+                px = anchor_x + dx
+                py = anchor_y + dy
+                if px < 0 or py < 0 or px + tw > sw or py + th > sh:
+                    continue
+                cand_r, verify = _evaluate_layer0_fuzzy_candidate(
+                    screenshot, tpl, amask, px, py, text_regions,
+                    min_ratio=min_ratio, small_ratio=small_ratio)
+                rank = _layer0_fuzzy_rank(verify)
+                if best is None or rank > best_rank:
+                    best = {
+                        'rect': cand_r,
+                        'verify': verify,
+                        'scale': scale,
+                    }
+                    best_rank = rank
+    return best
 
 
 def collect_component_candidate_peaks(result_map, threshold, max_peaks=SPECIAL_DIRECT_COMPONENT_MAX):
@@ -667,10 +1043,212 @@ def _build_text_overlay_patch(region_bgr, text_mask):
     return patch
 
 
+def _extract_localized_mismatch_groups(mismatch_mask, valid_mask):
+    mismatch_count = int(np.count_nonzero(mismatch_mask))
+    valid_count = int(np.count_nonzero(valid_mask))
+    if mismatch_count < TEXT_MIN_PIXELS or valid_count <= 0:
+        return None, []
+    if mismatch_count / valid_count > LAYER0_FUZZY_LOCAL_DIFF_MAX_AREA_RATIO:
+        return None, []
+
+    num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(
+        (mismatch_mask.astype(np.uint8) * 255), connectivity=8)
+    max_group_pixels = max(TEXT_MIN_PIXELS, int(valid_count * LAYER0_FUZZY_LOCAL_DIFF_MAX_GROUP_AREA_RATIO))
+    max_bbox_area = max(TEXT_MIN_PIXELS, int(valid_count * LAYER0_FUZZY_LOCAL_DIFF_MAX_BBOX_AREA_RATIO))
+    h, w = valid_mask.shape
+    border_band = max(1, min(LAYER0_FUZZY_LOCAL_DIFF_BORDER_BAND_PX, min(h, w) // 2))
+
+    rescue_mask = np.zeros_like(mismatch_mask, dtype=bool)
+    groups = []
+    for label in range(1, num_labels):
+        x, y, bw, bh, _ = stats[label]
+        raw_mask = mismatch_mask & (labels == label)
+        raw_pixels = int(np.count_nonzero(raw_mask))
+        if raw_pixels <= 0:
+            continue
+
+        bbox_area = int(bw * bh)
+        if raw_pixels > max_group_pixels or bbox_area > max_bbox_area:
+            return None, []
+
+        fill_ratio = raw_pixels / max(1, bbox_area)
+        touches_border = (
+            x <= border_band or y <= border_band
+            or x + bw >= w - border_band or y + bh >= h - border_band
+        )
+        if not touches_border and fill_ratio < LAYER0_FUZZY_LOCAL_DIFF_MIN_FILL_RATIO:
+            return None, []
+
+        rescue_mask |= raw_mask
+        groups.append({
+            'x': int(x),
+            'y': int(y),
+            'width': int(bw),
+            'height': int(bh),
+            'pixels': raw_pixels,
+            'fill_ratio': round(fill_ratio, 4),
+            'touches_border': bool(touches_border),
+        })
+
+    if not groups or len(groups) > LAYER0_FUZZY_LOCAL_DIFF_MAX_GROUPS:
+        return None, []
+
+    return rescue_mask & valid_mask, groups
+
+
+def _extract_focused_mismatch_groups(mismatch_mask, valid_mask):
+    mismatch_count = int(np.count_nonzero(mismatch_mask))
+    valid_count = int(np.count_nonzero(valid_mask))
+    if mismatch_count < TEXT_MIN_PIXELS or valid_count <= 0:
+        return None, []
+    if mismatch_count / valid_count > LAYER0_FUZZY_FOCUSED_DIFF_MAX_AREA_RATIO:
+        return None, []
+
+    border_support = _build_border_support(~mismatch_mask & valid_mask, valid_mask)
+    if border_support['total'] < LAYER0_FUZZY_FOCUSED_DIFF_BORDER_CLEAN_MIN:
+        return None, []
+
+    num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(
+        (mismatch_mask.astype(np.uint8) * 255), connectivity=8)
+    h, w = valid_mask.shape
+    inset = max(1, min(LAYER0_FUZZY_FOCUSED_DIFF_INSET_PX, min(h, w) // 4))
+
+    rescue_mask = np.zeros_like(mismatch_mask, dtype=bool)
+    groups = []
+    for label in range(1, num_labels):
+        x, y, bw, bh, _ = stats[label]
+        raw_mask = mismatch_mask & (labels == label)
+        raw_pixels = int(np.count_nonzero(raw_mask))
+        if raw_pixels <= 0:
+            continue
+
+        touches_outer = (
+            x < inset or y < inset
+            or x + bw > w - inset or y + bh > h - inset
+        )
+        if touches_outer:
+            return None, []
+
+        bbox_area = int(bw * bh)
+        fill_ratio = raw_pixels / max(1, bbox_area)
+        rescue_mask |= raw_mask
+        groups.append({
+            'x': int(x),
+            'y': int(y),
+            'width': int(bw),
+            'height': int(bh),
+            'pixels': raw_pixels,
+            'fill_ratio': round(fill_ratio, 4),
+        })
+
+    if not groups or len(groups) > LAYER0_FUZZY_FOCUSED_DIFF_MAX_GROUPS:
+        return None, []
+
+    return rescue_mask & valid_mask, groups
+
+
+def _rescue_match_with_detected_text_regions(region_bgr, expected_bgr, valid_mask, rect, text_regions,
+                                             max_diff=DEFAULT_MAX_DIFF):
+    valid_mask = valid_mask.astype(bool)
+    valid_count = int(np.count_nonzero(valid_mask))
+    result = {
+        'accepted': False,
+        'median_diff': 999.0,
+        'match_ratio': 0.0,
+        'valid_pixels': valid_count,
+        'perfect': False,
+        'text_rescued': False,
+        'text_pixels': 0,
+        'text_ratio': 0.0,
+        'text_groups': [],
+        'text_overlay_patch': None,
+        'text_locally_inferred': False,
+    }
+    if valid_count < MIN_MATCH_PIXELS:
+        return result
+
+    diff = np.abs(region_bgr.astype(np.int16) - expected_bgr.astype(np.int16)).max(axis=2)
+    mismatch_mask = valid_mask & (diff > max_diff)
+    mismatch_count = int(np.count_nonzero(mismatch_mask))
+    if mismatch_count < TEXT_MIN_PIXELS or mismatch_count / valid_count > TEXT_MAX_AREA_RATIO:
+        return result
+
+    h, w = valid_mask.shape
+    text_region_mask, region_groups = _build_text_region_mask(rect, (h, w), text_regions)
+    text_region_mask &= valid_mask
+
+    local_text_mask, local_group_labels = _detect_local_text_group_map(region_bgr, valid_mask)
+    extracted_mask, extracted_groups = _extract_text_groups(mismatch_mask, valid_mask)
+    text_mask = None
+    groups = []
+    text_locally_inferred = False
+
+    if np.any(local_text_mask):
+        seed_mask = local_text_mask & text_region_mask
+        if np.count_nonzero(seed_mask) < TEXT_MIN_PIXELS:
+            seed_mask = local_text_mask & mismatch_mask
+        if np.count_nonzero(seed_mask) < TEXT_MIN_PIXELS:
+            if extracted_mask is not None:
+                seed_mask = local_text_mask & extracted_mask
+
+        if np.count_nonzero(seed_mask) >= TEXT_MIN_PIXELS:
+            selected_labels = np.unique(local_group_labels[seed_mask])
+            text_mask, groups = _build_text_mask_from_group_labels(
+                local_group_labels, selected_labels, valid_mask)
+            text_locally_inferred = text_mask is not None
+
+    if text_mask is None and extracted_mask is not None:
+        text_mask = extracted_mask
+        groups = extracted_groups
+        text_locally_inferred = True
+
+    if text_mask is None and np.count_nonzero(text_region_mask) >= TEXT_MIN_PIXELS:
+        text_mask = text_region_mask
+        groups = region_groups
+
+    if text_mask is None:
+        return result
+
+    text_mask &= valid_mask
+    text_pixels = int(np.count_nonzero(text_mask))
+    if text_pixels < TEXT_MIN_PIXELS:
+        return result
+
+    clean_mask = valid_mask & ~text_mask
+    clean_count = int(np.count_nonzero(clean_mask))
+    if clean_count < MIN_MATCH_PIXELS:
+        return result
+
+    clean_diffs = diff[clean_mask]
+    if clean_diffs.size <= 0:
+        return result
+
+    clean_median = float(np.median(clean_diffs))
+    clean_ratio = float(np.count_nonzero(clean_diffs <= max_diff) / clean_diffs.size)
+    if clean_median > VERIFY_MEDIAN_MAX or clean_ratio < TEXT_MIN_CLEAN_RATIO:
+        return result
+
+    result.update({
+        'accepted': True,
+        'median_diff': clean_median,
+        'match_ratio': clean_ratio,
+        'valid_pixels': clean_count,
+        'perfect': False,
+        'text_rescued': True,
+        'text_pixels': text_pixels,
+        'text_ratio': float(text_pixels / valid_count),
+        'text_groups': groups,
+        'text_overlay_patch': _build_text_overlay_patch(region_bgr, text_mask),
+        'text_locally_inferred': text_locally_inferred,
+    })
+    return result
+
+
 def _analyze_region_match(region_bgr, expected_bgr, valid_mask, max_diff=DEFAULT_MAX_DIFF,
                           min_match_ratio=SOFT_MATCH_RATIO_MIN,
                           small_match_ratio=SOFT_SMALL_MATCH_RATIO_MIN,
-                          allow_text_rescue=True):
+                          allow_text_rescue=True,
+                          allow_local_diff_rescue=False):
     valid_mask = valid_mask.astype(bool)
     valid_count = np.count_nonzero(valid_mask)
     result = {
@@ -685,6 +1263,12 @@ def _analyze_region_match(region_bgr, expected_bgr, valid_mask, max_diff=DEFAULT
         'text_groups': [],
         'text_overlay_patch': None,
         'border_support': None,
+        'local_diff_rescued': False,
+        'local_diff_pixels': 0,
+        'local_diff_groups': [],
+        'focused_diff_rescued': False,
+        'focused_diff_pixels': 0,
+        'focused_diff_groups': [],
     }
     if valid_count < MIN_MATCH_PIXELS:
         return result
@@ -713,6 +1297,51 @@ def _analyze_region_match(region_bgr, expected_bgr, valid_mask, max_diff=DEFAULT
         if median_diff <= VERIFY_MEDIAN_MAX and match_ratio >= ratio_min:
             result['accepted'] = True
         return result
+
+    if allow_local_diff_rescue:
+        local_diff_mask, local_groups = _extract_localized_mismatch_groups(mismatch_mask, valid_mask)
+        if local_diff_mask is not None:
+            clean_mask = valid_mask & ~local_diff_mask
+            clean_count = int(np.count_nonzero(clean_mask))
+            if clean_count >= MIN_MATCH_PIXELS:
+                clean_diffs = per_px_max[clean_mask]
+                clean_median = float(np.median(clean_diffs))
+                clean_ratio = float(np.count_nonzero(clean_diffs <= max_diff) / clean_count)
+                if clean_median <= VERIFY_MEDIAN_MAX and clean_ratio >= LAYER0_FUZZY_LOCAL_DIFF_CLEAN_RATIO:
+                    local_pixels = int(np.count_nonzero(local_diff_mask))
+                    result.update({
+                        'accepted': True,
+                        'median_diff': clean_median,
+                        'match_ratio': clean_ratio,
+                        'valid_pixels': clean_count,
+                        'perfect': False,
+                        'local_diff_rescued': True,
+                        'local_diff_pixels': local_pixels,
+                        'local_diff_groups': local_groups,
+                    })
+                    return result
+
+        focused_diff_mask, focused_groups = _extract_focused_mismatch_groups(mismatch_mask, valid_mask)
+        if focused_diff_mask is not None:
+            clean_mask = valid_mask & ~focused_diff_mask
+            clean_count = int(np.count_nonzero(clean_mask))
+            if clean_count >= MIN_MATCH_PIXELS:
+                clean_diffs = per_px_max[clean_mask]
+                clean_median = float(np.median(clean_diffs))
+                clean_ratio = float(np.count_nonzero(clean_diffs <= max_diff) / clean_count)
+                if clean_median <= VERIFY_MEDIAN_MAX and clean_ratio >= LAYER0_FUZZY_FOCUSED_DIFF_CLEAN_RATIO:
+                    focused_pixels = int(np.count_nonzero(focused_diff_mask))
+                    result.update({
+                        'accepted': True,
+                        'median_diff': clean_median,
+                        'match_ratio': clean_ratio,
+                        'valid_pixels': clean_count,
+                        'perfect': False,
+                        'focused_diff_rescued': True,
+                        'focused_diff_pixels': focused_pixels,
+                        'focused_diff_groups': focused_groups,
+                    })
+                    return result
 
     if allow_text_rescue and match_ratio >= TEXT_MIN_BASE_RATIO and mismatch_count / valid_count <= TEXT_MAX_AREA_RATIO:
         border_support = _build_border_support(ok_mask, valid_mask)
@@ -754,7 +1383,8 @@ def _analyze_region_match(region_bgr, expected_bgr, valid_mask, max_diff=DEFAULT
 def verify_pixel_match(screenshot, template_bgr, alpha_mask, x, y, max_diff=DEFAULT_MAX_DIFF,
                        min_match_ratio=SOFT_MATCH_RATIO_MIN,
                        small_match_ratio=SOFT_SMALL_MATCH_RATIO_MIN,
-                       allow_text_rescue=True):
+                       allow_text_rescue=True,
+                       allow_local_diff_rescue=False):
     th, tw = template_bgr.shape[:2]
     sh, sw = screenshot.shape[:2]
     if x < 0 or y < 0 or x + tw > sw or y + th > sh:
@@ -762,7 +1392,8 @@ def verify_pixel_match(screenshot, template_bgr, alpha_mask, x, y, max_diff=DEFA
                                      np.zeros((th, tw), dtype=bool), max_diff=max_diff,
                                      min_match_ratio=min_match_ratio,
                                      small_match_ratio=small_match_ratio,
-                                     allow_text_rescue=allow_text_rescue)
+                                     allow_text_rescue=allow_text_rescue,
+                                     allow_local_diff_rescue=allow_local_diff_rescue)
     region = screenshot[y:y + th, x:x + tw]
     vmask = erode_mask(alpha_mask)
     if vmask is None:
@@ -770,7 +1401,8 @@ def verify_pixel_match(screenshot, template_bgr, alpha_mask, x, y, max_diff=DEFA
     return _analyze_region_match(region, template_bgr, vmask, max_diff=max_diff,
                                  min_match_ratio=min_match_ratio,
                                  small_match_ratio=small_match_ratio,
-                                 allow_text_rescue=allow_text_rescue)
+                                 allow_text_rescue=allow_text_rescue,
+                                 allow_local_diff_rescue=allow_local_diff_rescue)
 
 
 def _build_shape_ring(mask, px=WHITE_SOURCE_RING_DILATE_PX):
@@ -833,11 +1465,15 @@ def _analyze_solid_shape_region(region_bgr, visible_mask, base_mask):
     return result
 
 
-def _analyze_composited_solid_shape_region(region_bgr, base_mask, overlay_crop):
+def _analyze_composited_solid_shape_region(region_bgr, base_mask, overlay_crop, exclusion_mask=None):
     base_mask = base_mask.astype(bool)
     overlay_alpha = overlay_crop[:, :, 3] > 0 if overlay_crop.shape[2] == 4 else np.zeros(base_mask.shape, dtype=bool)
     visible_mask = base_mask & ~overlay_alpha
     valid_mask = base_mask | overlay_alpha
+    if exclusion_mask is not None:
+        exclusion_mask = exclusion_mask.astype(bool)
+        visible_mask = visible_mask & ~exclusion_mask
+        valid_mask = valid_mask & ~exclusion_mask
     valid_count = int(np.count_nonzero(valid_mask))
     result = {
         'accepted': False,
@@ -927,7 +1563,7 @@ def verify_solid_shape_match(screenshot, alpha_mask, x, y):
     return _analyze_solid_shape_region(region, visible_mask, base_mask)
 
 
-def composite_verify_solid_shape(alpha_mask, px, py, tw, th, overlay, screenshot):
+def composite_verify_solid_shape(alpha_mask, px, py, tw, th, overlay, screenshot, exclusion_mask=None):
     sh, sw = screenshot.shape[:2]
     if px < 0 or py < 0 or px + tw > sw or py + th > sh:
         return _analyze_solid_shape_region(
@@ -945,10 +1581,14 @@ def composite_verify_solid_shape(alpha_mask, px, py, tw, th, overlay, screenshot
                 np.zeros((th, tw), dtype=bool),
                 np.zeros((th, tw), dtype=bool),
             )
-        return _analyze_composited_solid_shape_region(region, base_mask, overlay_crop)
+        return _analyze_composited_solid_shape_region(region, base_mask, overlay_crop, exclusion_mask=exclusion_mask)
     visible_mask = erode_mask(base_mask)
     if visible_mask is None:
         visible_mask = base_mask
+    if exclusion_mask is not None:
+        exclusion_mask = exclusion_mask.astype(bool)
+        visible_mask = visible_mask & ~exclusion_mask
+        base_mask = base_mask & ~exclusion_mask
     return _analyze_solid_shape_region(region, visible_mask, base_mask)
 
 
@@ -1197,7 +1837,7 @@ def build_coverage_tree(match_nodes):
 
 # ──────────────────── Overlay 构建 ────────────────────
 
-def build_overlay(all_matches, sprites, white_sprites, sh, sw):
+def build_overlay(all_matches, sprites, white_sprites, sh, sw, include_non_overlay=False):
     """
     把所有已匹配sprite合成为一张 BGRA overlay 图。
     按layer从大到小（底层先画，顶层后画覆盖）。
@@ -1205,6 +1845,8 @@ def build_overlay(all_matches, sprites, white_sprites, sh, sw):
     overlay = np.zeros((sh, sw, 4), dtype=np.uint8)
     sorted_matches = sorted(all_matches, key=lambda m: m.get('layer', 0), reverse=True)
     for m in sorted_matches:
+        if not include_non_overlay and not m.get('render_in_overlay', True):
+            continue
         r = m['rect']
         sp = _get_sprite(m, sprites, white_sprites)
         if sp is None:
@@ -1233,13 +1875,35 @@ def _get_sprite(match, sprites, white_sprites):
     return sprites[idx] if 0 <= idx < len(sprites) else None
 
 
+def build_fuzzy_exclusion_mask(existing, px, py, tw, th):
+    mask = np.zeros((th, tw), dtype=bool)
+    if tw <= 0 or th <= 0:
+        return mask
+    x2 = px + tw
+    y2 = py + th
+    for e in existing:
+        if not _is_fuzzy_match_entry(e):
+            continue
+        r = e['rect']
+        ix1 = max(px, r['x'])
+        iy1 = max(py, r['y'])
+        ix2 = min(x2, r['x'] + r['width'])
+        iy2 = min(y2, r['y'] + r['height'])
+        if ix1 >= ix2 or iy1 >= iy2:
+            continue
+        mask[iy1 - py:iy2 - py, ix1 - px:ix2 - px] = True
+    return mask
+
+
 # ──────────────────── 合成验证 ────────────────────
 
 def composite_verify(template_bgr, alpha_mask, px, py, tw, th, overlay, screenshot,
                      max_diff=DEFAULT_MAX_DIFF,
                      min_match_ratio=SOFT_MATCH_RATIO_MIN,
                      small_match_ratio=SOFT_SMALL_MATCH_RATIO_MIN,
-                     allow_text_rescue=True):
+                     allow_text_rescue=True,
+                     exclusion_mask=None,
+                     allow_local_diff_rescue=False):
     sh, sw = screenshot.shape[:2]
     if px < 0 or py < 0 or px + tw > sw or py + th > sh:
         return _analyze_region_match(np.zeros((th, tw, 3), dtype=np.uint8), template_bgr,
@@ -1254,17 +1918,21 @@ def composite_verify(template_bgr, alpha_mask, px, py, tw, th, overlay, screensh
     vmask = erode_mask(alpha_mask) if alpha_mask is not None else np.ones((th, tw), dtype=bool)
     overlay_alpha = overlay_crop[:, :, 3] if overlay_crop.shape[2] == 4 else np.zeros((th, tw), np.uint8)
     visible = vmask & (overlay_alpha < 250)
+    if exclusion_mask is not None:
+        visible = visible & ~exclusion_mask.astype(bool)
     return _analyze_region_match(crop, canvas, visible, max_diff=max_diff,
                                  min_match_ratio=min_match_ratio,
                                  small_match_ratio=small_match_ratio,
-                                 allow_text_rescue=allow_text_rescue)
+                                 allow_text_rescue=allow_text_rescue,
+                                 allow_local_diff_rescue=allow_local_diff_rescue)
 
 
 # ──────────────────── 单层匹配 ────────────────────
 
 def match_one_layer(layer_num, sprites, sliced_indices, white_sprites,
-                    screenshot, overlay, all_existing, text_regions,
-                    max_diff=DEFAULT_MAX_DIFF):
+                   screenshot, overlay, all_existing, text_regions,
+                   fuzzy_scales=None,
+                   max_diff=DEFAULT_MAX_DIFF):
     is_direct = overlay is None
     matches = []
 
@@ -1290,6 +1958,31 @@ def match_one_layer(layer_num, sprites, sliced_indices, white_sprites,
                          all_existing + matches, is_direct, text_regions, max_diff=max_diff)
     matches.extend(white)
     print(f"  [3/3] white sprites: found {len(white)}")
+
+    if fuzzy_scales is not None:
+        original_fuzzy_label = "layer0 fuzzy original" if layer_num == 0 else f"layer{layer_num} fuzzy original"
+        print(f"  [1.5/3] {original_fuzzy_label} (0/{normal_count})...", flush=True)
+        original_fuzzy = _match_normal_fuzzy(
+            sprites, screenshot, all_existing + matches, text_regions,
+            fuzzy_scales=fuzzy_scales, overlay=overlay, stage_label=original_fuzzy_label)
+        matches.extend(original_fuzzy)
+        print(f"  [1.5/3] {original_fuzzy_label}: found {len(original_fuzzy)}")
+
+        slice_fuzzy_label = f"layer{layer_num} fuzzy 9-slice"
+        print(f"  [2.5/3] {slice_fuzzy_label} (0/{slice_count})...", flush=True)
+        slice_fuzzy = _match_9slice_fuzzy(
+            sprites, sliced_indices, screenshot, overlay,
+            all_existing + matches, is_direct, text_regions)
+        matches.extend(slice_fuzzy)
+        print(f"  [2.5/3] {slice_fuzzy_label}: found {len(slice_fuzzy)}")
+
+        white_fuzzy_label = f"layer{layer_num} fuzzy white"
+        print(f"  [3.5/3] {white_fuzzy_label} (0/{white_count})...", flush=True)
+        white_fuzzy = _match_white_fuzzy(
+            white_sprites, screenshot, overlay,
+            all_existing + matches, is_direct, text_regions)
+        matches.extend(white_fuzzy)
+        print(f"  [3.5/3] {white_fuzzy_label}: found {len(white_fuzzy)}")
 
     matches = deduplicate_matches(matches)
     return matches
@@ -1385,12 +2078,17 @@ def _match_normal(sprites, sliced_indices, screenshot, overlay, existing, is_dir
                 if not is_direct:
                     if not any(_rects_overlap(cand_r, e['rect']) for e in existing):
                         continue
+                    exclusion_mask = build_fuzzy_exclusion_mask(existing, px, py, tw, th)
+                else:
+                    exclusion_mask = None
 
                 if is_white_source:
                     if is_direct:
                         verify = verify_solid_shape_match(screenshot, amask, px, py)
                     else:
-                        verify = composite_verify_solid_shape(amask, px, py, tw, th, overlay, screenshot)
+                        verify = composite_verify_solid_shape(
+                            amask, px, py, tw, th, overlay, screenshot,
+                            exclusion_mask=exclusion_mask)
                 else:
                     if is_direct:
                         verify = verify_pixel_match(
@@ -1401,7 +2099,8 @@ def _match_normal(sprites, sliced_indices, screenshot, overlay, existing, is_dir
                         verify = composite_verify(
                             tpl, amask, px, py, tw, th, overlay, screenshot, max_diff=match_max_diff,
                             min_match_ratio=min_ratio, small_match_ratio=small_ratio,
-                            allow_text_rescue=allow_text_rescue)
+                            allow_text_rescue=allow_text_rescue,
+                            exclusion_mask=exclusion_mask)
                 if verify['accepted']:
                     matches.append({
                         'sprite_idx': sidx,
@@ -1429,6 +2128,131 @@ def _match_normal(sprites, sliced_indices, screenshot, overlay, existing, is_dir
     return matches
 
 
+def _match_normal_fuzzy(sprites, screenshot, existing, text_regions, fuzzy_scales=None,
+                        overlay=None, stage_label='original fuzzy'):
+    sh, sw = screenshot.shape[:2]
+    is_direct = overlay is None
+    matches = []
+    total = len(sprites)
+    t_start = time.time()
+    fuzzy_scales = normalize_match_scales(fuzzy_scales)
+
+    for sidx, sp in enumerate(sprites):
+        name = os.path.basename(sp['rel_path'])
+        sys.stdout.write(f"\r  [1.5/3] {stage_label} ({sidx+1}/{total}) {name[:40]:<40} matched:{len(matches)}")
+        sys.stdout.flush()
+
+        if sp.get('is_white_source') or sp.get('border'):
+            continue
+
+        min_ratio = LAYER_FUZZY_MATCH_RATIO_MIN
+        small_ratio = LAYER_FUZZY_SMALL_MATCH_RATIO_MIN
+
+        for scale in fuzzy_scales:
+            tw = max(1, round(sp['w'] * scale))
+            th = max(1, round(sp['h'] * scale))
+            if tw < MIN_TEMPLATE_DIM or th < MIN_TEMPLATE_DIM or tw > sw or th > sh:
+                continue
+
+            tpl, amask = prepare_template(sp['img'], tw, th)
+            if amask is not None and np.count_nonzero(amask) < MIN_MATCH_PIXELS:
+                continue
+
+            mask_3ch = make_mask_3ch(amask)
+            if mask_3ch is not None:
+                res = cv2.matchTemplate(screenshot, tpl, cv2.TM_CCORR_NORMED, mask=mask_3ch)
+            else:
+                res = cv2.matchTemplate(screenshot, tpl, cv2.TM_CCORR_NORMED)
+
+            peaks = collect_layer0_fuzzy_candidate_peaks(res, tw, th)
+            for peak_idx, (cy, cx, score, rescue_candidate) in enumerate(peaks):
+                px, py = int(cx), int(cy)
+                if _is_dup_pos(px, py, tw, th, existing + matches):
+                    continue
+                cand_r = {'x': px, 'y': py, 'width': tw, 'height': th}
+                if _is_text_like_false_positive(sp, cand_r, text_regions):
+                    continue
+                if not is_direct:
+                    if not any(_rects_overlap(cand_r, e['rect']) for e in existing):
+                        continue
+                    exclusion_mask = build_fuzzy_exclusion_mask(existing, px, py, tw, th)
+                    verify = composite_verify(
+                        tpl, amask, px, py, tw, th, overlay, screenshot, max_diff=LAYER_FUZZY_MAX_DIFF,
+                        min_match_ratio=min_ratio, small_match_ratio=small_ratio,
+                        allow_text_rescue=False,
+                        exclusion_mask=exclusion_mask,
+                        allow_local_diff_rescue=True)
+                else:
+                    exclusion_mask = None
+                    cand_r, verify = _evaluate_layer0_fuzzy_candidate(
+                        screenshot, tpl, amask, px, py, text_regions,
+                        min_ratio=min_ratio, small_ratio=small_ratio)
+                best_rect = cand_r
+                best_verify = verify
+                best_scale = scale
+                best_mask = amask
+                best_exclusion_mask = exclusion_mask
+
+                if is_direct and peak_idx < LAYER0_FUZZY_REFINE_MAX_PEAKS and (
+                        verify['accepted']
+                        or verify['match_ratio'] >= LAYER0_FUZZY_REFINE_MIN_RATIO):
+                    refined = _refine_layer0_fuzzy_candidate(
+                        sp, screenshot, px, py, tw, th, scale, text_regions,
+                        min_ratio=min_ratio, small_ratio=small_ratio)
+                    if refined is not None and _layer0_fuzzy_rank(refined['verify']) > _layer0_fuzzy_rank(best_verify):
+                        best_rect = refined['rect']
+                        best_verify = refined['verify']
+                        best_scale = refined['scale']
+
+                if _is_dup_pos(best_rect['x'], best_rect['y'], best_rect['width'], best_rect['height'],
+                               existing + matches):
+                    continue
+                if not is_direct:
+                    occlusion_ratio = _compute_candidate_occlusion_ratio(
+                        best_mask, overlay, best_rect['x'], best_rect['y'],
+                        best_rect['width'], best_rect['height'],
+                        exclusion_mask=best_exclusion_mask)
+                    if occlusion_ratio < LAYER_FUZZY_OCCLUSION_RATIO_MIN:
+                        continue
+                if not _should_accept_common_fuzzy(score, best_verify, is_direct):
+                    continue
+
+                matches.append({
+                    'sprite_idx': sidx,
+                    'white_idx': -1,
+                    'is_white': False,
+                    'is_9slice': False,
+                    'rect': best_rect,
+                    'match_ratio': round(best_verify['match_ratio'], 6),
+                    'median_diff': round(best_verify['median_diff'], 2),
+                    'perfect': bool(best_verify['perfect']),
+                    'valid_pixels': best_verify['valid_pixels'],
+                    'scale': round(best_scale, 4),
+                    'candidate_score': round(float(score), 6),
+                    'rescue_candidate': bool(rescue_candidate),
+                    'text_rescued': bool(best_verify['text_rescued']),
+                    'text_pixels': int(best_verify['text_pixels']),
+                    'text_ratio': round(float(best_verify['text_ratio']), 6),
+                    'text_groups': best_verify['text_groups'],
+                    'text_overlay_patch': best_verify['text_overlay_patch'],
+                    'majority_rescued': bool(best_verify.get('majority_rescued', False)),
+                    'render_in_overlay': False,
+                    'layer0_fuzzy': bool(is_direct),
+                    'fuzzy_match': True,
+                })
+
+    elapsed = time.time() - t_start
+    sys.stdout.write(f"\r  [1.5/3] {stage_label} ({total}/{total}) done in {elapsed:.1f}s{' ':32}\n")
+    sys.stdout.flush()
+    return matches
+
+
+def _match_normal_layer0_fuzzy(sprites, screenshot, existing, text_regions, fuzzy_scales=None):
+    return _match_normal_fuzzy(
+        sprites, screenshot, existing, text_regions,
+        fuzzy_scales=fuzzy_scales, overlay=None, stage_label='layer0 fuzzy')
+
+
 # ── 九宫格 sprite 匹配 ──
 
 def _match_9slice(sprites, sliced_indices, screenshot, overlay, existing, is_direct, text_regions,
@@ -1449,7 +2273,7 @@ def _match_9slice(sprites, sliced_indices, screenshot, overlay, existing, is_dir
         is_icon_like = _is_icon_like_sprite(sp)
         min_ratio = ICON_LIKE_MATCH_RATIO_MIN if is_icon_like else SOFT_MATCH_RATIO_MIN
         small_ratio = ICON_LIKE_SMALL_MATCH_RATIO_MIN if is_icon_like else SOFT_SMALL_MATCH_RATIO_MIN
-        allow_text_rescue = not is_icon_like
+        allow_text_rescue = False
         img = sp['img']
         h, w = img.shape[:2]
         L = min(border['left'], w - 1)
@@ -1481,6 +2305,7 @@ def _match_9slice(sprites, sliced_indices, screenshot, overlay, existing, is_dir
                 cand_r = {'x': tl_x, 'y': tl_y, 'width': rw, 'height': rh}
                 if _is_text_like_false_positive(sp, cand_r, text_regions):
                     continue
+                exclusion_mask = build_fuzzy_exclusion_mask(existing, tl_x, tl_y, rw, rh) if not is_direct else None
                 tpl, amask = prepare_template(sp['img'], rw, rh, border=border)
                 if is_direct:
                     verify = verify_pixel_match(
@@ -1491,7 +2316,8 @@ def _match_9slice(sprites, sliced_indices, screenshot, overlay, existing, is_dir
                     verify = composite_verify(
                         tpl, amask, tl_x, tl_y, rw, rh, overlay, screenshot, max_diff=max_diff,
                         min_match_ratio=min_ratio, small_match_ratio=small_ratio,
-                        allow_text_rescue=allow_text_rescue)
+                        allow_text_rescue=allow_text_rescue,
+                        exclusion_mask=exclusion_mask)
                 if verify['accepted']:
                     matches.append({
                         'sprite_idx': sidx, 'is_white': False, 'is_9slice': True,
@@ -1511,6 +2337,105 @@ def _match_9slice(sprites, sliced_indices, screenshot, overlay, existing, is_dir
                     })
     elapsed = time.time() - t_start
     sys.stdout.write(f"\r  [2/3] 9-slice ({total}/{total}) done in {elapsed:.1f}s{' ':40}\n")
+    sys.stdout.flush()
+    return matches
+
+
+def _match_9slice_fuzzy(sprites, sliced_indices, screenshot, overlay, existing, is_direct, text_regions):
+    sh, sw = screenshot.shape[:2]
+    matches = []
+    total = len(sliced_indices)
+    t_start = time.time()
+
+    for si, sidx in enumerate(sliced_indices):
+        sp = sprites[sidx]
+        border = sp['border']
+        if not border or sp.get('is_white_source'):
+            continue
+        name = os.path.basename(sp['rel_path'])
+        sys.stdout.write(f"\r  [2.5/3] 9-slice fuzzy ({si+1}/{total}) {name[:40]:<40} matched:{len(matches)}")
+        sys.stdout.flush()
+
+        img = sp['img']
+        h, w = img.shape[:2]
+        L = min(border['left'], w - 1)
+        R = min(border['right'], w - L - 1)
+        T = min(border['top'], h - 1)
+        B = min(border['bottom'], h - T - 1)
+        if T < MIN_TEMPLATE_DIM or L < MIN_TEMPLATE_DIM:
+            continue
+
+        tl_bgr, tl_mask = _extract_patch_bgr_mask(img[0:T, 0:L])
+        if tl_bgr is None:
+            continue
+        mask_3ch = make_mask_3ch(tl_mask)
+        if mask_3ch is not None:
+            res = cv2.matchTemplate(screenshot, tl_bgr, cv2.TM_CCORR_NORMED, mask=mask_3ch)
+        else:
+            res = cv2.matchTemplate(screenshot, tl_bgr, cv2.TM_CCORR_NORMED)
+        tl_locs = collect_candidate_peaks(res, L, T)
+
+        for cy, cx, score, rescue_candidate in tl_locs:
+            tl_x, tl_y = int(cx), int(cy)
+            if tl_x < 0 or tl_y < 0:
+                continue
+            sizes = _find_9slice_size(img, border, screenshot, tl_x, tl_y, sw, sh)
+            for (rw, rh) in sizes:
+                if _is_dup_pos(tl_x, tl_y, rw, rh, existing + matches):
+                    continue
+                cand_r = {'x': tl_x, 'y': tl_y, 'width': rw, 'height': rh}
+                if _is_text_like_false_positive(sp, cand_r, text_regions):
+                    continue
+                if not is_direct and not any(_rects_overlap(cand_r, e['rect']) for e in existing):
+                    continue
+                exclusion_mask = build_fuzzy_exclusion_mask(existing, tl_x, tl_y, rw, rh) if not is_direct else None
+                tpl, amask = prepare_template(sp['img'], rw, rh, border=border)
+                if is_direct:
+                    verify = verify_pixel_match(
+                        screenshot, tpl, amask, tl_x, tl_y, max_diff=LAYER_FUZZY_MAX_DIFF,
+                        min_match_ratio=LAYER_FUZZY_MATCH_RATIO_MIN,
+                        small_match_ratio=LAYER_FUZZY_SMALL_MATCH_RATIO_MIN,
+                        allow_text_rescue=False,
+                        allow_local_diff_rescue=True)
+                else:
+                    verify = composite_verify(
+                        tpl, amask, tl_x, tl_y, rw, rh, overlay, screenshot, max_diff=LAYER_FUZZY_MAX_DIFF,
+                        min_match_ratio=LAYER_FUZZY_MATCH_RATIO_MIN,
+                        small_match_ratio=LAYER_FUZZY_SMALL_MATCH_RATIO_MIN,
+                        allow_text_rescue=False,
+                        exclusion_mask=exclusion_mask,
+                        allow_local_diff_rescue=True)
+                    occlusion_ratio = _compute_candidate_occlusion_ratio(
+                        amask, overlay, tl_x, tl_y, rw, rh, exclusion_mask=exclusion_mask)
+                    if occlusion_ratio < LAYER_FUZZY_OCCLUSION_RATIO_MIN:
+                        continue
+                if not _should_accept_common_fuzzy(score, verify, is_direct):
+                    continue
+                matches.append({
+                    'sprite_idx': sidx,
+                    'white_idx': -1,
+                    'is_white': False,
+                    'is_9slice': True,
+                    'rect': cand_r,
+                    'match_ratio': round(verify['match_ratio'], 6),
+                    'median_diff': round(verify['median_diff'], 2),
+                    'perfect': bool(verify['perfect']),
+                    'valid_pixels': verify['valid_pixels'],
+                    'scale': round(rw / sp['w'], 4),
+                    'candidate_score': round(float(score), 6),
+                    'rescue_candidate': bool(rescue_candidate),
+                    'text_rescued': bool(verify.get('text_rescued', False)),
+                    'text_pixels': int(verify.get('text_pixels', 0)),
+                    'text_ratio': round(float(verify.get('text_ratio', 0.0)), 6),
+                    'text_groups': verify.get('text_groups', []),
+                    'text_overlay_patch': verify.get('text_overlay_patch'),
+                    'majority_rescued': bool(verify.get('majority_rescued', False)),
+                    'render_in_overlay': False,
+                    'fuzzy_match': True,
+                })
+
+    elapsed = time.time() - t_start
+    sys.stdout.write(f"\r  [2.5/3] 9-slice fuzzy ({total}/{total}) done in {elapsed:.1f}s{' ':32}\n")
     sys.stdout.flush()
     return matches
 
@@ -1571,7 +2496,7 @@ def _match_white(white_sprites, screenshot, overlay, existing, is_direct, text_r
             is_icon_like = _is_icon_like_sprite(wsp)
             min_ratio = ICON_LIKE_MATCH_RATIO_MIN if is_icon_like else SOFT_MATCH_RATIO_MIN
             small_ratio = ICON_LIKE_SMALL_MATCH_RATIO_MIN if is_icon_like else SOFT_SMALL_MATCH_RATIO_MIN
-            allow_text_rescue = not is_icon_like
+            allow_text_rescue = False
             if wsp['border']:
                 min_w, min_h = get_9slice_target_min_size(wsp['img'], wsp['border'])
                 if w < min_w or h < min_h:
@@ -1598,6 +2523,7 @@ def _match_white(white_sprites, screenshot, overlay, existing, is_direct, text_r
 
             tpl_bgr = np.zeros((h, w, 3), dtype=np.uint8)
             tpl_bgr[opaque] = fill_bgr
+            exclusion_mask = build_fuzzy_exclusion_mask(existing, x, y, w, h) if not is_direct else None
             if is_direct:
                 verify = verify_pixel_match(
                     screenshot, tpl_bgr, check, x, y, max_diff=max_diff,
@@ -1607,7 +2533,8 @@ def _match_white(white_sprites, screenshot, overlay, existing, is_direct, text_r
                 verify = composite_verify(
                     tpl_bgr, check, x, y, w, h, overlay, screenshot, max_diff=max_diff,
                     min_match_ratio=min_ratio, small_match_ratio=small_ratio,
-                    allow_text_rescue=allow_text_rescue)
+                    allow_text_rescue=allow_text_rescue,
+                    exclusion_mask=exclusion_mask)
             if not verify['accepted']:
                 continue
 
@@ -1648,6 +2575,150 @@ def _match_white(white_sprites, screenshot, overlay, existing, is_direct, text_r
     return matches
 
 
+def _match_white_fuzzy(white_sprites, screenshot, overlay, existing, is_direct, text_regions):
+    sh, sw = screenshot.shape[:2]
+    if not white_sprites:
+        return []
+
+    covered = np.zeros((sh, sw), dtype=bool)
+    for e in existing:
+        r = e['rect']
+        x1, y1 = max(0, r['x']), max(0, r['y'])
+        x2 = min(sw, r['x'] + r['width'])
+        y2 = min(sh, r['y'] + r['height'])
+        covered[y1:y2, x1:x2] = True
+
+    uncovered = ~covered
+    if np.count_nonzero(uncovered) < MIN_MATCH_PIXELS:
+        return []
+
+    uncov_u8 = uncovered.astype(np.uint8) * 255
+    contours, _ = cv2.findContours(uncov_u8, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    total_contours = len(contours)
+    t_start = time.time()
+    matches = []
+
+    for ci, contour in enumerate(contours):
+        sys.stdout.write(f"\r  [3.5/3] white fuzzy: region ({ci+1}/{total_contours}) matched:{len(matches)}")
+        sys.stdout.flush()
+        x, y, w, h = cv2.boundingRect(contour)
+        if w < MIN_TEMPLATE_DIM or h < MIN_TEMPLATE_DIM:
+            continue
+        if cv2.contourArea(contour) < MIN_MATCH_PIXELS:
+            continue
+
+        rect_mask = uncovered[y:y + h, x:x + w]
+        if np.count_nonzero(rect_mask) < MIN_MATCH_PIXELS:
+            continue
+        cand_r = {'x': x, 'y': y, 'width': w, 'height': h}
+        if not is_direct and not any(_rects_overlap(cand_r, e['rect']) for e in existing):
+            continue
+        region = screenshot[y:y + h, x:x + w]
+        exclusion_mask = build_fuzzy_exclusion_mask(existing, x, y, w, h) if not is_direct else None
+
+        best = None
+        for widx, wsp in enumerate(white_sprites):
+            if _is_text_like_false_positive(wsp, cand_r, text_regions):
+                continue
+            if wsp['border']:
+                min_w, min_h = get_9slice_target_min_size(wsp['img'], wsp['border'])
+                if w < min_w or h < min_h:
+                    continue
+            else:
+                if w != wsp['w'] or h != wsp['h']:
+                    continue
+
+            resized = resize_sprite(wsp, w, h)
+            if len(resized.shape) == 3 and resized.shape[2] == 4:
+                wa = resized[:, :, 3]
+            else:
+                wa = np.full((h, w), 255, dtype=np.uint8)
+            opaque = wa > 250
+            if np.any(rect_mask & ~opaque):
+                continue
+            check = rect_mask & opaque
+            cc = np.count_nonzero(check)
+            if cc < MIN_MATCH_PIXELS:
+                continue
+
+            fill_bgr = _estimate_dominant_bgr(region, check)
+            if fill_bgr is None:
+                continue
+            tpl_bgr = np.zeros((h, w, 3), dtype=np.uint8)
+            tpl_bgr[opaque] = fill_bgr
+
+            if is_direct:
+                verify = verify_pixel_match(
+                    screenshot, tpl_bgr, check, x, y, max_diff=LAYER_FUZZY_MAX_DIFF,
+                    min_match_ratio=LAYER_FUZZY_MATCH_RATIO_MIN,
+                    small_match_ratio=LAYER_FUZZY_SMALL_MATCH_RATIO_MIN,
+                    allow_text_rescue=False,
+                    allow_local_diff_rescue=True)
+                occlusion_ratio = 0.0
+            else:
+                verify = composite_verify(
+                    tpl_bgr, check, x, y, w, h, overlay, screenshot, max_diff=LAYER_FUZZY_MAX_DIFF,
+                    min_match_ratio=LAYER_FUZZY_MATCH_RATIO_MIN,
+                    small_match_ratio=LAYER_FUZZY_SMALL_MATCH_RATIO_MIN,
+                    allow_text_rescue=False,
+                    exclusion_mask=exclusion_mask,
+                    allow_local_diff_rescue=True)
+                occlusion_ratio = _compute_candidate_occlusion_ratio(
+                    check, overlay, x, y, w, h, exclusion_mask=exclusion_mask)
+                if occlusion_ratio < LAYER_FUZZY_OCCLUSION_RATIO_MIN:
+                    continue
+
+            if exclusion_mask is None:
+                visible_mask = check
+            else:
+                visible_mask = check & ~exclusion_mask.astype(bool)
+            if _is_large_uniform_visible_region(region, visible_mask) and occlusion_ratio < WHITE_FUZZY_MIN_OCCLUSION_RATIO:
+                continue
+            if not _should_accept_common_fuzzy(1.0, verify, is_direct):
+                continue
+
+            rank = (
+                1 if verify.get('majority_rescued') else 0,
+                1 if verify.get('local_diff_rescued') or verify.get('focused_diff_rescued') else 0,
+                round(verify['median_diff'], 2),
+                -round(verify['match_ratio'], 6),
+            )
+            if best is None or rank < best['_rank']:
+                tint_color = [int(fill_bgr[2]), int(fill_bgr[1]), int(fill_bgr[0])]
+                best = {
+                    '_rank': rank,
+                    'white_idx': widx,
+                    'sprite_idx': wsp.get('base_sprite_idx', -1),
+                    'is_white': True,
+                    'is_9slice': wsp['border'] is not None,
+                    'rect': cand_r,
+                    'match_ratio': round(verify['match_ratio'], 6),
+                    'median_diff': round(verify['median_diff'], 2),
+                    'perfect': bool(verify['perfect']),
+                    'valid_pixels': verify['valid_pixels'],
+                    'scale': round(w / wsp['w'], 4),
+                    'candidate_score': 1.0,
+                    'rescue_candidate': False,
+                    'tint_color': tint_color,
+                    'text_rescued': bool(verify.get('text_rescued', False)),
+                    'text_pixels': int(verify.get('text_pixels', 0)),
+                    'text_ratio': round(float(verify.get('text_ratio', 0.0)), 6),
+                    'text_groups': verify.get('text_groups', []),
+                    'text_overlay_patch': verify.get('text_overlay_patch'),
+                    'majority_rescued': bool(verify.get('majority_rescued', False)),
+                    'render_in_overlay': False,
+                    'fuzzy_match': True,
+                }
+        if best:
+            best.pop('_rank', None)
+            matches.append(best)
+
+    elapsed = time.time() - t_start
+    sys.stdout.write(f"\r  [3.5/3] white fuzzy: done in {elapsed:.1f}s{' ':32}\n")
+    sys.stdout.flush()
+    return matches
+
+
 # ──────────────────── Debug 图片 ────────────────────
 
 def _layer_color(layer_num):
@@ -1684,7 +2755,7 @@ def _render_overlay_preview(overlay_bgra):
     return preview
 
 
-def save_overlay_debug(overlay_bgra, screenshot_bgr, debug_dir, stem):
+def save_overlay_debug(overlay_bgra, screenshot_bgr, debug_dir, stem, text_regions=None, matches=None):
     os.makedirs(debug_dir, exist_ok=True)
     raw_path = os.path.join(debug_dir, f"{stem}_overlay.png")
     preview_path = os.path.join(debug_dir, f"{stem}_overlay_preview.png")
@@ -1695,7 +2766,7 @@ def save_overlay_debug(overlay_bgra, screenshot_bgr, debug_dir, stem):
     cv2.imwrite(preview_path, preview)
 
     panel_w = max(screenshot_bgr.shape[1], preview.shape[1])
-    left = _make_labeled_panel(screenshot_bgr, "Screenshot", width=panel_w)
+    left = _make_labeled_panel(screenshot_bgr.copy(), "Screenshot", width=panel_w)
     right = _make_labeled_panel(preview, "Reconstructed", width=panel_w)
     compare = np.hstack([left, right])
     cv2.imwrite(compare_path, compare)
@@ -1704,9 +2775,8 @@ def save_overlay_debug(overlay_bgra, screenshot_bgr, debug_dir, stem):
     print(f"  Compare saved: {compare_path}")
     return raw_path, compare_path
 
-
 def generate_layer_debug(screenshot, layer_num, layer_matches, all_matches_before,
-                         sprites, white_sprites, debug_dir):
+                         sprites, white_sprites, debug_dir, text_regions=None):
     canvas = screenshot.copy()
 
     # draw previous layers with thin lines (dimmed)
@@ -1742,7 +2812,6 @@ def generate_layer_debug(screenshot, layer_num, layer_matches, all_matches_befor
             label += f" [{' '.join(tags)}]"
         cv2.putText(canvas, label, (r['x'] + 2, r['y'] - 6),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 1)
-
     out_path = os.path.join(debug_dir, f"layer_{layer_num}.png")
     cv2.imwrite(out_path, canvas)
     print(f"  Debug saved: {out_path}")
@@ -1752,7 +2821,7 @@ def generate_layer_debug(screenshot, layer_num, layer_matches, all_matches_befor
 # ──────────────────── 主流程 ────────────────────
 
 def match_sprites(screenshot_path, output_path, sprite_dirs, borders_path, whites_path,
-                   debug_dir=None, max_diff=DEFAULT_MAX_DIFF):
+                   debug_dir=None, max_diff=DEFAULT_MAX_DIFF, fuzzy_scales=None):
     t0 = time.time()
 
     screenshot = cv2.imread(screenshot_path)
@@ -1761,8 +2830,9 @@ def match_sprites(screenshot_path, output_path, sprite_dirs, borders_path, white
         sys.exit(1)
     sh, sw = screenshot.shape[:2]
     print(f"Screenshot: {sw}x{sh}, max_diff: {max_diff}")
-    text_regions = detect_text_regions(screenshot)
-    print(f"Detected {len(text_regions)} text exclusion regions")
+    fuzzy_scales = normalize_match_scales(fuzzy_scales)
+    print(f"Layer0 fuzzy scales: {fuzzy_scales}")
+    text_regions = []
 
     borders_map = {}
     if borders_path:
@@ -1797,7 +2867,8 @@ def match_sprites(screenshot_path, output_path, sprite_dirs, borders_path, white
 
         layer_matches = match_one_layer(
             layer, sprites, sliced_indices, white_sprites,
-            screenshot, overlay, all_matches, text_regions, max_diff=max_diff)
+            screenshot, overlay, all_matches, text_regions,
+            fuzzy_scales=fuzzy_scales, max_diff=max_diff)
 
         if not layer_matches:
             print(f"  Layer {layer}: no matches, done")
@@ -1818,14 +2889,18 @@ def match_sprites(screenshot_path, output_path, sprite_dirs, borders_path, white
         if debug_dir:
             generate_layer_debug(screenshot, layer, layer_matches,
                                  [m for m in all_matches if m.get('layer', 0) < layer],
-                                 sprites, white_sprites, debug_dir)
+                                 sprites, white_sprites, debug_dir, text_regions=text_regions)
             layer_overlay = build_overlay(all_matches, sprites, white_sprites, sh, sw)
-            save_overlay_debug(layer_overlay, screenshot, debug_dir, f"layer_{layer}")
+            save_overlay_debug(layer_overlay, screenshot, debug_dir, f"layer_{layer}",
+                               text_regions=text_regions, matches=all_matches)
         layer += 1
 
     final_overlay = build_overlay(all_matches, sprites, white_sprites, sh, sw)
     if debug_dir:
-        save_overlay_debug(final_overlay, screenshot, debug_dir, "final")
+        final_display_overlay = build_overlay(
+            all_matches, sprites, white_sprites, sh, sw, include_non_overlay=True)
+        save_overlay_debug(final_display_overlay, screenshot, debug_dir, "final",
+                           text_regions=text_regions, matches=all_matches)
 
     # ── 构建节点 + 覆盖树 ──
     match_nodes = []
@@ -1918,6 +2993,11 @@ if __name__ == '__main__':
     parser.add_argument('--debug-dir', help='Directory to save per-layer debug images')
     parser.add_argument('--max-diff', type=int, default=DEFAULT_MAX_DIFF,
                         help=f'Max per-channel pixel diff for verification (default {DEFAULT_MAX_DIFF})')
+    parser.add_argument('--fuzzy-scales',
+                        help='Comma-separated layer0 fuzzy original scales '
+                             f'(default {",".join(str(v) for v in DEFAULT_LAYER0_FUZZY_SCALES)})')
     args = parser.parse_args()
+    fuzzy_scales = parse_match_scales_arg(args.fuzzy_scales)
     match_sprites(args.screenshot, args.output, args.sprite_dirs,
-                  args.borders, args.whites, args.debug_dir, args.max_diff)
+                  args.borders, args.whites, args.debug_dir, args.max_diff,
+                  fuzzy_scales=fuzzy_scales)

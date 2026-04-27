@@ -15,6 +15,7 @@ namespace UnityGameFramework.Extension
             item.m_ResourceComponent = resourceComponent;
             return item;
         }
+
         protected override void Release(bool isShutdown)
         {
             SpriteCollection spriteCollection = (SpriteCollection) Target;

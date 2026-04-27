@@ -112,12 +112,13 @@ namespace UnityGameFramework.Extension
             while (current != null)
             {
                 var next = current.Next;
-                if (current.Value.SpriteObject.IsCanRelease())
+                var value = current.Value;
+                if (value.SpriteObject.IsCanRelease())
                 {
-                    m_SpriteCollectionPool.Unspawn(current.Value.Collection);
-                    ReferencePool.Release(current.Value.SpriteObject);
+                    m_SpriteCollectionPool.Unspawn(value.Collection);
+                    ReferencePool.Release(value.SpriteObject);
                     m_LoadedSpriteObjectsLinkedList.Remove(current);
-                    ReferencePool.Release(current.Value);
+                    ReferencePool.Release(value);
                 }
                 current = next;
             }
