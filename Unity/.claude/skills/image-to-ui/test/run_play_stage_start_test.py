@@ -40,7 +40,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run the direct play-stage-start sprite matcher test")
     parser.add_argument(
         "--fuzzy-scales",
-        help="Comma-separated layer0 fuzzy scales to pass into sprite_matcher.py",
+        help="Comma-separated fuzzy scales to pass into sprite_matcher.py",
     )
     return parser.parse_args()
 
@@ -98,7 +98,7 @@ def main() -> int:
     match_sprites = load_match_sprites(sprite_matcher_path)
     fuzzy_scales = args.fuzzy_scales if args.fuzzy_scales is not None else DEFAULT_FUZZY_SCALES
     if fuzzy_scales is not None:
-        print(f"Layer0 fuzzy scales: {fuzzy_scales}")
+        print(f"Fuzzy scales: {fuzzy_scales}")
     match_sprites(
         str(screenshot_path),
         str(output_json_path),
@@ -108,8 +108,6 @@ def main() -> int:
         str(debug_dir_path),
         fuzzy_scales=fuzzy_scales,
     )
-
-    print(f"Saved output to: {output_json_path}")
     return 0
 
 

@@ -37,7 +37,7 @@ class SpriteMatcherTests(unittest.TestCase):
 
         self.assertFalse(result["accepted"])
 
-    def test_layer0_fuzzy_accepts_localized_mismatch_block(self):
+    def test_fuzzy_accepts_localized_mismatch_block(self):
         expected = np.full((40, 40, 3), 100, dtype=np.uint8)
         region = expected.copy()
         region[10:24, 12:26] = 180
@@ -45,16 +45,15 @@ class SpriteMatcherTests(unittest.TestCase):
 
         result = sprite_matcher._analyze_region_match(
             region, expected, valid_mask, max_diff=24,
-            min_match_ratio=sprite_matcher.LAYER0_FUZZY_MATCH_RATIO_MIN,
-            small_match_ratio=sprite_matcher.LAYER0_FUZZY_SMALL_MATCH_RATIO_MIN,
-            allow_text_rescue=False,
+            min_match_ratio=sprite_matcher.FUZZY_MATCH_RATIO_MIN,
+            small_match_ratio=sprite_matcher.FUZZY_SMALL_MATCH_RATIO_MIN,
             allow_local_diff_rescue=True)
 
         self.assertTrue(result["accepted"])
         self.assertTrue(result["local_diff_rescued"])
         self.assertEqual(196, result["local_diff_pixels"])
 
-    def test_layer0_fuzzy_rejects_scattered_mismatch_pixels(self):
+    def test_fuzzy_rejects_scattered_mismatch_pixels(self):
         expected = np.full((40, 40, 3), 100, dtype=np.uint8)
         region = expected.copy()
         ys, xs = np.indices((40, 40))
@@ -64,14 +63,13 @@ class SpriteMatcherTests(unittest.TestCase):
 
         result = sprite_matcher._analyze_region_match(
             region, expected, valid_mask, max_diff=24,
-            min_match_ratio=sprite_matcher.LAYER0_FUZZY_MATCH_RATIO_MIN,
-            small_match_ratio=sprite_matcher.LAYER0_FUZZY_SMALL_MATCH_RATIO_MIN,
-            allow_text_rescue=False,
+            min_match_ratio=sprite_matcher.FUZZY_MATCH_RATIO_MIN,
+            small_match_ratio=sprite_matcher.FUZZY_SMALL_MATCH_RATIO_MIN,
             allow_local_diff_rescue=True)
 
         self.assertFalse(result["accepted"])
 
-    def test_layer0_fuzzy_accepts_large_focused_inner_difference(self):
+    def test_fuzzy_accepts_large_focused_inner_difference(self):
         expected = np.full((64, 64, 3), 100, dtype=np.uint8)
         region = expected.copy()
         region[14:50, 14:50] = 180
@@ -79,16 +77,15 @@ class SpriteMatcherTests(unittest.TestCase):
 
         result = sprite_matcher._analyze_region_match(
             region, expected, valid_mask, max_diff=24,
-            min_match_ratio=sprite_matcher.LAYER0_FUZZY_MATCH_RATIO_MIN,
-            small_match_ratio=sprite_matcher.LAYER0_FUZZY_SMALL_MATCH_RATIO_MIN,
-            allow_text_rescue=False,
+            min_match_ratio=sprite_matcher.FUZZY_MATCH_RATIO_MIN,
+            small_match_ratio=sprite_matcher.FUZZY_SMALL_MATCH_RATIO_MIN,
             allow_local_diff_rescue=True)
 
         self.assertTrue(result["accepted"])
         self.assertTrue(result["focused_diff_rescued"])
         self.assertEqual(1296, result["focused_diff_pixels"])
 
-    def test_layer0_fuzzy_majority_rescue_accepts_high_corr_majority_match(self):
+    def test_fuzzy_majority_rescue_accepts_high_corr_majority_match(self):
         verify = {
             "accepted": False,
             "match_ratio": 0.6734,
@@ -97,7 +94,7 @@ class SpriteMatcherTests(unittest.TestCase):
             "majority_rescued": False,
         }
 
-        accepted = sprite_matcher._should_accept_layer0_fuzzy_majority(0.9317, verify)
+        accepted = sprite_matcher._should_accept_fuzzy_majority(0.9317, verify)
 
         self.assertTrue(accepted)
         self.assertTrue(verify["accepted"])
@@ -221,7 +218,29 @@ class SpriteMatcherTests(unittest.TestCase):
         self.assertEqual(1, len(white_sprites))
         self.assertTrue(sprites[0]["is_white_source"])
 
-    def test_load_sprites_does_not_auto_detect_non_binary_sprite_as_white_source(self):
+    def test_load_sprites_auto_detects_grayscale_sprite_as_white_source(self):
+        img = np.zeros((16, 16, 4), dtype=np.uint8)
+        img[3:13, 3:13] = [220, 220, 220, 255]
+        img[5:11, 5:11] = [64, 64, 64, 255]
+        img[7:9, 7:9] = [0, 0, 0, 255]
+
+        with mock.patch.object(
+            sprite_matcher.os,
+            "walk",
+            return_value=[("C:/fake_sprites", [], ["GrayScale.png"])],
+        ), mock.patch.object(sprite_matcher.cv2, "imread", return_value=img):
+            sprites, sliced_indices, white_sprites = sprite_matcher.load_sprites(
+                ["C:/fake_sprites"],
+                {},
+                {},
+            )
+
+        self.assertEqual(1, len(sprites))
+        self.assertEqual([], sliced_indices)
+        self.assertEqual(1, len(white_sprites))
+        self.assertTrue(sprites[0]["is_white_source"])
+
+    def test_load_sprites_does_not_auto_detect_non_grayscale_sprite_as_white_source(self):
         img = np.zeros((16, 16, 4), dtype=np.uint8)
         img[3:13, 3:13] = [255, 255, 255, 255]
         img[6:10, 6:10] = [0, 0, 255, 255]
@@ -241,39 +260,17 @@ class SpriteMatcherTests(unittest.TestCase):
         self.assertEqual(0, len(white_sprites))
         self.assertFalse(sprites[0]["is_white_source"])
 
-    def test_collect_cover_candidate_peaks_uses_white_existing_only(self):
-        result_map = np.zeros((12, 12), dtype=np.float32)
-        result_map[3, 4] = 0.91
-        result_map[8, 8] = 0.99
-        existing = [
-            {
-                "is_white": True,
-                "rect": {"x": 4, "y": 3, "width": 4, "height": 4},
-            },
-            {
-                "is_white": False,
-                "rect": {"x": 8, "y": 8, "width": 2, "height": 2},
-            },
-        ]
-
-        peaks = sprite_matcher.collect_cover_candidate_peaks(
-            result_map, existing, tw=6, th=6, white_only=True, max_per_match=4)
-
-        coords = {(y, x) for y, x, _, _ in peaks}
-        self.assertIn((3, 4), coords)
-        self.assertNotIn((8, 8), coords)
-
     def test_parse_match_scales_arg_normalizes_and_deduplicates(self):
         parsed = sprite_matcher.parse_match_scales_arg("1.1, 1.0, 1.1, 0, bad, 0.9")
 
         self.assertEqual([1.1, 1.0, 0.9], parsed)
         self.assertEqual([1.1, 1.0, 0.9], sprite_matcher.normalize_match_scales("1.1, 1.0, 1.1, 0, bad, 0.9"))
         self.assertEqual(
-            sprite_matcher.DEFAULT_LAYER0_FUZZY_SCALES,
+            sprite_matcher.DEFAULT_FUZZY_SCALES,
             sprite_matcher.normalize_match_scales(None),
         )
 
-    def test_match_normal_accepts_high_coverage_border_under_white_overlay(self):
+    def test_match_normal_skips_border_sprites(self):
         img = np.zeros((24, 24, 4), dtype=np.uint8)
         img[:, :, :3] = [40, 40, 220]
         img[:, :, 3] = 255
@@ -292,26 +289,14 @@ class SpriteMatcherTests(unittest.TestCase):
 
         screenshot = np.zeros((48, 48, 3), dtype=np.uint8)
         screenshot[10:34, 12:36] = img[:, :, :3]
-        screenshot[16:28, 18:30] = [255, 255, 255]
 
         overlay = np.zeros((48, 48, 4), dtype=np.uint8)
-        overlay[16:28, 18:30, :3] = [255, 255, 255]
-        overlay[16:28, 18:30, 3] = 255
-        existing = [
-            {
-                "sprite_idx": 1,
-                "white_idx": 0,
-                "is_white": True,
-                "rect": {"x": 18, "y": 16, "width": 12, "height": 12},
-            }
-        ]
+        existing = []
 
         matches = sprite_matcher._match_normal(
-            [sprite], [], screenshot, overlay, existing, False, [], max_diff=sprite_matcher.DEFAULT_MAX_DIFF)
+            [sprite], [], screenshot, overlay, existing)
 
-        self.assertEqual(1, len(matches))
-        self.assertEqual({"x": 12, "y": 10, "width": 24, "height": 24}, matches[0]["rect"])
-        self.assertGreaterEqual(matches[0]["match_ratio"], sprite_matcher.UNDERLAY_MATCH_RATIO_MIN)
+        self.assertEqual(0, len(matches))
 
     def test_original_match_requires_exact_pixels(self):
         yy, xx = np.indices((12, 12))
@@ -337,14 +322,14 @@ class SpriteMatcherTests(unittest.TestCase):
         screenshot[7:19, 9:21] = img[:, :, :3]
 
         matches = sprite_matcher._match_normal(
-            [sprite], [], screenshot, None, [], True, [], max_diff=sprite_matcher.DEFAULT_MAX_DIFF)
+            [sprite], [], screenshot, None, [])
 
         self.assertEqual(1, len(matches))
         self.assertEqual({"x": 9, "y": 7, "width": 12, "height": 12}, matches[0]["rect"])
         self.assertEqual(1.0, matches[0]["match_ratio"])
         self.assertEqual(0.0, matches[0]["median_diff"])
 
-    def test_original_match_rejects_single_pixel_difference(self):
+    def test_original_match_accepts_near_perfect_with_small_diff(self):
         yy, xx = np.indices((12, 12))
         img = np.zeros((12, 12, 4), dtype=np.uint8)
         img[:, :, 0] = (xx * 17 + yy * 13) % 256
@@ -369,11 +354,12 @@ class SpriteMatcherTests(unittest.TestCase):
         screenshot[10, 12] = [31, 140, 220]
 
         matches = sprite_matcher._match_normal(
-            [sprite], [], screenshot, None, [], True, [], max_diff=sprite_matcher.DEFAULT_MAX_DIFF)
+            [sprite], [], screenshot, None, [])
 
-        self.assertEqual([], matches)
+        self.assertEqual(1, len(matches))
+        self.assertGreater(matches[0]["match_ratio"], 0.9)
 
-    def test_layer0_fuzzy_refines_scale_beyond_bucket(self):
+    def test_fuzzy_refines_scale_beyond_bucket(self):
         yy, xx = np.indices((128, 128))
         img = np.zeros((128, 128, 4), dtype=np.uint8)
         img[:, :, 0] = (xx * 11 + yy * 5 + 20) % 256
@@ -398,15 +384,50 @@ class SpriteMatcherTests(unittest.TestCase):
         scaled = sprite_matcher.resize_sprite(sprite, 143, 143)
         screenshot[y0:y0 + 143, x0:x0 + 143] = scaled[:, :, :3]
 
-        matches = sprite_matcher._match_normal_layer0_fuzzy(
-            [sprite], screenshot, [], [], fuzzy_scales=[1.0, 1.1])
+        matches = sprite_matcher._match_normal(
+            [sprite], [], screenshot, None, [],
+            fuzzy_scales=[1.0, 1.1])
 
         self.assertEqual(1, len(matches))
         self.assertEqual({"x": x0, "y": y0, "width": 143, "height": 143}, matches[0]["rect"])
         self.assertGreater(matches[0]["scale"], 1.1)
-        self.assertGreaterEqual(matches[0]["match_ratio"], sprite_matcher.LAYER0_FUZZY_MATCH_RATIO_MIN)
+        self.assertGreaterEqual(matches[0]["match_ratio"], sprite_matcher.FUZZY_MATCH_RATIO_MIN)
 
-    def test_build_overlay_skips_layer0_fuzzy_matches(self):
+    def test_fuzzy_allows_white_source_sprite(self):
+        img = np.zeros((64, 64, 4), dtype=np.uint8)
+        yy, xx = np.indices((64, 64))
+        ring = ((xx - 32) ** 2 + (yy - 32) ** 2 <= 29 ** 2) & ((xx - 32) ** 2 + (yy - 32) ** 2 >= 18 ** 2)
+        img[ring] = [48, 48, 48, 255]
+        sprite = {
+            "path": "C:/fake/GrayBadge.png",
+            "rel_path": "GrayBadge.png",
+            "img": img,
+            "w": 64,
+            "h": 64,
+            "ar": 1.0,
+            "border": None,
+            "base_sprite_idx": 0,
+            "is_white_source": True,
+            "white_idx": 0,
+        }
+        sprite.update(sprite_matcher.compute_sprite_metadata(img))
+
+        screenshot = np.zeros((120, 120, 3), dtype=np.uint8)
+        y0, x0 = 18, 26
+        scaled = sprite_matcher.resize_sprite(sprite, 70, 70)
+        screenshot[y0:y0 + 70, x0:x0 + 70] = scaled[:, :, :3]
+
+        matches = sprite_matcher._match_normal(
+            [sprite], [], screenshot, None, [],
+            fuzzy_scales=[1.0, 1.1])
+
+        self.assertGreaterEqual(len(matches), 1)
+        target = next((m for m in matches if m["rect"] == {"x": x0, "y": y0, "width": 70, "height": 70}), None)
+        self.assertIsNotNone(target)
+        self.assertTrue(target["is_white"])
+        self.assertEqual(0, target["white_idx"])
+
+    def test_build_overlay_renders_fuzzy_matches(self):
         img = np.zeros((16, 16, 4), dtype=np.uint8)
         img[:, :, :3] = [40, 120, 220]
         img[:, :, 3] = 255
@@ -430,17 +451,16 @@ class SpriteMatcherTests(unittest.TestCase):
                 "is_white": False,
                 "is_9slice": False,
                 "rect": {"x": 5, "y": 6, "width": 16, "height": 16},
-                "render_in_overlay": False,
-                "layer0_fuzzy": True,
+                "fuzzy_match": True,
             }
         ], [sprite], [], 40, 40)
 
-        self.assertEqual(0, int(np.count_nonzero(overlay[:, :, 3])))
+        self.assertGreater(int(np.count_nonzero(overlay[:, :, 3])), 0)
 
     def test_build_fuzzy_exclusion_mask_marks_overlapping_bbox_only(self):
         mask = sprite_matcher.build_fuzzy_exclusion_mask([
             {
-                "layer0_fuzzy": True,
+                "fuzzy_match": True,
                 "rect": {"x": 12, "y": 13, "width": 8, "height": 6},
             },
             {
@@ -448,7 +468,6 @@ class SpriteMatcherTests(unittest.TestCase):
                 "rect": {"x": 10, "y": 10, "width": 2, "height": 2},
             },
             {
-                "layer0_fuzzy": False,
                 "rect": {"x": 10, "y": 10, "width": 20, "height": 20},
             },
         ], 8, 10, 10, 10)
@@ -504,6 +523,46 @@ class SpriteMatcherTests(unittest.TestCase):
         result = sprite_matcher.verify_solid_shape_match(screenshot, alpha > 250, x0, y0)
 
         self.assertFalse(result["accepted"])
+
+    def test_fuzzy_solid_shape_accepts_inner_occlusion(self):
+        alpha = np.zeros((28, 28), dtype=np.uint8)
+        alpha[4:24, 4:24] = 255
+
+        screenshot = np.full((56, 56, 3), [24, 32, 48], dtype=np.uint8)
+        tint_bgr = np.array([53, 2, 139], dtype=np.uint8)
+        y0, x0 = 11, 13
+        screenshot[y0:y0 + 28, x0:x0 + 28][alpha > 250] = tint_bgr
+        screenshot[y0 + 10:y0 + 18, x0 + 10:x0 + 18] = [235, 253, 254]
+
+        result = sprite_matcher.verify_solid_shape_fuzzy_match(screenshot, alpha > 250, x0, y0)
+
+        self.assertTrue(result["accepted"])
+        self.assertEqual("inner_occlusion", result["white_fuzzy_mode"])
+        self.assertGreaterEqual(result["edge_match_ratio"], sprite_matcher.WHITE_SOURCE_FUZZY_INNER_EDGE_RATIO_MIN)
+
+    def test_fuzzy_solid_shape_accepts_small_edge_occlusion(self):
+        alpha = np.zeros((28, 28), dtype=np.uint8)
+        alpha[4:24, 4:24] = 255
+
+        screenshot = np.full((56, 56, 3), [24, 32, 48], dtype=np.uint8)
+        tint_bgr = np.array([53, 2, 139], dtype=np.uint8)
+        y0, x0 = 11, 13
+        screenshot[y0:y0 + 28, x0:x0 + 28][alpha > 250] = tint_bgr
+        screenshot[y0 + 4:y0 + 10, x0 + 4:x0 + 8] = [235, 253, 254]
+
+        result = sprite_matcher.verify_solid_shape_fuzzy_match(screenshot, alpha > 250, x0, y0)
+
+        self.assertTrue(result["accepted"])
+        self.assertEqual("edge_occlusion", result["white_fuzzy_mode"])
+        self.assertGreaterEqual(result["inner_match_ratio"], sprite_matcher.WHITE_SOURCE_FUZZY_EDGE_INNER_RATIO_MIN)
+
+    def test_central_exclusion_hole_rejects_halo_candidate(self):
+        alpha = np.zeros((32, 32), dtype=bool)
+        alpha[4:28, 4:28] = True
+        exclusion = np.zeros((32, 32), dtype=bool)
+        exclusion[8:24, 8:24] = True
+
+        self.assertTrue(sprite_matcher._is_central_exclusion_hole(alpha, exclusion))
 
     def test_composite_solid_shape_accepts_tinted_underlay_with_overlay(self):
         alpha = np.zeros((28, 28), dtype=np.uint8)
@@ -587,7 +646,7 @@ class SpriteMatcherTests(unittest.TestCase):
         screenshot = np.full((20, 20, 3), [32, 48, 200], dtype=np.uint8)
 
         matches = sprite_matcher._match_white_fuzzy(
-            [sprite], screenshot, None, [], True, [])
+            [sprite], screenshot, None, [])
 
         self.assertEqual([], matches)
 
