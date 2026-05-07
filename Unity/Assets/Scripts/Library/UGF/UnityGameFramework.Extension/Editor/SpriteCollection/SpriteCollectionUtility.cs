@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 
 namespace UnityGameFramework.Extension.Editor
 {
@@ -14,6 +15,7 @@ namespace UnityGameFramework.Extension.Editor
                 SpriteCollection collection = AssetDatabase.LoadAssetAtPath<SpriteCollection>(path);
                 collection.Pack();
             }
+            Debug.Log($"Refresh SpriteCollection complete, total: {guids.Length}");
         }
     }
 }

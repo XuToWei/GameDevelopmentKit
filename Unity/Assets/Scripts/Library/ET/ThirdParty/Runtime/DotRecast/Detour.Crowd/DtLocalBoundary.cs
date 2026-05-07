@@ -35,6 +35,8 @@ namespace DotRecast.Detour.Crowd
         private List<DtSegment> m_segs = new List<DtSegment>();
         private List<long> m_polys = new List<long>();
         private List<long> m_parents = new List<long>();
+        private List<RcSegmentVert> m_segmentVerts = new List<RcSegmentVert>();
+        private List<long> m_segmentRefs = new List<long>();
 
         public DtLocalBoundary()
         {
@@ -107,17 +109,17 @@ namespace DotRecast.Detour.Crowd
                 // Secondly, store all polygon edges.
                 m_segs.Clear();
 
-                var segmentVerts = new List<RcSegmentVert>();
-                var segmentRefs = new List<long>();
-                
+                m_segmentVerts.Clear();
+                m_segmentRefs.Clear();
+
                 for (int j = 0; j < m_polys.Count; ++j)
                 {
-                    var result = navquery.GetPolyWallSegments(m_polys[j], false, filter, ref segmentVerts, ref segmentRefs);
+                    var result = navquery.GetPolyWallSegments(m_polys[j], false, filter, ref m_segmentVerts, ref m_segmentRefs);
                     if (result.Succeeded())
                     {
-                        for (int k = 0; k < segmentRefs.Count; ++k)
+                        for (int k = 0; k < m_segmentRefs.Count; ++k)
                         {
-                            RcSegmentVert s = segmentVerts[k];
+                            RcSegmentVert s = m_segmentVerts[k];
                             var s0 = s.vmin;
                             var s3 = s.vmax;
 
