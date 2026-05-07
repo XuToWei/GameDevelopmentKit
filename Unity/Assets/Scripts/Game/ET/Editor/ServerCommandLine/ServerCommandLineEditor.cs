@@ -20,7 +20,7 @@ namespace ET.Editor
             GetWindow<ServerCommandLineEditor>("Server CommandLine", DockDefine.Types);
         }
         
-        private int selectStartConfigIndex = 1;
+        private int selectStartConfigIndex;
         private string[] startConfigs;
         private string startConfig;
         private DevelopMode developMode;
@@ -38,11 +38,12 @@ namespace ET.Editor
                 }
             }
             this.startConfigs = configs.ToArray();
+            this.selectStartConfigIndex = configs.IndexOf("Localhost");
         }
 
         private void OnGUI()
         {
-            selectStartConfigIndex = EditorGUILayout.Popup(selectStartConfigIndex, this.startConfigs);
+            this.selectStartConfigIndex = EditorGUILayout.Popup(this.selectStartConfigIndex, this.startConfigs);
             this.startConfig = this.startConfigs[this.selectStartConfigIndex];
             this.developMode = (DevelopMode) EditorGUILayout.EnumPopup("起服模式：", this.developMode);
 
