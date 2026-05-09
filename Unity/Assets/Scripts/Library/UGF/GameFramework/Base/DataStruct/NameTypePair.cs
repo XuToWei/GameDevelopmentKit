@@ -1,58 +1,40 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
 using System;
 using System.Runtime.InteropServices;
 
 namespace GameFramework
 {
     /// <summary>
-    /// 类型和名称的组合值。
+    /// 名称和类型的组合值。
     /// </summary>
     [StructLayout(LayoutKind.Auto)]
-    public struct TypeNamePair : IEquatable<TypeNamePair>
+    public struct NameTypePair : IEquatable<NameTypePair>
     {
         private readonly Type m_Type;
         private readonly string m_Name;
 
         /// <summary>
-        /// 初始化类型和名称的组合值的新实例。
+        /// 初始化名称和类型的组合值的新实例。
         /// </summary>
-        /// <param name="type">类型。</param>
-        public TypeNamePair(Type type)
-            : this(type, string.Empty)
-        {
-        }
-
-        /// <summary>
-        /// 初始化类型和名称的组合值的新实例。
-        /// </summary>
-        /// <param name="type">类型。</param>
         /// <param name="name">名称。</param>
-        public TypeNamePair(Type type, string name)
+        public NameTypePair(string name)
+            : this(name, null)
         {
-            if (type == null)
-            {
-                throw new GameFrameworkException("Type is invalid.");
-            }
-
-            m_Type = type;
-            m_Name = name ?? string.Empty;
         }
 
         /// <summary>
-        /// 获取类型。
+        /// 初始化名称和类型的组合值的新实例。
         /// </summary>
-        public Type Type
+        /// <param name="name">名称。</param>
+        /// <param name="type">类型。</param>
+        public NameTypePair(string name, Type type)
         {
-            get
+            if (name == null)
             {
-                return m_Type;
+                throw new GameFrameworkException("Name is invalid.");
             }
+
+            m_Name = name;
+            m_Type = type;
         }
 
         /// <summary>
@@ -67,18 +49,28 @@ namespace GameFramework
         }
 
         /// <summary>
-        /// 获取类型和名称的组合值字符串。
+        /// 获取类型。
         /// </summary>
-        /// <returns>类型和名称的组合值字符串。</returns>
+        public Type Type
+        {
+            get
+            {
+                return m_Type;
+            }
+        }
+
+        /// <summary>
+        /// 获取名称和类型的组合值字符串。
+        /// </summary>
+        /// <returns>名称和类型的组合值字符串。</returns>
         public override string ToString()
         {
-            if (m_Type == null)
+            if (m_Name == null)
             {
-                throw new GameFrameworkException("Type is invalid.");
+                throw new GameFrameworkException("Name is invalid.");
             }
 
-            string typeName = m_Type.FullName;
-            return string.IsNullOrEmpty(m_Name) ? typeName : Utility.Text.Format("{0}.{1}", typeName, m_Name);
+            return m_Type == null ? m_Name : Utility.Text.Format("{0}.{1}", m_Name, m_Type.FullName);
         }
 
         /// <summary>
@@ -87,7 +79,7 @@ namespace GameFramework
         /// <returns>对象的哈希值。</returns>
         public override int GetHashCode()
         {
-            return m_Type.GetHashCode() ^ m_Name.GetHashCode();
+            return m_Type == null ? m_Name.GetHashCode() : m_Name.GetHashCode() ^ m_Type.GetHashCode();
         }
 
         /// <summary>
@@ -97,7 +89,7 @@ namespace GameFramework
         /// <returns>被比较的对象是否与自身相等。</returns>
         public override bool Equals(object obj)
         {
-            return obj is TypeNamePair && Equals((TypeNamePair)obj);
+            return obj is NameTypePair && Equals((NameTypePair)obj);
         }
 
         /// <summary>
@@ -105,7 +97,7 @@ namespace GameFramework
         /// </summary>
         /// <param name="value">要比较的对象。</param>
         /// <returns>被比较的对象是否与自身相等。</returns>
-        public bool Equals(TypeNamePair value)
+        public bool Equals(NameTypePair value)
         {
             return m_Type == value.m_Type && m_Name == value.m_Name;
         }
@@ -116,7 +108,7 @@ namespace GameFramework
         /// <param name="a">值 a。</param>
         /// <param name="b">值 b。</param>
         /// <returns>两个对象是否相等。</returns>
-        public static bool operator ==(TypeNamePair a, TypeNamePair b)
+        public static bool operator ==(NameTypePair a, NameTypePair b)
         {
             return a.Equals(b);
         }
@@ -127,7 +119,7 @@ namespace GameFramework
         /// <param name="a">值 a。</param>
         /// <param name="b">值 b。</param>
         /// <returns>两个对象是否不相等。</returns>
-        public static bool operator !=(TypeNamePair a, TypeNamePair b)
+        public static bool operator !=(NameTypePair a, NameTypePair b)
         {
             return !(a == b);
         }

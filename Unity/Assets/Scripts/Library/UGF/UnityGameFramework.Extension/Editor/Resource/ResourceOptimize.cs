@@ -105,39 +105,44 @@ namespace UnityGameFramework.Extension.Editor
 
         private void OptimizeSprite()
         {
-            var sprite2Collection = new Dictionary<string, string>();
+            var sprite2Atlas = new Dictionary<string, string>();
             var searchInFolders = new string[] { "Assets/Res" };
-            var scGuids = AssetDatabase.FindAssets("t:SpriteCollection", searchInFolders);
-            foreach (string scGuid in scGuids)
+            var saGuids = AssetDatabase.FindAssets("t:SpriteAtlas", searchInFolders);
+            foreach (string scGuid in saGuids)
             {
-                var scPath = AssetDatabase.GUIDToAssetPath(scGuid);
-                var sc = AssetDatabase.LoadAssetAtPath<SpriteCollection>(scPath);
-                sc.Pack();
-                foreach (Sprite sprite in sc.Sprites)
+                var saPath = AssetDatabase.GUIDToAssetPath(scGuid);
+                var sa = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(saPath);
+                int spriteCount = sa.spriteCount;
+                var sprites = new Sprite[spriteCount];
+                sa.GetSprites(sprites);
+                foreach (Sprite sprite in sprites)
                 {
                     string spritePath = AssetDatabase.GetAssetPath(sprite);
                     string spriteGuide = AssetDatabase.AssetPathToGUID(spritePath);
-                    if (!sprite2Collection.TryAdd(spriteGuide, scPath))
+                    if (!sprite2Atlas.TryAdd(spriteGuide, saPath))
                     {
-                        throw new GameFrameworkException($"[{spritePath}]被重复添加进不同的SpriteCollection（[{sprite2Collection[spriteGuide]}]，[{scPath}]），请检查清理！");
+                        throw new GameFrameworkException($"[{spritePath}]被重复添加进不同的SpriteAtlas（[{sprite2Atlas[spriteGuide]}]，[{saPath}]），请检查清理！");
                     }
                 }
             }
             foreach (var asset in m_ResourceCollection.GetAssets())
             {
-                if (sprite2Collection.ContainsKey(asset.Guid) || scGuids.Contains(asset.Guid))
+                if (sprite2Atlas.ContainsKey(asset.Guid) || saGuids.Contains(asset.Guid))
                 {
                     asset.Resource.UnassignAsset(asset);
                 }
             }
-            foreach (var scGuid in scGuids)
+            foreach (var saGuid in saGuids)
             {
-                var scPath = AssetDatabase.GUIDToAssetPath(scGuid);
-                var sc = AssetDatabase.LoadAssetAtPath<SpriteCollection>(scPath);
-                var assets = new List<string>();
-                assets.Add(scPath);
-                foreach (var spritePath in sc.Names)
+                var saPath = AssetDatabase.GUIDToAssetPath(saGuid);
+                var sa = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(saPath);
+                var assets = new List<string> { saPath };
+                int spriteCount = sa.spriteCount;
+                Sprite[] sprites = new Sprite[spriteCount];
+                sa.GetSprites(sprites);
+                foreach (var sprite in sprites)
                 {
+                    string spritePath = AssetDatabase.GetAssetPath(sprite);
                     assets.Add(spritePath);
                 }
                 assets.Sort(string.CompareOrdinal);

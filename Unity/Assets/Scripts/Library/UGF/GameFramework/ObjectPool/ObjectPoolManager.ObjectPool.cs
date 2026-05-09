@@ -18,7 +18,7 @@ namespace GameFramework.ObjectPool
         /// <typeparam name="T">对象类型。</typeparam>
         private sealed class ObjectPool<T> : ObjectPoolBase, IObjectPool<T> where T : ObjectBase
         {
-            private readonly GameFrameworkMultiDictionary<string, Object<T>> m_Objects;
+            private readonly GameFrameworkMultiDictionary<NameTypePair, Object<T>> m_Objects;
             private readonly Dictionary<object, Object<T>> m_ObjectMap;
             private readonly ReleaseObjectFilterCallback<T> m_DefaultReleaseObjectFilterCallback;
             private readonly List<T> m_CachedCanReleaseObjects;
@@ -42,7 +42,7 @@ namespace GameFramework.ObjectPool
             public ObjectPool(string name, bool allowMultiSpawn, float autoReleaseInterval, int capacity, float expireTime, int priority)
                 : base(name)
             {
-                m_Objects = new GameFrameworkMultiDictionary<string, Object<T>>();
+                m_Objects = new GameFrameworkMultiDictionary<NameTypePair, Object<T>>();
                 m_ObjectMap = new Dictionary<object, Object<T>>();
                 m_DefaultReleaseObjectFilterCallback = DefaultReleaseObjectFilterCallback;
                 m_CachedCanReleaseObjects = new List<T>();
@@ -196,7 +196,7 @@ namespace GameFramework.ObjectPool
                 }
 
                 Object<T> internalObject = Object<T>.Create(obj, spawned);
-                m_Objects.Add(obj.Name, internalObject);
+                m_Objects.Add(new NameTypePair(obj.Name, obj.Type), internalObject);
                 m_ObjectMap.Add(obj.Target, internalObject);
 
                 if (Count > m_Capacity)
@@ -211,7 +211,7 @@ namespace GameFramework.ObjectPool
             /// <returns>要检查的对象是否存在。</returns>
             public bool CanSpawn()
             {
-                return CanSpawn(string.Empty);
+                return CanSpawn(new NameTypePair(string.Empty));
             }
 
             /// <summary>
@@ -221,17 +221,33 @@ namespace GameFramework.ObjectPool
             /// <returns>要检查的对象是否存在。</returns>
             public bool CanSpawn(string name)
             {
-                if (name == null)
-                {
-                    throw new GameFrameworkException("Name is invalid.");
-                }
+                return CanSpawn(new NameTypePair(name));
+            }
 
+            /// <summary>
+            /// 检查对象。
+            /// </summary>
+            /// <param name="name">对象名称。</param>
+            /// <param name="type">对象类型。</param>
+            /// <returns>要检查的对象是否存在。</returns>
+            public bool CanSpawn(string name, Type type)
+            {
+                return CanSpawn(new NameTypePair(name, type));
+            }
+
+            /// <summary>
+            /// 检查对象。
+            /// </summary>
+            /// <param name="nameTypePair">对象名称和类型的组合值。</param>
+            /// <returns>要检查的对象是否存在。</returns>
+            public bool CanSpawn(NameTypePair nameTypePair)
+            {
                 GameFrameworkLinkedListRange<Object<T>> objectRange = default(GameFrameworkLinkedListRange<Object<T>>);
-                if (m_Objects.TryGetValue(name, out objectRange))
+                if (m_Objects.TryGetValue(nameTypePair, out objectRange))
                 {
                     foreach (Object<T> internalObject in objectRange)
                     {
-                        if (m_AllowMultiSpawn || !internalObject.IsInUse)
+                        if ((m_AllowMultiSpawn || !internalObject.IsInUse))
                         {
                             return true;
                         }
@@ -247,7 +263,7 @@ namespace GameFramework.ObjectPool
             /// <returns>要获取的对象。</returns>
             public T Spawn()
             {
-                return Spawn(string.Empty);
+                return Spawn(new NameTypePair(string.Empty));
             }
 
             /// <summary>
@@ -257,13 +273,29 @@ namespace GameFramework.ObjectPool
             /// <returns>要获取的对象。</returns>
             public T Spawn(string name)
             {
-                if (name == null)
-                {
-                    throw new GameFrameworkException("Name is invalid.");
-                }
+                return Spawn(new NameTypePair(name));
+            }
 
+            /// <summary>
+            /// 获取对象。
+            /// </summary>
+            /// <param name="name">对象名称。</param>
+            /// <param name="type">对象类型。</param>
+            /// <returns>要获取的对象。</returns>
+            public T Spawn(string name, Type type)
+            {
+                return Spawn(new NameTypePair(name, type));
+            }
+
+            /// <summary>
+            /// 获取对象。
+            /// </summary>
+            /// <param name="nameTypePair">对象名称和类型的组合值。</param>
+            /// <returns>要获取的对象。</returns>
+            public T Spawn(NameTypePair nameTypePair)
+            {
                 GameFrameworkLinkedListRange<Object<T>> objectRange = default(GameFrameworkLinkedListRange<Object<T>>);
-                if (m_Objects.TryGetValue(name, out objectRange))
+                if (m_Objects.TryGetValue(nameTypePair, out objectRange))
                 {
                     foreach (Object<T> internalObject in objectRange)
                     {
@@ -431,7 +463,7 @@ namespace GameFramework.ObjectPool
                     return false;
                 }
 
-                m_Objects.Remove(internalObject.Name, internalObject);
+                m_Objects.Remove(new NameTypePair(internalObject.Name, internalObject.Type), internalObject);
                 m_ObjectMap.Remove(internalObject.Peek().Target);
 
                 internalObject.Release(false);
@@ -522,11 +554,11 @@ namespace GameFramework.ObjectPool
             public override ObjectInfo[] GetAllObjectInfos()
             {
                 List<ObjectInfo> results = new List<ObjectInfo>();
-                foreach (KeyValuePair<string, GameFrameworkLinkedListRange<Object<T>>> objectRanges in m_Objects)
+                foreach (KeyValuePair<NameTypePair, GameFrameworkLinkedListRange<Object<T>>> objectRanges in m_Objects)
                 {
                     foreach (Object<T> internalObject in objectRanges.Value)
                     {
-                        results.Add(new ObjectInfo(internalObject.Name, internalObject.Locked, internalObject.CustomCanReleaseFlag, internalObject.Priority, internalObject.LastUseTime, internalObject.SpawnCount));
+                        results.Add(new ObjectInfo(internalObject.Name, internalObject.Type, internalObject.Locked, internalObject.CustomCanReleaseFlag, internalObject.Priority, internalObject.LastUseTime, internalObject.SpawnCount));
                     }
                 }
 

@@ -22,7 +22,7 @@ namespace GameFramework.Resource
             private sealed partial class LoadResourceAgent : ITaskAgent<LoadResourceTaskBase>
             {
                 private static readonly Dictionary<string, string> s_CachedResourceNames = new Dictionary<string, string>(StringComparer.Ordinal);
-                private static readonly HashSet<string> s_LoadingAssetNames = new HashSet<string>(StringComparer.Ordinal);
+                private static readonly HashSet<NameTypePair> s_LoadingAssetNames = new HashSet<NameTypePair>();
                 private static readonly HashSet<string> s_LoadingResourceNames = new HashSet<string>(StringComparer.Ordinal);
 
                 private readonly ILoadResourceAgentHelper m_Helper;
@@ -157,7 +157,8 @@ namespace GameFramework.Resource
                         return StartTaskStatus.HasToWait;
                     }
 
-                    if (IsAssetLoading(m_Task.AssetName))
+                    NameTypePair assetKey = new NameTypePair(m_Task.AssetName, m_Task.AssetType);
+                    if (IsAssetLoading(assetKey))
                     {
                         m_Task.StartTime = default(DateTime);
                         return StartTaskStatus.HasToWait;
@@ -165,7 +166,7 @@ namespace GameFramework.Resource
 
                     if (!m_Task.IsScene)
                     {
-                        AssetObject assetObject = m_ResourceLoader.m_AssetPool.Spawn(m_Task.AssetName);
+                        AssetObject assetObject = m_ResourceLoader.m_AssetPool.Spawn(assetKey);
                         if (assetObject != null)
                         {
                             OnAssetObjectReady(assetObject);
@@ -189,7 +190,7 @@ namespace GameFramework.Resource
                         return StartTaskStatus.HasToWait;
                     }
 
-                    s_LoadingAssetNames.Add(m_Task.AssetName);
+                    s_LoadingAssetNames.Add(assetKey);
 
                     ResourceObject resourceObject = m_ResourceLoader.m_ResourcePool.Spawn(resourceName);
                     if (resourceObject != null)
@@ -248,9 +249,9 @@ namespace GameFramework.Resource
                     m_Task = null;
                 }
 
-                private static bool IsAssetLoading(string assetName)
+                private static bool IsAssetLoading(NameTypePair assetKey)
                 {
-                    return s_LoadingAssetNames.Contains(assetName);
+                    return s_LoadingAssetNames.Contains(assetKey);
                 }
 
                 private static bool IsResourceLoading(string resourceName)
@@ -281,7 +282,7 @@ namespace GameFramework.Resource
                 {
                     m_Helper.Reset();
                     m_Task.OnLoadAssetFailure(this, status, errorMessage);
-                    s_LoadingAssetNames.Remove(m_Task.AssetName);
+                    s_LoadingAssetNames.Remove(new NameTypePair(m_Task.AssetName, m_Task.AssetType));
                     s_LoadingResourceNames.Remove(m_Task.ResourceInfo.ResourceName.Name);
                     m_Task.Done = true;
                 }
@@ -322,15 +323,16 @@ namespace GameFramework.Resource
                 private void OnLoadResourceAgentHelperLoadComplete(object sender, LoadResourceAgentHelperLoadCompleteEventArgs e)
                 {
                     AssetObject assetObject = null;
+                    NameTypePair assetKey = new NameTypePair(m_Task.AssetName, m_Task.AssetType);
                     if (m_Task.IsScene)
                     {
-                        assetObject = m_ResourceLoader.m_AssetPool.Spawn(m_Task.AssetName);
+                        assetObject = m_ResourceLoader.m_AssetPool.Spawn(assetKey);
                     }
 
                     if (assetObject == null)
                     {
                         List<object> dependencyAssets = m_Task.GetDependencyAssets();
-                        assetObject = AssetObject.Create(m_Task.AssetName, e.Asset, dependencyAssets, m_Task.ResourceObject.Target, m_ResourceHelper, m_ResourceLoader);
+                        assetObject = AssetObject.Create(m_Task.AssetName, m_Task.AssetType, e.Asset, dependencyAssets, m_Task.ResourceObject.Target, m_ResourceHelper, m_ResourceLoader);
                         m_ResourceLoader.m_AssetPool.Register(assetObject, true);
                         m_ResourceLoader.m_AssetToResourceMap.Add(e.Asset, m_Task.ResourceObject.Target);
                         foreach (object dependencyAsset in dependencyAssets)
@@ -347,7 +349,7 @@ namespace GameFramework.Resource
                         }
                     }
 
-                    s_LoadingAssetNames.Remove(m_Task.AssetName);
+                    s_LoadingAssetNames.Remove(assetKey);
                     OnAssetObjectReady(assetObject);
                 }
 

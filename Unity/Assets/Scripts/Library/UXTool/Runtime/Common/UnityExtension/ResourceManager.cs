@@ -13,13 +13,13 @@ using Object = UnityEngine.Object;
 internal class ResourceManager
 {
     private static ResourceComponent s_ResourceComponent;
-    private static SpriteCollectionComponent s_SpriteCollectionComponent;
+    private static AssetSetComponent s_AssetSetComponent;
     private static AssetCollection s_PreloadAsset;
 
     internal static async UniTask InitAsync()
     {
         s_ResourceComponent = GameEntry.GetComponent<ResourceComponent>();
-        s_SpriteCollectionComponent = GameEntry.GetComponent<SpriteCollectionComponent>();
+        s_AssetSetComponent = GameEntry.GetComponent<AssetSetComponent>();
         s_PreloadAsset = await s_ResourceComponent.LoadAssetAsync<AssetCollection>(UXGUIConfig.UXToolAssetCollectionPath);
     }
 
@@ -55,68 +55,61 @@ internal class ResourceManager
     }
 
     [Serializable]
-    internal class UXImageLocalizationWaitSet : ISetSpriteObject
+    internal class UXImageLocalizationSet : AssetSet<Sprite>
     {
         [ShowInInspector]
-        private Image m_Image;
+        private UXImage m_UXImage;
+        [ShowInInspector]
+        private Sprite m_CurSprite;
 
-        public static UXImageLocalizationWaitSet Create(Image obj, string collection, string spriteName)
+        public static UXImageLocalizationSet Create(UXImage uxImage, string spritePath)
         {
-            UXImageLocalizationWaitSet waitSet = ReferencePool.Acquire<UXImageLocalizationWaitSet>();
-            waitSet.m_Image = obj;
-            waitSet.SpritePath = spriteName;
-            waitSet.CollectionPath = collection;
-            return waitSet;
+            UXImageLocalizationSet localizationSet = ReferencePool.Acquire<UXImageLocalizationSet>();
+            localizationSet.m_UXImage = uxImage;
+            localizationSet.AssetPath = spritePath;
+            localizationSet.Target = uxImage;
+            return localizationSet;
         }
 
-        [ShowInInspector]
-        public string SpritePath { get; private set; }
-
-        [ShowInInspector]
-        public string CollectionPath { get; private set; }
-
-        [ShowInInspector]
-        public Sprite CurSprite { get; private set; }
-
-        public void SetSprite(Sprite sprite)
+        public override void SetAsset(Sprite asset)
         {
-            if (m_Image != null)
+            if (m_UXImage != null)
             {
-                m_Image.sprite = sprite;
-                CurSprite = sprite;
-                if (m_Image.sprite == null)
+                m_UXImage.sprite = asset;
+                m_CurSprite = asset;
+                if (asset == null)
                 {
-                    m_Image.sprite = Load<Sprite>(UXGUIConfig.UXGUINeedReplaceSpritePathReplace);
+                    m_UXImage.sprite = Load<Sprite>(UXGUIConfig.UXGUINeedReplaceSpritePathReplace);
                 }
             }
         }
 
-        public bool IsCanRelease()
+        public override bool IsCanRelease()
         {
-            return m_Image == null || m_Image.sprite != CurSprite && CurSprite != null;
+            return m_UXImage == null || m_UXImage.sprite != m_CurSprite && m_CurSprite != null;
         }
 
-        public void Clear()
+        public override void Clear()
         {
-            m_Image = null;
-            SpritePath = null;
-            CollectionPath = null;
-            CurSprite = null;
+            base.Clear();
+            m_UXImage = null;
+            m_CurSprite = null;
         }
     }
     
-    internal static void LoadSprite(Image image, string path)
+    internal static void LoadSprite(UXImage uxImage, string spritePath)
     {
-        if(string.IsNullOrEmpty(path)) return;
-        if (s_SpriteCollectionComponent != null)
+        if(string.IsNullOrEmpty(spritePath))
+            return;
+        if (s_AssetSetComponent != null)
         {
-            UXImageLocalizationWaitSet waitSet = UXImageLocalizationWaitSet.Create(image, Path.ChangeExtension(path, ".asset"), path);
-            s_SpriteCollectionComponent.SetSprite(waitSet);
+            UXImageLocalizationSet localizationSet = UXImageLocalizationSet.Create(uxImage, spritePath);
+            s_AssetSetComponent.SetByResource(localizationSet);
         }
         else
         {
 #if UNITY_EDITOR
-            image.sprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            uxImage.sprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
 #endif
         }
     }

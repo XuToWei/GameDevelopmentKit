@@ -19,7 +19,7 @@ public class LanguageController
                 choices.Add(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_显示key));
                 choices.Add(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_无文字模式));
                 choices.Add(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_游戏内语言));
-                foreach (int i in EditorLocalizationTool.ReadyLanguageTypes)
+                for (int i = 0; i < EditorLocalizationTool.ReadyLanguageTypes.Length; i++)
                 {
                     choices.Add(LocalizationLanguage.GetLanguage(i));
                 }

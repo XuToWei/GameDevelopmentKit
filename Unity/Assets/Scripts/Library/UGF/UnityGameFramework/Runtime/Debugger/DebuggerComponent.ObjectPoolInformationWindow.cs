@@ -59,6 +59,7 @@ namespace UnityGameFramework.Runtime
                     GUILayout.BeginHorizontal();
                     {
                         GUILayout.Label("<b>Name</b>");
+                        GUILayout.Label("<b>Type</b>", GUILayout.Width(120f));
                         GUILayout.Label("<b>Locked</b>", GUILayout.Width(60f));
                         GUILayout.Label(objectPool.AllowMultiSpawn ? "<b>Count</b>" : "<b>In Use</b>", GUILayout.Width(60f));
                         GUILayout.Label("<b>Flag</b>", GUILayout.Width(60f));
@@ -74,6 +75,7 @@ namespace UnityGameFramework.Runtime
                             GUILayout.BeginHorizontal();
                             {
                                 GUILayout.Label(string.IsNullOrEmpty(objectInfos[i].Name) ? "<None>" : objectInfos[i].Name);
+                                GUILayout.Label(objectInfos[i].Type == null ? "<None>" : objectInfos[i].Type.FullName, GUILayout.Width(120f));
                                 GUILayout.Label(objectInfos[i].Locked.ToString(), GUILayout.Width(60f));
                                 GUILayout.Label(objectPool.AllowMultiSpawn ? objectInfos[i].SpawnCount.ToString() : objectInfos[i].IsInUse.ToString(), GUILayout.Width(60f));
                                 GUILayout.Label(objectInfos[i].CustomCanReleaseFlag.ToString(), GUILayout.Width(60f));

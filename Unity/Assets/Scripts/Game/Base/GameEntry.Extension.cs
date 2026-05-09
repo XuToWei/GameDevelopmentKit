@@ -7,13 +7,7 @@ namespace Game
     /// </summary>
     public partial class GameEntry
     {
-        public static BuiltinComponent Builtin
-        {
-            get;
-            private set;
-        }
-
-        public static CameraComponent Camera
+        public static AssetSetComponent AssetSet
         {
             get;
             private set;
@@ -37,27 +31,12 @@ namespace Game
             private set;
         }
 
-        public static SpriteCollectionComponent SpriteCollection
-        {
-            get;
-            private set;
-        }
-
-        public static TextureSetComponent TextureSet
-        {
-            get;
-            private set;
-        }
-
         private static void InitExtensionComponents()
         {
-            Builtin = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinComponent>();
-            Camera = UnityGameFramework.Runtime.GameEntry.GetComponent<CameraComponent>();
+            AssetSet = UnityGameFramework.Runtime.GameEntry.GetComponent<AssetSetComponent>();
             CodeRunner = UnityGameFramework.Runtime.GameEntry.GetComponent<CodeRunnerComponent>();
             NetworkService = UnityGameFramework.Runtime.GameEntry.GetComponent<NetworkServiceComponent>();
             Screen = UnityGameFramework.Runtime.GameEntry.GetComponent<ScreenComponent>();
-            SpriteCollection = UnityGameFramework.Runtime.GameEntry.GetComponent<SpriteCollectionComponent>();
-            TextureSet = UnityGameFramework.Runtime.GameEntry.GetComponent<TextureSetComponent>();
         }
     }
 }
