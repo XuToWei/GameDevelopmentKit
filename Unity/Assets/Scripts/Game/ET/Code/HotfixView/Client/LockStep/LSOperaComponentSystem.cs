@@ -1,5 +1,6 @@
 using TrueSync;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ET.Client
 {
@@ -17,22 +18,22 @@ namespace ET.Client
         private static void Update(this LSOperaComponent self)
         {
             TSVector2 v = new();
-            if (Input.GetKey(KeyCode.W))
+            if (Keyboard.current.wKey.wasPressedThisFrame)
             {
                 v.y += 1;
             }
 
-            if (Input.GetKey(KeyCode.A))
+            if (Keyboard.current.aKey.wasPressedThisFrame)
             {
                 v.x -= 1;
             }
 
-            if (Input.GetKey(KeyCode.S))
+            if (Keyboard.current.sKey.wasPressedThisFrame)
             {
                 v.y -= 1;
             }
 
-            if (Input.GetKey(KeyCode.D))
+            if (Keyboard.current.dKey.wasPressedThisFrame)
             {
                 v.x += 1;
             }

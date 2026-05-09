@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Game;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ET.Client
 {
@@ -17,9 +18,9 @@ namespace ET.Client
         [EntitySystem]
         private static void Update(this OperaComponent self)
         {
-            if (Input.GetMouseButtonDown(1))
+            if (Mouse.current.rightButton.wasPressedThisFrame)
             {
-                Ray ray = GameEntry.Camera.CurrentSceneCamera.ScreenPointToRay(Input.mousePosition);
+                Ray ray = GameEntry.Camera.CurrentSceneCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 1000, self.mapMask))
                 {
@@ -28,24 +29,24 @@ namespace ET.Client
                     self.Root().GetComponent<ClientSenderComponent>().Send(c2MPathfindingResult);
                 }
             }
-            
-            if (Input.GetKeyDown(KeyCode.Q))
+
+            if (Keyboard.current.qKey.wasPressedThisFrame)
             {
                 self.Test1().Forget();
             }
-                
-            if (Input.GetKeyDown(KeyCode.W))
+
+            if (Keyboard.current.wKey.wasPressedThisFrame)
             {
                 self.Test2().Forget();
             }
 
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Keyboard.current.rKey.wasPressedThisFrame)
             {
                 CodeLoaderComponent.Instance.ReloadAsync().Forget();
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.T))
+            if (Keyboard.current.tKey.wasPressedThisFrame)
             {
                 C2M_TransferMap c2MTransferMap = C2M_TransferMap.Create();
                 self.Root().GetComponent<ClientSenderComponent>().Call(c2MTransferMap).Forget();
