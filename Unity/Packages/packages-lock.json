@@ -104,7 +104,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9fae2bebcf8768398905aba0e64a25f2384b4556"
+      "hash": "419759ee3b6bb17a65cba1348c084d41680184ea"
     },
     "com.psygames.unitywebsocket": {
       "version": "https://github.com/psygames/UnityWebSocket.git#upm",
@@ -311,14 +311,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "34cd04c2dac9e240bea2ca4f71dc4a6eb0dec50f"
+      "hash": "04f6baf3f57a2684f950f8e3e91a10ed4f95bcb7"
     },
     "com.yasirkula.runtimeinspector": {
       "version": "https://github.com/yasirkula/UnityRuntimeInspector.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f8755d61a7b535cc626630e54478ca162ab97ff6"
+      "hash": "ec8421f717664d75493e7132cbe16f2cfdbbf946"
     },
     "me.qiankanglai.loopscrollrect": {
       "version": "https://github.com/qiankanglai/LoopScrollRect.git",
