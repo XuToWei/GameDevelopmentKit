@@ -1,2 +1,3 @@
 1：新手按钮挖空修改
 2：GF事件不能异步调用的分析器
+3：GF种Debugger的Input相关切换成NewInputSystem
