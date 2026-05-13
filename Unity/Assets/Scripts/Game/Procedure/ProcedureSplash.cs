@@ -24,7 +24,7 @@ namespace Game
             {
                 // 编辑器模式
                 Log.Info("Editor resource mode detected.");
-                ChangeState<ProcedurePreload>(procedureOwner);
+                ChangeState<ProcedureResourcesReady>(procedureOwner);
             }
             else if (GameEntry.Resource.ResourceMode == ResourceMode.Package)
             {

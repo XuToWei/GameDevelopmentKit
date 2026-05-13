@@ -69,11 +69,28 @@ namespace UnityGameFramework.Extension.Editor
                 throw new GameFrameworkException("ResourceCollection is invalid.");
             }
             m_ResourceCollection = resourceCollection;
+            AddLauncherResource();
             OptimizeLoadType();
             OptimizeSprite();
             Analyze();
             CalculateCombine();
             Save();
+        }
+
+        private void AddLauncherResource()
+        {
+            m_ResourceCollection.RemoveResource(GameEntryLoader.LauncherResourceName, null);
+#if UNITY_WEBGL
+            m_ResourceCollection.AddResource(LauncherSceneLoader.LauncherSceneResourceName, null, null, LoadType.LoadFromMemory, true, new string[] { LauncherSceneLoader.LauncherResourceGroup });
+#else
+            m_ResourceCollection.AddResource(GameEntryLoader.LauncherResourceName, null, null, LoadType.LoadFromFile, true, new string[] { GameEntryLoader.LauncherResourceGroupName });
+#endif
+            string guid = AssetDatabase.AssetPathToGUID(GameEntryLoader.GameEntryPrefabAssetPath);
+            m_ResourceCollection.UnassignAsset(guid);
+            if (!m_ResourceCollection.AssignAsset(guid, GameEntryLoader.LauncherResourceName, null))
+            {
+                throw new GameFrameworkException(Utility.Text.Format("Can not assign asset '{0}' to resource '{1}'.", GameEntryLoader.GameEntryPrefabAssetPath, GameEntryLoader.LauncherResourceName));
+            }
         }
 
         private void OptimizeLoadType()

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using GameFramework;
-using OfficeOpenXml;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,22 +32,27 @@ namespace Game.Editor
                 return;
             List<string> entityAssetNames = new List<string>();
             int maxEntityId = 0;
-            using (var package = new ExcelPackage(new FileInfo(COMMON_ENTITY_XLSX)))
+            using (var fs = new FileStream(COMMON_ENTITY_XLSX, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                foreach (var ws in package.Workbook.Worksheets)
+                var workbook = new XSSFWorkbook(fs);
+                for (int i = 0; i < workbook.NumberOfSheets; i++)
                 {
-                    if (ws.Name.StartsWith("~"))
+                    var ws = workbook.GetSheetAt(i);
+                    if (ws.SheetName.StartsWith("~"))
                         continue;
-                    if (ws.Dimension == null)
+                    if (ws.LastRowNum < 3)
                         continue;
-                    for (int row = 4; row <= ws.Dimension.End.Row; row++)
+                    for (int row = 3; row <= ws.LastRowNum; row++)
                     {
-                        string assetName = ws.Cells[row, 5].GetValue<string>();
+                        var dataRow = ws.GetRow(row);
+                        if (dataRow == null)
+                            continue;
+                        string assetName = dataRow.GetCell(4)?.ToString();
                         if (!string.IsNullOrEmpty(assetName))
                         {
                             entityAssetNames.Add(assetName);
                         }
-                        int entityId = ws.Cells[row, 2].GetValue<int>();
+                        int entityId = (int)(dataRow.GetCell(1)?.NumericCellValue ?? 0);
                         maxEntityId = Mathf.Max(maxEntityId, entityId);
                     }
                 }
@@ -89,22 +95,27 @@ namespace Game.Editor
                 return;
             List<string> entityAssetNames = new List<string>();
             int maxEntityId = 0;
-            using (var package = new ExcelPackage(new FileInfo(UI_ENTITY_XLSX)))
+            using (var fs = new FileStream(UI_ENTITY_XLSX, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                foreach (var ws in package.Workbook.Worksheets)
+                var workbook = new XSSFWorkbook(fs);
+                for (int i = 0; i < workbook.NumberOfSheets; i++)
                 {
-                    if (ws.Name.StartsWith("~"))
+                    var ws = workbook.GetSheetAt(i);
+                    if (ws.SheetName.StartsWith("~"))
                         continue;
-                    if (ws.Dimension == null)
+                    if (ws.LastRowNum < 3)
                         continue;
-                    for (int row = 4; row <= ws.Dimension.End.Row; row++)
+                    for (int row = 3; row <= ws.LastRowNum; row++)
                     {
-                        string assetName = ws.Cells[row, 5].GetValue<string>();
+                        var dataRow = ws.GetRow(row);
+                        if (dataRow == null)
+                            continue;
+                        string assetName = dataRow.GetCell(4)?.ToString();
                         if (!string.IsNullOrEmpty(assetName))
                         {
                             entityAssetNames.Add(assetName);
                         }
-                        int entityId = ws.Cells[row, 2].GetValue<int>();
+                        int entityId = (int)(dataRow.GetCell(1)?.NumericCellValue ?? 0);
                         maxEntityId = Mathf.Max(maxEntityId, entityId);
                     }
                 }
@@ -141,36 +152,54 @@ namespace Game.Editor
 
         private static void ClearSheet(string filePath, string sheetName)
         {
-            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            IWorkbook workbook;
+            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                var ws = package.Workbook.Worksheets[sheetName];
-                if (ws != null)
-                    package.Workbook.Worksheets.Delete(ws);
-                package.Workbook.Worksheets.Add(sheetName);
-                package.Save();
+                workbook = new XSSFWorkbook(fs);
+            }
+            int idx = workbook.GetSheetIndex(sheetName);
+            if (idx >= 0)
+                workbook.RemoveSheetAt(idx);
+            workbook.CreateSheet(sheetName);
+            using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+                workbook.Write(fs);
             }
         }
 
         private static void InsertToSheet(string filePath, string sheetName, string[] headers, List<object[]> data)
         {
-            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            IWorkbook workbook;
+            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                var ws = package.Workbook.Worksheets[sheetName];
-                if (ws != null)
-                    package.Workbook.Worksheets.Delete(ws);
-                ws = package.Workbook.Worksheets.Add(sheetName);
-                for (int col = 0; col < headers.Length; col++)
+                workbook = new XSSFWorkbook(fs);
+            }
+            int idx = workbook.GetSheetIndex(sheetName);
+            if (idx >= 0)
+                workbook.RemoveSheetAt(idx);
+            var ws = workbook.CreateSheet(sheetName);
+            var headerRow = ws.CreateRow(0);
+            for (int col = 0; col < headers.Length; col++)
+            {
+                headerRow.CreateCell(col).SetCellValue(headers[col]);
+            }
+            for (int i = 0; i < data.Count; i++)
+            {
+                var dataRow = ws.CreateRow(i + 1);
+                for (int col = 0; col < data[i].Length; col++)
                 {
-                    ws.Cells[1, col + 1].Value = headers[col];
+                    var cell = dataRow.CreateCell(col);
+                    if (data[i][col] is int intVal)
+                        cell.SetCellValue(intVal);
+                    else if (data[i][col] is double doubleVal)
+                        cell.SetCellValue(doubleVal);
+                    else
+                        cell.SetCellValue(data[i][col]?.ToString() ?? "");
                 }
-                for (int i = 0; i < data.Count; i++)
-                {
-                    for (int col = 0; col < data[i].Length; col++)
-                    {
-                        ws.Cells[i + 2, col + 1].Value = data[i][col];
-                    }
-                }
-                package.Save();
+            }
+            using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+                workbook.Write(fs);
             }
         }
     }

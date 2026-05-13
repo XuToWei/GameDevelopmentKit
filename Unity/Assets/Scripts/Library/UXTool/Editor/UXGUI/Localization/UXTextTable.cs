@@ -6,7 +6,8 @@ using Cysharp.Threading.Tasks;
 // using UnityEditor.SceneManagement;
 using ThunderFireUITool;
 using Game.Editor;
-using OfficeOpenXml;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using UnityEditor;
 
 namespace UnityEngine.UI
@@ -192,28 +193,35 @@ namespace UnityEngine.UI
             // changed by gdk
             string textTablePath = ThunderFireUIToolConfig.TextTablePath;
             string sheetName = ThunderFireUIToolConfig.NoTranslateTextTableSheet;
-            using (var package = new ExcelPackage(new FileInfo(textTablePath)))
+            IWorkbook workbook;
+            using (var fs = new FileStream(textTablePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                var ws = package.Workbook.Worksheets[sheetName];
-                if (ws != null)
-                    package.Workbook.Worksheets.Delete(ws);
-                ws = package.Workbook.Worksheets.Add(sheetName);
-                if (insertList.Count > 0)
+                workbook = new XSSFWorkbook(fs);
+            }
+            int idx = workbook.GetSheetIndex(sheetName);
+            if (idx >= 0)
+                workbook.RemoveSheetAt(idx);
+            var ws = workbook.CreateSheet(sheetName);
+            if (insertList.Count > 0)
+            {
+                var headerRow = ws.CreateRow(0);
+                headerRow.CreateCell(0).SetCellValue("key");
+                headerRow.CreateCell(1).SetCellValue("ChineseSimplified");
+                for (int i = 0; i < insertList.Count; i++)
                 {
-                    ws.Cells[1, 1].Value = "key";
-                    ws.Cells[1, 2].Value = "ChineseSimplified";
-                    for (int i = 0; i < insertList.Count; i++)
-                    {
-                        ws.Cells[i + 2, 1].Value = insertList[i][0];
-                        ws.Cells[i + 2, 2].Value = insertList[i][1];
-                    }
-                    Debug.Log($"未翻译的文本写入：{textTablePath}@{sheetName}！");
+                    var dataRow = ws.CreateRow(i + 1);
+                    dataRow.CreateCell(0).SetCellValue(insertList[i][0]);
+                    dataRow.CreateCell(1).SetCellValue(insertList[i][1]);
                 }
-                else
-                {
-                    Debug.Log("没有未翻译的文本！");
-                }
-                package.Save();
+                Debug.Log($"未翻译的文本写入：{textTablePath}@{sheetName}！");
+            }
+            else
+            {
+                Debug.Log("没有未翻译的文本！");
+            }
+            using (var fs = new FileStream(textTablePath, FileMode.Create, FileAccess.Write))
+            {
+                workbook.Write(fs);
             }
         }
     }
