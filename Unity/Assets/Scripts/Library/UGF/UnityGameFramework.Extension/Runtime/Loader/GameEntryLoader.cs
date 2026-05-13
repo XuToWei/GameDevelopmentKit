@@ -35,13 +35,13 @@ namespace UnityGameFramework.Extension
                 yield return assetBundleCreateRequest;
                 if (!assetBundleCreateRequest.isDone)
                 {
-                    throw new GameFrameworkException($"Load asset bundle '{resourcePath}' failure.");
+                    throw new GameFrameworkException($"GameEntryLoader load asset bundle '{resourcePath}' failure.");
                 }
                 AssetBundleRequest assetBundleRequest = assetBundleCreateRequest.assetBundle.LoadAssetAsync<GameObject>(GameEntryPrefabAssetPath);
                 yield return assetBundleRequest;
                 if (!assetBundleRequest.isDone)
                 {
-                    throw new GameFrameworkException($"Load asset '{GameEntryPrefabAssetPath}' failure.");
+                    throw new GameFrameworkException($"GameEntryLoader load asset '{GameEntryPrefabAssetPath}' failure.");
                 }
                 Instantiate(assetBundleRequest.asset, Vector3.zero, Quaternion.identity);
                 assetBundleCreateRequest.assetBundle.Unload(false);
