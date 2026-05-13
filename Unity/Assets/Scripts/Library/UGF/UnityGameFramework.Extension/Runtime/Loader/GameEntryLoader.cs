@@ -48,8 +48,8 @@ namespace UnityGameFramework.Extension
                 assetBundleCreateRequest.assetBundle.Unload(false);
             }
 #if UNITY_EDITOR
-            FindAnyObjectByType<BaseComponent>().EditorResourceMode = m_EditorResourceMode;
-            FindAnyObjectByType<CodeRunnerComponent>().EnableCodeBytesMode = m_EnableEditorCodeBytesMode;
+            GameEntry.GetComponent<BaseComponent>().EditorResourceMode = m_EditorResourceMode;
+            GameEntry.GetComponent<CodeRunnerComponent>().EnableCodeBytesMode = m_EnableEditorCodeBytesMode;
 #endif
         }
 
