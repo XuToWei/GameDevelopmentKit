@@ -1,3 +1,4 @@
+using System.Collections;
 using GameFramework;
 using UnityEngine;
 using UnityGameFramework.Runtime;
@@ -22,7 +23,7 @@ namespace UnityGameFramework.Extension
         [SerializeField]
         private bool m_EnableEditorCodeBytesMode;
 
-        private System.Collections.IEnumerator Start()
+        private IEnumerator Start()
         {
             string resourcePath = GetResourcePath();
             if (string.IsNullOrEmpty(resourcePath))
