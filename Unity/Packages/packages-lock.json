@@ -16,7 +16,7 @@
         "com.unity.collections": "1.5.1",
         "com.unity.mathematics": "1.0.1"
       },
-      "hash": "b651c5866fe0e3fba065ce2e56dfdfcd59d3d109"
+      "hash": "0b4c588ee75a07198841d92aab653e6b39445089"
     },
     "com.annulusgames.lit-motion.animation": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
@@ -25,7 +25,7 @@
       "dependencies": {
         "com.annulusgames.lit-motion": "2.0.0"
       },
-      "hash": "b651c5866fe0e3fba065ce2e56dfdfcd59d3d109"
+      "hash": "0b4c588ee75a07198841d92aab653e6b39445089"
     },
     "com.baracuda.preprocessor-symbol-definition-files": {
       "version": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
@@ -39,7 +39,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "fcef6dfe8ed715cc60a7618a1d2ad62bcace3a80"
+      "hash": "4feac30cb2e105992986c737f7f54992b8300e1a"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -75,22 +75,6 @@
       "source": "git",
       "dependencies": {},
       "hash": "33356da2c43fa28397192baee70910c978e3169f"
-    },
-    "com.cysharp.memorypack": {
-      "version": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack#1.10.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
-    },
-    "com.cysharp.r3": {
-      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity#1.2.9",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.modules.imgui": "1.0.0"
-      },
-      "hash": "9b18209448c5e1f4572a4191b1f4f530a1d26c01"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10",
