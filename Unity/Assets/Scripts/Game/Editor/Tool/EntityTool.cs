@@ -20,8 +20,8 @@ namespace Game.Editor
          private const string COMMON_ENTITY_XLSX = "../Design/Excel/Game/Datas/Entity.xlsx";
         private const string UI_ENTITY_XLSX = "../Design/Excel/Game/Datas/UIEntity.xlsx";
 #endif
-        private const string COMMON_ENTITY_ASSET_PATH = "Assets/Res/Entity";
-        private const string UI_ENTITY_ASSET_PATH = "Assets/Res/UI/UIEntity";
+        private const string COMMON_ENTITY_ASSET_PATH = "Assets/Res/Entity/";
+        private const string UI_ENTITY_ASSET_PATH = "Assets/Res/UI/UIEntity/";
         private const string NO_ADD_ENTITY_SHEET = "~未添加的实体";
 
         [MenuItem("Game/Entity Tool/Write Entity To Tables")]
@@ -61,7 +61,7 @@ namespace Game.Editor
             foreach (var guid in guids)
             {
                 string entityAsset = AssetDatabase.GUIDToAssetPath(guid);
-                string entityAssetName = Utility.Path.GetRegularPath(entityAsset).Replace(COMMON_ENTITY_ASSET_PATH, "");
+                string entityAssetName = Path.ChangeExtension(Utility.Path.GetRegularPath(entityAsset).Replace(COMMON_ENTITY_ASSET_PATH, ""), null);
                 if (entityAssetNames.Contains(entityAssetName))
                     continue;
                 insertList.Add(new object[]
@@ -124,7 +124,7 @@ namespace Game.Editor
             foreach (var guid in guids)
             {
                 string entityAsset = AssetDatabase.GUIDToAssetPath(guid);
-                string entityAssetName = Utility.Path.GetRegularPath(entityAsset).Replace(UI_ENTITY_ASSET_PATH, "");
+                string entityAssetName = Path.ChangeExtension(Utility.Path.GetRegularPath(entityAsset).Replace(UI_ENTITY_ASSET_PATH, ""), null);
                 if (entityAssetNames.Contains(entityAssetName))
                     continue;
                 insertList.Add(new object[]
