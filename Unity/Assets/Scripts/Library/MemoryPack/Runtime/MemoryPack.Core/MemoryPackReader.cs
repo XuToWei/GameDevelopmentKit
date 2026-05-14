@@ -393,7 +393,12 @@ public ref partial struct MemoryPackReader
         var byteCount = checked(length * 2);
         ref var src = ref GetSpanReference(byteCount);
 
-        var str = new string(MemoryMarshal.CreateReadOnlySpan(ref Unsafe.As<byte, char>(ref src), length));
+        // Use CopyBlockUnaligned instead of Unsafe.As<byte, char> to avoid
+        // unaligned memory access crashes on ARM (e.g. Samsung Galaxy A13).
+        // See: https://github.com/Cysharp/MemoryPack/issues/427
+        var chars = new char[length];
+        Unsafe.CopyBlockUnaligned(ref Unsafe.As<char, byte>(ref MemoryMarshal.GetReference(chars.AsSpan())), ref src, (uint)byteCount);
+        var str = new string(chars);
 
         Advance(byteCount);
 

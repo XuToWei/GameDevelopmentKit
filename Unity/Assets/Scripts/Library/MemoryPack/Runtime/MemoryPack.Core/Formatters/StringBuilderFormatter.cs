@@ -73,8 +73,12 @@ public sealed class StringBuilderFormatter : MemoryPackFormatter<StringBuilder>
         // note: to improvement append as chunk(per 64K?)
         var size = checked(length * 2);
         ref var p = ref reader.GetSpanReference(size);
-        var src = MemoryMarshal.CreateSpan(ref Unsafe.As<byte, char>(ref p), length);
-        value.Append(src);
+        // Use CopyBlockUnaligned instead of Unsafe.As<byte, char> to avoid
+        // unaligned memory access crashes on ARM (e.g. Samsung Galaxy A13).
+        // See: https://github.com/Cysharp/MemoryPack/issues/427
+        var chars = new char[length];
+        Unsafe.CopyBlockUnaligned(ref Unsafe.As<char, byte>(ref MemoryMarshal.GetReference(chars.AsSpan())), ref p, (uint)size);
+        value.Append(chars);
 
         reader.Advance(size);
     }
