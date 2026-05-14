@@ -60,11 +60,8 @@ namespace UnityGameFramework.Runtime
         private InputSummaryInformationWindow m_InputSummaryInformationWindow = new InputSummaryInformationWindow();
         private InputDeviceInformationWindow m_InputDeviceInformationWindow = new InputDeviceInformationWindow();
         private InputTouchInformationWindow m_InputTouchInformationWindow = new InputTouchInformationWindow();
-        private InputAccelerationInformationWindow m_InputAccelerationInformationWindow = new InputAccelerationInformationWindow();
-        private InputGyroscopeInformationWindow m_InputGyroscopeInformationWindow = new InputGyroscopeInformationWindow();
-        private InputCompassInformationWindow m_InputCompassInformationWindow = new InputCompassInformationWindow();
-        private InputPenInformationWindow m_InputPenInformationWindow = new InputPenInformationWindow();
-        private InputJoystickInformationWindow m_InputJoystickInformationWindow = new InputJoystickInformationWindow();
+        private InputSensorInformationWindow m_InputSensorInformationWindow = new InputSensorInformationWindow();
+        private InputPeripheralInformationWindow m_InputPeripheralInformationWindow = new InputPeripheralInformationWindow();
         private InputActionInformationWindow m_InputActionInformationWindow = new InputActionInformationWindow();
         private PathInformationWindow m_PathInformationWindow = new PathInformationWindow();
         private SceneInformationWindow m_SceneInformationWindow = new SceneInformationWindow();
@@ -194,11 +191,8 @@ namespace UnityGameFramework.Runtime
             RegisterDebuggerWindow("Information/Input/Summary", m_InputSummaryInformationWindow);
             RegisterDebuggerWindow("Information/Input/Device", m_InputDeviceInformationWindow);
             RegisterDebuggerWindow("Information/Input/Touch", m_InputTouchInformationWindow);
-            RegisterDebuggerWindow("Information/Input/Acceleration", m_InputAccelerationInformationWindow);
-            RegisterDebuggerWindow("Information/Input/Gyroscope", m_InputGyroscopeInformationWindow);
-            RegisterDebuggerWindow("Information/Input/Compass", m_InputCompassInformationWindow);
-            RegisterDebuggerWindow("Information/Input/Pen", m_InputPenInformationWindow);
-            RegisterDebuggerWindow("Information/Input/Joystick", m_InputJoystickInformationWindow);
+            RegisterDebuggerWindow("Information/Input/Sensor", m_InputSensorInformationWindow);
+            RegisterDebuggerWindow("Information/Input/Peripheral", m_InputPeripheralInformationWindow);
             RegisterDebuggerWindow("Information/Input/Action", m_InputActionInformationWindow);
             RegisterDebuggerWindow("Information/Other/Scene", m_SceneInformationWindow);
             RegisterDebuggerWindow("Information/Other/Path", m_PathInformationWindow);
