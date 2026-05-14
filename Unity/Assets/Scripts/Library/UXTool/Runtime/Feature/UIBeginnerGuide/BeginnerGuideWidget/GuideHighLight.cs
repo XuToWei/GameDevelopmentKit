@@ -156,10 +156,11 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
             {
                 // changed by gdk
                 target = go.GetComponent<RectTransform>();
-                childObject.transform.position = target.position;
-                childObject.transform.eulerAngles = target.eulerAngles;
-                childObject.GetComponent<RectTransform>().sizeDelta = target.rect.size;
-                childObject.transform.localScale = target.localScale;
+                RectTransform childRectTransform = childObject.GetComponent<RectTransform>();
+                childRectTransform.position = target.position;
+                childRectTransform.eulerAngles = target.eulerAngles;
+                childRectTransform.sizeDelta = target.rect.size;
+                childRectTransform.localScale = target.localScale;
                 needUpdateTarget = true;
             }
             else

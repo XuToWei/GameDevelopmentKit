@@ -33,7 +33,17 @@ namespace UnityGameFramework.Extension
         private Component m_InitComponent;
 
 #if UNITY_EDITOR
-        public bool EnableCodeBytesMode => m_EnableEditorCodeBytesMode;
+        public bool EnableCodeBytesMode
+        {
+            get
+            {
+                return m_EnableEditorCodeBytesMode;
+            }
+            set
+            {
+                m_EnableEditorCodeBytesMode = value;
+            }
+        }
 #else
         public bool EnableCodeBytesMode => true;
 #endif

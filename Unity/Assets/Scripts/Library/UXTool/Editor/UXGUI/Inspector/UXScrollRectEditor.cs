@@ -37,7 +37,7 @@ namespace UnityEngine.UI
 
         private static void OnHierarchyGUI(int instanceID, Rect selectionRect)
         {
-            GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+            GameObject go = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             if (go != null && go.hideFlags == HideFlags.DontSave && go.name.StartsWith("UXPreview"))
             {
                 Utils.DrawGreenRect(instanceID, selectionRect, go.name.Substring(9));

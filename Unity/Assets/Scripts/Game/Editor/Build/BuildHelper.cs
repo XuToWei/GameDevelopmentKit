@@ -73,7 +73,7 @@ namespace Game.Editor
             
             string[] levels =
             {
-                EntryUtility.EntryScenePath,
+                EntryUtility.LauncherScenePath,
             };
             Debug.Log("start build pkg");
             string locationPathName = $"{fold}/{appName}";

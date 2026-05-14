@@ -35,22 +35,22 @@ public class LocalizationHelper
         ShowKey = -3,
         NoWord = -2,
         None = -1,
-        ChineseSimplified = 0,// 简体中文
-        ChineseTraditional = 1,// 繁体中文
-        English = 2,// 英语
-        Japanese = 3,// 日语
-        Korean = 4,// 韩语
-        French = 5,// 法语
-        German = 6,// 德语
-        Spanish = 7,// 西班牙语
-        Russian = 8,// 俄语
-        Turkish = 9,// 土耳其语
-        PortuguesePortugal = 10,// 葡萄牙语
-        Vietnamese = 11,// 越南语
-        Thai = 12,// 泰语
-        Arabic = 13,// 阿拉伯语
-        Italian = 14,// 意大利语
-        Indonesian = 15,// 印尼语
+        ChineseSimplified = Language.ChineseSimplified,// 简体中文
+        ChineseTraditional = Language.ChineseTraditional,// 繁体中文
+        English = Language.English,// 英语
+        Japanese = Language.Japanese,// 日语
+        Korean = Language.Korean,// 韩语
+        French = Language.French,// 法语
+        German = Language.German,// 德语
+        Spanish = Language.Spanish,// 西班牙语
+        Russian = Language.Russian,// 俄语
+        Turkish = Language.Turkish,// 土耳其语
+        PortuguesePortugal = Language.PortuguesePortugal,// 葡萄牙语
+        Vietnamese = Language.Vietnamese,// 越南语
+        Thai = Language.Thai,// 泰语
+        Arabic = Language.Arabic,// 阿拉伯语
+        Italian = Language.Italian,// 意大利语
+        Indonesian = Language.Indonesian,// 印尼语
     }
     public enum TextLocalizationType
     {
@@ -126,7 +126,7 @@ public class LocalizationHelper
 #if UNITY_EDITOR
         if (s_LocalizationComponent != null)
         {
-            if(languageType >= 0 && !string.Equals(s_LocalizationComponent.Language.ToString(), languageType.ToString()))
+            if(languageType >= 0 && languageType != (LanguageType)s_LocalizationComponent.Language)
             {
                 throw new Exception($"UXTool设置语言 {languageType} 错误（GF语言为：{s_LocalizationComponent.Language}）!");
             }
@@ -156,59 +156,7 @@ public class LocalizationHelper
     {
         await UniTask.CompletedTask;
         s_LocalizationComponent = GameEntry.GetComponent<LocalizationComponent>();
-        switch (s_LocalizationComponent.Language)
-        {
-            case Language.ChineseSimplified:
-                SetLanguage(LanguageType.ChineseSimplified);
-                break;
-            case Language.ChineseTraditional:
-                SetLanguage(LanguageType.ChineseTraditional);
-                break;
-            case Language.English:
-                SetLanguage(LanguageType.English);
-                break;
-            case Language.Japanese:
-                SetLanguage(LanguageType.Japanese);
-                break;
-            case Language.Korean:
-                SetLanguage(LanguageType.Korean);
-                break;
-            case Language.French:
-                SetLanguage(LanguageType.French);
-                break;
-            case Language.German:
-                SetLanguage(LanguageType.German);
-                break;
-            case Language.Spanish:
-                SetLanguage(LanguageType.Spanish);
-                break;
-            case Language.Russian:
-                SetLanguage(LanguageType.Russian);
-                break;
-            case Language.Turkish:
-                SetLanguage(LanguageType.Turkish);
-                break;
-            case Language.PortuguesePortugal:
-                SetLanguage(LanguageType.PortuguesePortugal);
-                break;
-            case Language.Vietnamese:
-                SetLanguage(LanguageType.Vietnamese);
-                break;
-            case Language.Thai:
-                SetLanguage(LanguageType.Thai);
-                break;
-            case Language.Arabic:
-                SetLanguage(LanguageType.Arabic);
-                break;
-            case Language.Italian:
-                SetLanguage(LanguageType.Italian);
-                break;
-            case Language.Indonesian:
-                SetLanguage(LanguageType.Indonesian);
-                break;
-            default:
-                throw new GameFrameworkException(Utility.Text.Format("UXTool不支持的语言类型: {0}", s_LocalizationComponent.Language));
-        }
+        SetLanguage((LanguageType)s_LocalizationComponent.Language);
     }
 
     public static void Clear()

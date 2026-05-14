@@ -113,7 +113,15 @@ public class ColorBlind : Editor
     //[MenuItem("ThunderFireUXTool/Color/Normal")]
     public static void ToNormal()
     {
-        DestroyImmediate(AddOrGetComponent());
+        var effect = AddOrGetComponent();
+        if(effect.gameObject.name == "ColorBlind Camera")
+        {
+            DestroyImmediate(effect.gameObject);
+        }
+        else
+        {
+            DestroyImmediate(effect);
+        }
         //var m = FindMaterial();
         //m.SetInt("type",0);
     }

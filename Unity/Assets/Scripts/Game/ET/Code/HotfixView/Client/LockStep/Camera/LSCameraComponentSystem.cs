@@ -1,5 +1,6 @@
 ﻿using Game;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ET.Client
 {
@@ -21,7 +22,7 @@ namespace ET.Client
 			Room room = self.GetParent<Room>();
 			if (room.IsReplay)
 			{
-				if (Input.GetKeyDown(KeyCode.Tab))
+				if (Keyboard.current.tabKey.wasPressedThisFrame)
 				{
 					++self.index;
 					self.MyUnitView = new LSUnitView();

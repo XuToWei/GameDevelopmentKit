@@ -9,8 +9,6 @@
         "Unity.Mathematics",
         "HybridCLR.Runtime",
         "UniTask",
-        "StompyRobot.SRDebugger",
-        "StompyRobot.SRF",
         "CodeBind",
         "Unity.TextMeshPro",
         "Coffee.UIEffect",

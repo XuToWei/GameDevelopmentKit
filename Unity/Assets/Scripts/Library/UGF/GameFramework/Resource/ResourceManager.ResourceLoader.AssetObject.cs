@@ -5,6 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using System;
 using GameFramework.ObjectPool;
 using System.Collections.Generic;
 
@@ -42,7 +43,7 @@ namespace GameFramework.Resource
                     }
                 }
 
-                public static AssetObject Create(string name, object target, List<object> dependencyAssets, object resource, IResourceHelper resourceHelper, ResourceLoader resourceLoader)
+                public static AssetObject Create(string name, Type type, object target, List<object> dependencyAssets, object resource, IResourceHelper resourceHelper, ResourceLoader resourceLoader)
                 {
                     if (dependencyAssets == null)
                     {
@@ -65,7 +66,7 @@ namespace GameFramework.Resource
                     }
 
                     AssetObject assetObject = ReferencePool.Acquire<AssetObject>();
-                    assetObject.Initialize(name, target);
+                    assetObject.Initialize(name, type, target);
                     assetObject.m_DependencyAssets.AddRange(dependencyAssets);
                     assetObject.m_Resource = resource;
                     assetObject.m_ResourceHelper = resourceHelper;

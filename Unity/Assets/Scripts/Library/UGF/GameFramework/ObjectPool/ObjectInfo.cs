@@ -17,6 +17,7 @@ namespace GameFramework.ObjectPool
     public struct ObjectInfo
     {
         private readonly string m_Name;
+        private readonly Type m_Type;
         private readonly bool m_Locked;
         private readonly bool m_CustomCanReleaseFlag;
         private readonly int m_Priority;
@@ -27,14 +28,16 @@ namespace GameFramework.ObjectPool
         /// 初始化对象信息的新实例。
         /// </summary>
         /// <param name="name">对象名称。</param>
+        /// <param name="type">对象类型。</param>
         /// <param name="locked">对象是否被加锁。</param>
         /// <param name="customCanReleaseFlag">对象自定义释放检查标记。</param>
         /// <param name="priority">对象的优先级。</param>
         /// <param name="lastUseTime">对象上次使用时间。</param>
         /// <param name="spawnCount">对象的获取计数。</param>
-        public ObjectInfo(string name, bool locked, bool customCanReleaseFlag, int priority, DateTime lastUseTime, int spawnCount)
+        public ObjectInfo(string name, Type type, bool locked, bool customCanReleaseFlag, int priority, DateTime lastUseTime, int spawnCount)
         {
             m_Name = name;
+            m_Type = type;
             m_Locked = locked;
             m_CustomCanReleaseFlag = customCanReleaseFlag;
             m_Priority = priority;
@@ -50,6 +53,17 @@ namespace GameFramework.ObjectPool
             get
             {
                 return m_Name;
+            }
+        }
+
+        /// <summary>
+        /// 获取对象类型。
+        /// </summary>
+        public Type Type
+        {
+            get
+            {
+                return m_Type;
             }
         }
 

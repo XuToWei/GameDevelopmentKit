@@ -13,7 +13,7 @@ using UnityEngine.UI;
 namespace ThunderFireUITool
 {
     //带数据的TreeViewItem
-    public class UIComponentCheckResultViewItem : TreeViewItem
+    public class UIComponentCheckResultViewItem : TreeViewItem<int>
     {
         public GameObject prefabGo;
         public string prefabPath;
@@ -159,7 +159,7 @@ namespace ThunderFireUITool
             }
         }
 
-        protected override float GetCustomRowHeight(int row, TreeViewItem item)
+        protected override float GetCustomRowHeight(int row, TreeViewItem<int> item)
         {
             UIComponentCheckResultViewItem e = item as UIComponentCheckResultViewItem;
             if (e == null ) return base.GetCustomRowHeight(row, item);
