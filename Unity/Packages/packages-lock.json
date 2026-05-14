@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "31c3d1e9933399a637b5cbed53d376dc8679f36c"
+      "hash": "7f5bfdaa71d53cc53910e58ef9673a8eba722462"
     },
     "com.annulusgames.lit-motion": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
@@ -26,13 +26,6 @@
         "com.annulusgames.lit-motion": "2.0.0"
       },
       "hash": "0b4c588ee75a07198841d92aab653e6b39445089"
-    },
-    "com.baracuda.preprocessor-symbol-definition-files": {
-      "version": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "93c7e64d2fa1b8ce1798f0cbce75034f63a45c04"
     },
     "com.code-philosophy.hybridclr": {
       "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
@@ -132,13 +125,6 @@
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
-    },
-    "com.unity.editoriterationprofiler": {
-      "version": "https://github.com/Unity-Technologies/com.unity.editoriterationprofiler.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "02a50237af74cc628b971f02987eba048076b902"
     },
     "com.unity.ext.nunit": {
       "version": "2.0.5",
@@ -311,7 +297,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "48735bdc5e6d9451b3015e54f2b1f858c404df3e"
+      "hash": "64ead283b59e1337a25553378aa70c6e200150c9"
     },
     "me.xw.codebind": {
       "version": "https://github.com/XuToWei/CodeBind.git",
