@@ -213,7 +213,7 @@ MonoBehaviour:
   m_DefaultGameEntryPrefab: {fileID: 1470662328693957228, guid: c361bae2493f73c48b63e97b9ec064b4,
     type: 3}
   m_EditorResourceMode: 1
-  m_EnableEditorCodeBytesMode: 1
+  m_EnableEditorCodeBytesMode: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
