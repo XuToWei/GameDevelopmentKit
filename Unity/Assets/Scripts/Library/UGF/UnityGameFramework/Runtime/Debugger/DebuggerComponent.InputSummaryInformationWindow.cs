@@ -1,10 +1,3 @@
-//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,6 +24,26 @@ namespace UnityGameFramework.Runtime
                     DrawItem("Background Behavior", InputSystem.settings.backgroundBehavior.ToString());
                     DrawItem("Editor Input Behavior In Play Mode", InputSystem.settings.editorInputBehaviorInPlayMode.ToString());
                     DrawItem("Device Count", InputSystem.devices.Count.ToString());
+                    DrawItem("Disconnected Device Count", InputSystem.disconnectedDevices.Count.ToString());
+                }
+                GUILayout.EndVertical();
+
+                GUILayout.Label("<b>Metrics</b>");
+                GUILayout.BeginVertical("box");
+                {
+                    var metrics = InputSystem.metrics;
+                    DrawItem("Current Num Devices", metrics.currentNumDevices.ToString());
+                    DrawItem("Max Num Devices", metrics.maxNumDevices.ToString());
+                    DrawItem("Current State Size In Bytes", metrics.currentStateSizeInBytes.ToString());
+                    DrawItem("Max State Size In Bytes", metrics.maxStateSizeInBytes.ToString());
+                    DrawItem("Total Event Count", metrics.totalEventCount.ToString());
+                    DrawItem("Total Event Bytes", metrics.totalEventBytes.ToString());
+                    DrawItem("Total Update Count", metrics.totalUpdateCount.ToString());
+                    DrawItem("Total Event Processing Time", metrics.totalEventProcessingTime.ToString());
+                    DrawItem("Total Event Lag Time", metrics.totalEventLagTime.ToString());
+                    DrawItem("Average Event Bytes Per Frame", metrics.averageEventBytesPerFrame.ToString());
+                    DrawItem("Average Processing Time Per Event", metrics.averageProcessingTimePerEvent.ToString());
+                    DrawItem("Average Lag Time Per Event", metrics.averageLagTimePerEvent.ToString());
                 }
                 GUILayout.EndVertical();
 

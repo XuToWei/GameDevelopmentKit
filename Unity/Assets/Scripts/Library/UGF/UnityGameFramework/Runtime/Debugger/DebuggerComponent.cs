@@ -63,6 +63,9 @@ namespace UnityGameFramework.Runtime
         private InputAccelerationInformationWindow m_InputAccelerationInformationWindow = new InputAccelerationInformationWindow();
         private InputGyroscopeInformationWindow m_InputGyroscopeInformationWindow = new InputGyroscopeInformationWindow();
         private InputCompassInformationWindow m_InputCompassInformationWindow = new InputCompassInformationWindow();
+        private InputPenInformationWindow m_InputPenInformationWindow = new InputPenInformationWindow();
+        private InputJoystickInformationWindow m_InputJoystickInformationWindow = new InputJoystickInformationWindow();
+        private InputActionInformationWindow m_InputActionInformationWindow = new InputActionInformationWindow();
         private PathInformationWindow m_PathInformationWindow = new PathInformationWindow();
         private SceneInformationWindow m_SceneInformationWindow = new SceneInformationWindow();
         private TimeInformationWindow m_TimeInformationWindow = new TimeInformationWindow();
@@ -194,6 +197,9 @@ namespace UnityGameFramework.Runtime
             RegisterDebuggerWindow("Information/Input/Acceleration", m_InputAccelerationInformationWindow);
             RegisterDebuggerWindow("Information/Input/Gyroscope", m_InputGyroscopeInformationWindow);
             RegisterDebuggerWindow("Information/Input/Compass", m_InputCompassInformationWindow);
+            RegisterDebuggerWindow("Information/Input/Pen", m_InputPenInformationWindow);
+            RegisterDebuggerWindow("Information/Input/Joystick", m_InputJoystickInformationWindow);
+            RegisterDebuggerWindow("Information/Input/Action", m_InputActionInformationWindow);
             RegisterDebuggerWindow("Information/Other/Scene", m_SceneInformationWindow);
             RegisterDebuggerWindow("Information/Other/Path", m_PathInformationWindow);
             RegisterDebuggerWindow("Information/Other/Time", m_TimeInformationWindow);
