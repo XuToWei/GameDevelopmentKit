@@ -51,6 +51,7 @@ namespace UnityGameFramework.Extension
             GameEntry.GetComponent<BaseComponent>().EditorResourceMode = m_EditorResourceMode;
             GameEntry.GetComponent<CodeRunnerComponent>().EnableCodeBytesMode = m_EnableEditorCodeBytesMode;
 #endif
+            Destroy(this.gameObject);
         }
 
         private string GetResourcePath()
