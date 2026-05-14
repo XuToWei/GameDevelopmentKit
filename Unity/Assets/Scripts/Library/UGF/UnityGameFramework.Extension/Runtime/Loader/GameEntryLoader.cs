@@ -25,27 +25,35 @@ namespace UnityGameFramework.Extension
 
         private IEnumerator Start()
         {
-            string resourcePath = GetResourcePath();
-            if (string.IsNullOrEmpty(resourcePath))
+            m_EditorResourceMode &= Application.isEditor;
+            if (m_EditorResourceMode)
             {
                 Instantiate(m_DefaultGameEntryPrefab, Vector3.zero, Quaternion.identity);
             }
             else
             {
-                AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(resourcePath);
-                yield return assetBundleCreateRequest;
-                if (!assetBundleCreateRequest.isDone)
+                string resourcePath = GetResourcePath();
+                if (string.IsNullOrEmpty(resourcePath))
                 {
-                    throw new GameFrameworkException($"GameEntryLoader load asset bundle '{resourcePath}' failure.");
+                    Instantiate(m_DefaultGameEntryPrefab, Vector3.zero, Quaternion.identity);
                 }
-                AssetBundleRequest assetBundleRequest = assetBundleCreateRequest.assetBundle.LoadAssetAsync<GameObject>(GameEntryPrefabAssetPath);
-                yield return assetBundleRequest;
-                if (!assetBundleRequest.isDone)
+                else
                 {
-                    throw new GameFrameworkException($"GameEntryLoader load asset '{GameEntryPrefabAssetPath}' failure.");
+                    AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(resourcePath);
+                    yield return assetBundleCreateRequest;
+                    if (!assetBundleCreateRequest.isDone)
+                    {
+                        throw new GameFrameworkException($"GameEntryLoader load asset bundle '{resourcePath}' failure.");
+                    }
+                    AssetBundleRequest assetBundleRequest = assetBundleCreateRequest.assetBundle.LoadAssetAsync<GameObject>(GameEntryPrefabAssetPath);
+                    yield return assetBundleRequest;
+                    if (!assetBundleRequest.isDone)
+                    {
+                        throw new GameFrameworkException($"GameEntryLoader load asset '{GameEntryPrefabAssetPath}' failure.");
+                    }
+                    Instantiate(assetBundleRequest.asset, Vector3.zero, Quaternion.identity);
+                    assetBundleCreateRequest.assetBundle.Unload(false);
                 }
-                Instantiate(assetBundleRequest.asset, Vector3.zero, Quaternion.identity);
-                assetBundleCreateRequest.assetBundle.Unload(false);
             }
 #if UNITY_EDITOR
             GameEntry.GetComponent<BaseComponent>().EditorResourceMode = m_EditorResourceMode;
