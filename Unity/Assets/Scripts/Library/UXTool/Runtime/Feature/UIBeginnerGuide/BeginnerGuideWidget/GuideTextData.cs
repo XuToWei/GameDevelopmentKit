@@ -22,14 +22,15 @@ public class GuideTextData : GuideWidgetData
     public override string Serialize()
     {
         UpdateTransformData();
+        GuideText guideText = GetComponent<GuideText>();
         if (textBgStyle == TextBgStyle.Default)
         {
-            guideTextContent = GetComponent<GuideText>().defaultContent.GetComponent<Text>().text;
+            guideTextContent = guideText.defaultContent.GetComponent<Text>().text;
         }
         else
         {
-            guideTextTitle = GetComponent<GuideText>().withTitleTitle.GetComponent<Text>().text;
-            guideTextContent = GetComponent<GuideText>().withTitleContent.GetComponent<Text>().text;
+            guideTextTitle = guideText.withTitleTitle.GetComponent<Text>().text;
+            guideTextContent = guideText.withTitleContent.GetComponent<Text>().text;
         }
 
         string data = JsonUtility.ToJson(this);

@@ -19,10 +19,12 @@ public class GuideTargetStroke : GuideWidgetBase
             targetStrokeData.ApplyTransformData(transform);
             if (targetStrokeData.targetType == TargetType.Target && target != null)
             {
-                transform.position = target.transform.position;
-                transform.eulerAngles = target.transform.eulerAngles;
-                transform.localScale = target.transform.localScale;
-                transform.GetComponent<RectTransform>().sizeDelta = target.GetComponent<RectTransform>().sizeDelta;
+                RectTransform rectTransform = transform.GetComponent<RectTransform>();
+                RectTransform targetRectTransform = target.GetComponent<RectTransform>();
+                rectTransform.position = targetRectTransform.position;
+                rectTransform.eulerAngles = targetRectTransform.eulerAngles;
+                rectTransform.localScale = targetRectTransform.localScale;
+                rectTransform.sizeDelta = targetRectTransform.sizeDelta;
                 // changed by gdk
                 needUpdateTarget = true;
             }
