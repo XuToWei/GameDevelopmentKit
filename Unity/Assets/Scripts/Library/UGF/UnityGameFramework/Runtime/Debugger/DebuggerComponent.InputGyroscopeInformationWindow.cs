@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
@@ -6,6 +6,7 @@
 //------------------------------------------------------------
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace UnityGameFramework.Runtime
 {
@@ -18,28 +19,92 @@ namespace UnityGameFramework.Runtime
                 GUILayout.Label("<b>Input Gyroscope Information</b>");
                 GUILayout.BeginVertical("box");
                 {
-                    GUILayout.BeginHorizontal();
+                    var gyroscope = UnityEngine.InputSystem.Gyroscope.current;
+                    DrawItem("Gyroscope Present", (gyroscope != null).ToString());
+
+                    if (gyroscope != null)
                     {
-                        if (GUILayout.Button("Enable", GUILayout.Height(30f)))
+                        GUILayout.BeginHorizontal();
                         {
-                            Input.gyro.enabled = true;
+                            if (GUILayout.Button("Enable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.EnableDevice(gyroscope);
+                            }
+                            if (GUILayout.Button("Disable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.DisableDevice(gyroscope);
+                            }
                         }
-                        if (GUILayout.Button("Disable", GUILayout.Height(30f)))
+                        GUILayout.EndHorizontal();
+
+                        DrawItem("Enabled", gyroscope.enabled.ToString());
+                        if (gyroscope.enabled)
                         {
-                            Input.gyro.enabled = false;
+                            DrawItem("Angular Velocity", gyroscope.angularVelocity.ReadValue().ToString());
+                            DrawItem("Sampling Frequency", gyroscope.samplingFrequency.ToString());
                         }
                     }
-                    GUILayout.EndHorizontal();
+                }
+                GUILayout.EndVertical();
 
-                    DrawItem("Enabled", Input.gyro.enabled.ToString());
-                    if (Input.gyro.enabled)
+                GUILayout.Label("<b>Attitude Sensor</b>");
+                GUILayout.BeginVertical("box");
+                {
+                    var attitude = AttitudeSensor.current;
+                    DrawItem("Attitude Sensor Present", (attitude != null).ToString());
+
+                    if (attitude != null)
                     {
-                        DrawItem("Update Interval", Input.gyro.updateInterval.ToString());
-                        DrawItem("Attitude", Input.gyro.attitude.eulerAngles.ToString());
-                        DrawItem("Gravity", Input.gyro.gravity.ToString());
-                        DrawItem("Rotation Rate", Input.gyro.rotationRate.ToString());
-                        DrawItem("Rotation Rate Unbiased", Input.gyro.rotationRateUnbiased.ToString());
-                        DrawItem("User Acceleration", Input.gyro.userAcceleration.ToString());
+                        GUILayout.BeginHorizontal();
+                        {
+                            if (GUILayout.Button("Enable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.EnableDevice(attitude);
+                            }
+                            if (GUILayout.Button("Disable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.DisableDevice(attitude);
+                            }
+                        }
+                        GUILayout.EndHorizontal();
+
+                        DrawItem("Enabled", attitude.enabled.ToString());
+                        if (attitude.enabled)
+                        {
+                            DrawItem("Attitude", attitude.attitude.ReadValue().eulerAngles.ToString());
+                            DrawItem("Sampling Frequency", attitude.samplingFrequency.ToString());
+                        }
+                    }
+                }
+                GUILayout.EndVertical();
+
+                GUILayout.Label("<b>Gravity Sensor</b>");
+                GUILayout.BeginVertical("box");
+                {
+                    var gravity = GravitySensor.current;
+                    DrawItem("Gravity Sensor Present", (gravity != null).ToString());
+
+                    if (gravity != null)
+                    {
+                        GUILayout.BeginHorizontal();
+                        {
+                            if (GUILayout.Button("Enable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.EnableDevice(gravity);
+                            }
+                            if (GUILayout.Button("Disable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.DisableDevice(gravity);
+                            }
+                        }
+                        GUILayout.EndHorizontal();
+
+                        DrawItem("Enabled", gravity.enabled.ToString());
+                        if (gravity.enabled)
+                        {
+                            DrawItem("Gravity", gravity.gravity.ReadValue().ToString());
+                            DrawItem("Sampling Frequency", gravity.samplingFrequency.ToString());
+                        }
                     }
                 }
                 GUILayout.EndVertical();

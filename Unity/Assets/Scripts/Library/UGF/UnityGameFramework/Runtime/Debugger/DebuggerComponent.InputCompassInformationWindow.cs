@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
@@ -6,6 +6,7 @@
 //------------------------------------------------------------
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace UnityGameFramework.Runtime
 {
@@ -18,27 +19,30 @@ namespace UnityGameFramework.Runtime
                 GUILayout.Label("<b>Input Compass Information</b>");
                 GUILayout.BeginVertical("box");
                 {
-                    GUILayout.BeginHorizontal();
-                    {
-                        if (GUILayout.Button("Enable", GUILayout.Height(30f)))
-                        {
-                            Input.compass.enabled = true;
-                        }
-                        if (GUILayout.Button("Disable", GUILayout.Height(30f)))
-                        {
-                            Input.compass.enabled = false;
-                        }
-                    }
-                    GUILayout.EndHorizontal();
+                    var magneticField = MagneticFieldSensor.current;
+                    DrawItem("Magnetic Field Sensor Present", (magneticField != null).ToString());
 
-                    DrawItem("Enabled", Input.compass.enabled.ToString());
-                    if (Input.compass.enabled)
+                    if (magneticField != null)
                     {
-                        DrawItem("Heading Accuracy", Input.compass.headingAccuracy.ToString());
-                        DrawItem("Magnetic Heading", Input.compass.magneticHeading.ToString());
-                        DrawItem("Raw Vector", Input.compass.rawVector.ToString());
-                        DrawItem("Timestamp", Input.compass.timestamp.ToString());
-                        DrawItem("True Heading", Input.compass.trueHeading.ToString());
+                        GUILayout.BeginHorizontal();
+                        {
+                            if (GUILayout.Button("Enable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.EnableDevice(magneticField);
+                            }
+                            if (GUILayout.Button("Disable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.DisableDevice(magneticField);
+                            }
+                        }
+                        GUILayout.EndHorizontal();
+
+                        DrawItem("Enabled", magneticField.enabled.ToString());
+                        if (magneticField.enabled)
+                        {
+                            DrawItem("Magnetic Field", magneticField.magneticField.ReadValue().ToString());
+                            DrawItem("Sampling Frequency", magneticField.samplingFrequency.ToString());
+                        }
                     }
                 }
                 GUILayout.EndVertical();

@@ -1,12 +1,12 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace UnityGameFramework.Runtime
 {
@@ -19,27 +19,64 @@ namespace UnityGameFramework.Runtime
                 GUILayout.Label("<b>Input Acceleration Information</b>");
                 GUILayout.BeginVertical("box");
                 {
-                    DrawItem("Acceleration", Input.acceleration.ToString());
-                    DrawItem("Acceleration Event Count", Input.accelerationEventCount.ToString());
-                    DrawItem("Acceleration Events", GetAccelerationEventsString(Input.accelerationEvents));
+                    var accelerometer = Accelerometer.current;
+                    DrawItem("Accelerometer Present", (accelerometer != null).ToString());
+
+                    if (accelerometer != null)
+                    {
+                        GUILayout.BeginHorizontal();
+                        {
+                            if (GUILayout.Button("Enable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.EnableDevice(accelerometer);
+                            }
+                            if (GUILayout.Button("Disable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.DisableDevice(accelerometer);
+                            }
+                        }
+                        GUILayout.EndHorizontal();
+
+                        DrawItem("Enabled", accelerometer.enabled.ToString());
+                        if (accelerometer.enabled)
+                        {
+                            DrawItem("Acceleration", accelerometer.acceleration.ReadValue().ToString());
+                            DrawItem("Sampling Frequency", accelerometer.samplingFrequency.ToString());
+                        }
+                    }
                 }
                 GUILayout.EndVertical();
-            }
 
-            private string GetAccelerationEventString(AccelerationEvent accelerationEvent)
-            {
-                return Utility.Text.Format("{0}, {1}", accelerationEvent.acceleration, accelerationEvent.deltaTime);
-            }
-
-            private string GetAccelerationEventsString(AccelerationEvent[] accelerationEvents)
-            {
-                string[] accelerationEventStrings = new string[accelerationEvents.Length];
-                for (int i = 0; i < accelerationEvents.Length; i++)
+                GUILayout.Label("<b>Linear Acceleration Sensor</b>");
+                GUILayout.BeginVertical("box");
                 {
-                    accelerationEventStrings[i] = GetAccelerationEventString(accelerationEvents[i]);
-                }
+                    var linearAcceleration = LinearAccelerationSensor.current;
+                    DrawItem("Linear Acceleration Sensor Present", (linearAcceleration != null).ToString());
 
-                return string.Join("; ", accelerationEventStrings);
+                    if (linearAcceleration != null)
+                    {
+                        GUILayout.BeginHorizontal();
+                        {
+                            if (GUILayout.Button("Enable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.EnableDevice(linearAcceleration);
+                            }
+                            if (GUILayout.Button("Disable", GUILayout.Height(30f)))
+                            {
+                                InputSystem.DisableDevice(linearAcceleration);
+                            }
+                        }
+                        GUILayout.EndHorizontal();
+
+                        DrawItem("Enabled", linearAcceleration.enabled.ToString());
+                        if (linearAcceleration.enabled)
+                        {
+                            DrawItem("Acceleration", linearAcceleration.acceleration.ReadValue().ToString());
+                            DrawItem("Sampling Frequency", linearAcceleration.samplingFrequency.ToString());
+                        }
+                    }
+                }
+                GUILayout.EndVertical();
             }
         }
     }

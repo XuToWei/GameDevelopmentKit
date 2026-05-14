@@ -58,8 +58,8 @@ namespace UnityGameFramework.Runtime
         private ScreenInformationWindow m_ScreenInformationWindow = new ScreenInformationWindow();
         private GraphicsInformationWindow m_GraphicsInformationWindow = new GraphicsInformationWindow();
         private InputSummaryInformationWindow m_InputSummaryInformationWindow = new InputSummaryInformationWindow();
+        private InputDeviceInformationWindow m_InputDeviceInformationWindow = new InputDeviceInformationWindow();
         private InputTouchInformationWindow m_InputTouchInformationWindow = new InputTouchInformationWindow();
-        private InputLocationInformationWindow m_InputLocationInformationWindow = new InputLocationInformationWindow();
         private InputAccelerationInformationWindow m_InputAccelerationInformationWindow = new InputAccelerationInformationWindow();
         private InputGyroscopeInformationWindow m_InputGyroscopeInformationWindow = new InputGyroscopeInformationWindow();
         private InputCompassInformationWindow m_InputCompassInformationWindow = new InputCompassInformationWindow();
@@ -189,8 +189,8 @@ namespace UnityGameFramework.Runtime
             RegisterDebuggerWindow("Information/Screen", m_ScreenInformationWindow);
             RegisterDebuggerWindow("Information/Graphics", m_GraphicsInformationWindow);
             RegisterDebuggerWindow("Information/Input/Summary", m_InputSummaryInformationWindow);
+            RegisterDebuggerWindow("Information/Input/Device", m_InputDeviceInformationWindow);
             RegisterDebuggerWindow("Information/Input/Touch", m_InputTouchInformationWindow);
-            RegisterDebuggerWindow("Information/Input/Location", m_InputLocationInformationWindow);
             RegisterDebuggerWindow("Information/Input/Acceleration", m_InputAccelerationInformationWindow);
             RegisterDebuggerWindow("Information/Input/Gyroscope", m_InputGyroscopeInformationWindow);
             RegisterDebuggerWindow("Information/Input/Compass", m_InputCompassInformationWindow);
