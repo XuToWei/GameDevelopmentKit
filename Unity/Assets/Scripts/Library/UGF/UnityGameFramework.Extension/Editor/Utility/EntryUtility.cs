@@ -1,54 +1,38 @@
-using System.Collections.Generic;
-using System.Reflection;
+using System;
+using System.IO;
+using GameFramework;
 using GameFramework.Resource;
-using UnityEditor.SceneManagement;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityGameFramework.Runtime;
 
 namespace UnityGameFramework.Extension.Editor
 {
     public static class EntryUtility
     {
-        public static readonly string EntryScenePath = "Assets/Launcher.unity";
-        
-        public static Scene GetEntryScene()
-        {
-            EditorSceneManager.OpenScene(EntryScenePath, OpenSceneMode.Additive);
-            return SceneManager.GetSceneByPath(EntryScenePath);
-        }
-
-        public static T GetEntrySceneComponent<T>() where T : Component
-        {
-            Scene entryScene = GetEntryScene();
-            foreach (var rootGameObject in entryScene.GetRootGameObjects())
-            {
-                T component = rootGameObject.GetComponentInChildren<T>();
-                if (component != null)
-                {
-                    return component;
-                }
-            }
-            return null;
-        }
-        
-        public static T[] GetEntrySceneComponents<T>() where T : Component
-        {
-            Scene entryScene = GetEntryScene();
-            List<T> components = new List<T>();
-            foreach (var rootGameObject in entryScene.GetRootGameObjects())
-            {
-                components.AddRange(rootGameObject.GetComponentsInChildren<T>(true));
-            }
-            return components.ToArray();
-        }
+        public const string EntryPrefabPath = "Assets/Res/GameEntry.prefab";
+        public const string LauncherScenePath = "Assets/Launcher.unity";
 
         public static ResourceMode GetEntryResourceMode()
         {
-            ResourceComponent resourceComponent = GetEntrySceneComponent<ResourceComponent>();
-            FieldInfo resourceModeFieldInfo = typeof(ResourceComponent).GetField("m_ResourceMode", BindingFlags.Instance | BindingFlags.NonPublic);
-            ResourceMode resourceMode = (ResourceMode)resourceModeFieldInfo.GetValue(resourceComponent);
-            return resourceMode;
+            using var reader = new StreamReader(EntryPrefabPath);
+            for (int i = 0; i < int.MaxValue; i++)
+            {
+                string line = reader.ReadLine();
+                if(line == null)
+                    break;
+                if (line.Contains("m_ResourceMode", StringComparison.Ordinal))
+                {
+                    string valueLine = reader.ReadLine();
+                    if (valueLine != null)
+                    {
+                        int idx = valueLine.IndexOf("value: ", StringComparison.Ordinal);
+                        if (idx >= 0)
+                        {
+                            return (ResourceMode)int.Parse(valueLine.Substring(idx + 7).Trim());
+                        }
+                    }
+                    break;
+                }
+            }
+            throw new GameFrameworkException("Failed to parse resource mode from entry scene.");
         }
     }
 }

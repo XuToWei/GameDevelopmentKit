@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "cn.lys.aibridge": {
+      "version": "https://github.com/XuToWei/AIBridge-Extension.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "7f5bfdaa71d53cc53910e58ef9673a8eba722462"
+    },
     "com.annulusgames.lit-motion": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
       "depth": 0,
@@ -9,7 +16,7 @@
         "com.unity.collections": "1.5.1",
         "com.unity.mathematics": "1.0.1"
       },
-      "hash": "b651c5866fe0e3fba065ce2e56dfdfcd59d3d109"
+      "hash": "0b4c588ee75a07198841d92aab653e6b39445089"
     },
     "com.annulusgames.lit-motion.animation": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
@@ -18,21 +25,14 @@
       "dependencies": {
         "com.annulusgames.lit-motion": "2.0.0"
       },
-      "hash": "b651c5866fe0e3fba065ce2e56dfdfcd59d3d109"
-    },
-    "com.baracuda.preprocessor-symbol-definition-files": {
-      "version": "https://github.com/JohnBaracuda/com.baracuda.preprocessor-symbol-definition-files.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "93c7e64d2fa1b8ce1798f0cbce75034f63a45c04"
+      "hash": "0b4c588ee75a07198841d92aab653e6b39445089"
     },
     "com.code-philosophy.hybridclr": {
       "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "fcef6dfe8ed715cc60a7618a1d2ad62bcace3a80"
+      "hash": "4feac30cb2e105992986c737f7f54992b8300e1a"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -76,15 +76,6 @@
       "dependencies": {},
       "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
     },
-    "com.cysharp.r3": {
-      "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity#1.2.9",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.modules.imgui": "1.0.0"
-      },
-      "hash": "9b18209448c5e1f4572a4191b1f4f530a1d26c01"
-    },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10",
       "depth": 0,
@@ -97,7 +88,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9fae2bebcf8768398905aba0e64a25f2384b4556"
+      "hash": "419759ee3b6bb17a65cba1348c084d41680184ea"
     },
     "com.psygames.unitywebsocket": {
       "version": "https://github.com/psygames/UnityWebSocket.git#upm",
@@ -113,7 +104,7 @@
       "dependencies": {}
     },
     "com.unity.burst": {
-      "version": "1.8.25",
+      "version": "1.8.28",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -123,31 +114,24 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collections": {
-      "version": "2.6.2",
+      "version": "2.6.5",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.burst": "1.8.23",
+        "com.unity.burst": "1.8.27",
         "com.unity.mathematics": "1.3.2",
         "com.unity.test-framework": "1.4.6",
-        "com.unity.nuget.mono-cecil": "1.11.5",
+        "com.unity.nuget.mono-cecil": "1.11.6",
         "com.unity.test-framework.performance": "3.0.3"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.editorcoroutines": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
-    },
-    "com.unity.editoriterationprofiler": {
-      "version": "https://github.com/Unity-Technologies/com.unity.editoriterationprofiler.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "02a50237af74cc628b971f02987eba048076b902"
     },
     "com.unity.ext.nunit": {
       "version": "2.0.5",
@@ -156,7 +140,7 @@
       "dependencies": {}
     },
     "com.unity.ide.rider": {
-      "version": "3.0.38",
+      "version": "3.0.40",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -165,7 +149,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.14.2",
+      "version": "1.19.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -174,14 +158,14 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.mathematics": {
-      "version": "1.3.2",
+      "version": "1.3.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.memoryprofiler": {
-      "version": "1.1.9",
+      "version": "1.1.12",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -194,7 +178,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.multiplayer.center": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
@@ -202,7 +186,7 @@
       }
     },
     "com.unity.nuget.mono-cecil": {
-      "version": "1.11.5",
+      "version": "1.11.6",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
@@ -216,34 +200,33 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.profiling.core": {
-      "version": "1.0.2",
+      "version": "1.0.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
-      "version": "17.0.4",
+      "version": "17.3.0",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
-        "com.unity.burst": "1.8.20",
+        "com.unity.burst": "1.8.14",
         "com.unity.mathematics": "1.3.2",
         "com.unity.ugui": "2.0.0",
         "com.unity.collections": "2.4.3",
         "com.unity.modules.physics": "1.0.0",
         "com.unity.modules.terrain": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.rendering.light-transport": "1.0.1"
+        "com.unity.modules.jsonserialize": "1.0.0"
       }
     },
     "com.unity.render-pipelines.universal": {
-      "version": "17.0.4",
+      "version": "17.3.0",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.render-pipelines.core": "17.0.4",
-        "com.unity.shadergraph": "17.0.4",
+        "com.unity.render-pipelines.core": "17.3.0",
+        "com.unity.shadergraph": "17.3.0",
         "com.unity.render-pipelines.universal-config": "17.0.3"
       }
     },
@@ -255,47 +238,21 @@
         "com.unity.render-pipelines.core": "17.0.3"
       }
     },
-    "com.unity.rendering.light-transport": {
-      "version": "1.0.1",
-      "depth": 2,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.collections": "2.2.0",
-        "com.unity.mathematics": "1.2.4",
-        "com.unity.modules.terrain": "1.0.0"
-      }
-    },
     "com.unity.searcher": {
-      "version": "4.9.3",
+      "version": "4.9.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.shadergraph": {
-      "version": "17.0.4",
+      "version": "17.3.0",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
-        "com.unity.render-pipelines.core": "17.0.4",
+        "com.unity.render-pipelines.core": "17.3.0",
         "com.unity.searcher": "4.9.3"
       }
-    },
-    "com.unity.sysroot": {
-      "version": "2.0.10",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.sysroot.linux-x86_64": {
-      "version": "2.0.9",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.sysroot": "2.0.10"
-      },
-      "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
       "version": "1.6.0",
@@ -317,16 +274,6 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.toolchain.win-x86_64-linux-x86_64": {
-      "version": "2.0.11",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.sysroot": "2.0.10",
-        "com.unity.sysroot.linux-x86_64": "2.0.9"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.ugui": {
       "version": "2.0.0",
       "depth": 0,
@@ -341,14 +288,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "34cd04c2dac9e240bea2ca4f71dc4a6eb0dec50f"
+      "hash": "04f6baf3f57a2684f950f8e3e91a10ed4f95bcb7"
     },
     "com.yasirkula.runtimeinspector": {
       "version": "https://github.com/yasirkula/UnityRuntimeInspector.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f8755d61a7b535cc626630e54478ca162ab97ff6"
+      "hash": "ec8421f717664d75493e7132cbe16f2cfdbbf946"
     },
     "me.qiankanglai.loopscrollrect": {
       "version": "https://github.com/qiankanglai/LoopScrollRect.git",
@@ -357,7 +304,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "48735bdc5e6d9451b3015e54f2b1f858c404df3e"
+      "hash": "64ead283b59e1337a25553378aa70c6e200150c9"
     },
     "me.xw.codebind": {
       "version": "https://github.com/XuToWei/CodeBind.git",
@@ -378,7 +325,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9f16082a3e06c1f8562956d230e15b7ec49035fb"
+      "hash": "3ba3d7fbecb191c5a471deb8bad38cfdfaee155b"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
@@ -392,7 +339,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "29b61c47e5ff4ba7f1976918ec0d4b9b4ecb1576"
+      "hash": "9cb25fae3db67e463f4969a613557929d777cb27"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
@@ -534,7 +481,8 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.hierarchycore": "1.0.0"
+        "com.unity.modules.hierarchycore": "1.0.0",
+        "com.unity.modules.physics": "1.0.0"
       }
     },
     "com.unity.modules.umbra": {

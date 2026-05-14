@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 
 namespace UnityGameFramework.Extension.Editor
 {
@@ -14,6 +15,7 @@ namespace UnityGameFramework.Extension.Editor
                 AssetCollection collection = AssetDatabase.LoadAssetAtPath<AssetCollection>(path);
                 collection.Pack();
             }
+            Debug.Log($"Refresh AssetCollection complete, total: {guids.Length}");
         }
     }
 }

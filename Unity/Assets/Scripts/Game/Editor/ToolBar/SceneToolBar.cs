@@ -22,7 +22,7 @@ namespace Game.Editor
             if (s_SceneNames == null)
             {
                 var sceneList = AssetDatabase.FindAssets("t:scene", new[] { "Assets/Res" }).ToList();
-                sceneList.Insert(0, AssetDatabase.AssetPathToGUID(EntryUtility.EntryScenePath));
+                sceneList.Insert(0, AssetDatabase.AssetPathToGUID(EntryUtility.LauncherScenePath));
                 s_SceneGuids = sceneList.ToArray();
                 s_SceneNames = new string[s_SceneGuids.Length];
                 for (int i = 0; i < s_SceneNames.Length; i++)

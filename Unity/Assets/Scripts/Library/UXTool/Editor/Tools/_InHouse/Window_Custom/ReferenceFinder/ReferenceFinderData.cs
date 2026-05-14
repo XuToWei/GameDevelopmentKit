@@ -13,7 +13,7 @@ using ThunderFireUITool;
 using UnityEditor.Build;
 using UnityEditor.IMGUI.Controls;
 
-public class AssetDescription : TreeViewItem
+public class AssetDescription : TreeViewItem<int>
 {
     public AssetDescription(){}
     public AssetDescription(AssetDescription data)

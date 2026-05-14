@@ -34,7 +34,7 @@ namespace Game
                 return;
             }
 
-            ChangeState<ProcedurePreload>(procedureOwner);
+            ChangeState<ProcedureResourcesReady>(procedureOwner);
         }
 
         private void OnInitResourcesComplete()

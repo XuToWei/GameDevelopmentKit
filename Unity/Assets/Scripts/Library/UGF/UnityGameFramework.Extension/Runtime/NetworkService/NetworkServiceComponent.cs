@@ -31,11 +31,6 @@ namespace UnityGameFramework.Extension
             eventComponent.Subscribe(NetworkCustomErrorEventArgs.EventId, OnNetworkCustomError);
         }
 
-        private void OnDestroy()
-        {
-            DestroyServiceNetworkHelper();
-        }
-
         private void OnNetworkConnected(object sender, GameEventArgs args)
         {
             NetworkConnectedEventArgs ne = (NetworkConnectedEventArgs)args;

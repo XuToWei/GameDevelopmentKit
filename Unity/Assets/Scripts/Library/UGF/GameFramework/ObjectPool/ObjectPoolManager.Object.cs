@@ -41,6 +41,17 @@ namespace GameFramework.ObjectPool
             }
 
             /// <summary>
+            /// 获取对象类型。
+            /// </summary>
+            public Type Type
+            {
+                get
+                {
+                    return m_Object.Type;
+                }
+            }
+
+            /// <summary>
             /// 获取对象是否被加锁。
             /// </summary>
             public bool Locked

@@ -15,18 +15,24 @@ public class GuideHighLightButton : Button
             var current = eventData.pointerCurrentRaycast.gameObject;
             //排除自己和自己的父节点
             bool isAfterSelf = false;
-            foreach (var t in s_RaycastResults)
+            foreach (var result in s_RaycastResults)
             {
-                if (!isAfterSelf && current == t.gameObject)
+                var resultGameObject = result.gameObject;
+                if (!isAfterSelf && current == resultGameObject)
                 {
                     isAfterSelf = true;
                     continue;
                 }
-                if (isAfterSelf && !current.transform.IsChildOf(t.gameObject.transform) && !t.gameObject.transform.IsChildOf(current.transform))
+                if (isAfterSelf)
                 {
-                    //RaycastAll后ugui会自己排序，如果你只想响应透下去的最近的一个响应，这里ExecuteEvents.Execute后直接break就行。
-                    ExecuteEvents.ExecuteHierarchy(t.gameObject, eventData, ExecuteEvents.pointerClickHandler);
-                    break;
+                    var resultTransform = resultGameObject.transform;
+                    var currentTransform = current.transform;
+                    if (!currentTransform.IsChildOf(resultTransform) && !resultTransform.IsChildOf(currentTransform))
+                    {
+                        //RaycastAll后ugui会自己排序，如果你只想响应透下去的最近的一个响应，这里ExecuteEvents.Execute后直接break就行。
+                        ExecuteEvents.ExecuteHierarchy(resultGameObject, eventData, ExecuteEvents.pointerClickHandler);
+                        break;
+                    }
                 }
             }
             s_RaycastResults.Clear();

@@ -37,7 +37,7 @@ namespace ThunderFireUITool
 
         public static List<Transform> checkResultGoTransList = new List<Transform>();
         [SerializeField]
-        private TreeViewState m_resultTreeViewState;
+        private TreeViewState<int> m_resultTreeViewState;
         private UIComponentCheckResultTableView m_resultTreeView;
 
 
@@ -152,7 +152,7 @@ namespace ThunderFireUITool
                     textColor = Color.yellow
                 }
             };
-            GameObject obj = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+            GameObject obj = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             if (obj != null)
             {
                 if (checkResultGoTransList.Contains(obj.transform))

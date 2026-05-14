@@ -1,12 +1,7 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
 using GameFramework;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
 
 namespace UnityGameFramework.Runtime
 {
@@ -19,31 +14,50 @@ namespace UnityGameFramework.Runtime
                 GUILayout.Label("<b>Input Touch Information</b>");
                 GUILayout.BeginVertical("box");
                 {
-                    DrawItem("Touch Supported", Input.touchSupported.ToString());
-                    DrawItem("Touch Pressure Supported", Input.touchPressureSupported.ToString());
-                    DrawItem("Stylus Touch Supported", Input.stylusTouchSupported.ToString());
-                    DrawItem("Simulate Mouse With Touches", Input.simulateMouseWithTouches.ToString());
-                    DrawItem("Multi Touch Enabled", Input.multiTouchEnabled.ToString());
-                    DrawItem("Touch Count", Input.touchCount.ToString());
-                    DrawItem("Touches", GetTouchesString(Input.touches));
+                    DrawItem("Touchscreen Present", (Touchscreen.current != null).ToString());
+
+                    if (Touchscreen.current != null)
+                    {
+                        DrawItem("Touchscreen Name", Touchscreen.current.name);
+                        DrawItem("Touchscreen Display Name", Touchscreen.current.displayName);
+                    }
+                }
+                GUILayout.EndVertical();
+
+                GUILayout.Label("<b>Enhanced Touch</b>");
+                GUILayout.BeginVertical("box");
+                {
+                    GUILayout.BeginHorizontal();
+                    {
+                        if (GUILayout.Button("Enable", GUILayout.Height(30f)))
+                        {
+                            EnhancedTouchSupport.Enable();
+                        }
+                        if (GUILayout.Button("Disable", GUILayout.Height(30f)))
+                        {
+                            EnhancedTouchSupport.Disable();
+                        }
+                    }
+                    GUILayout.EndHorizontal();
+
+                    DrawItem("Enhanced Touch Enabled", EnhancedTouchSupport.enabled.ToString());
+                    if (EnhancedTouchSupport.enabled)
+                    {
+                        var activeTouches = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches;
+                        DrawItem("Active Touch Count", activeTouches.Count.ToString());
+                        for (int i = 0; i < activeTouches.Count; i++)
+                        {
+                            var touch = activeTouches[i];
+                            DrawItem(Utility.Text.Format("Touch [{0}]", i), GetTouchString(touch));
+                        }
+                    }
                 }
                 GUILayout.EndVertical();
             }
 
-            private string GetTouchString(Touch touch)
+            private string GetTouchString(UnityEngine.InputSystem.EnhancedTouch.Touch touch)
             {
-                return Utility.Text.Format("{0}, {1}, {2}, {3}, {4}", touch.position, touch.deltaPosition, touch.rawPosition, touch.pressure, touch.phase);
-            }
-
-            private string GetTouchesString(Touch[] touches)
-            {
-                string[] touchStrings = new string[touches.Length];
-                for (int i = 0; i < touches.Length; i++)
-                {
-                    touchStrings[i] = GetTouchString(touches[i]);
-                }
-
-                return string.Join("; ", touchStrings);
+                return Utility.Text.Format("{0}, {1}, {2}, {3}, {4}", touch.screenPosition, touch.delta, touch.pressure, touch.phase, touch.touchId);
             }
         }
     }

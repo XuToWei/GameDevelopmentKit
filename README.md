@@ -55,7 +55,7 @@
 
 - 1.安装 [.net8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)，服务器功能需要安装[MongoDB](https://www.mongodb.com/)
 
-- 2.打开Unity(6000.0.59f2)项目，等待Unity编译完成
+- 2.打开Unity(6000.3.12f1)项目，等待Unity编译完成
 
 - 3.使用IDE打开Kit.sln编译（导表，资源服务器，代码分析等功能需要用到）
 

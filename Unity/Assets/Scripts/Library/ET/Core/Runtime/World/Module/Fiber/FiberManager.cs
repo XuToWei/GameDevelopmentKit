@@ -28,7 +28,7 @@ namespace ET
             this.mainThreadScheduler = new MainThreadScheduler(this);
             this.schedulers[(int)SchedulerType.Main] = this.mainThreadScheduler;
             
-#if UNITY_ET_VIEW && UNITY_EDITOR
+#if UNITY_EDITOR
             this.schedulers[(int)SchedulerType.Thread] = this.mainThreadScheduler;
             this.schedulers[(int)SchedulerType.ThreadPool] = this.mainThreadScheduler;
 #else
@@ -76,18 +76,22 @@ namespace ET
                 
                 TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
                 
-                fiber.ThreadSynchronizationContext.Post(async () =>
+                fiber.ThreadSynchronizationContext.Post(() =>
                 {
-                    try
+                    async UniTaskVoid RunAsync()
                     {
-                        // 根据Fiber的SceneType分发Init,必须在Fiber线程中执行
-                        await EventSystem.Instance.Invoke<FiberInit, UniTask>((long)sceneType, new FiberInit() {Fiber = fiber});
-                        tcs.SetResult(true);
+                        try
+                        {
+                            // 根据Fiber的SceneType分发Init,必须在Fiber线程中执行
+                            await EventSystem.Instance.Invoke<FiberInit, UniTask>((long)sceneType, new FiberInit() {Fiber = fiber});
+                            tcs.SetResult(true);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error($"init fiber fail: {sceneType} {e}");
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        Log.Error($"init fiber fail: {sceneType} {e}");
-                    }
+                    RunAsync().Forget();
                 });
 
                 await tcs.Task;

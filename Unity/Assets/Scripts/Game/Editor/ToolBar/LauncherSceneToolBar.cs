@@ -18,7 +18,7 @@ namespace Game.Editor
                 if (GUILayout.Button(m_ButtonGUIContent))
                 {
                     BuildSceneSetting.AllScenes();
-                    SceneHelper.StartScene(EntryUtility.EntryScenePath);
+                    SceneHelper.StartScene(EntryUtility.LauncherScenePath);
                 }
             }
             EditorGUI.EndDisabledGroup();

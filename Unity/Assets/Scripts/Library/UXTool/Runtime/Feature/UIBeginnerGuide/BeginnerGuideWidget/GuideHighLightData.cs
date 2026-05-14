@@ -17,10 +17,11 @@ public class GuideHighLightData : GuideWidgetData
 
     public override string Serialize()
     {
-        childPos = transform.GetChild(0).localPosition;
-        childRot = transform.GetChild(0).eulerAngles;
-        childScale = transform.GetChild(0).localScale;
-        childSize = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta;
+        RectTransform rectTransform0 = transform.GetChild(0).GetComponent<RectTransform>();
+        childPos = rectTransform0.localPosition;
+        childRot = rectTransform0.eulerAngles;
+        childScale = rectTransform0.localScale;
+        childSize = rectTransform0.sizeDelta;
         UpdateTransformData();
         string data = JsonUtility.ToJson(this);
         return data;

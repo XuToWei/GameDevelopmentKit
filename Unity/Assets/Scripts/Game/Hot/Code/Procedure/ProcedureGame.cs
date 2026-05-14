@@ -1,5 +1,6 @@
 using GameFramework.Fsm;
 using UnityGameFramework.Runtime;
+using ProcedureOwner = GameFramework.Fsm.IFsm<Game.Hot.ProcedureComponent>;
 
 namespace Game.Hot
 {
@@ -18,6 +19,12 @@ namespace Game.Hot
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
             procedureOwner.SetData<VarInt32>("NextSceneId", HotEntry.Tables.DTOneConfig.SceneMenu);
             ChangeState<ProcedureChangeScene>(procedureOwner);
+        }
+
+        protected override void OnDestroy(ProcedureOwner procedureOwner)
+        {
+            GameEntry.NetworkService.DestroyServiceNetworkHelper();
+            base.OnDestroy(procedureOwner);
         }
     }
 }

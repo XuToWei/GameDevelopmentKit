@@ -36,7 +36,10 @@
         "uNode.Core",
         "uNode.Core.Editor",
         "uNode.Editor",
-        "uNode.Integration.InputSystem"
+        "uNode.Integration.InputSystem",
+        "cn.lys.aibridge.Runtime",
+        "cn.lys.aibridge.Editor",
+        "Leihuo.UXTools.Editor"
     ],
     "includePlatforms": [
         "Editor"

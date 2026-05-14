@@ -15,6 +15,7 @@ namespace GameFramework.ObjectPool
     public abstract class ObjectBase : IReference
     {
         private string m_Name;
+        private Type m_Type;
         private object m_Target;
         private bool m_Locked;
         private int m_Priority;
@@ -40,6 +41,17 @@ namespace GameFramework.ObjectPool
             get
             {
                 return m_Name;
+            }
+        }
+
+        /// <summary>
+        /// 获取对象类型。
+        /// </summary>
+        public Type Type
+        {
+            get
+            {
+                return m_Type;
             }
         }
 
@@ -116,7 +128,7 @@ namespace GameFramework.ObjectPool
         /// <param name="target">对象。</param>
         protected void Initialize(object target)
         {
-            Initialize(null, target, false, 0);
+            Initialize(null, null, target, false, 0);
         }
 
         /// <summary>
@@ -126,7 +138,18 @@ namespace GameFramework.ObjectPool
         /// <param name="target">对象。</param>
         protected void Initialize(string name, object target)
         {
-            Initialize(name, target, false, 0);
+            Initialize(name, null, target, false, 0);
+        }
+
+        /// <summary>
+        /// 初始化对象基类。
+        /// </summary>
+        /// <param name="name">对象名称。</param>
+        /// <param name="type">对象类型。</param>
+        /// <param name="target">对象。</param>
+        protected void Initialize(string name, Type type, object target)
+        {
+            Initialize(name, type, target, false, 0);
         }
 
         /// <summary>
@@ -137,7 +160,19 @@ namespace GameFramework.ObjectPool
         /// <param name="locked">对象是否被加锁。</param>
         protected void Initialize(string name, object target, bool locked)
         {
-            Initialize(name, target, locked, 0);
+            Initialize(name, null, target, locked, 0);
+        }
+
+        /// <summary>
+        /// 初始化对象基类。
+        /// </summary>
+        /// <param name="name">对象名称。</param>
+        /// <param name="type">对象类型。</param>
+        /// <param name="target">对象。</param>
+        /// <param name="locked">对象是否被加锁。</param>
+        protected void Initialize(string name, Type type, object target, bool locked)
+        {
+            Initialize(name, type, target, locked, 0);
         }
 
         /// <summary>
@@ -148,17 +183,30 @@ namespace GameFramework.ObjectPool
         /// <param name="priority">对象的优先级。</param>
         protected void Initialize(string name, object target, int priority)
         {
-            Initialize(name, target, false, priority);
+            Initialize(name, null, target, false, priority);
         }
 
         /// <summary>
         /// 初始化对象基类。
         /// </summary>
         /// <param name="name">对象名称。</param>
+        /// <param name="type">对象类型。</param>
+        /// <param name="target">对象。</param>
+        /// <param name="priority">对象的优先级。</param>
+        protected void Initialize(string name, Type type, object target, int priority)
+        {
+            Initialize(name, type, target, false, priority);
+        }
+
+        /// <summary>
+        /// 初始化对象基类。
+        /// </summary>
+        /// <param name="name">对象名称。</param>
+        /// <param name="type">对象类型。</param>
         /// <param name="target">对象。</param>
         /// <param name="locked">对象是否被加锁。</param>
         /// <param name="priority">对象的优先级。</param>
-        protected void Initialize(string name, object target, bool locked, int priority)
+        protected void Initialize(string name, Type type, object target, bool locked, int priority)
         {
             if (target == null)
             {
@@ -166,6 +214,7 @@ namespace GameFramework.ObjectPool
             }
 
             m_Name = name ?? string.Empty;
+            m_Type = type;
             m_Target = target;
             m_Locked = locked;
             m_Priority = priority;
@@ -178,6 +227,7 @@ namespace GameFramework.ObjectPool
         public virtual void Clear()
         {
             m_Name = null;
+            m_Type = null;
             m_Target = null;
             m_Locked = false;
             m_Priority = 0;

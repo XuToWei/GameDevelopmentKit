@@ -1,0 +1,243 @@
+---
+name: image-to-ui
+description: "分析UI效果图/设计稿/截图，提取结构化的UI节点层级（位置、大小、类型、父子关系），输出JSON和debug叠加图。当用户提供UI图片并希望拆解为节点结构时使用：效果图转层级、设计稿转节点、UI元素检测、mockup分析、截图还原UI结构、从图片生成UI布局。即使用户只说"分析这张图"或"帮我拆解这个界面"，只要图片是UI/游戏界面，就应该使用此skill。"
+---
+
+# Image to UI - 效果图分析与Debug可视化
+
+从UI效果图中提取结构化的节点层级信息，生成debug叠加图验证结果。
+
+## 核心原则：只分析前景层
+
+效果图是最终渲染结果，不是分层PSD。很多界面存在"前景+背景"的层次关系（弹窗覆盖主界面、教程遮罩覆盖游戏画面、半透明蒙版下的内容等）。
+
+**判定规则**：如果画面中存在半透明遮罩/覆盖层，遮罩后面的所有内容（无论多清晰）都属于背景，整体合并为一个Image节点，不拆解其中的按钮、文字、进度条等子元素。只识别遮罩之上的前景元素。
+
+**典型场景**：
+- 教程引导界面：暗色蒙版覆盖游戏画面 → 背景整体为一个Image，只分析蒙版上的引导角色、对话气泡、跳过按钮
+- 弹窗/对话框：半透明黑色遮罩 + 弹窗 → 背景为一个Image，只分析弹窗内部元素
+- 全屏界面无遮罩：所有可见元素都是前景，正常分析
+
+**判断线索**：画面整体或大面积变暗/变模糊、有明显的明暗分层、前景元素浮在暗化内容之上。
+
+## 工作流程
+
+### 第一步：读取效果图并判定前景层
+
+用 Read 工具查看用户提供的UI效果图。
+
+**首先判定前景层边界**（这一步必须在详细分析之前完成）：
+1. 画面中是否存在半透明遮罩/覆盖层？
+2. 如果有遮罩：遮罩之下的一切都是背景（合并为单个Image），只分析遮罩之上的元素
+3. 如果无遮罩：所有可见元素都是前景，正常分析
+
+**然后观察前景层内的结构**：
+- 整体布局结构（弹窗？全屏？多面板？）
+- 可交互元素（按钮、输入框等）
+- 文字内容
+- 元素之间的对齐和间距规律
+
+### 第二步：视觉分析——确定语义层级与坐标
+
+仅对前景层内的元素进行逐层识别，确定类型、命名、父子关系、视觉属性和坐标。遮罩后面的内容不论多清晰都不要单独识别。
+
+**识别顺序**（从外到内）：
+1. 根画布/全屏背景（或遮罩背景作为单个Image）
+2. 前景层的主要面板和容器
+3. 容器内的控件
+4. 控件内的子元素（按钮里的文字等）
+
+**每个元素需要确定**：
+- **类型**：选择最匹配的组件类型（见组件类型表）
+- **命名**：`{前缀}_{描述}`，如 `btn_play`、`txt_level`、`panel_popup`
+- **父子关系**：元素之间的嵌套和包含关系
+- **视觉属性**：颜色、透明度、文字内容、字号等
+- **坐标**：`x, y, width, height`，相对画布左上角
+
+**提高坐标准确性的技巧**：
+
+AI看到的是缩略图，直接估算像素坐标会有误差。以下方法能显著提高准确性：
+
+- **利用对称性**：居中的元素 x = (画布宽 - 元素宽) / 2。比如弹窗在画布中水平居中，已知画布1080宽、弹窗约907宽，则 x ≈ (1080-907)/2 ≈ 86
+- **利用对齐关系**：同一行的元素 y 值相同或接近；同一列的元素 x 值相同
+- **利用等间距**：水平排列的同类元素（如3个道具图标）通常等间距分布，知道容器范围和元素数量就能算出每个的位置
+- **从父到子推算**：先确定容器坐标，再根据内边距和布局规则推算子元素位置
+- **参考已知尺寸**：文字高度通常与字号接近，按钮高度一般40-80px（手机端可能更大），图标通常是正方形
+- **区分前景与背景的相似元素**：当遮罩下的背景中存在与前景相似的元素（如背景有一个大角色剪影，前景有一个小吉祥物），容易把两者混淆导致框选过大。此时注意：前景元素通常更小、更亮、边缘更清晰；背景元素被暗化、模糊。只框选前景层那个，不要把背景中的相似元素也圈进来
+
+**常见复合元素拆解**：
+
+| 视觉元素 | 拆解方式 |
+|----------|----------|
+| 带文字的按钮 | Button 父节点 + Text 子节点 |
+| 带图标的按钮 | Button 父节点 + Image 子节点 |
+| 带标题的面板 | Panel 父节点 + Text 子节点 + 内容子节点 |
+| 圆形头像 | Mask 父节点 + RawImage 子节点 |
+| 进度条 | ProgressBar 父节点（含背景和填充信息） |
+| 带计数的图标 | Image 父节点（在properties中描述计数） |
+
+### 第三步：输出JSON
+
+将分析结果输出为 `ui_hierarchy.json`。
+
+输出目录：`AIBridgeCache/image-to-ui/{界面名}/`（Unity项目根目录下，PascalCase命名）。界面名从内容推断，如关卡开始界面命名为 `PlayStageStart`。
+
+```json
+{
+  "canvas": { "width": 1080, "height": 2340 },
+  "nodes": [
+    {
+      "id": 1,
+      "name": "img_background",
+      "type": "Image",
+      "rect": { "x": 0, "y": 0, "width": 1080, "height": 2340 },
+      "parentId": null,
+      "children": [2],
+      "properties": { "note": "游戏主界面背景" }
+    }
+  ]
+}
+```
+
+#### 字段说明
+
+| 字段 | 说明 |
+|------|------|
+| `id` | 节点唯一整数ID，从1开始递增 |
+| `name` | 格式 `{前缀}_{描述}`。前缀见下表 |
+| `type` | 组件类型（见组件类型表） |
+| `rect` | 像素包围盒，相对**画布**左上角（不是相对父节点） |
+| `parentId` | 父节点ID，根节点为 `null` |
+| `children` | 子节点ID数组，无子节点为空数组 `[]` |
+| `properties` | 视觉属性，因类型而异 |
+
+**命名前缀**：`img_`图片、`txt_`文字、`btn_`按钮、`tgl_`开关、`sld_`滑块、`input_`输入框、`dropdown_`下拉框、`scroll_`滚动视图、`panel_`面板、`group_`布局组、`mask_`遮罩、`raw_`原始图片
+
+**properties常用字段**：
+- Text: `text`(文字内容), `fontSize`, `color`
+- Panel/Button: `color`(背景色), `opacity`
+- 通用: `note`(补充说明，用于无法用字段表达的视觉信息)
+
+#### 组件类型表
+
+| 类型 | 判断依据 |
+|------|----------|
+| `Image` | 静态图形、图标、背景、装饰 |
+| `RawImage` | 照片、头像、缩略图 |
+| `Text` | 文字标签或段落 |
+| `Button` | 可点击元素（有背景+文字/图标，看起来可交互） |
+| `Toggle` | 复选框、开关 |
+| `Slider` | 滑块、音量条 |
+| `InputField` | 文本输入框 |
+| `Dropdown` | 下拉选择器 |
+| `ScrollView` | 可滚动区域 |
+| `Panel` | 通用容器 |
+| `HorizontalGroup` | 子元素水平排列 |
+| `VerticalGroup` | 子元素垂直排列 |
+| `GridGroup` | 子元素网格排列 |
+| `Mask` | 裁剪/遮罩区域（圆角、圆形等） |
+| `ProgressBar` | 进度条（背景+填充） |
+| `TabGroup` | 标签组 |
+| `ListView` | 可滚动列表（有重复项模式） |
+
+### 第四步：生成Debug可视化图片
+
+调用 `{skill_base_dir}/scripts/generate_debug.py` 生成debug叠加图：
+
+```bash
+py -3 "{skill_base_dir}/scripts/generate_debug.py" "效果图路径" "ui_hierarchy.json路径" "输出debug图路径"
+```
+
+输出文件命名为 `{原效果图文件名}_hierarchy_debug.png`，保存到输出目录。
+
+### 第五步：展示结果
+
+向用户展示：
+1. Debug可视化图片（用Read工具查看，确认各元素位置合理）
+2. 树形层级视图：
+
+```
+Canvas (1080x2340)
+  img_background [Image] (1080x2340)
+    panel_overlay [Panel] (1080x2340) opacity=0.5
+      panel_popup [Panel] (907x806)
+        txt_title [Text] (240x45) "LEVEL 8"
+        btn_close [Button] (80x80)
+        btn_play [Button] (600x138)
+          txt_play [Text] (240x55) "PLAY"
+```
+
+### 第六步：Sprite匹配
+
+分两步执行：
+
+**6a. 预解析sprite元数据**（每个项目只需跑一次，sprite没变化不用重跑）：
+
+解析九宫格border信息：
+```bash
+py -3 "{skill_base_dir}/scripts/parse_sprite_borders.py" "sprite目录" "borders.json输出路径" ["sprite目录2" ...]
+```
+
+识别白图/纯色sprite：
+```bash
+py -3 "{skill_base_dir}/scripts/parse_white_sprites.py" "sprite目录" "whites.json输出路径" ["sprite目录2" ...]
+```
+
+**6b. 运行sprite匹配**：
+
+```bash
+py -3 "{skill_base_dir}/scripts/sprite_matcher.py" "效果图路径" "sprite_match.json输出路径" "sprite目录" --borders "borders.json" --whites "whites.json" --debug-dir "debug输出目录"
+```
+
+所有路径通过参数传入。`--borders`、`--whites`、`--debug-dir` 为可选参数。不需要ui_hierarchy.json——匹配器自动在截图中搜索所有sprite的位置和大小。`--debug-dir` 指定后，每匹配完一层会生成一张debug图片（`layer_0.png`、`layer_1.png`...），当前层匹配用彩色粗框+半透明填充标注，之前层用细框灰显。
+
+输出文件 `sprite_match.json` 保存到同一输出目录。
+
+#### 匹配原理
+
+逐层匹配，完全自主：
+
+**Layer 0 — 直接匹配**：对截图直接搜索所有sprite（普通→9-slice→白图依次尝试）。普通sprite用多尺度模板匹配（0.25x~4.0x），9-slice用四角patch定位，白图用alpha形状匹配均匀色块。找到的是最顶层不被遮挡的sprite。像素级验证（diff≤1）才确认。
+
+**Layer 1+ — 合成匹配**：将前面所有已匹配sprite合成为一张overlay（Porter-Duff alpha compositing），然后对每个候选sprite：将其渲染到目标位置作为底层，overlay叠在上面，合成结果与截图像素比较。每层同样按普通→9-slice→白图顺序尝试所有sprite。
+
+**重复**：每层结束后将新匹配加入已匹配列表，重建overlay，继续下一层，直到某层零匹配为止。
+
+**最终处理**：去重（同位同大小保留最优）+ 构建覆盖树（rect几何包含关系确定parent-child）。
+
+#### 输出结构
+
+`sprite_match.json` 包含完整的覆盖关系树（parentId/children基于rect几何包含关系确定）：
+
+```json
+{
+  "summary": {
+    "total_matches": 15,
+    "perfect_matches": 12,
+    "slice_matches": 3,
+    "white_matches": 2
+  },
+  "nodes": [
+    {
+      "node_id": 1,
+      "rect": { "x": 200, "y": 500, "width": 300, "height": 80 },
+      "parentId": null,
+      "children": [2],
+      "match": {
+        "sprite_path": "SuperCasual/Components/Button/Button01_l_Green.png",
+        "match_ratio": 1.0,
+        "perfect": true,
+        "scale": 1.5,
+        "is_9slice": false,
+        "is_white": false
+      }
+    }
+  ]
+}
+```
+
+## 其他原则
+
+**parentId和children必须双向一致**：如果节点A的children包含B，则B的parentId必须是A。
+
+**类型选择从简**：不确定时选更通用的类型（Image优于RawImage，Panel优于具体布局组）。
