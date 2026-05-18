@@ -6,7 +6,7 @@ using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedure
 
 namespace Game
 {
-    public class ProcedureResourcesReady : ProcedureBase
+    public class ProcedureCompleteResources : ProcedureBase
     {
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
