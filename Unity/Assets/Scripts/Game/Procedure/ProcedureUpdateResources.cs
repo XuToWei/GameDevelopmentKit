@@ -78,7 +78,7 @@ namespace Game
                 return;
             }
 
-            ChangeState<ProcedureResourcesReady>(procedureOwner);
+            ChangeState<ProcedureCompleteResources>(procedureOwner);
         }
 
         private void StartUpdateResources(object userData)

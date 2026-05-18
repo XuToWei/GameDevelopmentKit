@@ -41,7 +41,7 @@ namespace Game
             }
             else
             {
-                ChangeState<ProcedureResourcesReady>(procedureOwner);
+                ChangeState<ProcedureCompleteResources>(procedureOwner);
             }
         }
 
