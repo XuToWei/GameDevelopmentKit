@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 288724289}
   - component: {fileID: 288724290}
   m_Layer: 0
-  m_Name: DefaultSettingHelper
+  m_Name: SettingHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 1216277726}
   - component: {fileID: 1216277727}
   m_Layer: 0
-  m_Name: GameEntryLoader
+  m_Name: Loader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
