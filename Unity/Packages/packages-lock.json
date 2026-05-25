@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "7f5bfdaa71d53cc53910e58ef9673a8eba722462"
+      "hash": "2e9861828b628c41a889e9f2c69e45ba5c40bbbb"
     },
     "com.annulusgames.lit-motion": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
@@ -70,11 +70,11 @@
       "hash": "33356da2c43fa28397192baee70910c978e3169f"
     },
     "com.cysharp.memorypack": {
-      "version": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack#1.10.0",
+      "version": "https://github.com/XuToWei/MemoryPack-Extension.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
+      "hash": "27409d4524ef73afee2a01beca54d4f1090c9644"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10",
