@@ -69,12 +69,25 @@ namespace UnityGameFramework.Extension.Editor
                 throw new GameFrameworkException("ResourceCollection is invalid.");
             }
             m_ResourceCollection = resourceCollection;
+            RemoveOldCombineResources();
             AddLauncherResource();
             OptimizeLoadType();
             OptimizeSprite();
             Analyze();
             CalculateCombine();
             Save();
+        }
+
+        private void RemoveOldCombineResources()
+        {
+            var resources = m_ResourceCollection.GetResources();
+            foreach (var resource in resources)
+            {
+                if (resource.Name.StartsWith("Auto/Combine/", StringComparison.Ordinal))
+                {
+                    m_ResourceCollection.RemoveResource(resource.Name, resource.Variant);
+                }
+            }
         }
 
         private void AddLauncherResource()
@@ -135,10 +148,10 @@ namespace UnityGameFramework.Extension.Editor
                 foreach (Sprite sprite in sprites)
                 {
                     string spritePath = AssetDatabase.GetAssetPath(sprite);
-                    string spriteGuide = AssetDatabase.AssetPathToGUID(spritePath);
-                    if (!sprite2Atlas.TryAdd(spriteGuide, saPath))
+                    string spriteGuid = AssetDatabase.AssetPathToGUID(spritePath);
+                    if (!sprite2Atlas.TryAdd(spriteGuid, saPath))
                     {
-                        throw new GameFrameworkException($"[{spritePath}]被重复添加进不同的SpriteAtlas（[{sprite2Atlas[spriteGuide]}]，[{saPath}]），请检查清理！");
+                        throw new GameFrameworkException($"[{spritePath}]被重复添加进不同的SpriteAtlas（[{sprite2Atlas[spriteGuid]}]，[{saPath}]），请检查清理！");
                     }
                 }
             }
@@ -153,7 +166,7 @@ namespace UnityGameFramework.Extension.Editor
             {
                 var saPath = AssetDatabase.GUIDToAssetPath(saGuid);
                 var sa = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(saPath);
-                var assets = new List<string> { saPath };
+                var assets = new SortedSet<string>(StringComparer.Ordinal) { saPath };
                 int spriteCount = sa.spriteCount;
                 Sprite[] sprites = new Sprite[spriteCount];
                 sa.GetSprites(sprites);
@@ -162,15 +175,15 @@ namespace UnityGameFramework.Extension.Editor
                     string spritePath = AssetDatabase.GetAssetPath(sprite);
                     assets.Add(spritePath);
                 }
-                assets.Sort(string.CompareOrdinal);
-                var newBundleName = GetNewCombineName(assets);
+                var assetList = assets.ToList();
+                var newBundleName = GetNewCombineName(assetList);
 #if UNITY_WEBGL
                 //WebGL下不能使用LoadFromFile
                 m_ResourceCollection.AddResource(newBundleName, null, null, LoadType.LoadFromMemory, false);
 #else
                 m_ResourceCollection.AddResource(newBundleName, null, null, LoadType.LoadFromFile, false);
 #endif
-                foreach (var asset in assets)
+                foreach (var asset in assetList)
                 {
                     m_ResourceCollection.AssignAsset(AssetDatabase.AssetPathToGUID(asset), newBundleName, null);
                 }
@@ -295,14 +308,14 @@ namespace UnityGameFramework.Extension.Editor
             {
                 cur++;
                 EditorUtility.DisplayProgressBar("CalculateCombine (3/3)", Utility.Text.Format("{0}/{1} processing...", cur, count), (float)cur / count);
-                currentCombineBundles.Add(abInfo.Name);
-                currentCombineBundleSize += abInfo.Size;
-                if (currentCombineBundleSize > MAX_COMBINE_SHARE_AB_SIZE)
+                if (currentCombineBundles.Count > 0 && currentCombineBundleSize + abInfo.Size > MAX_COMBINE_SHARE_AB_SIZE)
                 {
                     m_CombineBundles[GetNewCombineName(currentCombineBundles)] = currentCombineBundles;
                     currentCombineBundles = new List<string>();
                     currentCombineBundleSize = 0;
                 }
+                currentCombineBundles.Add(abInfo.Name);
+                currentCombineBundleSize += abInfo.Size;
             }
             if (currentCombineBundles.Count > 0)
             {
