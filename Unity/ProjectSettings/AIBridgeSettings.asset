@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d5e82d04e834c2eb6f7697d1c95d74c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: cn.lys.aibridge.Editor::AIBridge.Editor.AIBridgeProjectSettings
-  dataVersion: 1
+  dataVersion: 7
   bridgeEnabled: 1
   debugLogging: 0
+  editorLanguage: English
+  editorLanguageInitialized: 1
+  skillRootDirectory: 
   scriptDirectory: Assets/AIBridgeScripts
   gifRecorder:
     FrameCount: 50
@@ -22,6 +25,11 @@ MonoBehaviour:
     Scale: 0.5
     ColorCount: 128
     StartDelay: 0.1
+  logRetrieval:
+    Count: 50
+    LogType: all
+    RegexFilterEnabled: 0
+    RegexPattern: 
   assistantSelections:
   - TargetId: claude
     Selected: 1
@@ -31,6 +39,7 @@ MonoBehaviour:
     Selected: 0
   - TargetId: cline
     Selected: 0
+  assistantSkillRootDirectories: []
   legacyGifMigrated: 0
   legacyScriptDirectoryMigrated: 0
   autoInstallSkills: 1
