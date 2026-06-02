@@ -94,7 +94,7 @@ namespace UnityGameFramework.Extension.Editor
         {
             m_ResourceCollection.RemoveResource(GameEntryLoader.LauncherResourceName, null);
 #if UNITY_WEBGL
-            m_ResourceCollection.AddResource(LauncherSceneLoader.LauncherSceneResourceName, null, null, LoadType.LoadFromMemory, true, new string[] { LauncherSceneLoader.LauncherResourceGroup });
+            m_ResourceCollection.AddResource(GameEntryLoader.LauncherResourceName, null, null, LoadType.LoadFromMemory, true, new string[] { GameEntryLoader.LauncherResourceGroupName });
 #else
             m_ResourceCollection.AddResource(GameEntryLoader.LauncherResourceName, null, null, LoadType.LoadFromFile, true, new string[] { GameEntryLoader.LauncherResourceGroupName });
 #endif
