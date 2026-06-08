@@ -48,7 +48,12 @@ namespace UnityGameFramework.Extension
         [ShowInInspector]
         private float m_CheckCanReleaseTime = 0.0f;
 
+        [ReadOnly]
+        [ShowInInspector]
         private HashSet<NameTypePair> m_LoadingAssets;
+
+        [ReadOnly]
+        [ShowInInspector]
         private List<IAssetSet> m_WaitingAssetSets;
 
         /// <summary>
