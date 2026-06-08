@@ -101,7 +101,12 @@ namespace UnityGameFramework.Extension
             NameTypePair assetKey = new NameTypePair(assetSet.AssetPath, assetSet.AssetType);
             if (m_AssetSetObjectPool.CanSpawn(assetKey))
             {
-                asset = (UnityEngine.Object)m_AssetSetObjectPool.Spawn(assetKey).Target;
+                AssetSetObject assetSetObject = m_AssetSetObjectPool.Spawn(assetKey);
+                if (assetSetObject == null)
+                {
+                    throw new GameFrameworkException(Utility.Text.Format("Can not spawn '{0}' from pool.", assetKey));
+                }
+                asset = (UnityEngine.Object)assetSetObject.Target;
             }
             else
             {
@@ -130,6 +135,7 @@ namespace UnityGameFramework.Extension
             if (asset != null)
             {
                 assetSet.SetAsset(asset);
+                m_LoadedAssetSetLinkedList.AddLast(LoadedAssetSet.Create(assetSet, asset));
             }
             else
             {

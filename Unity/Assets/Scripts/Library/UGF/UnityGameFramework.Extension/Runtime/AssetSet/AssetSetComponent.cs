@@ -48,8 +48,13 @@ namespace UnityGameFramework.Extension
         [ShowInInspector]
         private float m_CheckCanReleaseTime = 0.0f;
 
+        [ReadOnly]
+        [ShowInInspector]
         private HashSet<NameTypePair> m_LoadingAssets;
-        private Dictionary<NameTypePair, UGFDictionary<object, IAssetSet>> m_WaitingAssetSets;
+
+        [ReadOnly]
+        [ShowInInspector]
+        private List<IAssetSet> m_WaitingAssetSets;
 
         /// <summary>
         /// 对象池容量
@@ -87,7 +92,7 @@ namespace UnityGameFramework.Extension
             m_AssetSetObjectPool = objectPoolComponent.CreateMultiSpawnObjectPool<AssetSetObject>("AssetSet", m_AutoReleaseInterval, m_PoolCapacity, m_PoolExpireTime, 0);
             m_LoadedAssetSetLinkedList = new LinkedList<LoadedAssetSet>();
             m_LoadingAssets = new HashSet<NameTypePair>();
-            m_WaitingAssetSets = new Dictionary<NameTypePair, UGFDictionary<object, IAssetSet>>();
+            m_WaitingAssetSets = new List<IAssetSet>();
 
             InitializeResources();
             InitializeFileSystem();
@@ -129,31 +134,22 @@ namespace UnityGameFramework.Extension
 
         public void RemoveLoadingAssetSet(IAssetSet assetSet)
         {
-            NameTypePair assetKey = new NameTypePair(assetSet.AssetPath, assetSet.AssetType);
-            if (m_WaitingAssetSets.TryGetValue(assetKey, out UGFDictionary<object, IAssetSet> waitingAssetSetDictionary))
+            for (int i = m_WaitingAssetSets.Count - 1; i >= 0; i--)
             {
-                if (waitingAssetSetDictionary.Remove(assetSet.Target))
+                IAssetSet waitingAssetSet = m_WaitingAssetSets[i];
+                if (waitingAssetSet == assetSet)
                 {
-                    ReferencePool.Release(assetSet);
-                }
-
-                if (waitingAssetSetDictionary.Count == 0)
-                {
-                    m_WaitingAssetSets.Remove(assetKey);
-                    waitingAssetSetDictionary.Dispose();
+                    m_WaitingAssetSets.RemoveAt(i);
+                    ReferencePool.Release(waitingAssetSet);
                 }
             }
         }
 
         public void RemoveAllLoadingAssetSet()
         {
-            foreach (var waitingAssetSetDictionary in m_WaitingAssetSets.Values)
+            foreach (IAssetSet waitingAssetSet in m_WaitingAssetSets)
             {
-                foreach (var waitingAssetSet in waitingAssetSetDictionary.Values)
-                {
-                    ReferencePool.Release(waitingAssetSet);
-                }
-                waitingAssetSetDictionary.Dispose();
+                ReferencePool.Release(waitingAssetSet);
             }
             m_WaitingAssetSets.Clear();
         }

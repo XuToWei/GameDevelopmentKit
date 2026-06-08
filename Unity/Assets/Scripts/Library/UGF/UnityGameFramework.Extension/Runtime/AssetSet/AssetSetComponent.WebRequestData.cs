@@ -6,20 +6,20 @@ namespace UnityGameFramework.Extension
     {
         private class WebRequestData : IReference
         {
-            public IAssetSet AssetSet { get; private set; }
+            public string AssetPath { get; private set; }
             public AssetSetComponent UserData { get; private set; }
 
-            public static WebRequestData Create(IAssetSet assetSet, AssetSetComponent userData)
+            public static WebRequestData Create(string assetPath, AssetSetComponent userData)
             {
                 WebRequestData webRequestData = ReferencePool.Acquire<WebRequestData>();
-                webRequestData.AssetSet = assetSet;
+                webRequestData.AssetPath = assetPath;
                 webRequestData.UserData = userData;
                 return webRequestData;
             }
 
             public void Clear()
             {
-                AssetSet = null;
+                AssetPath = null;
                 UserData = null;
             }
         }

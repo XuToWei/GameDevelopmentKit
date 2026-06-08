@@ -4,8 +4,13 @@
       "version": "https://github.com/XuToWei/AIBridge-Extension.git",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "7f5bfdaa71d53cc53910e58ef9673a8eba722462"
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.test-framework": "1.1.31",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.screencapture": "1.0.0"
+      },
+      "hash": "a60d0aa26655066497333d324e856b5b455575aa"
     },
     "com.annulusgames.lit-motion": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
@@ -16,7 +21,7 @@
         "com.unity.collections": "1.5.1",
         "com.unity.mathematics": "1.0.1"
       },
-      "hash": "0b4c588ee75a07198841d92aab653e6b39445089"
+      "hash": "2053ef5c23f2ae755dd85d5865b698c542c351b6"
     },
     "com.annulusgames.lit-motion.animation": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
@@ -25,14 +30,14 @@
       "dependencies": {
         "com.annulusgames.lit-motion": "2.0.0"
       },
-      "hash": "0b4c588ee75a07198841d92aab653e6b39445089"
+      "hash": "2053ef5c23f2ae755dd85d5865b698c542c351b6"
     },
     "com.code-philosophy.hybridclr": {
       "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4feac30cb2e105992986c737f7f54992b8300e1a"
+      "hash": "e4def761d69b27b7b51a5de0f6d272861416a2d6"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -70,11 +75,11 @@
       "hash": "33356da2c43fa28397192baee70910c978e3169f"
     },
     "com.cysharp.memorypack": {
-      "version": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack#1.10.0",
+      "version": "https://github.com/XuToWei/MemoryPack-Extension.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2554e81f0315ddf835026940ccc4ba8175edfda3"
+      "hash": "27409d4524ef73afee2a01beca54d4f1090c9644"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10",
@@ -256,7 +261,7 @@
     },
     "com.unity.test-framework": {
       "version": "1.6.0",
-      "depth": 2,
+      "depth": 1,
       "source": "builtin",
       "dependencies": {
         "com.unity.ext.nunit": "2.0.3",
@@ -304,7 +309,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "64ead283b59e1337a25553378aa70c6e200150c9"
+      "hash": "cb18906158c4ddcef902e23fe84e0c275cd6da04"
     },
     "me.xw.codebind": {
       "version": "https://github.com/XuToWei/CodeBind.git",
@@ -325,7 +330,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3ba3d7fbecb191c5a471deb8bad38cfdfaee155b"
+      "hash": "2fd4f46839631854b9546888d5d666ced2a91d3a"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
@@ -339,7 +344,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9cb25fae3db67e463f4969a613557929d777cb27"
+      "hash": "4583057a826438c6bb86559e86c2c0d94fa2a05c"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
