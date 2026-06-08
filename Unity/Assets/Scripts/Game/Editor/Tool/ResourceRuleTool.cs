@@ -15,18 +15,18 @@ namespace Game.Editor
         public static void ActivateRule(string ruleDataAsset)
         {
             ruleDataAsset = Utility.Path.GetRegularPath(ruleDataAsset);
-            var ruleData = AssetDatabase.LoadAssetAtPath<ResourceRuleEditorData>(ruleDataAsset);
+            ResourceRuleEditorData ruleData = AssetDatabase.LoadAssetAtPath<ResourceRuleEditorData>(ruleDataAsset);
             if (ruleData == null)
             {
                 throw new GameFrameworkException($"{ruleDataAsset} not exist!");
             }
-            ruleData.isActivate = true;
+            ruleData.IsActivate = true;
             string[] allConfigs = AssetDatabase.FindAssets("t:ResourceRuleEditorData").Select(AssetDatabase.GUIDToAssetPath).ToArray();
-            foreach (var config in allConfigs)
+            foreach (string config in allConfigs)
             {
                 string configPath = Utility.Path.GetRegularPath(config);
                 ResourceRuleEditorData ruleEditorData = AssetDatabase.LoadAssetAtPath<ResourceRuleEditorData>(configPath);
-                ruleEditorData.isActivate = ruleDataAsset == configPath;
+                ruleEditorData.IsActivate = ruleDataAsset == configPath;
                 EditorUtility.SetDirty(ruleEditorData);
             }
             AssetDatabase.SaveAssets();

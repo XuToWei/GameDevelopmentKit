@@ -289,18 +289,18 @@ namespace ET.Editor
             AddAsmdefFile($"{CodePath}/Model/Generate/Client/Ignore.asmdef", "Ignore.Model.Generate.Client");
         }
         
-        static void RefreshETResourceRule(bool isClient)
+        private static void RefreshETResourceRule(bool isClient)
         {
             ResourceRuleEditorData ruleEditorData = AssetDatabase.LoadAssetAtPath<ResourceRuleEditorData>(ResourceRuleTool.ResourceRuleAsset_ET);
-            foreach (var rule in ruleEditorData.rules)
+            foreach (ResourceRule rule in ruleEditorData.Rules)
             {
-                if (rule.name == "ET.Client")
+                if (rule.Name == "ET.Client")
                 {
-                    rule.valid = isClient;
+                    rule.Valid = isClient;
                 }
-                else if(rule.name == "ET.ClientServer")
+                else if (rule.Name == "ET.ClientServer")
                 {
-                    rule.valid = !isClient;
+                    rule.Valid = !isClient;
                 }
             }
         }

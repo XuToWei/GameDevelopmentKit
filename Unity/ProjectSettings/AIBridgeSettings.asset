@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d5e82d04e834c2eb6f7697d1c95d74c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: cn.lys.aibridge.Editor::AIBridge.Editor.AIBridgeProjectSettings
-  dataVersion: 1
+  dataVersion: 18
   bridgeEnabled: 1
   debugLogging: 0
+  editorLanguage: English
+  editorLanguageInitialized: 1
+  skillRootDirectory: 
   scriptDirectory: Assets/AIBridgeScripts
   gifRecorder:
     FrameCount: 50
@@ -22,15 +25,64 @@ MonoBehaviour:
     Scale: 0.5
     ColorCount: 128
     StartDelay: 0.1
+  logRetrieval:
+    Count: 50
+    LogType: all
+    RegexFilterEnabled: 0
+    RegexPattern: 
   assistantSelections:
   - TargetId: claude
-    Selected: 1
+    Selected: 0
   - TargetId: codex
     Selected: 1
   - TargetId: cursor
     Selected: 0
   - TargetId: cline
     Selected: 0
-  legacyGifMigrated: 0
-  legacyScriptDirectoryMigrated: 0
+  assistantSkillRootDirectories: []
+  legacyGifMigrated: 1
+  legacyScriptDirectoryMigrated: 1
   autoInstallSkills: 1
+  enableCodeExecution: 1
+  codeExecutionRiskAccepted: 1
+  runtimeBridge:
+    EnableRuntimeBridge: 1
+    AutoInjectRuntimeBridgeInEditorPlayMode: 1
+    AutoInjectRuntimeBridgeInDevelopmentBuild: 1
+    AllowInReleaseBuild: 0
+    ExchangeDirectory: 
+    TargetId: 
+    AuthToken: 
+    AllowedActions: 
+    EnableRuntimeCodeExecution: 1
+    HeartbeatIntervalSeconds: 1
+    LogBufferSize: 500
+    MaxResultBytes: 1048576
+    KeepRunningInBackground: 1
+    EnableHttpTransport: 1
+    HttpBindAddress: 0.0.0.0
+    HttpPort: 27182
+    EnableLanDiscovery: 1
+    DiscoveryUdpPort: 27183
+  codeIndex:
+    EnableCodeIndex: 0
+    PrewarmOnUnityStartup: 1
+    WarmupDelaySeconds: 10
+    WarmupMode: light
+    AutoRefreshOnFileChange: 1
+    FallbackToTextSearch: 1
+    CleanupModeOnQuit: processOnly
+    IncludePackageCacheSourceAssemblies: 0
+    IgnoredAssemblyPatterns: 
+    IgnoredSourcePathPatterns: 
+  workflowUi:
+    EnableImplementationBranch: 1
+    EnableDebugBranch: 1
+    EnableReviewBranch: 1
+    EnableValidationBranch: 1
+    EnableOrchestrationBranch: 1
+    DefaultValidationLevel: compileAndLogs
+    PreferRuntimeEvidence: 0
+    PreferCodeIndexGuidance: 1
+    SharedPromptPrefix: 
+    AssistantPromptPrefixes: []
