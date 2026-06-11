@@ -85,9 +85,9 @@ namespace UnityGameFramework.Extension
             bool hasFile = m_AssetSetFileSystem.HasFile(fileName);
             if (!hasFile) return null;
             CheckBuffer(fileName);
-            m_AssetSetFileSystem.ReadFile(fileName, m_Buffer);
+            int byteRead = m_AssetSetFileSystem.ReadFile(fileName, m_Buffer);
             Texture2D tex = new Texture2D(0, 0, TextureFormat.RGBA32, false);
-            tex.LoadImage(m_Buffer);
+            tex.LoadImage(GetExactBytes(m_Buffer, byteRead));
             return tex;
         }
 
@@ -97,6 +97,8 @@ namespace UnityGameFramework.Extension
         /// <param name="assetSet">需要设置资源的对象</param>
         public void SetByFileSystem<T>(T assetSet) where T : IAssetSet, ISerializeAssetSet
         {
+            RemoveWaitingAssetSetByTarget(assetSet);
+
             UnityEngine.Object asset;
             NameTypePair assetKey = new NameTypePair(assetSet.AssetPath, assetSet.AssetType);
             if (m_AssetSetObjectPool.CanSpawn(assetKey))
@@ -125,11 +127,11 @@ namespace UnityGameFramework.Extension
                     return;
                 }
                 CheckBuffer(assetSet.AssetPath);
-                m_AssetSetFileSystem.ReadFile(assetSet.AssetPath, m_Buffer);
-                asset = assetSet.Serialize(m_Buffer);
+                int byteRead = m_AssetSetFileSystem.ReadFile(assetSet.AssetPath, m_Buffer);
+                asset = assetSet.Serialize(GetExactBytes(m_Buffer, byteRead));
                 if (asset != null)
                 {
-                    m_AssetSetObjectPool.Register(AssetSetObject.Create(assetSet.AssetPath, assetSet.AssetType, asset, m_ResourceComponent), true);
+                    m_AssetSetObjectPool.Register(AssetSetObject.Create(assetSet.AssetPath, assetSet.AssetType, asset, null), true);
                 }
             }
             if (asset != null)
@@ -164,6 +166,23 @@ namespace UnityGameFramework.Extension
         }
 
         /// <summary>
+        /// 获取缓存中实际读取长度的字节数据（长度不一致时拷贝，避免把缓存尾部残留数据传给反序列化）。
+        /// </summary>
+        /// <param name="buffer">读取缓存</param>
+        /// <param name="length">实际读取的字节数</param>
+        private static byte[] GetExactBytes(byte[] buffer, int length)
+        {
+            if (length == buffer.Length)
+            {
+                return buffer;
+            }
+
+            byte[] bytes = new byte[length];
+            Array.Copy(buffer, bytes, length);
+            return bytes;
+        }
+
+        /// <summary>
         /// 检查文件系统大小(不足自动扩容为原来的2倍)
         /// </summary>
         private void CheckFileSystem()
@@ -183,6 +202,12 @@ namespace UnityGameFramework.Extension
                 newFileSystemFullPath = Utility.Path.GetRegularPath(Path.Combine(Application.persistentDataPath, "AssetSetFileSystem_1.dat"));
             }
 
+            // 上次迁移中途失败可能残留目标文件，需先删除否则创建失败
+            if (File.Exists(newFileSystemFullPath))
+            {
+                File.Delete(newFileSystemFullPath);
+            }
+
             var oldFileSystem = m_AssetSetFileSystem;
             IFileSystem newFileSystem = m_FileSystemComponent.CreateFileSystem(newFileSystemFullPath, FileSystemAccess.ReadWrite, m_AssetSetFileSystem.MaxFileCount * 2, m_AssetSetFileSystem.MaxFileCount * 16);
             using UGFList<FileInfo> fileInfos = UGFList<FileInfo>.Create();
@@ -192,9 +217,7 @@ namespace UnityGameFramework.Extension
             {
                 CheckBuffer(fileInfo.Name);
                 int byteRead = oldFileSystem.ReadFile(fileInfo.Name, m_Buffer);
-                byte[] bytes = new byte[byteRead];
-                Array.Copy(m_Buffer, bytes, byteRead);
-                newFileSystem.WriteFile(fileInfo.Name, bytes);
+                newFileSystem.WriteFile(fileInfo.Name, GetExactBytes(m_Buffer, byteRead));
             }
 
             m_FileSystemComponent.DestroyFileSystem(oldFileSystem, true);

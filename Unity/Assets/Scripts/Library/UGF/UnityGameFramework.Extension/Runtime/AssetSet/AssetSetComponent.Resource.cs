@@ -34,7 +34,7 @@ namespace UnityGameFramework.Extension
                     ReferencePool.Release(waitingAssetSet);
                 }
             }
-            Log.Error("Can not load SpriteCollection from '{0}' with error message '{1}'.", assetName, errormessage);
+            Log.Error("Can not load asset from '{0}' with error message '{1}'.", assetName, errormessage);
         }
 
         private void OnLoadAssetSuccess(string assetName, object asset, float duration, object userdata)
@@ -73,15 +73,7 @@ namespace UnityGameFramework.Extension
         /// <param name="assetSet">需要资源的对象</param>
         public void SetByResource<T>(T assetSet) where T : IAssetSet
         {
-            for (int i = m_WaitingAssetSets.Count - 1; i >= 0; i--)
-            {
-                IAssetSet waitingAssetSet = m_WaitingAssetSets[i];
-                if (waitingAssetSet.Target == assetSet.Target)
-                {
-                    m_WaitingAssetSets.RemoveAt(i);
-                    ReferencePool.Release(waitingAssetSet);
-                }
-            }
+            RemoveWaitingAssetSetByTarget(assetSet);
 
             NameTypePair assetKey = new NameTypePair(assetSet.AssetPath, assetSet.AssetType);
             if (m_AssetSetObjectPool.CanSpawn(assetKey))
