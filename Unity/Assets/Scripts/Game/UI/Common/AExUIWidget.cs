@@ -237,7 +237,7 @@ namespace Game
             GetComponentsInChildren(true, uiWidgets);
             foreach (AExUIWidget uiWidget in uiWidgets)
             {
-                if (uiWidget == this || uiWidget.UIFormOwner != null || uiWidget.GetComponentInParent<AExUIWidget>(true) != this)
+                if (uiWidget == this || uiWidget.Initialized || uiWidget.GetComponentInParent<AExUIWidget>(true) != this)
                     continue;
                 AddUIWidget(uiWidget, userData);
             }
