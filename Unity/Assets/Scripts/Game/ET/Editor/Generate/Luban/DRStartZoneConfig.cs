@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using SimpleJSON;
+using Luban.SimpleJSON;
 using Luban;
 
 namespace ET.Editor
@@ -24,7 +24,7 @@ public sealed class DRStartZoneConfig :  Luban.EditorBeanBase
             Desc = "";
     }
 
-    public override void LoadJson(SimpleJSON.JSONObject _json)
+    public override void LoadJson(JSONObject _json)
     {
         { 
             var _fieldJson = _json["StartConfig"];
@@ -68,7 +68,7 @@ public sealed class DRStartZoneConfig :  Luban.EditorBeanBase
         
     }
 
-    public override void SaveJson(SimpleJSON.JSONObject _json)
+    public override void SaveJson(JSONObject _json)
     {
         {
 
@@ -95,16 +95,16 @@ public sealed class DRStartZoneConfig :  Luban.EditorBeanBase
         }
     }
 
-    public static DRStartZoneConfig LoadJsonDRStartZoneConfig(SimpleJSON.JSONNode _json)
+    public static DRStartZoneConfig LoadJsonDRStartZoneConfig(JSONNode _json)
     {
         DRStartZoneConfig obj = new DRStartZoneConfig();
-        obj.LoadJson((SimpleJSON.JSONObject)_json);
+        obj.LoadJson((JSONObject)_json);
         return obj;
     }
         
-    public static void SaveJsonDRStartZoneConfig(DRStartZoneConfig _obj, SimpleJSON.JSONNode _json)
+    public static void SaveJsonDRStartZoneConfig(DRStartZoneConfig _obj, JSONNode _json)
     {
-        _obj.SaveJson((SimpleJSON.JSONObject)_json);
+        _obj.SaveJson((JSONObject)_json);
     }
 
     /// <summary>

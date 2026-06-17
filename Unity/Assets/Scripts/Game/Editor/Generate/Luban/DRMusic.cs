@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using SimpleJSON;
+using Luban.SimpleJSON;
 using Luban;
 
 namespace Game.Editor
@@ -23,7 +23,7 @@ public sealed class DRMusic :  Luban.EditorBeanBase
             AssetName = "";
     }
 
-    public override void LoadJson(SimpleJSON.JSONObject _json)
+    public override void LoadJson(JSONObject _json)
     {
         { 
             var _fieldJson = _json["Id"];
@@ -67,7 +67,7 @@ public sealed class DRMusic :  Luban.EditorBeanBase
         
     }
 
-    public override void SaveJson(SimpleJSON.JSONObject _json)
+    public override void SaveJson(JSONObject _json)
     {
         {
             _json["Id"] = new JSONNumber(Id);
@@ -92,16 +92,16 @@ public sealed class DRMusic :  Luban.EditorBeanBase
         }
     }
 
-    public static DRMusic LoadJsonDRMusic(SimpleJSON.JSONNode _json)
+    public static DRMusic LoadJsonDRMusic(JSONNode _json)
     {
         DRMusic obj = new DRMusic();
-        obj.LoadJson((SimpleJSON.JSONObject)_json);
+        obj.LoadJson((JSONObject)_json);
         return obj;
     }
         
-    public static void SaveJsonDRMusic(DRMusic _obj, SimpleJSON.JSONNode _json)
+    public static void SaveJsonDRMusic(DRMusic _obj, JSONNode _json)
     {
-        _obj.SaveJson((SimpleJSON.JSONObject)_json);
+        _obj.SaveJson((JSONObject)_json);
     }
 
     /// <summary>

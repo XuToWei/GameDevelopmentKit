@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
 using Luban;
-using SimpleJSON;
+using Luban.SimpleJSON;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityGameFramework.Extension;

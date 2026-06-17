@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using SimpleJSON;
+using Luban.SimpleJSON;
 using Luban;
 
 namespace Game.Hot.Editor
@@ -20,7 +20,7 @@ public sealed class DRArmor :  Luban.EditorBeanBase
     {
     }
 
-    public override void LoadJson(SimpleJSON.JSONObject _json)
+    public override void LoadJson(JSONObject _json)
     {
         { 
             var _fieldJson = _json["Id"];
@@ -48,7 +48,7 @@ public sealed class DRArmor :  Luban.EditorBeanBase
         
     }
 
-    public override void SaveJson(SimpleJSON.JSONObject _json)
+    public override void SaveJson(JSONObject _json)
     {
         {
             _json["Id"] = new JSONNumber(Id);
@@ -61,16 +61,16 @@ public sealed class DRArmor :  Luban.EditorBeanBase
         }
     }
 
-    public static DRArmor LoadJsonDRArmor(SimpleJSON.JSONNode _json)
+    public static DRArmor LoadJsonDRArmor(JSONNode _json)
     {
         DRArmor obj = new DRArmor();
-        obj.LoadJson((SimpleJSON.JSONObject)_json);
+        obj.LoadJson((JSONObject)_json);
         return obj;
     }
         
-    public static void SaveJsonDRArmor(DRArmor _obj, SimpleJSON.JSONNode _json)
+    public static void SaveJsonDRArmor(DRArmor _obj, JSONNode _json)
     {
-        _obj.SaveJson((SimpleJSON.JSONObject)_json);
+        _obj.SaveJson((JSONObject)_json);
     }
 
     /// <summary>

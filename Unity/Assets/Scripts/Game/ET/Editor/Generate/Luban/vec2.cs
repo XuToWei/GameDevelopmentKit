@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using SimpleJSON;
+using Luban.SimpleJSON;
 using Luban;
 
 namespace ET.Editor
@@ -20,7 +20,7 @@ public sealed class vec2 :  Luban.EditorBeanBase
     {
     }
 
-    public override void LoadJson(SimpleJSON.JSONObject _json)
+    public override void LoadJson(JSONObject _json)
     {
         { 
             var _fieldJson = _json["x"];
@@ -40,7 +40,7 @@ public sealed class vec2 :  Luban.EditorBeanBase
         
     }
 
-    public override void SaveJson(SimpleJSON.JSONObject _json)
+    public override void SaveJson(JSONObject _json)
     {
         {
             _json["x"] = new JSONNumber(x);
@@ -50,16 +50,16 @@ public sealed class vec2 :  Luban.EditorBeanBase
         }
     }
 
-    public static vec2 LoadJsonvec2(SimpleJSON.JSONNode _json)
+    public static vec2 LoadJsonvec2(JSONNode _json)
     {
         vec2 obj = new vec2();
-        obj.LoadJson((SimpleJSON.JSONObject)_json);
+        obj.LoadJson((JSONObject)_json);
         return obj;
     }
         
-    public static void SaveJsonvec2(vec2 _obj, SimpleJSON.JSONNode _json)
+    public static void SaveJsonvec2(vec2 _obj, JSONNode _json)
     {
-        _obj.SaveJson((SimpleJSON.JSONObject)_json);
+        _obj.SaveJson((JSONObject)_json);
     }
 
     public float x;

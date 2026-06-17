@@ -3,7 +3,7 @@ using System.Reflection;
 using Cysharp.Threading.Tasks;
 using GameFramework;
 using Luban;
-using SimpleJSON;
+using Luban.SimpleJSON;
 using UnityEngine;
 using UnityGameFramework.Extension;
 
