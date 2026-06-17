@@ -111,6 +111,13 @@ namespace GameFramework.Network
             /// </summary>
             protected override void InternalClose()
             {
+                m_ConnectUserData = null;
+
+                m_WebSocket.OnOpen -= OnWebSocketOpen;
+                m_WebSocket.OnMessage -= OnWebSocketMessage;
+                m_WebSocket.OnError -= OnWebSocketError;
+                m_WebSocket.OnClose -= OnWebSocketClose;
+
                 m_WebSocket.CloseAsync();
                 m_WebSocket = null;
 

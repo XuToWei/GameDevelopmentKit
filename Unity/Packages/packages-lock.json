@@ -10,7 +10,7 @@
         "com.unity.modules.imageconversion": "1.0.0",
         "com.unity.modules.screencapture": "1.0.0"
       },
-      "hash": "a60d0aa26655066497333d324e856b5b455575aa"
+      "hash": "33ad2d3b791476659c5a3bafd39d1e4cccd14e3c"
     },
     "com.annulusgames.lit-motion": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
@@ -316,7 +316,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "fb636d1db98d7cc7c9690ce01b64c3bcdd732b1a"
+      "hash": "e721ae1b2835bda1bdf75eb9f19affe47160b54e"
     },
     "me.xw.protobufunity": {
       "version": "https://github.com/XuToWei/Protobuf-Unity.git",
@@ -337,7 +337,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "70eee1ee18304328efb281a716fac722dcdf11cb"
+      "hash": "b5469b86ea20e2ba8b7622c2a25972b159f25ee6"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",

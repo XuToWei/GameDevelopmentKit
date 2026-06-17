@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -34,16 +35,16 @@ namespace StateController
         [HorizontalGroup]
         [SerializeField]
         [LabelText("Key")]
-        [ValueDropdown("LocalizationAllKeys", DropdownWidth = 300)]
+        [ValueDropdown(nameof(LocalizationAllKeys), DropdownWidth = 300)]
         private string m_LocalizationKey;
 
         public bool EnableLocalization => m_EnableLocalization;
         public string LocalizationKey => m_LocalizationKey;
 
 #if UNITY_EDITOR
-        private string[] LocalizationAllKeys()
+        private List<string> LocalizationAllKeys()
         {
-            return ThunderFireUITool.EditorLocalizationTool.AllKeys;
+            return ThunderFireUITool.EditorLocalizationTool.AllKeyList;
         }
 #endif
     }

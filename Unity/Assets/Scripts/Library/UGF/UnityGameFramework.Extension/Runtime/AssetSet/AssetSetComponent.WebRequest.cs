@@ -23,15 +23,7 @@ namespace UnityGameFramework.Extension
         public void SetByWebRequest<T>(T assetSet) where T : IAssetSet, ISerializeAssetSet, ISaveAbleAssetSet
         {
             NameTypePair assetKey = new NameTypePair(assetSet.AssetPath, assetSet.AssetType);
-            for (int i = m_WaitingAssetSets.Count - 1; i >= 0; i--)
-            {
-                IAssetSet waitingAssetSet = m_WaitingAssetSets[i];
-                if (waitingAssetSet.Target == assetSet.Target)
-                {
-                    m_WaitingAssetSets.RemoveAt(i);
-                    ReferencePool.Release(waitingAssetSet);
-                }
-            }
+            RemoveWaitingAssetSetByTarget(assetSet);
 
             if (m_AssetSetObjectPool.CanSpawn(assetKey))
             {
@@ -80,7 +72,7 @@ namespace UnityGameFramework.Extension
             for (int i = m_WaitingAssetSets.Count - 1; i >= 0; i--)
             {
                 IAssetSet waitingAssetSet = m_WaitingAssetSets[i];
-                if (waitingAssetSet.AssetType == loadingAssetKey.Type && waitingAssetSet.AssetPath == loadingAssetKey.Name)
+                if (waitingAssetSet.AssetPath == loadingAssetKey.Name)
                 {
                     m_WaitingAssetSets.RemoveAt(i);
                     ReferencePool.Release(waitingAssetSet);
@@ -104,34 +96,46 @@ namespace UnityGameFramework.Extension
             m_LoadingAssets.Remove(loadingAssetKey);
 
             byte[] bytes = webRequestSuccessEventArgs.GetWebResponseBytes();
+            bool saved = false;
             for (int i = m_WaitingAssetSets.Count - 1; i >= 0; i--)
             {
                 IAssetSet waitingAssetSet = m_WaitingAssetSets[i];
-                if (waitingAssetSet.AssetPath == loadingAssetKey.Name)
+                if (waitingAssetSet.AssetPath != loadingAssetKey.Name || !(waitingAssetSet is ISerializeAssetSet serializeAssetSet))
                 {
-                    if (waitingAssetSet is ISerializeAssetSet serializeAssetSet)
+                    continue;
+                }
+
+                m_WaitingAssetSets.RemoveAt(i);
+
+                UnityEngine.Object asset;
+                NameTypePair assetKey = new NameTypePair(waitingAssetSet.AssetPath, waitingAssetSet.AssetType);
+                if (m_AssetSetObjectPool.CanSpawn(assetKey))
+                {
+                    AssetSetObject assetSetObject = m_AssetSetObjectPool.Spawn(assetKey);
+                    if (assetSetObject == null)
                     {
-                        UnityEngine.Object asset = serializeAssetSet.Serialize(bytes);
-                        AssetSetObject assetSetObject = AssetSetObject.Create(waitingAssetSet.AssetPath, waitingAssetSet.AssetType, asset, m_ResourceComponent);
-                        NameTypePair assetKey = new NameTypePair(waitingAssetSet.AssetPath, waitingAssetSet.AssetType);
-                        if (m_AssetSetObjectPool.CanSpawn(assetKey))
-                        {
-                            if (m_AssetSetObjectPool.Spawn(assetKey) == null)
-                            {
-                                throw new GameFrameworkException(Utility.Text.Format("Can not spawn '{0}' from pool.", assetKey));
-                            }
-                        }
-                        else
-                        {
-                            m_AssetSetObjectPool.Register(assetSetObject, true);
-                        }
-                        waitingAssetSet.SetAsset(asset);
-                        m_LoadedAssetSetLinkedList.AddLast(LoadedAssetSet.Create(waitingAssetSet, asset));
-                        if(serializeAssetSet is ISaveAbleAssetSet saveAbleAssetSet && saveAbleAssetSet.NeedSave)
-                        {
-                            SaveByFileSystem(waitingAssetSet.AssetPath, bytes);
-                        }
+                        throw new GameFrameworkException(Utility.Text.Format("Can not spawn '{0}' from pool.", assetKey));
                     }
+                    asset = (UnityEngine.Object)assetSetObject.Target;
+                }
+                else
+                {
+                    asset = serializeAssetSet.Serialize(bytes);
+                    if (asset == null)
+                    {
+                        Log.Error("Can not serialize asset '{0}' downloaded from '{1}'.", waitingAssetSet.AssetPath, webRequestSuccessEventArgs.WebRequestUri);
+                        ReferencePool.Release(waitingAssetSet);
+                        continue;
+                    }
+                    m_AssetSetObjectPool.Register(AssetSetObject.Create(waitingAssetSet.AssetPath, waitingAssetSet.AssetType, asset, null), true);
+                }
+
+                waitingAssetSet.SetAsset(asset);
+                m_LoadedAssetSetLinkedList.AddLast(LoadedAssetSet.Create(waitingAssetSet, asset));
+                if (!saved && serializeAssetSet is ISaveAbleAssetSet saveAbleAssetSet && saveAbleAssetSet.NeedSave)
+                {
+                    SaveByFileSystem(waitingAssetSet.AssetPath, bytes);
+                    saved = true;
                 }
             }
         }
