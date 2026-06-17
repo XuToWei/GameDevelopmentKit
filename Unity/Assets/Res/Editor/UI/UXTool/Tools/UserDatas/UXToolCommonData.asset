@@ -15,3 +15,4 @@ MonoBehaviour:
   CustomUnityWindowTitle: 
   MaxRecentSelectedFiles: 15
   MaxRecentOpenedPrefabs: 15
+  MaxOpenedPrefabTabs: 5

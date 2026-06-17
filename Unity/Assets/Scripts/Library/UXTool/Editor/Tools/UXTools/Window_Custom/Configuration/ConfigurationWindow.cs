@@ -126,8 +126,10 @@ namespace ThunderFireUITool
         private TextField projectNameTextField;
         private IntegerField maxFilesField;
         private IntegerField maxPrefabsField;
+        private IntegerField maxOpenedPrefabsField;
         private TextElement errorLabel;
         private TextElement errorPrefabLabel;
+        private TextElement errorOpenedPrefabLabel;
 
         private ConfigurationOption GeneralOption;
         private ConfigurationOption StorageOption;
@@ -387,6 +389,50 @@ namespace ThunderFireUITool
 
                 }
             });
+
+            TextElement maxOpenedPrefabsLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
+            {
+                text = "Scene窗口打开Prefab数上限",
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    left = 0,
+                    fontSize = 13,
+                    top = 265,
+                    color = Color.white,
+                    maxWidth = 250,
+                }
+            });
+
+            maxOpenedPrefabsField = new IntegerField();
+            maxOpenedPrefabsField.style.position = Position.Absolute;
+            maxOpenedPrefabsField.style.width = 137;
+            maxOpenedPrefabsField.style.height = 25;
+            maxOpenedPrefabsField.style.top = 265;
+            maxOpenedPrefabsField.style.right = 0;
+            if (commonData != null)
+            {
+                maxOpenedPrefabsField.value = commonData.MaxOpenedPrefabTabs;
+            }
+
+            container.Add(maxOpenedPrefabsField);
+
+            errorOpenedPrefabLabel = UXBuilder.Text(container, new UXBuilderTextStruct()
+            {
+                text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_显示上限必须大于0),
+                style = new UXStyle()
+                {
+                    position = Position.Absolute,
+                    color = Color.red,
+                    maxWidth = 137,
+                    display = DisplayStyle.None,
+                    fontSize = 13,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    top = 290,
+                    right = 1,
+
+                }
+            });
         }
 
         private void leftContainerRefresh()
@@ -516,6 +562,16 @@ namespace ThunderFireUITool
                 else
                 {
                     errorLabel.style.display = DisplayStyle.Flex;
+                    return;
+                }
+                if (maxOpenedPrefabsField.value >= 1)
+                {
+                    commonData.MaxOpenedPrefabTabs = maxOpenedPrefabsField.value;
+                    errorOpenedPrefabLabel.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    errorOpenedPrefabLabel.style.display = DisplayStyle.Flex;
                     return;
                 }
 
