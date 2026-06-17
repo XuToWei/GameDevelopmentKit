@@ -57,6 +57,8 @@ namespace ThunderFireUITool
         public string CustomUnityWindowTitle = "";
         public int MaxRecentSelectedFiles = 15;
         public int MaxRecentOpenedPrefabs = 15;
+        // Scene 窗口同时打开（标签栏中保留）的 Prefab 数量上限
+        public int MaxOpenedPrefabTabs = 5;
     }
 }
 #endif

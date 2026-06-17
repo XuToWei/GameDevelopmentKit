@@ -10,7 +10,7 @@ namespace ET.Client
         [UGFUIFormSystem]
         private static void UGFUIFormOnOpen(this UIFormLobbyComponent self)
         {
-            self.View.EnterMapButton.SetAsync(self.EnterMap);
+            self.View.enterMapButton.SetAsync(self.EnterMap);
         }
 
         private static async UniTask EnterMap(this UIFormLobbyComponent self)

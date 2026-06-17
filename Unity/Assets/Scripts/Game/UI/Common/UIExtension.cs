@@ -1,12 +1,11 @@
 ﻿using GameFramework.UI;
-using JetBrains.Annotations;
 using UnityGameFramework.Runtime;
 
 namespace Game
 {
     public static partial class UIExtension
     {
-        public static bool HasUIForm(this UIComponent uiComponent, int uiFormTypeId, string uiGroupName = null)
+        public static bool IsLoadingOrHasUIForm(this UIComponent uiComponent, int uiFormTypeId, string uiGroupName = null)
         {
             DRUIForm drUIForm = GameEntry.Tables.DTUIForm.GetOrDefault(uiFormTypeId);
             if (drUIForm == null)
@@ -15,6 +14,11 @@ namespace Game
             }
 
             string assetName = AssetUtility.GetUIFormAsset(drUIForm.AssetName);
+            if (uiComponent.IsLoadingUIForm(assetName))
+            {
+                return true;
+            }
+
             if (string.IsNullOrEmpty(uiGroupName))
             {
                 return uiComponent.HasUIForm(assetName);
@@ -29,7 +33,6 @@ namespace Game
             return uiGroup.HasUIForm(assetName);
         }
 
-        [CanBeNull]
         public static UIForm GetUIForm(this UIComponent uiComponent, int uiFormTypeId, string uiGroupName = null)
         {
             DRUIForm drUIForm = GameEntry.Tables.DTUIForm.GetOrDefault(uiFormTypeId);

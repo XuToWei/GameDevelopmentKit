@@ -1,0 +1,7 @@
+interface:
+  display_name: "AIBridge Development Workflow"
+  short_description: "含 harness 探测的 Unity 开发、调试、审查与验证工作流"
+  default_prompt: "Use $aibridge-development-workflow to probe harness readiness and route a Unity/AIBridge task into implementation, debug investigation, review, validation, or workflow orchestration."
+
+policy:
+  allow_implicit_invocation: true

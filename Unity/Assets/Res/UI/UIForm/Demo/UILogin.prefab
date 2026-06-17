@@ -1172,7 +1172,7 @@ PrefabInstance:
     - target: {fileID: 9057508152899508439, guid: 59c7163ab075c3742a9dd5ad4b50d5bd,
         type: 3}
       propertyPath: m_Name
-      value: Test_WidgetTest (2)
+      value: Test_WidgetTest (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1301,7 +1301,7 @@ PrefabInstance:
     - target: {fileID: 9057508152899508439, guid: 59c7163ab075c3742a9dd5ad4b50d5bd,
         type: 3}
       propertyPath: m_Name
-      value: Test_WidgetTest (1)
+      value: Test_WidgetTest (0)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

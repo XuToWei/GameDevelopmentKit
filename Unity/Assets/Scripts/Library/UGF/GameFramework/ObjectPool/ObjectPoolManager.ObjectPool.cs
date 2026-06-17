@@ -247,7 +247,7 @@ namespace GameFramework.ObjectPool
                 {
                     foreach (Object<T> internalObject in objectRange)
                     {
-                        if ((m_AllowMultiSpawn || !internalObject.IsInUse))
+                        if (m_AllowMultiSpawn || !internalObject.IsInUse)
                         {
                             return true;
                         }

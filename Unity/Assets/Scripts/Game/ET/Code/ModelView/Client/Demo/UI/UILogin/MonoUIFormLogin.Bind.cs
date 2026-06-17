@@ -17,20 +17,19 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.RectTransform m_Test2RectTransform;
 
-
-        public UnityEngine.UI.InputField AccountInputField => m_AccountInputField;
-        public UnityEngine.UI.Button LoginButton => m_LoginButton;
-        public UnityEngine.UI.InputField PasswordInputField => m_PasswordInputField;
-        public ET.Client.MonoUIWidgetTest TestWidgetTest => m_TestWidgetTest;
-        public UnityEngine.RectTransform Test1RectTransform => m_Test1RectTransform;
-        public UnityEngine.RectTransform Test2RectTransform => m_Test2RectTransform;
-
+        public UnityEngine.UI.InputField accountInputField => this.m_AccountInputField;
+        public UnityEngine.UI.Button loginButton => this.m_LoginButton;
+        public UnityEngine.UI.InputField passwordInputField => this.m_PasswordInputField;
+        public ET.Client.MonoUIWidgetTest testWidgetTest => this.m_TestWidgetTest;
+        public UnityEngine.RectTransform test1RectTransform => this.m_Test1RectTransform;
+        public UnityEngine.RectTransform test2RectTransform => this.m_Test2RectTransform;
 
 #if UNITY_EDITOR
-        [Sirenix.OdinInspector.HideLabel, Sirenix.OdinInspector.ReadOnly, Sirenix.OdinInspector.ShowInInspector]
-        [Sirenix.OdinInspector.GUIColor(1,0.8f,0), Sirenix.OdinInspector.PropertyOrder(-99999)]
-        [Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
-        private string BindDataExitEmptyWarning => "BindData exit empty, please check.";
+        [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
+        private void DrawBindDataExitEmptyWarning()
+        {
+            Sirenix.Utilities.Editor.SirenixEditorGUI.MessageBox("BindData contains empty reference.", UnityEditor.MessageType.Warning);
+        }
 
         private bool CheckBindDataExitEmpty()
         {
@@ -43,5 +42,6 @@ namespace ET.Client
             return false;
         }
 #endif
+
     }
 }

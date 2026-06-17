@@ -7,9 +7,21 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.Button m_EnterMapButton;
 
+        public UnityEngine.UI.Button enterMapButton => this.m_EnterMapButton;
 
-        public UnityEngine.UI.Button EnterMapButton => m_EnterMapButton;
+#if UNITY_EDITOR
+        [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
+        private void DrawBindDataExitEmptyWarning()
+        {
+            Sirenix.Utilities.Editor.SirenixEditorGUI.MessageBox("BindData contains empty reference.", UnityEditor.MessageType.Warning);
+        }
 
+        private bool CheckBindDataExitEmpty()
+        {
+            if (this.m_EnterMapButton == null) return true;
+            return false;
+        }
+#endif
 
     }
 }
