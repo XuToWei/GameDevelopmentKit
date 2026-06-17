@@ -16,12 +16,23 @@ namespace ThunderFireUITool
         }
 
         private static string[] m_AllKeys;
+        private static readonly List<string> m_AllKeyList = new List<string>();
+
         public static string[] AllKeys
         {
             get
             {
                 TryRefreshData();
                 return m_AllKeys;
+            }
+        }
+
+        public static List<string> AllKeyList
+        {
+            get
+            {
+                TryRefreshData();
+                return m_AllKeyList;
             }
         }
 
@@ -58,6 +69,7 @@ namespace ThunderFireUITool
             s_Dictionary.Clear();
             s_AssetFileInfos.Clear();
             m_AllKeys = Array.Empty<string>();
+            m_AllKeyList.Clear();
             foreach (LocalizationHelper.LanguageType languageType in ReadyLanguageTypes)
             {
                 string asset = GetLocalizationAsset(languageType);
@@ -94,6 +106,7 @@ namespace ThunderFireUITool
                 }
             }
             m_AllKeys = s_Dictionary.Keys.ToArray();
+            m_AllKeyList.InsertRange(0, s_Dictionary.Keys);
         }
 
         public static string GetString(LocalizationHelper.LanguageType languageType, string key, string defaultString = "<UNKNOWN>")
@@ -117,6 +130,7 @@ namespace ThunderFireUITool
             s_Dictionary.Clear();
             s_AssetFileInfos.Clear();
             m_AllKeys = Array.Empty<string>();
+            m_AllKeyList.Clear();
         }
     }
 }

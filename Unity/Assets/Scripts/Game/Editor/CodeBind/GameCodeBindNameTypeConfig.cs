@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
-using CodeBind;
+using CodeBind.Editor;
 
 namespace Game
 {
-    sealed class GameCodeBindNameTypeConfig
+    sealed class GameCodeBindNameTypeConfig : ICodeBindNameTypeConfig
     {
-        [CodeBindNameType]
-        public static Dictionary<string, Type> BindNameTypeDict = new Dictionary<string, Type>()
+        public int Priority => 1;
+
+        public IReadOnlyDictionary<string, Type> BindNameTypeDict { get; } = new Dictionary<string, Type>()
         {
             { "UIWidget", typeof(AUIWidget) },
             // TMP
@@ -29,6 +30,7 @@ namespace Game
             { "UIAdapter", typeof(UIAdapter) },
             { "IgnoreUIAdapter", typeof(IgnoreUIAdapter) },
             { "UIAdapterScaleScreenRate", typeof(UIAdapterScaleScreenRate) },
+            { "StateControllerMono", typeof(StateController.StateControllerMono) }
         };
     }
 }

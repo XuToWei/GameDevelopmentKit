@@ -7,9 +7,21 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.Text m_DescText;
 
+        public UnityEngine.UI.Text descText => this.m_DescText;
 
-        public UnityEngine.UI.Text DescText => m_DescText;
+#if UNITY_EDITOR
+        [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
+        private void DrawBindDataExitEmptyWarning()
+        {
+            Sirenix.Utilities.Editor.SirenixEditorGUI.MessageBox("BindData contains empty reference.", UnityEditor.MessageType.Warning);
+        }
 
+        private bool CheckBindDataExitEmpty()
+        {
+            if (this.m_DescText == null) return true;
+            return false;
+        }
+#endif
 
     }
 }

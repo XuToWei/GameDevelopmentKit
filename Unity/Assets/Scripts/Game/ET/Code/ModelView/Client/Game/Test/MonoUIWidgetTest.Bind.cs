@@ -11,17 +11,16 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.Button m_TestReopenButton;
 
-
-        public UnityEngine.UI.UXText TestUXText => m_TestUXText;
-        public UnityEngine.UI.Button TestCloseButton => m_TestCloseButton;
-        public UnityEngine.UI.Button TestReopenButton => m_TestReopenButton;
-
+        public UnityEngine.UI.UXText testUXText => this.m_TestUXText;
+        public UnityEngine.UI.Button testCloseButton => this.m_TestCloseButton;
+        public UnityEngine.UI.Button testReopenButton => this.m_TestReopenButton;
 
 #if UNITY_EDITOR
-        [Sirenix.OdinInspector.HideLabel, Sirenix.OdinInspector.ReadOnly, Sirenix.OdinInspector.ShowInInspector]
-        [Sirenix.OdinInspector.GUIColor(1,0.8f,0), Sirenix.OdinInspector.PropertyOrder(-99999)]
-        [Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
-        private string BindDataExitEmptyWarning => "BindData exit empty, please check.";
+        [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
+        private void DrawBindDataExitEmptyWarning()
+        {
+            Sirenix.Utilities.Editor.SirenixEditorGUI.MessageBox("BindData contains empty reference.", UnityEditor.MessageType.Warning);
+        }
 
         private bool CheckBindDataExitEmpty()
         {
@@ -31,5 +30,6 @@ namespace ET.Client
             return false;
         }
 #endif
+
     }
 }

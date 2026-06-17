@@ -29,7 +29,7 @@ namespace ET
             GetComponentsInChildren(true, monoUIWidgets);
             foreach (AETMonoUGFUIWidget monoUIWidget in monoUIWidgets)
             {
-                if(monoUIWidget.UIFormOwner != null || monoUIWidget.GetComponentInParent<AETMonoUGFUIForm>() != this)
+                if(monoUIWidget.UIFormOwner != null || monoUIWidget.GetComponentInParent<AETMonoUGFUIForm>(true) != this)
                     continue;
                 m_UGFUIForm.AddChildUIWidget(monoUIWidget, true);
             }
