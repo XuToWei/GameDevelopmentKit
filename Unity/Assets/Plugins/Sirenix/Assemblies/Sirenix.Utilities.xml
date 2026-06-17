@@ -1758,14 +1758,25 @@
         </member>
         <member name="M:Sirenix.Utilities.TypeExtensions.FindIdealConstructor(System.Type,System.Reflection.BindingFlags)">
             <summary>
-            Weighs multiple constructors for a given type, and attempts to find the most ideal constructor. This will ignore any unmanaged constructors.
+            Finds the constructor of a type that is closest to a default constructor while favoring safer options.
+            Unmanaged constructors are ignored.
             </summary>
-            <param name="type">The <see cref="T:System.Type"/> to weigh the constructors of.</param>
-            <param name="flags">The <see cref="T:System.Reflection.BindingFlags"/> to search for the constructors; <see cref="F:System.Reflection.BindingFlags.Default"/> means only find the public ones.</param>
-            <returns>The most ideal <see cref="T:System.Reflection.ConstructorInfo"/> based on the scoring system.</returns>
-            <remarks>The scoring system prefers value types over reference types (adjusted for default values),
-            it provides bonuses for empty constructors or constructors solely consisting of default values.
-            Lastly it considers the amount of parameters present in the constructor in the overall score. </remarks>
+            <param name="type">The <see cref="T:System.Type"/> whose constructors are evaluated.</param>
+            <param name="flags">
+            The <see cref="T:System.Reflection.BindingFlags"/> to use when retrieving constructors. 
+            <see cref="F:System.Reflection.BindingFlags.Default"/> restricts the search to public constructors.
+            </param>
+            <returns>
+            The <see cref="T:System.Reflection.ConstructorInfo"/> considered closest to a default constructor based on the ranking heuristics.
+            </returns>
+            <remarks>
+            <p>Constructors are ranked using these heuristics:</p>
+            <p>1. Empty constructors are preferred first.</p>
+            <p>2. Constructors where all parameters have default values are preferred next.</p>
+            <p>3. Shorter constructors are preferred over longer ones.</p>
+            <p>4. Constructors with more parameters that have default values are preferred.</p>
+            <p>5. Constructors with more value-type parameters are preferred.</p>
+            </remarks>
         </member>
         <member name="M:Sirenix.Utilities.TypeExtensions.IsUnmanagedCtor(System.Reflection.ConstructorInfo)">
             <summary>

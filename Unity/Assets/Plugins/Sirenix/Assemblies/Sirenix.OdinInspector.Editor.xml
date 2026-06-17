@@ -276,7 +276,12 @@
         </member>
         <member name="P:Sirenix.OdinInspector.Editor.GeneralDrawerConfig.ShowPrefabModifiedValueBar">
             <summary>
-            Specify whether or not the warning for properties that do not support prefab modifications should be shown in the inspector.
+            Specify whether or not a blue bar should be drawn next to modified prefab values.
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.Editor.GeneralDrawerConfig.UseUnityContextMenuForModifications">
+            <summary>
+            Specify whether or not the Unity context menu options should be included when showing the context menu for a Unity-serialized value that has prefab modifications.
             </summary>
         </member>
         <member name="P:Sirenix.OdinInspector.Editor.GeneralDrawerConfig.MaxRecursiveDrawDepth">
@@ -969,6 +974,93 @@
             </summary>
             <param name="owner">The owner.</param>
             <param name="value">The value.</param>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.VisibleItems.HasAssociatedData(System.Int32)">
+            <summary>
+            Checks whether the allocated <see cref="T:UnityEngine.Rect"/> has data associated with it.
+            </summary>
+            <param name="index">The index of the <see cref="T:UnityEngine.Rect"/> to check.</param>
+            <returns><c>true</c> if the <see cref="T:UnityEngine.Rect"/> has data associated with it; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.VisibleItems.GetAssociatedData(System.Int32)">
+            <summary>
+            Gets the data associated with the <see cref="T:UnityEngine.Rect"/> at the given <paramref name="index"/>; this is the second parameter assigned in the <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.AllocateRect(System.Single,System.Object)"/> method.
+            </summary>
+            <param name="index">The index of the <see cref="T:UnityEngine.Rect"/> to retrieve the associated data from.</param>
+            <returns>The associated data.</returns>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.VisibleItems.GetAssociatedData``1(System.Int32)">
+            <summary>
+            Gets the data associated with the <see cref="T:UnityEngine.Rect"/> at the given <see cref="!:index"/>; this is the second parameter assigned in the <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.AllocateRect(System.Single,System.Object)"/> method.
+            </summary>
+            <param name="index">The index of the <see cref="T:UnityEngine.Rect"/> to retrieve the associated data from.</param>
+            <typeparam name="T">The expected associated data type.</typeparam>
+            <returns>The associated data.</returns>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.VisibleItems.GetIndentation(System.Int32)">
+            <summary>
+            Gets the indentation set for the <see cref="T:UnityEngine.Rect"/> at the given <paramref name="index"/>.
+            </summary>
+            <param name="index">The <paramref name="index"/> of the <see cref="T:UnityEngine.Rect"/> to retrieve the indentation for.</param>
+            <returns>The indentation for the <see cref="T:UnityEngine.Rect"/>.</returns>
+            <remarks>The indentation is set using <see cref="F:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.Indentation"/> during <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.BeginAllocations"/> and <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.EndAllocations"/>.</remarks>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.VisibleItems.GetCombinedRects">
+            <summary>
+            Creates a <see cref="T:UnityEngine.Rect"/> representing all the visible <see cref="T:UnityEngine.Rect"/>'s combined.
+            </summary>
+            <returns>The created <see cref="T:UnityEngine.Rect"/>.</returns>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.AllocateRect(System.Single,System.Object)">
+            <summary>
+            Allocates an <see cref="T:UnityEngine.Rect"/> in the view, with the option to associate a given <see cref="T:System.Object"/> with it.
+            </summary>
+            <param name="height"></param>
+            <param name="reference"></param>
+            <remarks>Ensure <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.BeginAllocations"/> is called before calling this, and ensure <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.EndAllocations"/> is called after you're done with <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.AllocateRect(System.Single,System.Object)"/></remarks>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.Internal.DropCommit.TryCommit(Sirenix.OdinInspector.Editor.Internal.DesignerEditorContext,Sirenix.OdinInspector.Editor.Internal.DragAndDropState)">
+            <summary>
+            Commit a vertical drop using DragAndDropState.
+            Center on an empty group inserts INTO that group.
+            Top/Bottom on any item inserts as a SIBLING in the parent container.
+            Returns true if the model changed.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.Internal.DesignerEditorWindow.HandleWindowMovement(System.Boolean,UnityEngine.Vector2,UnityEditor.EditorWindow,System.Int32)">
+            <summary>
+            Handles the window's linux-like drag behaviour.
+            </summary>
+            <param name="isDragging">Are we currently dragging (provided by the calling window)</param>
+            <param name="dragStartPosition">Where did the drag start (provided by the calling window)</param>
+            <param name="editorWindow">The window to move</param>
+            <param name="controlID">A passive control id to make sure the window keeps getting events while dragging (provided by the calling window)</param>
+            <returns>A bool so the calling window can update its "isDragging" variable and a Vector2 so the calling window can update its "dragStartPosition" variable</returns>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Editor.Internal.RefList`1.IndexRef">
+            <summary>
+            
+            </summary>
+            <remarks>Does not guarantee stability.</remarks>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Editor.Internal.OdinInternalDragAndDropUtils">
+            <summary> Temporary. </summary>
+            <warning>This implementation <b>will</b> get refactored.</warning>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Editor.Internal.OdinInternalEditorFields">
+            <summary> Temporary. </summary>
+            <warning>This implementation <b>will</b> get refactored.</warning>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Editor.Internal.OdinObjectSelectorIds">
+            <summary>
+            Contains a set of Unique IDs used for various parts of Odin that don't rely on ControlIds as the ID identifier for OdinObjectSelector.
+            </summary>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Editor.Internal.TypeSelectorHandler_WILL_BE_DEPRECATED">
+            <summary>
+            Handles instantiating different versions of the Type Selector depending on the context.
+            </summary>
+            <remarks>This handler only handles shared constructors between the two versions, for obsolete or unique constructors use the desired selector.</remarks>
         </member>
         <member name="T:Sirenix.OdinInspector.Editor.InspectorPropertyInfo">
             <summary>
@@ -2161,56 +2253,6 @@
             </summary>
             <param name="reference"></param>
         </member>
-        <member name="M:Sirenix.OdinInspector.Editor.PropertyTree`1.GetPropertyAtPath(System.String)">
-            <summary>
-            Gets the property at the given path. Note that this is the path found in <see cref="P:Sirenix.OdinInspector.Editor.InspectorProperty.Path" />, not the Unity path.
-            </summary>
-            <param name="path">The path of the property to get.</param>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.PropertyTree`1.GetPropertyAtPath(System.String,Sirenix.OdinInspector.Editor.InspectorProperty@)">
-            <summary>
-            Gets the property at the given path. Note that this is the path found in <see cref="P:Sirenix.OdinInspector.Editor.InspectorProperty.Path" />, not the Unity path.
-            </summary>
-            <param name="path">The path of the property to get.</param>
-            <param name="closestProperty"></param>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.PropertyTree`1.GetPropertyAtUnityPath(System.String)">
-            <summary>
-            Finds the property at the specified unity path.
-            </summary>
-            <param name="path">The unity path for the property.</param>
-            <returns>The property found at the path.</returns>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.PropertyTree`1.GetPropertyAtUnityPath(System.String,Sirenix.OdinInspector.Editor.InspectorProperty@)">
-            <summary>
-            Finds the property at the specified unity path.
-            </summary>
-            <param name="path">The unity path for the property.</param>
-            <param name="closestProperty"></param>
-            <returns>The property found at the path.</returns>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.PropertyTree`1.GetPropertyAtPrefabModificationPath(System.String)">
-            <summary>
-            Finds the property at the specified modification path.
-            </summary>
-            <param name="path">The prefab modification path for the property.</param>
-            <returns>The property found at the path.</returns>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.PropertyTree`1.GetPropertyAtPrefabModificationPath(System.String,Sirenix.OdinInspector.Editor.InspectorProperty@)">
-            <summary>
-            Finds the property at the specified modification path.
-            </summary>
-            <param name="path">The prefab modification path for the property.</param>
-            <param name="closestProperty"></param>
-            <returns>The property found at the path.</returns>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.PropertyTree`1.GetUnityPropertyForPath(System.String,System.Reflection.FieldInfo@)">
-            <summary>
-            Gets a Unity property for the given Odin or Unity path. If there is no <see cref="T:UnityEditor.SerializedObject" /> for this property tree, or no such property is found in the <see cref="T:UnityEditor.SerializedObject" />, a property will be emitted using <see cref="T:Sirenix.OdinInspector.Editor.UnityPropertyEmitter" />.
-            </summary>
-            <param name="path">The Odin or Unity path to the property to get.</param>
-            <param name="backingField">The backing field of the Unity property.</param>
-        </member>
         <member name="M:Sirenix.OdinInspector.Editor.PropertyTree`1.EnumerateTree(System.Boolean,System.Boolean)">
             <summary>
             Enumerates over the properties of the tree. WARNING: For tree that have large targets with lots of data, this may involve massive amounts of work as the full tree structure is resolved. USE THIS METHOD SPARINGLY AND ONLY WHEN ABSOLUTELY NECESSARY!
@@ -2513,6 +2555,15 @@
             For now, it only exists to denote which internally defined resolvers support prefab modifications being set.
             </summary>
         </member>
+        <member name="T:Sirenix.OdinInspector.Editor.OdinCacheableProcessorAttribute">
+            <summary>
+            Marks an <see cref="T:Sirenix.OdinInspector.Editor.OdinAttributeProcessor"/> or <see cref="T:Sirenix.OdinInspector.Editor.OdinPropertyProcessor"/> as cacheable.
+            </summary>
+            <remarks>
+            Only mark a processor as cacheable if it always produces the same attributes for the same properties in the same order.  
+            Caching is applied only when all processors that run on a property are cacheable; if any running processor is not, the result will not be cached.
+            </remarks>
+        </member>
         <member name="T:Sirenix.OdinInspector.Editor.CollectionChangeInfo">
             <summary>
             Contains information about a change that is going to occur/has occurred to a collection.
@@ -2732,6 +2783,11 @@
         <member name="P:Sirenix.OdinInspector.Editor.IPropertyValueEntry.ValueChangedFromPrefab">
             <summary>
             Whether this value entry has been changed from its prefab counterpart.
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.Editor.IPropertyValueEntry.ChildValueChangedFromPrefab">
+            <summary>
+            Whether a child of this value entry has been changed from its prefab counterpart.
             </summary>
         </member>
         <member name="P:Sirenix.OdinInspector.Editor.IPropertyValueEntry.ListLengthChangedFromPrefab">
@@ -3332,6 +3388,11 @@
             Whether this value entry has been changed from its prefab counterpart.
             </summary>
         </member>
+        <member name="P:Sirenix.OdinInspector.Editor.PropertyValueEntry.ChildValueChangedFromPrefab">
+            <summary>
+            Whether a child of this value entry has been changed from its prefab counterpart.
+            </summary>
+        </member>
         <member name="P:Sirenix.OdinInspector.Editor.PropertyValueEntry.ListLengthChangedFromPrefab">
             <summary>
             Whether this value entry has had its list length changed from its prefab counterpart.
@@ -3663,6 +3724,11 @@
             Whether this value entry has been changed from its prefab counterpart.
             </summary>
         </member>
+        <member name="P:Sirenix.OdinInspector.Editor.PropertyValueEntryAlias.ChildValueChangedFromPrefab">
+            <summary>
+            Whether a child of this value entry has been changed from its prefab counterpart.
+            </summary>
+        </member>
         <member name="P:Sirenix.OdinInspector.Editor.PropertyValueEntryAlias.ListLengthChangedFromPrefab">
             <summary>
             Whether this value entry has had its list length changed from its prefab counterpart.
@@ -3825,6 +3891,11 @@
         <member name="P:Sirenix.OdinInspector.Editor.PropertyValueEntryAlias`2.ValueChangedFromPrefab">
             <summary>
             Whether this value entry has been changed from its prefab counterpart.
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.Editor.PropertyValueEntryAlias`2.ChildValueChangedFromPrefab">
+            <summary>
+            Whether a child of this value entry has been changed from its prefab counterpart.
             </summary>
         </member>
         <member name="P:Sirenix.OdinInspector.Editor.PropertyValueEntryAlias`2.ListLengthChangedFromPrefab">
@@ -4427,6 +4498,16 @@
             <seealso cref="T:Sirenix.OdinInspector.GUIColorAttribute"/>
         </member>
         <member name="M:Sirenix.OdinInspector.Editor.Drawers.HideLabelAttributeDrawer.DrawPropertyLayout(UnityEngine.GUIContent)">
+            <summary>
+            Draws the property.
+            </summary>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Editor.Drawers.ImageAttributeDrawer">
+            <summary>
+            Draws properties marked with <see cref="T:Sirenix.OdinInspector.ImageAttribute"/> as an image directly in the inspector.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.Drawers.ImageAttributeDrawer.DrawPropertyLayout(UnityEngine.GUIContent)">
             <summary>
             Draws the property.
             </summary>
@@ -7153,135 +7234,6 @@
             <summary>
             Preview object of the example.
             </summary>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.VisibleItems.HasAssociatedData(System.Int32)">
-            <summary>
-            Checks whether the allocated <see cref="T:UnityEngine.Rect"/> has data associated with it.
-            </summary>
-            <param name="index">The index of the <see cref="T:UnityEngine.Rect"/> to check.</param>
-            <returns><c>true</c> if the <see cref="T:UnityEngine.Rect"/> has data associated with it; otherwise <c>false</c>.</returns>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.VisibleItems.GetAssociatedData(System.Int32)">
-            <summary>
-            Gets the data associated with the <see cref="T:UnityEngine.Rect"/> at the given <paramref name="index"/>; this is the second parameter assigned in the <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.AllocateRect(System.Single,System.Object)"/> method.
-            </summary>
-            <param name="index">The index of the <see cref="T:UnityEngine.Rect"/> to retrieve the associated data from.</param>
-            <returns>The associated data.</returns>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.VisibleItems.GetAssociatedData``1(System.Int32)">
-            <summary>
-            Gets the data associated with the <see cref="T:UnityEngine.Rect"/> at the given <see cref="!:index"/>; this is the second parameter assigned in the <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.AllocateRect(System.Single,System.Object)"/> method.
-            </summary>
-            <param name="index">The index of the <see cref="T:UnityEngine.Rect"/> to retrieve the associated data from.</param>
-            <typeparam name="T">The expected associated data type.</typeparam>
-            <returns>The associated data.</returns>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.VisibleItems.GetIndentation(System.Int32)">
-            <summary>
-            Gets the indentation set for the <see cref="T:UnityEngine.Rect"/> at the given <paramref name="index"/>.
-            </summary>
-            <param name="index">The <paramref name="index"/> of the <see cref="T:UnityEngine.Rect"/> to retrieve the indentation for.</param>
-            <returns>The indentation for the <see cref="T:UnityEngine.Rect"/>.</returns>
-            <remarks>The indentation is set using <see cref="F:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.Indentation"/> during <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.BeginAllocations"/> and <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.EndAllocations"/>.</remarks>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.VisibleItems.GetCombinedRects">
-            <summary>
-            Creates a <see cref="T:UnityEngine.Rect"/> representing all the visible <see cref="T:UnityEngine.Rect"/>'s combined.
-            </summary>
-            <returns>The created <see cref="T:UnityEngine.Rect"/>.</returns>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.AllocateRect(System.Single,System.Object)">
-            <summary>
-            Allocates an <see cref="T:UnityEngine.Rect"/> in the view, with the option to associate a given <see cref="T:System.Object"/> with it.
-            </summary>
-            <param name="height"></param>
-            <param name="reference"></param>
-            <remarks>Ensure <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.BeginAllocations"/> is called before calling this, and ensure <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.EndAllocations"/> is called after you're done with <see cref="M:Sirenix.OdinInspector.Editor.Internal.OdinGUIScrollView.AllocateRect(System.Single,System.Object)"/></remarks>
-        </member>
-        <member name="T:Sirenix.OdinInspector.Editor.Internal.OdinInternalDragAndDropUtils">
-            <summary> Temporary. </summary>
-            <warning>This implementation <b>will</b> get refactored.</warning>
-        </member>
-        <member name="T:Sirenix.OdinInspector.Editor.Internal.OdinInternalEditorFields">
-            <summary> Temporary. </summary>
-            <warning>This implementation <b>will</b> get refactored.</warning>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinInternalEditorFields.UnityObjectField(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Object,System.Type,System.Boolean,System.Boolean,Sirenix.OdinInspector.Editor.InspectorProperty)">
-            <summary>
-            Draws a regular Unity ObjectField, but supports labels being nulls, and also adds a small button that will open the object in a new inspector window.
-            </summary>
-            <param name="position">Position and size of the field.</param>
-            <param name="label">The label to use, or null if no label should be used.</param>
-            <param name="value">The Unity object.</param>
-            <param name="objectType">The Unity object type. This supports inheritance.</param>
-            <param name="allowSceneObjects">Whether to allow scene objects.</param>
-            <param name="readOnly">Determines if the Field is read-only.</param>
-            <param name="property">Will be used for setting and updating the value, this provides a more consistent way to the handle changes.</param>
-            <remarks>If a property is assigned through the parameters, the return value should not be used for setting the <see cref="T:Sirenix.OdinInspector.Editor.PropertyValueEntry`1"/>, the drawer will handle that.</remarks>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinInternalEditorFields.UnityObjectField(System.Object,System.Int32,UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Object,System.Type,System.Boolean,System.Boolean,Sirenix.OdinInspector.Editor.InspectorProperty)">
-            <summary>
-            Draws a regular Unity ObjectField, but supports labels being nulls, and also adds a small button that will open the object in a new inspector window.
-            </summary>
-            <param name="position">Position and size of the field.</param>
-            <param name="label">The label to use, or null if no label should be used.</param>
-            <param name="value">The Unity object.</param>
-            <param name="objectType">The Unity object type. This supports inheritance.</param>
-            <param name="allowSceneObjects">Whether to allow scene objects.</param>
-            <param name="readOnly">Determines if the Field is read-only.</param>
-            <param name="property">Will be used for setting and updating the value, this provides a more consistent way to the handle changes.</param>
-            <remarks>If a property is assigned through the parameters, the return value should not be used for setting the <see cref="T:Sirenix.OdinInspector.Editor.PropertyValueEntry`1"/>, the drawer will handle that.</remarks>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinInternalEditorFields.PolymorphicObjectField(UnityEngine.Rect,System.Int32,System.Boolean,UnityEngine.GUIContent,System.Object,System.Type,System.Type,System.Boolean,System.Boolean,Sirenix.OdinInspector.Editor.InspectorProperty,System.Boolean,System.Boolean,System.String)">
-            <summary>
-            TODO
-            </summary>
-            <param name="position"></param>
-            <param name="id"></param>
-            <param name="hasKeyboardFocus"></param>
-            <param name="label"></param>
-            <param name="value"></param>
-            <param name="valueType"></param>
-            <param name="baseType"></param>
-            <param name="allowSceneObjects"></param>
-            <param name="disallowNullValues"></param>
-            <param name="property"></param>
-            <param name="readOnly"></param>
-            <param name="showBaseType"></param>
-            <param name="title"></param>
-            <returns></returns>
-            <remarks>If a property is assigned through the parameters, the return value should not be used for setting the <see cref="T:Sirenix.OdinInspector.Editor.PropertyValueEntry`1"/>, the drawer will handle that.</remarks>
-        </member>
-        <member name="M:Sirenix.OdinInspector.Editor.Internal.OdinInternalEditorFields.PolymorphicObjectField(System.Object,System.Int32,UnityEngine.Rect,System.Int32,System.Boolean,UnityEngine.GUIContent,System.Object,System.Type,System.Type,System.Boolean,System.Boolean,Sirenix.OdinInspector.Editor.InspectorProperty,System.Boolean,System.Boolean,System.String)">
-            <summary>
-            TODO
-            </summary>
-            <param name="position"></param>
-            <param name="id"></param>
-            <param name="hasKeyboardFocus"></param>
-            <param name="label"></param>
-            <param name="value"></param>
-            <param name="valueType"></param>
-            <param name="baseType"></param>
-            <param name="allowSceneObjects"></param>
-            <param name="disallowNullValues"></param>
-            <param name="property"></param>
-            <param name="readOnly"></param>
-            <param name="showBaseType"></param>
-            <param name="title"></param>
-            <returns></returns>
-            <remarks>If a property is assigned through the parameters, the return value should not be used for setting the <see cref="T:Sirenix.OdinInspector.Editor.PropertyValueEntry`1"/>, the drawer will handle that.</remarks>
-        </member>
-        <member name="T:Sirenix.OdinInspector.Editor.Internal.OdinObjectSelectorIds">
-            <summary>
-            Contains a set of Unique IDs used for various parts of Odin that don't rely on ControlIds as the ID identifier for OdinObjectSelector.
-            </summary>
-        </member>
-        <member name="T:Sirenix.OdinInspector.Editor.Internal.TypeSelectorHandler_WILL_BE_DEPRECATED">
-            <summary>
-            Handles instantiating different versions of the Type Selector depending on the context.
-            </summary>
-            <remarks>This handler only handles shared constructors between the two versions, for obsolete or unique constructors use the desired selector.</remarks>
         </member>
         <member name="T:Sirenix.OdinInspector.Editor.AllowGUIEnabledForReadonlyAttribute">
              <summary>
@@ -10205,6 +10157,36 @@
             <summary>
             Sets the selected types.
             </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.OdinVisualDesignerConfig.ToggleFavorite(System.Type)">
+            <returns>The favorite state *after* toggling.</returns>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.OdinVisualDesigner.OpenForType(System.Type)">
+            <summary>
+            Opens the Visual Designer for the specified <see cref="T:System.Type"/>.
+            </summary>
+            <param name="type">The type to display and customize in the Visual Designer.</param>
+            <returns>
+            The opened <see cref="T:Sirenix.OdinInspector.Editor.OdinEditorWindow"/>, or <c>null</c> if the window could not be opened.
+            </returns>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.OdinVisualDesigner.OpenForInstance(System.Object)">
+            <summary>
+            Opens the Visual Designer for the specified object instance.
+            </summary>
+            <param name="instance">The object instance to display and customize in the Visual Designer.</param>
+            <returns>
+            The opened <see cref="T:Sirenix.OdinInspector.Editor.OdinEditorWindow"/>, or <c>null</c> if the window could not be opened or the instance was <c>null</c>.
+            </returns>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.OdinVisualDesigner.OpenForProperty(Sirenix.OdinInspector.Editor.InspectorProperty)">
+            <summary>
+            Opens the Visual Designer for the specified <see cref="T:Sirenix.OdinInspector.Editor.InspectorProperty"/>.
+            </summary>
+            <param name="property">The property to display and customize in the Visual Designer.</param>
+            <returns>
+            The opened <see cref="T:Sirenix.OdinInspector.Editor.OdinEditorWindow"/>, or <c>null</c> if the window could not be opened.
+            </returns>
         </member>
         <member name="P:Sirenix.OdinInspector.Editor.OdinObjectSelector.SelectorProperty">
             <summary>
