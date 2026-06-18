@@ -27,41 +27,19 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.Text m_SpeedText;
 
-        public UnityEngine.UI.Text frameCountText => this.m_FrameCountText;
-        public UnityEngine.UI.Button jumpButton => this.m_JumpButton;
-        public UnityEngine.UI.InputField jumpToCountInputField => this.m_JumpToCountInputField;
-        public UnityEngine.Transform playTransform => this.m_PlayTransform;
-        public UnityEngine.UI.Text predictText => this.m_PredictText;
-        public UnityEngine.UI.Text progressText => this.m_ProgressText;
-        public UnityEngine.Transform replayTransform => this.m_ReplayTransform;
-        public UnityEngine.UI.InputField saveNameInputField => this.m_SaveNameInputField;
-        public UnityEngine.UI.Button saveReplayButton => this.m_SaveReplayButton;
-        public UnityEngine.UI.Button speedButton => this.m_SpeedButton;
-        public UnityEngine.UI.Text speedText => this.m_SpeedText;
 
-#if UNITY_EDITOR
-        [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
-        private void DrawBindDataExitEmptyWarning()
-        {
-            Sirenix.Utilities.Editor.SirenixEditorGUI.MessageBox("BindData contains empty reference.", UnityEditor.MessageType.Warning);
-        }
+        public UnityEngine.UI.Text FrameCountText => m_FrameCountText;
+        public UnityEngine.UI.Button JumpButton => m_JumpButton;
+        public UnityEngine.UI.InputField JumpToCountInputField => m_JumpToCountInputField;
+        public UnityEngine.Transform PlayTransform => m_PlayTransform;
+        public UnityEngine.UI.Text PredictText => m_PredictText;
+        public UnityEngine.UI.Text ProgressText => m_ProgressText;
+        public UnityEngine.Transform ReplayTransform => m_ReplayTransform;
+        public UnityEngine.UI.InputField SaveNameInputField => m_SaveNameInputField;
+        public UnityEngine.UI.Button SaveReplayButton => m_SaveReplayButton;
+        public UnityEngine.UI.Button SpeedButton => m_SpeedButton;
+        public UnityEngine.UI.Text SpeedText => m_SpeedText;
 
-        private bool CheckBindDataExitEmpty()
-        {
-            if (this.m_FrameCountText == null) return true;
-            if (this.m_JumpButton == null) return true;
-            if (this.m_JumpToCountInputField == null) return true;
-            if (this.m_PlayTransform == null) return true;
-            if (this.m_PredictText == null) return true;
-            if (this.m_ProgressText == null) return true;
-            if (this.m_ReplayTransform == null) return true;
-            if (this.m_SaveNameInputField == null) return true;
-            if (this.m_SaveReplayButton == null) return true;
-            if (this.m_SpeedButton == null) return true;
-            if (this.m_SpeedText == null) return true;
-            return false;
-        }
-#endif
 
     }
 }

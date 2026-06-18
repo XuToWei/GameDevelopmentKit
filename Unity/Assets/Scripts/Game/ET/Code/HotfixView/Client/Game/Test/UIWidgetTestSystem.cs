@@ -11,9 +11,9 @@ namespace ET.Client
         private static void UGFUIWidgetOnOpen(this UIWidgetTest self)
         {
             self.OpenAllUIWidgets();
-            self.View.testReopenButton.SetAsync(self.OnClickTestReopenButton);
-            self.View.testCloseButton.Set(self.OnClickTestCloseButton);
-            self.View.testUXText.text = "UIWidget测试成功!";
+            self.View.TestReopenButton.SetAsync(self.OnClickTestReopenButton);
+            self.View.TestCloseButton.Set(self.OnClickTestCloseButton);
+            self.View.TestUXText.text = "UIWidget测试成功!";
             Log.Info("UIWidget测试OnOpen");
         }
         

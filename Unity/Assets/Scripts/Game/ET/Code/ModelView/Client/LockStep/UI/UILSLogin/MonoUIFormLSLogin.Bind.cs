@@ -11,25 +11,11 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.InputField m_PasswordInputField;
 
-        public UnityEngine.UI.InputField accountInputField => this.m_AccountInputField;
-        public UnityEngine.UI.Button loginButton => this.m_LoginButton;
-        public UnityEngine.UI.InputField passwordInputField => this.m_PasswordInputField;
 
-#if UNITY_EDITOR
-        [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
-        private void DrawBindDataExitEmptyWarning()
-        {
-            Sirenix.Utilities.Editor.SirenixEditorGUI.MessageBox("BindData contains empty reference.", UnityEditor.MessageType.Warning);
-        }
+        public UnityEngine.UI.InputField AccountInputField => m_AccountInputField;
+        public UnityEngine.UI.Button LoginButton => m_LoginButton;
+        public UnityEngine.UI.InputField PasswordInputField => m_PasswordInputField;
 
-        private bool CheckBindDataExitEmpty()
-        {
-            if (this.m_AccountInputField == null) return true;
-            if (this.m_LoginButton == null) return true;
-            if (this.m_PasswordInputField == null) return true;
-            return false;
-        }
-#endif
 
     }
 }

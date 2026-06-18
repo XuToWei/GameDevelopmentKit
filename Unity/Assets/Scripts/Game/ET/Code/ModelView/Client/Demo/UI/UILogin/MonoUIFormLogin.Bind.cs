@@ -17,12 +17,12 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.RectTransform m_Test2RectTransform;
 
-        public UnityEngine.UI.InputField accountInputField => this.m_AccountInputField;
-        public UnityEngine.UI.Button loginButton => this.m_LoginButton;
-        public UnityEngine.UI.InputField passwordInputField => this.m_PasswordInputField;
-        public ET.Client.MonoUIWidgetTest testWidgetTest => this.m_TestWidgetTest;
-        public UnityEngine.RectTransform test1RectTransform => this.m_Test1RectTransform;
-        public UnityEngine.RectTransform test2RectTransform => this.m_Test2RectTransform;
+        public UnityEngine.UI.InputField AccountInputField => this.m_AccountInputField;
+        public UnityEngine.UI.Button LoginButton => this.m_LoginButton;
+        public UnityEngine.UI.InputField PasswordInputField => this.m_PasswordInputField;
+        public ET.Client.MonoUIWidgetTest TestWidgetTest => this.m_TestWidgetTest;
+        public UnityEngine.RectTransform Test1RectTransform => this.m_Test1RectTransform;
+        public UnityEngine.RectTransform Test2RectTransform => this.m_Test2RectTransform;
 
 #if UNITY_EDITOR
         [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
