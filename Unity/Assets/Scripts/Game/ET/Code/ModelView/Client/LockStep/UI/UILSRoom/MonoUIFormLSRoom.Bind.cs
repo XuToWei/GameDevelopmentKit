@@ -27,19 +27,41 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.Text m_SpeedText;
 
+        public UnityEngine.UI.Text FrameCountText => this.m_FrameCountText;
+        public UnityEngine.UI.Button JumpButton => this.m_JumpButton;
+        public UnityEngine.UI.InputField JumpToCountInputField => this.m_JumpToCountInputField;
+        public UnityEngine.Transform PlayTransform => this.m_PlayTransform;
+        public UnityEngine.UI.Text PredictText => this.m_PredictText;
+        public UnityEngine.UI.Text ProgressText => this.m_ProgressText;
+        public UnityEngine.Transform ReplayTransform => this.m_ReplayTransform;
+        public UnityEngine.UI.InputField SaveNameInputField => this.m_SaveNameInputField;
+        public UnityEngine.UI.Button SaveReplayButton => this.m_SaveReplayButton;
+        public UnityEngine.UI.Button SpeedButton => this.m_SpeedButton;
+        public UnityEngine.UI.Text SpeedText => this.m_SpeedText;
 
-        public UnityEngine.UI.Text FrameCountText => m_FrameCountText;
-        public UnityEngine.UI.Button JumpButton => m_JumpButton;
-        public UnityEngine.UI.InputField JumpToCountInputField => m_JumpToCountInputField;
-        public UnityEngine.Transform PlayTransform => m_PlayTransform;
-        public UnityEngine.UI.Text PredictText => m_PredictText;
-        public UnityEngine.UI.Text ProgressText => m_ProgressText;
-        public UnityEngine.Transform ReplayTransform => m_ReplayTransform;
-        public UnityEngine.UI.InputField SaveNameInputField => m_SaveNameInputField;
-        public UnityEngine.UI.Button SaveReplayButton => m_SaveReplayButton;
-        public UnityEngine.UI.Button SpeedButton => m_SpeedButton;
-        public UnityEngine.UI.Text SpeedText => m_SpeedText;
+#if UNITY_EDITOR
+        [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]
+        private void DrawBindDataExitEmptyWarning()
+        {
+            Sirenix.Utilities.Editor.SirenixEditorGUI.MessageBox("BindData contains empty reference.", UnityEditor.MessageType.Warning);
+        }
 
+        private bool CheckBindDataExitEmpty()
+        {
+            if (this.m_FrameCountText == null) return true;
+            if (this.m_JumpButton == null) return true;
+            if (this.m_JumpToCountInputField == null) return true;
+            if (this.m_PlayTransform == null) return true;
+            if (this.m_PredictText == null) return true;
+            if (this.m_ProgressText == null) return true;
+            if (this.m_ReplayTransform == null) return true;
+            if (this.m_SaveNameInputField == null) return true;
+            if (this.m_SaveReplayButton == null) return true;
+            if (this.m_SpeedButton == null) return true;
+            if (this.m_SpeedText == null) return true;
+            return false;
+        }
+#endif
 
     }
 }
