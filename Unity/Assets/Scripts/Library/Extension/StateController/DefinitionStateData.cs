@@ -35,7 +35,9 @@ namespace StateController
         [HorizontalGroup]
         [SerializeField]
         [LabelText("Key")]
+#if UNITY_EDITOR
         [ValueDropdown(nameof(LocalizationAllKeys), DropdownWidth = 300)]
+#endif
         private string m_LocalizationKey;
 
         public bool EnableLocalization => m_EnableLocalization;

@@ -61,7 +61,7 @@ namespace Game
             m_ItemPool.Push(trans);
         }
 
-        public void ProvideData(Transform trans, int idx)
+        void LoopScrollDataSource.ProvideData(Transform trans, int idx)
         {
             if (itemRenderer != null)
             {
