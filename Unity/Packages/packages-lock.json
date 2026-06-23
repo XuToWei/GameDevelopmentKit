@@ -243,6 +243,16 @@
         "com.unity.render-pipelines.core": "17.0.3"
       }
     },
+    "com.unity.scriptablebuildpipeline": {
+      "version": "2.6.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.test-framework": "1.4.5",
+        "com.unity.modules.assetbundle": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.searcher": {
       "version": "4.9.4",
       "depth": 0,
@@ -330,7 +340,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "715dd1d231b090d21684d79bb213558f184b6ad9"
+      "hash": "f45572ded4b20a023b0ff05f5a409cb86d654672"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
