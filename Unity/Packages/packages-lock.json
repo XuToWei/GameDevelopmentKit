@@ -243,6 +243,16 @@
         "com.unity.render-pipelines.core": "17.0.3"
       }
     },
+    "com.unity.scriptablebuildpipeline": {
+      "version": "2.6.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.test-framework": "1.4.5",
+        "com.unity.modules.assetbundle": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.searcher": {
       "version": "4.9.4",
       "depth": 0,
@@ -316,7 +326,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e721ae1b2835bda1bdf75eb9f19affe47160b54e"
+      "hash": "a5c35b1221c6889e3c18296a27101148763beb99"
     },
     "me.xw.protobufunity": {
       "version": "https://github.com/XuToWei/Protobuf-Unity.git",
@@ -326,18 +336,18 @@
       "hash": "749522159547e3aa80110e3ea747f294f0e2caf3"
     },
     "me.xw.reactivebinding": {
-      "version": "https://github.com/XuToWei/ReactiveBinding.git",
+      "version": "https://github.com/XuToWei/ReactiveBinding.git?path=Unity",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2fd4f46839631854b9546888d5d666ced2a91d3a"
+      "hash": "f45572ded4b20a023b0ff05f5a409cb86d654672"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "b5469b86ea20e2ba8b7622c2a25972b159f25ee6"
+      "hash": "cc3849dce749e148a16145d8893ea675992f45e4"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",

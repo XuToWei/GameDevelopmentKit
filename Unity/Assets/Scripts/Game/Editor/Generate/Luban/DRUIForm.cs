@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using SimpleJSON;
+using Luban.SimpleJSON;
 using Luban;
 
 namespace Game.Editor
@@ -24,7 +24,7 @@ public sealed class DRUIForm :  Luban.EditorBeanBase
             UIGroupName = "";
     }
 
-    public override void LoadJson(SimpleJSON.JSONObject _json)
+    public override void LoadJson(JSONObject _json)
     {
         { 
             var _fieldJson = _json["Id"];
@@ -84,7 +84,7 @@ public sealed class DRUIForm :  Luban.EditorBeanBase
         
     }
 
-    public override void SaveJson(SimpleJSON.JSONObject _json)
+    public override void SaveJson(JSONObject _json)
     {
         {
             _json["Id"] = new JSONNumber(Id);
@@ -117,16 +117,16 @@ public sealed class DRUIForm :  Luban.EditorBeanBase
         }
     }
 
-    public static DRUIForm LoadJsonDRUIForm(SimpleJSON.JSONNode _json)
+    public static DRUIForm LoadJsonDRUIForm(JSONNode _json)
     {
         DRUIForm obj = new DRUIForm();
-        obj.LoadJson((SimpleJSON.JSONObject)_json);
+        obj.LoadJson((JSONObject)_json);
         return obj;
     }
         
-    public static void SaveJsonDRUIForm(DRUIForm _obj, SimpleJSON.JSONNode _json)
+    public static void SaveJsonDRUIForm(DRUIForm _obj, JSONNode _json)
     {
-        _obj.SaveJson((SimpleJSON.JSONObject)_json);
+        _obj.SaveJson((JSONObject)_json);
     }
 
     /// <summary>

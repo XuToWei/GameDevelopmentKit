@@ -1563,6 +1563,14 @@
             <c>true</c> if the current window has focus. Otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:Sirenix.Utilities.Editor.GUIHelper.CurrentWindowEntityId">
+            <summary>
+            Gets the Entity Id of the current editor window.
+            </summary>
+            <value>
+            The Entity Id of the current editor window.
+            </value>
+        </member>
         <member name="P:Sirenix.Utilities.Editor.GUIHelper.CurrentWindowInstanceID">
             <summary>
             Gets the ID of the current editor window.
@@ -6931,6 +6939,24 @@
             <param name="messageBoxStyle">The style of the message box.</param>
             <param name="wide">If set to <c>true</c> the message box will be wide.</param>
         </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.MessageBox(System.String,UnityEditor.MessageType,System.Int32)">
+            <summary>
+            Draws a message box with a configurable font size.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="messageType">Type of the message.</param>
+            <param name="fontSize">The font size of the text. This also affects the size of the icon.</param>
+        </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.MessageBox(System.String,Sirenix.OdinInspector.SdfIconType,UnityEngine.Color,System.Int32,System.Action{UnityEditor.GenericMenu})">
+            <summary>
+            Draws a message box with a configurable font size.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="icon">The SDF icon to draw next to the message.</param>
+            <param name="iconColor">The color of the SDF icon.</param>
+            <param name="fontSize">The font size of the text. This also affects the size of the icon.</param>
+            <param name="onContextClick">The action to be invoked if the message box is right-clicked.</param>
+        </member>
         <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.DetailedMessageBox(System.String,System.String,UnityEditor.MessageType,System.Boolean,System.Boolean)">
             <summary>
             Draws a message box that can be expanded to show more details.
@@ -6940,6 +6966,17 @@
             <param name="messageType">Type of the message box.</param>
             <param name="hideDetailedMessage">If set to <c>true</c> the detailed message is hidden.</param>
             <param name="wide">If set to <c>true</c> the message box will be wide.</param>
+            <returns>State of isFolded.</returns>
+        </member>
+        <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.DetailedMessageBox(System.String,System.String,UnityEditor.MessageType,System.Boolean,System.Int32)">
+            <summary>
+            Draws a message box that can be expanded to show more details.
+            </summary>
+            <param name="message">The message of the message box.</param>
+            <param name="detailedMessage">The detailed message of the message box.</param>
+            <param name="messageType">Type of the message box.</param>
+            <param name="hideDetailedMessage">If set to <c>true</c> the detailed message is hidden.</param>
+            <param name="fontSize">The font size of the text. This also affects the size of the icon.</param>
             <returns>State of isFolded.</returns>
         </member>
         <member name="M:Sirenix.Utilities.Editor.SirenixEditorGUI.IconMessageBox(System.String,Sirenix.OdinInspector.SdfIconType,System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle,System.Action{UnityEditor.GenericMenu})">
@@ -7886,7 +7923,7 @@
             Creates a rect that can be grabbed and pulled to change a value up or down.
             </summary>
             <param name="rect">The grabbable rect.</param>
-            <param name="id">The control ID for the sliding.</param>
+            <param name="controlId">The control ID for the sliding.</param>
             <param name="t">The current value.</param>
             <returns>
             The current value.
@@ -9085,6 +9122,11 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
         </member>
+        <member name="T:Sirenix.Utilities.Editor.OdinEntityId.Internal">
+            <summary>
+            Use at your own risk; subject to change.
+            </summary>
+        </member>
         <member name="T:Sirenix.Utilities.Editor.TextureUtilities">
             <summary>
             Collection of texture functions.
@@ -9379,6 +9421,20 @@
         <member name="F:Sirenix.Utilities.Editor.UnitInfo.UsesCustomConversion">
             <summary>
             Indicates whether the UnitInfo should use the <c>multiplier</c> or the <c>ConvertFromBase</c> and <c>ConvertToBase</c> methods.
+            </summary>
+        </member>
+        <member name="T:Sirenix.Utilities.Editor.UnityShims">
+            <summary>
+            <para>
+            This is an internal class that is used solely in pre-built assembly versions of Odin, not in source distributions.
+            Some Unity API's differ in different versions of the engine, like the Color, Color32, Rect and Vector2/3/4 structs.
+            This class contains replacements or reimplementations of these Unity APIs. This class should not be used directly.
+            </para>
+            <para>
+            At build time, Odin's assemblies are IL post-processed to redirect all relevant calls with shims into the implementations
+            here instead of using the Unity versions of these APIs, such that Odin's pre-built assemblies work across a wide 
+            range of Unity versions.
+            </para>
             </summary>
         </member>
         <member name="T:Sirenix.Utilities.AssemblyTypeFlags">

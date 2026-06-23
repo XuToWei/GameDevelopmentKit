@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 1426575000, guid: afbf832bc46149f5a291e87cab63e46d, type: 3}
   m_Name: GlobalValidationConfig
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Sirenix.OdinValidator.Editor.dll::Sirenix.OdinValidator.Editor.GlobalValidationConfig
   ValidateScenesOnSceneLoad:
     serializedValue: 0
     changedFromDefault: 0
@@ -84,4 +84,4 @@ MonoBehaviour:
   KeepMainValidationSessionAliveInBackground:
     serializedValue: 0
     changedFromDefault: 0
-  HasShownValidationConfig: 1
+  HasShownValidationConfig: 0

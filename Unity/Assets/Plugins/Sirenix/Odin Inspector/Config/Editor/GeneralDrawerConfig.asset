@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: -645759843, guid: a4865f1ab4504ed8a368670db22f409c, type: 3}
   m_Name: GeneralDrawerConfig
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Sirenix.OdinInspector.Editor.dll::Sirenix.OdinInspector.Editor.GeneralDrawerConfig
   enableUIToolkitSupport: 1
   useOldUnityObjectField: 0
   useOldUnityPreviewField: 0

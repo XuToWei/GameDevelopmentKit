@@ -9,7 +9,7 @@ using GameFramework.Localization;
 using System;
 using System.Collections.Generic;
 using Luban;
-using SimpleJSON;
+using Luban.SimpleJSON;
 using UnityGameFramework.Runtime;
 
 namespace Game

@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using SimpleJSON;
+using Luban.SimpleJSON;
 using Luban;
 
 namespace Game.Hot.Editor
@@ -20,7 +20,7 @@ public sealed class DRAsteroid :  Luban.EditorBeanBase
     {
     }
 
-    public override void LoadJson(SimpleJSON.JSONObject _json)
+    public override void LoadJson(JSONObject _json)
     {
         { 
             var _fieldJson = _json["Id"];
@@ -80,7 +80,7 @@ public sealed class DRAsteroid :  Luban.EditorBeanBase
         
     }
 
-    public override void SaveJson(SimpleJSON.JSONObject _json)
+    public override void SaveJson(JSONObject _json)
     {
         {
             _json["Id"] = new JSONNumber(Id);
@@ -105,16 +105,16 @@ public sealed class DRAsteroid :  Luban.EditorBeanBase
         }
     }
 
-    public static DRAsteroid LoadJsonDRAsteroid(SimpleJSON.JSONNode _json)
+    public static DRAsteroid LoadJsonDRAsteroid(JSONNode _json)
     {
         DRAsteroid obj = new DRAsteroid();
-        obj.LoadJson((SimpleJSON.JSONObject)_json);
+        obj.LoadJson((JSONObject)_json);
         return obj;
     }
         
-    public static void SaveJsonDRAsteroid(DRAsteroid _obj, SimpleJSON.JSONNode _json)
+    public static void SaveJsonDRAsteroid(DRAsteroid _obj, JSONNode _json)
     {
-        _obj.SaveJson((SimpleJSON.JSONObject)_json);
+        _obj.SaveJson((JSONObject)_json);
     }
 
     /// <summary>

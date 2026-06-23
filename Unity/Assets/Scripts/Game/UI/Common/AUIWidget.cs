@@ -89,6 +89,11 @@ namespace Game
             m_UIFormOwner = uiForm;
         }
 
+        public virtual void SetInitialized(bool initialized)
+        {
+            m_Initialized = initialized;
+        }
+
         /// <summary>
         /// 界面初始化。
         /// </summary>
@@ -99,7 +104,6 @@ namespace Game
             {
                 m_CachedRectTransform = GetComponent<RectTransform>();
             }
-            m_Initialized = true;
             m_Visible = gameObject.activeInHierarchy;
         }
 
