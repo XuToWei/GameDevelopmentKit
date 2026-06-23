@@ -84,4 +84,4 @@ MonoBehaviour:
   KeepMainValidationSessionAliveInBackground:
     serializedValue: 0
     changedFromDefault: 0
-  HasShownValidationConfig: 0
+  HasShownValidationConfig: 1
