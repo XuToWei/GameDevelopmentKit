@@ -11,9 +11,9 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.InputField m_PasswordInputField;
 
-        public UnityEngine.UI.InputField accountInputField => this.m_AccountInputField;
-        public UnityEngine.UI.Button loginButton => this.m_LoginButton;
-        public UnityEngine.UI.InputField passwordInputField => this.m_PasswordInputField;
+        public UnityEngine.UI.InputField AccountInputField => this.m_AccountInputField;
+        public UnityEngine.UI.Button LoginButton => this.m_LoginButton;
+        public UnityEngine.UI.InputField PasswordInputField => this.m_PasswordInputField;
 
 #if UNITY_EDITOR
         [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]

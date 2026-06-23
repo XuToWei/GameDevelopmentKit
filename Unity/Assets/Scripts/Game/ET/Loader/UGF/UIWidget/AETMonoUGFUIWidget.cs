@@ -1,4 +1,3 @@
-using System;
 using Game;
 using GameFramework;
 using UnityGameFramework.Extension;
@@ -52,7 +51,7 @@ namespace ET
             GetComponentsInChildren(true, monoUIWidgets);
             foreach (AETMonoUGFUIWidget monoUIWidget in monoUIWidgets)
             {
-                if (monoUIWidget == this || monoUIWidget.UIFormOwner != null || monoUIWidget.GetComponentInParent<AETMonoUGFUIWidget>(true) != this)
+                if (monoUIWidget == this || monoUIWidget.Initialized || monoUIWidget.GetComponentInParent<AETMonoUGFUIWidget>(true) != this)
                     continue;
                 m_UGFUIWidget.AddChildUIWidget(monoUIWidget, true);
             }

@@ -11,9 +11,9 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.InputField m_ReplayPathInputField;
 
-        public UnityEngine.UI.Button enterMapButton => this.m_EnterMapButton;
-        public UnityEngine.UI.Button replayButton => this.m_ReplayButton;
-        public UnityEngine.UI.InputField replayPathInputField => this.m_ReplayPathInputField;
+        public UnityEngine.UI.Button EnterMapButton => this.m_EnterMapButton;
+        public UnityEngine.UI.Button ReplayButton => this.m_ReplayButton;
+        public UnityEngine.UI.InputField ReplayPathInputField => this.m_ReplayPathInputField;
 
 #if UNITY_EDITOR
         [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]

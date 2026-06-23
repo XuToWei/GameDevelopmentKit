@@ -27,17 +27,17 @@ namespace ET.Client
         [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.Text m_SpeedText;
 
-        public UnityEngine.UI.Text frameCountText => this.m_FrameCountText;
-        public UnityEngine.UI.Button jumpButton => this.m_JumpButton;
-        public UnityEngine.UI.InputField jumpToCountInputField => this.m_JumpToCountInputField;
-        public UnityEngine.Transform playTransform => this.m_PlayTransform;
-        public UnityEngine.UI.Text predictText => this.m_PredictText;
-        public UnityEngine.UI.Text progressText => this.m_ProgressText;
-        public UnityEngine.Transform replayTransform => this.m_ReplayTransform;
-        public UnityEngine.UI.InputField saveNameInputField => this.m_SaveNameInputField;
-        public UnityEngine.UI.Button saveReplayButton => this.m_SaveReplayButton;
-        public UnityEngine.UI.Button speedButton => this.m_SpeedButton;
-        public UnityEngine.UI.Text speedText => this.m_SpeedText;
+        public UnityEngine.UI.Text FrameCountText => this.m_FrameCountText;
+        public UnityEngine.UI.Button JumpButton => this.m_JumpButton;
+        public UnityEngine.UI.InputField JumpToCountInputField => this.m_JumpToCountInputField;
+        public UnityEngine.Transform PlayTransform => this.m_PlayTransform;
+        public UnityEngine.UI.Text PredictText => this.m_PredictText;
+        public UnityEngine.UI.Text ProgressText => this.m_ProgressText;
+        public UnityEngine.Transform ReplayTransform => this.m_ReplayTransform;
+        public UnityEngine.UI.InputField SaveNameInputField => this.m_SaveNameInputField;
+        public UnityEngine.UI.Button SaveReplayButton => this.m_SaveReplayButton;
+        public UnityEngine.UI.Button SpeedButton => this.m_SpeedButton;
+        public UnityEngine.UI.Text SpeedText => this.m_SpeedText;
 
 #if UNITY_EDITOR
         [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(CheckBindDataExitEmpty))]

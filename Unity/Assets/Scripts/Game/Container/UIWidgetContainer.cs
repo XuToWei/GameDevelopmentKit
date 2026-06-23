@@ -51,6 +51,7 @@ namespace Game
                 throw new GameFrameworkException(Utility.Text.Format("Can't duplicate add UIWidget : '{0}'!", uiWidget.CachedRectTransform.name));
             }
             m_UIWidgets.Add(uiWidget);
+            uiWidget.SetInitialized(true);
             uiWidget.SetUIFormOwner(UIFormOwner);
             uiWidget.OnInit(userData);
         }
@@ -72,6 +73,7 @@ namespace Game
             }
             if (m_UIWidgets.Remove(uiWidget))
             {
+                uiWidget.SetInitialized(false);
                 uiWidget.SetUIFormOwner(null);
             }
             else
@@ -86,6 +88,7 @@ namespace Game
             {
                 foreach (AUIWidget uiWidget in m_UIWidgets)
                 {
+                    uiWidget.SetInitialized(false);
                     uiWidget.SetUIFormOwner(null);
                 }
                 m_UIWidgets.Clear();
