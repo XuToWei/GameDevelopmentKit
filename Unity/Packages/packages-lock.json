@@ -1,17 +1,5 @@
 {
   "dependencies": {
-    "cn.lys.aibridge": {
-      "version": "https://github.com/XuToWei/AIBridge-Extension.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0",
-        "com.unity.test-framework": "1.1.31",
-        "com.unity.modules.imageconversion": "1.0.0",
-        "com.unity.modules.screencapture": "1.0.0"
-      },
-      "hash": "33ad2d3b791476659c5a3bafd39d1e4cccd14e3c"
-    },
     "com.annulusgames.lit-motion": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
       "depth": 0,
@@ -297,6 +285,15 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "com.unityagentbridge.core": {
+      "version": "https://github.com/XuToWei/UnityAgentBridge.git?path=Unity",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "hash": "cdf84d22cd500f82badfebed7ce89f4d678489f8"
     },
     "com.yasirkula.inspectplus": {
       "version": "https://github.com/yasirkula/UnityInspectPlus.git",

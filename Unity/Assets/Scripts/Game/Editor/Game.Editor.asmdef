@@ -24,8 +24,7 @@
         "SocoTool.Editor",
         "SocoTool",
         "Leihuo.UXTools.Editor.Common",
-        "cn.lys.aibridge.Runtime",
-        "cn.lys.aibridge.Editor",
+        "AgentBridge.Editor",
         "Leihuo.UXTools.Editor",
         "CodeBind.Editor",
         "StateController"

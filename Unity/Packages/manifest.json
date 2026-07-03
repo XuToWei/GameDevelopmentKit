@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "cn.lys.aibridge": "https://github.com/XuToWei/AIBridge-Extension.git",
     "com.annulusgames.lit-motion": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
     "com.annulusgames.lit-motion.animation": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
     "com.code-philosophy.hybridclr": "https://github.com/focus-creative-games/hybridclr_unity.git",
@@ -22,6 +21,7 @@
     "com.unity.scriptablebuildpipeline": "2.6.1",
     "com.unity.searcher": "4.9.4",
     "com.unity.ugui": "2.0.0",
+    "com.unityagentbridge.core": "https://github.com/XuToWei/UnityAgentBridge.git?path=Unity",
     "com.yasirkula.inspectplus": "https://github.com/yasirkula/UnityInspectPlus.git",
     "com.yasirkula.runtimeinspector": "https://github.com/yasirkula/UnityRuntimeInspector.git",
     "me.qiankanglai.loopscrollrect": "https://github.com/qiankanglai/LoopScrollRect.git",
