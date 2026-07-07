@@ -15,7 +15,7 @@ GameDevelopmentKit is a dual-end (client/server) game development framework for 
 
 ### Prerequisites
 - .NET 8 SDK
-- Unity 6000.0.59f2
+- Unity 6000.3.18f1
 - MongoDB (optional, for server features)
 - Paid plugins: Odin Inspector, SRDebugger
 
