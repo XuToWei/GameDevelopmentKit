@@ -105,5 +105,11 @@ namespace ThunderFireUITool
         public StyleMaterialDefinition unityMaterial { get; set; }
         public StyleTextAutoSize unityTextAutoSize { get; set; }
 #endif
+
+#if UNITY_6000_0_OR_NEWER
+        public void Clear(bool clearInlineStyle)
+        {
+        }
+#endif
     }
 }

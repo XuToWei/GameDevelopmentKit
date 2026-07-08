@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "cn.lys.aibridge": "https://github.com/XuToWei/AIBridge-Extension.git",
     "com.annulusgames.lit-motion": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
     "com.annulusgames.lit-motion.animation": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
     "com.code-philosophy.hybridclr": "https://github.com/focus-creative-games/hybridclr_unity.git",
@@ -16,7 +15,6 @@
     "com.unity.ide.rider": "3.0.40",
     "com.unity.inputsystem": "1.19.0",
     "com.unity.memoryprofiler": "1.1.12",
-    "com.unity.multiplayer.center": "1.0.1",
     "com.unity.nuget.newtonsoft-json": "3.2.2",
     "com.unity.render-pipelines.universal": "17.3.0",
     "com.unity.scriptablebuildpipeline": "2.6.1",
@@ -30,6 +28,7 @@
     "me.xw.reactivebinding": "https://github.com/XuToWei/ReactiveBinding.git?path=Unity",
     "me.xw.statecontroller": "https://github.com/XuToWei/StateController.git",
     "me.xw.toolbarextension": "https://github.com/XuToWei/ToolbarExtension.git",
+    "me.xw.unityagentbridge": "https://github.com/XuToWei/UnityAgentBridge.git?path=Unity",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",

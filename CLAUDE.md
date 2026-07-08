@@ -15,7 +15,7 @@ GameDevelopmentKit is a dual-end (client/server) game development framework for 
 
 ### Prerequisites
 - .NET 8 SDK
-- Unity 6000.0.59f2
+- Unity 6000.3.18f1
 - MongoDB (optional, for server features)
 - Paid plugins: Odin Inspector, SRDebugger
 
@@ -364,3 +364,44 @@ Detailed documentation is in the `Book/` directory (in Chinese):
 
 ## QQ Group
 949482664
+
+<!-- BEGIN UNITY_AGENT_BRIDGE -->
+## Unity Agent Bridge(驱动 Unity 编辑器)——必读,严格遵守
+
+本工程接入了 Unity Agent Bridge:**任何需要让 Unity 编辑器做的事**(查场景、改物体、建资源、跑编译……),你(AI)都必须通过"写请求文件 / 读响应文件"来完成,不能凭空假设 Unity 状态,也不能跳过这套流程直接改工程文件。完整协议见 Unity 包内 `AGENT.md`。
+
+`<root>` 默认 `<工程>/.agentbridge/`,下有 `requests/`(你写)、`responses/`(你读)。
+
+### 第 0 步(每个 session 开头,只做一次)
+在发任何其它命令**之前**,先发一次 `list_commands`,把返回的命令清单连同 `commandsVersion`、每条的 `paramsSchema` **记在本 session 里**。可用命令不在文档里、也不写死,只能这样运行时发现。**没做过第 0 步就发别的命令 = 错误。** 之后一直用这份缓存,不要重复调 `list_commands`(何时才需重调见文末)。
+
+### 每让 Unity 做一件事,严格按此 5 步(不可跳步、不可合并、不可并发)
+1. **取 schema**:从缓存里找到该命令,按它的 `paramsSchema` 拼 `params`(命令不存在 → 先做"重新发现",别猜)。
+2. **起唯一 id**:为这条请求生成一个**全新、从未用过**的 `id`(哪怕是重试,也换新 id)。
+3. **原子写**:先写 `<root>/requests/{id}.request.json.tmp`,**再改名**成 `<root>/requests/{id}.request.json`。**绝不能直接写最终名**(会被读到半截)。
+   - Windows:`Move-Item -Force {id}.request.json.tmp {id}.request.json`
+   - macOS/Linux:`mv {id}.request.json.tmp {id}.request.json`
+4. **等这一条的响应**:反复读 `<root>/responses/{id}.response.json`,直到该文件出现(约每 1 秒一次,最多等 ~30 秒;超时按失败处理)。**在读到它之前,绝不发下一条命令**——`responses/` 只保留最新一条,抢发会把你要的那条冲掉。
+5. **按 id 核对并处理**:确认响应 `id` 与你发的一致;`status=="ok"` 用 `result`,`status=="error"` 看 `error.code`(如 `INVALID_PARAMS` 改参数、`INTERRUPTED` 换新 id 重发)。顺便对照响应里的 `commandsVersion`(见文末)。
+
+### 完整示例:让 Unity 执行 ping
+- 生成 id:`req-8f3a`
+- 写 `<root>/requests/req-8f3a.request.json.tmp`,内容:`{"v":1,"id":"req-8f3a","command":"ping","params":{}}`
+- 改名为 `<root>/requests/req-8f3a.request.json`
+- 轮询读 `<root>/responses/req-8f3a.response.json`,直到出现
+- 得到 `{"id":"req-8f3a","status":"ok","result":{"message":"pong",...},"commandsVersion":"..."}` → 成功
+
+### 绝不(违反任一条都会出错)
+- 绝不直接写 `.request.json`(必须先 `.tmp` 再改名)。
+- 绝不复用 `id`。
+- 绝不在上一条响应读到之前,发下一条命令。
+- 绝不跳过第 0 步、凭记忆或猜测发命令。
+
+### 何时才重新 `list_commands`(平时都不需要)
+仅当以下之一发生:任意响应的 `commandsVersion` 与你缓存的不一致 / 在 Unity 里装卸或启停了扩展 / 某命令返回 `UNKNOWN_COMMAND`。这时重发一次 `list_commands` 刷新缓存,再继续。
+
+（可选)Unity 失焦时默认不轮询;若需失焦也驱动,在 Unity 开 `Window/Agent Bridge` 勾顶部「失焦不节流」。
+<!-- END UNITY_AGENT_BRIDGE -->
+
+
+

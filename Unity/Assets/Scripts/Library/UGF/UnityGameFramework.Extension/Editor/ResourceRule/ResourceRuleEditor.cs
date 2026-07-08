@@ -27,6 +27,7 @@ namespace UnityGameFramework.Extension.Editor
 
         private const float Gap = 5f;
         private const float WindowMinWidth = 1550f;
+        private const float WindowMaxWidth = 2500;
         private const float WindowMinHeight = 420f;
         private const float WindowMaxHeight = 1000f;
         private const float RowHeight = 18f;
@@ -42,7 +43,7 @@ namespace UnityGameFramework.Extension.Editor
         private const float AssetDirectoryWidthOffset = 119f;
         private const float SelectButtonWidth = 50f;
         private const float FilterTypeWidth = 150f;
-        private const float PatternsWidth = 250f;
+        private const float PatternsMinWidth = 250f;
 
         private static readonly Regex ResourceNameRegex = new Regex(@"^([A-Za-z0-9\._-]+/)*[A-Za-z0-9\._-]+$");
         private static readonly Regex ResourceVariantRegex = new Regex(@"^[a-z0-9_-]+$");
@@ -68,7 +69,7 @@ namespace UnityGameFramework.Extension.Editor
         {
             ResourceRuleEditor window = GetWindow<ResourceRuleEditor>(true, WindowTitle, true);
             window.minSize = new Vector2(WindowMinWidth, WindowMinHeight);
-            window.maxSize = new Vector2(WindowMinWidth, WindowMaxHeight);
+            window.maxSize = new Vector2(WindowMaxWidth, WindowMaxHeight);
         }
 
         [MenuItem("Game Framework/Resource Tools/Refresh Activate Resource Collection", false, 51)]
@@ -94,7 +95,7 @@ namespace UnityGameFramework.Extension.Editor
 
             ResourceRuleEditor window = GetWindow<ResourceRuleEditor>(true, WindowTitle, true);
             window.minSize = new Vector2(WindowMinWidth, WindowMinHeight);
-            window.maxSize = new Vector2(WindowMinWidth, WindowMaxHeight);
+            window.maxSize = new Vector2(WindowMaxWidth, WindowMaxHeight);
             window.m_CurrentConfigPath = AssetDatabase.GetAssetPath(configuration);
             window.Load();
             return true;
@@ -401,7 +402,7 @@ namespace UnityGameFramework.Extension.Editor
             rule.FilterType = (ResourceFilterType)EditorGUI.EnumPopup(fieldRect, rule.FilterType);
 
             fieldRect.xMin = fieldRect.xMax + Gap;
-            fieldRect.xMax = rect.xMax;
+            fieldRect.xMax = Mathf.Max(fieldRect.xMin + PatternsMinWidth, rect.xMax);
             rule.SearchPatterns = EditorGUI.TextField(fieldRect, rule.SearchPatterns);
         }
 
@@ -522,7 +523,7 @@ namespace UnityGameFramework.Extension.Editor
                 EditorGUI.TextField(rect, "Filter Type");
 
                 rect.xMin = rect.xMax + Gap;
-                rect.xMax = rect.xMin + PatternsWidth;
+                rect.xMax = Mathf.Max(rect.xMin + PatternsMinWidth, position.width - Gap);
                 EditorGUI.TextField(rect, "Patterns");
             }
             EditorGUI.EndDisabledGroup();
