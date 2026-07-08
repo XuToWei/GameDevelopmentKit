@@ -93,7 +93,7 @@ MonoBehaviour:
     m_LoadType: 0
     m_Packed: 0
     m_FilterType: 0
-    m_SearchPatterns: '*.prefab,*.anim,*.controller,*.inputactions,*shader,*.mat,*png,*json,*.txt,*.asset'
+    m_SearchPatterns: '*.prefab,*.anim,*.controller,*.inputactions,*shader,*.mat,*png,*json,*.txt,*.asset,*.spriteatlasv2'
   - m_Valid: 1
     m_Name: UI.RuntimeInspector
     m_Variant: 

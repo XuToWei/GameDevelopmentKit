@@ -41,10 +41,11 @@ namespace UnityGameFramework.Extension
                 }
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    if (entityComponent.HasEntity(entityId))
+                    if (entityComponent.HasEntity(entityId) || entityComponent.IsLoadingEntity(entityId))
                     {
                         entityComponent.HideEntity(entityId);
                     }
+                    core.TrySetCanceled(cancellationToken);
                     return false;
                 }
                 if (entityComponent.IsLoadingEntity(entityId))

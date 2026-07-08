@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-using AIBridge.Editor;
+using AgentBridge;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using StateController;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -9,124 +11,67 @@ using UnityEngine;
 namespace Game.Editor
 {
     /// <summary>
-    /// AIBridge extension command for StateController: inspect controllers/datas/states, switch a data's
-    /// selected state, and author the configuration (add data, add state, attach state-effect components).
-    /// Auto-discovered by CommandRegistry via reflection.
-    ///
-    /// 读取/切换用 StateControllerMono 的 public API；新增数据/状态/效果节点用 SerializedObject 按序列化字段名编辑
-    /// （m_Datas / m_Name / m_States 以及效果节点的 m_DataName(1)/m_StateValues(1)），不引用包内 internal 类型。
-    ///
-    /// CLI usage (custom command type, dispatched via batch script 'call' line):
-    ///   AIBridgeCLI multi --cmd "statecontroller --action list --assetPath Assets/.../X.prefab"
+    /// Unity Agent Bridge command for StateController inspection, state switching, and simple authoring.
     /// </summary>
-    public class StateControllerCommand : ICommand
+    public sealed class StateControllerCommand : ICommandHandler
     {
-        public string Type => "statecontroller";
-        public bool RequiresRefresh => true;
-
-        public string SkillDescription => @"### `statecontroller` - StateController Inspect / Switch / Author
-
-Inspect StateController controllers/datas/states, switch a data's selected state, or author configuration:
-add a data, add a state, and attach a state-effect component (a `BaseState` subclass) to a node.
-
-**Important**: `statecontroller` is a custom command type - it is NOT a native CLI subcommand. Invoke it through the batch script runner with a `call` line.
-
-```bash
-# Inspect controllers/datas/states
-$CLI multi --cmd ""statecontroller --action list --assetPath Assets/.../X.prefab""
-
-# Inspect state-effect nodes (BaseState components): binding data + per-state values (optional --dataName/--nodePath filter)
-$CLI multi --cmd ""statecontroller --action list_nodes --assetPath Assets/.../X.prefab""
-$CLI multi --cmd ""statecontroller --action list_nodes --assetPath Assets/.../X.prefab --dataName Tab""
-
-# Switch a data's state (by name or index)
-$CLI batch from_text --text ""call statecontroller --action set_state --assetPath Assets/.../X.prefab --dataName Tab --stateName Selected""
-
-# Add a data (optionally with initial states)
-$CLI batch from_text --text ""call statecontroller --action add_data --assetPath Assets/.../X.prefab --dataName Tab --states Normal,Selected""
-
-# Add a state to a data (existing effect-nodes bound to that data get a matching value slot)
-$CLI batch from_text --text ""call statecontroller --action add_state --assetPath Assets/.../X.prefab --dataName Tab --stateName Disabled""
-
-# Attach a state-effect component to a node and bind it to a data (value slots aligned to the data's states)
-$CLI batch from_text --text ""call statecontroller --action add_state_node --assetPath Assets/.../X.prefab --nodePath Tabs/Icon --stateType StateGameObjectForActive --dataName Tab""
-```
-
-**Actions & parameters:**
-
-| action | params | description |
-|--------|--------|-------------|
-| `list` (default) | target | list controllers, datas, states, current selection |
-| `list_nodes` | target, `--dataName`/`--nodePath` (optional filter) | list BaseState effect nodes: path, type, controller, bound data(s) + per-state values |
-| `set_state` | target, `--dataName`, `--stateName`\|`--stateIndex`, `--controllerPath` | apply a data's state onto components |
-| `add_data` | target, `--dataName`, `--states` (csv, optional), `--controllerPath` | add a new data to a controller |
-| `add_state` | target, `--dataName`, `--stateName`, `--controllerPath` | add a state to a data; realigns effect-nodes bound to that data |
-| `add_state_node` | node, `--stateType`, `--dataName`, `--nodePath` (prefab) | add a `BaseState` component to the node, bind it to a data, align value slots |
-
-**Target**: `--assetPath` (prefab; node ops add `--nodePath` relative to the prefab root) / `--path` (scene) / `--instanceId` / current selection. `--controllerPath` disambiguates when the subtree has multiple controllers.
-
-`--stateType` is the C# class name of a `BaseState` subclass, e.g. `StateGameObjectForActive`, `StateImageForSprite`, `StateTextForText`, `StateRectTransformForAnchoredPosition`. Newly created value slots use default values - set actual values in the editor afterwards.
-
-**Response (list):**
-```json
-{""success"":true,""data"":{""action"":""list"",""target"":""...prefab"",""controllers"":[{""path"":""Form/Tabs"",""datas"":[{""name"":""Tab"",""selectedName"":""Selected"",""selectedIndex"":1,""states"":[""Normal"",""Selected""]}]}]}}
-```";
+        private const string ErrorCode = "STATECONTROLLER_ERROR";
 
         private static readonly HashSet<string> s_Actions = new HashSet<string>
         {
             "list", "list_nodes", "set_state", "add_data", "add_state", "add_state_node"
         };
 
-        public CommandResult Execute(CommandRequest request)
+        public string Command => "statecontroller";
+        public string Description => "StateController 编辑工具：列出控制器数据/状态、列出 BaseState 节点、切换状态、新增 data/state、给节点添加 BaseState 组件。action=list/list_nodes/set_state/add_data/add_state/add_state_node，默认 list；目标支持 assetPath(prefab)/path(scene)/instanceId/当前选择。写操作会自动保存 Prefab 或标记 Scene dirty。";
+        public string Group => "Game";
+        public bool CanDisable => true;
+
+        public object Execute(JObject @params)
         {
-            string action = request.GetParam("action", "list").ToLowerInvariant();
+            string action = GetString(@params, "action", "list").ToLowerInvariant();
             if (!s_Actions.Contains(action))
             {
-                return CommandResult.Failure(request.id,
+                throw new CommandException(ErrorCodes.InvalidParams,
                     $"Unknown action: {action}. Supported: {string.Join(", ", s_Actions)}");
             }
 
-            if (!TryResolveRoot(request, out GameObject root, out bool isPrefabContents, out string assetPath,
+            if (!TryResolveRoot(@params, out GameObject root, out bool isPrefabContents, out string assetPath,
                     out string targetLabel, out string error))
             {
-                return CommandResult.Failure(request.id, error);
+                throw new CommandException(ErrorCode, error);
             }
 
             try
             {
-                switch (action)
+                if (action == "add_state_node")
                 {
-                    case "add_state_node":
-                        return AddStateNode(request, root, targetLabel, isPrefabContents, assetPath);
-                    case "list_nodes":
-                        return ListNodes(request, root, targetLabel);
-                    default:
-                        break;
+                    return AddStateNode(@params, root, targetLabel, isPrefabContents, assetPath);
+                }
+                if (action == "list_nodes")
+                {
+                    return ListNodes(@params, root, targetLabel);
                 }
 
                 StateControllerMono[] controllers = root.GetComponentsInChildren<StateControllerMono>(true);
                 if (controllers.Length == 0)
                 {
-                    return CommandResult.Failure(request.id, $"No StateControllerMono found under '{targetLabel}'.");
+                    throw new CommandException(ErrorCode, $"No StateControllerMono found under '{targetLabel}'.");
                 }
 
                 switch (action)
                 {
                     case "list":
-                        return List(request, root, targetLabel, controllers);
+                        return List(root, targetLabel, controllers);
                     case "set_state":
-                        return SetState(request, root, targetLabel, controllers, isPrefabContents, assetPath);
+                        return SetState(@params, root, targetLabel, controllers, isPrefabContents, assetPath);
                     case "add_data":
-                        return AddData(request, root, targetLabel, controllers, isPrefabContents, assetPath);
+                        return AddData(@params, root, targetLabel, controllers, isPrefabContents, assetPath);
                     case "add_state":
-                        return AddState(request, root, targetLabel, controllers, isPrefabContents, assetPath);
+                        return AddState(@params, root, targetLabel, controllers, isPrefabContents, assetPath);
                     default:
-                        return CommandResult.Failure(request.id, $"Unhandled action: {action}");
+                        throw new CommandException(ErrorCode, $"Unhandled action: {action}");
                 }
-            }
-            catch (Exception ex)
-            {
-                return CommandResult.FromException(request.id, ex);
             }
             finally
             {
@@ -137,11 +82,62 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             }
         }
 
-        // ---------------------------------------------------------------------
-        // list / set_state
-        // ---------------------------------------------------------------------
+        public JObject GetParamsSchema()
+        {
+            return JObject.Parse(@"{
+  ""type"": ""object"",
+  ""properties"": {
+    ""action"": {
+      ""type"": ""string"",
+      ""default"": ""list"",
+      ""enum"": [""list"", ""list_nodes"", ""set_state"", ""add_data"", ""add_state"", ""add_state_node""],
+      ""description"": ""默认 list。list/list_nodes 只读；set_state/add_data/add_state/add_state_node 会修改目标，Prefab 自动保存，Scene 标记 dirty。""
+    },
+    ""assetPath"": {
+      ""type"": ""string"",
+      ""description"": ""Prefab 资源路径。传入后通过 PrefabUtility.LoadPrefabContents 编辑并保存 prefab；优先级高于 instanceId/path/selection。""
+    },
+    ""path"": {
+      ""type"": ""string"",
+      ""description"": ""Scene 中 GameObject 的层级路径，包含根节点名；未传 assetPath/instanceId 时使用。""
+    },
+    ""instanceId"": {
+      ""type"": ""integer"",
+      ""description"": ""Scene 对象 instanceId；未传 assetPath 时优先于 path。""
+    },
+    ""nodePath"": {
+      ""type"": ""string"",
+      ""description"": ""目标根节点下的相对子节点路径。add_state_node 用它定位要添加 BaseState 的节点；list_nodes 可用它过滤节点。""
+    },
+    ""controllerPath"": {
+      ""type"": ""string"",
+      ""description"": ""当目标下有多个 StateControllerMono 时用于消歧；值为相对路径或控制器节点名。""
+    },
+    ""dataName"": {
+      ""type"": ""string"",
+      ""description"": ""set_state/add_data/add_state/add_state_node 使用的数据名；list_nodes 可用作过滤条件。""
+    },
+    ""stateName"": {
+      ""type"": ""string"",
+      ""description"": ""set_state 要切换到的状态名，或 add_state 要新增的状态名。set_state 可用 stateIndex 替代。""
+    },
+    ""stateIndex"": {
+      ""type"": ""integer"",
+      ""description"": ""set_state 可选。按状态索引切换，未传 stateName 时使用。""
+    },
+    ""states"": {
+      ""type"": ""string"",
+      ""description"": ""add_data 可选。逗号分隔的初始状态名，例如 Normal,Selected,Disabled。""
+    },
+    ""stateType"": {
+      ""type"": ""string"",
+      ""description"": ""add_state_node 必填。BaseState 子类名或完整类型名，例如 StateGameObjectForActive。""
+    }
+  }
+}");
+        }
 
-        private CommandResult List(CommandRequest request, GameObject root, string targetLabel, StateControllerMono[] controllers)
+        private static object List(GameObject root, string targetLabel, StateControllerMono[] controllers)
         {
             var controllerInfos = new List<object>();
             foreach (StateControllerMono controller in controllers)
@@ -157,6 +153,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                         states = controller.GetStateNames(data.Name) ?? Array.Empty<string>()
                     });
                 }
+
                 controllerInfos.Add(new
                 {
                     path = GetRelativePath(root.transform, controller.transform),
@@ -164,22 +161,18 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 });
             }
 
-            return CommandResult.Success(request.id, new
+            return new
             {
                 action = "list",
                 target = targetLabel,
                 controllers = controllerInfos
-            });
+            };
         }
 
-        /// <summary>
-        /// 列出目标下所有 BaseState 效果节点的信息：路径、类型、所属控制器、绑定的 data 及每个状态的值。
-        /// 可选 --dataName / --nodePath 过滤。
-        /// </summary>
-        private CommandResult ListNodes(CommandRequest request, GameObject root, string targetLabel)
+        private static object ListNodes(JObject @params, GameObject root, string targetLabel)
         {
-            string dataFilter = request.GetParam<string>("dataName", null);
-            string nodeFilter = request.GetParam<string>("nodePath", null);
+            string dataFilter = GetString(@params, "dataName", null);
+            string nodeFilter = GetString(@params, "nodePath", null);
 
             var nodes = new List<object>();
             foreach (BaseState state in root.GetComponentsInChildren<BaseState>(true))
@@ -188,6 +181,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 {
                     continue;
                 }
+
                 string nodePath = GetRelativePath(root.transform, state.transform);
                 if (!string.IsNullOrEmpty(nodeFilter) && nodePath != nodeFilter && state.name != nodeFilter)
                 {
@@ -199,7 +193,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
 
                 string mode;
                 string booleanLogic = null;
-                var bindings = new List<object>();
+                var bindings = new List<BindingInfo>();
                 SerializedProperty dn = so.FindProperty("m_DataName");
                 if (dn != null)
                 {
@@ -214,6 +208,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                     {
                         booleanLogic = SafeEnumName(logic);
                     }
+
                     SerializedProperty dn1 = so.FindProperty("m_DataName1");
                     if (dn1 != null)
                     {
@@ -242,16 +237,16 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 });
             }
 
-            return CommandResult.Success(request.id, new
+            return new
             {
                 action = "list_nodes",
                 target = targetLabel,
                 count = nodes.Count,
                 nodes
-            });
+            };
         }
 
-        private static object BuildBinding(string dataName, SerializedProperty stateValuesProp)
+        private static BindingInfo BuildBinding(string dataName, SerializedProperty stateValuesProp)
         {
             var slots = new List<object>();
             if (stateValuesProp != null && stateValuesProp.isArray)
@@ -268,15 +263,19 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                     });
                 }
             }
-            return new { dataName, stateValues = slots };
+
+            return new BindingInfo
+            {
+                DataName = dataName,
+                StateValues = slots
+            };
         }
 
-        private static bool BindingsContainData(List<object> bindings, string dataName)
+        private static bool BindingsContainData(List<BindingInfo> bindings, string dataName)
         {
-            foreach (object b in bindings)
+            foreach (BindingInfo binding in bindings)
             {
-                string dn = b.GetType().GetProperty("dataName")?.GetValue(b) as string;
-                if (dn == dataName)
+                if (binding.DataName == dataName)
                 {
                     return true;
                 }
@@ -284,13 +283,13 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             return false;
         }
 
-        /// <summary>把 StateValue.m_Value 的 SerializedProperty 读成可序列化的可读值。</summary>
         private static object ReadSerializedValue(SerializedProperty p)
         {
             if (p == null)
             {
                 return null;
             }
+
             switch (p.propertyType)
             {
                 case SerializedPropertyType.Boolean:
@@ -321,38 +320,39 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
         private static string SafeEnumName(SerializedProperty p)
         {
             string[] names = p.enumDisplayNames;
-            int idx = p.enumValueIndex;
-            return idx >= 0 && idx < names.Length ? names[idx] : idx.ToString();
+            int index = p.enumValueIndex;
+            return index >= 0 && index < names.Length ? names[index] : index.ToString();
         }
 
-        private CommandResult SetState(CommandRequest request, GameObject root, string targetLabel,
+        private static object SetState(JObject @params, GameObject root, string targetLabel,
             StateControllerMono[] controllers, bool isPrefabContents, string assetPath)
         {
-            string dataName = request.GetParam<string>("dataName", null);
+            string dataName = GetString(@params, "dataName", null);
             if (string.IsNullOrEmpty(dataName))
             {
-                return CommandResult.Failure(request.id, "Missing 'dataName' for set_state.");
-            }
-            bool hasStateName = request.HasParam("stateName");
-            string stateName = request.GetParam<string>("stateName", null);
-            bool hasStateIndex = request.HasParam("stateIndex");
-            int stateIndex = request.GetParam("stateIndex", -1);
-            if (!hasStateName && !hasStateIndex)
-            {
-                return CommandResult.Failure(request.id, "Provide 'stateName' or 'stateIndex' for set_state.");
+                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'dataName' for set_state.");
             }
 
-            string controllerPath = request.GetParam<string>("controllerPath", null);
+            bool hasStateName = HasParam(@params, "stateName");
+            string stateName = GetString(@params, "stateName", null);
+            bool hasStateIndex = HasParam(@params, "stateIndex");
+            int stateIndex = GetInt(@params, "stateIndex", -1);
+            if (!hasStateName && !hasStateIndex)
+            {
+                throw new CommandException(ErrorCodes.InvalidParams, "Provide 'stateName' or 'stateIndex' for set_state.");
+            }
+
+            string controllerPath = GetString(@params, "controllerPath", null);
             StateControllerMono controller = ResolveController(root, controllers, controllerPath, dataName, out string resolveError);
             if (controller == null)
             {
-                return CommandResult.Failure(request.id, resolveError);
+                throw new CommandException(ErrorCode, resolveError);
             }
 
             string[] states = controller.GetStateNames(dataName);
             if (states == null)
             {
-                return CommandResult.Failure(request.id,
+                throw new CommandException(ErrorCode,
                     $"Data '{dataName}' not found on controller '{GetRelativePath(root.transform, controller.transform)}'.");
             }
 
@@ -360,7 +360,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             {
                 if (Array.IndexOf(states, stateName) < 0)
                 {
-                    return CommandResult.Failure(request.id,
+                    throw new CommandException(ErrorCodes.InvalidParams,
                         $"State '{stateName}' not in data '{dataName}'. Available: [{string.Join(", ", states)}]");
                 }
             }
@@ -368,7 +368,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             {
                 if (stateIndex < 0 || stateIndex >= states.Length)
                 {
-                    return CommandResult.Failure(request.id,
+                    throw new CommandException(ErrorCodes.InvalidParams,
                         $"stateIndex {stateIndex} out of range for data '{dataName}' (count {states.Length}).");
                 }
                 stateName = states[stateIndex];
@@ -377,7 +377,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             controller.SetSelectedName(dataName, stateName);
             Persist(controller, isPrefabContents, root, assetPath);
 
-            return CommandResult.Success(request.id, new
+            return new
             {
                 action = "set_state",
                 target = targetLabel,
@@ -385,84 +385,85 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 dataName,
                 stateName,
                 stateIndex = Array.IndexOf(states, stateName)
-            });
+            };
         }
 
-        // ---------------------------------------------------------------------
-        // add_data / add_state
-        // ---------------------------------------------------------------------
-
-        private CommandResult AddData(CommandRequest request, GameObject root, string targetLabel,
+        private static object AddData(JObject @params, GameObject root, string targetLabel,
             StateControllerMono[] controllers, bool isPrefabContents, string assetPath)
         {
-            string dataName = request.GetParam<string>("dataName", null);
+            string dataName = GetString(@params, "dataName", null);
             if (string.IsNullOrEmpty(dataName))
             {
-                return CommandResult.Failure(request.id, "Missing 'dataName' for add_data.");
+                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'dataName' for add_data.");
             }
 
-            string controllerPath = request.GetParam<string>("controllerPath", null);
+            string controllerPath = GetString(@params, "controllerPath", null);
             StateControllerMono controller = ResolveController(root, controllers, controllerPath, null, out string resolveError);
             if (controller == null)
             {
-                return CommandResult.Failure(request.id, resolveError);
+                throw new CommandException(ErrorCode, resolveError);
             }
 
-            var initialStates = SplitCsv(request.GetParam<string>("states", null));
-
+            var initialStates = SplitCsv(GetString(@params, "states", null));
             var so = new SerializedObject(controller);
             SerializedProperty datas = so.FindProperty("m_Datas");
             if (datas == null)
             {
-                return CommandResult.Failure(request.id, "StateControllerMono.m_Datas not found (package layout changed?).");
+                throw new CommandException(ErrorCode, "StateControllerMono.m_Datas not found (package layout changed?).");
             }
+
             for (int i = 0; i < datas.arraySize; i++)
             {
                 if (datas.GetArrayElementAtIndex(i).FindPropertyRelative("m_Name").stringValue == dataName)
                 {
-                    return CommandResult.Failure(request.id, $"Data '{dataName}' already exists on controller.");
+                    throw new CommandException(ErrorCode, $"Data '{dataName}' already exists on controller.");
                 }
             }
 
-            int idx = datas.arraySize;
-            datas.InsertArrayElementAtIndex(idx);
-            SerializedProperty dataEl = datas.GetArrayElementAtIndex(idx);
+            if (!isPrefabContents)
+            {
+                Undo.RecordObject(controller, "AgentBridge StateController Add Data");
+            }
+
+            int index = datas.arraySize;
+            datas.InsertArrayElementAtIndex(index);
+            SerializedProperty dataEl = datas.GetArrayElementAtIndex(index);
             dataEl.FindPropertyRelative("m_Name").stringValue = dataName;
             SerializedProperty statesProp = dataEl.FindPropertyRelative("m_States");
             statesProp.ClearArray();
-            foreach (string s in initialStates)
+            foreach (string state in initialStates)
             {
-                AddStateElement(statesProp, s);
+                AddStateElement(statesProp, state);
             }
             so.ApplyModifiedPropertiesWithoutUndo();
 
             Persist(controller, isPrefabContents, root, assetPath);
 
-            return CommandResult.Success(request.id, new
+            return new
             {
                 action = "add_data",
                 target = targetLabel,
                 controllerPath = GetRelativePath(root.transform, controller.transform),
                 dataName,
                 states = initialStates
-            });
+            };
         }
 
-        private CommandResult AddState(CommandRequest request, GameObject root, string targetLabel,
+        private static object AddState(JObject @params, GameObject root, string targetLabel,
             StateControllerMono[] controllers, bool isPrefabContents, string assetPath)
         {
-            string dataName = request.GetParam<string>("dataName", null);
-            string stateName = request.GetParam<string>("stateName", null);
+            string dataName = GetString(@params, "dataName", null);
+            string stateName = GetString(@params, "stateName", null);
             if (string.IsNullOrEmpty(dataName) || string.IsNullOrEmpty(stateName))
             {
-                return CommandResult.Failure(request.id, "Provide both 'dataName' and 'stateName' for add_state.");
+                throw new CommandException(ErrorCodes.InvalidParams, "Provide both 'dataName' and 'stateName' for add_state.");
             }
 
-            string controllerPath = request.GetParam<string>("controllerPath", null);
+            string controllerPath = GetString(@params, "controllerPath", null);
             StateControllerMono controller = ResolveController(root, controllers, controllerPath, dataName, out string resolveError);
             if (controller == null)
             {
-                return CommandResult.Failure(request.id, resolveError);
+                throw new CommandException(ErrorCode, resolveError);
             }
 
             var so = new SerializedObject(controller);
@@ -479,7 +480,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             }
             if (dataEl == null)
             {
-                return CommandResult.Failure(request.id, $"Data '{dataName}' not found on controller.");
+                throw new CommandException(ErrorCode, $"Data '{dataName}' not found on controller.");
             }
 
             SerializedProperty statesProp = dataEl.FindPropertyRelative("m_States");
@@ -487,19 +488,23 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             {
                 if (statesProp.GetArrayElementAtIndex(i).FindPropertyRelative("m_Name").stringValue == stateName)
                 {
-                    return CommandResult.Failure(request.id, $"State '{stateName}' already exists in data '{dataName}'.");
+                    throw new CommandException(ErrorCode, $"State '{stateName}' already exists in data '{dataName}'.");
                 }
             }
+
+            if (!isPrefabContents)
+            {
+                Undo.RecordObject(controller, "AgentBridge StateController Add State");
+            }
+
             AddStateElement(statesProp, stateName);
             so.ApplyModifiedPropertiesWithoutUndo();
 
-            // 同步：把绑定该 data 的效果节点的值槽对齐到新的状态集合
             string[] states = controller.GetStateNames(dataName) ?? Array.Empty<string>();
             int aligned = AlignEffectNodes(controller, dataName, states);
-
             Persist(controller, isPrefabContents, root, assetPath);
 
-            return CommandResult.Success(request.id, new
+            return new
             {
                 action = "add_state",
                 target = targetLabel,
@@ -508,64 +513,65 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 stateName,
                 states,
                 alignedEffectNodes = aligned
-            });
+            };
         }
 
-        // ---------------------------------------------------------------------
-        // add_state_node：给节点挂一个 BaseState 效果组件并绑定到 data
-        // ---------------------------------------------------------------------
-
-        private CommandResult AddStateNode(CommandRequest request, GameObject root, string targetLabel,
+        private static object AddStateNode(JObject @params, GameObject root, string targetLabel,
             bool isPrefabContents, string assetPath)
         {
-            string stateTypeName = request.GetParam<string>("stateType", null);
+            string stateTypeName = GetString(@params, "stateType", null);
             if (string.IsNullOrEmpty(stateTypeName))
             {
-                return CommandResult.Failure(request.id, "Missing 'stateType' for add_state_node.");
+                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'stateType' for add_state_node.");
             }
-            string dataName = request.GetParam<string>("dataName", null);
+            string dataName = GetString(@params, "dataName", null);
             if (string.IsNullOrEmpty(dataName))
             {
-                return CommandResult.Failure(request.id, "Missing 'dataName' for add_state_node.");
+                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'dataName' for add_state_node.");
             }
 
             Type stateType = ResolveStateType(stateTypeName);
             if (stateType == null)
             {
-                return CommandResult.Failure(request.id,
+                throw new CommandException(ErrorCode,
                     $"State type '{stateTypeName}' not found (must be a non-abstract BaseState subclass).");
             }
 
-            // 定位节点：prefab 用 --nodePath（相对根），否则 root 自身即节点
             Transform node = root.transform;
-            string nodePath = request.GetParam<string>("nodePath", null);
+            string nodePath = GetString(@params, "nodePath", null);
             if (!string.IsNullOrEmpty(nodePath))
             {
                 node = root.transform.Find(nodePath);
                 if (node == null)
                 {
-                    return CommandResult.Failure(request.id, $"Node '{nodePath}' not found under '{targetLabel}'.");
+                    throw new CommandException(ErrorCode, $"Node '{nodePath}' not found under '{targetLabel}'.");
                 }
             }
 
             StateControllerMono controller = node.GetComponentInParent<StateControllerMono>(true);
             if (controller == null)
             {
-                return CommandResult.Failure(request.id,
+                throw new CommandException(ErrorCode,
                     $"Node '{GetRelativePath(root.transform, node)}' has no StateControllerMono ancestor.");
             }
+
             string[] states = controller.GetStateNames(dataName);
             if (states == null)
             {
-                return CommandResult.Failure(request.id,
+                throw new CommandException(ErrorCode,
                     $"Data '{dataName}' not found on controller '{GetRelativePath(root.transform, controller.transform)}'.");
             }
             if (node.GetComponent(stateType) != null)
             {
-                return CommandResult.Failure(request.id, $"Node already has a '{stateType.Name}' component.");
+                throw new CommandException(ErrorCode, $"Node already has a '{stateType.Name}' component.");
             }
 
-            var comp = node.gameObject.AddComponent(stateType);
+            Component comp = node.gameObject.AddComponent(stateType);
+            if (!isPrefabContents)
+            {
+                Undo.RegisterCreatedObjectUndo(comp, "AgentBridge StateController Add State Node");
+            }
+
             var so = new SerializedObject(comp);
             string boundField;
             if (so.FindProperty("m_DataName") != null)
@@ -583,14 +589,14 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             else
             {
                 UnityEngine.Object.DestroyImmediate(comp, true);
-                return CommandResult.Failure(request.id,
+                throw new CommandException(ErrorCode,
                     $"'{stateType.Name}' has no recognized data field (m_DataName / m_DataName1).");
             }
             so.ApplyModifiedPropertiesWithoutUndo();
 
             Persist(comp, isPrefabContents, root, assetPath);
 
-            return CommandResult.Success(request.id, new
+            return new
             {
                 action = "add_state_node",
                 target = targetLabel,
@@ -600,34 +606,29 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 dataName,
                 boundField,
                 stateValueSlots = states
-            });
+            };
         }
 
-        // ---------------------------------------------------------------------
-        // SerializedProperty 辅助
-        // ---------------------------------------------------------------------
-
-        /// <summary>给 data 的 m_States 追加一个状态元素（清空其 m_Links）。</summary>
         private static void AddStateElement(SerializedProperty statesProp, string stateName)
         {
-            int idx = statesProp.arraySize;
-            statesProp.InsertArrayElementAtIndex(idx);
-            SerializedProperty el = statesProp.GetArrayElementAtIndex(idx);
-            el.FindPropertyRelative("m_Name").stringValue = stateName;
-            SerializedProperty links = el.FindPropertyRelative("m_Links");
+            int index = statesProp.arraySize;
+            statesProp.InsertArrayElementAtIndex(index);
+            SerializedProperty element = statesProp.GetArrayElementAtIndex(index);
+            element.FindPropertyRelative("m_Name").stringValue = stateName;
+            SerializedProperty links = element.FindPropertyRelative("m_Links");
             if (links != null)
             {
                 links.ClearArray();
             }
         }
 
-        /// <summary>把一个值槽列表对齐到给定状态集合：删除多余、补齐缺失（保留已有值，新槽用默认值）。</summary>
         private static void AlignStateValues(SerializedProperty listProp, string[] stateNames)
         {
             if (listProp == null)
             {
                 return;
             }
+
             var wanted = new HashSet<string>(stateNames);
             for (int i = listProp.arraySize - 1; i >= 0; i--)
             {
@@ -637,6 +638,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                     listProp.DeleteArrayElementAtIndex(i);
                 }
             }
+
             var existing = new HashSet<string>();
             for (int i = 0; i < listProp.arraySize; i++)
             {
@@ -646,23 +648,24 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                     existing.Add(nameProp.stringValue);
                 }
             }
-            foreach (string sn in stateNames)
+
+            foreach (string stateName in stateNames)
             {
-                if (existing.Contains(sn))
+                if (existing.Contains(stateName))
                 {
                     continue;
                 }
-                int idx = listProp.arraySize;
-                listProp.InsertArrayElementAtIndex(idx);
-                SerializedProperty nameProp = listProp.GetArrayElementAtIndex(idx).FindPropertyRelative("m_StateName");
+
+                int index = listProp.arraySize;
+                listProp.InsertArrayElementAtIndex(index);
+                SerializedProperty nameProp = listProp.GetArrayElementAtIndex(index).FindPropertyRelative("m_StateName");
                 if (nameProp != null)
                 {
-                    nameProp.stringValue = sn;
+                    nameProp.stringValue = stateName;
                 }
             }
         }
 
-        /// <summary>把控制器下绑定了 dataName 的所有 BaseState 效果节点的值槽对齐到 states，返回对齐的节点数。</summary>
         private static int AlignEffectNodes(StateControllerMono controller, string dataName, string[] states)
         {
             int count = 0;
@@ -672,6 +675,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 {
                     continue;
                 }
+
                 var so = new SerializedObject(state);
                 bool changed = false;
                 SerializedProperty dn = so.FindProperty("m_DataName");
@@ -698,6 +702,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                         changed = true;
                     }
                 }
+
                 if (changed)
                 {
                     so.ApplyModifiedPropertiesWithoutUndo();
@@ -709,29 +714,25 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
 
         private static Type ResolveStateType(string name)
         {
-            foreach (Type t in TypeCache.GetTypesDerivedFrom<BaseState>())
+            foreach (Type type in TypeCache.GetTypesDerivedFrom<BaseState>())
             {
-                if (!t.IsAbstract && t.Name == name)
+                if (!type.IsAbstract && (type.Name == name || type.FullName == name))
                 {
-                    return t;
+                    return type;
                 }
             }
             return null;
         }
 
-        // ---------------------------------------------------------------------
-        // 目标 / 控制器解析、持久化、工具
-        // ---------------------------------------------------------------------
-
-        private static bool TryResolveRoot(CommandRequest request, out GameObject root, out bool isPrefabContents,
+        private static bool TryResolveRoot(JObject @params, out GameObject root, out bool isPrefabContents,
             out string assetPath, out string targetLabel, out string error)
         {
             root = null;
             isPrefabContents = false;
             error = null;
-            assetPath = request.GetParam<string>("assetPath", null);
-            string path = request.GetParam<string>("path", null);
-            int instanceId = request.GetParam("instanceId", 0);
+            assetPath = GetString(@params, "assetPath", null);
+            string path = GetString(@params, "path", null);
+            int instanceId = GetInt(@params, "instanceId", 0);
 
             if (!string.IsNullOrEmpty(assetPath))
             {
@@ -752,9 +753,10 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 targetLabel = assetPath;
                 return true;
             }
+
             if (instanceId != 0)
             {
-#if UNITY_6000_3_OR_NEWER
+#if UNITY_6000_0_OR_NEWER
                 root = EditorUtility.EntityIdToObject(instanceId) as GameObject;
 #else
                 root = EditorUtility.InstanceIDToObject(instanceId) as GameObject;
@@ -763,7 +765,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             }
             else if (!string.IsNullOrEmpty(path))
             {
-                root = GameObject.Find(path);
+                root = SceneObjectResolver.FindByPath(path);
                 targetLabel = path;
             }
             else
@@ -780,22 +782,18 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             return true;
         }
 
-        /// <summary>
-        /// 解析目标控制器：给了 controllerPath 按路径/名字匹配；否则给了 dataName 取唯一拥有该 data 的控制器；
-        /// 都没有时取唯一控制器。
-        /// </summary>
-        private StateControllerMono ResolveController(GameObject root, StateControllerMono[] controllers,
+        private static StateControllerMono ResolveController(GameObject root, StateControllerMono[] controllers,
             string controllerPath, string dataName, out string error)
         {
             error = null;
 
             if (!string.IsNullOrEmpty(controllerPath))
             {
-                foreach (StateControllerMono c in controllers)
+                foreach (StateControllerMono controller in controllers)
                 {
-                    if (GetRelativePath(root.transform, c.transform) == controllerPath || c.name == controllerPath)
+                    if (GetRelativePath(root.transform, controller.transform) == controllerPath || controller.name == controllerPath)
                     {
-                        return c;
+                        return controller;
                     }
                 }
                 error = $"Controller '{controllerPath}' not found under target.";
@@ -808,18 +806,19 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 {
                     return controllers[0];
                 }
-                error = $"Multiple StateControllerMono under target. Disambiguate with --controllerPath. Candidates: [{string.Join(", ", GetControllerPaths(root, controllers))}]";
+                error = $"Multiple StateControllerMono under target. Disambiguate with controllerPath. Candidates: [{string.Join(", ", GetControllerPaths(root, controllers))}]";
                 return null;
             }
 
             var owning = new List<StateControllerMono>();
-            foreach (StateControllerMono c in controllers)
+            foreach (StateControllerMono controller in controllers)
             {
-                if (c.GetStateNames(dataName) != null)
+                if (controller.GetStateNames(dataName) != null)
                 {
-                    owning.Add(c);
+                    owning.Add(controller);
                 }
             }
+
             if (owning.Count == 1)
             {
                 return owning[0];
@@ -829,16 +828,17 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 error = $"No controller under target has data '{dataName}'.";
                 return null;
             }
-            error = $"Multiple controllers have data '{dataName}'. Disambiguate with --controllerPath. Candidates: [{string.Join(", ", GetControllerPaths(root, owning))}]";
+
+            error = $"Multiple controllers have data '{dataName}'. Disambiguate with controllerPath. Candidates: [{string.Join(", ", GetControllerPaths(root, owning))}]";
             return null;
         }
 
         private static List<string> GetControllerPaths(GameObject root, IReadOnlyList<StateControllerMono> controllers)
         {
             var paths = new List<string>();
-            foreach (StateControllerMono c in controllers)
+            foreach (StateControllerMono controller in controllers)
             {
-                paths.Add(GetRelativePath(root.transform, c.transform));
+                paths.Add(GetRelativePath(root.transform, controller.transform));
             }
             return paths;
         }
@@ -850,9 +850,9 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 PrefabUtility.SaveAsPrefabAsset(root, assetPath);
                 return;
             }
+
             EditorUtility.SetDirty(target);
-            Component component = target as Component;
-            if (component != null && component.gameObject.scene.IsValid())
+            if (target is Component component && component.gameObject.scene.IsValid())
             {
                 EditorSceneManager.MarkSceneDirty(component.gameObject.scene);
             }
@@ -865,6 +865,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             {
                 return result;
             }
+
             foreach (string part in csv.Split(','))
             {
                 string trimmed = part.Trim();
@@ -882,6 +883,7 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
             {
                 return root.name;
             }
+
             string path = target.name;
             Transform t = target.parent;
             while (t != null && t != root)
@@ -890,6 +892,30 @@ $CLI batch from_text --text ""call statecontroller --action add_state_node --ass
                 t = t.parent;
             }
             return $"{root.name}/{path}";
+        }
+
+        private static string GetString(JObject @params, string name, string defaultValue)
+        {
+            return @params?[name]?.Value<string>() ?? defaultValue;
+        }
+
+        private static int GetInt(JObject @params, string name, int defaultValue)
+        {
+            return @params?[name]?.Value<int?>() ?? defaultValue;
+        }
+
+        private static bool HasParam(JObject @params, string name)
+        {
+            return @params?[name] != null;
+        }
+
+        private sealed class BindingInfo
+        {
+            [JsonProperty("dataName")]
+            public string DataName;
+
+            [JsonProperty("stateValues")]
+            public List<object> StateValues;
         }
     }
 }

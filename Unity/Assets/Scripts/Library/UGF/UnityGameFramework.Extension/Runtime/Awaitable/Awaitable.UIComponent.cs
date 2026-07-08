@@ -41,10 +41,11 @@ namespace UnityGameFramework.Extension
                 }
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    if (uiComponent.HasUIForm(serialId))
+                    if (uiComponent.HasUIForm(serialId) || uiComponent.IsLoadingUIForm(serialId))
                     {
                         uiComponent.CloseUIForm(serialId);
                     }
+                    core.TrySetCanceled(cancellationToken);
                     return false;
                 }
                 if (uiComponent.IsLoadingUIForm(serialId))
