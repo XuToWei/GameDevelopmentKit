@@ -31,15 +31,15 @@ namespace UnityGameFramework.Extension.Editor
 
         private ResourceCollection m_ResourceCollection;
 
-        private readonly Dictionary<string, DependencyData> m_DependencyDatas;
+        private readonly Dictionary<string, DependencyData> m_DependencyDatas = new();
         //key：冗余资源路径，value：引用该资源的主资源
-        private readonly Dictionary<string, List<Asset>> m_ScatteredAssets;
-        private readonly HashSet<Stamp> m_AnalyzedStamps;
-        private readonly Dictionary<string, List<string>> m_CombineBundles;
-        private readonly MethodInfo m_GetStorageMemorySizeLongMethod;
-        private readonly object[] m_ParamCache;
-        private readonly Dictionary<string, string[]> m_DependencyCachePool;
-        private readonly Dictionary<string, long> m_AssetSizeCache;
+        private readonly Dictionary<string, List<Asset>> m_ScatteredAssets = new();
+        private readonly HashSet<Stamp> m_AnalyzedStamps = new();
+        private readonly Dictionary<string, List<string>> m_CombineBundles = new();
+        private readonly MethodInfo m_GetStorageMemorySizeLongMethod = typeof(EditorWindow).Assembly.GetType("UnityEditor.TextureUtil").GetMethod("GetStorageMemorySizeLong", BindingFlags.Static | BindingFlags.Public);
+        private readonly object[] m_ParamCache = new object[1];
+        private readonly Dictionary<string, string[]> m_DependencyCachePool = new();
+        private readonly Dictionary<string, long> m_AssetSizeCache = new();
 
         [MenuItem("Game Framework/Resource Tools/Resource Optimize", false, 52)]
         static void StartOptimize()
@@ -48,18 +48,6 @@ namespace UnityGameFramework.Extension.Editor
             resourceCollection.Load();
             ResourceOptimize optimize = new ResourceOptimize();
             optimize.Optimize(resourceCollection);
-        }
-
-        public ResourceOptimize()
-        {
-            m_DependencyDatas = new Dictionary<string, DependencyData>();
-            m_ScatteredAssets = new Dictionary<string, List<Asset>>();
-            m_AnalyzedStamps = new HashSet<Stamp>();
-            m_CombineBundles = new Dictionary<string, List<string>>();
-            m_GetStorageMemorySizeLongMethod = typeof(EditorWindow).Assembly.GetType("UnityEditor.TextureUtil").GetMethod("GetStorageMemorySizeLong", BindingFlags.Static | BindingFlags.Public);
-            m_ParamCache = new object[1];
-            m_DependencyCachePool = new Dictionary<string, string[]>();
-            m_AssetSizeCache = new Dictionary<string, long>();
         }
 
         public void Optimize(ResourceCollection resourceCollection)
