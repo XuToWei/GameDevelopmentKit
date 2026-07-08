@@ -2,7 +2,8 @@
 <UnityGameFramework>
   <ResourceCollection>
     <Resources>
-      <Resource Name="Config" FileSystem="GameData" LoadType="0" Packed="False" />
+      <Resource Name="Auto/Combine/6274e2cf" LoadType="0" Packed="False" />
+      <Resource Name="Auto/Launcher" LoadType="0" Packed="True" ResourceGroups="Launcher" />
       <Resource Name="Entity" LoadType="0" Packed="False" />
       <Resource Name="ET.ClientServer" FileSystem="GameData" LoadType="0" Packed="False" />
       <Resource Name="ET.Code" FileSystem="GameData" LoadType="0" Packed="False" />
@@ -36,6 +37,7 @@
       <Asset Guid="022955a1cd3806c42a0dd8276a685c53" ResourceName="UI.UXTool" />
       <Asset Guid="022ca0278bad06c44bdb83acae8ff0bc" ResourceName="UI.UXTool" />
       <Asset Guid="0240f7f08e046d04e9c3086a48e58ecf" ResourceName="UI.UXTool" />
+      <Asset Guid="024a8b91804d621429847a81ef4eeeef" ResourceName="ET.Code" />
       <Asset Guid="02f7c91eb3902ae40a86fda557478f4d" ResourceName="UI.UXTool" />
       <Asset Guid="02ff034b615fcb4498787e6c6d9a134f" ResourceName="HybridCLR" />
       <Asset Guid="03b0038fb3e26ca4fbd5a9ab04f935a2" ResourceName="UI.UXTool" />
@@ -51,7 +53,6 @@
       <Asset Guid="0a65a68c01a76ea4b8b574827a6467aa" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="0bf95b0cbca885c4cad5d9babd2c03a2" ResourceName="UI.UXTool" />
       <Asset Guid="1009ccebe686bd549829ad70ae054eba" ResourceName="UI.UXTool" />
-      <Asset Guid="10ec57a4624749e4da180f39cf791ae5" ResourceName="ET.Code" />
       <Asset Guid="114d57cbe6103c24ba03dd555f31d2bf" ResourceName="UI.UXTool" />
       <Asset Guid="11e27c26ac87b40f0a62ec40d7261989" ResourceName="Entity" />
       <Asset Guid="1253f56e46557bf43ab518af1bc81395" ResourceName="UI.UXTool" />
@@ -64,6 +65,7 @@
       <Asset Guid="16468be14555e6b49815741930dacef1" ResourceName="UI.UXTool" />
       <Asset Guid="16884f9829d30424781c300f04db702a" ResourceName="HybridCLR" />
       <Asset Guid="172ab742804613d4f99fee07a3878843" ResourceName="Luban" />
+      <Asset Guid="177dc17b7f73fd24ca0c51ef7d96734f" ResourceName="Luban" />
       <Asset Guid="17b111fc72de6d34c8b80b10929c86eb" ResourceName="UI.UXTool" />
       <Asset Guid="17b4b96214cae7a469bef91b74a00a4f" ResourceName="UI.UXTool" />
       <Asset Guid="17fe8e89dccbc164bb2aad7895be004d" ResourceName="UI.UXTool" />
@@ -98,6 +100,7 @@
       <Asset Guid="3ec74aa98d7b1ba4599726fc79459c3c" ResourceName="Luban" />
       <Asset Guid="3f54fcfdac53aec42ae18a6a1c6d8cb1" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="40ce6803183529f4f8cb189d4c09c141" ResourceName="UI.UXTool" />
+      <Asset Guid="43abc460915104a4fa96202073a376b0" ResourceName="ET.Code" />
       <Asset Guid="4473d81b14ddb0143addf0e6050d8491" ResourceName="Res/Scene/Main" />
       <Asset Guid="457a2709b87f0d94fbc97b41cfa89fae" ResourceName="UI.UXTool" />
       <Asset Guid="477cf74b16d89a94291cf1ff97f0dfa8" ResourceName="UI.UXTool" />
@@ -106,7 +109,6 @@
       <Asset Guid="4eb028c2d41731848b73b8784a0ec0f1" ResourceName="ET.ClientServer" />
       <Asset Guid="4f272325ab7fc91408b7b77b4cae932c" ResourceName="UI.UXTool" />
       <Asset Guid="50a0f4e00afa49845832e78e71e8bf73" ResourceName="HybridCLR" />
-      <Asset Guid="522a790cad1f9a442b489d57c0aee1a8" ResourceName="UI.UXTool" />
       <Asset Guid="5322de890c0399a41af975436009b7d7" ResourceName="UI.UXTool" />
       <Asset Guid="54e50a6ecae1b70438e1c50bdbf55e39" ResourceName="UI.UXTool" />
       <Asset Guid="5564ceda6f96abf439a97240fd7abb4a" ResourceName="UI.UXTool" />
@@ -146,21 +148,22 @@
       <Asset Guid="72148cd09c2371c47adf33359c0925b7" ResourceName="UI.UXTool" />
       <Asset Guid="738bdf56857a65f479c367c7b62c4ad7" ResourceName="Entity" />
       <Asset Guid="73942e845134fc5409424517650e5a0d" ResourceName="HybridCLR" />
-      <Asset Guid="7b961e1dc996eef4d8a8f9b3a685e529" ResourceName="ET.Code" />
+      <Asset Guid="7b9593e016b7dfd4ca40a2c961bd7883" ResourceName="HybridCLR" />
       <Asset Guid="7c257456f05a75841b93e90bdd63bbf9" ResourceName="Res/Localization/ChineseSimplified/Localization" />
       <Asset Guid="7c4bd903827c81443b0bee2fa408efcd" ResourceName="ET.ClientServer" />
+      <Asset Guid="7ca3b64aa69c9244d9f90d2b7dd613b4" ResourceName="UI.UXTool" />
       <Asset Guid="7d5f7699d6d1d48e485ac71126e12061" ResourceName="Entity" />
       <Asset Guid="7d7519d6f12d2ee42ace9b3f15502ce8" ResourceName="UI.UXTool" />
       <Asset Guid="7e2d9312c5afda3438f3e420470bf02d" ResourceName="UI.UXTool" />
       <Asset Guid="7f5aee8da226edf4991598327cb32ce0" ResourceName="Res/UI/UISprite/Logo" />
       <Asset Guid="7fb8fcae9b6bfbf49a097924290f0ce6" ResourceName="HybridCLR" />
-      <Asset Guid="80008968a0933a1409844961cd9f4f37" ResourceName="ET.Code" />
-      <Asset Guid="80fc7ede423905f42b0725620134ae15" ResourceName="ET.Code" />
       <Asset Guid="8132ea8fface6ca4eb0224667a2aa887" ResourceName="Res/UI/UIPrefab/Button" />
       <Asset Guid="81523fb22b1b6ca43bd34af552ed6f82" ResourceName="UI.UXTool" />
       <Asset Guid="822d44e3e4c29b24b8f0c5ad4dc4e7f2" ResourceName="UI.UXTool" />
+      <Asset Guid="8310fdcd0a33c11499ae784ea3571f0b" ResourceName="UI.UXTool" />
       <Asset Guid="834bfaee90a9d4e04b1e8c1ca22cc88e" ResourceName="Entity" />
       <Asset Guid="839e2641e990cad4e8bfdfdac37c5b79" ResourceName="UI.UXTool" />
+      <Asset Guid="8448bbcd845e47145b7b356a66793970" ResourceName="ET.Code" />
       <Asset Guid="84b7805ef4c5343ce920ff2c6e71c7f1" ResourceName="GameHot" />
       <Asset Guid="84f01b41076e54f429838619462e9a37" ResourceName="UI.UXTool" />
       <Asset Guid="8522461e56b6b9747af8e1a33f3af608" ResourceName="GameHot" />
@@ -179,6 +182,7 @@
       <Asset Guid="90bbee64859e4e14f8f5eec8db43b621" ResourceName="UI.UXTool" />
       <Asset Guid="9143e2b62ad50488482f9b73672fc331" ResourceName="Entity" />
       <Asset Guid="919546e3dacf13c4c9e26b7393c796fc" ResourceName="UI.UXTool" />
+      <Asset Guid="91ddddbb4ac95e144b11eec367d27826" ResourceName="Auto/Combine/6274e2cf" />
       <Asset Guid="927853b6f24bb6c49ae06752fad056be" ResourceName="UI.UXTool" />
       <Asset Guid="943f3c476130c4f4f8ae55ef3ccd38ba" ResourceName="Res/Prefab/Skeleton/Texture/Skeleton_D" />
       <Asset Guid="94d28398aaf1dad4c8c2b147cba2ecb1" ResourceName="UI.UXTool" />
@@ -196,7 +200,8 @@
       <Asset Guid="9ef39b1d990f66b41ba4e5bdf5741b1b" ResourceName="UI.UXTool" />
       <Asset Guid="9f6d9adc6f537764fa0fea29671e77bf" ResourceName="UI.UIForm.LockStep" />
       <Asset Guid="9f847ec5e66e03e4ead1d3c5f7b510e8" ResourceName="Res/UI/UISprite/Common" />
-      <Asset Guid="a2533bfa7899a4d459b23044731dabfa" ResourceName="ET.Code" />
+      <Asset Guid="a1b1cbe9529996f448fe8a1ede090f09" ResourceName="ET.Code" />
+      <Asset Guid="a4068226bdf6afe4da72b1ef1594de28" ResourceName="ET.Code" />
       <Asset Guid="a5294483f20f40d449699101bb428cda" ResourceName="Res/Scene/Map1" />
       <Asset Guid="a57e4a78fa2c235448cc55f4f05671a2" ResourceName="UI.UXTool" />
       <Asset Guid="a5d9d0e22ef24e54f889295f42c5fc22" ResourceName="UI.UXTool" />
@@ -209,7 +214,6 @@
       <Asset Guid="ab0e7d449081c5840b6ecbc53b9a60e4" ResourceName="ET.ClientServer" />
       <Asset Guid="ab45c3f613f388d43bbf43ec05eb92e2" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="abd1565e9e268f04cac3631d022b4ace" ResourceName="Entity" />
-      <Asset Guid="ac8128978dc317248b81bea70128b967" ResourceName="HybridCLR" />
       <Asset Guid="ae1d5970989b0a849ada21f113c42f99" ResourceName="UI.UXTool" />
       <Asset Guid="aed5b0806dfc5804c83c52f0c0d7f2b8" ResourceName="UI.UXTool" />
       <Asset Guid="afc18fc39ade3744397c0c993b57be53" ResourceName="Entity" />
@@ -221,6 +225,7 @@
       <Asset Guid="b44b5ab44e24caa4b80290b9fd405077" ResourceName="UI.UXTool" />
       <Asset Guid="b54d6e05f56c5e242af6389c2f517b2e" ResourceName="HybridCLR" />
       <Asset Guid="b63abefc0bba2af40963ceaa717f87fc" ResourceName="HybridCLR" />
+      <Asset Guid="b72699bc57b54324a8b4332251139803" ResourceName="UI.UXTool" />
       <Asset Guid="b9975f2be09eab4449a3f00368f0da41" ResourceName="UI.UXTool" />
       <Asset Guid="ba6a7efaa30b4ed478cdd6c14656df32" ResourceName="UI.UXTool" />
       <Asset Guid="ba7bedebaa6c676469b3705842554cf6" ResourceName="UI.UXTool" />
@@ -235,6 +240,7 @@
       <Asset Guid="c191c1fcf2d859f4db51f61449931949" ResourceName="UI.UXTool" />
       <Asset Guid="c1bf5d88e5d4ff247abb4e9e25996132" ResourceName="UI.UXTool" />
       <Asset Guid="c2bc38357a60b454dabab66d850b2d98" ResourceName="UI.UXTool" />
+      <Asset Guid="c361bae2493f73c48b63e97b9ec064b4" ResourceName="Auto/Launcher" />
       <Asset Guid="c534ae0cab839b246b214aef20574059" ResourceName="UI.UXTool" />
       <Asset Guid="c54e8d9624286b24fa23519e5df2ed0a" ResourceName="UI.UIForm.LockStep" />
       <Asset Guid="c6e5d00057c459640b5d6d14026d13f6" ResourceName="UI.UXTool" />
@@ -244,7 +250,7 @@
       <Asset Guid="ca9eca684ec84504a955194cb34433a7" ResourceName="GameHot" />
       <Asset Guid="cadd0764941c8b646ae79b51d0ea8285" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="cb9dc182bed8c52428dfa0309bd9ccc1" ResourceName="UI.UXTool" />
-      <Asset Guid="cd590f301d3662040841baada9b1dfb4" ResourceName="Luban" />
+      <Asset Guid="cdcbb709d3b4b8e488cbe42262cef930" ResourceName="ET.Code" />
       <Asset Guid="d0ef5b9be64e67b489d5eaa6bb69b98a" ResourceName="HybridCLR" />
       <Asset Guid="d2f2e5ce2a6eb6242a0378d368a023d1" ResourceName="UI.UXTool" />
       <Asset Guid="d31ae9b768b6ea942a5c638e16f4c240" ResourceName="HybridCLR" />
@@ -263,7 +269,9 @@
       <Asset Guid="db58965402f12ed47b4dad61a9e48c9d" ResourceName="Res/UI/UISprite/Icon" />
       <Asset Guid="dd132f3c9fe16eb45b5aa4bbe7bae597" ResourceName="HybridCLR" />
       <Asset Guid="dfc4233acbbd1c44fa552f08e23cd89c" ResourceName="Luban" />
+      <Asset Guid="dff598a90c710a24683413c5d9e4b7c8" ResourceName="GameHot" />
       <Asset Guid="e1c2baec53ec3994aa4550e3ddd8df23" ResourceName="HybridCLR" />
+      <Asset Guid="e25621b19292d4e4294eb547271042da" ResourceName="ET.Code" />
       <Asset Guid="e3cc6d6e2b1013745958915ce2f0d0a4" ResourceName="UI.UXTool" />
       <Asset Guid="e3e153d6a5950c946b86ea8b7887eb73" ResourceName="UI.UXTool" />
       <Asset Guid="e49b337fff7724145b8baf823e6da1fa" ResourceName="UI.UXTool" />
@@ -277,11 +285,11 @@
       <Asset Guid="e85864330b68dde498dcb6e8711815d3" ResourceName="Res/UI/UISprite/Common" />
       <Asset Guid="e94a05065db18fe428057500ab8f574b" ResourceName="UI.UXTool" />
       <Asset Guid="ea52d03e4ad273945844b8c7eae6a8c4" ResourceName="UI.UXTool" />
+      <Asset Guid="eae0b604e4ad6934baa5493c90980a57" ResourceName="ET.Code" />
       <Asset Guid="edca3104d046db9439c1f4594ad5e602" ResourceName="UI.UXTool" />
       <Asset Guid="ee27a57b3c2516c4dbf2d5f67ad9a8ab" ResourceName="UI.UXTool" />
       <Asset Guid="ee3aae79703f46248a0b9b10bd42ccdc" ResourceName="UI.UXTool" />
       <Asset Guid="ef17659f7e6a1af49b4030e0ae1d89e2" ResourceName="UI.UXTool" />
-      <Asset Guid="ef1a84591e7119040a9659d2273a0fd2" ResourceName="ET.Code" />
       <Asset Guid="ef43a0db1f649274590f3d130c1f0ff3" ResourceName="UI.UXTool" />
       <Asset Guid="f01edee366b9828498ed5166df654a8d" ResourceName="HybridCLR" />
       <Asset Guid="f1833b4cd407d8e408a62b46185431ff" ResourceName="Luban" />
@@ -295,12 +303,9 @@
       <Asset Guid="f51ce754799783c41836961b0a098a38" ResourceName="HybridCLR" />
       <Asset Guid="f5a85bf9d9006a44e9aae59c2350c247" ResourceName="UI.UXTool" />
       <Asset Guid="f7389a115b7e48a4f917e080a4c4273c" ResourceName="HybridCLR" />
-      <Asset Guid="f79b477ead2b0494aa628ef231b292f9" ResourceName="Config" />
       <Asset Guid="f7a0edd8631d02a4482c8ccc87322d35" ResourceName="UI.UXTool" />
-      <Asset Guid="fa60accedfcd96645b9130538a318729" ResourceName="ET.Code" />
       <Asset Guid="fb1f428dbf5a5a647b1b69e59ee6ebdf" ResourceName="UI.UXTool" />
       <Asset Guid="fbd12d1b2c9fb0945a8a9e4ff9775374" ResourceName="UI.UXTool" />
-      <Asset Guid="fbef209fd5a71a344b650622f40a3777" ResourceName="ET.Code" />
       <Asset Guid="fe9b056115b6ee64aaafc8b8a9385855" ResourceName="UI.UXTool" />
       <Asset Guid="fedd25a3c60e7ae499fc6efab9ee180b" ResourceName="Entity" />
       <Asset Guid="fef68d1dd70201b4bb76246e05dbcf8d" ResourceName="UI.UXTool" />
