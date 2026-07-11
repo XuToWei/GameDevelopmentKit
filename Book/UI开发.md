@@ -2,6 +2,8 @@
 
 GDK 的 UI 配置统一由 GF UIComponent 管理。业务层可选择 GameHot 的 MonoBehaviour 工作流，或 ETUI 的 Entity/System 工作流；两者共享 UI 表、资源路径、UIGroup 和 GF 生命周期。
 
+运行时为 `Image`、`UXImage` 或 `RawImage` 动态换图时，使用 [AssetSet 资源设置](AssetSet.md) 统一处理加载、远程缓存与回收。
+
 ## 选择实现方式
 
 | 方式 | 业务代码 | 适用场景 |

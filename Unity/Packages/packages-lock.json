@@ -9,7 +9,7 @@
         "com.unity.collections": "1.5.1",
         "com.unity.mathematics": "1.0.1"
       },
-      "hash": "2053ef5c23f2ae755dd85d5865b698c542c351b6"
+      "hash": "ab6e92bfe78ff911def2fd3c4e9c79bb5a186946"
     },
     "com.annulusgames.lit-motion.animation": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
@@ -18,7 +18,7 @@
       "dependencies": {
         "com.annulusgames.lit-motion": "2.0.0"
       },
-      "hash": "2053ef5c23f2ae755dd85d5865b698c542c351b6"
+      "hash": "ab6e92bfe78ff911def2fd3c4e9c79bb5a186946"
     },
     "com.code-philosophy.hybridclr": {
       "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
@@ -34,7 +34,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "9a7535a3fad66ebec5458a8b22f6ad023c960fd3"
+      "hash": "5a568c41998fd7ec09ecfc0fcd6405b330362720"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
@@ -43,7 +43,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "4e30651290ab5c914237f2af4e3bdbef661feb93"
+      "hash": "cacb9fde452451eb1577ead430a009427bb787a6"
     },
     "com.coffee.ui-particle": {
       "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
@@ -53,7 +53,7 @@
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "c54f63cb18a22382215b142b63e232f0f86fff58"
+      "hash": "5a305705f84549e50223d897bb95495edd78bf1a"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -81,7 +81,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "419759ee3b6bb17a65cba1348c084d41680184ea"
+      "hash": "e2b86f7ad433dd7dba2ac0b1a66d36f5105aa912"
     },
     "com.psygames.unitywebsocket": {
       "version": "https://github.com/psygames/UnityWebSocket.git#upm",
@@ -224,7 +224,7 @@
       }
     },
     "com.unity.scriptablebuildpipeline": {
-      "version": "2.6.1",
+      "version": "3.1.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -306,35 +306,35 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a5c35b1221c6889e3c18296a27101148763beb99"
+      "hash": "d4558ccc855c464c2961490352fc189117450703"
     },
     "me.xw.protobufunity": {
       "version": "https://github.com/XuToWei/Protobuf-Unity.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "749522159547e3aa80110e3ea747f294f0e2caf3"
+      "hash": "37802570b75ba2c53dc2748f2f118eeaf163b892"
     },
     "me.xw.reactivebinding": {
       "version": "https://github.com/XuToWei/ReactiveBinding.git?path=Unity",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f45572ded4b20a023b0ff05f5a409cb86d654672"
+      "hash": "bbfa037f7188f085fa8474fbb2dd8f6f1fb00de9"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "cc3849dce749e148a16145d8893ea675992f45e4"
+      "hash": "7094aa802c5a14f74dcec86280b3485d3824c4fa"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4583057a826438c6bb86559e86c2c0d94fa2a05c"
+      "hash": "45fe7f15ae69086f24c80a42d3e7aecfd4f1cd2a"
     },
     "me.xw.unityagentbridge": {
       "version": "https://github.com/XuToWei/UnityAgentBridge.git?path=Unity",
@@ -343,7 +343,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "3c65a5b398e6881836a6d68754bbb49ebd68e6c8"
+      "hash": "2ac7d50d8313dd8892ec88a6ca584659874b4c41"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

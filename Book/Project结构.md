@@ -10,7 +10,7 @@ flowchart LR
     B --> C["ProcedurePreset"]
     C -->|"UNITY_ET"| D["ProcedureET"]
     C -->|"UNITY_GAMEHOT"| E["ProcedureGameHot"]
-    C -->|"均未启用"| F["ProcedureGame"]
+    C -->|"均未启用（兜底）"| F["ProcedureGame"]
     D --> G["GameEntry.CodeRunner → ET.Init"]
     E --> H["GameEntry.CodeRunner → Game.Hot.Init"]
     G --> I["ET Entry / Fiber / EventSystem"]
@@ -65,10 +65,10 @@ Unity/Assets/Scripts/Game/
 
 | 业务模式 | 入口 | 业务程序集 | 典型开发方式 |
 | --- | --- | --- | --- |
-| 纯 GF（GameHot） | `ProcedureGame` / `Game.Hot.Init` | `Game` / `Game.Hot.Code` | GF 基础业务，或可热更的 MonoBehaviour 业务 |
+| 纯 GF（GameHot） | `Game.Hot.Init` | `Game.Hot.Code` | GF + MonoBehaviour 业务 |
 | ET | `ET.Init` | Model、Hotfix、ModelView、HotfixView | Entity + System + Fiber |
 
-基础 GF 与 GameHot 对外统称为纯 GF（GameHot）路线。是否启用 `UNITY_GAMEHOT`，决定进入 `ProcedureGame` 还是 `Game.Hot.Init`。
+纯 GF（GameHot）路线必须启用 `UNITY_GAMEHOT`，由 `ProcedureGameHot` 启动 `Game.Hot.Init`。两个业务符号均未启用时只进入 `ProcedureGame` 基础兜底流程，不加载 GameHot 业务程序集。
 
 GameHot 与 ET 的启用符号互斥。菜单实现会在启用一个模块时移除另一个模块，避免两个业务入口同时进入资源收集和裁剪配置。
 
