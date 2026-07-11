@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Text;
 using CommandLine;
 
 namespace ET.Server
@@ -8,6 +9,7 @@ namespace ET.Server
     {
         private static int Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
                 Log.Error(e.ExceptionObject.ToString());
@@ -41,7 +43,6 @@ namespace ET.Server
                     {
                         Options.Instance.Console = 1;
                         //Options: Customs
-                        //GB2312: 使用GB2312编码解决中文乱码
                         //Json: luban导出json
                         //Check: 只检查，不导出
                         //ShowCmd: 显示cmd

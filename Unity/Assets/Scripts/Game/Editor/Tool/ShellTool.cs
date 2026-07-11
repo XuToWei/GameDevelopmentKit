@@ -22,6 +22,8 @@ namespace Game.Editor
             Process process = new();
             try
             {
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                Encoding encoding = string.IsNullOrEmpty(encodingName) ? Encoding.UTF8 : Encoding.GetEncoding(encodingName);
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
                 string app = "bash";
                 string splitChar = ":";
@@ -30,18 +32,10 @@ namespace Game.Editor
                 {
                     environmentVars = s_DefaultUnixEnvironmentVars;
                 }
-                if (string.IsNullOrEmpty(encodingName))
-                {
-                    encodingName = "UTF-8";
-                }
 #elif UNITY_EDITOR_WIN
                 string app = "cmd.exe";
                 string splitChar = ";";
                 string arguments = "/c";
-                if (string.IsNullOrEmpty(encodingName))
-                {
-                    encodingName = "GB2312";
-                }
 #endif
                 ProcessStartInfo start = new ProcessStartInfo(app);
 
@@ -63,8 +57,6 @@ namespace Game.Editor
                 start.RedirectStandardOutput = true;
                 start.RedirectStandardError = true;
                 start.RedirectStandardInput = false;
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                var encoding = Encoding.GetEncoding(encodingName);
                 start.StandardOutputEncoding = encoding;
                 start.StandardErrorEncoding = encoding;
                 
@@ -104,6 +96,8 @@ namespace Game.Editor
             Process process = new();
             try
             {
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                Encoding encoding = string.IsNullOrEmpty(encodingName) ? Encoding.UTF8 : Encoding.GetEncoding(encodingName);
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
                 string app = "bash";
                 string splitChar = ":";
@@ -112,18 +106,10 @@ namespace Game.Editor
                 {
                     environmentVars = s_DefaultUnixEnvironmentVars;
                 }
-                if (string.IsNullOrEmpty(encodingName))
-                {
-                    encodingName = "UTF-8";
-                }
 #elif UNITY_EDITOR_WIN
                 string app = "cmd.exe";
                 string splitChar = ";";
                 string arguments = "/c";
-                if (string.IsNullOrEmpty(encodingName))
-                {
-                    encodingName = "GB2312";
-                }
 #endif
                 ProcessStartInfo start = new ProcessStartInfo(app);
 
@@ -145,8 +131,6 @@ namespace Game.Editor
                 start.RedirectStandardOutput = true;
                 start.RedirectStandardError = true;
                 start.RedirectStandardInput = true;
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                var encoding = Encoding.GetEncoding(encodingName);
                 start.StandardOutputEncoding = encoding;
                 start.StandardErrorEncoding = encoding;
 

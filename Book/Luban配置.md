@@ -174,7 +174,6 @@ Luban 命令完成后，ExcelExporter 会读取 `Assets/Res/Editor/Luban` 中的
 | `Check` | 只校验配置，不写输出；同时跳过本地化导出 |
 | `ShowCmd` | 打印展开后的完整 Luban 命令 |
 | `ShowInfo` | 显示 Luban 标准输出 |
-| `GB2312` | Windows 下按 GB2312 读取子进程输出 |
 
 校验示例：
 
@@ -222,7 +221,7 @@ if (table != null)
 
 ### 输出只显示失败，没有 Luban 细节
 
-增加 `--Customs=ShowCmd,ShowInfo`。Windows 控制台乱码时再加入 `GB2312`。
+增加 `--Customs=ShowCmd,ShowInfo`。工具链统一使用 UTF-8；若自定义外部命令仍出现乱码，应让该命令同样以 UTF-8 输出。
 
 ### ID 常量没有更新
 
