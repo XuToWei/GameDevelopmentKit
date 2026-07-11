@@ -1,6 +1,6 @@
 # Proto 生成工具
 
-GDK 的 Proto2CS 是面向项目约定的轻量代码生成器，不调用 `protoc`。它按子目录隔离 Opcode 区间，并可生成 ET 的 MemoryPack 消息或 UGF 的 protobuf-net Packet。
+GDK 的 Proto2CS 是面向项目约定的轻量代码生成器，不调用 `protoc`。它按子目录隔离 Opcode 区间，并可生成 ET 的 MemoryPack 消息或 UGF 的 Protobuf Unity Packet。
 
 ## 目录约定
 
@@ -115,7 +115,7 @@ message C2G_Login // IRequest
 
 名称以 `CS` 开头的消息继承 `CSPacketBase`，以 `SC` 开头的消息继承 `SCPacketBase`，并分配 Opcode。其他消息作为 `IReference` 数据对象，不分配 Packet Opcode。
 
-生成器使用 protobuf-net 的 `ProtoContract` 与 `ProtoMember`。每个 `SC*` Packet 还会生成 Handler partial，业务代码可实现其 `OnHandle` 部分。
+生成器使用 [Protobuf Unity](https://github.com/XuToWei/Protobuf-Unity) 提供的 `ProtoContract` 与 `ProtoMember`。每个 `SC*` Packet 还会生成 Handler partial，业务代码可实现其 `OnHandle` 部分。
 
 ## 支持的 Proto 写法
 
