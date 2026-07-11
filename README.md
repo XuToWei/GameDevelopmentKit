@@ -1,21 +1,42 @@
 # GameDevelopmentKit
 
-> Unity 客户端、ET 服务端、热更新与配置工具链一体化的双端游戏开发框架。
+> 一套仓库贯通 Unity 客户端、ET 服务端、热更新、配置与发布，加速游戏从原型走向长期迭代。
 
 GameDevelopmentKit（GDK）以 ET 8.1 承载服务端，以 UnityGameFramework（GF）承载客户端，并将 ET 客户端能力模块化接入 GF。项目同时提供 GameHot 业务层，允许团队按项目需求选择纯 GF、GameHot 或 ET 开发路径。
 
-## 核心特色
+GDK 的重点不是简单集合第三方库，而是打通客户端、服务端、配置、协议、热更新、资源发布与日常开发工具，让团队把时间集中在玩法和内容上。
 
-| 能力 | 说明 |
+## 为什么选择 GDK
+
+| 优势 | 带来的价值 |
 | --- | --- |
-| 双端统一 | Unity 客户端与 ET 服务端共享协议、配置和基础设施 |
-| 模块可选 | 纯 GF、GameHot、ET 三种客户端路径按需切换 |
-| 热更新 | HybridCLR 管理热更新程序集、AOT 补充元数据和构建流程 |
-| ET × GF | ETUI、ETEntity 将 ET 实体生命周期接入 GF UI 与 Entity 系统 |
-| 统一异步 | 全项目使用 UniTask，替代 ETTask 并覆盖 GF 场景 |
-| 数据驱动 | Luban 多工程并行导表，并生成 UI、Entity、Scene、Sound 常量 |
-| 协议生成 | 同一套 Proto 工具可生成 ET（MemoryPack）或 UGF（protobuf-net）代码 |
-| 编辑器工具 | CodeBind、状态控制器、响应式绑定、代码生成、Toolbar 与一键构建 |
+| 一套工程贯通双端 | Unity 与 ET 共用协议、配置和基础设施，减少重复定义与联调成本 |
+| 复杂度按需启用 | 可从纯 GF、GameHot 到 ET 逐级选择，不必为轻量项目强行引入完整服务端体系 |
+| 热更新形成闭环 | HybridCLR、AOT 元数据、资源更新、版本检查和构建工具已经串联 |
+| ET 与 GF 深度融合 | ETUI、ETEntity、UIWidget 将 ET 生命周期接入成熟的 GF UI 与 Entity 管理 |
+| 数据与协议自动生成 | Luban、Proto、UI/Entity ID 和 ET 模板生成降低手写样板代码与编号错误 |
+| 规范进入工具链 | UniTask、资源所有权容器和 Roslyn Analyzer 把异步、释放与 ET 规则前置到开发阶段 |
+
+## 已落地的实用细节
+
+- **模式切换不只改宏**：菜单会同步 Luban 工程、资源收集规则、`link.xml` 与 HybridCLR 程序集列表。
+- **运营更新链路完整**：包含应用版本检查、版本列表更新、资源校验、差异资源下载、移动网络确认、进度与失败重试。
+- **UI 生产能力丰富**：支持 CodeBind、状态控制器、响应式绑定、循环列表、红点、新手引导、安全区适配和多语言。
+- **异步调用更统一**：资源、场景、UI、Entity、下载和网络请求均提供 UniTask/Awaitable 封装，并支持取消与集中释放。
+- **联网玩法有现成参考**：ET 示例覆盖登录、网关、地图、AOI、机器人和压测；LockStep 覆盖匹配、回滚、校验、重连与录像。
+- **开发发布更省步骤**：配置与协议生成、代码模板、资源清理、Toolbar、HybridCLR 准备、一键构建和本地资源服务器均有工具入口。
+
+## 商业化应用方向
+
+| 项目方向 | 可复用的框架基础 |
+| --- | --- |
+| 原型、独立游戏、休闲项目 | 纯 GF 或 GameHot、数据表、UI/Entity、流程管理和资源构建 |
+| 长期运营的移动端或 PC 游戏 | 代码热更新、资源更新、版本流程、多语言和多屏适配 |
+| RPG、SLG、多人在线项目 | ET 双端架构、Actor 消息、网关与地图服务、AOI、机器人和压测示例 |
+| 房间制竞技或动作玩法 | 匹配、帧同步、回滚、Hash 校验、断线重连与录像回放示例 |
+| 多项目或多人团队 | 模式化目录、自动生成、静态分析和统一构建流程 |
+
+GDK 提供的是可扩展的商业项目工程底座。渠道登录、支付、广告、数据分析、崩溃上报、CDN、灰度发布、安全与合规仍需按产品和发行地区接入。
 
 ## 运行模式
 
@@ -51,18 +72,17 @@ dotnet build Kit.sln
 
 ## 主要依赖
 
-- [UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)
-- [ET 8.1](https://github.com/egametang/ET/commit/faa825d22a5b05d727f4878dfe34600628942579)
-- [HybridCLR](https://github.com/focus-creative-games/hybridclr)
-- [Luban](https://github.com/focus-creative-games/luban)
-- [UniTask](https://github.com/Cysharp/UniTask)
-- [CodeBind](https://github.com/XuToWei/CodeBind)、[StateController](https://github.com/XuToWei/StateController)、[ReactiveBinding](https://github.com/XuToWei/ReactiveBinding)
-
-项目还使用 UGFExtensions、SocoTools、FolderTag、LoopScrollRect 等开源库，具体版本以 `Unity/Packages/manifest.json` 和仓库源码为准。
+| 分类 | 依赖 |
+| --- | --- |
+| 客户端与服务端 | [UnityGameFramework](https://github.com/EllanJiang/UnityGameFramework)、[UGFExtensions](https://github.com/FingerCaster/UGFExtensions)、[ET 8.1](https://github.com/egametang/ET/commit/faa825d22a5b05d727f4878dfe34600628942579) |
+| 热更新与配置 | [HybridCLR](https://github.com/focus-creative-games/hybridclr)、[Luban](https://github.com/focus-creative-games/luban)、[Luban Extension](https://github.com/XuToWei/Luban-Extension) |
+| 异步与协议 | [UniTask](https://github.com/Cysharp/UniTask)、[MemoryPack Extension](https://github.com/XuToWei/MemoryPack-Extension)、[Protobuf Unity](https://github.com/XuToWei/Protobuf-Unity)、[protobuf-net](https://github.com/protobuf-net/protobuf-net) |
+| 代码与界面工作流 | [CodeBind](https://github.com/XuToWei/CodeBind)、[StateController](https://github.com/XuToWei/StateController)、[ReactiveBinding](https://github.com/XuToWei/ReactiveBinding)、[LoopScrollRect](https://github.com/qiankanglai/LoopScrollRect) |
+| 编辑器与资源优化 | [SocoTools](https://github.com/crossous/SocoTools)、[FolderTag](https://github.com/liyingsong99/FolderTag) |
 
 ## 商业插件
 
-项目依赖 [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041) 与 [SRDebugger](https://assetstore.unity.com/packages/tools/gui/srdebugger-console-tools-on-device-27688)。请自行购买授权。
+项目依赖 [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)，请自行购买并遵守其授权条款。
 
 ## 交流与许可
 

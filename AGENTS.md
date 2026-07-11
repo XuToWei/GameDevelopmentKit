@@ -17,7 +17,7 @@ GameDevelopmentKit is a dual-end (client/server) game development framework for 
 - .NET 8 SDK
 - Unity 6000.3.18f1
 - MongoDB (optional, for server features)
-- Paid plugins: Odin Inspector, SRDebugger
+- Paid plugin: Odin Inspector
 
 ### Running in Editor
 1. Open Unity project, wait for compilation
@@ -120,7 +120,6 @@ Unity/Assets/Scripts/
 │   │   └── Runtime/             # Luban运行时代码
 │   ├── ReplaceComponent/        # 组件替换工具
 │   ├── SocoTool/                # Soco工具集
-│   ├── StompyRobot/             # SRDebugger相关
 │   ├── UGF/                     # UnityGameFramework
 │   │   ├── GameFramework/       # GF核心框架
 │   │   ├── GameFramework.prefab # GF预制体
