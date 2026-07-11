@@ -65,9 +65,10 @@ Unity/Assets/Scripts/Game/
 
 | 业务模式 | 入口 | 业务程序集 | 典型开发方式 |
 | --- | --- | --- | --- |
-| 纯 GF | `ProcedureGame` | `Game` | GF Procedure、UI、Entity |
-| GameHot | `Game.Hot.Init` | `Game.Hot.Code` | MonoBehaviour + GF 扩展 |
+| 纯 GF（GameHot） | `ProcedureGame` / `Game.Hot.Init` | `Game` / `Game.Hot.Code` | GF 基础业务，或可热更的 MonoBehaviour 业务 |
 | ET | `ET.Init` | Model、Hotfix、ModelView、HotfixView | Entity + System + Fiber |
+
+基础 GF 与 GameHot 对外统称为纯 GF（GameHot）路线。是否启用 `UNITY_GAMEHOT`，决定进入 `ProcedureGame` 还是 `Game.Hot.Init`。
 
 GameHot 与 ET 的启用符号互斥。菜单实现会在启用一个模块时移除另一个模块，避免两个业务入口同时进入资源收集和裁剪配置。
 
