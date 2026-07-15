@@ -1,3 +1,4 @@
+using System.Globalization;
 using AgentBridge;
 using Newtonsoft.Json.Linq;
 using ThunderFireUITool;
@@ -19,6 +20,7 @@ namespace Game.Editor
         public string Description => "UXTool 编辑工具：调用 QuickBackground 添加临时设计稿背景。action=add_background；可传 designImage(Sprite/Texture2D 资源路径) 和 color(r,g,b[,a])。背景对象按 UXTool 自身逻辑创建，通常用于编辑预览，不建议当作正式 Prefab 内容。";
         public string Group => "Game";
         public bool CanDisable => true;
+        public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
 
         public object Execute(JObject @params)
         {
@@ -33,10 +35,9 @@ namespace Game.Editor
             }
         }
 
-        public JObject GetParamsSchema()
-        {
-            return JObject.Parse(@"{
+        public JObject ParamsSchema { get; } = JObject.Parse(@"{
   ""type"": ""object"",
+  ""additionalProperties"": false,
   ""properties"": {
     ""action"": {
       ""type"": ""string"",
@@ -49,15 +50,39 @@ namespace Game.Editor
     },
     ""color"": {
       ""type"": ""string"",
-      ""description"": ""可选。背景 tint，格式 r,g,b 或 r,g,b,a，使用 0-1 浮点数；解析失败时使用白色。""
+      ""description"": ""可选。背景 tint，格式 r,g,b 或 r,g,b,a；分量必须是使用小数点的 0-1 浮点数，否则返回 INVALID_PARAMS。""
     }
   },
   ""required"": [""action""]
 }");
-        }
 
         private static object AddBackground(JObject @params)
         {
+            string designImagePath = GetString(@params, "designImage", string.Empty);
+            Sprite sprite = null;
+            Texture2D texture = null;
+            if (!string.IsNullOrEmpty(designImagePath))
+            {
+                sprite = AssetDatabase.LoadAssetAtPath<Sprite>(designImagePath);
+                if (sprite == null)
+                {
+                    texture = AssetDatabase.LoadAssetAtPath<Texture2D>(designImagePath);
+                }
+                else
+                {
+                    texture = sprite.texture;
+                }
+
+                if (sprite == null && texture == null)
+                {
+                    throw new CommandException(ErrorCodes.InvalidParams,
+                        $"Design image not found or is not a Sprite/Texture2D: {designImagePath}");
+                }
+            }
+
+            string colorString = GetString(@params, "color", string.Empty);
+            Color? requestedColor = string.IsNullOrEmpty(colorString) ? null : ParseColor(colorString);
+
             QuickBackground.CreateBackGround();
 
             GameObject bgRoot = FindQuickBackground();
@@ -75,46 +100,29 @@ namespace Game.Editor
 
             Image image = imageTransform.GetComponent<Image>();
             RectTransform rect = imageTransform.GetComponent<RectTransform>();
-            string designImagePath = GetString(@params, "designImage", string.Empty);
+            if (image == null || rect == null)
+            {
+                throw new CommandException(ErrorCode,
+                    "UXQuickBackground child must contain both Image and RectTransform components.");
+            }
 
             if (!string.IsNullOrEmpty(designImagePath))
             {
-                Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(designImagePath);
-                Texture2D texture = null;
                 if (sprite == null)
                 {
-                    texture = AssetDatabase.LoadAssetAtPath<Texture2D>(designImagePath);
-                    if (texture != null)
-                    {
-                        sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                        sprite.name = texture.name;
-                        sprite.hideFlags = HideFlags.DontSave;
-                    }
-                }
-                else
-                {
-                    texture = sprite.texture;
+                    sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height),
+                        new Vector2(0.5f, 0.5f));
+                    sprite.name = texture.name;
+                    sprite.hideFlags = HideFlags.DontSave;
                 }
 
-                if (sprite == null)
-                {
-                    throw new CommandException(ErrorCode, $"Design image not found or is not a Sprite/Texture2D: {designImagePath}");
-                }
-
-                if (image != null)
-                {
-                    image.sprite = sprite;
-                }
-                if (rect != null && texture != null)
-                {
-                    rect.sizeDelta = new Vector2(texture.width, texture.height);
-                }
+                image.sprite = sprite;
+                rect.sizeDelta = new Vector2(sprite.rect.width, sprite.rect.height);
             }
 
-            string colorString = GetString(@params, "color", string.Empty);
-            if (!string.IsNullOrEmpty(colorString) && image != null)
+            if (requestedColor.HasValue)
             {
-                image.color = ParseColor(colorString);
+                image.color = requestedColor.Value;
             }
 
             string resultPath = image != null && image.sprite != null && image.sprite.texture != null
@@ -156,24 +164,27 @@ namespace Game.Editor
         private static Color ParseColor(string colorString)
         {
             string[] parts = colorString.Split(',');
-            if (parts.Length < 3)
+            if (parts.Length != 3 && parts.Length != 4)
             {
-                return Color.white;
+                throw new CommandException(ErrorCodes.InvalidParams,
+                    $"color must contain exactly 3 or 4 comma-separated components, got {parts.Length}.");
             }
 
-            if (!float.TryParse(parts[0].Trim(), out float r) ||
-                !float.TryParse(parts[1].Trim(), out float g) ||
-                !float.TryParse(parts[2].Trim(), out float b))
+            var components = new float[4] { 0f, 0f, 0f, 1f };
+            for (int i = 0; i < parts.Length; i++)
             {
-                return Color.white;
+                string value = parts[i].Trim();
+                if (!float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture,
+                        out float component) || float.IsNaN(component) || float.IsInfinity(component) ||
+                    component < 0f || component > 1f)
+                {
+                    throw new CommandException(ErrorCodes.InvalidParams,
+                        $"color component {i + 1} must be a finite 0-1 number using '.', got '{value}'.");
+                }
+                components[i] = component;
             }
 
-            float a = 1f;
-            if (parts.Length >= 4)
-            {
-                float.TryParse(parts[3].Trim(), out a);
-            }
-            return new Color(r, g, b, a);
+            return new Color(components[0], components[1], components[2], components[3]);
         }
 
         private static string GetString(JObject @params, string name, string defaultValue)

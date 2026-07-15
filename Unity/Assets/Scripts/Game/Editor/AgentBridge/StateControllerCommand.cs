@@ -26,6 +26,7 @@ namespace Game.Editor
         public string Description => "StateController 编辑工具：列出控制器数据/状态、列出 BaseState 节点、切换状态、新增 data/state、给节点添加 BaseState 组件。action=list/list_nodes/set_state/add_data/add_state/add_state_node，默认 list；目标支持 assetPath(prefab)/path(scene)/instanceId/当前选择。写操作会自动保存 Prefab 或标记 Scene dirty。";
         public string Group => "Game";
         public bool CanDisable => true;
+        public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
 
         public object Execute(JObject @params)
         {
@@ -82,10 +83,9 @@ namespace Game.Editor
             }
         }
 
-        public JObject GetParamsSchema()
-        {
-            return JObject.Parse(@"{
+        public JObject ParamsSchema { get; } = JObject.Parse(@"{
   ""type"": ""object"",
+  ""additionalProperties"": false,
   ""properties"": {
     ""action"": {
       ""type"": ""string"",
@@ -95,10 +95,12 @@ namespace Game.Editor
     },
     ""assetPath"": {
       ""type"": ""string"",
+      ""minLength"": 1,
       ""description"": ""Prefab 资源路径。传入后通过 PrefabUtility.LoadPrefabContents 编辑并保存 prefab；优先级高于 instanceId/path/selection。""
     },
     ""path"": {
       ""type"": ""string"",
+      ""minLength"": 1,
       ""description"": ""Scene 中 GameObject 的层级路径，包含根节点名；未传 assetPath/instanceId 时使用。""
     },
     ""instanceId"": {
@@ -107,35 +109,41 @@ namespace Game.Editor
     },
     ""nodePath"": {
       ""type"": ""string"",
-      ""description"": ""目标根节点下的相对子节点路径。add_state_node 用它定位要添加 BaseState 的节点；list_nodes 可用它过滤节点。""
+      ""minLength"": 1,
+      ""description"": ""目标根节点下的节点路径；可直接回传 list_nodes 返回的含根节点路径，也兼容不含根节点的相对路径。add_state_node 用它定位节点，list_nodes 用它过滤。""
     },
     ""controllerPath"": {
       ""type"": ""string"",
-      ""description"": ""当目标下有多个 StateControllerMono 时用于消歧；值为相对路径或控制器节点名。""
+      ""minLength"": 1,
+      ""description"": ""当目标下有多个 StateControllerMono 时用于消歧；可用 list 返回的含根节点路径、不含根节点的相对路径或唯一节点名。""
     },
     ""dataName"": {
       ""type"": ""string"",
+      ""minLength"": 1,
       ""description"": ""set_state/add_data/add_state/add_state_node 使用的数据名；list_nodes 可用作过滤条件。""
     },
     ""stateName"": {
       ""type"": ""string"",
+      ""minLength"": 1,
       ""description"": ""set_state 要切换到的状态名，或 add_state 要新增的状态名。set_state 可用 stateIndex 替代。""
     },
     ""stateIndex"": {
       ""type"": ""integer"",
+      ""minimum"": 0,
       ""description"": ""set_state 可选。按状态索引切换，未传 stateName 时使用。""
     },
     ""states"": {
       ""type"": ""string"",
-      ""description"": ""add_data 可选。逗号分隔的初始状态名，例如 Normal,Selected,Disabled。""
+      ""minLength"": 1,
+      ""description"": ""add_data 可选。逗号分隔且不可重复的初始状态名，例如 Normal,Selected,Disabled。""
     },
     ""stateType"": {
       ""type"": ""string"",
+      ""minLength"": 1,
       ""description"": ""add_state_node 必填。BaseState 子类名或完整类型名，例如 StateGameObjectForActive。""
     }
   }
 }");
-        }
 
         private static object List(GameObject root, string targetLabel, StateControllerMono[] controllers)
         {
@@ -183,7 +191,8 @@ namespace Game.Editor
                 }
 
                 string nodePath = GetRelativePath(root.transform, state.transform);
-                if (!string.IsNullOrEmpty(nodeFilter) && nodePath != nodeFilter && state.name != nodeFilter)
+                if (!string.IsNullOrEmpty(nodeFilter) &&
+                    !MatchesNodePath(root.transform, state.transform, nodeFilter))
                 {
                     continue;
                 }
@@ -328,7 +337,7 @@ namespace Game.Editor
             StateControllerMono[] controllers, bool isPrefabContents, string assetPath)
         {
             string dataName = GetString(@params, "dataName", null);
-            if (string.IsNullOrEmpty(dataName))
+            if (string.IsNullOrWhiteSpace(dataName))
             {
                 throw new CommandException(ErrorCodes.InvalidParams, "Missing 'dataName' for set_state.");
             }
@@ -340,6 +349,16 @@ namespace Game.Editor
             if (!hasStateName && !hasStateIndex)
             {
                 throw new CommandException(ErrorCodes.InvalidParams, "Provide 'stateName' or 'stateIndex' for set_state.");
+            }
+            if (hasStateName && hasStateIndex)
+            {
+                throw new CommandException(ErrorCodes.InvalidParams,
+                    "Provide only one of 'stateName' or 'stateIndex' for set_state.");
+            }
+            if (hasStateName && string.IsNullOrWhiteSpace(stateName))
+            {
+                throw new CommandException(ErrorCodes.InvalidParams,
+                    "'stateName' must not be empty or whitespace for set_state.");
             }
 
             string controllerPath = GetString(@params, "controllerPath", null);
@@ -392,7 +411,7 @@ namespace Game.Editor
             StateControllerMono[] controllers, bool isPrefabContents, string assetPath)
         {
             string dataName = GetString(@params, "dataName", null);
-            if (string.IsNullOrEmpty(dataName))
+            if (string.IsNullOrWhiteSpace(dataName))
             {
                 throw new CommandException(ErrorCodes.InvalidParams, "Missing 'dataName' for add_data.");
             }
@@ -454,7 +473,7 @@ namespace Game.Editor
         {
             string dataName = GetString(@params, "dataName", null);
             string stateName = GetString(@params, "stateName", null);
-            if (string.IsNullOrEmpty(dataName) || string.IsNullOrEmpty(stateName))
+            if (string.IsNullOrWhiteSpace(dataName) || string.IsNullOrWhiteSpace(stateName))
             {
                 throw new CommandException(ErrorCodes.InvalidParams, "Provide both 'dataName' and 'stateName' for add_state.");
             }
@@ -520,12 +539,12 @@ namespace Game.Editor
             bool isPrefabContents, string assetPath)
         {
             string stateTypeName = GetString(@params, "stateType", null);
-            if (string.IsNullOrEmpty(stateTypeName))
+            if (string.IsNullOrWhiteSpace(stateTypeName))
             {
                 throw new CommandException(ErrorCodes.InvalidParams, "Missing 'stateType' for add_state_node.");
             }
             string dataName = GetString(@params, "dataName", null);
-            if (string.IsNullOrEmpty(dataName))
+            if (string.IsNullOrWhiteSpace(dataName))
             {
                 throw new CommandException(ErrorCodes.InvalidParams, "Missing 'dataName' for add_state_node.");
             }
@@ -541,7 +560,7 @@ namespace Game.Editor
             string nodePath = GetString(@params, "nodePath", null);
             if (!string.IsNullOrEmpty(nodePath))
             {
-                node = root.transform.Find(nodePath);
+                node = FindNode(root.transform, nodePath);
                 if (node == null)
                 {
                     throw new CommandException(ErrorCode, $"Node '{nodePath}' not found under '{targetLabel}'.");
@@ -619,6 +638,12 @@ namespace Game.Editor
             if (links != null)
             {
                 links.ClearArray();
+            }
+            SerializedProperty onSelectedEvent = element.FindPropertyRelative("m_OnSelectedEvent");
+            if (onSelectedEvent != null &&
+                onSelectedEvent.propertyType == SerializedPropertyType.ManagedReference)
+            {
+                onSelectedEvent.managedReferenceValue = null;
             }
         }
 
@@ -789,13 +814,63 @@ namespace Game.Editor
 
             if (!string.IsNullOrEmpty(controllerPath))
             {
+                var fullPathMatches = new List<StateControllerMono>();
                 foreach (StateControllerMono controller in controllers)
                 {
-                    if (GetRelativePath(root.transform, controller.transform) == controllerPath || controller.name == controllerPath)
+                    string fullPath = GetRelativePath(root.transform, controller.transform);
+                    if (fullPath == controllerPath)
                     {
-                        return controller;
+                        fullPathMatches.Add(controller);
                     }
                 }
+
+                if (fullPathMatches.Count == 1)
+                {
+                    return fullPathMatches[0];
+                }
+                if (fullPathMatches.Count > 1)
+                {
+                    error = $"Controller path '{controllerPath}' is ambiguous. Candidates: [{string.Join(", ", GetControllerPaths(root, fullPathMatches))}]";
+                    return null;
+                }
+
+                var relativePathMatches = new List<StateControllerMono>();
+                foreach (StateControllerMono controller in controllers)
+                {
+                    string relativePath = GetPathBelowRoot(root.transform, controller.transform);
+                    if (relativePath == controllerPath)
+                    {
+                        relativePathMatches.Add(controller);
+                    }
+                }
+                if (relativePathMatches.Count == 1)
+                {
+                    return relativePathMatches[0];
+                }
+                if (relativePathMatches.Count > 1)
+                {
+                    error = $"Controller path '{controllerPath}' is ambiguous. Candidates: [{string.Join(", ", GetControllerPaths(root, relativePathMatches))}]";
+                    return null;
+                }
+
+                var nameMatches = new List<StateControllerMono>();
+                foreach (StateControllerMono controller in controllers)
+                {
+                    if (controller.name == controllerPath)
+                    {
+                        nameMatches.Add(controller);
+                    }
+                }
+                if (nameMatches.Count == 1)
+                {
+                    return nameMatches[0];
+                }
+                if (nameMatches.Count > 1)
+                {
+                    error = $"Controller name '{controllerPath}' is ambiguous. Use a path. Candidates: [{string.Join(", ", GetControllerPaths(root, nameMatches))}]";
+                    return null;
+                }
+
                 error = $"Controller '{controllerPath}' not found under target.";
                 return null;
             }
@@ -866,32 +941,67 @@ namespace Game.Editor
                 return result;
             }
 
+            var unique = new HashSet<string>(StringComparer.Ordinal);
             foreach (string part in csv.Split(','))
             {
                 string trimmed = part.Trim();
-                if (trimmed.Length > 0)
+                if (trimmed.Length == 0)
                 {
-                    result.Add(trimmed);
+                    throw new CommandException(ErrorCodes.InvalidParams,
+                        "states must not contain empty entries.");
                 }
+                if (!unique.Add(trimmed))
+                {
+                    throw new CommandException(ErrorCodes.InvalidParams,
+                        $"states contains duplicate entry '{trimmed}'.");
+                }
+                result.Add(trimmed);
             }
             return result;
         }
 
-        private static string GetRelativePath(Transform root, Transform target)
+        private static Transform FindNode(Transform root, string path)
+        {
+            if (string.IsNullOrEmpty(path) || path == root.name)
+            {
+                return root;
+            }
+
+            string prefix = $"{root.name}/";
+            string relativePath = path.StartsWith(prefix, StringComparison.Ordinal)
+                ? path.Substring(prefix.Length)
+                : path;
+            return root.Find(relativePath);
+        }
+
+        private static bool MatchesNodePath(Transform root, Transform target, string path)
+        {
+            return GetRelativePath(root, target) == path ||
+                   GetPathBelowRoot(root, target) == path ||
+                   target.name == path;
+        }
+
+        private static string GetPathBelowRoot(Transform root, Transform target)
         {
             if (target == root)
             {
-                return root.name;
+                return string.Empty;
             }
 
             string path = target.name;
-            Transform t = target.parent;
-            while (t != null && t != root)
+            Transform current = target.parent;
+            while (current != null && current != root)
             {
-                path = $"{t.name}/{path}";
-                t = t.parent;
+                path = $"{current.name}/{path}";
+                current = current.parent;
             }
-            return $"{root.name}/{path}";
+            return path;
+        }
+
+        private static string GetRelativePath(Transform root, Transform target)
+        {
+            string relativePath = GetPathBelowRoot(root, target);
+            return string.IsNullOrEmpty(relativePath) ? root.name : $"{root.name}/{relativePath}";
         }
 
         private static string GetString(JObject @params, string name, string defaultValue)
