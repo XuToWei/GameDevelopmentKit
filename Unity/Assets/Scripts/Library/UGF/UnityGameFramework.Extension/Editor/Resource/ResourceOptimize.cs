@@ -300,7 +300,17 @@ namespace UnityGameFramework.Extension.Editor
                 long byteSize = GetAssetSize(assetPath);
                 if (byteSize < MAX_COMBINE_SHARE_AB_ITEM_SIZE)
                 {
-                    allCombines.Add(assetPath, new ABInfo(assetPath, byteSize, kv.Value.Count));
+                    SortedSet<string> referencingBundleNames = new SortedSet<string>(StringComparer.Ordinal);
+                    foreach (Asset asset in kv.Value)
+                    {
+                        if (asset.Resource != null)
+                        {
+                            referencingBundleNames.Add(asset.Resource.FullName);
+                        }
+                    }
+                    string[] names = new string[referencingBundleNames.Count];
+                    referencingBundleNames.CopyTo(names);
+                    allCombines.Add(assetPath, new ABInfo(assetPath, byteSize, kv.Value.Count, names));
                     allShareCanCombine++;
                 }
                 else
@@ -344,27 +354,43 @@ namespace UnityGameFramework.Extension.Editor
                 allCombines.Remove(key);
             }
 
-            List<ABInfo> left =  allCombines.Values.ToList();
-            //优先用名字排序，这样相同目录（往往是相同资源的依赖）的尽可能规划到一起
-            left.Sort((a,b) =>
-            {
-                int c1 = string.Compare(a.Name, b.Name, StringComparison.Ordinal);
-                if(c1 == 0)
-                {
-                    int c2 = a.ReferenceCount.CompareTo(b.ReferenceCount);
-                    if (c2 == 0)
-                    {
-                        return a.Size.CompareTo(b.Size);
-                    }
-                    return c2;
-                }
-                return c1;
-            });
+            List<ABInfo> left = new List<ABInfo>(allCombines.Values);
             allFinalCombine = left.Count;
             List<string> currentCombineBundles = new List<string>();
             long currentCombineBundleSize = 0;
             count = left.Count;
             cur = 0;
+            Dictionary<string, int> referencingBundleCounts = new Dictionary<string, int>(StringComparer.Ordinal);
+            foreach (ABInfo abInfo in left)
+            {
+                foreach (string name in abInfo.ReferencingBundleNames)
+                {
+                    referencingBundleCounts.TryGetValue(name, out int referenceCount);
+                    referencingBundleCounts[name] = referenceCount + 1;
+                }
+            }
+
+            // 多 AB 引用时归入冗余依赖最多的 AB，优先减少该 AB 加载的共享包数量。
+            foreach (ABInfo abInfo in left)
+            {
+                int maxReferenceCount = -1;
+                foreach (string name in abInfo.ReferencingBundleNames)
+                {
+                    int referenceCount = referencingBundleCounts[name];
+                    if (referenceCount > maxReferenceCount)
+                    {
+                        maxReferenceCount = referenceCount;
+                        abInfo.CombineGroupName = name;
+                    }
+                }
+                abInfo.CombineGroupName ??= string.Empty;
+            }
+            left.Sort((a, b) =>
+            {
+                int result = string.Compare(a.CombineGroupName, b.CombineGroupName, StringComparison.Ordinal);
+                return result != 0 ? result : string.Compare(a.Name, b.Name, StringComparison.Ordinal);
+            });
+
             foreach (ABInfo abInfo in left)
             {
                 cur++;

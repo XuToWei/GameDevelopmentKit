@@ -27,7 +27,7 @@ namespace ET
             private const string EXCEL_DIR = "../Design/Excel";
             private const string GEN_CONFIG_NAME = "luban.conf";
 
-            private static Encoding s_Encoding;
+            private static readonly Encoding s_Encoding = Encoding.UTF8;
 
             private class CmdInfo
             {
@@ -51,7 +51,6 @@ namespace ET
 
             public static void DoExport()
             {
-                bool isGB2312 = Options.Instance.Customs.Contains("GB2312", StringComparison.OrdinalIgnoreCase);
                 bool useJson = Options.Instance.Customs.Contains("Json", StringComparison.OrdinalIgnoreCase);
                 bool isCheck = Options.Instance.Customs.Contains("Check", StringComparison.OrdinalIgnoreCase);
                 bool showCmd = Options.Instance.Customs.Contains("ShowCmd", StringComparison.OrdinalIgnoreCase);
@@ -59,17 +58,6 @@ namespace ET
 
                 string actionStr = isCheck? "check" : "export";
                 Log.Info($"Start {actionStr} Luban excel ...");
-                if (isGB2312)
-                {
-                    //luban在windows上编码为GB2312
-                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                    s_Encoding = Encoding.GetEncoding("GB2312");
-                }
-                else
-                {
-                    s_Encoding = Encoding.UTF8;
-                }
-
                 string excelDir = Path.GetFullPath(Path.Combine(Define.WorkDir, EXCEL_DIR));
                 string[] dirs = Directory.GetDirectories(excelDir);
                 if (dirs.Length < 1)
