@@ -320,7 +320,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "bbfa037f7188f085fa8474fbb2dd8f6f1fb00de9"
+      "hash": "86dd0e2c5a8d2a286d92426cb3b2ca6dd75c602d"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
@@ -334,16 +334,17 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "45fe7f15ae69086f24c80a42d3e7aecfd4f1cd2a"
+      "hash": "ecb4645d33e69f481cf70ceb2eec385ff89c5287"
     },
     "me.xw.unityagentbridge": {
       "version": "https://github.com/XuToWei/UnityAgentBridge.git?path=Unity",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.2.1"
+        "com.unity.nuget.newtonsoft-json": "3.2.1",
+        "com.unity.test-framework": "1.1.33"
       },
-      "hash": "2ac7d50d8313dd8892ec88a6ca584659874b4c41"
+      "hash": "015a3164b53e38dc0b66b359d311a1be3537ecdd"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

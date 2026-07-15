@@ -25,6 +25,7 @@ namespace Game.Editor
         public string Description => "CodeBind 绑定工具：生成 *.Bind.cs、刷新序列化引用，或把节点改名为 bindName_*。action=all/generate_code/set_serialization/rename_node，默认 all；目标支持 assetPath(prefab)/path(scene)/instanceId/当前选择。Prefab 会自动保存，Scene 目标会标记 dirty；all 生成新代码后可能需要先编译再执行 set_serialization。";
         public string Group => "Game";
         public bool CanDisable => true;
+        public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
 
         public object Execute(JObject @params)
         {
@@ -43,10 +44,9 @@ namespace Game.Editor
             }
         }
 
-        public JObject GetParamsSchema()
-        {
-            return JObject.Parse(@"{
+        public JObject ParamsSchema { get; } = JObject.Parse(@"{
   ""type"": ""object"",
+  ""additionalProperties"": false,
   ""properties"": {
     ""action"": {
       ""type"": ""string"",
@@ -72,6 +72,7 @@ namespace Game.Editor
     },
     ""bindName"": {
       ""type"": ""string"",
+      ""minLength"": 1,
       ""description"": ""rename_node 必填。节点会被改名为 bindName<separator>*；不要包含 separator。""
     },
     ""arrayIndex"": {
@@ -82,11 +83,11 @@ namespace Game.Editor
     ""separator"": {
       ""type"": ""string"",
       ""minLength"": 1,
+      ""maxLength"": 1,
       ""description"": ""绑定分隔符，默认读取 EditorPrefs CodeBind.SeparatorChar，通常为 _。""
     }
   }
 }");
-        }
 
         private static object RunBind(JObject @params, string action)
         {
@@ -116,6 +117,11 @@ namespace Game.Editor
                 {
                     throw new CommandException(ErrorCode,
                         $"No [MonoCodeBind] component or CSCodeBindMono found under '{targetLabel}'.");
+                }
+
+                if (!isPrefabContents)
+                {
+                    Undo.RegisterFullObjectHierarchyUndo(root, "AgentBridge CodeBind");
                 }
 
                 if (genCode)
@@ -149,7 +155,7 @@ namespace Game.Editor
                 {
                     PrefabUtility.SaveAsPrefabAsset(root, assetPath);
                 }
-                else if (serialize)
+                else if (genCode || serialize)
                 {
                     EditorUtility.SetDirty(root);
                     if (root.scene.IsValid())
@@ -479,6 +485,11 @@ namespace Game.Editor
             string custom = GetString(@params, "separator", null);
             if (!string.IsNullOrEmpty(custom))
             {
+                if (custom.Length != 1)
+                {
+                    throw new CommandException(ErrorCodes.InvalidParams,
+                        $"separator must contain exactly one character, got '{custom}'.");
+                }
                 return custom[0];
             }
 
