@@ -27,7 +27,10 @@ namespace Game.Editor
         public bool CanDisable => true;
         public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
 
-        public object Execute(JObject @params)
+        // AgentBridge's task-like return type requires an async method builder, while ET0501
+        // normally forbids non-UniTask async methods in project code.
+#pragma warning disable ET0501, CS1998
+        public async CommandTask<object> ExecuteAsync(JObject @params)
         {
             string action = GetString(@params, "action", "all").ToLowerInvariant();
             switch (action)
@@ -43,6 +46,7 @@ namespace Game.Editor
                         $"Unknown action: {action}. Supported: all, generate_code, set_serialization, rename_node");
             }
         }
+#pragma warning restore ET0501, CS1998
 
         public JObject ParamsSchema { get; } = JObject.Parse(@"{
   ""type"": ""object"",
