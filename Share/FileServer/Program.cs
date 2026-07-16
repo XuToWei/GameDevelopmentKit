@@ -15,7 +15,11 @@ namespace FileServer
 
         private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args).UseUrls(Config.Url)
+            return WebHost.CreateDefaultBuilder(args)
+                .UseKestrel(options =>
+                {
+                    options.ListenAnyIP(Config.Port);
+                })
                 .UseStartup<Startup>();
         }
     }

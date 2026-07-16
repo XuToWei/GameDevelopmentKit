@@ -1,0 +1,281 @@
+@page "/versions"
+@inject VersionService VersionService
+@inject AuthService AuthService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<PageTitle>版本管理 - 游戏管理后台</PageTitle>
+
+<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-4">
+    <MudText Typo="Typo.h5">版本管理</MudText>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+               OnClick="OpenCreateDialog">新建版本</MudButton>
+</MudStack>
+
+@* 筛选 *@
+<MudStack Row="true" Spacing="2" Class="mb-4">
+    <MudSelect @bind-Value="_filterPlatform" Label="平台" Variant="Variant.Outlined" Dense="true"
+               Margin="Margin.Dense" Style="width:150px;">
+        <MudSelectItem T="string" Value="@("")">全部</MudSelectItem>
+        <MudSelectItem T="string" Value="@("Windows64")">Windows64</MudSelectItem>
+        <MudSelectItem T="string" Value="@("MacOS")">MacOS</MudSelectItem>
+        <MudSelectItem T="string" Value="@("iOS")">iOS</MudSelectItem>
+        <MudSelectItem T="string" Value="@("Android")">Android</MudSelectItem>
+    </MudSelect>
+    <MudSelect @bind-Value="_filterEnv" Label="环境" Variant="Variant.Outlined" Dense="true"
+               Margin="Margin.Dense" Style="width:150px;">
+        <MudSelectItem T="string" Value="@("")">全部</MudSelectItem>
+        <MudSelectItem T="string" Value="@("Dev")">Dev</MudSelectItem>
+        <MudSelectItem T="string" Value="@("Staging")">Staging</MudSelectItem>
+        <MudSelectItem T="string" Value="@("Production")">Production</MudSelectItem>
+    </MudSelect>
+    <MudSpacer />
+    <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
+</MudStack>
+
+<MudTable Items="_filteredVersions" Dense="true" Hover="true" Elevation="2">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>平台</MudTh>
+        <MudTh>环境</MudTh>
+        <MudTh>游戏版本</MudTh>
+        <MudTh>内部版本</MudTh>
+        <MudTh>资源版本</MudTh>
+        <MudTh>强制更新</MudTh>
+        <MudTh>状态</MudTh>
+        <MudTh>创建时间</MudTh>
+        <MudTh>创建者</MudTh>
+        <MudTh>操作</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Id</MudTd>
+        <MudTd><MudChip T="string" Size="Size.Small" Color="@GetPlatformColor(context.Platform)">@context.Platform</MudChip></MudTd>
+        <MudTd><MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@GetEnvColor(context.Environment)">@context.Environment</MudChip></MudTd>
+        <MudTd>@context.LatestGameVersion</MudTd>
+        <MudTd>@context.InternalGameVersion</MudTd>
+        <MudTd>@context.InternalResourceVersion</MudTd>
+        <MudTd>
+            @if (context.ForceUpdateGame)
+            {
+                <MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Warning" Size="Size.Small" />
+            }
+            else
+            {
+                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Default" Size="Size.Small" />
+            }
+        </MudTd>
+        <MudTd>
+            @if (context.IsActive)
+            {
+                <MudChip T="string" Color="Color.Success" Size="Size.Small" Class="status-chip">已激活</MudChip>
+            }
+            else
+            {
+                <MudChip T="string" Color="Color.Default" Size="Size.Small" Class="status-chip">未激活</MudChip>
+            }
+        </MudTd>
+        <MudTd>@context.CreatedAt.ToString("yyyy-MM-dd HH:mm")</MudTd>
+        <MudTd>@context.CreatedBy</MudTd>
+        <MudTd>
+            @if (!context.IsActive)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small"
+                               OnClick="@(() => ActivateVersion(context))" />
+            }
+            else
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Warning" Size="Size.Small"
+                               OnClick="@(() => DeactivateVersion(context))" />
+            }
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small"
+                           OnClick="@(() => OpenEditDialog(context))" />
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small"
+                           OnClick="@(() => DeleteVersion(context))" />
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>暂无版本记录，点击"新建版本"创建</MudText>
+    </NoRecordsContent>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new[] { 10, 25, 50 }" />
+    </PagerContent>
+</MudTable>
+
+@* 编辑对话框 *@
+<MudDialog @bind-Visible="_dialogVisible" Options="_dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@(_isCreating ? "新建版本" : "编辑版本")</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid Spacing="2">
+            <MudItem xs="6">
+                <MudSelect @bind-Value="_editingVersion.Platform" Label="平台" Variant="Variant.Outlined" Required="true">
+                    <MudSelectItem T="string" Value="@("Windows64")">Windows64</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("MacOS")">MacOS</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("iOS")">iOS</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("Android")">Android</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="6">
+                <MudSelect @bind-Value="_editingVersion.Environment" Label="环境" Variant="Variant.Outlined" Required="true">
+                    <MudSelectItem T="string" Value="@("Dev")">Dev</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("Staging")">Staging</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("Production")">Production</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField @bind-Value="_editingVersion.LatestGameVersion" Label="游戏版本" Variant="Variant.Outlined" Required="true" />
+            </MudItem>
+            <MudItem xs="3">
+                <MudNumericField @bind-Value="_editingVersion.InternalGameVersion" Label="内部游戏版本" Variant="Variant.Outlined" />
+            </MudItem>
+            <MudItem xs="3">
+                <MudNumericField @bind-Value="_editingVersion.InternalResourceVersion" Label="资源版本" Variant="Variant.Outlined" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="_editingVersion.UpdatePrefixUri" Label="更新地址" Variant="Variant.Outlined" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudSwitch @bind-Value="_editingVersion.ForceUpdateGame" Label="强制更新" Color="Color.Warning" T="bool" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="_editingVersion.Description" Label="描述" Variant="Variant.Outlined" Lines="2" />
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => _dialogVisible = false)">取消</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SaveVersion">保存</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private string _filterPlatform = "";
+    private string _filterEnv = "";
+    private bool _dialogVisible;
+    private bool _isCreating;
+    private DialogOptions _dialogOptions = new() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+    private VersionRecord _editingVersion = new();
+
+    private List<VersionRecord> _versions = new();
+    private IEnumerable<VersionRecord> _filteredVersions => _versions
+        .Where(v => string.IsNullOrEmpty(_filterPlatform) || v.Platform == _filterPlatform)
+        .Where(v => string.IsNullOrEmpty(_filterEnv) || v.Environment == _filterEnv)
+        .OrderByDescending(v => v.CreatedAt);
+
+    protected override void OnInitialized()
+    {
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        _versions = VersionService.GetAllVersions();
+    }
+
+    private string CurrentUser => AuthService.CurrentUser.Username;
+
+    private Color GetPlatformColor(string platform) => platform switch
+    {
+        "Windows64" => Color.Info,
+        "MacOS" => Color.Default,
+        "iOS" => Color.Warning,
+        "Android" => Color.Success,
+        _ => Color.Default,
+    };
+
+    private Color GetEnvColor(string env) => env switch
+    {
+        "Dev" => Color.Info,
+        "Staging" => Color.Warning,
+        "Production" => Color.Error,
+        _ => Color.Default,
+    };
+
+    private void OpenCreateDialog()
+    {
+        _editingVersion = new VersionRecord { Platform = "Windows64", Environment = "Dev" };
+        _isCreating = true;
+        _dialogVisible = true;
+    }
+
+    private void OpenEditDialog(VersionRecord version)
+    {
+        _editingVersion = new VersionRecord
+        {
+            Id = version.Id,
+            Platform = version.Platform,
+            Environment = version.Environment,
+            LatestGameVersion = version.LatestGameVersion,
+            InternalGameVersion = version.InternalGameVersion,
+            InternalResourceVersion = version.InternalResourceVersion,
+            UpdatePrefixUri = version.UpdatePrefixUri,
+            ForceUpdateGame = version.ForceUpdateGame,
+            Description = version.Description,
+        };
+        _isCreating = false;
+        _dialogVisible = true;
+    }
+
+    private void SaveVersion()
+    {
+        if (_isCreating)
+        {
+            VersionService.CreateVersion(_editingVersion, CurrentUser);
+            Snackbar.Add("版本已创建", Severity.Success);
+        }
+        else
+        {
+            var existing = VersionService.GetVersionById(_editingVersion.Id);
+            if (existing != null)
+            {
+                existing.Platform = _editingVersion.Platform;
+                existing.Environment = _editingVersion.Environment;
+                existing.LatestGameVersion = _editingVersion.LatestGameVersion;
+                existing.InternalGameVersion = _editingVersion.InternalGameVersion;
+                existing.InternalResourceVersion = _editingVersion.InternalResourceVersion;
+                existing.UpdatePrefixUri = _editingVersion.UpdatePrefixUri;
+                existing.ForceUpdateGame = _editingVersion.ForceUpdateGame;
+                existing.Description = _editingVersion.Description;
+                VersionService.UpdateVersion(existing);
+            }
+            Snackbar.Add("版本已更新", Severity.Success);
+        }
+        _dialogVisible = false;
+        RefreshData();
+    }
+
+    private async Task ActivateVersion(VersionRecord version)
+    {
+        var confirm = await DialogService.ShowMessageBox("激活版本",
+            $"确定要激活 {version.Platform} - {version.Environment} v{version.LatestGameVersion} 吗？\n这将停用同平台同环境的其他版本。",
+            "确定", "取消");
+        if (confirm != true) return;
+
+        var success = VersionService.ActivateVersion(version.Id, CurrentUser);
+        Snackbar.Add(success ? $"版本 v{version.LatestGameVersion} 已激活" : "激活失败", success ? Severity.Success : Severity.Error);
+        RefreshData();
+    }
+
+    private void DeactivateVersion(VersionRecord version)
+    {
+        var success = VersionService.DeactivateVersion(version.Id, CurrentUser);
+        Snackbar.Add(success ? $"版本 v{version.LatestGameVersion} 已停用" : "停用失败", success ? Severity.Warning : Severity.Error);
+        RefreshData();
+    }
+
+    private async Task DeleteVersion(VersionRecord version)
+    {
+        if (version.IsActive)
+        {
+            Snackbar.Add("无法删除已激活的版本，请先停用", Severity.Error);
+            return;
+        }
+        var confirm = await DialogService.ShowMessageBox("删除版本", $"确定要删除版本 #{version.Id} 吗？此操作不可撤销。", "确定", "取消");
+        if (confirm != true) return;
+
+        var success = VersionService.DeleteVersion(version.Id);
+        Snackbar.Add(success ? "版本已删除" : "删除失败", success ? Severity.Info : Severity.Error);
+        RefreshData();
+    }
+}

@@ -1,0 +1,136 @@
+@page "/versions/history"
+@inject VersionService VersionService
+@inject AuthService AuthService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<PageTitle>版本激活历史 - 游戏管理后台</PageTitle>
+
+<MudText Typo="Typo.h5" Class="mb-4">版本激活历史</MudText>
+
+@* 筛选 *@
+<MudStack Row="true" Spacing="2" Class="mb-4">
+    <MudSelect @bind-Value="_filterPlatform" Label="平台" Variant="Variant.Outlined" Dense="true"
+               Margin="Margin.Dense" Style="width:150px;">
+        <MudSelectItem T="string" Value="@("")">全部</MudSelectItem>
+        <MudSelectItem T="string" Value="@("Windows64")">Windows64</MudSelectItem>
+        <MudSelectItem T="string" Value="@("MacOS")">MacOS</MudSelectItem>
+        <MudSelectItem T="string" Value="@("iOS")">iOS</MudSelectItem>
+        <MudSelectItem T="string" Value="@("Android")">Android</MudSelectItem>
+    </MudSelect>
+    <MudSpacer />
+    <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
+    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="align-self-center">
+        共 @_filteredHistory.Count() 条记录
+    </MudText>
+</MudStack>
+
+@if (!_filteredHistory.Any())
+{
+    <MudAlert Severity="Severity.Info">暂无激活历史记录</MudAlert>
+}
+else
+{
+    <MudTimeline TimelinePosition="TimelinePosition.Start">
+        @foreach (var record in _filteredHistory.Take(50))
+        {
+            <MudTimelineItem Color="@(record.Action == "Activated" ? Color.Success : Color.Warning)"
+                             Size="Size.Small" Elevation="2">
+                <ItemOpposite>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">@record.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</MudText>
+                </ItemOpposite>
+                <ItemContent>
+                    <MudCard Elevation="1">
+                        <MudCardContent Class="pa-3">
+                            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                                @if (record.Action == "Activated")
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small" />
+                                    <MudText Typo="Typo.body1"><strong>激活</strong></MudText>
+                                }
+                                else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Warning" Size="Size.Small" />
+                                    <MudText Typo="Typo.body1"><strong>停用</strong></MudText>
+                                }
+                                <MudChip T="string" Size="Size.Small" Color="@GetPlatformColor(record.Platform)">@record.Platform</MudChip>
+                                <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@GetEnvColor(record.Environment)">@record.Environment</MudChip>
+                            </MudStack>
+                            <MudText Typo="Typo.body2" Class="mt-1">
+                                版本 #@record.VersionRecordId
+                                @if (record.PreviousVersionId != 0)
+                                {
+                                    <span> (替换 #@record.PreviousVersionId)</span>
+                                }
+                            </MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">操作人: @record.AdminUser</MudText>
+                        </MudCardContent>
+                        @if (record.Action == "Activated" && record.PreviousVersionId != 0)
+                        {
+                            <MudCardActions>
+                                <MudButton Size="Size.Small" Color="Color.Warning" Variant="Variant.Text"
+                                           StartIcon="@Icons.Material.Filled.Undo"
+                                           OnClick="@(() => Rollback(record))">
+                                    回滚到 #@record.PreviousVersionId
+                                </MudButton>
+                            </MudCardActions>
+                        }
+                    </MudCard>
+                </ItemContent>
+            </MudTimelineItem>
+        }
+    </MudTimeline>
+}
+
+@code {
+    private string _filterPlatform = "";
+
+    private List<VersionActivationHistory> _history = new();
+    private IEnumerable<VersionActivationHistory> _filteredHistory => _history
+        .Where(h => string.IsNullOrEmpty(_filterPlatform) || h.Platform == _filterPlatform);
+
+    protected override void OnInitialized()
+    {
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        _history = VersionService.GetActivationHistory(
+            string.IsNullOrEmpty(_filterPlatform) ? null : _filterPlatform,
+            100);
+    }
+
+    private string CurrentUser => AuthService.CurrentUser.Username;
+
+    private Color GetPlatformColor(string platform) => platform switch
+    {
+        "Windows64" => Color.Info,
+        "MacOS" => Color.Default,
+        "iOS" => Color.Warning,
+        "Android" => Color.Success,
+        _ => Color.Default,
+    };
+
+    private Color GetEnvColor(string env) => env switch
+    {
+        "Dev" => Color.Info,
+        "Staging" => Color.Warning,
+        "Production" => Color.Error,
+        _ => Color.Default,
+    };
+
+    private async Task Rollback(VersionActivationHistory record)
+    {
+        if (record.PreviousVersionId == 0) return;
+
+        var confirm = await DialogService.ShowMessageBox("回滚版本",
+            $"确定要将 {record.Platform} - {record.Environment} 回滚到版本 #{record.PreviousVersionId} 吗？",
+            "确定回滚", "取消");
+        if (confirm != true) return;
+
+        var success = VersionService.ActivateVersion(record.PreviousVersionId, CurrentUser);
+        Snackbar.Add(success ? $"已回滚到版本 #{record.PreviousVersionId}" : "回滚失败", success ? Severity.Success : Severity.Error);
+        RefreshData();
+    }
+}

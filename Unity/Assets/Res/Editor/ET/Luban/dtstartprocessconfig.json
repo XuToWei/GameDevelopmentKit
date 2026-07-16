@@ -42,10 +42,34 @@
     "Port": 20007
   },
   {
+    "StartConfig": "Benchmark",
+    "Id": 100001,
+    "MachineId": 1,
+    "Port": 21001
+  },
+  {
+    "StartConfig": "Benchmark",
+    "Id": 100002,
+    "MachineId": 1,
+    "Port": 21002
+  },
+  {
     "StartConfig": "Localhost",
     "Id": 1,
     "MachineId": 1,
     "Port": 20001
+  },
+  {
+    "StartConfig": "Localhost",
+    "Id": 100001,
+    "MachineId": 1,
+    "Port": 21001
+  },
+  {
+    "StartConfig": "Localhost",
+    "Id": 100002,
+    "MachineId": 1,
+    "Port": 21002
   },
   {
     "StartConfig": "Release",
@@ -120,6 +144,18 @@
     "Port": 20012
   },
   {
+    "StartConfig": "Release",
+    "Id": 100001,
+    "MachineId": 1,
+    "Port": 21001
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 100002,
+    "MachineId": 1,
+    "Port": 21002
+  },
+  {
     "StartConfig": "RouterTest",
     "Id": 1,
     "MachineId": 1,
@@ -160,5 +196,17 @@
     "Id": 7,
     "MachineId": 1,
     "Port": 20007
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 100001,
+    "MachineId": 1,
+    "Port": 21001
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 100002,
+    "MachineId": 1,
+    "Port": 21002
   }
 ]

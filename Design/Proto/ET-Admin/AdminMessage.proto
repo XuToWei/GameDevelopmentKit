@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+package ET;
+
+////// Shared Proto Types //////
+
+message FiberInfoProto
+{
+	int32 Id = 1;
+	int32 Zone = 2;
+	string SceneType = 3;
+	string Name = 4;
+	string SchedulerType = 5;
+	int32 EntityCount = 6;
+	int32 ProcessId = 7;
+}
+
+message SceneInfoProto
+{
+	int32 Id = 1;
+	string SceneType = 2;
+	string Name = 3;
+	int32 Zone = 4;
+	string InnerAddress = 5;
+	string OuterAddress = 6;
+	int32 PlayerCount = 7;
+	int32 FiberId = 8;
+	int32 ProcessId = 9;
+}
+
+////// Admin Messages //////
+
+// ResponseType Admin2S_GetFibersResponse
+message Admin2S_GetFibersRequest // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message Admin2S_GetFibersResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated FiberInfoProto Fibers = 4;
+}
+
+// ResponseType Admin2S_GetScenesResponse
+message Admin2S_GetScenesRequest // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message Admin2S_GetScenesResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated SceneInfoProto Scenes = 4;
+}
+
+// Server -> Admin: process status push (one-way)
+message S2Admin_ProcessStatusReport // IMessage
+{
+	int32 RpcId = 1;
+	int32 ProcessId = 2;
+	int32 Status = 3;
+	int64 MemoryUsage = 4;
+	int32 FiberCount = 5;
+}
+
+// ResponseType Admin2S_KickPlayerResponse
+message Admin2S_KickPlayerRequest // IRequest
+{
+	int32 RpcId = 1;
+	int64 PlayerId = 2;
+	string Reason = 3;
+}
+
+message Admin2S_KickPlayerResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
+
+// ResponseType Admin2S_ReloadResponse
+message Admin2S_ReloadRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Type = 2; // "code", "config", "all"
+}
+
+message Admin2S_ReloadResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool Success = 4;
+}
+
+////// Agent Messages //////
+
+// ResponseType Admin2Agent_StartProcessResponse
+message Admin2Agent_StartProcessRequest // IRequest
+{
+	int32 RpcId = 1;
+	int32 ProcessId = 2;
+}
+
+message Admin2Agent_StartProcessResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
+
+// ResponseType Admin2Agent_StopProcessResponse
+message Admin2Agent_StopProcessRequest // IRequest
+{
+	int32 RpcId = 1;
+	int32 ProcessId = 2;
+}
+
+message Admin2Agent_StopProcessResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
+
+// ResponseType Admin2Agent_DeployFileResponse
+message Admin2Agent_DeployFileRequest // IRequest
+{
+	int32 RpcId = 1;
+	string FileName = 2;
+	bytes FileData = 3;
+	string TargetPath = 4;
+}
+
+message Admin2Agent_DeployFileResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
+
+// ResponseType Admin2Agent_HotReloadResponse
+message Admin2Agent_HotReloadRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Type = 2;
+	repeated int32 ProcessIds = 3;
+}
+
+message Admin2Agent_HotReloadResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
+
+// Agent -> Admin: status report (one-way)
+message Agent2Admin_StatusReport // IMessage
+{
+	int32 RpcId = 1;
+	int32 AgentProcessId = 2;
+	int32 ManagedProcessCount = 3;
+	int64 MemoryUsage = 4;
+}

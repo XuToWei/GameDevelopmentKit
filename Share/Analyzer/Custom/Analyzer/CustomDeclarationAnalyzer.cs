@@ -41,7 +41,7 @@ namespace ET.Analyzer
              {
                  return;
              }
-             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
              {
                  return;
              }
@@ -69,7 +69,7 @@ namespace ET.Analyzer
              {
                  return;
              }
-             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
              {
                  return;
              }
@@ -97,7 +97,7 @@ namespace ET.Analyzer
              {
                  return;
              }
-             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
              {
                  return;
              }
@@ -125,7 +125,7 @@ namespace ET.Analyzer
              {
                  return;
              }
-             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
              {
                  return;
              }
@@ -156,7 +156,7 @@ namespace ET.Analyzer
              {
                  return;
              }
-             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
              {
                  return;
              }
@@ -212,7 +212,7 @@ namespace ET.Analyzer
              {
                  return;
              }
-             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
              {
                  return;
              }
@@ -259,7 +259,7 @@ namespace ET.Analyzer
              {
                  return;
              }
-             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
              {
                  return;
              }
@@ -298,7 +298,7 @@ namespace ET.Analyzer
              {
                  return;
              }
-             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
              {
                  return;
              }
@@ -326,7 +326,7 @@ namespace ET.Analyzer
              {
                  return;
              }
-             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+             if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
              {
                  return;
              }

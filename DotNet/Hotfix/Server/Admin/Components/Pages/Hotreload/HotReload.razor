@@ -1,0 +1,222 @@
+@page "/hotreload"
+@inject HotReloadService HotReloadService
+@inject AgentActorService AgentService
+@inject AuthService AuthService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<PageTitle>热更新 - 游戏管理后台</PageTitle>
+
+<MudText Typo="Typo.h5" Class="mb-4">热更新管理</MudText>
+
+<MudGrid>
+    @* 热更操作面板 *@
+    <MudItem xs="12" md="6">
+        <MudCard Elevation="2">
+            <MudCardHeader>
+                <CardHeaderContent><MudText Typo="Typo.h6">热更新操作</MudText></CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudStack Spacing="3">
+                    <MudSelect @bind-Value="_selectedTarget" Label="热更目标" Variant="Variant.Outlined">
+                        <MudSelectItem T="string" Value="@("全部服务器")">全部服务器</MudSelectItem>
+                        <MudSelectItem T="string" Value="@("Gate 服务器")">Gate 服务器</MudSelectItem>
+                        <MudSelectItem T="string" Value="@("Map 服务器")">Map 服务器</MudSelectItem>
+                        <MudSelectItem T="string" Value="@("Login 服务器")">Login 服务器</MudSelectItem>
+                        @foreach (var agent in _agents)
+                        {
+                            <MudSelectItem T="string" Value="@($"Machine-{agent.MachineId}")">机器 @agent.MachineId (Agent-@agent.ProcessId)</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudSelect @bind-Value="_selectedType" Label="热更类型" Variant="Variant.Outlined">
+                        <MudSelectItem T="string" Value="@("代码热更")">代码热更 (Hotfix DLL)</MudSelectItem>
+                        <MudSelectItem T="string" Value="@("配置热更")">配置热更 (Config)</MudSelectItem>
+                        <MudSelectItem T="string" Value="@("全量热更")">全量热更 (Code + Config)</MudSelectItem>
+                    </MudSelect>
+
+                    <MudTextField @bind-Value="_description" Label="更新说明" Variant="Variant.Outlined" Lines="2"
+                                  Placeholder="简要描述本次热更内容..." />
+
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true"
+                               StartIcon="@Icons.Material.Filled.CloudUpload" Size="Size.Large"
+                               OnClick="ExecuteHotReload" Disabled="_isExecuting">
+                        @if (_isExecuting)
+                        {
+                            <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                            <span>执行中...</span>
+                        }
+                        else
+                        {
+                            <span>执行热更新</span>
+                        }
+                    </MudButton>
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    @* 当前状态 *@
+    <MudItem xs="12" md="6">
+        <MudCard Elevation="2">
+            <MudCardHeader>
+                <CardHeaderContent><MudText Typo="Typo.h6">最近执行结果</MudText></CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (_lastRecord != null)
+                {
+                    <MudSimpleTable Dense="true" Hover="true">
+                        <tbody>
+                            <tr><td><strong>目标</strong></td><td>@_lastRecord.Target</td></tr>
+                            <tr><td><strong>类型</strong></td><td>@_lastRecord.Type</td></tr>
+                            <tr><td><strong>时间</strong></td><td>@_lastRecord.StartTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</td></tr>
+                            <tr><td><strong>操作人</strong></td><td>@_lastRecord.Operator</td></tr>
+                            <tr><td><strong>耗时</strong></td><td>@_lastRecord.Duration</td></tr>
+                            <tr>
+                                <td><strong>结果</strong></td>
+                                <td>
+                                    <MudChip T="string" Size="Size.Small" Color="@(_lastRecord.Success ? Color.Success : Color.Error)">
+                                        @(_lastRecord.Success ? "成功" : "失败")
+                                    </MudChip>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </MudSimpleTable>
+                }
+                else
+                {
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">暂无执行记录</MudText>
+                }
+            </MudCardContent>
+        </MudCard>
+
+        @if (_lastResult != null)
+        {
+            <MudAlert Severity="@(_lastResult.Success ? Severity.Success : Severity.Error)" Class="mt-3"
+                      Icon="@(_lastResult.Success ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Error)">
+                @(_lastResult.Success ? "热更新执行成功" : "热更新执行失败")
+            </MudAlert>
+        }
+    </MudItem>
+
+    @* 执行日志 *@
+    @if (_executionLogs.Any())
+    {
+        <MudItem xs="12">
+            <MudCard Elevation="2">
+                <MudCardHeader>
+                    <CardHeaderContent><MudText Typo="Typo.h6">执行日志</MudText></CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.Clear" OnClick="@(() => _executionLogs.Clear())" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    <div class="log-container pa-3" style="background: #0d1117; border-radius: 4px;">
+                        @foreach (var log in _executionLogs)
+                        {
+                            <div style="color: #81c784;">@log</div>
+                        }
+                    </div>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+
+    @* 热更历史 *@
+    <MudItem xs="12">
+        <MudCard Elevation="2">
+            <MudCardHeader>
+                <CardHeaderContent><MudText Typo="Typo.h6">热更历史</MudText></CardHeaderContent>
+                <CardHeaderActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshHistory" />
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudTable Items="_history" Dense="true" Hover="true" Elevation="0">
+                    <HeaderContent>
+                        <MudTh>时间</MudTh>
+                        <MudTh>目标</MudTh>
+                        <MudTh>类型</MudTh>
+                        <MudTh>说明</MudTh>
+                        <MudTh>操作人</MudTh>
+                        <MudTh>结果</MudTh>
+                        <MudTh>耗时</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>@context.StartTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</MudTd>
+                        <MudTd>@context.Target</MudTd>
+                        <MudTd><MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@context.Type</MudChip></MudTd>
+                        <MudTd>@context.Description</MudTd>
+                        <MudTd>@context.Operator</MudTd>
+                        <MudTd>
+                            <MudChip T="string" Size="Size.Small" Color="@(context.Success ? Color.Success : Color.Error)" Class="status-chip">
+                                @(context.Success ? "成功" : "失败")
+                            </MudChip>
+                        </MudTd>
+                        <MudTd>@context.Duration</MudTd>
+                    </RowTemplate>
+                    <NoRecordsContent>
+                        <MudText>暂无热更历史记录</MudText>
+                    </NoRecordsContent>
+                </MudTable>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private string _selectedTarget = "全部服务器";
+    private string _selectedType = "代码热更";
+    private string _description = "";
+    private bool _isExecuting;
+    private HotReloadService.HotReloadResult _lastResult;
+    private HotReloadService.HotReloadRecord _lastRecord;
+    private List<string> _executionLogs = new();
+    private List<HotReloadService.HotReloadRecord> _history = new();
+    private List<AgentInfo> _agents = new();
+
+    private record AgentInfo(int ProcessId, int MachineId);
+
+    private string CurrentUser => AuthService.CurrentUser.Username;
+
+    protected override void OnInitialized()
+    {
+        _agents = ET.Tables.Instance.DTStartSceneConfig.Agents
+            .Select(a => new AgentInfo(a.Process, a.StartProcessConfig.MachineId))
+            .ToList();
+        RefreshHistory();
+    }
+
+    private void RefreshHistory()
+    {
+        _history = HotReloadService.GetHistory();
+        _lastRecord = _history.FirstOrDefault();
+    }
+
+    private async Task ExecuteHotReload()
+    {
+        var confirm = await DialogService.ShowMessageBox("确认热更新",
+            $"即将对 [{_selectedTarget}] 执行 [{_selectedType}]，确定继续吗？",
+            "确定执行", "取消");
+        if (confirm != true) return;
+
+        _isExecuting = true;
+        _executionLogs.Clear();
+        _lastResult = null;
+        StateHasChanged();
+
+        _lastResult = await HotReloadService.ExecuteHotReloadAsync(
+            _selectedTarget, _selectedType,
+            string.IsNullOrWhiteSpace(_description) ? "无说明" : _description,
+            CurrentUser);
+
+        _executionLogs = _lastResult.Logs;
+        _isExecuting = false;
+
+        Snackbar.Add(
+            _lastResult.Success ? "热更新执行成功" : "热更新执行失败",
+            _lastResult.Success ? Severity.Success : Severity.Error);
+
+        RefreshHistory();
+    }
+}

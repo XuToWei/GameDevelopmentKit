@@ -30,7 +30,13 @@ namespace ET
                         Console.Write($"{modeContex?.Mode ?? ""}> ");
                         return Console.In.ReadLine();
                     }, self.CancellationTokenSource.Token);
-                    
+
+                    if (line == null)
+                    {
+                        Log.Warning("Console input was closed; stopping the console reader.");
+                        return;
+                    }
+
                     line = line.Trim();
 
                     switch (line)

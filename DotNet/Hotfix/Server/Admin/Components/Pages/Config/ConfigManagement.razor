@@ -1,0 +1,322 @@
+@page "/config"
+@inject ConfigService ConfigService
+@inject AuthService AuthService
+@inject ProcessManagerService ProcessManager
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<PageTitle>配置管理 - 游戏管理后台</PageTitle>
+
+<MudText Typo="Typo.h5" Class="mb-4">配置管理</MudText>
+
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-4">
+    @* 游戏配置 *@
+    <MudTabPanel Text="游戏配置" Icon="@Icons.Material.Filled.Tune">
+        <MudStack Row="true" Justify="Justify.FlexEnd" Class="mb-2">
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small"
+                       StartIcon="@Icons.Material.Filled.Add" OnClick="OpenAddConfigDialog">添加配置</MudButton>
+        </MudStack>
+        <MudTable Items="_configs" Dense="true" Hover="true" Elevation="0">
+            <HeaderContent>
+                <MudTh>配置项</MudTh>
+                <MudTh>当前值</MudTh>
+                <MudTh>类型</MudTh>
+                <MudTh>描述</MudTh>
+                <MudTh>最后修改</MudTh>
+                <MudTh>操作</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd><strong>@context.Key</strong></MudTd>
+                <MudTd>
+                    @if (context.Key == _editingKey)
+                    {
+                        <MudTextField @bind-Value="_editingValue" Variant="Variant.Outlined"
+                                      Margin="Margin.Dense" Style="width:200px;" />
+                    }
+                    else
+                    {
+                        @context.Value
+                    }
+                </MudTd>
+                <MudTd><MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@context.Type</MudChip></MudTd>
+                <MudTd>@context.Description</MudTd>
+                <MudTd>@context.ModifiedAt.ToLocalTime().ToString("MM-dd HH:mm")</MudTd>
+                <MudTd>
+                    @if (context.Key == _editingKey)
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Success" Size="Size.Small"
+                                       OnClick="@(() => SaveConfig(context))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Default" Size="Size.Small"
+                                       OnClick="CancelEdit" />
+                    }
+                    else
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small"
+                                       OnClick="@(() => StartEdit(context))" />
+                    }
+                </MudTd>
+            </RowTemplate>
+            <NoRecordsContent>
+                <MudText>暂无配置项，点击"添加配置"创建</MudText>
+            </NoRecordsContent>
+        </MudTable>
+    </MudTabPanel>
+
+    @* 公告管理 *@
+    <MudTabPanel Text="公告管理" Icon="@Icons.Material.Filled.Campaign">
+        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-4">
+            <MudText Typo="Typo.h6">公告列表</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
+                       OnClick="OpenAnnouncementDialog">发布公告</MudButton>
+        </MudStack>
+
+        <MudTable Items="_announcements" Dense="true" Hover="true" Elevation="0">
+            <HeaderContent>
+                <MudTh>标题</MudTh>
+                <MudTh>内容</MudTh>
+                <MudTh>类型</MudTh>
+                <MudTh>状态</MudTh>
+                <MudTh>发布时间</MudTh>
+                <MudTh>操作</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd><strong>@context.Title</strong></MudTd>
+                <MudTd Style="max-width:300px;">
+                    <MudText Typo="Typo.body2" Style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                        @context.Content
+                    </MudText>
+                </MudTd>
+                <MudTd>
+                    <MudChip T="string" Size="Size.Small" Color="@(context.Type == "紧急" ? Color.Error : context.Type == "维护" ? Color.Warning : Color.Info)">
+                        @context.Type
+                    </MudChip>
+                </MudTd>
+                <MudTd>
+                    @if (context.IsActive)
+                    {
+                        <MudChip T="string" Color="Color.Success" Size="Size.Small">显示中</MudChip>
+                    }
+                    else
+                    {
+                        <MudChip T="string" Color="Color.Default" Size="Size.Small">已关闭</MudChip>
+                    }
+                </MudTd>
+                <MudTd>@context.PublishedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</MudTd>
+                <MudTd>
+                    @if (context.IsActive)
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.VisibilityOff" Color="Color.Warning" Size="Size.Small"
+                                       OnClick="@(() => ToggleAnnouncement(context, false))" />
+                    }
+                    else
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Success" Size="Size.Small"
+                                       OnClick="@(() => ToggleAnnouncement(context, true))" />
+                    }
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small"
+                                   OnClick="@(() => DeleteAnnouncement(context))" />
+                </MudTd>
+            </RowTemplate>
+            <NoRecordsContent>
+                <MudText>暂无公告</MudText>
+            </NoRecordsContent>
+        </MudTable>
+    </MudTabPanel>
+
+    @* 维护设置 *@
+    <MudTabPanel Text="维护设置" Icon="@Icons.Material.Filled.Engineering">
+        <MudGrid Spacing="4">
+            <MudItem xs="12" md="6">
+                <MudCard Elevation="0">
+                    <MudCardContent>
+                        <MudStack Spacing="3">
+                            <MudSwitch @bind-Value="_maintenanceEnabled" Label="开启维护模式" Color="Color.Warning" T="bool" />
+                            <MudTextField @bind-Value="_maintenanceMessage" Label="维护公告" Variant="Variant.Outlined"
+                                          Lines="3" Disabled="!_maintenanceEnabled" />
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                                       OnClick="SaveMaintenance">保存维护设置</MudButton>
+                        </MudStack>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudAlert Severity="@(_maintenanceEnabled ? Severity.Warning : Severity.Info)" Class="mb-3">
+                    @if (_maintenanceEnabled)
+                    {
+                        <span>维护模式已开启，新玩家将无法登录</span>
+                    }
+                    else
+                    {
+                        <span>维护模式未开启，服务器正常运行</span>
+                    }
+                </MudAlert>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+</MudTabs>
+
+@* 公告对话框 *@
+<MudDialog @bind-Visible="_announcementDialogVisible" Options="new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true }">
+    <TitleContent><MudText Typo="Typo.h6">发布公告</MudText></TitleContent>
+    <DialogContent>
+        <MudStack Spacing="3">
+            <MudTextField @bind-Value="_newTitle" Label="标题" Variant="Variant.Outlined" Required="true" />
+            <MudTextField @bind-Value="_newContent" Label="内容" Variant="Variant.Outlined" Lines="4" Required="true" />
+            <MudSelect @bind-Value="_newType" Label="类型" Variant="Variant.Outlined">
+                <MudSelectItem T="string" Value="@("普通")">普通</MudSelectItem>
+                <MudSelectItem T="string" Value="@("维护")">维护</MudSelectItem>
+                <MudSelectItem T="string" Value="@("紧急")">紧急</MudSelectItem>
+            </MudSelect>
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => _announcementDialogVisible = false)">取消</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="PublishAnnouncement">发布</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@* 添加配置对话框 *@
+<MudDialog @bind-Visible="_addConfigDialogVisible" Options="new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true }">
+    <TitleContent><MudText Typo="Typo.h6">添加配置</MudText></TitleContent>
+    <DialogContent>
+        <MudStack Spacing="3">
+            <MudTextField @bind-Value="_newConfigKey" Label="配置键" Variant="Variant.Outlined" Required="true" />
+            <MudTextField @bind-Value="_newConfigValue" Label="值" Variant="Variant.Outlined" Required="true" />
+            <MudSelect @bind-Value="_newConfigType" Label="类型" Variant="Variant.Outlined">
+                <MudSelectItem T="string" Value="@("string")">string</MudSelectItem>
+                <MudSelectItem T="string" Value="@("int")">int</MudSelectItem>
+                <MudSelectItem T="string" Value="@("float")">float</MudSelectItem>
+                <MudSelectItem T="string" Value="@("bool")">bool</MudSelectItem>
+            </MudSelect>
+            <MudTextField @bind-Value="_newConfigDesc" Label="描述" Variant="Variant.Outlined" />
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => _addConfigDialogVisible = false)">取消</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddConfig">添加</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private string _editingKey = "";
+    private string _editingValue = "";
+    private bool _maintenanceEnabled;
+    private string _maintenanceMessage = "";
+    private bool _announcementDialogVisible;
+    private string _newTitle = "";
+    private string _newContent = "";
+    private string _newType = "普通";
+    private bool _addConfigDialogVisible;
+    private string _newConfigKey = "";
+    private string _newConfigValue = "";
+    private string _newConfigType = "string";
+    private string _newConfigDesc = "";
+
+    private List<ConfigService.ConfigEntry> _configs = new();
+    private List<ConfigService.Announcement> _announcements = new();
+
+    private string CurrentUser => AuthService.CurrentUser.Username;
+
+    protected override void OnInitialized()
+    {
+        RefreshData();
+        _maintenanceEnabled = ProcessManager.MaintenanceMode;
+        _maintenanceMessage = ConfigService.MaintenanceMessage;
+    }
+
+    private void RefreshData()
+    {
+        _configs = ConfigService.GetAllConfigs();
+        _announcements = ConfigService.GetAllAnnouncements();
+    }
+
+    private void StartEdit(ConfigService.ConfigEntry config)
+    {
+        _editingKey = config.Key;
+        _editingValue = config.Value;
+    }
+
+    private void CancelEdit() => _editingKey = null;
+
+    private void SaveConfig(ConfigService.ConfigEntry config)
+    {
+        ConfigService.SetConfig(config.Key, _editingValue, config.Type, config.Description, CurrentUser);
+        _editingKey = null;
+        Snackbar.Add($"配置 {config.Key} 已更新", Severity.Success);
+        RefreshData();
+    }
+
+    private void SaveMaintenance()
+    {
+        ProcessManager.SetMaintenanceMode(_maintenanceEnabled);
+        ConfigService.MaintenanceMessage = _maintenanceMessage;
+        Snackbar.Add("维护设置已保存", Severity.Success);
+    }
+
+    private void OpenAnnouncementDialog()
+    {
+        _newTitle = "";
+        _newContent = "";
+        _newType = "普通";
+        _announcementDialogVisible = true;
+    }
+
+    private void PublishAnnouncement()
+    {
+        if (string.IsNullOrWhiteSpace(_newTitle) || string.IsNullOrWhiteSpace(_newContent))
+        {
+            Snackbar.Add("请填写标题和内容", Severity.Warning);
+            return;
+        }
+        ConfigService.CreateAnnouncement(new ConfigService.Announcement
+        {
+            Title = _newTitle,
+            Content = _newContent,
+            Type = _newType,
+            IsActive = true,
+            PublishedBy = CurrentUser,
+        });
+        _announcementDialogVisible = false;
+        Snackbar.Add("公告已发布", Severity.Success);
+        RefreshData();
+    }
+
+    private void ToggleAnnouncement(ConfigService.Announcement item, bool active)
+    {
+        item.IsActive = active;
+        ConfigService.UpdateAnnouncement(item);
+        Snackbar.Add(active ? "公告已重新发布" : "公告已关闭", Severity.Info);
+        RefreshData();
+    }
+
+    private async Task DeleteAnnouncement(ConfigService.Announcement item)
+    {
+        var confirm = await DialogService.ShowMessageBox("删除公告", $"确定要删除公告「{item.Title}」吗？", "确定", "取消");
+        if (confirm != true) return;
+        ConfigService.DeleteAnnouncement(item.Id);
+        Snackbar.Add("公告已删除", Severity.Info);
+        RefreshData();
+    }
+
+    private void OpenAddConfigDialog()
+    {
+        _newConfigKey = "";
+        _newConfigValue = "";
+        _newConfigType = "string";
+        _newConfigDesc = "";
+        _addConfigDialogVisible = true;
+    }
+
+    private void AddConfig()
+    {
+        if (string.IsNullOrWhiteSpace(_newConfigKey))
+        {
+            Snackbar.Add("请填写配置键", Severity.Warning);
+            return;
+        }
+        ConfigService.SetConfig(_newConfigKey, _newConfigValue, _newConfigType, _newConfigDesc, CurrentUser);
+        _addConfigDialogVisible = false;
+        Snackbar.Add($"配置 {_newConfigKey} 已添加", Severity.Success);
+        RefreshData();
+    }
+}
