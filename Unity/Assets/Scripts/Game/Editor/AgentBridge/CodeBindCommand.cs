@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using AgentBridge;
 using CodeBind;
 using Newtonsoft.Json.Linq;
@@ -27,10 +28,10 @@ namespace Game.Editor
         public bool CanDisable => true;
         public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
 
-        // AgentBridge's task-like return type requires an async method builder, while ET0501
+        // AgentBridge's Task<object> contract requires an async method builder, while ET0501
         // normally forbids non-UniTask async methods in project code.
 #pragma warning disable ET0501, CS1998
-        public async CommandTask<object> ExecuteAsync(JObject @params)
+        public async Task<object> ExecuteAsync(JObject @params)
         {
             string action = GetString(@params, "action", "all").ToLowerInvariant();
             switch (action)

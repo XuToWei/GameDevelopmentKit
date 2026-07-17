@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.UI;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace UnityEditor.UI
@@ -22,21 +17,27 @@ namespace UnityEditor.UI
         }
         public override void OnInspectorGUI()
         {
-            var graphic = (target as Mask).GetComponent<Graphic>();
-            if (graphic && !graphic.IsActive())
+            var mask = target as UXMask;
+            if (mask == null)
+                return;
+            var graphic = mask.GetComponent<Graphic>();
+            if (graphic != null && !graphic.IsActive())
                 EditorGUILayout.HelpBox("Masking disabled due to Graphic component being disabled.", MessageType.Warning);
             serializedObject.Update();
             EditorGUILayout.PropertyField(m_ShowMaskGraphic);
             var trans = graphic.transform;
             bool hasChildMask = false;
-            for (int i = 0;i<trans.childCount;i++){
+            for (int i = 0; i < trans.childCount; i++)
+            {
                 var child = trans.GetChild(i);
-                if (child.GetComponentInChildren<UXMask>()){
+                if (child.GetComponentInChildren<UXMask>())
+                {
                     hasChildMask = true;
                     break;
                 }
             }
-            if (hasChildMask){
+            if (hasChildMask)
+            {
                 EditorGUILayout.HelpBox("Child's IsReverse driven by Child UXMask.", MessageType.Warning);
             }
             EditorGUILayout.PropertyField(m_IsReverseMask);
