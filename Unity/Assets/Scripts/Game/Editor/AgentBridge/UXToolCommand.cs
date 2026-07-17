@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Threading.Tasks;
 using AgentBridge;
 using Newtonsoft.Json.Linq;
 using ThunderFireUITool;
@@ -22,7 +23,10 @@ namespace Game.Editor
         public bool CanDisable => true;
         public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
 
-        public object Execute(JObject @params)
+        // AgentBridge's Task<object> contract requires an async method builder, while ET0501
+        // normally forbids non-UniTask async methods in project code.
+#pragma warning disable ET0501, CS1998
+        public async Task<object> ExecuteAsync(JObject @params)
         {
             string action = GetString(@params, "action", string.Empty).ToLowerInvariant();
             switch (action)
@@ -34,6 +38,7 @@ namespace Game.Editor
                         $"Unknown action: {action}. Supported: add_background");
             }
         }
+#pragma warning restore ET0501, CS1998
 
         public JObject ParamsSchema { get; } = JObject.Parse(@"{
   ""type"": ""object"",

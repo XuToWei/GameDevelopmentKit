@@ -1,0 +1,39 @@
+<div class="nav-shell">
+    <div class="nav-section-label">工作台</div>
+    <MudNavMenu Class="modern-nav">
+        <MudNavLink Href="/" Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.SpaceDashboard">运行态势</MudNavLink>
+
+        <div class="nav-section-label nav-section-spaced">实时运营</div>
+        <MudNavGroup Title="服务器集群" Icon="@Icons.Material.Filled.Dns" Expanded="true">
+            <MudNavLink Href="/servers" Match="NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Storage">服务器列表</MudNavLink>
+            <MudNavLink Href="/servers/agents" Match="NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.CloudQueue">Agent 监控</MudNavLink>
+            <MudNavLink Href="/servers/fibers" Match="NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.AccountTree">Fiber 监控</MudNavLink>
+            <MudNavLink Href="/servers/scenes" Match="NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Hub">Scene 监控</MudNavLink>
+        </MudNavGroup>
+
+        <MudNavLink Href="/players" Match="NavLinkMatch.Prefix"
+                    Icon="@Icons.Material.Filled.Groups">玩家管理</MudNavLink>
+
+        <div class="nav-section-label nav-section-spaced">交付与维护</div>
+        <MudNavGroup Title="版本中心" Icon="@Icons.Material.Filled.RocketLaunch" Expanded="false">
+            <MudNavLink Href="/versions" Match="NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Inventory2">版本列表</MudNavLink>
+            <MudNavLink Href="/versions/history" Match="NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.History">激活历史</MudNavLink>
+        </MudNavGroup>
+
+        <MudNavLink Href="/config" Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.Tune">配置管理</MudNavLink>
+
+        <MudNavLink Href="/hotreload" Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.Bolt">热更新</MudNavLink>
+
+        <MudNavLink Href="/logs" Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.Terminal">实时日志</MudNavLink>
+    </MudNavMenu>
+</div>

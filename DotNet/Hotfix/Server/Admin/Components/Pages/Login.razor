@@ -1,0 +1,149 @@
+@page "/login"
+@layout AuthLayout
+@inject NavigationManager Navigation
+@inject AuthService AuthService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JS
+
+<PageTitle>登录 - 游戏管理后台</PageTitle>
+
+<div class="login-background">
+    <div class="login-grid-pattern"></div>
+    <div class="login-glow login-glow-one"></div>
+    <div class="login-glow login-glow-two"></div>
+
+    <div class="login-container">
+        <section class="login-story">
+            <div class="login-brand">
+                <div class="login-brand-mark"><MudIcon Icon="@Icons.Material.Filled.SportsEsports" /></div>
+                <div>
+                    <div class="login-brand-name">GDK Console</div>
+                    <div class="login-brand-caption">GameDevelopmentKit</div>
+                </div>
+            </div>
+
+            <div class="story-copy">
+                <div class="story-kicker"><span></span> GAME OPERATIONS</div>
+                <h1>让每一次部署<br />都清晰可控</h1>
+                <p>在一个工作台中掌握服务器运行、玩家状态、版本交付与热更新全链路。</p>
+            </div>
+
+            <div class="story-features">
+                <div class="story-feature">
+                    <MudIcon Icon="@Icons.Material.Filled.MonitorHeart" />
+                    <span>实时进程监控</span>
+                </div>
+                <div class="story-feature">
+                    <MudIcon Icon="@Icons.Material.Filled.Bolt" />
+                    <span>安全热更新</span>
+                </div>
+                <div class="story-feature">
+                    <MudIcon Icon="@Icons.Material.Filled.VerifiedUser" />
+                    <span>权限隔离</span>
+                </div>
+            </div>
+        </section>
+
+        <MudPaper Class="login-panel" Elevation="0">
+            <div class="login-mobile-brand">
+                <div class="login-brand-mark"><MudIcon Icon="@Icons.Material.Filled.SportsEsports" /></div>
+                <span>GDK Console</span>
+            </div>
+            <div class="login-panel-header">
+                <div class="login-eyebrow">ADMIN PORTAL</div>
+                <MudText Typo="Typo.h4">欢迎回来</MudText>
+                <MudText Typo="Typo.body1">使用管理员账户进入运维控制台</MudText>
+            </div>
+
+            <div class="login-fields">
+                <MudTextField @bind-Value="_username" Label="用户名" Placeholder="请输入管理员账号"
+                              Variant="Variant.Outlined" Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.PersonOutline" Disabled="_loading"
+                              Class="login-field" />
+                <MudTextField @bind-Value="_password" Label="密码" Placeholder="请输入登录密码"
+                              Variant="Variant.Outlined" InputType="InputType.Password"
+                              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Lock"
+                              OnKeyDown="OnPasswordKeyDown" Disabled="_loading" Class="login-field" />
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                    <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Dense="true" Class="login-error">
+                        @_errorMessage
+                    </MudAlert>
+            }
+            </div>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
+                       FullWidth="true" OnClick="HandleLogin" Disabled="_loading"
+                       Class="login-submit" EndIcon="@Icons.Material.Filled.ArrowForward">
+                @if (_loading)
+                {
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                }
+                进入控制台
+            </MudButton>
+
+            <div class="login-security-note">
+                <MudIcon Icon="@Icons.Material.Filled.Shield" Size="Size.Small" />
+                <span>登录会话独立加密，操作记录可追踪</span>
+            </div>
+        </MudPaper>
+    </div>
+</div>
+
+@code {
+    private string _username = "";
+    private string _password = "";
+    private string _errorMessage = "";
+    private bool _loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var identity = authState.User.Identity;
+        if (identity != null && identity.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    private async Task OnPasswordKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            await HandleLogin();
+        }
+    }
+
+    private async Task HandleLogin()
+    {
+        if (_loading) return;
+
+        if (string.IsNullOrWhiteSpace(_username) || string.IsNullOrEmpty(_password))
+        {
+            _errorMessage = "请输入用户名和密码";
+            return;
+        }
+
+        _loading = true;
+        _errorMessage = string.Empty;
+        StateHasChanged();
+
+        try
+        {
+            var response = await JS.InvokeAsync<LoginResponse>(
+                "gdkAdminAuth.login", _username, _password);
+            if (response.Success)
+            {
+                Navigation.NavigateTo("/", forceLoad: true);
+            }
+            else
+            {
+                _errorMessage = response.ErrorMessage;
+            }
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+}

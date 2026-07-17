@@ -10,19 +10,11 @@ namespace ET.Analyzer
         public static bool EnableAnalyzer = true;
 
         /// <summary>
-        /// EnableClass特性忽略的目录名
+        /// 忽略所有分析器的目录名
         /// </summary>
-        public static HashSet<string> EnableClassIgnorePathNames = new HashSet<string>()
+        public static HashSet<string> IgnorePathNames = new HashSet<string>()
         {
-            "Model/Generate", "Model/Client/Generate"
-        };
-
-        /// <summary>
-        /// Custom忽略的目录名
-        /// </summary>
-        public static HashSet<string> CustomIgnorePathNames = new HashSet<string>()
-        {
-            
+            "Model/Generate", "Model/Client/Generate", "Hotfix/Server/Admin", "Hotfix/Server/Agent"
         };
     }
 }

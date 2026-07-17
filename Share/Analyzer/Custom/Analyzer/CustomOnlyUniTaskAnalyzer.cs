@@ -29,7 +29,7 @@ namespace ET.Analyzer.Custom
             {
                 return;
             }
-            if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.CustomIgnorePathNames))
+            if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
             {
                 return;
             }
