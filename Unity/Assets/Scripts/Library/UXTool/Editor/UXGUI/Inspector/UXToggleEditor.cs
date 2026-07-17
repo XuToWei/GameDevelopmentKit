@@ -1,26 +1,27 @@
-using UnityEditor;
-using UnityEditor.UI;
 using UnityEngine.UI;
 
-[CustomEditor(typeof(UXToggle))]
-[CanEditMultipleObjects]
-public sealed class UXToggleEditor : ToggleEditor
+namespace UnityEditor.UI
 {
-    private SerializedProperty m_ToggleAnimatorProperty;
-
-    protected override void OnEnable()
+    [CustomEditor(typeof(UXToggle))]
+    [CanEditMultipleObjects]
+    public sealed class UXToggleEditor : ToggleEditor
     {
-        base.OnEnable();
-        m_ToggleAnimatorProperty = serializedObject.FindProperty("m_ToggleAnimator");
-    }
+        private SerializedProperty m_ToggleAnimatorProperty;
 
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            m_ToggleAnimatorProperty = serializedObject.FindProperty("m_ToggleAnimator");
+        }
 
-        serializedObject.Update();
-        EditorGUILayout.Space();
-        EditorGUILayout.PropertyField(m_ToggleAnimatorProperty);
-        serializedObject.ApplyModifiedProperties();
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            serializedObject.Update();
+            EditorGUILayout.Space();
+            EditorGUILayout.PropertyField(m_ToggleAnimatorProperty);
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 }

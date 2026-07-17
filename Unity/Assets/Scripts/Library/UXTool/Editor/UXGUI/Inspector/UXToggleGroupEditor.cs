@@ -1,73 +1,75 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CustomEditor(typeof(UXToggleGroup))]
-[CanEditMultipleObjects]
-public sealed class UXToggleGroupEditor : Editor
+namespace UnityEditor.UI
 {
-    private const string UndoName = "Assign Child Toggles To UXToggleGroup";
-
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(UXToggleGroup))]
+    [CanEditMultipleObjects]
+    public sealed class UXToggleGroupEditor : Editor
     {
-        base.OnInspectorGUI();
+        private const string UndoName = "Assign Child Toggles To UXToggleGroup";
 
-        EditorGUILayout.Space();
-        if (GUILayout.Button("Assign All Child Toggles"))
+        public override void OnInspectorGUI()
         {
-            Undo.IncrementCurrentGroup();
-            int undoGroup = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName(UndoName);
+            base.OnInspectorGUI();
 
-            foreach (Object currentTarget in targets)
+            EditorGUILayout.Space();
+            if (GUILayout.Button("Assign All Child Toggles"))
             {
-                AssignChildToggles((UXToggleGroup)currentTarget);
-            }
+                Undo.IncrementCurrentGroup();
+                int undoGroup = Undo.GetCurrentGroup();
+                Undo.SetCurrentGroupName(UndoName);
 
-            Undo.CollapseUndoOperations(undoGroup);
-        }
-    }
+                foreach (Object currentTarget in targets)
+                {
+                    AssignChildToggles((UXToggleGroup)currentTarget);
+                }
 
-    internal static int AssignChildToggles(UXToggleGroup group)
-    {
-        List<Toggle> changedToggles = new List<Toggle>();
-        group.GetComponentsInChildren(true, changedToggles);
-        for (int i = changedToggles.Count - 1; i >= 0; i--)
-        {
-            if (changedToggles[i].group == group)
-            {
-                changedToggles.RemoveAt(i);
+                Undo.CollapseUndoOperations(undoGroup);
             }
         }
 
-        if (changedToggles.Count == 0)
+        internal static int AssignChildToggles(UXToggleGroup group)
         {
-            return 0;
-        }
-
-        HashSet<Toggle> affectedToggles = new HashSet<Toggle>(changedToggles);
-        foreach (Toggle activeToggle in group.ActiveToggles())
-        {
-            affectedToggles.Add(activeToggle);
-        }
-
-        foreach (Toggle toggle in affectedToggles)
-        {
-            Undo.RegisterCompleteObjectUndo(toggle, UndoName);
-            if (toggle.graphic != null)
+            List<Toggle> changedToggles = new List<Toggle>();
+            group.GetComponentsInChildren(true, changedToggles);
+            for (int i = changedToggles.Count - 1; i >= 0; i--)
             {
-                Undo.RegisterCompleteObjectUndo(toggle.graphic.canvasRenderer, UndoName);
+                if (changedToggles[i].group == group)
+                {
+                    changedToggles.RemoveAt(i);
+                }
             }
-        }
 
-        foreach (Toggle toggle in changedToggles)
-        {
-            toggle.group = group;
-            PrefabUtility.RecordPrefabInstancePropertyModifications(toggle);
-            EditorUtility.SetDirty(toggle);
-        }
+            if (changedToggles.Count == 0)
+            {
+                return 0;
+            }
 
-        return changedToggles.Count;
+            HashSet<Toggle> affectedToggles = new HashSet<Toggle>(changedToggles);
+            foreach (Toggle activeToggle in group.ActiveToggles())
+            {
+                affectedToggles.Add(activeToggle);
+            }
+
+            foreach (Toggle toggle in affectedToggles)
+            {
+                Undo.RegisterCompleteObjectUndo(toggle, UndoName);
+                if (toggle.graphic != null)
+                {
+                    Undo.RegisterCompleteObjectUndo(toggle.graphic.canvasRenderer, UndoName);
+                }
+            }
+
+            foreach (Toggle toggle in changedToggles)
+            {
+                toggle.group = group;
+                PrefabUtility.RecordPrefabInstancePropertyModifications(toggle);
+                EditorUtility.SetDirty(toggle);
+            }
+
+            return changedToggles.Count;
+        }
     }
 }
