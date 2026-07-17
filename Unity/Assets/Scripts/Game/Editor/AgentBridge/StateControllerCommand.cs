@@ -31,8 +31,7 @@ namespace Game.Editor
 
         // AgentBridge's Task<object> contract requires an async method builder, while ET0501
         // normally forbids non-UniTask async methods in project code.
-#pragma warning disable ET0501, CS1998
-        public async Task<object> ExecuteAsync(JObject @params)
+        public Task<object> ExecuteAsync(JObject @params)
         {
             string action = GetString(@params, "action", "list").ToLowerInvariant();
             if (!s_Actions.Contains(action))
@@ -51,11 +50,11 @@ namespace Game.Editor
             {
                 if (action == "add_state_node")
                 {
-                    return AddStateNode(@params, root, targetLabel, isPrefabContents, assetPath);
+                    return Task.FromResult<object>(AddStateNode(@params, root, targetLabel, isPrefabContents, assetPath));
                 }
                 if (action == "list_nodes")
                 {
-                    return ListNodes(@params, root, targetLabel);
+                    return Task.FromResult<object>(ListNodes(@params, root, targetLabel));
                 }
 
                 StateControllerMono[] controllers = root.GetComponentsInChildren<StateControllerMono>(true);
@@ -67,13 +66,13 @@ namespace Game.Editor
                 switch (action)
                 {
                     case "list":
-                        return List(root, targetLabel, controllers);
+                        return Task.FromResult<object>(List(root, targetLabel, controllers));
                     case "set_state":
-                        return SetState(@params, root, targetLabel, controllers, isPrefabContents, assetPath);
+                        return Task.FromResult<object>(SetState(@params, root, targetLabel, controllers, isPrefabContents, assetPath));
                     case "add_data":
-                        return AddData(@params, root, targetLabel, controllers, isPrefabContents, assetPath);
+                        return Task.FromResult<object>(AddData(@params, root, targetLabel, controllers, isPrefabContents, assetPath));
                     case "add_state":
-                        return AddState(@params, root, targetLabel, controllers, isPrefabContents, assetPath);
+                        return Task.FromResult<object>(AddState(@params, root, targetLabel, controllers, isPrefabContents, assetPath));
                     default:
                         throw new CommandException(ErrorCode, $"Unhandled action: {action}");
                 }
@@ -86,7 +85,6 @@ namespace Game.Editor
                 }
             }
         }
-#pragma warning restore ET0501, CS1998
 
         public JObject ParamsSchema { get; } = JObject.Parse(@"{
   ""type"": ""object"",
