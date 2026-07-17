@@ -1,0 +1,169 @@
+@page "/servers/agents"
+@inject AgentActorService AgentService
+@inject ServerMonitorNotifier Notifier
+@inject ProcessManagerService ProcessManager
+@inject ISnackbar Snackbar
+@implements IDisposable
+
+<PageTitle>Agent 监控 - 游戏管理后台</PageTitle>
+
+<MudText Typo="Typo.h5" Class="mb-4">Agent 监控</MudText>
+
+@* 统计概览 *@
+<MudGrid Class="mb-4">
+    <MudItem xs="6" sm="3">
+        <MudCard Elevation="2">
+            <MudCardContent>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">Agent 总数</MudText>
+                <MudText Typo="Typo.h5">@_agents.Count</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudCard Elevation="2">
+            <MudCardContent>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">在线</MudText>
+                <MudText Typo="Typo.h5" Color="Color.Success">@_agents.Count(a => a.Online)</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudCard Elevation="2">
+            <MudCardContent>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">离线</MudText>
+                <MudText Typo="Typo.h5" Color="Color.Error">@_agents.Count(a => !a.Online)</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudCard Elevation="2">
+            <MudCardContent>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">管理服务器数</MudText>
+                <MudText Typo="Typo.h5">@_agents.Sum(a => a.ManagedServerCount)</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<MudTable Items="_agents" Dense="true" Hover="true" Elevation="2" Loading="_loading">
+    <ToolBarContent>
+        <MudText Typo="Typo.body1">Agent 列表</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<AgentInfo, object>(x => x.ProcessId)">进程ID</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<AgentInfo, object>(x => x.MachineId)">机器ID</MudTableSortLabel></MudTh>
+        <MudTh>名称</MudTh>
+        <MudTh>状态</MudTh>
+        <MudTh>内网地址</MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<AgentInfo, object>(x => x.ManagedServerCount)">管理服务器数</MudTableSortLabel></MudTh>
+        <MudTh>管理的服务器</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="进程ID">@context.ProcessId</MudTd>
+        <MudTd DataLabel="机器ID">@context.MachineId</MudTd>
+        <MudTd DataLabel="名称">@context.Name</MudTd>
+        <MudTd DataLabel="状态">
+            <MudChip T="string" Size="Size.Small"
+                     Color="@(context.Online ? Color.Success : Color.Error)"
+                     Icon="@(context.Online ? Icons.Material.Filled.Cloud : Icons.Material.Filled.CloudOff)">
+                @(context.Online ? "在线" : "离线")
+            </MudChip>
+        </MudTd>
+        <MudTd DataLabel="内网地址">@context.InnerAddress</MudTd>
+        <MudTd DataLabel="管理服务器数">@context.ManagedServerCount</MudTd>
+        <MudTd DataLabel="管理的服务器">
+            <MudStack Row="true" Spacing="1">
+                @foreach (var serverId in context.ManagedServerIds.Take(5))
+                {
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@serverId</MudChip>
+                }
+                @if (context.ManagedServerIds.Count > 5)
+                {
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Text">+@(context.ManagedServerIds.Count - 5)</MudChip>
+                }
+            </MudStack>
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudStack AlignItems="AlignItems.Center" Spacing="2" Class="py-4">
+            <MudIcon Icon="@Icons.Material.Filled.Info" Color="Color.Info" />
+            <MudText>暂无 Agent 配置</MudText>
+        </MudStack>
+    </NoRecordsContent>
+</MudTable>
+
+@code {
+    private bool _loading;
+    private List<AgentInfo> _agents = new();
+
+    private record AgentInfo(
+        int ProcessId,
+        int MachineId,
+        string Name,
+        bool Online,
+        string InnerAddress,
+        int ManagedServerCount,
+        List<int> ManagedServerIds);
+
+    protected override void OnInitialized()
+    {
+        Notifier.OnServerStatusChanged += OnNotified;
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        var agents = ET.Tables.Instance.DTStartSceneConfig.Agents;
+        var allServers = ProcessManager.GetAllServers();
+
+        _agents = agents.Select(a =>
+        {
+            var processConfig = a.StartProcessConfig;
+            if (processConfig == null)
+            {
+                throw new InvalidOperationException($"Agent {a.Process} 缺少进程配置");
+            }
+
+            var machineId = processConfig.MachineId;
+
+            // 查找该 Agent 管理的服务器（同一机器上的服务器）
+            var managedServers = allServers
+                .Where(s =>
+                {
+                    var serverProcess = ET.Tables.Instance.DTStartProcessConfig.Get(ET.Options.Instance.StartConfig, s.ProcessId);
+                    if (serverProcess == null)
+                    {
+                        throw new InvalidOperationException($"服务器进程 {s.ProcessId} 缺少进程配置");
+                    }
+
+                    return serverProcess.MachineId == machineId;
+                })
+                .Select(s => s.ProcessId)
+                .ToList();
+
+            return new AgentInfo(
+                ProcessId: a.Process,
+                MachineId: machineId,
+                Name: a.Name,
+                Online: AgentService.IsAgentAlive(a.Process),
+                InnerAddress: $"{processConfig.InnerIP}:{processConfig.Port}",
+                ManagedServerCount: managedServers.Count,
+                ManagedServerIds: managedServers
+            );
+        }).ToList();
+
+        StateHasChanged();
+    }
+
+    private void OnNotified()
+    {
+        InvokeAsync(RefreshData);
+    }
+
+    public void Dispose()
+    {
+        Notifier.OnServerStatusChanged -= OnNotified;
+    }
+}

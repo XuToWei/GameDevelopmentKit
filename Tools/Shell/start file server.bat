@@ -1,3 +1,3 @@
 cd /d ../../Bin
-FileServer.exe
+dotnet FileServer.dll
 pause

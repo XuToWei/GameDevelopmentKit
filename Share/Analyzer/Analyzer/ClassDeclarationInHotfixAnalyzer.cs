@@ -44,6 +44,10 @@ namespace ET.Analyzer
 
         private void AnalyzeSemanticModel(SemanticModelAnalysisContext analysisContext)
         {
+            if (analysisContext.SemanticModel.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
+            {
+                return;
+            }
             foreach (var classDeclarationSyntax in analysisContext.SemanticModel.SyntaxTree.GetRoot().DescendantNodes<ClassDeclarationSyntax>())
             {
                 var classTypeSymbol = analysisContext.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax);

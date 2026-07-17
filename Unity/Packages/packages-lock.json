@@ -313,7 +313,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "86dd0e2c5a8d2a286d92426cb3b2ca6dd75c602d"
+      "hash": "0a78f16c4a4109219ccfdb50f259c9a8ca929535"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
@@ -337,7 +337,7 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.test-framework": "1.1.33"
       },
-      "hash": "015a3164b53e38dc0b66b359d311a1be3537ecdd"
+      "hash": "33f38ed701e9640d79fc7f40829afa5b766316f9"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

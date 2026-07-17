@@ -56,7 +56,7 @@ namespace ET.Analyzer
             }
             
             //针对配置相对目录做屏蔽
-            if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.EnableClassIgnorePathNames))
+            if (context.Node.SyntaxTree.FilePath.IsFilterPath(AnalyzerGlobalSetting.IgnorePathNames))
             {
                 return;
             }
