@@ -69,7 +69,7 @@ namespace UnityGameFramework.Extension
                 s_OpenUIFormEventDataDict.Remove(serialId);
                 ReferencePool.Release(eventData);
             }
-            return NewUniTask<UIForm>(MoveNext, cancellationToken, ReturnAction);
+            return NewUniTask<UIForm>(MoveNext, ReturnAction);
         }
 
         private sealed class OpenUIFormEventData : IReference
