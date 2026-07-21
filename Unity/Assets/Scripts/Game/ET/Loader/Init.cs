@@ -59,7 +59,9 @@ namespace ET
         {
             if (this.m_RunnerComponent != null)
             {
-                DestroyImmediate(this.m_RunnerComponent);
+                Runner runner = this.m_RunnerComponent;
+                this.m_RunnerComponent = null;
+                DestroyImmediate(runner);
             }
         }
 
