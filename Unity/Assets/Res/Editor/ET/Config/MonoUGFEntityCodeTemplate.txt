@@ -3,7 +3,7 @@
 namespace ET.Client
 {
     [MonoCodeBind]
-    public partial class MonoGFEntity#NAME# : AETMonoUGFEntity
+    public partial class MonoUGFEntity#NAME# : AETMonoUGFEntity
     {
         
     }

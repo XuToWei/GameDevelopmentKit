@@ -6,12 +6,12 @@ namespace ET.Editor
 {
     internal sealed class UGFEntityCodeCreator : ICodeCreator
     {
-        private const string GFEntityComponentCodeTemplateFile      = "Assets/Res/Editor/ET/Config/GFEntityCodeTemplate.txt";
-        private const string GFEntitySystemCodeTemplateFile         = "Assets/Res/Editor/ET/Config/GFEntitySystemCodeTemplate.txt";
-        private const string MonoGFEntityCodeTemplateFile           = "Assets/Res/Editor/ET/Config/MonoGFEntityCodeTemplate.txt";
+        private const string UGFEntityComponentCodeTemplateFile      = "Assets/Res/Editor/ET/Config/UGFEntityCodeTemplate.txt";
+        private const string UGFEntitySystemCodeTemplateFile         = "Assets/Res/Editor/ET/Config/UGFEntitySystemCodeTemplate.txt";
+        private const string MonoUGFEntityCodeTemplateFile           = "Assets/Res/Editor/ET/Config/MonoUGFEntityCodeTemplate.txt";
 
-        private const string GFEntityModelViewCodePath              = "Assets/Scripts/Game/ET/Code/ModelView/Client/Game/GFEntity";
-        private const string GFEntityHotfixViewCodePath             = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Game/GFEntity";
+        private const string UGFEntityModelViewCodePath              = "Assets/Scripts/Game/ET/Code/ModelView/Client/Game/UGFEntity";
+        private const string UGFEntityHotfixViewCodePath             = "Assets/Scripts/Game/ET/Code/HotfixView/Client/Game/UGFEntity";
 
         public void OnEnable()
         {
@@ -55,9 +55,9 @@ namespace ET.Editor
                 Debug.Log($"Generate cs:{codeFile}!");
             }
             
-            GenerateCS(GFEntityComponentCodeTemplateFile,     $"{GFEntityModelViewCodePath}/{entityName}/GFEntity{entityName}.cs");
-            GenerateCS(GFEntitySystemCodeTemplateFile,        $"{GFEntityHotfixViewCodePath}/{entityName}/GFEntity{entityName}System.cs");
-            GenerateCS(MonoGFEntityCodeTemplateFile,         $"{GFEntityModelViewCodePath}/{entityName}/MonoGFEntity{entityName}.cs");
+            GenerateCS(UGFEntityComponentCodeTemplateFile,     $"{UGFEntityModelViewCodePath}/{entityName}/UGFEntity{entityName}.cs");
+            GenerateCS(UGFEntitySystemCodeTemplateFile,        $"{UGFEntityHotfixViewCodePath}/{entityName}/UGFEntity{entityName}System.cs");
+            GenerateCS(MonoUGFEntityCodeTemplateFile,          $"{UGFEntityModelViewCodePath}/{entityName}/MonoUGFEntity{entityName}.cs");
             Debug.Log("生成完毕！");
         }
     }
