@@ -32,13 +32,15 @@ namespace Game.Hot
         {
             if (this.m_HotEntryGameObject != null)
             {
-                DestroyImmediate(this.m_HotEntryGameObject);
+                GameObject hotEntryGameObject = this.m_HotEntryGameObject;
                 this.m_HotEntryGameObject = null;
+                DestroyImmediate(hotEntryGameObject);
             }
             if (this.m_HotEntryAsset != null)
             {
-                GameEntry.Resource.UnloadAsset(this.m_HotEntryAsset);
+                GameObject hotEntryAsset = this.m_HotEntryAsset;
                 this.m_HotEntryAsset = null;
+                GameEntry.Resource.UnloadAsset(hotEntryAsset);
             }
         }
 

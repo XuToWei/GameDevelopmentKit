@@ -30,8 +30,7 @@ namespace Game.Editor
 
         // AgentBridge's Task<object> contract requires an async method builder, while ET0501
         // normally forbids non-UniTask async methods in project code.
-#pragma warning disable ET0501, CS1998
-        public async Task<object> ExecuteAsync(JObject @params)
+        public Task<object> ExecuteAsync(JObject @params)
         {
             string action = GetString(@params, "action", "all").ToLowerInvariant();
             switch (action)
@@ -39,15 +38,14 @@ namespace Game.Editor
                 case "all":
                 case "generate_code":
                 case "set_serialization":
-                    return RunBind(@params, action);
+                    return Task.FromResult<object>(RunBind(@params, action));
                 case "rename_node":
-                    return RenameNode(@params);
+                    return Task.FromResult<object>(RenameNode(@params));
                 default:
                     throw new CommandException(ErrorCodes.InvalidParams,
                         $"Unknown action: {action}. Supported: all, generate_code, set_serialization, rename_node");
             }
         }
-#pragma warning restore ET0501, CS1998
 
         public JObject ParamsSchema { get; } = JObject.Parse(@"{
   ""type"": ""object"",
