@@ -72,14 +72,16 @@ namespace ET
             {
                 if (this.m_Cts != null)
                 {
-                    this.m_Cts.Cancel();
-                    ObjectPool.Instance.Recycle(this.m_Cts);
+                    CancellationTokenSourcePlus cts = this.m_Cts;
                     this.m_Cts = null;
+                    cts.Cancel();
+                    ObjectPool.Instance.Recycle(cts);
                 }
                 if (this.Available)
                 {
-                    GameEntry.UI.CloseUIForm(this.m_UIForm);
+                    UIForm uiForm = this.m_UIForm;
                     this.m_UIForm = null;
+                    GameEntry.UI.CloseUIForm(uiForm);
                 }
             }
             base.Dispose();
@@ -87,6 +89,10 @@ namespace ET
 
         public async UniTask OpenUIFormAsync(int uiFormTypeId)
         {
+            if(this.m_UIForm != null)
+            {
+                throw new Exception($"UGFUIForm OpenUIFormAsync failed! uiFormTypeId:'{uiFormTypeId}', this entity is already opened!");
+            }
             if(this.m_Cts == null)
             {
                 this.m_Cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
