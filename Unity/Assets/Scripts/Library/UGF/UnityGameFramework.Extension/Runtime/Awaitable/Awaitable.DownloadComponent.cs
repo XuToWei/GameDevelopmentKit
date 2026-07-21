@@ -74,7 +74,7 @@ namespace UnityGameFramework.Extension
             {
                 ReferencePool.Release(eventData);
             }
-            return NewUniTask<DownloadResult>(MoveNext, cancellationToken, ReturnAction);
+            return NewUniTask<DownloadResult>(MoveNext, ReturnAction);
         }
         
         private sealed class DownloadEventData : IReference

@@ -48,29 +48,63 @@ namespace ET.Analyzer.Custom
             {
                 return;
             }
-            
+
             var returnType = methodSymbol.ReturnType;
             string namespaceName = "";
             if (returnType.ContainingNamespace != null)
             {
                 namespaceName = returnType.ContainingNamespace.ToString();
             }
-            if (methodSymbol.IsAsync)
+
+            bool violatesRule = methodSymbol.IsAsync
+                    ? !(namespaceName == "Cysharp.Threading.Tasks" && returnType.Name.StartsWith("UniTask"))
+                    : namespaceName == "System.Threading.Tasks" && returnType.Name.StartsWith("Task");
+            if (!violatesRule)
             {
-                if (namespaceName != "Cysharp.Threading.Tasks" || !returnType.Name.StartsWith("UniTask"))
+                return;
+            }
+
+            // A method cannot change the return type imposed by an interface or a base
+            // virtual method. In that case the inherited contract takes precedence over
+            // the project's UniTask convention.
+            if (methodSymbol.OverriddenMethod != null &&
+                SymbolEqualityComparer.Default.Equals(returnType, methodSymbol.OverriddenMethod.ReturnType))
+            {
+                return;
+            }
+
+            foreach (IMethodSymbol interfaceMethod in methodSymbol.ExplicitInterfaceImplementations)
+            {
+                if (SymbolEqualityComparer.Default.Equals(returnType, interfaceMethod.ReturnType))
                 {
-                    Diagnostic diagnostic = Diagnostic.Create(CustomOnlyUniTaskAnalyzerRule.Rule, context.Node.GetLocation());
-                    context.ReportDiagnostic(diagnostic);
+                    return;
                 }
             }
-            else
+
+            INamedTypeSymbol? containingType = methodSymbol.ContainingType;
+            if (containingType != null)
             {
-                if (namespaceName == "System.Threading.Tasks" && returnType.Name.StartsWith("Task"))
+                foreach (INamedTypeSymbol interfaceType in containingType.AllInterfaces)
                 {
-                    Diagnostic diagnostic = Diagnostic.Create(CustomOnlyUniTaskAnalyzerRule.Rule, context.Node.GetLocation());
-                    context.ReportDiagnostic(diagnostic);
+                    foreach (ISymbol interfaceMember in interfaceType.GetMembers(methodSymbol.Name))
+                    {
+                        if (interfaceMember is not IMethodSymbol interfaceMethod)
+                        {
+                            continue;
+                        }
+
+                        ISymbol? implementation = containingType.FindImplementationForInterfaceMember(interfaceMethod);
+                        if (SymbolEqualityComparer.Default.Equals(implementation, methodSymbol) &&
+                            SymbolEqualityComparer.Default.Equals(returnType, interfaceMethod.ReturnType))
+                        {
+                            return;
+                        }
+                    }
                 }
             }
+
+            Diagnostic diagnostic = Diagnostic.Create(CustomOnlyUniTaskAnalyzerRule.Rule, context.Node.GetLocation());
+            context.ReportDiagnostic(diagnostic);
         }
     }
 }

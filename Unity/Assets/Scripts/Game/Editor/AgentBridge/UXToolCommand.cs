@@ -25,20 +25,18 @@ namespace Game.Editor
 
         // AgentBridge's Task<object> contract requires an async method builder, while ET0501
         // normally forbids non-UniTask async methods in project code.
-#pragma warning disable ET0501, CS1998
-        public async Task<object> ExecuteAsync(JObject @params)
+        public Task<object> ExecuteAsync(JObject @params)
         {
             string action = GetString(@params, "action", string.Empty).ToLowerInvariant();
             switch (action)
             {
                 case "add_background":
-                    return AddBackground(@params);
+                    return Task.FromResult<object>(AddBackground(@params));
                 default:
                     throw new CommandException(ErrorCodes.InvalidParams,
                         $"Unknown action: {action}. Supported: add_background");
             }
         }
-#pragma warning restore ET0501, CS1998
 
         public JObject ParamsSchema { get; } = JObject.Parse(@"{
   ""type"": ""object"",

@@ -71,14 +71,16 @@ namespace ET
             {
                 if (this.m_Cts != null)
                 {
-                    this.m_Cts.Cancel();
-                    ObjectPool.Instance.Recycle(this.m_Cts);
+                    CancellationTokenSourcePlus cts = this.m_Cts;
                     this.m_Cts = null;
+                    cts.Cancel();
+                    ObjectPool.Instance.Recycle(cts);
                 }
                 if (this.Available)
                 {
-                    GameEntry.Entity.HideEntity(this.m_UGFEntity);
+                    UnityGameFramework.Runtime.Entity ugfEntity = this.m_UGFEntity;
                     this.m_UGFEntity = null;
+                    GameEntry.Entity.HideEntity(ugfEntity);
                 }
             }
             base.Dispose();
@@ -86,6 +88,10 @@ namespace ET
 
         public async UniTask ShowEntityAsync(int entityTypeId)
         {
+            if (this.m_UGFEntity != null)
+            {
+                throw new Exception($"UGFEntity ShowEntityAsync failed! entityTypeId:'{entityTypeId}', this entity is already shown.");
+            }
             if (this.m_Cts == null)
             {
                 this.m_Cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();
@@ -100,6 +106,10 @@ namespace ET
 
         public async UniTask ShowUIEntityAsync(int entityTypeId)
         {
+            if (this.m_UGFEntity != null)
+            {
+                throw new Exception($"UGFEntity ShowUIEntityAsync failed! entityTypeId:'{entityTypeId}', this entity is already shown.");
+            }
             if (this.m_Cts == null)
             {
                 this.m_Cts = ObjectPool.Instance.Fetch<CancellationTokenSourcePlus>();

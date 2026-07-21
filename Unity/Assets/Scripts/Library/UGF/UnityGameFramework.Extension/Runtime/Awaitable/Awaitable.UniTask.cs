@@ -1,16 +1,15 @@
 using System;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 
 namespace UnityGameFramework.Extension
 {
     public static partial class Awaitable
     {
-        public delegate bool MoveNextFunc<T>(ref UniTaskCompletionSourceCore<T> core);
-        
-        public static UniTask<T> NewUniTask<T>(MoveNextFunc<T> moveNext, CancellationToken cancellationToken = default, Action returnAction = null)
+        private delegate bool MoveNextFunc<T>(ref UniTaskCompletionSourceCore<T> core);
+
+        private static UniTask<T> NewUniTask<T>(MoveNextFunc<T> moveNext, Action returnAction)
         {
-            return new UniTask<T>(UniTaskConfiguredSource<T>.Create(moveNext, PlayerLoopTiming.LastUpdate, cancellationToken, returnAction, out short token), token);
+            return new UniTask<T>(UniTaskConfiguredSource<T>.Create(moveNext, PlayerLoopTiming.LastUpdate, returnAction, out short token), token);
         }
 
         private sealed class UniTaskConfiguredSource<T> : IUniTaskSource<T>, IPlayerLoopItem, ITaskPoolNode<UniTaskConfiguredSource<T>>
@@ -26,7 +25,6 @@ namespace UnityGameFramework.Extension
 
             MoveNextFunc<T> moveNext;
             Action returnAction;
-            CancellationToken cancellationToken;
 
             UniTaskCompletionSourceCore<T> core;
 
@@ -35,13 +33,8 @@ namespace UnityGameFramework.Extension
 
             }
 
-            public static IUniTaskSource<T> Create(MoveNextFunc<T> moveNext, PlayerLoopTiming timing, CancellationToken cancellationToken, Action returnAction, out short token)
+            public static IUniTaskSource<T> Create(MoveNextFunc<T> moveNext, PlayerLoopTiming timing, Action returnAction, out short token)
             {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return AutoResetUniTaskCompletionSource<T>.CreateFromCanceled(cancellationToken, out token);
-                }
-
                 if (!pool.TryPop(out var result))
                 {
                     result = new UniTaskConfiguredSource<T>();
@@ -49,7 +42,6 @@ namespace UnityGameFramework.Extension
 
                 result.moveNext = moveNext;
                 result.returnAction = returnAction;
-                result.cancellationToken = cancellationToken;
 
                 TaskTracker.TrackActiveTask(result, 3);
 
@@ -93,12 +85,6 @@ namespace UnityGameFramework.Extension
 
             public bool MoveNext()
             {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    core.TrySetCanceled(cancellationToken);
-                    return false;
-                }
-
                 if (moveNext.Invoke(ref core))
                 {
                     return true;
@@ -114,7 +100,6 @@ namespace UnityGameFramework.Extension
                 moveNext = null;
                 returnAction?.Invoke();
                 returnAction = null;
-                cancellationToken = CancellationToken.None;
                 return pool.TryPush(this);
             }
         }
