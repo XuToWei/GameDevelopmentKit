@@ -8,6 +8,7 @@ using StateController;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using StateControllerComponent = StateController.StateController;
 
 namespace Game.Editor
 {
@@ -24,7 +25,7 @@ namespace Game.Editor
         };
 
         public string Command => "statecontroller";
-        public string Description => "StateController 编辑工具：列出控制器数据/状态、列出 BaseState 节点、切换状态、新增 data/state、给节点添加 BaseState 组件。action=list/list_nodes/set_state/add_data/add_state/add_state_node，默认 list；目标支持 assetPath(prefab)/path(scene)/instanceId/当前选择。写操作会自动保存 Prefab 或标记 Scene dirty。";
+        public string Description => "StateController 编辑工具：列出控制器状态组/状态、列出 StateBinding 节点、切换状态、新增 group/state、给节点添加 StateBinding 组件。action=list/list_nodes/set_state/add_data/add_state/add_state_node，默认 list；dataName 保留为兼容参数，含义为 groupName；目标支持 assetPath(prefab)/path(scene)/instanceId/当前选择。写操作会自动保存 Prefab 或标记 Scene dirty。";
         public string Group => "Game";
         public bool CanDisable => true;
         public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
@@ -57,10 +58,10 @@ namespace Game.Editor
                     return Task.FromResult<object>(ListNodes(@params, root, targetLabel));
                 }
 
-                StateControllerMono[] controllers = root.GetComponentsInChildren<StateControllerMono>(true);
+                StateControllerComponent[] controllers = root.GetComponentsInChildren<StateControllerComponent>(true);
                 if (controllers.Length == 0)
                 {
-                    throw new CommandException(ErrorCode, $"No StateControllerMono found under '{targetLabel}'.");
+                    throw new CommandException(ErrorCode, $"No StateController found under '{targetLabel}'.");
                 }
 
                 switch (action)
@@ -118,12 +119,12 @@ namespace Game.Editor
     ""controllerPath"": {
       ""type"": ""string"",
       ""minLength"": 1,
-      ""description"": ""当目标下有多个 StateControllerMono 时用于消歧；可用 list 返回的含根节点路径、不含根节点的相对路径或唯一节点名。""
+      ""description"": ""当目标下有多个 StateController 时用于消歧；可用 list 返回的含根节点路径、不含根节点的相对路径或唯一节点名。""
     },
     ""dataName"": {
       ""type"": ""string"",
       ""minLength"": 1,
-      ""description"": ""set_state/add_data/add_state/add_state_node 使用的数据名；list_nodes 可用作过滤条件。""
+      ""description"": ""兼容参数名，含义为 groupName；set_state/add_data/add_state/add_state_node 使用；list_nodes 可用作过滤条件。""
     },
     ""stateName"": {
       ""type"": ""string"",
@@ -143,24 +144,24 @@ namespace Game.Editor
     ""stateType"": {
       ""type"": ""string"",
       ""minLength"": 1,
-      ""description"": ""add_state_node 必填。BaseState 子类名或完整类型名，例如 StateGameObjectForActive。""
+      ""description"": ""add_state_node 必填。StateBinding 子类名或完整类型名，例如 GameObjectActiveBinding。""
     }
   }
 }");
 
-        private static object List(GameObject root, string targetLabel, StateControllerMono[] controllers)
+        private static object List(GameObject root, string targetLabel, StateControllerComponent[] controllers)
         {
             var controllerInfos = new List<object>();
-            foreach (StateControllerMono controller in controllers)
+            foreach (StateControllerComponent controller in controllers)
             {
                 var datas = new List<object>();
-                foreach (StateControllerData data in controller.EditorDatas)
+                foreach (StateGroup data in controller.EditorGroups)
                 {
                     datas.Add(new
                     {
                         name = data.Name,
-                        selectedName = controller.GetSelectedName(data.Name),
-                        selectedIndex = controller.GetSelectedIndex(data.Name),
+                        selectedName = controller.GetCurrentStateName(data.Name),
+                        selectedIndex = controller.GetCurrentStateIndex(data.Name),
                         states = controller.GetStateNames(data.Name) ?? Array.Empty<string>()
                     });
                 }
@@ -186,7 +187,7 @@ namespace Game.Editor
             string nodeFilter = GetString(@params, "nodePath", null);
 
             var nodes = new List<object>();
-            foreach (BaseState state in root.GetComponentsInChildren<BaseState>(true))
+            foreach (StateBinding state in root.GetComponentsInChildren<StateBinding>(true))
             {
                 if (state == null)
                 {
@@ -201,35 +202,35 @@ namespace Game.Editor
                 }
 
                 var so = new SerializedObject(state);
-                StateControllerMono controller = state.GetComponentInParent<StateControllerMono>(true);
+                StateControllerComponent controller = state.GetComponentInParent<StateControllerComponent>(true);
 
                 string mode;
                 string booleanLogic = null;
                 var bindings = new List<BindingInfo>();
-                SerializedProperty dn = so.FindProperty("m_DataName");
+                SerializedProperty dn = so.FindProperty("m_GroupName");
                 if (dn != null)
                 {
                     mode = "selectable";
-                    bindings.Add(BuildBinding(dn.stringValue, so.FindProperty("m_StateValues")));
+                    bindings.Add(BuildBinding(dn.stringValue, so.FindProperty("m_ValueMappings")));
                 }
                 else
                 {
                     mode = "boolean";
-                    SerializedProperty logic = so.FindProperty("m_BooleanLogicType");
+                    SerializedProperty logic = so.FindProperty("m_BooleanMode");
                     if (logic != null && logic.propertyType == SerializedPropertyType.Enum)
                     {
                         booleanLogic = SafeEnumName(logic);
                     }
 
-                    SerializedProperty dn1 = so.FindProperty("m_DataName1");
+                    SerializedProperty dn1 = so.FindProperty("m_GroupName1");
                     if (dn1 != null)
                     {
-                        bindings.Add(BuildBinding(dn1.stringValue, so.FindProperty("m_StateValues1")));
+                        bindings.Add(BuildBinding(dn1.stringValue, so.FindProperty("m_ValueMappings1")));
                     }
-                    SerializedProperty dn2 = so.FindProperty("m_DataName2");
+                    SerializedProperty dn2 = so.FindProperty("m_GroupName2");
                     if (dn2 != null && !string.IsNullOrEmpty(dn2.stringValue))
                     {
-                        bindings.Add(BuildBinding(dn2.stringValue, so.FindProperty("m_StateValues2")));
+                        bindings.Add(BuildBinding(dn2.stringValue, so.FindProperty("m_ValueMappings2")));
                     }
                 }
 
@@ -337,7 +338,7 @@ namespace Game.Editor
         }
 
         private static object SetState(JObject @params, GameObject root, string targetLabel,
-            StateControllerMono[] controllers, bool isPrefabContents, string assetPath)
+            StateControllerComponent[] controllers, bool isPrefabContents, string assetPath)
         {
             string dataName = GetString(@params, "dataName", null);
             if (string.IsNullOrWhiteSpace(dataName))
@@ -365,7 +366,7 @@ namespace Game.Editor
             }
 
             string controllerPath = GetString(@params, "controllerPath", null);
-            StateControllerMono controller = ResolveController(root, controllers, controllerPath, dataName, out string resolveError);
+            StateControllerComponent controller = ResolveController(root, controllers, controllerPath, dataName, out string resolveError);
             if (controller == null)
             {
                 throw new CommandException(ErrorCode, resolveError);
@@ -396,7 +397,7 @@ namespace Game.Editor
                 stateName = states[stateIndex];
             }
 
-            controller.SetSelectedName(dataName, stateName);
+            controller.SetCurrentStateName(dataName, stateName);
             Persist(controller, isPrefabContents, root, assetPath);
 
             return new
@@ -411,7 +412,7 @@ namespace Game.Editor
         }
 
         private static object AddData(JObject @params, GameObject root, string targetLabel,
-            StateControllerMono[] controllers, bool isPrefabContents, string assetPath)
+            StateControllerComponent[] controllers, bool isPrefabContents, string assetPath)
         {
             string dataName = GetString(@params, "dataName", null);
             if (string.IsNullOrWhiteSpace(dataName))
@@ -420,7 +421,7 @@ namespace Game.Editor
             }
 
             string controllerPath = GetString(@params, "controllerPath", null);
-            StateControllerMono controller = ResolveController(root, controllers, controllerPath, null, out string resolveError);
+            StateControllerComponent controller = ResolveController(root, controllers, controllerPath, null, out string resolveError);
             if (controller == null)
             {
                 throw new CommandException(ErrorCode, resolveError);
@@ -428,10 +429,10 @@ namespace Game.Editor
 
             var initialStates = SplitCsv(GetString(@params, "states", null));
             var so = new SerializedObject(controller);
-            SerializedProperty datas = so.FindProperty("m_Datas");
+            SerializedProperty datas = so.FindProperty("m_Groups");
             if (datas == null)
             {
-                throw new CommandException(ErrorCode, "StateControllerMono.m_Datas not found (package layout changed?).");
+                throw new CommandException(ErrorCode, "StateController.m_Groups not found (package layout changed?).");
             }
 
             for (int i = 0; i < datas.arraySize; i++)
@@ -472,7 +473,7 @@ namespace Game.Editor
         }
 
         private static object AddState(JObject @params, GameObject root, string targetLabel,
-            StateControllerMono[] controllers, bool isPrefabContents, string assetPath)
+            StateControllerComponent[] controllers, bool isPrefabContents, string assetPath)
         {
             string dataName = GetString(@params, "dataName", null);
             string stateName = GetString(@params, "stateName", null);
@@ -482,14 +483,14 @@ namespace Game.Editor
             }
 
             string controllerPath = GetString(@params, "controllerPath", null);
-            StateControllerMono controller = ResolveController(root, controllers, controllerPath, dataName, out string resolveError);
+            StateControllerComponent controller = ResolveController(root, controllers, controllerPath, dataName, out string resolveError);
             if (controller == null)
             {
                 throw new CommandException(ErrorCode, resolveError);
             }
 
             var so = new SerializedObject(controller);
-            SerializedProperty datas = so.FindProperty("m_Datas");
+            SerializedProperty datas = so.FindProperty("m_Groups");
             SerializedProperty dataEl = null;
             for (int i = 0; i < datas.arraySize; i++)
             {
@@ -556,7 +557,7 @@ namespace Game.Editor
             if (stateType == null)
             {
                 throw new CommandException(ErrorCode,
-                    $"State type '{stateTypeName}' not found (must be a non-abstract BaseState subclass).");
+                    $"Binding type '{stateTypeName}' not found (must be a non-abstract StateBinding subclass).");
             }
 
             Transform node = root.transform;
@@ -570,11 +571,11 @@ namespace Game.Editor
                 }
             }
 
-            StateControllerMono controller = node.GetComponentInParent<StateControllerMono>(true);
+            StateControllerComponent controller = node.GetComponentInParent<StateControllerComponent>(true);
             if (controller == null)
             {
                 throw new CommandException(ErrorCode,
-                    $"Node '{GetRelativePath(root.transform, node)}' has no StateControllerMono ancestor.");
+                    $"Node '{GetRelativePath(root.transform, node)}' has no StateController ancestor.");
             }
 
             string[] states = controller.GetStateNames(dataName);
@@ -596,23 +597,23 @@ namespace Game.Editor
 
             var so = new SerializedObject(comp);
             string boundField;
-            if (so.FindProperty("m_DataName") != null)
+            if (so.FindProperty("m_GroupName") != null)
             {
-                so.FindProperty("m_DataName").stringValue = dataName;
-                AlignStateValues(so.FindProperty("m_StateValues"), states);
-                boundField = "m_DataName";
+                so.FindProperty("m_GroupName").stringValue = dataName;
+                AlignStateValues(so.FindProperty("m_ValueMappings"), states);
+                boundField = "m_GroupName";
             }
-            else if (so.FindProperty("m_DataName1") != null)
+            else if (so.FindProperty("m_GroupName1") != null)
             {
-                so.FindProperty("m_DataName1").stringValue = dataName;
-                AlignStateValues(so.FindProperty("m_StateValues1"), states);
-                boundField = "m_DataName1";
+                so.FindProperty("m_GroupName1").stringValue = dataName;
+                AlignStateValues(so.FindProperty("m_ValueMappings1"), states);
+                boundField = "m_GroupName1";
             }
             else
             {
                 UnityEngine.Object.DestroyImmediate(comp, true);
                 throw new CommandException(ErrorCode,
-                    $"'{stateType.Name}' has no recognized data field (m_DataName / m_DataName1).");
+                    $"'{stateType.Name}' has no recognized group field (m_GroupName / m_GroupName1).");
             }
             so.ApplyModifiedPropertiesWithoutUndo();
 
@@ -694,39 +695,39 @@ namespace Game.Editor
             }
         }
 
-        private static int AlignEffectNodes(StateControllerMono controller, string dataName, string[] states)
+        private static int AlignEffectNodes(StateControllerComponent controller, string dataName, string[] states)
         {
             int count = 0;
-            foreach (BaseState state in controller.GetComponentsInChildren<BaseState>(true))
+            foreach (StateBinding state in controller.GetComponentsInChildren<StateBinding>(true))
             {
-                if (state == null || state.GetComponentInParent<StateControllerMono>(true) != controller)
+                if (state == null || state.GetComponentInParent<StateControllerComponent>(true) != controller)
                 {
                     continue;
                 }
 
                 var so = new SerializedObject(state);
                 bool changed = false;
-                SerializedProperty dn = so.FindProperty("m_DataName");
+                SerializedProperty dn = so.FindProperty("m_GroupName");
                 if (dn != null)
                 {
                     if (dn.stringValue == dataName)
                     {
-                        AlignStateValues(so.FindProperty("m_StateValues"), states);
+                        AlignStateValues(so.FindProperty("m_ValueMappings"), states);
                         changed = true;
                     }
                 }
                 else
                 {
-                    SerializedProperty dn1 = so.FindProperty("m_DataName1");
+                    SerializedProperty dn1 = so.FindProperty("m_GroupName1");
                     if (dn1 != null && dn1.stringValue == dataName)
                     {
-                        AlignStateValues(so.FindProperty("m_StateValues1"), states);
+                        AlignStateValues(so.FindProperty("m_ValueMappings1"), states);
                         changed = true;
                     }
-                    SerializedProperty dn2 = so.FindProperty("m_DataName2");
+                    SerializedProperty dn2 = so.FindProperty("m_GroupName2");
                     if (dn2 != null && dn2.stringValue == dataName)
                     {
-                        AlignStateValues(so.FindProperty("m_StateValues2"), states);
+                        AlignStateValues(so.FindProperty("m_ValueMappings2"), states);
                         changed = true;
                     }
                 }
@@ -742,7 +743,7 @@ namespace Game.Editor
 
         private static Type ResolveStateType(string name)
         {
-            foreach (Type type in TypeCache.GetTypesDerivedFrom<BaseState>())
+            foreach (Type type in TypeCache.GetTypesDerivedFrom<StateBinding>())
             {
                 if (!type.IsAbstract && (type.Name == name || type.FullName == name))
                 {
@@ -810,15 +811,15 @@ namespace Game.Editor
             return true;
         }
 
-        private static StateControllerMono ResolveController(GameObject root, StateControllerMono[] controllers,
+        private static StateControllerComponent ResolveController(GameObject root, StateControllerComponent[] controllers,
             string controllerPath, string dataName, out string error)
         {
             error = null;
 
             if (!string.IsNullOrEmpty(controllerPath))
             {
-                var fullPathMatches = new List<StateControllerMono>();
-                foreach (StateControllerMono controller in controllers)
+                var fullPathMatches = new List<StateControllerComponent>();
+                foreach (StateControllerComponent controller in controllers)
                 {
                     string fullPath = GetRelativePath(root.transform, controller.transform);
                     if (fullPath == controllerPath)
@@ -837,8 +838,8 @@ namespace Game.Editor
                     return null;
                 }
 
-                var relativePathMatches = new List<StateControllerMono>();
-                foreach (StateControllerMono controller in controllers)
+                var relativePathMatches = new List<StateControllerComponent>();
+                foreach (StateControllerComponent controller in controllers)
                 {
                     string relativePath = GetPathBelowRoot(root.transform, controller.transform);
                     if (relativePath == controllerPath)
@@ -856,8 +857,8 @@ namespace Game.Editor
                     return null;
                 }
 
-                var nameMatches = new List<StateControllerMono>();
-                foreach (StateControllerMono controller in controllers)
+                var nameMatches = new List<StateControllerComponent>();
+                foreach (StateControllerComponent controller in controllers)
                 {
                     if (controller.name == controllerPath)
                     {
@@ -884,12 +885,12 @@ namespace Game.Editor
                 {
                     return controllers[0];
                 }
-                error = $"Multiple StateControllerMono under target. Disambiguate with controllerPath. Candidates: [{string.Join(", ", GetControllerPaths(root, controllers))}]";
+                error = $"Multiple StateController components under target. Disambiguate with controllerPath. Candidates: [{string.Join(", ", GetControllerPaths(root, controllers))}]";
                 return null;
             }
 
-            var owning = new List<StateControllerMono>();
-            foreach (StateControllerMono controller in controllers)
+            var owning = new List<StateControllerComponent>();
+            foreach (StateControllerComponent controller in controllers)
             {
                 if (controller.GetStateNames(dataName) != null)
                 {
@@ -911,10 +912,10 @@ namespace Game.Editor
             return null;
         }
 
-        private static List<string> GetControllerPaths(GameObject root, IReadOnlyList<StateControllerMono> controllers)
+        private static List<string> GetControllerPaths(GameObject root, IReadOnlyList<StateControllerComponent> controllers)
         {
             var paths = new List<string>();
-            foreach (StateControllerMono controller in controllers)
+            foreach (StateControllerComponent controller in controllers)
             {
                 paths.Add(GetRelativePath(root.transform, controller.transform));
             }

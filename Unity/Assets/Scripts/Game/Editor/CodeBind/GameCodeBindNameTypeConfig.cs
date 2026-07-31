@@ -4,11 +4,11 @@ using CodeBind.Editor;
 
 namespace Game
 {
-    sealed class GameCodeBindNameTypeConfig : ICodeBindNameTypeConfig
+    sealed class GameBindingTargetTokenConfig : IBindingTargetTokenConfig
     {
         public int Priority => 1;
 
-        public IReadOnlyDictionary<string, Type> BindNameTypeDict { get; } = new Dictionary<string, Type>()
+        public IReadOnlyDictionary<string, Type> TargetTypesByToken { get; } = new Dictionary<string, Type>()
         {
             { "UIWidget", typeof(AUIWidget) },
             // TMP
@@ -30,7 +30,7 @@ namespace Game
             { "UIAdapter", typeof(UIAdapter) },
             { "IgnoreUIAdapter", typeof(IgnoreUIAdapter) },
             { "UIAdapterScaleScreenRate", typeof(UIAdapterScaleScreenRate) },
-            { "StateControllerMono", typeof(StateController.StateControllerMono) }
+            { "StateController", typeof(StateController.StateController) }
         };
     }
 }

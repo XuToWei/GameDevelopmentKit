@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
   <assembly fullname="CodeBind">
-    <type fullname="CodeBind.CSCodeBindMono" preserve="all" />
-    <type fullname="CodeBind.CodeBindExtension" preserve="all" />
-    <type fullname="CodeBind.ICSCodeBind" preserve="all" />
+    <type fullname="CodeBind.PlainClassBindingHost" preserve="all" />
+    <type fullname="CodeBind.PlainClassBindingExtensions" preserve="all" />
+    <type fullname="CodeBind.IPlainClassBinding" preserve="all" />
   </assembly>
   <assembly fullname="CommandLine">
     <type fullname="CommandLine.Error" preserve="all" />

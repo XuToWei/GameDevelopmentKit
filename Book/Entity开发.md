@@ -162,7 +162,7 @@ using CodeBind;
 
 namespace ET.Client
 {
-    [MonoCodeBind]
+    [MonoBehaviourBinding]
     public partial class MonoGFEntityTest : AETMonoUGFEntity
     {
     }

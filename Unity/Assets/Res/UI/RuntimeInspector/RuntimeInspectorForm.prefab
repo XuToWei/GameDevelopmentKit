@@ -128,12 +128,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ef87eb99e5c284aa027ad36ad5e685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DataName: Layout
-  m_StateDatas:
-  - m_AnchorMin: {x: 0, y: 0.6}
-    m_AnchorMax: {x: 1, y: 1}
-  - m_AnchorMin: {x: 0, y: 0}
-    m_AnchorMax: {x: 0.4, y: 1}
+  m_GroupName: Layout
+  m_ValueMappings:
+  - m_StateName: Vertical
+    m_Value:
+      m_AnchorMin: {x: 0, y: 0.6}
+      m_AnchorMax: {x: 1, y: 1}
+  - m_StateName: Horizontal
+    m_Value:
+      m_AnchorMin: {x: 0, y: 0}
+      m_AnchorMax: {x: 0.4, y: 1}
 --- !u!1 &2343472881127083171
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,8 +238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd3fdf0736652d94f9e868f4f8033f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RootStateControllerMono: {fileID: 4131121061834182208}
   m_CloseButton: {fileID: 4736329787434307102}
+  m_RootStateController: {fileID: 4131121061834182208}
 --- !u!1 &4409811557220636433
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,12 +289,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ef87eb99e5c284aa027ad36ad5e685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DataName: Layout
-  m_StateDatas:
-  - m_AnchorMin: {x: 0, y: 0}
-    m_AnchorMax: {x: 1, y: 0.4}
-  - m_AnchorMin: {x: 0.6, y: 0}
-    m_AnchorMax: {x: 1, y: 1}
+  m_GroupName: Layout
+  m_ValueMappings:
+  - m_StateName: Vertical
+    m_Value:
+      m_AnchorMin: {x: 0, y: 0}
+      m_AnchorMax: {x: 1, y: 0.4}
+  - m_StateName: Horizontal
+    m_Value:
+      m_AnchorMin: {x: 0.6, y: 0}
+      m_AnchorMax: {x: 1, y: 1}
 --- !u!1 &4653716436726015422
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +312,7 @@ GameObject:
   - component: {fileID: 3586326942220739337}
   - component: {fileID: 4131121061834182208}
   m_Layer: 5
-  m_Name: Root_StateControllerMono
+  m_Name: Root_StateController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -368,17 +376,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb22ad5ff8744b80ad66edb1d7181c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EditorSelectedDataName: Layout
-  m_ControllerDatas:
+  m_EditorSelectedGroupName: Layout
+  m_Groups:
   - m_Name: Layout
-    m_StateNames:
-    - Vertical
-    - Horizontal
-    m_LinkDatas:
-    - m_TargetDataName: 
-      m_TargetSelectedName: 
-    - m_TargetDataName: 
-      m_TargetSelectedName: 
+    m_States:
+    - m_Name: Vertical
+      m_Links: []
+      m_OnSelectedEvent:
+        rid: -2
+    - m_Name: Horizontal
+      m_Links: []
+      m_OnSelectedEvent:
+        rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &5143928782283369968
 GameObject:
   m_ObjectHideFlags: 0
