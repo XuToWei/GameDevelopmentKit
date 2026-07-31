@@ -34,7 +34,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "5a568c41998fd7ec09ecfc0fcd6405b330362720"
+      "hash": "2f4016c3864f66353c97953a35010959534e9a35"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
@@ -43,7 +43,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "cacb9fde452451eb1577ead430a009427bb787a6"
+      "hash": "1f4427c3d5d249534dba69d8c53acafb5d5fbd7f"
     },
     "com.coffee.ui-particle": {
       "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
@@ -142,7 +142,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.19.0",
+      "version": "1.20.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -234,7 +234,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.searcher": {
-      "version": "4.9.4",
+      "version": "4.9.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -306,21 +306,21 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d4558ccc855c464c2961490352fc189117450703"
+      "hash": "de6877110432a7aaf0417febd02100e46ff590be"
     },
     "me.xw.reactivebinding": {
       "version": "https://github.com/XuToWei/ReactiveBinding.git?path=Unity",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "0a78f16c4a4109219ccfdb50f259c9a8ca929535"
+      "hash": "2d7095fbf85dc16d8854ca1f4c9893180cbbb368"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "7094aa802c5a14f74dcec86280b3485d3824c4fa"
+      "hash": "87c612de2f08921fc3e0199d4f1545bd74226592"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
@@ -337,7 +337,7 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.test-framework": "1.1.33"
       },
-      "hash": "33f38ed701e9640d79fc7f40829afa5b766316f9"
+      "hash": "99933a482fb5d3d96c7af2a7afc9dfb93d419873"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

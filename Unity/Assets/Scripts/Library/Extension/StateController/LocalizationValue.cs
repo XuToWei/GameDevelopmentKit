@@ -6,37 +6,18 @@ using UnityEngine;
 namespace StateController
 {
     [Serializable]
-    public struct AnchorData
-    {
-        [HorizontalGroup]
-        [SerializeField]
-        [LabelText("AnchorMin")]
-        [LabelWidth(70)]
-        private Vector2 m_AnchorMin;
-        
-        [HorizontalGroup]
-        [SerializeField]
-        [LabelText("AnchorMax")]
-        [LabelWidth(70)]
-        private Vector2 m_AnchorMax;
-        
-        public Vector2 AnchorMin => m_AnchorMin;
-        public Vector2 AnchorMax => m_AnchorMax;
-    }
-
-    [Serializable]
-    public struct LocalizationData
+    public struct LocalizationValue
     {
         [HorizontalGroup]
         [SerializeField]
         [LabelText("Enable")]
         private bool m_EnableLocalization;
-        
+
         [HorizontalGroup]
         [SerializeField]
         [LabelText("Key")]
 #if UNITY_EDITOR
-        [ValueDropdown(nameof(LocalizationAllKeys), DropdownWidth = 300)]
+        [ValueDropdown(nameof(EditorGetAllLocalizationKeys), DropdownWidth = 300)]
 #endif
         private string m_LocalizationKey;
 
@@ -44,7 +25,7 @@ namespace StateController
         public string LocalizationKey => m_LocalizationKey;
 
 #if UNITY_EDITOR
-        private List<string> LocalizationAllKeys()
+        private List<string> EditorGetAllLocalizationKeys()
         {
             return ThunderFireUITool.EditorLocalizationTool.AllKeyList;
         }

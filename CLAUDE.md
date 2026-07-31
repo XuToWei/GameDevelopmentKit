@@ -369,8 +369,9 @@ Detailed documentation is in the `Book/` directory (in Chinese):
 
 本工程通过 Unity Agent Bridge 驱动编辑器。执行任何 Unity 查询或修改前，必须先阅读已安装包的 `AGENT.md`，并遵守其中的 fixed-slot single-flight exchange、原子请求写入、先等 `processing.json` 消失再删除响应的 ack、唯一 id、session 首次 `list_commands` 和 `commandsVersion` 刷新规则。
 
-先寻找 `Assets/` 与已存在 `.agentbridge/` 同级的 Unity 工程；Bridge root 直接使用固定的 `request.json`、`processing.json`、`response.json` 槽位，空闲时这些文件可以不存在。找不到 Bridge root 时停止并报告 Unity 没有安装或运行 AgentBridge，不得自行创建目录。实际 command、params schema 和 batch policy 只从运行时 `list_commands` 获取，不得使用硬编码清单。
+先寻找 `Assets/` 与已存在 `.agentbridge/` 同级的 Unity 工程；Bridge root 直接使用固定的 `request.json`、`processing.json`、`response.json` 槽位，空闲时这些文件可以不存在。目录存在只表示桥接配置过，不保证宿主当前已启用。找不到 Bridge root 时停止并报告 Unity 没有安装或运行 AgentBridge，不得自行创建目录。实际 command、params schema 和 batch policy 只从运行时 `list_commands` 获取，不得使用硬编码清单。
 <!-- END UNITY_AGENT_BRIDGE -->
+
 
 
 

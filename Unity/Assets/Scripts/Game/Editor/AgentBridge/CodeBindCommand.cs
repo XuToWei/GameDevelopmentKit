@@ -12,18 +12,18 @@ using UnityEngine;
 namespace Game.Editor
 {
     /// <summary>
-    /// Unity Agent Bridge command for CodeBind: generate bind code, assign serialized references,
+    /// Unity Agent Bridge command for CodeBind: generate binding source, assign serialized references,
     /// and rename bind nodes.
     /// </summary>
     public sealed class CodeBindCommand : ICommandHandler
     {
         private const string ErrorCode = "CODEBIND_ERROR";
 
-        private static Type s_MonoCodeBinderType;
-        private static Type s_CSCodeBinderType;
+        private static Type s_MonoBehaviourBinderType;
+        private static Type s_PlainClassBinderType;
 
         public string Command => "codebind";
-        public string Description => "CodeBind 绑定工具：生成 *.Bind.cs、刷新序列化引用，或把节点改名为 bindName_*。action=all/generate_code/set_serialization/rename_node，默认 all；目标支持 assetPath(prefab)/path(scene)/instanceId/当前选择。Prefab 会自动保存，Scene 目标会标记 dirty；all 生成新代码后可能需要先编译再执行 set_serialization。";
+        public string Description => "CodeBind 绑定工具：生成 *.Bind.cs、刷新序列化引用，或把节点改名为 bindName_*。action=all/generate_code/set_serialization/rename_node，默认 all；目标支持 assetPath(prefab)/path(scene)/instanceId/当前选择。Prefab 会自动保存，Scene 目标会标记 dirty；all 生成新绑定源码后可能需要先编译再执行 set_serialization。";
         public string Group => "Game";
         public bool CanDisable => true;
         public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
@@ -87,7 +87,7 @@ namespace Game.Editor
       ""type"": ""string"",
       ""minLength"": 1,
       ""maxLength"": 1,
-      ""description"": ""绑定分隔符，默认读取 EditorPrefs CodeBind.SeparatorChar，通常为 _。""
+      ""description"": ""绑定分隔符，默认读取 EditorPrefs CodeBind.NameSeparator，通常为 _。""
     }
   }
 }");
@@ -119,7 +119,7 @@ namespace Game.Editor
                 if (targets.Count == 0)
                 {
                     throw new CommandException(ErrorCode,
-                        $"No [MonoCodeBind] component or CSCodeBindMono found under '{targetLabel}'.");
+                        $"No [MonoBehaviourBinding] component or PlainClassBindingHost found under '{targetLabel}'.");
                 }
 
                 if (!isPrefabContents)
@@ -131,7 +131,7 @@ namespace Game.Editor
                 {
                     foreach (BindTarget target in targets)
                     {
-                        InvokeBinder(target, "TryGenerateBindCode");
+                        InvokeBinder(target, "TryGenerateBindingSource");
                         codeGenerated.Add(target.Label);
                     }
                 }
@@ -142,7 +142,7 @@ namespace Game.Editor
                     {
                         try
                         {
-                            InvokeBinder(target, "TrySetSerialization");
+                            InvokeBinder(target, "TrySerializeBindings");
                             serialized.Add(target.Label);
                         }
                         catch (Exception ex) when (action == "all")
@@ -401,30 +401,30 @@ namespace Game.Editor
                     continue;
                 }
 
-                object[] attrs = mono.GetType().GetCustomAttributes(typeof(MonoCodeBindAttribute), false);
+                object[] attrs = mono.GetType().GetCustomAttributes(typeof(MonoBehaviourBindingAttribute), false);
                 if (attrs.Length == 0)
                 {
                     continue;
                 }
 
-                var attr = (MonoCodeBindAttribute)attrs[0];
+                var attr = (MonoBehaviourBindingAttribute)attrs[0];
                 MonoScript script = MonoScript.FromMonoBehaviour(mono);
                 targets.Add(new BindTarget
                 {
-                    BinderType = s_MonoCodeBinderType,
-                    BinderArgs = new object[] { script, mono.transform, attr.SeparatorChar },
+                    BinderType = s_MonoBehaviourBinderType,
+                    BinderArgs = new object[] { script, mono.transform, attr.NameSeparator },
                     Label = mono.GetType().Name
                 });
             }
 
-            CSCodeBindMono[] csBinds = root.GetComponentsInChildren<CSCodeBindMono>(true);
-            foreach (CSCodeBindMono bindMono in csBinds)
+            PlainClassBindingHost[] plainClassHosts = root.GetComponentsInChildren<PlainClassBindingHost>(true);
+            foreach (PlainClassBindingHost host in plainClassHosts)
             {
                 targets.Add(new BindTarget
                 {
-                    BinderType = s_CSCodeBinderType,
-                    BinderArgs = new object[] { bindMono.BindScript, bindMono.transform, bindMono.SeparatorChar },
-                    Label = $"{bindMono.name}(CSCodeBindMono)"
+                    BinderType = s_PlainClassBinderType,
+                    BinderArgs = new object[] { host.BindingClassScript, host.transform, host.NameSeparator },
+                    Label = $"{host.name}(PlainClassBindingHost)"
                 });
             }
 
@@ -452,9 +452,9 @@ namespace Game.Editor
 
         private static bool TryResolveBinderTypes(out string error)
         {
-            s_MonoCodeBinderType ??= FindType("CodeBind.Editor.MonoCodeBinder");
-            s_CSCodeBinderType ??= FindType("CodeBind.Editor.CSCodeBinder");
-            if (s_MonoCodeBinderType == null || s_CSCodeBinderType == null)
+            s_MonoBehaviourBinderType ??= FindType("CodeBind.Editor.MonoBehaviourBinder");
+            s_PlainClassBinderType ??= FindType("CodeBind.Editor.PlainClassBinder");
+            if (s_MonoBehaviourBinderType == null || s_PlainClassBinderType == null)
             {
                 error = "CodeBind.Editor binder types not found. Is the me.xw.codebind package present?";
                 return false;
@@ -496,7 +496,7 @@ namespace Game.Editor
                 return custom[0];
             }
 
-            string saved = EditorPrefs.GetString("CodeBind.SeparatorChar", "_");
+            string saved = EditorPrefs.GetString("CodeBind.NameSeparator", "_");
             return string.IsNullOrEmpty(saved) ? '_' : saved[0];
         }
 

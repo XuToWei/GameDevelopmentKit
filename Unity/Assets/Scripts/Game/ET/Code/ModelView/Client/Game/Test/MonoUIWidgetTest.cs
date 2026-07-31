@@ -2,8 +2,8 @@ using CodeBind;
 
 namespace ET.Client
 {
-    [CodeBindName("WidgetTest")]
-    [MonoCodeBind]
+    [BindingTargetToken("WidgetTest")]
+    [MonoBehaviourBinding]
     public partial class MonoUIWidgetTest : AETMonoUGFUIWidget
     {
         
