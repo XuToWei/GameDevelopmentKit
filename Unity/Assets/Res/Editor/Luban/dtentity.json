@@ -1,114 +1,34 @@
 [
   {
-    "Id": 10000,
-    "CSName": "PlayerShip",
-    "Desc": "玩家战机",
-    "AssetName": "PlayerShip",
-    "EntityGroupName": "Aircraft",
-    "Priority": 90
-  },
-  {
-    "Id": 10001,
-    "CSName": "EnemyShip",
-    "Desc": "敌人战机",
-    "AssetName": "EnemyShip",
+    "Id": 81001,
+    "CSName": "SurvivorPlayer",
+    "Desc": "联机幸存者玩家",
+    "AssetName": "SurvivorOnline/Player",
     "EntityGroupName": "Aircraft",
     "Priority": 80
   },
   {
-    "Id": 20000,
-    "CSName": "PlayerEngine",
-    "Desc": "玩家推进器",
-    "AssetName": "PlayerEngine",
+    "Id": 81002,
+    "CSName": "SurvivorMonster",
+    "Desc": "联机幸存者怪物",
+    "AssetName": "SurvivorOnline/Monster",
     "EntityGroupName": "Aircraft",
-    "Priority": 90
+    "Priority": 70
   },
   {
-    "Id": 20001,
-    "CSName": "EnemyEngine",
-    "Desc": "敌人推进器",
-    "AssetName": "EnemyEngine",
-    "EntityGroupName": "Aircraft",
-    "Priority": 80
-  },
-  {
-    "Id": 30000,
-    "CSName": "DefaultWeapon",
-    "Desc": "默认武器",
-    "AssetName": "DefaultWeapon",
-    "EntityGroupName": "Weapon",
-    "Priority": 30
-  },
-  {
-    "Id": 40000,
-    "CSName": "DefaultArmor",
-    "Desc": "默认装甲",
-    "AssetName": "DefaultArmor",
-    "EntityGroupName": "Armor",
-    "Priority": 30
-  },
-  {
-    "Id": 50000,
-    "CSName": "PlayerBolt",
-    "Desc": "玩家子弹",
-    "AssetName": "PlayerBolt",
+    "Id": 81003,
+    "CSName": "SurvivorProjectile",
+    "Desc": "联机幸存者投射物",
+    "AssetName": "SurvivorOnline/Projectile",
     "EntityGroupName": "Bullet",
     "Priority": 80
   },
   {
-    "Id": 50001,
-    "CSName": "EnemyBolt",
-    "Desc": "敌人子弹",
-    "AssetName": "EnemyBolt",
-    "EntityGroupName": "Bullet",
-    "Priority": 80
-  },
-  {
-    "Id": 60000,
-    "CSName": "Asteroid01",
-    "Desc": "小行星",
-    "AssetName": "Asteroid01",
-    "EntityGroupName": "Asteroid",
-    "Priority": 80
-  },
-  {
-    "Id": 60001,
-    "CSName": "Asteroid02",
-    "Desc": "小行星",
-    "AssetName": "Asteroid02",
-    "EntityGroupName": "Asteroid",
-    "Priority": 80
-  },
-  {
-    "Id": 60002,
-    "CSName": "Asteroid03",
-    "Desc": "小行星",
-    "AssetName": "Asteroid03",
-    "EntityGroupName": "Asteroid",
-    "Priority": 80
-  },
-  {
-    "Id": 70000,
-    "CSName": "PlayerExplosion",
-    "Desc": "玩家死亡特效",
-    "AssetName": "PlayerExplosion",
+    "Id": 81004,
+    "CSName": "SurvivorPickup",
+    "Desc": "联机幸存者经验拾取物",
+    "AssetName": "SurvivorOnline/Pickup",
     "EntityGroupName": "Effect",
-    "Priority": 80
-  },
-  {
-    "Id": 70001,
-    "CSName": "EnemyExplosion",
-    "Desc": "敌人死亡特效",
-    "AssetName": "EnemyExplosion",
-    "EntityGroupName": "Effect",
-    "Priority": 80
-  },
-  {
-    "Id": 70002,
-    "CSName": "AsteroidExplosion",
-    "Desc": "小行星死亡特效",
-    "AssetName": "AsteroidExplosion",
-    "EntityGroupName": "Effect",
-    "Priority": 80
+    "Priority": 60
   }
 ]

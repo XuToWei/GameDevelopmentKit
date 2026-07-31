@@ -10,7 +10,8 @@
         "LubanLib",
         "ZString",
         "MemoryPack",
-        "UniTask.Extension"
+        "UniTask.Extension",
+        "ReactiveBinding"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

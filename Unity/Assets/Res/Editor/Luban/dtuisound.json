@@ -1,14 +1,1 @@
-[
-  {
-    "Id": 10000,
-    "AssetName": "select",
-    "Priority": 0,
-    "Volume": 1
-  },
-  {
-    "Id": 10001,
-    "AssetName": "click",
-    "Priority": 0,
-    "Volume": 1
-  }
-]
+[]

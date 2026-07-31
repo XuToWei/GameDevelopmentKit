@@ -17,6 +17,7 @@ namespace ET
         
         Demo,
         LockStep,
+        Survivor,
 
         Admin,
         Agent,

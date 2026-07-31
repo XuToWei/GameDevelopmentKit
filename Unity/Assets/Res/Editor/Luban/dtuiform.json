@@ -54,39 +54,21 @@
     "PauseCoveredUIForm": false
   },
   {
-    "Id": 1,
-    "CSName": "DialogForm",
-    "Desc": "弹出框",
-    "AssetName": "Hot/DialogForm",
-    "UIGroupName": "Default",
-    "AllowMultiInstance": true,
-    "PauseCoveredUIForm": true
-  },
-  {
-    "Id": 100,
-    "CSName": "MenuForm",
-    "Desc": "主菜单",
-    "AssetName": "Hot/MenuForm",
+    "Id": 9801,
+    "CSName": "SurvivorLobby",
+    "Desc": "联机幸存者加房界面",
+    "AssetName": "SurvivorOnline/Lobby",
     "UIGroupName": "Default",
     "AllowMultiInstance": false,
-    "PauseCoveredUIForm": true
+    "PauseCoveredUIForm": false
   },
   {
-    "Id": 101,
-    "CSName": "SettingForm",
-    "Desc": "设置",
-    "AssetName": "Hot/SettingForm",
-    "UIGroupName": "Default",
+    "Id": 9802,
+    "CSName": "SurvivorHud",
+    "Desc": "联机幸存者局内界面",
+    "AssetName": "SurvivorOnline/Hud",
+    "UIGroupName": "Pop",
     "AllowMultiInstance": false,
-    "PauseCoveredUIForm": true
-  },
-  {
-    "Id": 102,
-    "CSName": "AboutForm",
-    "Desc": "关于",
-    "AssetName": "Hot/AboutForm",
-    "UIGroupName": "Default",
-    "AllowMultiInstance": false,
-    "PauseCoveredUIForm": true
+    "PauseCoveredUIForm": false
   }
 ]

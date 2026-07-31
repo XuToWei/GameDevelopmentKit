@@ -28,7 +28,8 @@
         "LitMotion.Animation",
         "LoopScrollRect.Runtime",
         "Game",
-        "UnityGameFramework.Runtime"
+        "UnityGameFramework.Runtime",
+        "ReactiveBinding"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

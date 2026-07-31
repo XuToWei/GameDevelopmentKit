@@ -30,7 +30,8 @@
         "LitMotion.Animation",
         "LoopScrollRect.Runtime",
         "Game",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "ReactiveBinding"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

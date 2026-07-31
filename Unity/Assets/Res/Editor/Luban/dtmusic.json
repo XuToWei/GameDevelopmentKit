@@ -1,17 +1,1 @@
-[
-  {
-    "Id": 1,
-    "AssetName": "music_menu",
-    "Volume": 0.5
-  },
-  {
-    "Id": 2,
-    "AssetName": "music_background",
-    "Volume": 0.5
-  },
-  {
-    "Id": 3,
-    "AssetName": "music_about",
-    "Volume": 0.5
-  }
-]
+[]

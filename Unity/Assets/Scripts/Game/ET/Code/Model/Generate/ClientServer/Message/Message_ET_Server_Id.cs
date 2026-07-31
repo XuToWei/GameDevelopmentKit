@@ -35,5 +35,13 @@ namespace ET
          public const ushort Room2G_Reconnect = 20029;
          public const ushort RoomManager2Room_Init = 20030;
          public const ushort Room2RoomManager_Init = 20031;
+         public const ushort G2SurvivorRoom_Init = 20032;
+         public const ushort SurvivorRoom2G_Init = 20033;
+         public const ushort G2SurvivorRoom_Join = 20034;
+         public const ushort SurvivorRoom2G_Join = 20035;
+         public const ushort G2SurvivorRoom_Start = 20036;
+         public const ushort SurvivorRoom2G_Start = 20037;
+         public const ushort G2SurvivorRoom_Input = 20038;
+         public const ushort G2SurvivorRoom_RequestFullSnapshot = 20039;
     }
 }

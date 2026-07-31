@@ -1,0 +1,54 @@
+syntax = "proto3";
+package ET;
+
+// ResponseType G2C_SurvivorJoinRoom
+message C2G_SurvivorJoinRoom // ISessionRequest
+{
+    int32 RpcId = 1;
+    string RoomCode = 2;
+}
+
+message G2C_SurvivorJoinRoom // ISessionResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+    string RoomCode = 4;
+    int64 PlayerId = 5;
+    bool IsHost = 6;
+    int64 Sequence = 7;
+    int64 ServerTick = 8;
+    bytes FullSnapshot = 9;
+}
+
+// ResponseType G2C_SurvivorStartGame
+message C2G_SurvivorStartGame // ISessionRequest
+{
+    int32 RpcId = 1;
+}
+
+message G2C_SurvivorStartGame // ISessionResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+}
+
+message C2G_SurvivorInput // ISessionMessage
+{
+    int64 InputSequence = 1;
+    int32 MoveX = 2;
+    int32 MoveY = 3;
+}
+
+message C2G_SurvivorRequestFullSnapshot // ISessionMessage
+{
+}
+
+message SurvivorRoom2C_StateFrame // IMessage
+{
+    int64 Sequence = 1;
+    int64 ServerTick = 2;
+    bool IsFull = 3;
+    bytes Payload = 4;
+}

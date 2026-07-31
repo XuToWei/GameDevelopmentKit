@@ -104,9 +104,17 @@ namespace ET
                         break;
                     case SceneType.Agent:
                         this.Agents.Add(startSceneConfig);
-                        this.AgentByMachineId[startSceneConfig.StartProcessConfig.MachineId] = startSceneConfig;
                         break;
                 }
+            }
+        }
+
+        partial void PostResolveRef()
+        {
+            this.AgentByMachineId.Clear();
+            foreach (DRStartSceneConfig agent in this.Agents)
+            {
+                this.AgentByMachineId[agent.StartProcessConfig.MachineId] = agent;
             }
         }
     }

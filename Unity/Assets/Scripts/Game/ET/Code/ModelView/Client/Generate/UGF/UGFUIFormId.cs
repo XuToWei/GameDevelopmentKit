@@ -40,23 +40,13 @@ namespace ET.Client
         public const int UILSRoom = 903;
 
         /// <summary>
-        /// 弹出框
+        /// 联机幸存者加房界面
         /// </summary>
-        public const int DialogForm = 1;
+        public const int SurvivorLobby = 9801;
 
         /// <summary>
-        /// 主菜单
+        /// 联机幸存者局内界面
         /// </summary>
-        public const int MenuForm = 100;
-
-        /// <summary>
-        /// 设置
-        /// </summary>
-        public const int SettingForm = 101;
-
-        /// <summary>
-        /// 关于
-        /// </summary>
-        public const int AboutForm = 102;
+        public const int SurvivorHud = 9802;
     }
 }

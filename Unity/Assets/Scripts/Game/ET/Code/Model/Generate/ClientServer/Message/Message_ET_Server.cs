@@ -850,4 +850,218 @@ namespace ET
         }
     }
 
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:5)
+    [MemoryPackable]
+    [Message(Message_ET_Server.G2SurvivorRoom_Init)]
+    [ResponseType(nameof(SurvivorRoom2G_Init))]
+    public partial class G2SurvivorRoom_Init: MessageObject, IRequest
+    {
+        public static G2SurvivorRoom_Init Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Init), isFromPool) as G2SurvivorRoom_Init; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public string RoomCode { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.RoomCode = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:11)
+    [MemoryPackable]
+    [Message(Message_ET_Server.SurvivorRoom2G_Init)]
+    public partial class SurvivorRoom2G_Init: MessageObject, IResponse
+    {
+        public static SurvivorRoom2G_Init Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2G_Init), isFromPool) as SurvivorRoom2G_Init; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:19)
+    [MemoryPackable]
+    [Message(Message_ET_Server.G2SurvivorRoom_Join)]
+    [ResponseType(nameof(SurvivorRoom2G_Join))]
+    public partial class G2SurvivorRoom_Join: MessageObject, IRequest
+    {
+        public static G2SurvivorRoom_Join Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Join), isFromPool) as G2SurvivorRoom_Join; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public long PlayerId { get; set; }
+        [MemoryPackOrder(2)]
+        public string DisplayName { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.PlayerId = default;
+            this.DisplayName = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:26)
+    [MemoryPackable]
+    [Message(Message_ET_Server.SurvivorRoom2G_Join)]
+    public partial class SurvivorRoom2G_Join: MessageObject, IResponse
+    {
+        public static SurvivorRoom2G_Join Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2G_Join), isFromPool) as SurvivorRoom2G_Join; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        [MemoryPackOrder(3)]
+        public bool IsHost { get; set; }
+        [MemoryPackOrder(4)]
+        public long Sequence { get; set; }
+        [MemoryPackOrder(5)]
+        public long ServerTick { get; set; }
+        [MemoryPackOrder(6)]
+        public byte[] FullSnapshot { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.IsHost = default;
+            this.Sequence = default;
+            this.ServerTick = default;
+            this.FullSnapshot = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:38)
+    [MemoryPackable]
+    [Message(Message_ET_Server.G2SurvivorRoom_Start)]
+    [ResponseType(nameof(SurvivorRoom2G_Start))]
+    public partial class G2SurvivorRoom_Start: MessageObject, IRequest
+    {
+        public static G2SurvivorRoom_Start Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Start), isFromPool) as G2SurvivorRoom_Start; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public long PlayerId { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.PlayerId = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:44)
+    [MemoryPackable]
+    [Message(Message_ET_Server.SurvivorRoom2G_Start)]
+    public partial class SurvivorRoom2G_Start: MessageObject, IResponse
+    {
+        public static SurvivorRoom2G_Start Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2G_Start), isFromPool) as SurvivorRoom2G_Start; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:51)
+    [MemoryPackable]
+    [Message(Message_ET_Server.G2SurvivorRoom_Input)]
+    public partial class G2SurvivorRoom_Input: MessageObject, IMessage
+    {
+        public static G2SurvivorRoom_Input Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Input), isFromPool) as G2SurvivorRoom_Input; 
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+        [MemoryPackOrder(1)]
+        public long InputSequence { get; set; }
+        [MemoryPackOrder(2)]
+        public int MoveX { get; set; }
+        [MemoryPackOrder(3)]
+        public int MoveY { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.PlayerId = default;
+            this.InputSequence = default;
+            this.MoveX = default;
+            this.MoveY = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:59)
+    [MemoryPackable]
+    [Message(Message_ET_Server.G2SurvivorRoom_RequestFullSnapshot)]
+    public partial class G2SurvivorRoom_RequestFullSnapshot: MessageObject, IMessage
+    {
+        public static G2SurvivorRoom_RequestFullSnapshot Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_RequestFullSnapshot), isFromPool) as G2SurvivorRoom_RequestFullSnapshot; 
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.PlayerId = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
 }

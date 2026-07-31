@@ -52,5 +52,12 @@ namespace ET
          public const ushort M2C_TransferMap = 10046;
          public const ushort C2G_Benchmark = 10047;
          public const ushort G2C_Benchmark = 10048;
+         public const ushort C2G_SurvivorJoinRoom = 10049;
+         public const ushort G2C_SurvivorJoinRoom = 10050;
+         public const ushort C2G_SurvivorStartGame = 10051;
+         public const ushort G2C_SurvivorStartGame = 10052;
+         public const ushort C2G_SurvivorInput = 10053;
+         public const ushort C2G_SurvivorRequestFullSnapshot = 10054;
+         public const ushort SurvivorRoom2C_StateFrame = 10055;
     }
 }

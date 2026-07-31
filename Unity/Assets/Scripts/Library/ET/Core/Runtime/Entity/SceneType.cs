@@ -26,6 +26,8 @@ namespace ET
 		Watcher = 1 << 19,
 		Admin = 1 << 20,
 		Agent = 1 << 21,
+		SurvivorLobby = 1 << 22,
+		SurvivorRoom = 1 << 23,
 
 		// 客户端
 		Demo = 1 << 30,
@@ -34,6 +36,9 @@ namespace ET
 		LockStepView = 1L << 33,
 		DemoView = 1L << 34,
 		NetClient = 1L << 35,
+		SurvivorClient = 1L << 36,
+		SurvivorView = 1L << 37,
+		Survivor = 1L << 38,
 
 		All = long.MaxValue,
 	}

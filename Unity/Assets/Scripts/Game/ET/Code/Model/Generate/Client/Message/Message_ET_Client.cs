@@ -1229,4 +1229,191 @@ namespace ET
         }
     }
 
+    // proto file : ET-Client/SurvivorOnlineOuter.proto (line:5)
+    [MemoryPackable]
+    [Message(Message_ET_Client.C2G_SurvivorJoinRoom)]
+    [ResponseType(nameof(G2C_SurvivorJoinRoom))]
+    public partial class C2G_SurvivorJoinRoom: MessageObject, ISessionRequest
+    {
+        public static C2G_SurvivorJoinRoom Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(C2G_SurvivorJoinRoom), isFromPool) as C2G_SurvivorJoinRoom; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public string RoomCode { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.RoomCode = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-Client/SurvivorOnlineOuter.proto (line:11)
+    [MemoryPackable]
+    [Message(Message_ET_Client.G2C_SurvivorJoinRoom)]
+    public partial class G2C_SurvivorJoinRoom: MessageObject, ISessionResponse
+    {
+        public static G2C_SurvivorJoinRoom Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(G2C_SurvivorJoinRoom), isFromPool) as G2C_SurvivorJoinRoom; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        [MemoryPackOrder(3)]
+        public string RoomCode { get; set; }
+        [MemoryPackOrder(4)]
+        public long PlayerId { get; set; }
+        [MemoryPackOrder(5)]
+        public bool IsHost { get; set; }
+        [MemoryPackOrder(6)]
+        public long Sequence { get; set; }
+        [MemoryPackOrder(7)]
+        public long ServerTick { get; set; }
+        [MemoryPackOrder(8)]
+        public byte[] FullSnapshot { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.RoomCode = default;
+            this.PlayerId = default;
+            this.IsHost = default;
+            this.Sequence = default;
+            this.ServerTick = default;
+            this.FullSnapshot = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-Client/SurvivorOnlineOuter.proto (line:25)
+    [MemoryPackable]
+    [Message(Message_ET_Client.C2G_SurvivorStartGame)]
+    [ResponseType(nameof(G2C_SurvivorStartGame))]
+    public partial class C2G_SurvivorStartGame: MessageObject, ISessionRequest
+    {
+        public static C2G_SurvivorStartGame Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(C2G_SurvivorStartGame), isFromPool) as C2G_SurvivorStartGame; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-Client/SurvivorOnlineOuter.proto (line:30)
+    [MemoryPackable]
+    [Message(Message_ET_Client.G2C_SurvivorStartGame)]
+    public partial class G2C_SurvivorStartGame: MessageObject, ISessionResponse
+    {
+        public static G2C_SurvivorStartGame Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(G2C_SurvivorStartGame), isFromPool) as G2C_SurvivorStartGame; 
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-Client/SurvivorOnlineOuter.proto (line:37)
+    [MemoryPackable]
+    [Message(Message_ET_Client.C2G_SurvivorInput)]
+    public partial class C2G_SurvivorInput: MessageObject, ISessionMessage
+    {
+        public static C2G_SurvivorInput Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(C2G_SurvivorInput), isFromPool) as C2G_SurvivorInput; 
+        }
+
+        [MemoryPackOrder(0)]
+        public long InputSequence { get; set; }
+        [MemoryPackOrder(1)]
+        public int MoveX { get; set; }
+        [MemoryPackOrder(2)]
+        public int MoveY { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.InputSequence = default;
+            this.MoveX = default;
+            this.MoveY = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-Client/SurvivorOnlineOuter.proto (line:44)
+    [MemoryPackable]
+    [Message(Message_ET_Client.C2G_SurvivorRequestFullSnapshot)]
+    public partial class C2G_SurvivorRequestFullSnapshot: MessageObject, ISessionMessage
+    {
+        public static C2G_SurvivorRequestFullSnapshot Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(C2G_SurvivorRequestFullSnapshot), isFromPool) as C2G_SurvivorRequestFullSnapshot; 
+        }
+
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
+    // proto file : ET-Client/SurvivorOnlineOuter.proto (line:48)
+    [MemoryPackable]
+    [Message(Message_ET_Client.SurvivorRoom2C_StateFrame)]
+    public partial class SurvivorRoom2C_StateFrame: MessageObject, IMessage
+    {
+        public static SurvivorRoom2C_StateFrame Create(bool isFromPool = false) 
+        { 
+            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2C_StateFrame), isFromPool) as SurvivorRoom2C_StateFrame; 
+        }
+
+        [MemoryPackOrder(0)]
+        public long Sequence { get; set; }
+        [MemoryPackOrder(1)]
+        public long ServerTick { get; set; }
+        [MemoryPackOrder(2)]
+        public bool IsFull { get; set; }
+        [MemoryPackOrder(3)]
+        public byte[] Payload { get; set; }
+        public override void Dispose() 
+        {
+            if (!this.IsFromPool) { return; }
+            this.Sequence = default;
+            this.ServerTick = default;
+            this.IsFull = default;
+            this.Payload = default;
+            ObjectPool.Instance.Recycle(this); 
+        }
+    }
+
 }

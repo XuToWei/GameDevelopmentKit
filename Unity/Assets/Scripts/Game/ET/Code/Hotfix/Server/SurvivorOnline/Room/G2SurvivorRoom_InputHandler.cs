@@ -1,0 +1,20 @@
+using Cysharp.Threading.Tasks;
+
+namespace ET.Server
+{
+    [MessageHandler(SceneType.SurvivorRoom)]
+    public sealed class G2SurvivorRoom_InputHandler: MessageHandler<Scene, G2SurvivorRoom_Input>
+    {
+        protected override async UniTask Run(Scene root, G2SurvivorRoom_Input message)
+        {
+            root.GetComponent<SurvivorRoom>()
+                    .GetComponent<SurvivorWorldComponent>()
+                    .SetPlayerInput(
+                        message.PlayerId,
+                        message.InputSequence,
+                        message.MoveX,
+                        message.MoveY);
+            await UniTask.CompletedTask;
+        }
+    }
+}

@@ -21,7 +21,7 @@ namespace ET
 
         public void OnAwake()
         {
-            AppType = AppType.Demo;
+            AppType = AppType.Survivor;
         }
     }
 }

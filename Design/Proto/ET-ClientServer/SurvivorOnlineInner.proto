@@ -1,0 +1,62 @@
+syntax = "proto3";
+package ET;
+
+// ResponseType SurvivorRoom2G_Init
+message G2SurvivorRoom_Init // IRequest
+{
+    int32 RpcId = 1;
+    string RoomCode = 2;
+}
+
+message SurvivorRoom2G_Init // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+}
+
+// ResponseType SurvivorRoom2G_Join
+message G2SurvivorRoom_Join // IRequest
+{
+    int32 RpcId = 1;
+    int64 PlayerId = 2;
+    string DisplayName = 3;
+}
+
+message SurvivorRoom2G_Join // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+    bool IsHost = 4;
+    int64 Sequence = 5;
+    int64 ServerTick = 6;
+    bytes FullSnapshot = 7;
+}
+
+// ResponseType SurvivorRoom2G_Start
+message G2SurvivorRoom_Start // IRequest
+{
+    int32 RpcId = 1;
+    int64 PlayerId = 2;
+}
+
+message SurvivorRoom2G_Start // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+}
+
+message G2SurvivorRoom_Input // IMessage
+{
+    int64 PlayerId = 1;
+    int64 InputSequence = 2;
+    int32 MoveX = 3;
+    int32 MoveY = 4;
+}
+
+message G2SurvivorRoom_RequestFullSnapshot // IMessage
+{
+    int64 PlayerId = 1;
+}
