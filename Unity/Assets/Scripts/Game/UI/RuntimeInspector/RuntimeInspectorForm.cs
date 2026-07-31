@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game
 {
-    [MonoCodeBind]
+    [MonoBehaviourBinding]
     public sealed partial class RuntimeInspectorForm : AUIForm
     {
         protected override void OnInit(object userData)
@@ -19,7 +19,7 @@ namespace Game
             if (orientation == ScreenOrientation.LandscapeLeft || orientation == ScreenOrientation.LandscapeRight ||
                 (orientation == ScreenOrientation.AutoRotation && (Input.deviceOrientation == DeviceOrientation.LandscapeLeft || Input.deviceOrientation == DeviceOrientation.LandscapeRight)))
             {
-                RootLayoutStateControllerData.SelectedName = RootLayoutStateName.Horizontal;
+                RootLayoutStateGroup.CurrentStateName = RootLayoutStateName.Horizontal;
             }
         }
     }

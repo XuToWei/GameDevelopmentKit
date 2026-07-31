@@ -7,49 +7,54 @@ namespace CodeBind
     /// <summary>
     /// 游戏工程的 CodeBind 代码生成 Customizer。
     /// </summary>
-    sealed class GameCodeBindCustomizer : ICodeBindCustomizer
+    sealed class GameCodeBindCustomizer : IBindingCodeCustomizer
     {
         public int Priority => 1;
 
-        public string GetFieldName(string name)
+        public string GetSerializedFieldName(string memberName)
         {
-            return $"m_{name}";
+            return $"m_{memberName}";
         }
 
-        public string GetPropertyName(string name)
+        public string GetPublicPropertyName(string memberName)
         {
-            return name;
+            return memberName;
         }
 
-        public string GenerateExtraCode(string nameSpace, string className, List<CodeBindData> bindDatas, SortedDictionary<string, List<CodeBindData>> bindArrayDataDict, string indentation)
+        public string BuildAdditionalSource(string namespaceName, string className,
+            List<BindingDescriptor> singleBindings,
+            SortedDictionary<string, List<BindingDescriptor>> arrayBindingsByMemberName,
+            string indentation)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            foreach (CodeBindData bindData in bindDatas)
+            foreach (BindingDescriptor binding in singleBindings)
             {
-                if (bindData.BindType != typeof(StateController.StateControllerMono))
+                if (binding.TargetType != typeof(StateController.StateController))
                 {
                     continue;
                 }
-                StateController.StateControllerMono controller = bindData.BindTransform.GetComponent<StateController.StateControllerMono>();
+                StateController.StateController controller =
+                    binding.SourceTransform.GetComponent<StateController.StateController>();
                 if (controller == null)
                 {
                     continue;
                 }
-                string controllerPropertyName = GetPropertyName($"{bindData.BindName}{bindData.BindPrefix}");
-                foreach (var data in controller.EditorDatas)
+                string controllerPropertyName =
+                    GetPublicPropertyName($"{binding.VariableName}{binding.TargetToken}");
+                foreach (StateController.StateGroup group in controller.EditorGroups)
                 {
-                    string[] stateNames = controller.GetStateNames(data.Name);
+                    string[] stateNames = controller.GetStateNames(group.Name);
                     if (stateNames == null)
                     {
                         continue;
                     }
-                    string dataBindName = $"{bindData.BindName}{data.Name}";
-                    string dataFieldName = GetFieldName($"{dataBindName}StateControllerData");
-                    string dataPropertyName = GetPropertyName($"{dataBindName}StateControllerData");
-                    string stateNameClassName = $"{dataBindName}StateName";
-                    string stateIndexClassName = $"{dataBindName}StateIndex";
-                    stringBuilder.AppendLine($"{indentation}private StateController.StateControllerData {dataFieldName};");
-                    stringBuilder.AppendLine($"{indentation}public StateController.StateControllerData {dataPropertyName} => this.{dataFieldName} ??= this.{controllerPropertyName}.GetData(\"{data.Name}\");");
+                    string groupBindingName = $"{binding.VariableName}{group.Name}";
+                    string groupFieldName = GetSerializedFieldName($"{groupBindingName}StateGroup");
+                    string groupPropertyName = GetPublicPropertyName($"{groupBindingName}StateGroup");
+                    string stateNameClassName = $"{groupBindingName}StateName";
+                    string stateIndexClassName = $"{groupBindingName}StateIndex";
+                    stringBuilder.AppendLine($"{indentation}private StateController.StateGroup {groupFieldName};");
+                    stringBuilder.AppendLine($"{indentation}public StateController.StateGroup {groupPropertyName} => this.{groupFieldName} ??= this.{controllerPropertyName}.GetGroup(\"{group.Name}\");");
                     stringBuilder.AppendLine($"{indentation}public static class {stateNameClassName}");
                     stringBuilder.AppendLine($"{indentation}{{");
                     foreach (var stateName in stateNames)

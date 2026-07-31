@@ -4,7 +4,7 @@ using UnityGameFramework.Runtime;
 
 namespace Game
 {
-    [CodeBind]
+    [BindingRoot]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(RectTransform))]
     public abstract class AUIWidget : MonoBehaviour
