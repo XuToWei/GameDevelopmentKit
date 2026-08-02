@@ -99,6 +99,7 @@ namespace ET
             World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[]
                 { typeof(World).Assembly, typeof(Init).Assembly, m_Model, m_ModelView, hotfixAssemblies.Item1, hotfixAssemblies.Item2 });
             CodeTypes.Instance.CreateCode();
+            ETReactiveRuntime.NotifyCodeReload();
             EventSystem.Instance.Invoke(new OnCodeReload());
         }
 

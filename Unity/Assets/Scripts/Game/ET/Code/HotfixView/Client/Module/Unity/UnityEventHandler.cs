@@ -36,7 +36,7 @@ namespace ET.Client
         {
             public override void Handle(OnCodeReload args)
             {
-                
+                World.Instance.AddSingleton<UGFSystemSingleton>();
             }
         }
     }
