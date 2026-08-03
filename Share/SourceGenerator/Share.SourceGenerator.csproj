@@ -14,6 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Remove="Tests/**/*.cs" />
         <Compile Include="../Analyzer/Extension/*.cs">
             <Link>Extension\%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>

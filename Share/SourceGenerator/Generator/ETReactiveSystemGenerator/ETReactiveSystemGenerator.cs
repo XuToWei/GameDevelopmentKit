@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
+using ET.Analyzer;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,13 +12,16 @@ namespace ET.Generator;
 [Generator(LanguageNames.CSharp)]
 public sealed class ETReactiveSystemGenerator: ISourceGenerator
 {
-    private const string SystemAttributeName = "ET.ETReactiveSystemOfAttribute";
+    private const string SystemAttributeName = "ET.ETReactiveSystemAttribute";
+    private const string EntitySystemAttributeName = "ET.EntitySystemOfAttribute";
     private const string SourceAttributeName = "ET.ETReactiveSourceAttribute";
     private const string BindAttributeName = "ET.ETReactiveBindAttribute";
-    private const string ReactiveStateTypeName = "ET.ETReactiveState";
+    private const string EntityTypeName = "ET.Entity";
+    private const string ReactiveHostInterfaceName = "ET.IETReactiveHost";
     private const string VersionInterfaceName = "ReactiveBinding.IVersion";
-    private const string ObserveMethodName = "ObserveReactive";
+    private const string ObserveMethodName = "ObserveChanges";
     private const string ResetMethodName = "ResetReactive";
+    private const string ClearMethodName = "ClearReactive";
 
     public void Initialize(GeneratorInitializationContext context)
     {
@@ -27,12 +30,19 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
 
     public void Execute(GeneratorExecutionContext context)
     {
-        if (context.SyntaxContextReceiver is not SyntaxReceiver receiver || receiver.SystemDeclarations.Count == 0)
+        if (context.SyntaxContextReceiver is not SyntaxReceiver receiver)
+        {
+            return;
+        }
+
+        GenerateReactiveHosts(context, receiver.HostDeclarations);
+        if (receiver.SystemDeclarations.Count == 0)
         {
             return;
         }
 
         HashSet<INamedTypeSymbol> processedSystems = new(SymbolEqualityComparer.Default);
+        List<SystemCandidate> candidates = new();
         foreach (ClassDeclarationSyntax declaration in receiver.SystemDeclarations)
         {
             SemanticModel semanticModel = context.Compilation.GetSemanticModel(declaration.SyntaxTree);
@@ -42,18 +52,110 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 continue;
             }
 
-            GenerateSystem(context, declaration, system);
+            INamedTypeSymbol? owner = null;
+            if (TryGetSystemAttribute(system, out AttributeData? attribute) &&
+                attribute != null)
+            {
+                TryGetOwner(system, attribute, out owner);
+            }
+
+            candidates.Add(new SystemCandidate(declaration, system, owner));
+        }
+
+        Dictionary<INamedTypeSymbol, int> ownerCounts = new(SymbolEqualityComparer.Default);
+        foreach (SystemCandidate candidate in candidates)
+        {
+            if (candidate.Owner == null)
+            {
+                continue;
+            }
+
+            ownerCounts.TryGetValue(candidate.Owner, out int count);
+            ownerCounts[candidate.Owner] = count + 1;
+        }
+
+        HashSet<INamedTypeSymbol> referencedOwners = GetReferencedReactiveOwners(context.Compilation);
+        foreach (SystemCandidate candidate in candidates)
+        {
+            bool duplicateOwner = candidate.Owner != null &&
+                                  (ownerCounts[candidate.Owner] > 1 || referencedOwners.Contains(candidate.Owner));
+            GenerateSystem(context, candidate.Declaration, candidate.System, duplicateOwner);
+        }
+    }
+
+    private static void GenerateReactiveHosts(
+        GeneratorExecutionContext context,
+        IReadOnlyList<ClassDeclarationSyntax> declarations)
+    {
+        if (declarations.Count == 0)
+        {
+            return;
+        }
+
+        INamedTypeSymbol? reactiveHostInterface = context.Compilation.GetTypeByMetadataName(ReactiveHostInterfaceName);
+        INamedTypeSymbol? entityType = context.Compilation.GetTypeByMetadataName(EntityTypeName);
+        IPropertySymbol? reactiveObserverProperty = reactiveHostInterface?.GetMembers("ReactiveObserver")
+                .OfType<IPropertySymbol>()
+                .FirstOrDefault();
+        if (reactiveHostInterface == null || entityType == null || reactiveObserverProperty == null)
+        {
+            return;
+        }
+
+        HashSet<INamedTypeSymbol> processedHosts = new(SymbolEqualityComparer.Default);
+        foreach (ClassDeclarationSyntax declaration in declarations)
+        {
+            SemanticModel semanticModel = context.Compilation.GetSemanticModel(declaration.SyntaxTree);
+            if (semanticModel.GetDeclaredSymbol(declaration, context.CancellationToken) is not INamedTypeSymbol host ||
+                !processedHosts.Add(host))
+            {
+                continue;
+            }
+
+            if (!IsOrInheritsFrom(host, entityType))
+            {
+                Report(
+                    context,
+                    ETReactiveDiagnosticRules.OwnerInterface,
+                    declaration.Identifier.GetLocation(),
+                    host.ToDisplayString());
+                continue;
+            }
+
+            if (!IsPartialTypeHierarchy(host))
+            {
+                Report(
+                    context,
+                    ETReactiveDiagnosticRules.HostDeclaration,
+                    declaration.Identifier.GetLocation(),
+                    host.ToDisplayString());
+                continue;
+            }
+
+            if (host.FindImplementationForInterfaceMember(reactiveObserverProperty) != null)
+            {
+                continue;
+            }
+
+            context.AddSource(
+                $"ETReactiveHostGenerator.{GetMetadataName(host)}.g.cs",
+                EmitReactiveHost(host));
         }
     }
 
     private static void GenerateSystem(
         GeneratorExecutionContext context,
         ClassDeclarationSyntax declaration,
-        INamedTypeSymbol system)
+        INamedTypeSymbol system,
+        bool duplicateOwner)
     {
-        AttributeData? systemAttribute = GetAttribute(system, SystemAttributeName);
-        if (systemAttribute == null)
+        if (!TryGetSystemAttribute(system, out AttributeData? systemAttribute) || systemAttribute == null)
         {
+            Report(
+                context,
+                ETReactiveDiagnosticRules.Owner,
+                declaration.Identifier.GetLocation(),
+                system.ToDisplayString());
             return;
         }
 
@@ -69,9 +171,8 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             valid = false;
         }
 
-        if (!TryGetOwnerAndStateMemberName(systemAttribute, out INamedTypeSymbol? owner, out string? stateMemberName) ||
+        if (!TryGetOwner(system, systemAttribute, out INamedTypeSymbol? owner) ||
             owner == null ||
-            stateMemberName == null ||
             SymbolEqualityComparer.Default.Equals(owner.ContainingAssembly, context.Compilation.Assembly))
         {
             Report(
@@ -82,23 +183,25 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             return;
         }
 
-        INamedTypeSymbol? reactiveStateType = context.Compilation.GetTypeByMetadataName(ReactiveStateTypeName);
-        string? generatedStateMemberName = null;
-        if (reactiveStateType == null ||
-            !TryGetStateMember(
-                context.Compilation,
-                system,
-                owner,
-                stateMemberName,
-                reactiveStateType,
-                out generatedStateMemberName))
+        if (duplicateOwner)
         {
             Report(
                 context,
-                ETReactiveDiagnosticRules.StateMember,
+                ETReactiveDiagnosticRules.DuplicateOwner,
                 declaration.Identifier.GetLocation(),
-                owner.ToDisplayString(),
-                stateMemberName);
+                owner.ToDisplayString());
+            valid = false;
+        }
+
+        INamedTypeSymbol? reactiveHostInterface = context.Compilation.GetTypeByMetadataName(ReactiveHostInterfaceName);
+        INamedTypeSymbol? entityType = context.Compilation.GetTypeByMetadataName(EntityTypeName);
+        if (!IsOrInheritsFrom(owner, entityType) || !ImplementsInterface(owner, reactiveHostInterface))
+        {
+            Report(
+                context,
+                ETReactiveDiagnosticRules.OwnerInterface,
+                declaration.Identifier.GetLocation(),
+                owner.ToDisplayString());
             valid = false;
         }
 
@@ -134,11 +237,12 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 continue;
             }
 
-            if (ContainsTypeFromAssembly(method.ReturnType, context.Compilation.Assembly))
+            bool isVersioned = ImplementsInterface(method.ReturnType, versionInterface);
+            if (!IsSupportedSourceType(method.ReturnType, isVersioned))
             {
                 Report(
                     context,
-                    ETReactiveDiagnosticRules.HotfixSourceType,
+                    ETReactiveDiagnosticRules.UnsupportedSourceType,
                     GetLocation(method, declaration),
                     method.Name,
                     method.ReturnType.ToDisplayString());
@@ -146,22 +250,25 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 continue;
             }
 
-            sources.Add(new SourceModel(
-                method,
-                ImplementsInterface(method.ReturnType, versionInterface)));
+            if (IsCustomStructWithoutEqualityOperator(method.ReturnType, isVersioned))
+            {
+                Report(
+                    context,
+                    ETReactiveDiagnosticRules.StructEquality,
+                    GetLocation(method, declaration),
+                    method.Name,
+                    method.ReturnType.ToDisplayString());
+                valid = false;
+                continue;
+            }
+
+            sources.Add(new SourceModel(method, isVersioned));
         }
 
         sources.Sort(static (left, right) => StringComparer.Ordinal.Compare(left.Id, right.Id));
         Dictionary<string, SourceModel> sourceById = new(StringComparer.Ordinal);
-        int slotCount = 0;
         foreach (SourceModel source in sources)
         {
-            source.ValueSlotIndex = slotCount++;
-            if (source.IsVersioned)
-            {
-                source.VersionSlotIndex = slotCount++;
-            }
-
             if (!sourceById.ContainsKey(source.Id))
             {
                 sourceById.Add(source.Id, source);
@@ -247,98 +354,63 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                     : StringComparer.Ordinal.Compare(left.Method.ToDisplayString(), right.Method.ToDisplayString());
         });
 
+        HashSet<string> usedSourceIds = new(
+            binds.SelectMany(static bind => bind.ReactiveIds),
+            StringComparer.Ordinal);
+        foreach (SourceModel source in sources.Where(source => !usedSourceIds.Contains(source.Id)))
+        {
+            Report(
+                context,
+                ETReactiveDiagnosticRules.UnusedSource,
+                GetLocation(source.Method, declaration),
+                source.Id);
+        }
+
+        sources.RemoveAll(source => !usedSourceIds.Contains(source.Id));
         valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ObserveMethodName);
         valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ResetMethodName);
+        valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ClearMethodName);
 
-        if (!valid || generatedStateMemberName == null)
+        if (!valid)
         {
             return;
         }
 
-        long groupId = ComputeHash(
-            $"{system.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}|" +
-            owner.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
-        long schemaId = ComputeSchemaHash(context, system, sources, binds, slotCount);
+        string observerTypeName = GetGeneratedObserverTypeName(system);
         string generatedCode = Emit(
             system,
             owner,
-            generatedStateMemberName,
+            observerTypeName,
             sources,
-            binds,
-            groupId,
-            schemaId,
-            slotCount);
+            binds);
 
         context.AddSource(
             $"ETReactiveSystemGenerator.{GetMetadataName(system)}.g.cs",
             generatedCode);
     }
 
-    private static bool TryGetOwnerAndStateMemberName(
+    private static bool TryGetOwner(
+        INamedTypeSymbol system,
         AttributeData attribute,
-        out INamedTypeSymbol? owner,
-        out string? stateMemberName)
+        out INamedTypeSymbol? owner)
     {
         owner = null;
-        stateMemberName = null;
-        if (attribute.ConstructorArguments.Length != 2 ||
-            attribute.ConstructorArguments[0].Value is not INamedTypeSymbol ownerValue ||
-            attribute.ConstructorArguments[1].Value is not string stateMemberNameValue ||
-            string.IsNullOrWhiteSpace(stateMemberNameValue))
+        if (!string.Equals(attribute.AttributeClass?.ToDisplayString(), SystemAttributeName, StringComparison.Ordinal) ||
+            attribute.ConstructorArguments.Length != 0)
         {
             return false;
         }
 
-        owner = ownerValue;
-        stateMemberName = stateMemberNameValue;
-        return true;
-    }
-
-    private static bool TryGetStateMember(
-        Compilation compilation,
-        INamedTypeSymbol system,
-        INamedTypeSymbol owner,
-        string stateMemberName,
-        INamedTypeSymbol reactiveStateType,
-        out string? generatedStateMemberName)
-    {
-        generatedStateMemberName = null;
-        INamedTypeSymbol? currentType = owner;
-        while (currentType != null)
+        AttributeData? entitySystemAttribute = GetAttribute(system, EntitySystemAttributeName);
+        if (entitySystemAttribute == null ||
+            entitySystemAttribute.ConstructorArguments.Length < 1 ||
+            entitySystemAttribute.ConstructorArguments[0].Value is not INamedTypeSymbol inferredOwner)
         {
-            ImmutableArray<ISymbol> members = currentType.GetMembers(stateMemberName);
-            if (members.Length > 0)
-            {
-                foreach (ISymbol member in members)
-                {
-                    if (member is IFieldSymbol field &&
-                        !field.IsStatic &&
-                        SymbolEqualityComparer.Default.Equals(field.Type, reactiveStateType) &&
-                        compilation.IsSymbolAccessibleWithin(field, system))
-                    {
-                        generatedStateMemberName = EscapeIdentifier(field.Name);
-                        return true;
-                    }
-
-                    if (member is IPropertySymbol property &&
-                        !property.IsStatic &&
-                        !property.IsIndexer &&
-                        property.GetMethod != null &&
-                        SymbolEqualityComparer.Default.Equals(property.Type, reactiveStateType) &&
-                        compilation.IsSymbolAccessibleWithin(property.GetMethod, system))
-                    {
-                        generatedStateMemberName = EscapeIdentifier(property.Name);
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
-            currentType = currentType.BaseType;
+            return false;
         }
 
-        return false;
+        owner = inferredOwner;
+        return true;
     }
 
     private static List<IMethodSymbol> GetAttributedMethods(INamedTypeSymbol system, string attributeName)
@@ -516,42 +588,62 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         return true;
     }
 
-    private static bool ContainsTypeFromAssembly(ITypeSymbol type, IAssemblySymbol assembly)
+    private static HashSet<INamedTypeSymbol> GetReferencedReactiveOwners(Compilation compilation)
     {
-        if (type is IArrayTypeSymbol arrayType)
+        HashSet<INamedTypeSymbol> owners = new(SymbolEqualityComparer.Default);
+        foreach (IAssemblySymbol assembly in compilation.SourceModule.ReferencedAssemblySymbols)
         {
-            return ContainsTypeFromAssembly(arrayType.ElementType, assembly);
+            if (!AnalyzeAssembly.AllHotfix.Contains(assembly.Identity.Name, StringComparer.Ordinal))
+            {
+                continue;
+            }
+
+            foreach (INamedTypeSymbol type in EnumerateTypes(assembly.GlobalNamespace))
+            {
+                if (!TryGetSystemAttribute(type, out AttributeData? attribute) ||
+                    attribute == null ||
+                    !TryGetOwner(type, attribute, out INamedTypeSymbol? owner) ||
+                    owner == null)
+                {
+                    continue;
+                }
+
+                owners.Add(owner);
+            }
         }
 
-        if (type is IPointerTypeSymbol pointerType)
+        return owners;
+    }
+
+    private static IEnumerable<INamedTypeSymbol> EnumerateTypes(INamespaceSymbol namespaceSymbol)
+    {
+        foreach (INamedTypeSymbol type in namespaceSymbol.GetTypeMembers())
         {
-            return ContainsTypeFromAssembly(pointerType.PointedAtType, assembly);
+            foreach (INamedTypeSymbol nestedType in EnumerateTypes(type))
+            {
+                yield return nestedType;
+            }
         }
 
-        if (type is IFunctionPointerTypeSymbol functionPointerType)
+        foreach (INamespaceSymbol nestedNamespace in namespaceSymbol.GetNamespaceMembers())
         {
-            return ContainsTypeFromAssembly(functionPointerType.Signature.ReturnType, assembly) ||
-                   functionPointerType.Signature.Parameters.Any(parameter =>
-                       ContainsTypeFromAssembly(parameter.Type, assembly));
+            foreach (INamedTypeSymbol type in EnumerateTypes(nestedNamespace))
+            {
+                yield return type;
+            }
         }
+    }
 
-        if (type is ITypeParameterSymbol typeParameter)
+    private static IEnumerable<INamedTypeSymbol> EnumerateTypes(INamedTypeSymbol type)
+    {
+        yield return type;
+        foreach (INamedTypeSymbol nestedType in type.GetTypeMembers())
         {
-            return SymbolEqualityComparer.Default.Equals(typeParameter.ContainingAssembly, assembly) ||
-                   typeParameter.ConstraintTypes.Any(constraint => ContainsTypeFromAssembly(constraint, assembly));
+            foreach (INamedTypeSymbol descendant in EnumerateTypes(nestedType))
+            {
+                yield return descendant;
+            }
         }
-
-        if (type is not INamedTypeSymbol namedType)
-        {
-            return false;
-        }
-
-        if (SymbolEqualityComparer.Default.Equals(namedType.ContainingAssembly, assembly))
-        {
-            return true;
-        }
-
-        return namedType.TypeArguments.Any(argument => ContainsTypeFromAssembly(argument, assembly));
     }
 
     private static bool ImplementsInterface(ITypeSymbol type, INamedTypeSymbol? interfaceType)
@@ -565,15 +657,118 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                namedType.AllInterfaces.Any(item => SymbolEqualityComparer.Default.Equals(item, interfaceType));
     }
 
+    private static bool DirectlyImplementsInterface(INamedTypeSymbol type, INamedTypeSymbol? interfaceType)
+    {
+        if (interfaceType == null)
+        {
+            return false;
+        }
+
+        return type.Interfaces.Any(item =>
+            SymbolEqualityComparer.Default.Equals(item, interfaceType) ||
+            item.AllInterfaces.Any(inherited => SymbolEqualityComparer.Default.Equals(inherited, interfaceType)));
+    }
+
+    private static bool IsPartialTypeHierarchy(INamedTypeSymbol type)
+    {
+        for (INamedTypeSymbol? current = type; current != null; current = current.ContainingType)
+        {
+            bool hasSourceDeclaration = false;
+            foreach (SyntaxReference syntaxReference in current.DeclaringSyntaxReferences)
+            {
+                if (syntaxReference.GetSyntax() is not TypeDeclarationSyntax declaration)
+                {
+                    return false;
+                }
+
+                hasSourceDeclaration = true;
+                if (!declaration.Modifiers.Any(static modifier => modifier.IsKind(SyntaxKind.PartialKeyword)))
+                {
+                    return false;
+                }
+            }
+
+            if (!hasSourceDeclaration)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool IsOrInheritsFrom(INamedTypeSymbol type, INamedTypeSymbol? baseType)
+    {
+        if (baseType == null)
+        {
+            return false;
+        }
+
+        INamedTypeSymbol? current = type;
+        while (current != null)
+        {
+            if (SymbolEqualityComparer.Default.Equals(current, baseType))
+            {
+                return true;
+            }
+
+            current = current.BaseType;
+        }
+
+        return false;
+    }
+
+    private static bool IsSupportedSourceType(ITypeSymbol type, bool isVersioned)
+    {
+        return type.IsValueType ||
+               type.SpecialType == SpecialType.System_String ||
+               isVersioned;
+    }
+
+    private static bool IsCustomStructWithoutEqualityOperator(ITypeSymbol type, bool isVersioned)
+    {
+        if (isVersioned ||
+            !type.IsValueType ||
+            type.SpecialType != SpecialType.None ||
+            type.TypeKind == TypeKind.Enum ||
+            type is not INamedTypeSymbol namedType ||
+            namedType.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
+        {
+            return false;
+        }
+
+        return !namedType.GetMembers("op_Equality")
+                .OfType<IMethodSymbol>()
+                .Any(static method => method.MethodKind == MethodKind.UserDefinedOperator);
+    }
+
+    private static string GetInequalityExpression(ITypeSymbol type, string oldValue, string currentValue)
+    {
+        if (type.SpecialType == SpecialType.System_Single)
+        {
+            return $"(global::System.Single.IsNaN({oldValue}) ? !global::System.Single.IsNaN({currentValue}) : " +
+                   $"global::System.Single.IsNaN({currentValue}) || ({oldValue} != {currentValue} && " +
+                   $"(global::System.Single.IsInfinity({oldValue}) || global::System.Single.IsInfinity({currentValue}) || " +
+                   $"global::System.Math.Abs({oldValue} - {currentValue}) > 1e-6f)))";
+        }
+
+        if (type.SpecialType == SpecialType.System_Double)
+        {
+            return $"(global::System.Double.IsNaN({oldValue}) ? !global::System.Double.IsNaN({currentValue}) : " +
+                   $"global::System.Double.IsNaN({currentValue}) || ({oldValue} != {currentValue} && " +
+                   $"(global::System.Double.IsInfinity({oldValue}) || global::System.Double.IsInfinity({currentValue}) || " +
+                   $"global::System.Math.Abs({oldValue} - {currentValue}) > 1e-9d)))";
+        }
+
+        return $"{oldValue} != {currentValue}";
+    }
+
     private static string Emit(
         INamedTypeSymbol system,
         INamedTypeSymbol owner,
-        string stateMemberName,
+        string observerTypeName,
         IReadOnlyList<SourceModel> sources,
-        IReadOnlyList<BindModel> binds,
-        long groupId,
-        long schemaId,
-        int slotCount)
+        IReadOnlyList<BindModel> binds)
     {
         StringBuilder code = new();
         code.AppendLine("// <auto-generated/>");
@@ -589,8 +784,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         }
 
         string ownerType = owner.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-        string groupIdExpression = ToLongExpression(groupId);
-        string schemaIdExpression = ToLongExpression(schemaId);
+        string systemType = system.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         code.Append(indentation)
                 .Append("static partial class ")
                 .Append(EscapeIdentifier(system.Name))
@@ -598,6 +792,327 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         code.Append(indentation).AppendLine("{");
         string bodyIndentation = indentation + "    ";
         string statementIndentation = bodyIndentation + "    ";
+        string observerBodyIndentation = statementIndentation + "    ";
+
+        code.Append(bodyIndentation).AppendLine("[global::ET.EnableClass]");
+        code.Append(bodyIndentation)
+                .Append("[global::ET.ETReactiveObserver(typeof(")
+                .Append(ownerType)
+                .AppendLine("))]");
+        code.Append(bodyIndentation)
+                .Append("private sealed class ")
+                .Append(observerTypeName)
+                .Append(" : global::ET.IETReactiveObserver")
+                .AppendLine();
+        code.Append(bodyIndentation).AppendLine("{");
+        code.Append(statementIndentation).AppendLine("private int dllVersion;");
+        code.Append(statementIndentation).AppendLine("private long ownerInstanceId;");
+        if (sources.Count > 0)
+        {
+            code.Append(statementIndentation)
+                    .Append("private ")
+                    .Append(ownerType)
+                    .AppendLine(" owner = default!;");
+            code.Append(statementIndentation).AppendLine("private bool __reactive_initialized;");
+        }
+
+        for (int index = 0; index < sources.Count; ++index)
+        {
+            SourceModel source = sources[index];
+            string token = source.Id;
+            string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            code.Append(statementIndentation)
+                    .Append("private ")
+                    .Append(typeName)
+                    .Append(" __reactive_")
+                    .Append(token)
+                    .AppendLine(" = default!;");
+            if (source.IsVersioned)
+            {
+                code.Append(statementIndentation)
+                        .Append("private int __reactive_")
+                        .Append(token)
+                        .AppendLine("_version = -1;");
+            }
+        }
+
+        code.AppendLine();
+        code.Append(statementIndentation).AppendLine("public int DllVersion => this.dllVersion;");
+        code.AppendLine();
+        code.Append(statementIndentation)
+                .AppendLine("public long OwnerInstanceId => this.ownerInstanceId;");
+        code.AppendLine();
+        code.Append(statementIndentation)
+                .AppendLine("public void Initialize(global::ET.IETReactiveHost reactiveHost, int dllVersion)");
+        code.Append(statementIndentation).AppendLine("{");
+        code.Append(observerBodyIndentation)
+                .Append(ownerType)
+                .Append(" owner = (")
+                .Append(ownerType)
+                .AppendLine(")reactiveHost;");
+        code.Append(observerBodyIndentation).AppendLine("this.dllVersion = dllVersion;");
+        code.Append(observerBodyIndentation).AppendLine("this.ownerInstanceId = owner.InstanceId;");
+        if (sources.Count > 0)
+        {
+            code.Append(observerBodyIndentation).AppendLine("this.owner = owner;");
+        }
+        code.Append(statementIndentation).AppendLine("}");
+        code.AppendLine();
+        code.Append(statementIndentation).AppendLine("public void Recycle()");
+        code.Append(statementIndentation).AppendLine("{");
+        code.Append(observerBodyIndentation).AppendLine("if (this.ownerInstanceId == 0)");
+        code.Append(observerBodyIndentation).AppendLine("{");
+        code.Append(observerBodyIndentation).AppendLine("    return;");
+        code.Append(observerBodyIndentation).AppendLine("}");
+        code.AppendLine();
+        code.Append(observerBodyIndentation).AppendLine("this.dllVersion = 0;");
+        code.Append(observerBodyIndentation).AppendLine("this.ownerInstanceId = 0;");
+        if (sources.Count > 0)
+        {
+            code.Append(observerBodyIndentation).AppendLine("this.owner = default!;");
+            code.Append(observerBodyIndentation).AppendLine("this.__reactive_initialized = false;");
+        }
+        foreach (SourceModel source in sources)
+        {
+            string token = source.Id;
+            code.Append(observerBodyIndentation)
+                    .Append("this.__reactive_")
+                    .Append(token)
+                    .AppendLine(" = default!;");
+            if (source.IsVersioned)
+            {
+                code.Append(observerBodyIndentation)
+                        .Append("this.__reactive_")
+                        .Append(token)
+                        .AppendLine("_version = -1;");
+            }
+        }
+        code.Append(statementIndentation).AppendLine("}");
+        code.AppendLine();
+        code.Append(statementIndentation).AppendLine("public void ObserveChanges()");
+        code.Append(statementIndentation).AppendLine("{");
+        if (sources.Count > 0)
+        {
+            code.Append(observerBodyIndentation).AppendLine("if (!this.__reactive_initialized)");
+            code.Append(observerBodyIndentation).AppendLine("{");
+            code.Append(observerBodyIndentation).AppendLine("    this.__reactive_initialized = true;");
+
+            foreach (SourceModel source in sources)
+            {
+                string token = source.Id;
+                code.Append(observerBodyIndentation)
+                        .Append("    this.__reactive_")
+                        .Append(token)
+                        .Append(" = ")
+                        .Append(systemType)
+                        .Append('.')
+                        .Append(EscapeIdentifier(source.Method.Name))
+                        .AppendLine("(this.owner);");
+                if (source.IsVersioned)
+                {
+                    code.Append(observerBodyIndentation)
+                            .Append("    this.__reactive_")
+                            .Append(token)
+                            .Append("_version = global::System.Object.ReferenceEquals(this.__reactive_")
+                            .Append(token)
+                            .Append(", null) ? -1 : ((global::ReactiveBinding.IVersion)(object)this.__reactive_")
+                            .Append(token)
+                            .AppendLine(").__Version;");
+                }
+            }
+
+            foreach (BindModel bind in binds)
+            {
+                AppendBindCall(
+                    code,
+                    observerBodyIndentation + "    ",
+                    systemType,
+                    bind,
+                    static id => $"this.__reactive_{id}",
+                    static id => $"this.__reactive_{id}");
+            }
+
+            code.Append(observerBodyIndentation).AppendLine("    return;");
+            code.Append(observerBodyIndentation).AppendLine("}");
+            code.AppendLine();
+
+            List<BindModel> multiBinds = binds.Where(static bind => bind.ReactiveIds.Count > 1).ToList();
+            Dictionary<string, List<BindModel>> singleBindsBySource = new(StringComparer.Ordinal);
+            foreach (BindModel bind in binds.Where(static bind => bind.ReactiveIds.Count == 1))
+            {
+                string reactiveId = bind.ReactiveIds[0];
+                if (!singleBindsBySource.TryGetValue(reactiveId, out List<BindModel>? sourceBinds))
+                {
+                    sourceBinds = new List<BindModel>();
+                    singleBindsBySource.Add(reactiveId, sourceBinds);
+                }
+
+                sourceBinds.Add(bind);
+            }
+
+            HashSet<string> sourcesNeedingFlags = new(
+                multiBinds.SelectMany(static bind => bind.ReactiveIds),
+                StringComparer.Ordinal);
+            HashSet<string> sourcesNeedingOldValues = new(
+                binds.Where(static bind => bind.Method.Parameters.Length - 1 == bind.ReactiveIds.Count * 2)
+                        .SelectMany(static bind => bind.ReactiveIds),
+                StringComparer.Ordinal);
+
+            foreach (SourceModel source in sources)
+            {
+                string token = source.Id;
+                if (sourcesNeedingFlags.Contains(source.Id))
+                {
+                    code.Append(observerBodyIndentation)
+                            .Append("bool __changed_")
+                            .Append(token)
+                            .AppendLine(" = false;");
+                }
+
+                if (sourcesNeedingOldValues.Contains(source.Id))
+                {
+                    code.Append(observerBodyIndentation)
+                            .Append(source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat))
+                            .Append(" __old_")
+                            .Append(token)
+                            .Append(" = this.__reactive_")
+                            .Append(token)
+                            .AppendLine(";");
+                }
+            }
+
+            if (sourcesNeedingFlags.Count > 0 || sourcesNeedingOldValues.Count > 0)
+            {
+                code.AppendLine();
+            }
+
+            foreach (SourceModel source in sources)
+            {
+                string token = source.Id;
+                string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                code.Append(observerBodyIndentation)
+                        .Append(typeName)
+                        .Append(" __current_")
+                        .Append(token)
+                        .Append(" = ")
+                        .Append(systemType)
+                        .Append('.')
+                        .Append(EscapeIdentifier(source.Method.Name))
+                        .AppendLine("(this.owner);");
+
+                if (source.IsVersioned)
+                {
+                    code.Append(observerBodyIndentation)
+                            .Append("int __current_")
+                            .Append(token)
+                            .Append("_version = global::System.Object.ReferenceEquals(__current_")
+                            .Append(token)
+                            .Append(", null) ? -1 : ((global::ReactiveBinding.IVersion)(object)__current_")
+                            .Append(token)
+                            .AppendLine(").__Version;");
+                    code.Append(observerBodyIndentation)
+                            .Append("if (!global::System.Object.ReferenceEquals(__current_")
+                            .Append(token)
+                            .Append(", this.__reactive_")
+                            .Append(token)
+                            .Append(") || __current_")
+                            .Append(token)
+                            .Append("_version != this.__reactive_")
+                            .Append(token)
+                            .AppendLine("_version)");
+                }
+                else
+                {
+                    code.Append(observerBodyIndentation)
+                            .Append("if (")
+                            .Append(GetInequalityExpression(
+                                source.Type,
+                                $"this.__reactive_{token}",
+                                $"__current_{token}"))
+                            .AppendLine(")");
+                }
+
+                code.Append(observerBodyIndentation).AppendLine("{");
+                if (sourcesNeedingFlags.Contains(source.Id))
+                {
+                    code.Append(observerBodyIndentation)
+                            .Append("    __changed_")
+                            .Append(token)
+                            .AppendLine(" = true;");
+                }
+
+                code.Append(observerBodyIndentation)
+                        .Append("    this.__reactive_")
+                        .Append(token)
+                        .Append(" = __current_")
+                        .Append(token)
+                        .AppendLine(";");
+                if (source.IsVersioned)
+                {
+                    code.Append(observerBodyIndentation)
+                            .Append("    this.__reactive_")
+                            .Append(token)
+                            .Append("_version = __current_")
+                            .Append(token)
+                            .AppendLine("_version;");
+                }
+
+                if (singleBindsBySource.TryGetValue(source.Id, out List<BindModel>? singleBinds))
+                {
+                    foreach (BindModel bind in singleBinds)
+                    {
+                        AppendBindCall(
+                            code,
+                            observerBodyIndentation + "    ",
+                            systemType,
+                            bind,
+                            static id => $"__old_{id}",
+                            static id => $"this.__reactive_{id}");
+                    }
+                }
+
+                code.Append(observerBodyIndentation).AppendLine("}");
+                code.AppendLine();
+            }
+
+            foreach (BindModel bind in multiBinds)
+            {
+                code.Append(observerBodyIndentation).Append("if (");
+                for (int index = 0; index < bind.ReactiveIds.Count; ++index)
+                {
+                    if (index > 0)
+                    {
+                        code.Append(" || ");
+                    }
+
+                    code.Append("__changed_").Append(bind.ReactiveIds[index]);
+                }
+
+                code.AppendLine(")");
+                code.Append(observerBodyIndentation).AppendLine("{");
+                AppendBindCall(
+                    code,
+                    observerBodyIndentation + "    ",
+                    systemType,
+                    bind,
+                    static id => $"__old_{id}",
+                    static id => $"this.__reactive_{id}");
+                code.Append(observerBodyIndentation).AppendLine("}");
+                code.AppendLine();
+            }
+        }
+
+        code.Append(statementIndentation).AppendLine("}");
+        code.AppendLine();
+        code.Append(statementIndentation).AppendLine("public void ResetChanges()");
+        code.Append(statementIndentation).AppendLine("{");
+        if (sources.Count > 0)
+        {
+            code.Append(observerBodyIndentation).AppendLine("this.__reactive_initialized = false;");
+        }
+        code.Append(statementIndentation).AppendLine("}");
+        code.Append(bodyIndentation).AppendLine("}");
+        code.AppendLine();
 
         code.Append(bodyIndentation)
                 .Append("public static void ")
@@ -606,167 +1121,34 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 .Append(ownerType)
                 .AppendLine(" self)");
         code.Append(bodyIndentation).AppendLine("{");
+        code.Append(statementIndentation).AppendLine("if (self.InstanceId == 0)");
+        code.Append(statementIndentation).AppendLine("{");
+        code.Append(statementIndentation).AppendLine("    return;");
+        code.Append(statementIndentation).AppendLine("}");
+        code.AppendLine();
         code.Append(statementIndentation)
-                .Append("global::ET.ETReactiveGroupState __reactiveGroup = self.")
-                .Append(stateMemberName)
-                .Append(".GetOrCreateGroup(")
-                .Append(groupIdExpression)
-                .Append(", ")
-                .Append(schemaIdExpression)
-                .Append(", ")
-                .Append(slotCount)
-                .AppendLine(");");
+                .AppendLine("global::ET.IETReactiveHost reactiveHost = self;");
         code.Append(statementIndentation)
-                .AppendLine("bool __reactiveInitialized = __reactiveGroup.Initialized;");
-
-        for (int index = 0; index < sources.Count; ++index)
-        {
-            SourceModel source = sources[index];
-            string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            string sourceMethodName = EscapeIdentifier(source.Method.Name);
-            code.AppendLine();
-            code.Append(statementIndentation)
-                    .Append(typeName)
-                    .Append(" __reactiveCurrent")
-                    .Append(index)
-                    .Append(" = ")
-                    .Append(sourceMethodName)
-                    .AppendLine("(self);");
-            code.Append(statementIndentation)
-                    .Append("global::ET.ETReactiveSlot<")
-                    .Append(typeName)
-                    .Append("> __reactiveSlot")
-                    .Append(index)
-                    .Append(" = __reactiveGroup.GetSlot<")
-                    .Append(typeName)
-                    .Append(">(")
-                    .Append(source.ValueSlotIndex)
-                    .AppendLine(");");
-            code.Append(statementIndentation)
-                    .Append(typeName)
-                    .Append(" __reactiveOld")
-                    .Append(index)
-                    .Append(" = __reactiveInitialized ? __reactiveSlot")
-                    .Append(index)
-                    .Append(".Value : __reactiveCurrent")
-                    .Append(index)
-                    .AppendLine(";");
-            code.Append(statementIndentation)
-                    .Append("bool __reactiveChanged")
-                    .Append(index)
-                    .Append(" = !__reactiveInitialized || !global::System.Collections.Generic.EqualityComparer<")
-                    .Append(typeName)
-                    .Append(">.Default.Equals(__reactiveOld")
-                    .Append(index)
-                    .Append(", __reactiveCurrent")
-                    .Append(index)
-                    .Append(')');
-
-            if (source.IsVersioned)
-            {
-                code.AppendLine(";");
-                code.Append(statementIndentation)
-                        .Append("int __reactiveCurrentVersion")
-                        .Append(index)
-                        .Append(" = global::System.Object.ReferenceEquals(__reactiveCurrent")
-                        .Append(index)
-                        .Append(", null) ? 0 : ((global::ReactiveBinding.IVersion)(object)__reactiveCurrent")
-                        .Append(index)
-                        .AppendLine(").Version;");
-                code.Append(statementIndentation)
-                        .Append("global::ET.ETReactiveSlot<int> __reactiveVersionSlot")
-                        .Append(index)
-                        .Append(" = __reactiveGroup.GetSlot<int>(")
-                        .Append(source.VersionSlotIndex)
-                        .AppendLine(");");
-                code.Append(statementIndentation)
-                        .Append("__reactiveChanged")
-                        .Append(index)
-                        .Append(" = __reactiveChanged")
-                        .Append(index)
-                        .Append(" || __reactiveVersionSlot")
-                        .Append(index)
-                        .Append(".Value != __reactiveCurrentVersion")
-                        .Append(index)
-                        .AppendLine(";");
-            }
-            else
-            {
-                code.AppendLine(";");
-            }
-        }
-
-        if (sources.Count > 0)
-        {
-            code.AppendLine();
-        }
-
-        for (int index = 0; index < sources.Count; ++index)
-        {
-            SourceModel source = sources[index];
-            code.Append(statementIndentation)
-                    .Append("__reactiveSlot")
-                    .Append(index)
-                    .Append(".Value = __reactiveCurrent")
-                    .Append(index)
-                    .AppendLine(";");
-            if (source.IsVersioned)
-            {
-                code.Append(statementIndentation)
-                        .Append("__reactiveVersionSlot")
-                        .Append(index)
-                        .Append(".Value = __reactiveCurrentVersion")
-                        .Append(index)
-                        .AppendLine(";");
-            }
-        }
-
-        code.Append(statementIndentation).AppendLine("__reactiveGroup.Initialized = true;");
-
-        foreach (BindModel bind in binds)
-        {
-            code.AppendLine();
-            code.Append(statementIndentation).Append("if (");
-            for (int sourceIndex = 0; sourceIndex < bind.ReactiveIds.Count; ++sourceIndex)
-            {
-                if (sourceIndex > 0)
-                {
-                    code.Append(" || ");
-                }
-
-                int modelIndex = GetSourceIndex(sources, bind.ReactiveIds[sourceIndex]);
-                code.Append("__reactiveChanged").Append(modelIndex);
-            }
-
-            code.AppendLine(")");
-            code.Append(statementIndentation).AppendLine("{");
-            code.Append(statementIndentation)
-                    .Append("    ")
-                    .Append(EscapeIdentifier(bind.Method.Name))
-                    .Append("(self");
-
-            int valueParameterCount = bind.Method.Parameters.Length - 1;
-            if (valueParameterCount == bind.ReactiveIds.Count)
-            {
-                foreach (string reactiveId in bind.ReactiveIds)
-                {
-                    code.Append(", __reactiveCurrent").Append(GetSourceIndex(sources, reactiveId));
-                }
-            }
-            else if (valueParameterCount == bind.ReactiveIds.Count * 2)
-            {
-                foreach (string reactiveId in bind.ReactiveIds)
-                {
-                    int sourceIndex = GetSourceIndex(sources, reactiveId);
-                    code.Append(", __reactiveOld").Append(sourceIndex);
-                    code.Append(", __reactiveCurrent").Append(sourceIndex);
-                }
-            }
-
-            code.AppendLine(");");
-            code.Append(statementIndentation).AppendLine("}");
-        }
-
+                .AppendLine("global::ET.ETReactiveSystem reactiveSystem = global::ET.ETReactiveSystem.Instance;");
+        code.Append(statementIndentation).AppendLine("int dllVersion = reactiveSystem.DllVersion;");
+        code.Append(statementIndentation)
+                .AppendLine("if (reactiveHost.ReactiveObserver is not global::ET.IETReactiveObserver observer ||")
+                .Append(statementIndentation)
+                .AppendLine("    observer.DllVersion != dllVersion || observer.OwnerInstanceId != self.InstanceId)");
+        code.Append(statementIndentation).AppendLine("{");
+        code.Append(statementIndentation).AppendLine("    if (reactiveHost.ReactiveObserver is global::ET.IETReactiveObserver oldObserver)");
+        code.Append(statementIndentation).AppendLine("    {");
+        code.Append(statementIndentation).AppendLine("        reactiveSystem.Recycle(oldObserver);");
+        code.Append(statementIndentation).AppendLine("    }");
+        code.AppendLine();
+        code.Append(statementIndentation)
+                .Append("    observer = reactiveSystem.Rent(typeof(")
+                .Append(ownerType)
+                .AppendLine("), reactiveHost);");
+        code.Append(statementIndentation).AppendLine("    reactiveHost.ReactiveObserver = observer;");
+        code.Append(statementIndentation).AppendLine("}");
+        code.AppendLine();
+        code.Append(statementIndentation).AppendLine("observer.ObserveChanges();");
         code.Append(bodyIndentation).AppendLine("}");
         code.AppendLine();
         code.Append(bodyIndentation)
@@ -777,11 +1159,31 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 .AppendLine(" self)");
         code.Append(bodyIndentation).AppendLine("{");
         code.Append(statementIndentation)
-                .Append("self.")
-                .Append(stateMemberName)
-                .Append(".Reset(")
-                .Append(groupIdExpression)
-                .AppendLine(");");
+                .AppendLine("if (((global::ET.IETReactiveHost)self).ReactiveObserver is global::ET.IETReactiveObserver observer &&")
+                .Append(statementIndentation)
+                .AppendLine("    observer.DllVersion == global::ET.ETReactiveSystem.Instance.DllVersion &&")
+                .Append(statementIndentation)
+                .AppendLine("    observer.OwnerInstanceId == self.InstanceId)");
+        code.Append(statementIndentation).AppendLine("{");
+        code.Append(statementIndentation).AppendLine("    observer.ResetChanges();");
+        code.Append(statementIndentation).AppendLine("}");
+        code.Append(bodyIndentation).AppendLine("}");
+        code.AppendLine();
+        code.Append(bodyIndentation)
+                .Append("public static void ")
+                .Append(ClearMethodName)
+                .Append("(this ")
+                .Append(ownerType)
+                .AppendLine(" self)");
+        code.Append(bodyIndentation).AppendLine("{");
+        code.Append(statementIndentation)
+                .AppendLine("global::ET.IETReactiveHost reactiveHost = self;");
+        code.Append(statementIndentation).AppendLine("global::ReactiveBinding.IReactiveObserver currentObserver = reactiveHost.ReactiveObserver;");
+        code.Append(statementIndentation).AppendLine("reactiveHost.ReactiveObserver = null!;");
+        code.Append(statementIndentation).AppendLine("if (currentObserver is global::ET.IETReactiveObserver pooledObserver)");
+        code.Append(statementIndentation).AppendLine("{");
+        code.Append(statementIndentation).AppendLine("    global::ET.ETReactiveSystem.Instance.Recycle(pooledObserver);");
+        code.Append(statementIndentation).AppendLine("}");
         code.Append(bodyIndentation).AppendLine("}");
         code.Append(indentation).AppendLine("}");
 
@@ -793,82 +1195,127 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         return code.ToString();
     }
 
-    private static int GetSourceIndex(IReadOnlyList<SourceModel> sources, string id)
+    private static string EmitReactiveHost(INamedTypeSymbol host)
     {
-        for (int index = 0; index < sources.Count; ++index)
+        StringBuilder code = new();
+        code.AppendLine("// <auto-generated/>");
+
+        string indentation = string.Empty;
+        if (!host.ContainingNamespace.IsGlobalNamespace)
         {
-            if (StringComparer.Ordinal.Equals(sources[index].Id, id))
+            code.Append("namespace ")
+                    .Append(host.ContainingNamespace.ToDisplayString())
+                    .AppendLine();
+            code.AppendLine("{");
+            indentation = "    ";
+        }
+
+        Stack<INamedTypeSymbol> typeHierarchy = new();
+        for (INamedTypeSymbol? current = host; current != null; current = current.ContainingType)
+        {
+            typeHierarchy.Push(current);
+        }
+
+        int declarationCount = typeHierarchy.Count;
+        foreach (INamedTypeSymbol type in typeHierarchy)
+        {
+            code.Append(indentation)
+                    .Append("partial ")
+                    .Append(GetTypeDeclarationKeyword(type))
+                    .Append(' ')
+                    .Append(EscapeIdentifier(type.Name));
+            if (type.TypeParameters.Length > 0)
             {
-                return index;
+                code.Append('<')
+                        .Append(string.Join(", ", type.TypeParameters.Select(parameter => EscapeIdentifier(parameter.Name))))
+                        .Append('>');
+            }
+
+            code.AppendLine();
+            code.Append(indentation).AppendLine("{");
+            indentation += "    ";
+        }
+
+        code.Append(indentation).AppendLine("[global::MemoryPack.MemoryPackIgnore]");
+        code.Append(indentation).AppendLine("[global::MongoDB.Bson.Serialization.Attributes.BsonIgnore]");
+        code.Append(indentation)
+                .AppendLine("public global::ReactiveBinding.IReactiveObserver ReactiveObserver { get; set; }");
+
+        for (int index = 0; index < declarationCount; ++index)
+        {
+            indentation = indentation.Substring(0, indentation.Length - 4);
+            code.Append(indentation).AppendLine("}");
+        }
+
+        if (!host.ContainingNamespace.IsGlobalNamespace)
+        {
+            code.AppendLine("}");
+        }
+
+        return code.ToString();
+    }
+
+    private static string GetTypeDeclarationKeyword(INamedTypeSymbol type)
+    {
+        SyntaxNode? declaration = type.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
+        if (declaration is StructDeclarationSyntax)
+        {
+            return "struct";
+        }
+
+        if (declaration is RecordDeclarationSyntax)
+        {
+            return "record";
+        }
+
+        return "class";
+    }
+
+    private static void AppendBindCall(
+        StringBuilder code,
+        string indentation,
+        string systemType,
+        BindModel bind,
+        Func<string, string> oldValueExpression,
+        Func<string, string> currentValueExpression)
+    {
+        code.Append(indentation)
+                .Append(systemType)
+                .Append('.')
+                .Append(EscapeIdentifier(bind.Method.Name))
+                .Append("(this.owner");
+
+        int valueParameterCount = bind.Method.Parameters.Length - 1;
+        if (valueParameterCount == bind.ReactiveIds.Count)
+        {
+            foreach (string reactiveId in bind.ReactiveIds)
+            {
+                code.Append(", ").Append(currentValueExpression(reactiveId));
+            }
+        }
+        else if (valueParameterCount == bind.ReactiveIds.Count * 2)
+        {
+            foreach (string reactiveId in bind.ReactiveIds)
+            {
+                code.Append(", ").Append(oldValueExpression(reactiveId));
+                code.Append(", ").Append(currentValueExpression(reactiveId));
             }
         }
 
-        throw new InvalidOperationException($"Reactive source '{id}' was not validated.");
+        code.AppendLine(");");
     }
 
-    private static long ComputeSchemaHash(
-        GeneratorExecutionContext context,
-        INamedTypeSymbol system,
-        IReadOnlyList<SourceModel> sources,
-        IReadOnlyList<BindModel> binds,
-        int slotCount)
+    private static string GetGeneratedObserverTypeName(INamedTypeSymbol system)
     {
-        StringBuilder schema = new();
-        schema.Append(GetMetadataName(system)).Append('|').Append(slotCount);
-        foreach (SourceModel source in sources)
+        const string baseName = "__ETReactiveObserver";
+        string candidate = baseName;
+        int suffix = 0;
+        while (system.GetTypeMembers(candidate).Length > 0)
         {
-            schema.Append("|S:")
-                    .Append(source.Id)
-                    .Append(':')
-                    .Append(source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat))
-                    .Append(':')
-                    .Append(source.IsVersioned ? 'V' : 'E');
-            AppendMethodSyntax(context, schema, source.Method);
+            candidate = $"{baseName}_{++suffix}";
         }
 
-        foreach (BindModel bind in binds)
-        {
-            schema.Append("|B:")
-                    .Append(bind.Method.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat))
-                    .Append(':')
-                    .Append(string.Join(",", bind.ReactiveIds));
-            AppendMethodSyntax(context, schema, bind.Method);
-        }
-
-        return ComputeHash(schema.ToString());
-    }
-
-    private static void AppendMethodSyntax(
-        GeneratorExecutionContext context,
-        StringBuilder schema,
-        IMethodSymbol method)
-    {
-        SyntaxReference? syntaxReference = method.DeclaringSyntaxReferences.FirstOrDefault();
-        if (syntaxReference?.GetSyntax(context.CancellationToken) is MethodDeclarationSyntax methodSyntax)
-        {
-            schema.Append(':').Append(methodSyntax.ToFullString());
-        }
-    }
-
-    private static long ComputeHash(string text)
-    {
-        const ulong seed = 1313;
-        ulong hash = 0;
-        unchecked
-        {
-            foreach (char character in text)
-            {
-                hash = hash * seed + (byte)(character >> 8);
-                hash = hash * seed + (byte)(character & byte.MaxValue);
-            }
-        }
-
-        return unchecked((long)hash);
-    }
-
-    private static string ToLongExpression(long value)
-    {
-        return $"unchecked((long)0x{unchecked((ulong)value):X16}UL)";
+        return candidate;
     }
 
     private static string GetMetadataName(INamedTypeSymbol type)
@@ -901,6 +1348,12 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             string.Equals(attribute.AttributeClass?.ToDisplayString(), metadataName, StringComparison.Ordinal));
     }
 
+    private static bool TryGetSystemAttribute(INamedTypeSymbol system, out AttributeData? attribute)
+    {
+        attribute = GetAttribute(system, SystemAttributeName);
+        return attribute != null;
+    }
+
     private static Location GetLocation(ISymbol symbol, ClassDeclarationSyntax fallback)
     {
         return symbol.Locations.FirstOrDefault(static location => location.IsInSource) ?? fallback.Identifier.GetLocation();
@@ -919,16 +1372,32 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
     {
         public List<ClassDeclarationSyntax> SystemDeclarations { get; } = new();
 
+        public List<ClassDeclarationSyntax> HostDeclarations { get; } = new();
+
         public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
         {
-            if (context.Node is not ClassDeclarationSyntax declaration || declaration.AttributeLists.Count == 0 ||
-                context.SemanticModel.GetDeclaredSymbol(declaration) is not INamedTypeSymbol system ||
-                GetAttribute(system, SystemAttributeName) == null)
+            if (context.Node is not ClassDeclarationSyntax declaration ||
+                context.SemanticModel.GetDeclaredSymbol(declaration) is not INamedTypeSymbol type)
             {
                 return;
             }
 
-            this.SystemDeclarations.Add(declaration);
+            if (declaration.AttributeLists.Count > 0 && GetAttribute(type, SystemAttributeName) != null)
+            {
+                this.SystemDeclarations.Add(declaration);
+            }
+
+            if (declaration.BaseList == null)
+            {
+                return;
+            }
+
+            INamedTypeSymbol? reactiveHostInterface =
+                    context.SemanticModel.Compilation.GetTypeByMetadataName(ReactiveHostInterfaceName);
+            if (DirectlyImplementsInterface(type, reactiveHostInterface))
+            {
+                this.HostDeclarations.Add(declaration);
+            }
         }
     }
 
@@ -947,10 +1416,25 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         public ITypeSymbol Type => this.Method.ReturnType;
 
         public bool IsVersioned { get; }
+    }
 
-        public int ValueSlotIndex { get; set; }
+    private sealed class SystemCandidate
+    {
+        public SystemCandidate(
+            ClassDeclarationSyntax declaration,
+            INamedTypeSymbol system,
+            INamedTypeSymbol? owner)
+        {
+            this.Declaration = declaration;
+            this.System = system;
+            this.Owner = owner;
+        }
 
-        public int VersionSlotIndex { get; set; } = -1;
+        public ClassDeclarationSyntax Declaration { get; }
+
+        public INamedTypeSymbol System { get; }
+
+        public INamedTypeSymbol? Owner { get; }
     }
 
     private sealed class BindModel

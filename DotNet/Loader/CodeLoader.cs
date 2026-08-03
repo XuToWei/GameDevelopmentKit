@@ -52,7 +52,6 @@ namespace ET
             CodeTypes codeTypes = World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[] { typeof (World).Assembly, typeof(Init).Assembly, this.model, hotfixAssembly });
 
             codeTypes.CreateCode();
-            ETReactiveRuntime.NotifyCodeReload();
             Log.Debug($"reload dll finish!");
         }
     }

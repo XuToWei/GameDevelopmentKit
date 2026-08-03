@@ -3,20 +3,25 @@ using System;
 namespace ET
 {
     /// <summary>
-    /// Declares a fieldless reactive binding group implemented by a Hotfix system.
-    /// Binding state must be owned by the stable target type.
+    /// Generates a Hotfix-local reactive observer for an EntitySystemOf class.
+    /// The EntitySystemOf owner must implement IETReactiveHost.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class ETReactiveSystemOfAttribute: BaseAttribute
+    public sealed class ETReactiveSystemAttribute: BaseAttribute
     {
-        public Type Type { get; }
+    }
 
-        public string StateMemberName { get; }
+    /// <summary>
+    /// Associates a generated observer Type with its stable reactive owner Type.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
+    public sealed class ETReactiveObserverAttribute: BaseAttribute
+    {
+        public Type OwnerType { get; }
 
-        public ETReactiveSystemOfAttribute(Type type, string stateMemberName)
+        public ETReactiveObserverAttribute(Type ownerType)
         {
-            this.Type = type;
-            this.StateMemberName = stateMemberName;
+            this.OwnerType = ownerType;
         }
     }
 
