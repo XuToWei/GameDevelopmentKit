@@ -4,22 +4,40 @@ namespace Game
 {
     public partial class RuntimeInspectorForm
     {
-        [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
-        private StateController.StateControllerMono m_RootStateControllerMono;
-        [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("BindData"), Sirenix.OdinInspector.ReadOnly]
+        [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("Binding Targets"), Sirenix.OdinInspector.ReadOnly]
         private UnityEngine.UI.Button m_CloseButton;
+        [UnityEngine.SerializeField, Sirenix.OdinInspector.FoldoutGroup("Binding Targets"), Sirenix.OdinInspector.ReadOnly]
+        private StateController.StateController m_RootStateController;
 
+        public UnityEngine.UI.Button CloseButton => this.m_CloseButton;
+        public StateController.StateController RootStateController => this.m_RootStateController;
 
-        public StateController.StateControllerMono RootStateControllerMono => m_RootStateControllerMono;
-        public UnityEngine.UI.Button CloseButton => m_CloseButton;
+#if UNITY_EDITOR
+        [Sirenix.OdinInspector.OnInspectorGUI, Sirenix.OdinInspector.PropertyOrder(-99999), Sirenix.OdinInspector.ShowIf(nameof(HasMissingTargets))]
+        private void DrawMissingTargetsWarning()
+        {
+            Sirenix.Utilities.Editor.SirenixEditorGUI.MessageBox("Binding targets contain missing references.", UnityEditor.MessageType.Warning);
+        }
 
+        private bool HasMissingTargets()
+        {
+            if (this.m_CloseButton == null) return true;
+            if (this.m_RootStateController == null) return true;
+            return false;
+        }
+#endif
 
-        private StateController.StateControllerData m_RootLayoutStateControllerData;
-        public StateController.StateControllerData RootLayoutStateControllerData => m_RootLayoutStateControllerData ??= RootStateControllerMono.GetData("Layout");
+        private StateController.StateGroup m_RootLayoutStateGroup;
+        public StateController.StateGroup RootLayoutStateGroup => this.m_RootLayoutStateGroup ??= this.RootStateController.GetGroup("Layout");
         public static class RootLayoutStateName
         {
             public const string Vertical = "Vertical";
             public const string Horizontal = "Horizontal";
+        }
+        public static class RootLayoutStateIndex
+        {
+            public const int Vertical = 0;
+            public const int Horizontal = 1;
         }
 
     }

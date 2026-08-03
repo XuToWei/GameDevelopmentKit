@@ -369,7 +369,7 @@ namespace TrueSync {
             var yl = y._serializedValue;
 
             if (yl == 0) {
-                return MAX_VALUE;
+                return MaxValue;
                 //throw new DivideByZeroException();
             }
 

@@ -27,7 +27,7 @@ namespace ET.Client
             foreach (long playerId in room.PlayerIds)
             {
                 LSUnit lsUnit = lsUnitComponent.GetChild<LSUnit>(playerId);
-                GameObject prefab = await UGFComponent.Instance.LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
+                GameObject prefab = await root.GetComponent<UGFComponent>().LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
 
                 GameObject unitGo = UnityEngine.Object.Instantiate(prefab);
                 unitGo.transform.position = lsUnit.Position.ToVector();

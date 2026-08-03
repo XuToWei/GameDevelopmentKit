@@ -6,13 +6,19 @@ using UnityGameFramework.Extension;
 
 namespace ET
 {
-    public class UGFComponent : Singleton<UGFComponent>, ISingletonAwake
+    [EntitySystemOf(typeof(UGFComponent))]
+    [FriendOf(typeof(UGFComponent))]
+    public static partial class UGFComponentSystem
     {
-        public void Awake()
+        [EntitySystem]
+        private static void Awake(this UGFComponent self)
         {
-            
         }
-        
+    }
+
+    [ComponentOf(typeof(Scene))]
+    public sealed class UGFComponent : Entity, IAwake
+    {
         public async UniTask<T> LoadAssetAsync<T>(string assetName) where T : UnityEngine.Object
         {
             T asset = await GameEntry.Resource.LoadAssetAsync<T>(assetName);

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace Game
 {
     [ReplaceComponent(typeof(Button))]
-    [CodeBindName("ExButton")]
+    [BindingTargetToken("ExButton")]
     public class ExButton : Button
     {
         public static event Action AllButtonOnPointerDownEvent;

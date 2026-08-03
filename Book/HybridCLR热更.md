@@ -140,7 +140,7 @@ Player 中 `CodeRunner.EnableCodeBytesMode` 固定为 true。编辑器中由 `Ga
 | `ETCompile` | 编译 ET 全部业务 DLL |
 | `ETReload` | 编译后调用 `CodeLoader.ReloadAsync()` |
 
-`ETReload` 重新装载 Hotfix 与 HotfixView、重建 CodeTypes，然后 Invoke `OnCodeReload`。重新创建的 `ETReactiveSystem` 会在 `Awake()` 中更新 DLL 版本；已有 Entity 在下次 `ObserveChanges()` 时按需替换旧版本 observer，不再遍历所有 Fiber。已有实体数据不会自动迁移，新增字段与静态状态仍需谨慎处理。
+`ETReload` 重新装载 Hotfix 与 HotfixView、重建 CodeTypes，并重新创建所有带 `[Code]` 的 Singleton。需要随热重载刷新类型缓存的系统必须添加 `[Code]`。已有实体数据不会自动迁移，新增字段与静态状态仍需谨慎处理。
 
 GameHot 当前提供 `HotCompile`，没有与 ETReload 等价的运行中程序集替换入口。
 

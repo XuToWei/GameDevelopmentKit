@@ -12,7 +12,7 @@ namespace ET.Client
             Unit unit = args.Unit;
             // Unit View层
             // 这里资源需要卸载，Demo就不搞了
-            GameObject unitGo = await UGFComponent.Instance.LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
+            GameObject unitGo = await scene.Root().GetComponent<UGFComponent>().LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
 
             GameObject go = UnityEngine.Object.Instantiate(unitGo);
             go.transform.position = unit.Position;
