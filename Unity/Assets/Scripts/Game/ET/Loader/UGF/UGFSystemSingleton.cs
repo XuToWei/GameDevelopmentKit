@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ET
 {
+    [Code]
     public class UGFSystemSingleton : Singleton<UGFSystemSingleton>, ISingletonAwake
     {
         private TypeSystems m_TypeSystems { get; set; }

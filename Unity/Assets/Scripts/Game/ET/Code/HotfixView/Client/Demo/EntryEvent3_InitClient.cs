@@ -9,9 +9,7 @@ namespace ET.Client
         {
             //Test
             root.AddComponent<TestComponent>();
-            
-            World.Instance.AddSingleton<UGFComponent>();
-            World.Instance.AddSingleton<UGFSystemSingleton>();
+            root.AddComponent<UGFComponent>();
             
             GlobalComponent globalComponent = root.AddComponent<GlobalComponent>();
             root.AddComponent<UIComponent>();

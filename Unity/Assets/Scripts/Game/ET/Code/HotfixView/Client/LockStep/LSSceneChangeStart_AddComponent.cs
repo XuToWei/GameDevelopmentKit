@@ -18,7 +18,7 @@ namespace ET.Client
             await room.GetComponent<UIComponent>().AddUIFormComponentAsync<UIFormLSRoomComponent>(UGFUIFormId.UILSRoom);
             
             // 加载场景资源
-            await UGFComponent.Instance.LoadSceneAsync(AssetUtility.GetSceneAsset(room.Name));
+            await clientScene.Root().GetComponent<UGFComponent>().LoadSceneAsync(AssetUtility.GetSceneAsset(room.Name));
         }
     }
 }
