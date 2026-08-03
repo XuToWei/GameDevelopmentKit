@@ -82,7 +82,7 @@ namespace ET.Client
 
 ## 3. 注册实体
 
-推荐通过组件跟随实体生命周期：
+实体只能通过接收组件跟随生命周期注册：
 
 ```csharp
 player.AddComponent<DynamicEventReceiverComponent>();
@@ -92,16 +92,13 @@ player.AddComponent<DynamicEventReceiverComponent>();
 
 只有 Main Fiber 中、`Root()` 可取得该组件的实体才能使用此生命周期组件；其他 Fiber 当前未初始化 DynamicEvent。
 
-也可直接调用：
+需要提前停止接收时，移除该组件：
 
 ```csharp
-DynamicEventComponent dynamicEventComponent =
-    player.Root().GetComponent<DynamicEventComponent>();
-dynamicEventComponent.RegisterEntity(player);
-dynamicEventComponent.UnRegisterEntity(player);
+player.RemoveComponent<DynamicEventReceiverComponent>();
 ```
 
-直接注册时，调用方必须保证反注册。重复注册会被去重。
+`RegisterEntity` 与 `UnRegisterEntity` 是模块内部生命周期方法，不作为业务 API 暴露。
 
 ## 4. 发布事件
 
@@ -111,7 +108,6 @@ dynamicEventComponent.UnRegisterEntity(player);
 DynamicEventComponent dynamicEventComponent =
     scene.Root().GetComponent<DynamicEventComponent>();
 dynamicEventComponent.Publish(
-    scene,
     new PlayerLevelChanged(10));
 ```
 
@@ -123,7 +119,6 @@ dynamicEventComponent.Publish(
 DynamicEventComponent dynamicEventComponent =
     scene.Root().GetComponent<DynamicEventComponent>();
 await dynamicEventComponent.PublishAsync(
-    scene,
     new PlayerLevelChanged(10));
 ```
 
@@ -133,11 +128,10 @@ await dynamicEventComponent.PublishAsync(
 
 | API | SceneType 来源 |
 | --- | --- |
-| `Publish(arg)` | `SceneType.All`，使用 Main Scene 的注册表 |
-| `Publish(scene, arg)` | `scene.SceneType` |
+| `Publish(arg)` | `DynamicEventComponent` 所属 Scene 的 `SceneType` |
 | `Publish(sceneType, arg)` | 调用方显式传入，使用 Main Scene 的注册表 |
 
-Async 版本提供相同三组重载。传入 Scene 时，系统会检查 Scene 与自身是否属于同一个 Fiber；跨 Fiber 通知必须使用 Actor 消息。
+Async 版本提供相同两组重载。默认发布始终使用组件所属 Scene，因此不需要传入 Scene，也不会借用其他 Fiber 的 SceneType。跨 Fiber 通知必须使用 Actor 消息。
 
 ## 分发规则
 
