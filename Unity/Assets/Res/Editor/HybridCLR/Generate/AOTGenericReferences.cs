@@ -1065,7 +1065,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// ET.AInvokeHandler<ET.NetComponentOnRead>
 	// ET.AInvokeHandler<ET.OnApplicationFocus>
 	// ET.AInvokeHandler<ET.OnApplicationPause>
-	// ET.AInvokeHandler<ET.OnCodeReload>
 	// ET.AInvokeHandler<ET.OnShutdown>
 	// ET.AInvokeHandler<ET.Server.RobotInvokeArgs,Cysharp.Threading.Tasks.UniTask>
 	// ET.AInvokeHandler<ET.TimerCallback>
