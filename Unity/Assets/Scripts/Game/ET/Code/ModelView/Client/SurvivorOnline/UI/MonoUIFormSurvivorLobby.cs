@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace ET.Client
 {
-    [MonoCodeBind]
+    [MonoBehaviourBinding]
     public sealed partial class MonoUIFormSurvivorLobby: AETMonoUGFUIForm
     {
         [SerializeField]

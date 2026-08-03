@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using ReactiveBinding;
 
 namespace ET.Client
 {
     [ComponentOf(typeof(Scene))]
-    public sealed class SurvivorClientComponent: Entity, IAwake, IDestroy
+    public sealed partial class SurvivorClientComponent: Entity, IAwake, IDestroy, IETReactiveHost
     {
         private EntityRef<SurvivorRoom> room;
+        private EntityRef<SurvivorWorldComponent> world;
 
         public SurvivorRoom Room
         {
@@ -17,6 +17,18 @@ namespace ET.Client
             set
             {
                 this.room = value;
+            }
+        }
+
+        public SurvivorWorldComponent World
+        {
+            get
+            {
+                return this.world;
+            }
+            set
+            {
+                this.world = value;
             }
         }
 
@@ -45,10 +57,6 @@ namespace ET.Client
         public G2C_SurvivorStartGame StartResponse { get; set; }
 
         public C2G_SurvivorInput InputMessage { get; set; }
-
-        public IReactiveObserver DataObserver { get; set; }
-
-        public List<IReactiveObserver> PresentationObservers { get; } = new();
 
         public IEnumerator<KeyValuePair<long, SurvivorPlayerState>> PlayerEnumerator { get; set; }
 

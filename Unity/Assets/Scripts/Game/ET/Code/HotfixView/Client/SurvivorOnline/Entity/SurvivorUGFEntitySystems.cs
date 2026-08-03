@@ -3,6 +3,7 @@ using UnityEngine;
 namespace ET.Client
 {
     [EntitySystemOf(typeof(SurvivorPlayerUGFEntity))]
+    [ETReactiveSystem]
     public static partial class SurvivorPlayerUGFEntitySystem
     {
         [EntitySystem]
@@ -13,8 +14,15 @@ namespace ET.Client
         [UGFEntitySystem]
         private static void UGFEntityOnShow(this SurvivorPlayerUGFEntity self)
         {
-            self.Observer = SurvivorPlayerUGFEntityReactiveObserver.Create(self);
-            self.Observer.ObserveChanges();
+            SurvivorPlayerEntry entry = self.GetParent<SurvivorPlayerEntry>();
+            self.State = entry
+                    .GetParent<SurvivorClientComponent>()
+                    .Runtime
+                    .PlayerStates[entry.Id];
+            self.View.SpriteRenderer.color = new Color(0.2f, 0.55f, 1f, 1f);
+            self.View.SpriteRenderer.sortingOrder = 20;
+            self.CachedTransform.localScale = Vector3.one;
+            self.ObserveChanges();
         }
 
         [UGFEntitySystem]
@@ -23,19 +31,40 @@ namespace ET.Client
             float elapseSeconds,
             float realElapseSeconds)
         {
-            self.Observer.ObserveChanges();
-            self.Observer.ResetChanges();
+            self.ObserveChanges();
         }
 
         [UGFEntitySystem]
         private static void UGFEntityOnHide(this SurvivorPlayerUGFEntity self, bool isShutdown)
         {
-            SurvivorPlayerUGFEntityReactiveObserver.Recycle(self.Observer);
-            self.Observer = null;
+            self.ClearReactive();
+            self.State = null;
+        }
+
+        [ETReactiveSource]
+        private static int PositionX(this SurvivorPlayerUGFEntity self)
+        {
+            return self.State.PositionX;
+        }
+
+        [ETReactiveSource]
+        private static int PositionY(this SurvivorPlayerUGFEntity self)
+        {
+            return self.State.PositionY;
+        }
+
+        [ETReactiveBind(nameof(PositionX), nameof(PositionY))]
+        private static void OnPositionChanged(
+            this SurvivorPlayerUGFEntity self,
+            int positionX,
+            int positionY)
+        {
+            self.CachedTransform.position = new Vector3(positionX / 1000f, positionY / 1000f, 0f);
         }
     }
 
     [EntitySystemOf(typeof(SurvivorMonsterUGFEntity))]
+    [ETReactiveSystem]
     public static partial class SurvivorMonsterUGFEntitySystem
     {
         [EntitySystem]
@@ -46,35 +75,57 @@ namespace ET.Client
         [UGFEntitySystem]
         private static void UGFEntityOnShow(this SurvivorMonsterUGFEntity self)
         {
+            SurvivorMonsterEntry entry = self.GetParent<SurvivorMonsterEntry>();
+            self.State = entry
+                    .GetParent<SurvivorClientComponent>()
+                    .Runtime
+                    .MonsterStates[entry.Id];
             self.View.SpriteRenderer.color = new Color(0.9f, 0.2f, 0.2f, 1f);
             self.View.SpriteRenderer.sortingOrder = 10;
             self.CachedTransform.localScale = new Vector3(0.8f, 0.8f, 1f);
-            self.Observer = new SurvivorMonsterUGFEntityReactiveObserver(
-                self,
-                self.GetParent<SurvivorMonsterEntry>()
-                        .GetParent<SurvivorClientComponent>()
-                        .Runtime
-                        .MonsterStates[self.GetParent<SurvivorMonsterEntry>().Id],
-                new SurvivorUGFEntityReactionSink());
-            self.Observer.ResetChanges();
-            self.GetParent<SurvivorMonsterEntry>()
-                    .GetParent<SurvivorClientComponent>()
-                    .RegisterPresentationObserver(self.Observer);
-            self.Observer.ObserveChanges();
+            self.ObserveChanges();
+        }
+
+        [UGFEntitySystem]
+        private static void UGFEntityOnUpdate(
+            this SurvivorMonsterUGFEntity self,
+            float elapseSeconds,
+            float realElapseSeconds)
+        {
+            self.ObserveChanges();
         }
 
         [UGFEntitySystem]
         private static void UGFEntityOnHide(this SurvivorMonsterUGFEntity self, bool isShutdown)
         {
-            self.GetParent<SurvivorMonsterEntry>()
-                    .GetParent<SurvivorClientComponent>()
-                    .UnregisterPresentationObserver(self.Observer);
-            self.Observer.ResetChanges();
-            self.Observer = null;
+            self.ClearReactive();
+            self.State = null;
+        }
+
+        [ETReactiveSource]
+        private static int PositionX(this SurvivorMonsterUGFEntity self)
+        {
+            return self.State.PositionX;
+        }
+
+        [ETReactiveSource]
+        private static int PositionY(this SurvivorMonsterUGFEntity self)
+        {
+            return self.State.PositionY;
+        }
+
+        [ETReactiveBind(nameof(PositionX), nameof(PositionY))]
+        private static void OnPositionChanged(
+            this SurvivorMonsterUGFEntity self,
+            int positionX,
+            int positionY)
+        {
+            self.CachedTransform.position = new Vector3(positionX / 1000f, positionY / 1000f, 0f);
         }
     }
 
     [EntitySystemOf(typeof(SurvivorProjectileUGFEntity))]
+    [ETReactiveSystem]
     public static partial class SurvivorProjectileUGFEntitySystem
     {
         [EntitySystem]
@@ -85,35 +136,57 @@ namespace ET.Client
         [UGFEntitySystem]
         private static void UGFEntityOnShow(this SurvivorProjectileUGFEntity self)
         {
+            SurvivorProjectileEntry entry = self.GetParent<SurvivorProjectileEntry>();
+            self.State = entry
+                    .GetParent<SurvivorClientComponent>()
+                    .Runtime
+                    .ProjectileStates[entry.Id];
             self.View.SpriteRenderer.color = new Color(1f, 0.85f, 0.1f, 1f);
             self.View.SpriteRenderer.sortingOrder = 30;
             self.CachedTransform.localScale = new Vector3(0.3f, 0.3f, 1f);
-            self.Observer = new SurvivorProjectileUGFEntityReactiveObserver(
-                self,
-                self.GetParent<SurvivorProjectileEntry>()
-                        .GetParent<SurvivorClientComponent>()
-                        .Runtime
-                        .ProjectileStates[self.GetParent<SurvivorProjectileEntry>().Id],
-                new SurvivorUGFEntityReactionSink());
-            self.Observer.ResetChanges();
-            self.GetParent<SurvivorProjectileEntry>()
-                    .GetParent<SurvivorClientComponent>()
-                    .RegisterPresentationObserver(self.Observer);
-            self.Observer.ObserveChanges();
+            self.ObserveChanges();
+        }
+
+        [UGFEntitySystem]
+        private static void UGFEntityOnUpdate(
+            this SurvivorProjectileUGFEntity self,
+            float elapseSeconds,
+            float realElapseSeconds)
+        {
+            self.ObserveChanges();
         }
 
         [UGFEntitySystem]
         private static void UGFEntityOnHide(this SurvivorProjectileUGFEntity self, bool isShutdown)
         {
-            self.GetParent<SurvivorProjectileEntry>()
-                    .GetParent<SurvivorClientComponent>()
-                    .UnregisterPresentationObserver(self.Observer);
-            self.Observer.ResetChanges();
-            self.Observer = null;
+            self.ClearReactive();
+            self.State = null;
+        }
+
+        [ETReactiveSource]
+        private static int PositionX(this SurvivorProjectileUGFEntity self)
+        {
+            return self.State.PositionX;
+        }
+
+        [ETReactiveSource]
+        private static int PositionY(this SurvivorProjectileUGFEntity self)
+        {
+            return self.State.PositionY;
+        }
+
+        [ETReactiveBind(nameof(PositionX), nameof(PositionY))]
+        private static void OnPositionChanged(
+            this SurvivorProjectileUGFEntity self,
+            int positionX,
+            int positionY)
+        {
+            self.CachedTransform.position = new Vector3(positionX / 1000f, positionY / 1000f, 0f);
         }
     }
 
     [EntitySystemOf(typeof(SurvivorPickupUGFEntity))]
+    [ETReactiveSystem]
     public static partial class SurvivorPickupUGFEntitySystem
     {
         [EntitySystem]
@@ -124,31 +197,52 @@ namespace ET.Client
         [UGFEntitySystem]
         private static void UGFEntityOnShow(this SurvivorPickupUGFEntity self)
         {
+            SurvivorPickupEntry entry = self.GetParent<SurvivorPickupEntry>();
+            self.State = entry
+                    .GetParent<SurvivorClientComponent>()
+                    .Runtime
+                    .PickupStates[entry.Id];
             self.View.SpriteRenderer.color = new Color(0.25f, 1f, 0.35f, 1f);
             self.View.SpriteRenderer.sortingOrder = 5;
             self.CachedTransform.localScale = new Vector3(0.4f, 0.4f, 1f);
-            self.Observer = new SurvivorPickupUGFEntityReactiveObserver(
-                self,
-                self.GetParent<SurvivorPickupEntry>()
-                        .GetParent<SurvivorClientComponent>()
-                        .Runtime
-                        .PickupStates[self.GetParent<SurvivorPickupEntry>().Id],
-                new SurvivorUGFEntityReactionSink());
-            self.Observer.ResetChanges();
-            self.GetParent<SurvivorPickupEntry>()
-                    .GetParent<SurvivorClientComponent>()
-                    .RegisterPresentationObserver(self.Observer);
-            self.Observer.ObserveChanges();
+            self.ObserveChanges();
+        }
+
+        [UGFEntitySystem]
+        private static void UGFEntityOnUpdate(
+            this SurvivorPickupUGFEntity self,
+            float elapseSeconds,
+            float realElapseSeconds)
+        {
+            self.ObserveChanges();
         }
 
         [UGFEntitySystem]
         private static void UGFEntityOnHide(this SurvivorPickupUGFEntity self, bool isShutdown)
         {
-            self.GetParent<SurvivorPickupEntry>()
-                    .GetParent<SurvivorClientComponent>()
-                    .UnregisterPresentationObserver(self.Observer);
-            self.Observer.ResetChanges();
-            self.Observer = null;
+            self.ClearReactive();
+            self.State = null;
+        }
+
+        [ETReactiveSource]
+        private static int PositionX(this SurvivorPickupUGFEntity self)
+        {
+            return self.State.PositionX;
+        }
+
+        [ETReactiveSource]
+        private static int PositionY(this SurvivorPickupUGFEntity self)
+        {
+            return self.State.PositionY;
+        }
+
+        [ETReactiveBind(nameof(PositionX), nameof(PositionY))]
+        private static void OnPositionChanged(
+            this SurvivorPickupUGFEntity self,
+            int positionX,
+            int positionY)
+        {
+            self.CachedTransform.position = new Vector3(positionX / 1000f, positionY / 1000f, 0f);
         }
     }
 }

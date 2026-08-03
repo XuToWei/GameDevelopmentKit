@@ -3,25 +3,21 @@ using Cysharp.Threading.Tasks;
 namespace ET.Client
 {
     [EntitySystemOf(typeof(SurvivorClientComponent))]
+    [ETReactiveSystem]
     public static partial class SurvivorClientComponentSystem
     {
         [EntitySystem]
         private static void Awake(this SurvivorClientComponent self)
         {
             self.Runtime = new SurvivorClientRuntime();
-            self.Runtime.DataObserver = new SurvivorClientReactiveObserver(
-                self,
-                new SurvivorClientReactionSink());
-            self.Runtime.DataObserver.ResetChanges();
             self.Root().SceneType |= SceneType.SurvivorClient | SceneType.SurvivorView;
         }
 
         [EntitySystem]
         private static void Destroy(this SurvivorClientComponent self)
         {
-            self.Runtime.DataObserver.ResetChanges();
-            self.Runtime.DataObserver = null;
-            self.Runtime.PresentationObservers.Clear();
+            self.ClearReactive();
+            self.World = null;
             self.Room = null;
             self.Runtime = null;
         }
@@ -104,11 +100,10 @@ namespace ET.Client
                 return;
             }
 
-            self.Room.GetComponent<SurvivorWorldComponent>().ApplySnapshot(payload);
+            self.World.ApplySnapshot(payload);
             self.LastSequence = sequence;
             self.HasBaseline = true;
-            self.Runtime.DataObserver.ObserveChanges();
-            self.NotifyPresentationObservers();
+            self.ObserveChanges();
         }
 
         public static void PrepareSnapshotConsumer(this SurvivorClientComponent self, string roomCode)
@@ -121,53 +116,19 @@ namespace ET.Client
             self.Room = self.Root().AddComponent<SurvivorRoom, SceneType, string>(
                 SceneType.SurvivorClient,
                 roomCode);
-            self.Room.AddComponent<SurvivorWorldComponent, SurvivorWorldRole, string>(
+            self.World = self.Room.AddComponent<SurvivorWorldComponent, SurvivorWorldRole, string>(
                 SurvivorWorldRole.SnapshotConsumer,
                 roomCode);
             self.LastSequence = 0;
             self.InputSequence = 0;
             self.HasBaseline = false;
-            self.Runtime.DataObserver.ResetChanges();
+            self.ResetReactive();
             self.Runtime.PlayerStates.Clear();
             self.Runtime.MonsterStates.Clear();
             self.Runtime.ProjectileStates.Clear();
             self.Runtime.PickupStates.Clear();
             self.Runtime.SeenStateIds.Clear();
             self.Runtime.RemovalStateIds.Clear();
-        }
-
-        public static void RegisterPresentationObserver(
-            this SurvivorClientComponent self,
-            ReactiveBinding.IReactiveObserver observer)
-        {
-            if (self.Runtime.PresentationObservers.Contains(observer))
-            {
-                return;
-            }
-
-            self.Runtime.PresentationObservers.Add(observer);
-        }
-
-        public static void UnregisterPresentationObserver(
-            this SurvivorClientComponent self,
-            ReactiveBinding.IReactiveObserver observer)
-        {
-            if (self.Runtime == null || observer == null)
-            {
-                return;
-            }
-
-            self.Runtime.PresentationObservers.Remove(observer);
-        }
-
-        public static void NotifyPresentationObservers(this SurvivorClientComponent self)
-        {
-            self.Runtime.Index = 0;
-            while (self.Runtime.Index < self.Runtime.PresentationObservers.Count)
-            {
-                self.Runtime.PresentationObservers[self.Runtime.Index].ObserveChanges();
-                self.Runtime.Index++;
-            }
         }
 
         public static void ReconcileStateEntries(this SurvivorClientComponent self)
@@ -178,8 +139,7 @@ namespace ET.Client
             self.Runtime.ProjectileStates.Clear();
             self.Runtime.PickupStates.Clear();
 
-            self.Runtime.PlayerEnumerator = self.Room
-                    .GetComponent<SurvivorWorldComponent>()
+            self.Runtime.PlayerEnumerator = self.World
                     .Data
                     .Players
                     .GetEnumerator();
@@ -198,8 +158,7 @@ namespace ET.Client
             self.Runtime.PlayerEnumerator.Dispose();
             self.Runtime.PlayerEnumerator = null;
 
-            self.Runtime.MonsterEnumerator = self.Room
-                    .GetComponent<SurvivorWorldComponent>()
+            self.Runtime.MonsterEnumerator = self.World
                     .Data
                     .Monsters
                     .GetEnumerator();
@@ -218,8 +177,7 @@ namespace ET.Client
             self.Runtime.MonsterEnumerator.Dispose();
             self.Runtime.MonsterEnumerator = null;
 
-            self.Runtime.ProjectileEnumerator = self.Room
-                    .GetComponent<SurvivorWorldComponent>()
+            self.Runtime.ProjectileEnumerator = self.World
                     .Data
                     .Projectiles
                     .GetEnumerator();
@@ -238,8 +196,7 @@ namespace ET.Client
             self.Runtime.ProjectileEnumerator.Dispose();
             self.Runtime.ProjectileEnumerator = null;
 
-            self.Runtime.PickupEnumerator = self.Room
-                    .GetComponent<SurvivorWorldComponent>()
+            self.Runtime.PickupEnumerator = self.World
                     .Data
                     .Pickups
                     .GetEnumerator();
@@ -276,6 +233,40 @@ namespace ET.Client
                 self.RemoveChild(self.Runtime.RemovalStateIds[self.Runtime.Index]);
                 self.Runtime.Index++;
             }
+        }
+
+        [ETReactiveSource]
+        private static long PlayerSetRevision(this SurvivorClientComponent self)
+        {
+            return self.World?.Data?.PlayerSetRevision ?? 0;
+        }
+
+        [ETReactiveSource]
+        private static long MonsterSetRevision(this SurvivorClientComponent self)
+        {
+            return self.World?.Data?.MonsterSetRevision ?? 0;
+        }
+
+        [ETReactiveSource]
+        private static long ProjectileSetRevision(this SurvivorClientComponent self)
+        {
+            return self.World?.Data?.ProjectileSetRevision ?? 0;
+        }
+
+        [ETReactiveSource]
+        private static long PickupSetRevision(this SurvivorClientComponent self)
+        {
+            return self.World?.Data?.PickupSetRevision ?? 0;
+        }
+
+        [ETReactiveBind(
+            nameof(PlayerSetRevision),
+            nameof(MonsterSetRevision),
+            nameof(ProjectileSetRevision),
+            nameof(PickupSetRevision))]
+        private static void OnMembershipChanged(this SurvivorClientComponent self)
+        {
+            self.ReconcileStateEntries();
         }
     }
 }

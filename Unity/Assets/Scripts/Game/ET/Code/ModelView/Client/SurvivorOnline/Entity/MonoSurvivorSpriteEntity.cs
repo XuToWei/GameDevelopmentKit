@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ET.Client
 {
-    [MonoCodeBind]
+    [MonoBehaviourBinding]
     [RequireComponent(typeof(SpriteRenderer))]
     public sealed partial class MonoSurvivorSpriteEntity: AETMonoUGFEntity
     {

@@ -1,25 +1,50 @@
-using ReactiveBinding;
-
 namespace ET.Client
 {
     [ComponentOf(typeof(UIComponent))]
-    public sealed class UIFormSurvivorLobbyComponent:
+    public sealed partial class UIFormSurvivorLobbyComponent:
             UGFUIForm<MonoUIFormSurvivorLobby>,
             IAwake,
             IUGFUIFormOnOpen,
-            IUGFUIFormOnClose
+            IUGFUIFormOnUpdate,
+            IUGFUIFormOnClose,
+            IETReactiveHost
     {
-        public IReactiveObserver Observer { get; set; }
+        private EntityRef<SurvivorClientComponent> client;
+
+        public SurvivorClientComponent Client
+        {
+            get
+            {
+                return this.client;
+            }
+            set
+            {
+                this.client = value;
+            }
+        }
     }
 
     [ComponentOf(typeof(UIComponent))]
-    public sealed class UIFormSurvivorHudComponent:
+    public sealed partial class UIFormSurvivorHudComponent:
             UGFUIForm<MonoUIFormSurvivorHud>,
             IAwake,
             IUGFUIFormOnOpen,
             IUGFUIFormOnUpdate,
-            IUGFUIFormOnClose
+            IUGFUIFormOnClose,
+            IETReactiveHost
     {
-        public IReactiveObserver Observer { get; set; }
+        private EntityRef<SurvivorClientComponent> client;
+
+        public SurvivorClientComponent Client
+        {
+            get
+            {
+                return this.client;
+            }
+            set
+            {
+                this.client = value;
+            }
+        }
     }
 }

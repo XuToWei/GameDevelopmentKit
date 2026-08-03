@@ -1,45 +1,50 @@
-using ReactiveBinding;
-
 namespace ET.Client
 {
     [ComponentOf(typeof(SurvivorPlayerEntry))]
-    public sealed class SurvivorPlayerUGFEntity:
+    public sealed partial class SurvivorPlayerUGFEntity:
             UGFEntity<MonoSurvivorSpriteEntity>,
             IAwake,
             IUGFEntityOnShow,
             IUGFEntityOnUpdate,
-            IUGFEntityOnHide
+            IUGFEntityOnHide,
+            IETReactiveHost
     {
-        public IReactiveObserver Observer { get; set; }
+        public SurvivorPlayerState State { get; set; }
     }
 
     [ComponentOf(typeof(SurvivorMonsterEntry))]
-    public sealed class SurvivorMonsterUGFEntity:
+    public sealed partial class SurvivorMonsterUGFEntity:
             UGFEntity<MonoSurvivorSpriteEntity>,
             IAwake,
             IUGFEntityOnShow,
-            IUGFEntityOnHide
+            IUGFEntityOnUpdate,
+            IUGFEntityOnHide,
+            IETReactiveHost
     {
-        public IReactiveObserver Observer { get; set; }
+        public SurvivorMonsterState State { get; set; }
     }
 
     [ComponentOf(typeof(SurvivorProjectileEntry))]
-    public sealed class SurvivorProjectileUGFEntity:
+    public sealed partial class SurvivorProjectileUGFEntity:
             UGFEntity<MonoSurvivorSpriteEntity>,
             IAwake,
             IUGFEntityOnShow,
-            IUGFEntityOnHide
+            IUGFEntityOnUpdate,
+            IUGFEntityOnHide,
+            IETReactiveHost
     {
-        public IReactiveObserver Observer { get; set; }
+        public SurvivorProjectileState State { get; set; }
     }
 
     [ComponentOf(typeof(SurvivorPickupEntry))]
-    public sealed class SurvivorPickupUGFEntity:
+    public sealed partial class SurvivorPickupUGFEntity:
             UGFEntity<MonoSurvivorSpriteEntity>,
             IAwake,
             IUGFEntityOnShow,
-            IUGFEntityOnHide
+            IUGFEntityOnUpdate,
+            IUGFEntityOnHide,
+            IETReactiveHost
     {
-        public IReactiveObserver Observer { get; set; }
+        public SurvivorPickupState State { get; set; }
     }
 }
