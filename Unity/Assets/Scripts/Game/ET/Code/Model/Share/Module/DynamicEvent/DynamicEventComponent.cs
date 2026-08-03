@@ -190,10 +190,10 @@ namespace ET
     [ComponentOf(typeof(Scene))]
     public sealed class DynamicEventComponent : Entity, IAwake, IUpdate
     {
-        public readonly Dictionary<Type, List<EntityRef<Entity>>> RegisteredEntityDict = new();
+        internal readonly Dictionary<Type, List<EntityRef<Entity>>> RegisteredEntityDict = new();
 
-        public readonly List<EntityRef<Entity>> NeedRemoveEntities = new();
+        internal readonly List<EntityRef<Entity>> NeedRemoveEntities = new();
 
-        public long RemoveTime;
+        internal long RemoveTime;
     }
 }
