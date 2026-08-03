@@ -8,10 +8,7 @@ namespace ET
     {
         protected override async UniTask Run(Scene scene, EntryEvent1 a)
         {
-            if (DynamicEventSystem.Instance != null)
-                return;
-            World.Instance.AddSingleton<DynamicEventSystem>();
-            scene.AddComponent<DynamicEventSystemUpdateComponent>();
+            scene.AddComponent<DynamicEventComponent>();
             await UniTask.CompletedTask;
         }
     }

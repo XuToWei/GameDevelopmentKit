@@ -185,7 +185,6 @@
     <type fullname="ET.IUGFUIWidgetEvent" preserve="all" />
     <type fullname="ET.OnApplicationFocus" preserve="all" />
     <type fullname="ET.OnApplicationPause" preserve="all" />
-    <type fullname="ET.OnCodeReload" preserve="all" />
     <type fullname="ET.OnShutdown" preserve="all" />
     <type fullname="ET.UGFEntity" preserve="all" />
     <type fullname="ET.UGFEventComponent" preserve="all" />

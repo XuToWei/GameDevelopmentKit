@@ -30,14 +30,5 @@ namespace ET.Client
                 
             }
         }
-        
-        [Invoke]
-        public class OnCodeReloadEventHandler: AInvokeHandler<OnCodeReload>
-        {
-            public override void Handle(OnCodeReload args)
-            {
-                
-            }
-        }
     }
 }
