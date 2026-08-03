@@ -4,27 +4,21 @@
 
 # GameDevelopmentKit
 
-> 一套仓库贯通 Unity 客户端、ET 服务端、热更新、配置与发布，加速游戏从原型走向长期迭代。
+GameDevelopmentKit（GDK）是一套 [Unity] 游戏开发框架。服务端基于 [ET 8.1]，客户端以 [UnityGameFramework]（GF）为底座，可选择纯 GF（GameHot）或 ET 开发模式。
 
-GameDevelopmentKit（GDK）以 ET 8.1 承载服务端，以 UnityGameFramework（GF）承载客户端，并将 ET 客户端能力模块化接入 GF。项目同时提供 GameHot 业务层，客户端可选择纯 GF（GameHot）或 ET 两种开发路径。
+## 核心能力
 
-## 核心特色
-
-| 能力 | 说明 |
+| 领域 | 能力 |
 | --- | --- |
-| 双端统一 | [Unity] 客户端与 [ET][ET 8.1] 服务端共享协议、配置和基础设施 |
-| 双模切换 | [纯 GF（GameHot）][模式选择] 与 [ET][ET 8.1] 按需切换，底座为 [GF][UnityGameFramework] |
-| 热更新 | [HybridCLR] 统一热更程序集、AOT 元数据与构建 |
-| ET×GF | [ETUI]、[ETEntity] 将 [ET][ET 8.1] 生命周期接入 [GF][UnityGameFramework] |
-| GF资源 | Sprite/Texture2D 同路径加载与 [ResourceOptimize] 智能去冗余 |
-| GF网络 | [UnityWebSocket] 提供 WebSocket 通道 |
-| 统一异步 | [UniTask] 统一 [ET][ET 8.1] 与 [GF][UnityGameFramework] 异步模型 |
-| 响应式 | [ReactiveBinding] 源码生成绑定，支持依赖推断、版本集合与对象图全量/增量同步 |
-| 数据驱动 | [Luban] 并行导表并生成 UI、Entity、Scene、Sound 常量 |
-| 协议生成 | [Proto2CS] 生成 [ET][ET 8.1]/[MemoryPack][MemoryPack Extension] 与 [GF][UnityGameFramework]/[Protobuf][Protobuf Unity] 协议代码 |
-| UI/UX | [UXTool] 覆盖组件、层级、红点、引导、多语言与适配 |
-| 资源设置 | [AssetSet] 统一图片加载、共享、替换与回收 |
-| 编辑器 | [CodeBind]、[StateController]、[代码生成]、[包更新]、[Toolbar] 与 [一键构建] |
+| 成熟稳定 | 经商业项目验证，覆盖客户端、服务端、热更新、数据、网络、UI 与构建等完整开发链路 |
+| 双端架构 | [Unity] 客户端与 [ET 8.1] 服务端共享协议、配置和基础设施；客户端支持 [纯 GF（GameHot）][模式选择] 与 ET 模式 |
+| 热更新 | [HybridCLR] 管理热更程序集、AOT 元数据与构建流程 |
+| ET 与 GF 集成 | [ETUI]、[ETEntity] 接入 ET 生命周期，[UniTask] 统一异步模型 |
+| 数据与协议 | [Luban] 导出配置，[Proto2CS] 生成 ET/MemoryPack 与 GF/Protobuf 协议代码 |
+| 数据绑定 | [ReactiveBinding]、[CodeBind] 与 [StateController] 覆盖响应式数据、组件绑定和 UI 状态 |
+| UI 与资源 | [UXTool] 提供 UI 工具，[AssetSet] 管理图片资源，[ResourceOptimize] 优化资源冗余 |
+| 网络 | [UnityWebSocket] 提供 WebSocket 通道 |
+| 编辑器工具 | [代码生成]、[包更新]、[Toolbar] 与 [一键构建] |
 
 ## 运行模式
 
@@ -34,30 +28,33 @@ GameDevelopmentKit（GDK）以 ET 8.1 承载服务端，以 UnityGameFramework�
 | ET | `UNITY_ET` | ET 实体系统、客户端与服务端共享业务模型 |
 | HybridCLR | 叠加 `UNITY_HOTFIX` | 将当前业务模块改为 DLL 资源加载 |
 
-`UNITY_ET` 与 `UNITY_GAMEHOT` 由编辑器菜单互斥管理。切换模式时会同步调整 Luban 工程、资源收集规则、`link.xml` 和 HybridCLR 程序集列表。
+`UNITY_ET` 与 `UNITY_GAMEHOT` 互斥，`UNITY_HOTFIX` 可叠加。编辑器切换模式时会同步更新 Luban 工程、资源收集规则、`link.xml` 和 HybridCLR 程序集列表。
 
 ## 快速开始
 
-安装 [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) 与 [Unity 6000.3.18f1](https://unity.com/releases/editor/whats-new/6000.3.18f1)。项目默认运行配置已就绪，可任选一种方式编译 `Kit.sln`：
+1. 安装 [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) 和 [Unity 6000.3.18f1](https://unity.com/releases/editor/whats-new/6000.3.18f1)。
 
-```powershell
-dotnet build Kit.sln
-```
+2. 在仓库根目录编译工具项目：
 
-也可使用 [JetBrains Rider](https://www.jetbrains.com/rider/download/) 打开 `Kit.sln`，选择 `Build > Build Solution`（`Ctrl+F9`）完成编译。
+   ```powershell
+   dotnet build Kit.sln
+   ```
 
-或在 Unity 编辑器中选择 `Game > Build Tool Editor`，点击 `Build Kit.sln`。
+   也可通过 [Rider](https://www.jetbrains.com/rider/download/) 编译 `Kit.sln`，或在 Unity 中选择 `Game > Build Tool Editor`。
 
-用 Unity 打开 `Unity/`，进入 `Assets/Launcher.unity`，点击 Play 即可运行。模式切换与独立服务端见 [完整快速开始](Book/快速开始.md)。
+3. 用 Unity 打开 `Unity/`，加载 `Assets/Launcher.unity`，点击 Play。
 
-## 文档
+模式切换和独立服务端启动方式见 [完整快速开始](Book/快速开始.md)。
 
-- [Book 文档索引](Book/README.md)：按上手、开发、工具链、构建和设计分类。
-- [项目结构与模式选择](Book/Project结构.md)：理解纯 GF（GameHot）、ET 与热更新边界。
-- [UI 开发](Book/UI开发.md) / [Entity 开发](Book/Entity开发.md)：两套业务模式的完整创建流程。
-- [AssetSet 资源设置](Book/AssetSet.md)：UI 图片的资源加载、远程缓存、共享与自动回收。
-- [Luban 配置](Book/Luban配置.md) / [Proto 生成](Book/Proto生成工具.md)：数据与协议生成链路。
-- [HybridCLR 热更新](Book/HybridCLR热更.md) / [一键打包](Book/一键打包.md)：从 DLL 到资源和安装包。
+## 文档导航
+
+| 主题 | 文档 |
+| --- | --- |
+| 索引与架构 | [Book 文档索引](Book/README.md)、[项目结构与模式选择](Book/Project结构.md) |
+| 业务开发 | [UI 开发](Book/UI开发.md)、[Entity 开发](Book/Entity开发.md) |
+| 资源与数据 | [AssetSet](Book/AssetSet.md)、[Luban 配置](Book/Luban配置.md) |
+| 协议 | [Proto 生成](Book/Proto生成工具.md) |
+| 热更新与构建 | [HybridCLR 热更新](Book/HybridCLR热更.md)、[一键打包](Book/一键打包.md) |
 
 ## 主要依赖
 
@@ -65,10 +62,8 @@ dotnet build Kit.sln
 | --- | --- |
 | 核心框架 | [UnityGameFramework]、[UGFExtensions]、[ET 8.1] |
 | 热更新与配置 | [HybridCLR]、[Luban]、[Luban Extension] |
-| 异步与序列化 | [UniTask]、[MemoryPack Extension]、[Protobuf Unity] |
-| 网络扩展 | [UnityWebSocket] |
-| 响应式编程 | [ReactiveBinding] |
-| UI 开发 | [UXTool]、[CodeBind]、[StateController]、[LoopScrollRect] |
+| 异步、序列化与网络 | [UniTask]、[MemoryPack Extension]、[Protobuf Unity]、[UnityWebSocket] |
+| UI 与绑定 | [UXTool]、[CodeBind]、[StateController]、[ReactiveBinding]、[LoopScrollRect] |
 | 编辑器工具 | [SocoTools]、[FolderTag] |
 
 [Unity]: https://unity.com/
@@ -100,12 +95,8 @@ dotnet build Kit.sln
 [Toolbar]: Book/自定义Toolbar.md
 [一键构建]: Book/一键打包.md
 
-## 商业插件
+## 商业依赖、交流与许可
 
-项目依赖 [Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)，请自行购买并遵守其授权条款。
-
-## 交流与许可
-
-QQ 群：`949482664`
-
-代码按 [MIT License](LICENSE) 开源；第三方资源与商业插件遵循各自许可。
+- 商业插件：[Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)，需自行购买并遵守授权条款。
+- QQ 群：`949482664`
+- 项目代码采用 [MIT License](LICENSE)；第三方资源和插件遵循各自许可。

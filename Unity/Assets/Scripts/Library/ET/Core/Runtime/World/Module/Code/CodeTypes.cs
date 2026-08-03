@@ -6,6 +6,9 @@ namespace ET
 {
     public class CodeTypes: Singleton<CodeTypes>, ISingletonAwake<Assembly[]>
     {
+        [StaticField]
+        private static readonly HashSet<Type> emptyTypes = new();
+
         private readonly Dictionary<string, Type> allTypes = new();
         private readonly UnOrderMultiMapSet<Type, Type> types = new();
         
@@ -35,7 +38,7 @@ namespace ET
         {
             if (!this.types.ContainsKey(systemAttributeType))
             {
-                return new HashSet<Type>();
+                return emptyTypes;
             }
 
             return this.types[systemAttributeType];
