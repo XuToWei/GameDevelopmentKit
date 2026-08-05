@@ -17,7 +17,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
     private const string SourceAttributeName = "ET.ETReactiveSourceAttribute";
     private const string BindAttributeName = "ET.ETReactiveBindAttribute";
     private const string EntityTypeName = "ET.Entity";
-    private const string ReactiveHostInterfaceName = "ET.IETReactiveHost";
+    private const string ReactiveHostInterfaceName = "ET.IETReactive";
     private const string VersionInterfaceName = "ReactiveBinding.IVersion";
     private const string ObserveMethodName = "ObserveChanges";
     private const string ResetMethodName = "ResetReactive";
@@ -94,10 +94,8 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
 
         INamedTypeSymbol? reactiveHostInterface = context.Compilation.GetTypeByMetadataName(ReactiveHostInterfaceName);
         INamedTypeSymbol? entityType = context.Compilation.GetTypeByMetadataName(EntityTypeName);
-        IPropertySymbol? reactiveObserverProperty = reactiveHostInterface?.GetMembers("ReactiveObserver")
-                .OfType<IPropertySymbol>()
-                .FirstOrDefault();
-        if (reactiveHostInterface == null || entityType == null || reactiveObserverProperty == null)
+        INamedTypeSymbol? versionInterface = context.Compilation.GetTypeByMetadataName(VersionInterfaceName);
+        if (reactiveHostInterface == null || entityType == null)
         {
             return;
         }
@@ -132,14 +130,44 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 continue;
             }
 
-            if (host.FindImplementationForInterfaceMember(reactiveObserverProperty) != null)
+            bool valid = true;
+            List<SourceModel> sources = new();
+            foreach (IPropertySymbol property in GetAttributedProperties(host, SourceAttributeName))
+            {
+                if (!IsValidSourceSignature(property))
+                {
+                    Report(context, ETReactiveDiagnosticRules.SourceSignature, GetLocation(property, declaration), property.Name);
+                    valid = false;
+                    continue;
+                }
+
+                bool isVersioned = ImplementsInterface(property.Type, versionInterface);
+                if (!IsSupportedSourceType(property.Type, isVersioned))
+                {
+                    Report(context, ETReactiveDiagnosticRules.UnsupportedSourceType, GetLocation(property, declaration), property.Name, property.Type.ToDisplayString());
+                    valid = false;
+                    continue;
+                }
+
+                if (IsCustomStructWithoutEqualityOperator(property.Type, isVersioned))
+                {
+                    Report(context, ETReactiveDiagnosticRules.StructEquality, GetLocation(property, declaration), property.Name, property.Type.ToDisplayString());
+                    valid = false;
+                    continue;
+                }
+
+                sources.Add(new SourceModel(property, isVersioned));
+            }
+
+            if (!valid)
             {
                 continue;
             }
 
+            sources.Sort(static (left, right) => StringComparer.Ordinal.Compare(left.Id, right.Id));
             context.AddSource(
                 $"ETReactiveHostGenerator.{GetMetadataName(host)}.g.cs",
-                EmitReactiveHost(host));
+                EmitReactiveHost(host, sources));
         }
     }
 
@@ -205,64 +233,35 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             valid = false;
         }
 
-        List<IMethodSymbol> sourceMethods = GetAttributedMethods(system, SourceAttributeName);
         List<IMethodSymbol> bindMethods = GetAttributedMethods(system, BindAttributeName);
-
-        foreach (IGrouping<string, IMethodSymbol> duplicateGroup in sourceMethods
-                     .GroupBy(static method => method.Name, StringComparer.Ordinal)
-                     .Where(static group => group.Count() > 1))
-        {
-            IMethodSymbol duplicate = duplicateGroup.Skip(1).First();
-            Report(
-                context,
-                ETReactiveDiagnosticRules.DuplicateSource,
-                GetLocation(duplicate, declaration),
-                duplicateGroup.Key,
-                system.ToDisplayString());
-            valid = false;
-        }
 
         INamedTypeSymbol? versionInterface = context.Compilation.GetTypeByMetadataName(VersionInterfaceName);
         List<SourceModel> sources = new();
-        foreach (IMethodSymbol method in sourceMethods)
+        foreach (IPropertySymbol property in GetAttributedProperties(owner, SourceAttributeName))
         {
-            if (!IsValidSourceSignature(method, owner))
+            if (!IsValidSourceSignature(property))
             {
-                Report(
-                    context,
-                    ETReactiveDiagnosticRules.SourceSignature,
-                    GetLocation(method, declaration),
-                    method.Name);
+                Report(context, ETReactiveDiagnosticRules.SourceSignature, GetLocation(property, declaration), property.Name);
                 valid = false;
                 continue;
             }
 
-            bool isVersioned = ImplementsInterface(method.ReturnType, versionInterface);
-            if (!IsSupportedSourceType(method.ReturnType, isVersioned))
+            bool isVersioned = ImplementsInterface(property.Type, versionInterface);
+            if (!IsSupportedSourceType(property.Type, isVersioned))
             {
-                Report(
-                    context,
-                    ETReactiveDiagnosticRules.UnsupportedSourceType,
-                    GetLocation(method, declaration),
-                    method.Name,
-                    method.ReturnType.ToDisplayString());
+                Report(context, ETReactiveDiagnosticRules.UnsupportedSourceType, GetLocation(property, declaration), property.Name, property.Type.ToDisplayString());
                 valid = false;
                 continue;
             }
 
-            if (IsCustomStructWithoutEqualityOperator(method.ReturnType, isVersioned))
+            if (IsCustomStructWithoutEqualityOperator(property.Type, isVersioned))
             {
-                Report(
-                    context,
-                    ETReactiveDiagnosticRules.StructEquality,
-                    GetLocation(method, declaration),
-                    method.Name,
-                    method.ReturnType.ToDisplayString());
+                Report(context, ETReactiveDiagnosticRules.StructEquality, GetLocation(property, declaration), property.Name, property.Type.ToDisplayString());
                 valid = false;
                 continue;
             }
 
-            sources.Add(new SourceModel(method, isVersioned));
+            sources.Add(new SourceModel(property, isVersioned));
         }
 
         sources.Sort(static (left, right) => StringComparer.Ordinal.Compare(left.Id, right.Id));
@@ -362,7 +361,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             Report(
                 context,
                 ETReactiveDiagnosticRules.UnusedSource,
-                GetLocation(source.Method, declaration),
+                GetLocation(source.Property, declaration),
                 source.Id);
         }
 
@@ -376,13 +375,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             return;
         }
 
-        string observerTypeName = GetGeneratedObserverTypeName(system);
-        string generatedCode = Emit(
-            system,
-            owner,
-            observerTypeName,
-            sources,
-            binds);
+        string generatedCode = Emit(system, owner, sources, binds);
 
         context.AddSource(
             $"ETReactiveSystemGenerator.{GetMetadataName(system)}.g.cs",
@@ -423,20 +416,26 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 .ToList();
     }
 
-    private static bool IsValidSourceSignature(IMethodSymbol method, INamedTypeSymbol owner)
+    private static List<IPropertySymbol> GetAttributedProperties(INamedTypeSymbol owner, string attributeName)
     {
-        return method.MethodKind == MethodKind.Ordinary &&
-               method.IsStatic &&
-               method.Arity == 0 &&
-               !method.ReturnsVoid &&
-               method.RefKind == RefKind.None &&
-               method.ReturnType.TypeKind != TypeKind.Error &&
-               method.ReturnType.TypeKind != TypeKind.Pointer &&
-               method.ReturnType.TypeKind != TypeKind.FunctionPointer &&
-               !method.ReturnType.IsRefLikeType &&
-               method.Parameters.Length == 1 &&
-               method.Parameters[0].RefKind == RefKind.None &&
-               SymbolEqualityComparer.Default.Equals(method.Parameters[0].Type, owner);
+        return owner.GetMembers()
+                .OfType<IPropertySymbol>()
+                .Where(property => !property.IsImplicitlyDeclared && GetAttribute(property, attributeName) != null)
+                .OrderBy(static property => property.Name, StringComparer.Ordinal)
+                .ToList();
+    }
+
+    private static bool IsValidSourceSignature(IPropertySymbol property)
+    {
+        return !property.IsStatic &&
+               property.DeclaredAccessibility == Accessibility.Public &&
+               property.GetMethod != null &&
+               property.Parameters.Length == 0 &&
+               property.RefKind == RefKind.None &&
+               property.Type.TypeKind != TypeKind.Error &&
+               property.Type.TypeKind != TypeKind.Pointer &&
+               property.Type.TypeKind != TypeKind.FunctionPointer &&
+               !property.Type.IsRefLikeType;
     }
 
     private static bool IsValidBindSignature(
@@ -766,7 +765,6 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
     private static string Emit(
         INamedTypeSymbol system,
         INamedTypeSymbol owner,
-        string observerTypeName,
         IReadOnlyList<SourceModel> sources,
         IReadOnlyList<BindModel> binds)
     {
@@ -776,417 +774,128 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         string indentation = string.Empty;
         if (!system.ContainingNamespace.IsGlobalNamespace)
         {
-            code.Append("namespace ")
-                    .Append(system.ContainingNamespace.ToDisplayString())
-                    .AppendLine();
+            code.Append("namespace ").Append(system.ContainingNamespace.ToDisplayString()).AppendLine();
             code.AppendLine("{");
             indentation = "    ";
         }
 
         string ownerType = owner.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         string systemType = system.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-        code.Append(indentation)
-                .Append("static partial class ")
-                .Append(EscapeIdentifier(system.Name))
-                .AppendLine();
-        code.Append(indentation).AppendLine("{");
         string bodyIndentation = indentation + "    ";
         string statementIndentation = bodyIndentation + "    ";
-        string observerBodyIndentation = statementIndentation + "    ";
-
-        code.Append(bodyIndentation).AppendLine("[global::ET.EnableClass]");
-        code.Append(bodyIndentation)
-                .Append("[global::ET.ETReactiveObserver(typeof(")
-                .Append(ownerType)
-                .AppendLine("))]");
-        code.Append(bodyIndentation)
-                .Append("private sealed class ")
-                .Append(observerTypeName)
-                .Append(" : global::ET.IETReactiveObserver")
-                .AppendLine();
-        code.Append(bodyIndentation).AppendLine("{");
-        code.Append(statementIndentation).AppendLine("private int dllVersion;");
-        code.Append(statementIndentation).AppendLine("private long ownerInstanceId;");
-        if (sources.Count > 0)
+        Dictionary<string, List<BindModel>> singleBindsBySource = new(StringComparer.Ordinal);
+        List<BindModel> multiBinds = binds.Where(static bind => bind.ReactiveIds.Count > 1).ToList();
+        foreach (BindModel bind in binds.Where(static bind => bind.ReactiveIds.Count == 1))
         {
-            code.Append(statementIndentation)
-                    .Append("private ")
-                    .Append(ownerType)
-                    .AppendLine(" owner = default!;");
-            code.Append(statementIndentation).AppendLine("private bool __reactive_initialized;");
+            string sourceId = bind.ReactiveIds[0];
+            if (!singleBindsBySource.TryGetValue(sourceId, out List<BindModel>? sourceBinds))
+            {
+                sourceBinds = new List<BindModel>();
+                singleBindsBySource.Add(sourceId, sourceBinds);
+            }
+
+            sourceBinds.Add(bind);
         }
 
-        for (int index = 0; index < sources.Count; ++index)
-        {
-            SourceModel source = sources[index];
-            string token = source.Id;
-            string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            code.Append(statementIndentation)
-                    .Append("private ")
-                    .Append(typeName)
-                    .Append(" __reactive_")
-                    .Append(token)
-                    .AppendLine(" = default!;");
-            if (source.IsVersioned)
-            {
-                code.Append(statementIndentation)
-                        .Append("private int __reactive_")
-                        .Append(token)
-                        .AppendLine("_version = -1;");
-            }
-        }
-
-        code.AppendLine();
-        code.Append(statementIndentation).AppendLine("public int DllVersion => this.dllVersion;");
-        code.AppendLine();
-        code.Append(statementIndentation)
-                .AppendLine("public long OwnerInstanceId => this.ownerInstanceId;");
-        code.AppendLine();
-        code.Append(statementIndentation)
-                .AppendLine("public void Initialize(global::ET.IETReactiveHost reactiveHost, int dllVersion)");
-        code.Append(statementIndentation).AppendLine("{");
-        code.Append(observerBodyIndentation)
-                .Append(ownerType)
-                .Append(" owner = (")
-                .Append(ownerType)
-                .AppendLine(")reactiveHost;");
-        code.Append(observerBodyIndentation).AppendLine("this.dllVersion = dllVersion;");
-        code.Append(observerBodyIndentation).AppendLine("this.ownerInstanceId = owner.InstanceId;");
-        if (sources.Count > 0)
-        {
-            code.Append(observerBodyIndentation).AppendLine("this.owner = owner;");
-        }
-        code.Append(statementIndentation).AppendLine("}");
-        code.AppendLine();
-        code.Append(statementIndentation).AppendLine("public void Recycle()");
-        code.Append(statementIndentation).AppendLine("{");
-        code.Append(observerBodyIndentation).AppendLine("if (this.ownerInstanceId == 0)");
-        code.Append(observerBodyIndentation).AppendLine("{");
-        code.Append(observerBodyIndentation).AppendLine("    return;");
-        code.Append(observerBodyIndentation).AppendLine("}");
-        code.AppendLine();
-        code.Append(observerBodyIndentation).AppendLine("this.dllVersion = 0;");
-        code.Append(observerBodyIndentation).AppendLine("this.ownerInstanceId = 0;");
-        if (sources.Count > 0)
-        {
-            code.Append(observerBodyIndentation).AppendLine("this.owner = default!;");
-            code.Append(observerBodyIndentation).AppendLine("this.__reactive_initialized = false;");
-        }
-        foreach (SourceModel source in sources)
-        {
-            string token = source.Id;
-            code.Append(observerBodyIndentation)
-                    .Append("this.__reactive_")
-                    .Append(token)
-                    .AppendLine(" = default!;");
-            if (source.IsVersioned)
-            {
-                code.Append(observerBodyIndentation)
-                        .Append("this.__reactive_")
-                        .Append(token)
-                        .AppendLine("_version = -1;");
-            }
-        }
-        code.Append(statementIndentation).AppendLine("}");
-        code.AppendLine();
-        code.Append(statementIndentation).AppendLine("public void ObserveChanges()");
-        code.Append(statementIndentation).AppendLine("{");
-        if (sources.Count > 0)
-        {
-            code.Append(observerBodyIndentation).AppendLine("if (!this.__reactive_initialized)");
-            code.Append(observerBodyIndentation).AppendLine("{");
-            code.Append(observerBodyIndentation).AppendLine("    this.__reactive_initialized = true;");
-
-            foreach (SourceModel source in sources)
-            {
-                string token = source.Id;
-                code.Append(observerBodyIndentation)
-                        .Append("    this.__reactive_")
-                        .Append(token)
-                        .Append(" = ")
-                        .Append(systemType)
-                        .Append('.')
-                        .Append(EscapeIdentifier(source.Method.Name))
-                        .AppendLine("(this.owner);");
-                if (source.IsVersioned)
-                {
-                    code.Append(observerBodyIndentation)
-                            .Append("    this.__reactive_")
-                            .Append(token)
-                            .Append("_version = global::System.Object.ReferenceEquals(this.__reactive_")
-                            .Append(token)
-                            .Append(", null) ? -1 : ((global::ReactiveBinding.IVersion)(object)this.__reactive_")
-                            .Append(token)
-                            .AppendLine(").__Version;");
-                }
-            }
-
-            foreach (BindModel bind in binds)
-            {
-                AppendBindCall(
-                    code,
-                    observerBodyIndentation + "    ",
-                    systemType,
-                    bind,
-                    static id => $"this.__reactive_{id}",
-                    static id => $"this.__reactive_{id}");
-            }
-
-            code.Append(observerBodyIndentation).AppendLine("    return;");
-            code.Append(observerBodyIndentation).AppendLine("}");
-            code.AppendLine();
-
-            List<BindModel> multiBinds = binds.Where(static bind => bind.ReactiveIds.Count > 1).ToList();
-            Dictionary<string, List<BindModel>> singleBindsBySource = new(StringComparer.Ordinal);
-            foreach (BindModel bind in binds.Where(static bind => bind.ReactiveIds.Count == 1))
-            {
-                string reactiveId = bind.ReactiveIds[0];
-                if (!singleBindsBySource.TryGetValue(reactiveId, out List<BindModel>? sourceBinds))
-                {
-                    sourceBinds = new List<BindModel>();
-                    singleBindsBySource.Add(reactiveId, sourceBinds);
-                }
-
-                sourceBinds.Add(bind);
-            }
-
-            HashSet<string> sourcesNeedingFlags = new(
-                multiBinds.SelectMany(static bind => bind.ReactiveIds),
-                StringComparer.Ordinal);
-            HashSet<string> sourcesNeedingOldValues = new(
-                binds.Where(static bind => bind.Method.Parameters.Length - 1 == bind.ReactiveIds.Count * 2)
-                        .SelectMany(static bind => bind.ReactiveIds),
-                StringComparer.Ordinal);
-
-            foreach (SourceModel source in sources)
-            {
-                string token = source.Id;
-                if (sourcesNeedingFlags.Contains(source.Id))
-                {
-                    code.Append(observerBodyIndentation)
-                            .Append("bool __changed_")
-                            .Append(token)
-                            .AppendLine(" = false;");
-                }
-
-                if (sourcesNeedingOldValues.Contains(source.Id))
-                {
-                    code.Append(observerBodyIndentation)
-                            .Append(source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat))
-                            .Append(" __old_")
-                            .Append(token)
-                            .Append(" = this.__reactive_")
-                            .Append(token)
-                            .AppendLine(";");
-                }
-            }
-
-            if (sourcesNeedingFlags.Count > 0 || sourcesNeedingOldValues.Count > 0)
-            {
-                code.AppendLine();
-            }
-
-            foreach (SourceModel source in sources)
-            {
-                string token = source.Id;
-                string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                code.Append(observerBodyIndentation)
-                        .Append(typeName)
-                        .Append(" __current_")
-                        .Append(token)
-                        .Append(" = ")
-                        .Append(systemType)
-                        .Append('.')
-                        .Append(EscapeIdentifier(source.Method.Name))
-                        .AppendLine("(this.owner);");
-
-                if (source.IsVersioned)
-                {
-                    code.Append(observerBodyIndentation)
-                            .Append("int __current_")
-                            .Append(token)
-                            .Append("_version = global::System.Object.ReferenceEquals(__current_")
-                            .Append(token)
-                            .Append(", null) ? -1 : ((global::ReactiveBinding.IVersion)(object)__current_")
-                            .Append(token)
-                            .AppendLine(").__Version;");
-                    code.Append(observerBodyIndentation)
-                            .Append("if (!global::System.Object.ReferenceEquals(__current_")
-                            .Append(token)
-                            .Append(", this.__reactive_")
-                            .Append(token)
-                            .Append(") || __current_")
-                            .Append(token)
-                            .Append("_version != this.__reactive_")
-                            .Append(token)
-                            .AppendLine("_version)");
-                }
-                else
-                {
-                    code.Append(observerBodyIndentation)
-                            .Append("if (")
-                            .Append(GetInequalityExpression(
-                                source.Type,
-                                $"this.__reactive_{token}",
-                                $"__current_{token}"))
-                            .AppendLine(")");
-                }
-
-                code.Append(observerBodyIndentation).AppendLine("{");
-                if (sourcesNeedingFlags.Contains(source.Id))
-                {
-                    code.Append(observerBodyIndentation)
-                            .Append("    __changed_")
-                            .Append(token)
-                            .AppendLine(" = true;");
-                }
-
-                code.Append(observerBodyIndentation)
-                        .Append("    this.__reactive_")
-                        .Append(token)
-                        .Append(" = __current_")
-                        .Append(token)
-                        .AppendLine(";");
-                if (source.IsVersioned)
-                {
-                    code.Append(observerBodyIndentation)
-                            .Append("    this.__reactive_")
-                            .Append(token)
-                            .Append("_version = __current_")
-                            .Append(token)
-                            .AppendLine("_version;");
-                }
-
-                if (singleBindsBySource.TryGetValue(source.Id, out List<BindModel>? singleBinds))
-                {
-                    foreach (BindModel bind in singleBinds)
-                    {
-                        AppendBindCall(
-                            code,
-                            observerBodyIndentation + "    ",
-                            systemType,
-                            bind,
-                            static id => $"__old_{id}",
-                            static id => $"this.__reactive_{id}");
-                    }
-                }
-
-                code.Append(observerBodyIndentation).AppendLine("}");
-                code.AppendLine();
-            }
-
-            foreach (BindModel bind in multiBinds)
-            {
-                code.Append(observerBodyIndentation).Append("if (");
-                for (int index = 0; index < bind.ReactiveIds.Count; ++index)
-                {
-                    if (index > 0)
-                    {
-                        code.Append(" || ");
-                    }
-
-                    code.Append("__changed_").Append(bind.ReactiveIds[index]);
-                }
-
-                code.AppendLine(")");
-                code.Append(observerBodyIndentation).AppendLine("{");
-                AppendBindCall(
-                    code,
-                    observerBodyIndentation + "    ",
-                    systemType,
-                    bind,
-                    static id => $"__old_{id}",
-                    static id => $"this.__reactive_{id}");
-                code.Append(observerBodyIndentation).AppendLine("}");
-                code.AppendLine();
-            }
-        }
-
-        code.Append(statementIndentation).AppendLine("}");
-        code.AppendLine();
-        code.Append(statementIndentation).AppendLine("public void ResetChanges()");
-        code.Append(statementIndentation).AppendLine("{");
-        if (sources.Count > 0)
-        {
-            code.Append(observerBodyIndentation).AppendLine("this.__reactive_initialized = false;");
-        }
-        code.Append(statementIndentation).AppendLine("}");
-        code.Append(bodyIndentation).AppendLine("}");
-        code.AppendLine();
-
-        code.Append(bodyIndentation)
-                .Append("public static void ")
-                .Append(ObserveMethodName)
-                .Append("(this ")
-                .Append(ownerType)
-                .AppendLine(" self)");
+        code.Append(indentation).Append("static partial class ").Append(EscapeIdentifier(system.Name)).AppendLine();
+        code.Append(indentation).AppendLine("{");
+        code.Append(bodyIndentation).Append("public static void ").Append(ObserveMethodName).Append("(this ").Append(ownerType).AppendLine(" self)");
         code.Append(bodyIndentation).AppendLine("{");
         code.Append(statementIndentation).AppendLine("if (self.InstanceId == 0)");
         code.Append(statementIndentation).AppendLine("{");
         code.Append(statementIndentation).AppendLine("    return;");
         code.Append(statementIndentation).AppendLine("}");
         code.AppendLine();
-        code.Append(statementIndentation)
-                .AppendLine("global::ET.IETReactiveHost reactiveHost = self;");
-        code.Append(statementIndentation)
-                .AppendLine("global::ET.ETReactiveSystem reactiveSystem = global::ET.ETReactiveSystem.Instance;");
-        code.Append(statementIndentation).AppendLine("int dllVersion = reactiveSystem.DllVersion;");
-        code.Append(statementIndentation)
-                .AppendLine("if (reactiveHost.ReactiveObserver is not global::ET.IETReactiveObserver observer ||")
-                .Append(statementIndentation)
-                .AppendLine("    observer.DllVersion != dllVersion || observer.OwnerInstanceId != self.InstanceId)");
+        code.Append(statementIndentation).AppendLine("if (!self.__ETReactiveInitialized)");
         code.Append(statementIndentation).AppendLine("{");
-        code.Append(statementIndentation).AppendLine("    if (reactiveHost.ReactiveObserver is global::ET.IETReactiveObserver oldObserver)");
-        code.Append(statementIndentation).AppendLine("    {");
-        code.Append(statementIndentation).AppendLine("        reactiveSystem.Recycle(oldObserver);");
-        code.Append(statementIndentation).AppendLine("    }");
-        code.AppendLine();
-        code.Append(statementIndentation)
-                .Append("    observer = reactiveSystem.Rent(typeof(")
-                .Append(ownerType)
-                .AppendLine("), reactiveHost);");
-        code.Append(statementIndentation).AppendLine("    reactiveHost.ReactiveObserver = observer;");
+        foreach (SourceModel source in sources)
+        {
+            string token = source.Id;
+            code.Append(statementIndentation).Append("    self.__ETReactive").Append(token).Append(" = self.").Append(EscapeIdentifier(source.Property.Name)).AppendLine(";");
+            if (source.IsVersioned)
+            {
+                code.Append(statementIndentation).Append("    self.__ETReactive").Append(token).Append("Version = global::System.Object.ReferenceEquals(self.__ETReactive").Append(token).Append(", null) ? -1 : ((global::ReactiveBinding.IVersion)(object)self.__ETReactive").Append(token).AppendLine(").__Version;");
+            }
+        }
+
+        code.Append(statementIndentation).AppendLine("    self.__ETReactiveInitialized = true;");
+        foreach (BindModel bind in binds.Where(static bind => !IsTransitionBind(bind)))
+        {
+            AppendEntityBindCall(code, statementIndentation + "    ", systemType, bind, static id => $"self.__ETReactive{id}", static id => $"self.__ETReactive{id}");
+        }
+
+        code.Append(statementIndentation).AppendLine("    return;");
         code.Append(statementIndentation).AppendLine("}");
         code.AppendLine();
-        code.Append(statementIndentation).AppendLine("observer.ObserveChanges();");
+        foreach (SourceModel source in sources)
+        {
+            string token = source.Id;
+            string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            code.Append(statementIndentation).Append(typeName).Append(" __old_").Append(token).Append(" = self.__ETReactive").Append(token).AppendLine(";");
+            code.Append(statementIndentation).Append(typeName).Append(" __current_").Append(token).Append(" = self.").Append(EscapeIdentifier(source.Property.Name)).AppendLine(";");
+            if (source.IsVersioned)
+            {
+                code.Append(statementIndentation).Append("int __current_").Append(token).Append("Version = global::System.Object.ReferenceEquals(__current_").Append(token).Append(", null) ? -1 : ((global::ReactiveBinding.IVersion)(object)__current_").Append(token).AppendLine(").__Version;");
+                code.Append(statementIndentation).Append("bool __changed_").Append(token).Append(" = !global::System.Object.ReferenceEquals(__current_").Append(token).Append(", self.__ETReactive").Append(token).Append(") || __current_").Append(token).Append("Version != self.__ETReactive").Append(token).AppendLine("Version;");
+            }
+            else
+            {
+                code.Append(statementIndentation).Append("bool __changed_").Append(token).Append(" = ").Append(GetInequalityExpression(source.Type, $"self.__ETReactive{token}", $"__current_{token}")).AppendLine(";");
+            }
+
+            code.Append(statementIndentation).Append("if (__changed_").Append(token).AppendLine(")");
+            code.Append(statementIndentation).AppendLine("{");
+            code.Append(statementIndentation).Append("    self.__ETReactive").Append(token).Append(" = __current_").Append(token).AppendLine(";");
+            if (source.IsVersioned)
+            {
+                code.Append(statementIndentation).Append("    self.__ETReactive").Append(token).Append("Version = __current_").Append(token).AppendLine("Version;");
+            }
+
+            code.Append(statementIndentation).AppendLine("}");
+            if (singleBindsBySource.TryGetValue(source.Id, out List<BindModel>? singleBinds))
+            {
+                foreach (BindModel bind in singleBinds)
+                {
+                    code.Append(statementIndentation).Append("if (__changed_").Append(token).AppendLine(")");
+                    code.Append(statementIndentation).AppendLine("{");
+                    AppendEntityBindCall(code, statementIndentation + "    ", systemType, bind, static id => $"__old_{id}", static id => $"self.__ETReactive{id}");
+                    code.Append(statementIndentation).AppendLine("}");
+                }
+            }
+
+            code.AppendLine();
+        }
+
+        foreach (BindModel bind in multiBinds)
+        {
+            string changes = string.Join(" || ", bind.ReactiveIds.Select(static id => $"__changed_{id}"));
+            code.Append(statementIndentation).Append("if (").Append(changes).AppendLine(")");
+            code.Append(statementIndentation).AppendLine("{");
+            AppendEntityBindCall(code, statementIndentation + "    ", systemType, bind, static id => $"__old_{id}", static id => $"self.__ETReactive{id}");
+            code.Append(statementIndentation).AppendLine("}");
+        }
+
         code.Append(bodyIndentation).AppendLine("}");
         code.AppendLine();
-        code.Append(bodyIndentation)
-                .Append("public static void ")
-                .Append(ResetMethodName)
-                .Append("(this ")
-                .Append(ownerType)
-                .AppendLine(" self)");
+        code.Append(bodyIndentation).Append("public static void ").Append(ResetMethodName).Append("(this ").Append(ownerType).AppendLine(" self)");
         code.Append(bodyIndentation).AppendLine("{");
-        code.Append(statementIndentation)
-                .AppendLine("if (((global::ET.IETReactiveHost)self).ReactiveObserver is global::ET.IETReactiveObserver observer &&")
-                .Append(statementIndentation)
-                .AppendLine("    observer.DllVersion == global::ET.ETReactiveSystem.Instance.DllVersion &&")
-                .Append(statementIndentation)
-                .AppendLine("    observer.OwnerInstanceId == self.InstanceId)");
-        code.Append(statementIndentation).AppendLine("{");
-        code.Append(statementIndentation).AppendLine("    observer.ResetChanges();");
-        code.Append(statementIndentation).AppendLine("}");
+        code.Append(statementIndentation).AppendLine("self.__ETReactiveInitialized = false;");
         code.Append(bodyIndentation).AppendLine("}");
         code.AppendLine();
-        code.Append(bodyIndentation)
-                .Append("public static void ")
-                .Append(ClearMethodName)
-                .Append("(this ")
-                .Append(ownerType)
-                .AppendLine(" self)");
+        code.Append(bodyIndentation).Append("public static void ").Append(ClearMethodName).Append("(this ").Append(ownerType).AppendLine(" self)");
         code.Append(bodyIndentation).AppendLine("{");
-        code.Append(statementIndentation)
-                .AppendLine("global::ET.IETReactiveHost reactiveHost = self;");
-        code.Append(statementIndentation).AppendLine("global::ReactiveBinding.IReactiveObserver currentObserver = reactiveHost.ReactiveObserver;");
-        code.Append(statementIndentation).AppendLine("reactiveHost.ReactiveObserver = null!;");
-        code.Append(statementIndentation).AppendLine("if (currentObserver is global::ET.IETReactiveObserver pooledObserver)");
-        code.Append(statementIndentation).AppendLine("{");
-        code.Append(statementIndentation).AppendLine("    global::ET.ETReactiveSystem.Instance.Recycle(pooledObserver);");
-        code.Append(statementIndentation).AppendLine("}");
+        code.Append(statementIndentation).AppendLine("self.__ETReactiveInitialized = false;");
+        foreach (SourceModel source in sources)
+        {
+            code.Append(statementIndentation).Append("self.__ETReactive").Append(source.Id).AppendLine(" = default;");
+            if (source.IsVersioned)
+            {
+                code.Append(statementIndentation).Append("self.__ETReactive").Append(source.Id).AppendLine("Version = -1;");
+            }
+        }
+
         code.Append(bodyIndentation).AppendLine("}");
         code.Append(indentation).AppendLine("}");
-
         if (!system.ContainingNamespace.IsGlobalNamespace)
         {
             code.AppendLine("}");
@@ -1195,96 +904,14 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         return code.ToString();
     }
 
-    private static string EmitReactiveHost(INamedTypeSymbol host)
+    private static bool IsTransitionBind(BindModel bind)
     {
-        StringBuilder code = new();
-        code.AppendLine("// <auto-generated/>");
-
-        string indentation = string.Empty;
-        if (!host.ContainingNamespace.IsGlobalNamespace)
-        {
-            code.Append("namespace ")
-                    .Append(host.ContainingNamespace.ToDisplayString())
-                    .AppendLine();
-            code.AppendLine("{");
-            indentation = "    ";
-        }
-
-        Stack<INamedTypeSymbol> typeHierarchy = new();
-        for (INamedTypeSymbol? current = host; current != null; current = current.ContainingType)
-        {
-            typeHierarchy.Push(current);
-        }
-
-        int declarationCount = typeHierarchy.Count;
-        foreach (INamedTypeSymbol type in typeHierarchy)
-        {
-            code.Append(indentation)
-                    .Append("partial ")
-                    .Append(GetTypeDeclarationKeyword(type))
-                    .Append(' ')
-                    .Append(EscapeIdentifier(type.Name));
-            if (type.TypeParameters.Length > 0)
-            {
-                code.Append('<')
-                        .Append(string.Join(", ", type.TypeParameters.Select(parameter => EscapeIdentifier(parameter.Name))))
-                        .Append('>');
-            }
-
-            code.AppendLine();
-            code.Append(indentation).AppendLine("{");
-            indentation += "    ";
-        }
-
-        code.Append(indentation).AppendLine("[global::MemoryPack.MemoryPackIgnore]");
-        code.Append(indentation).AppendLine("[global::MongoDB.Bson.Serialization.Attributes.BsonIgnore]");
-        code.Append(indentation)
-                .AppendLine("public global::ReactiveBinding.IReactiveObserver ReactiveObserver { get; set; }");
-
-        for (int index = 0; index < declarationCount; ++index)
-        {
-            indentation = indentation.Substring(0, indentation.Length - 4);
-            code.Append(indentation).AppendLine("}");
-        }
-
-        if (!host.ContainingNamespace.IsGlobalNamespace)
-        {
-            code.AppendLine("}");
-        }
-
-        return code.ToString();
+        return bind.Method.Parameters.Length - 1 == bind.ReactiveIds.Count * 2;
     }
 
-    private static string GetTypeDeclarationKeyword(INamedTypeSymbol type)
+    private static void AppendEntityBindCall(StringBuilder code, string indentation, string systemType, BindModel bind, Func<string, string> oldValueExpression, Func<string, string> currentValueExpression)
     {
-        SyntaxNode? declaration = type.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
-        if (declaration is StructDeclarationSyntax)
-        {
-            return "struct";
-        }
-
-        if (declaration is RecordDeclarationSyntax)
-        {
-            return "record";
-        }
-
-        return "class";
-    }
-
-    private static void AppendBindCall(
-        StringBuilder code,
-        string indentation,
-        string systemType,
-        BindModel bind,
-        Func<string, string> oldValueExpression,
-        Func<string, string> currentValueExpression)
-    {
-        code.Append(indentation)
-                .Append(systemType)
-                .Append('.')
-                .Append(EscapeIdentifier(bind.Method.Name))
-                .Append("(this.owner");
-
+        code.Append(indentation).Append(systemType).Append('.').Append(EscapeIdentifier(bind.Method.Name)).Append("(self");
         int valueParameterCount = bind.Method.Parameters.Length - 1;
         if (valueParameterCount == bind.ReactiveIds.Count)
         {
@@ -1305,19 +932,86 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         code.AppendLine(");");
     }
 
-    private static string GetGeneratedObserverTypeName(INamedTypeSymbol system)
+    private static string EmitReactiveHost(INamedTypeSymbol host, IReadOnlyList<SourceModel> sources)
     {
-        const string baseName = "__ETReactiveObserver";
-        string candidate = baseName;
-        int suffix = 0;
-        while (system.GetTypeMembers(candidate).Length > 0)
+        StringBuilder code = new();
+        code.AppendLine("// <auto-generated/>");
+
+        string indentation = string.Empty;
+        if (!host.ContainingNamespace.IsGlobalNamespace)
         {
-            candidate = $"{baseName}_{++suffix}";
+            code.Append("namespace ").Append(host.ContainingNamespace.ToDisplayString()).AppendLine();
+            code.AppendLine("{");
+            indentation = "    ";
         }
 
-        return candidate;
+        Stack<INamedTypeSymbol> typeHierarchy = new();
+        for (INamedTypeSymbol? current = host; current != null; current = current.ContainingType)
+        {
+            typeHierarchy.Push(current);
+        }
+
+        int declarationCount = typeHierarchy.Count;
+        foreach (INamedTypeSymbol type in typeHierarchy)
+        {
+            code.Append(indentation).Append("partial ").Append(GetTypeDeclarationKeyword(type)).Append(' ').Append(EscapeIdentifier(type.Name));
+            if (type.TypeParameters.Length > 0)
+            {
+                code.Append('<').Append(string.Join(", ", type.TypeParameters.Select(parameter => EscapeIdentifier(parameter.Name)))).Append('>');
+            }
+
+            code.AppendLine();
+            code.Append(indentation).AppendLine("{");
+            indentation += "    ";
+        }
+
+        AppendReactiveField(code, indentation, "public bool __ETReactiveInitialized;");
+        foreach (SourceModel source in sources)
+        {
+            string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            AppendReactiveField(code, indentation, $"public {typeName} __ETReactive{source.Id};");
+            if (source.IsVersioned)
+            {
+                AppendReactiveField(code, indentation, $"public int __ETReactive{source.Id}Version = -1;");
+            }
+        }
+
+        for (int index = 0; index < declarationCount; ++index)
+        {
+            indentation = indentation.Substring(0, indentation.Length - 4);
+            code.Append(indentation).AppendLine("}");
+        }
+
+        if (!host.ContainingNamespace.IsGlobalNamespace)
+        {
+            code.AppendLine("}");
+        }
+
+        return code.ToString();
     }
 
+    private static void AppendReactiveField(StringBuilder code, string indentation, string declaration)
+    {
+        code.Append(indentation).AppendLine("[global::System.NonSerialized]");
+        code.Append(indentation).AppendLine("[global::MemoryPack.MemoryPackIgnore]");
+        code.Append(indentation).AppendLine("[global::MongoDB.Bson.Serialization.Attributes.BsonIgnore]");
+        code.Append(indentation).AppendLine(declaration);
+    }
+    private static string GetTypeDeclarationKeyword(INamedTypeSymbol type)
+    {
+        SyntaxNode? declaration = type.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
+        if (declaration is StructDeclarationSyntax)
+        {
+            return "struct";
+        }
+
+        if (declaration is RecordDeclarationSyntax)
+        {
+            return "record";
+        }
+
+        return "class";
+    }
     private static string GetMetadataName(INamedTypeSymbol type)
     {
         Stack<string> names = new();
@@ -1403,17 +1097,19 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
 
     private sealed class SourceModel
     {
-        public SourceModel(IMethodSymbol method, bool isVersioned)
+        public SourceModel(IPropertySymbol property, bool isVersioned)
         {
-            this.Method = method;
+            this.Property = property;
             this.IsVersioned = isVersioned;
         }
 
-        public IMethodSymbol Method { get; }
+        public IPropertySymbol Property { get; }
 
-        public string Id => this.Method.Name;
+        public IMethodSymbol Method => this.Property.GetMethod!;
 
-        public ITypeSymbol Type => this.Method.ReturnType;
+        public string Id => this.Property.Name;
+
+        public ITypeSymbol Type => this.Property.Type;
 
         public bool IsVersioned { get; }
     }

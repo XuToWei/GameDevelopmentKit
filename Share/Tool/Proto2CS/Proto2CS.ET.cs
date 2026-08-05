@@ -172,7 +172,7 @@ namespace ET
                         {
                             msgDisposeSb.Clear();
                             s_StringBuilder.Append("\t{\n");
-                            s_StringBuilder.Append($"\t\tpublic static {msgName} Create(bool isFromPool = false) \n\t\t{{ \n\t\t\treturn ObjectPool.Instance.Fetch(typeof({msgName}), isFromPool) as {msgName}; \n\t\t}}\n\n");
+                            s_StringBuilder.Append($"\t\tpublic static {msgName} Create(bool isFromPool = false)\n\t\t{{\n\t\t\treturn ObjectPool.Instance.Fetch(typeof({msgName}), isFromPool) as {msgName};\n\t\t}}\n\n");
                             continue;
                         }
 
@@ -184,7 +184,7 @@ namespace ET
                             // 加了no dispose则自己去定义dispose函数，不要自动生成
                             if (!newline.Contains("// no dispose"))
                             {
-                                s_StringBuilder.Append($"\t\tpublic override void Dispose() \n\t\t{{\n\t\t\tif (!this.IsFromPool) {{ return; }}\n{msgDisposeSb.ToString()}\t\t\tObjectPool.Instance.Recycle(this); \n\t\t}}\n");
+                                s_StringBuilder.Append($"\t\tpublic override void Dispose()\n\t\t{{\n\t\t\tif (!this.IsFromPool) {{ return; }}\n{msgDisposeSb.ToString()}\t\t\tObjectPool.Instance.Recycle(this);\n\t\t}}\n");
                             }
 
                             s_StringBuilder.Append("\t}\n\n");
