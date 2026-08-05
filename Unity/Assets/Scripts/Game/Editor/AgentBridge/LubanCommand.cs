@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using AgentBridge;
 using Newtonsoft.Json.Linq;
@@ -27,7 +26,7 @@ namespace Game.Editor
         public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
 
         // Run the external tool off the Unity thread, then marshal result handling back to it.
-        public Task<object> ExecuteAsync(JObject @params)
+        public async Task<object> ExecuteAsync(JObject @params)
         {
             string action = @params?["action"]?.Value<string>() ?? "validate";
             string format = @params?["format"]?.Value<string>() ?? "bin";
@@ -44,12 +43,9 @@ namespace Game.Editor
 
             string repositoryRoot = ResolveRepositoryRoot();
             string binDirectory = Path.Combine(repositoryRoot, "Bin");
-            TaskScheduler mainThreadScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-            return RunToolAsync(binDirectory, action, format).ContinueWith<object>(task =>
-                Complete(task.GetAwaiter().GetResult(), action, format),
-                CancellationToken.None,
-                TaskContinuationOptions.ExecuteSynchronously,
-                mainThreadScheduler);
+            ProcessResult result = await Task.Run(
+                () => RunTool(binDirectory, action, format));
+            return Complete(result, action, format);
         }
 
         private static object Complete(ProcessResult result, string action, string format)
@@ -102,12 +98,6 @@ namespace Game.Editor
     }
   }
 }");
-
-        private static Task<ProcessResult> RunToolAsync(
-            string binDirectory, string action, string format)
-        {
-            return Task.Run(() => RunTool(binDirectory, action, format));
-        }
 
         private static ProcessResult RunTool(
             string binDirectory, string action, string format)

@@ -384,7 +384,7 @@ namespace Game.Editor
                     continue;
                 }
 
-                for (int columnIndex = Math.Max(0, row.FirstCellNum);
+                for (int columnIndex = Math.Max(0, (int)row.FirstCellNum);
                      columnIndex < row.LastCellNum; columnIndex++)
                 {
                     if (ReadCell(row.GetCell(columnIndex)).Type == "blank")

@@ -613,7 +613,7 @@ namespace Game.Editor
 
                 IRow copied = templateRow.CopyRowTo(rowIndex);
                 templateCopied = true;
-                for (int columnIndex = Math.Max(0, copied.FirstCellNum);
+                for (int columnIndex = Math.Max(0, (int)copied.FirstCellNum);
                      columnIndex < copied.LastCellNum; columnIndex++)
                 {
                     ICell cell = copied.GetCell(columnIndex);
