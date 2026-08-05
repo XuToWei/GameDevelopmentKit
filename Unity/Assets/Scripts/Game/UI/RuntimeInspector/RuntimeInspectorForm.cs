@@ -17,7 +17,7 @@ namespace Game
             base.OnOpen(userData);
             ScreenOrientation orientation = Screen.orientation;
             if (orientation == ScreenOrientation.LandscapeLeft || orientation == ScreenOrientation.LandscapeRight ||
-                (orientation == ScreenOrientation.AutoRotation && (Input.deviceOrientation == DeviceOrientation.LandscapeLeft || Input.deviceOrientation == DeviceOrientation.LandscapeRight)))
+                (orientation == ScreenOrientation.AutoRotation && Screen.width >= Screen.height))
             {
                 RootLayoutStateGroup.CurrentStateName = RootLayoutStateName.Horizontal;
             }

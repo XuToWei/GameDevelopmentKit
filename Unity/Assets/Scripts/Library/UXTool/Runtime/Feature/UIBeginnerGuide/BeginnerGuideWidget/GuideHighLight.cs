@@ -272,14 +272,14 @@ public class GuideHighLight : GuideWidgetBase, ICanvasRaycastFilter, IPointerCli
         }
         // else if (guideFinishType == GuideFinishType.Strong)
         // {
-        //     // Vector2 sp = Input.mousePosition;
+        //     // Vector2 sp = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
         //     // Debug.Log(sp);
         //     // //Debug.Log(target.)
         //     // if (RectTransformUtility.RectangleContainsScreenPoint(target, sp))
         //     // {
         //     //     UIBeginnerGuideManager.Instance.FinishGuide(guideID);
         //     // }
-        //     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //     Ray ray = Camera.main.ScreenPointToRay(UnityEngine.InputSystem.Mouse.current.position.ReadValue());
         //     RaycastHit hit;
         //     if (Physics.Raycast(ray, out hit))
         //     {

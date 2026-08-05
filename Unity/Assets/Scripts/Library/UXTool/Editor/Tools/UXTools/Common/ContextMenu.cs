@@ -129,11 +129,6 @@ namespace ThunderFireUITool
             mMenu.AddDisabledItem(new GUIContent(item));
         }
 
-        static public void GetAllObjects()
-        {
-            Vector3 mousePos = Input.mousePosition;
-
-        }
         static public bool IsEmpty()
         {
             if (mMenu == null) return true;

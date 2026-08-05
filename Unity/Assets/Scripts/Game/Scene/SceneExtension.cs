@@ -27,6 +27,17 @@ namespace Game
             return sceneComponent.SceneIsLoaded(assetName);
         }
 
+        public static bool SceneIsUnloading(this SceneComponent sceneComponent, int sceneId)
+        {
+            DRScene drScene = GameEntry.Tables.DTScene.GetOrDefault(sceneId);
+            if (drScene == null)
+            {
+                return false;
+            }
+            string assetName = AssetUtility.GetSceneAsset(drScene.AssetName);
+            return sceneComponent.SceneIsUnloading(assetName);
+        }
+
         public static bool CanLoadScene(this SceneComponent sceneComponent, int sceneId)
         {
             DRScene drScene = GameEntry.Tables.DTScene.GetOrDefault(sceneId);
@@ -35,7 +46,7 @@ namespace Game
                 return false;
             }
             string assetName = AssetUtility.GetSceneAsset(drScene.AssetName);
-            return !sceneComponent.SceneIsLoading(assetName) && sceneComponent.SceneIsLoaded(assetName);
+            return !sceneComponent.SceneIsLoading(assetName) && sceneComponent.SceneIsLoaded(assetName) && !sceneComponent.SceneIsUnloading(assetName);
         }
 
         public static void LoadScene(this SceneComponent sceneComponent, int sceneId, object userData = null)
@@ -59,6 +70,22 @@ namespace Game
                 throw new GameFrameworkException(error);
             }
             string assetName = AssetUtility.GetSceneAsset(drScene.AssetName);
+            sceneComponent.UnloadScene(assetName, userData);
+        }
+
+        public static void TryUnloadScene(this SceneComponent sceneComponent, int sceneId, object userData = null)
+        {
+            DRScene drScene = GameEntry.Tables.DTScene.GetOrDefault(sceneId);
+            if (drScene == null)
+            {
+                string error = Utility.Text.Format("Can not unload Scene '{0}' from data table.", sceneId.ToString());
+                throw new GameFrameworkException(error);
+            }
+            string assetName = AssetUtility.GetSceneAsset(drScene.AssetName);
+            if (sceneComponent.SceneIsLoading(assetName) || sceneComponent.SceneIsLoaded(assetName) || sceneComponent.SceneIsUnloading(assetName))
+            {
+                return;
+            }
             sceneComponent.UnloadScene(assetName, userData);
         }
     }
