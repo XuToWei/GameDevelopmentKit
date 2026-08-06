@@ -11,33 +11,24 @@ namespace ET
         }
 
         [EntitySystem]
-        private static void Update(this SurvivorPlayerStateReactiveObserver self)
-        {
-            self.ObserveChanges();
-        }
-
-        [EntitySystem]
         private static void Destroy(this SurvivorPlayerStateReactiveObserver self)
         {
             SurvivorPlayerState state = self.State;
             self.ClearReactive();
             self.State = null;
-            if (state != null)
-            {
-                state.LogicObserver = default;
-            }
-        }
-
-        [ETReactiveBind(nameof(SurvivorPlayerStateReactiveObserver.Hp))]
-        private static void OnHpChanged(this SurvivorPlayerStateReactiveObserver self, int oldHp, int newHp)
-        {
-            self.GetParent<SurvivorWorldComponent>().ResolvePlayerHpChanged(self.State, newHp);
+            state.LogicObserver = default;
         }
 
         [ETReactiveBind(nameof(SurvivorPlayerStateReactiveObserver.Experience))]
         private static void OnExperienceChanged(this SurvivorPlayerStateReactiveObserver self, int oldExperience, int newExperience)
         {
             self.GetParent<SurvivorWorldComponent>().ResolvePlayerExperienceChanged(self.State);
+        }
+
+        [ETReactiveBind(nameof(SurvivorPlayerStateReactiveObserver.Hp))]
+        private static void OnHpChanged(this SurvivorPlayerStateReactiveObserver self, int oldHp, int newHp)
+        {
+            self.GetParent<SurvivorWorldComponent>().ResolvePlayerHpChanged(self.State, newHp);
         }
     }
 
@@ -52,25 +43,12 @@ namespace ET
         }
 
         [EntitySystem]
-        private static void Update(this SurvivorMonsterStateReactiveObserver self)
-        {
-            self.ObserveChanges();
-            if (!self.State.Alive)
-            {
-                self.Dispose();
-            }
-        }
-
-        [EntitySystem]
         private static void Destroy(this SurvivorMonsterStateReactiveObserver self)
         {
             SurvivorMonsterState state = self.State;
             self.ClearReactive();
             self.State = null;
-            if (state != null)
-            {
-                state.LogicObserver = default;
-            }
+            state.LogicObserver = default;
         }
 
         [ETReactiveBind(nameof(SurvivorMonsterStateReactiveObserver.Hp))]
@@ -84,23 +62,11 @@ namespace ET
     {
         public static void AttachPlayerReaction(this SurvivorWorldComponent self, SurvivorPlayerState state)
         {
-            SurvivorPlayerStateReactiveObserver observer = state.LogicObserver;
-            if (observer != null)
-            {
-                observer.Dispose();
-            }
-
             state.LogicObserver = self.AddChild<SurvivorPlayerStateReactiveObserver, SurvivorPlayerState>(state);
         }
 
         public static void AttachMonsterReaction(this SurvivorWorldComponent self, SurvivorMonsterState state)
         {
-            SurvivorMonsterStateReactiveObserver observer = state.LogicObserver;
-            if (observer != null)
-            {
-                observer.Dispose();
-            }
-
             state.LogicObserver = self.AddChild<SurvivorMonsterStateReactiveObserver, SurvivorMonsterState>(state);
         }
 
@@ -110,7 +76,7 @@ namespace ET
             while (self.Runtime.PlayerEnumerator.MoveNext())
             {
                 SurvivorPlayerStateReactiveObserver observer = self.Runtime.PlayerEnumerator.Current.Value.LogicObserver;
-                observer?.Dispose();
+                observer.Dispose();
             }
 
             self.Runtime.PlayerEnumerator.Dispose();
@@ -120,7 +86,7 @@ namespace ET
             while (self.Runtime.MonsterEnumerator.MoveNext())
             {
                 SurvivorMonsterStateReactiveObserver observer = self.Runtime.MonsterEnumerator.Current.Value.LogicObserver;
-                observer?.Dispose();
+                observer.Dispose();
             }
 
             self.Runtime.MonsterEnumerator.Dispose();
@@ -153,8 +119,9 @@ namespace ET
             {
                 state.Experience -= state.Level * SurvivorDefaults.LevelExperienceStep;
                 state.Level++;
-                state.MaxHp += 10;
-                state.Hp = (int)((long)state.Hp * state.MaxHp / (state.MaxHp - 10));
+                int oldMaxHp = state.MaxHp;
+                state.MaxHp += SurvivorDefaults.LevelMaxHpIncrease;
+                state.Hp = (int)((long)state.Hp * state.MaxHp / oldMaxHp);
                 state.UnspentSkillPoints++;
             }
 

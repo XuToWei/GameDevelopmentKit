@@ -9,14 +9,14 @@ namespace ET.Client
             IUGFEntityOnHide,
             IETReactive
     {
-        public SurvivorPickupState State { get; set; }
+        public SurvivorPickupEntry Entry { get; set; }
 
         public SurvivorPresentationPosition PresentationPosition { get; set; }
 
         [ETReactiveSource]
-        public int PositionX => this.State.PositionX;
+        public int PositionX => this.Entry.State.PositionX;
 
         [ETReactiveSource]
-        public int PositionY => this.State.PositionY;
+        public int PositionY => this.Entry.State.PositionY;
     }
 }

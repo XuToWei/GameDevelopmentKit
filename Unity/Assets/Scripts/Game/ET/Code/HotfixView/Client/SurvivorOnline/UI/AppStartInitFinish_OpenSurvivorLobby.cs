@@ -7,19 +7,22 @@ namespace ET.Client
     {
         protected override async UniTask Run(Scene scene, AppStartInitFinish args)
         {
-            await scene.GetComponent<UIComponent>()
-                    .AddUIFormComponentAsync<UIFormSurvivorLoginComponent>(UGFUIFormId.SurvivorLogin);
+            await scene.GetComponent<UIComponent>().AddUIFormComponentAsync<UIFormSurvivorLoginComponent>(UGFUIFormId.SurvivorLogin);
         }
     }
 
+    /// <summary>
+    /// 登录完成后只建立 SurvivorClientComponent。Lobby 界面由 SurvivorViewComponent
+    /// 首次观察 Phase 时打开，避免出现第二条 UI 打开路径。
+    /// </summary>
     [Event(SceneType.Survivor)]
-    public sealed class LoginFinish_OpenSurvivorLobby: AEvent<Scene, LoginFinish>
+    public sealed class LoginFinish_StartSurvivorClient: AEvent<Scene, LoginFinish>
     {
         protected override async UniTask Run(Scene scene, LoginFinish args)
         {
             scene.GetComponent<UIComponent>().RemoveComponent<UIFormSurvivorLoginComponent>();
             scene.AddComponent<SurvivorClientComponent>();
-            await SurvivorViewStarter.OpenLobby(scene);
+            await UniTask.CompletedTask;
         }
     }
 }

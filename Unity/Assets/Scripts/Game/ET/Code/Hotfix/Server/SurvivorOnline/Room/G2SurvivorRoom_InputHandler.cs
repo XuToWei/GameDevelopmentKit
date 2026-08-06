@@ -7,13 +7,7 @@ namespace ET.Server
     {
         protected override async UniTask Run(Scene root, G2SurvivorRoom_Input message)
         {
-            root.GetComponent<SurvivorRoom>()
-                    .GetComponent<SurvivorRoomServerComponent>()
-                    .QueuePlayerInput(
-                        message.PlayerId,
-                        message.InputSequence,
-                        message.MoveX,
-                        message.MoveY);
+            root.GetComponent<SurvivorRoom>().GetComponent<SurvivorRoomServerComponent>().QueuePlayerInput(message.PlayerId, message.InputSequence, message.MoveX, message.MoveY);
             await UniTask.CompletedTask;
         }
     }

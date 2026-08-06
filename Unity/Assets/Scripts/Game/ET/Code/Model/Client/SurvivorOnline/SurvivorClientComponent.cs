@@ -1,7 +1,7 @@
 namespace ET.Client
 {
     [ComponentOf(typeof(Scene))]
-    public sealed partial class SurvivorClientComponent: Entity, IAwake, IUpdate, IDestroy, IETReactive
+    public sealed class SurvivorClientComponent: Entity, IAwake, IDestroy
     {
         public ClientSenderComponent ClientSender { get; set; }
 
@@ -23,13 +23,30 @@ namespace ET.Client
 
         public SurvivorWorldComponent WorldComponent => this.World;
 
-        [ETReactiveSource]
-        public long SkillChoiceRevision => this.HasBaseline ? this.WorldComponent.Data.Players[this.PlayerId].SkillChoiceRevision : 0;
+        /// <summary>尚未收到首个完整快照或玩家还没进入房间时为 null，这是真实的动态状态而非架构缺失。</summary>
+        public SurvivorPlayerState LocalPlayer
+        {
+            get
+            {
+                if (!this.HasBaseline)
+                {
+                    return null;
+                }
 
-        [ETReactiveSource]
-        public int UnspentSkillPoints => this.HasBaseline ? this.WorldComponent.Data.Players[this.PlayerId].UnspentSkillPoints : 0;
+                return this.WorldComponent.Data.Players.TryGetValue(this.PlayerId, out SurvivorPlayerState player) ? player : null;
+            }
+        }
 
-        [ETReactiveSource]
+        /// <summary>供 View 层观察的业务状态。没有基线时对外表现为 Lobby。</summary>
         public SurvivorRoomPhase Phase => this.HasBaseline ? this.WorldComponent.Data.Phase : SurvivorRoomPhase.Lobby;
+
+        public bool SkillChoiceAvailable
+        {
+            get
+            {
+                SurvivorPlayerState player = this.LocalPlayer;
+                return player != null && this.Phase == SurvivorRoomPhase.Running && player.UnspentSkillPoints > 0;
+            }
+        }
     }
 }

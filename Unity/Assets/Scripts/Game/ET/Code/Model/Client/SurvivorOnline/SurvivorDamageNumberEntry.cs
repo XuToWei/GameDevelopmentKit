@@ -1,6 +1,6 @@
 namespace ET.Client
 {
-    [ChildOf(typeof(SurvivorCombatFeedbackComponent))]
+    [ChildOf(typeof(SurvivorViewEntityManagerComponent))]
     public sealed class SurvivorDamageNumberEntry: Entity, IAwake<int, float, float>
     {
         public int Damage { get; set; }

@@ -17,12 +17,7 @@ namespace ET.Client
         [UGFEntitySystem]
         private static void UGFEntityOnShow(this SurvivorMonsterUGFEntity self)
         {
-            SurvivorMonsterEntry entry = self.GetParent<SurvivorMonsterEntry>();
-            self.State = entry
-                    .GetParent<SurvivorClientComponent>()
-                    .GetComponent<SurvivorViewEntityManagerComponent>()
-                    .Runtime
-                    .MonsterStates[entry.Id];
+            self.Entry = self.GetParent<SurvivorMonsterEntry>();
             self.View.SpriteRenderer.color = new Color(1f, 0.22f, 0.18f, 1f);
             self.View.SpriteRenderer.sortingOrder = 10;
             self.CachedTransform.localScale = new Vector3(VisualScale, VisualScale, 1f);
@@ -30,10 +25,7 @@ namespace ET.Client
         }
 
         [UGFEntitySystem]
-        private static void UGFEntityOnUpdate(
-            this SurvivorMonsterUGFEntity self,
-            float elapseSeconds,
-            float realElapseSeconds)
+        private static void UGFEntityOnUpdate(this SurvivorMonsterUGFEntity self, float elapseSeconds, float realElapseSeconds)
         {
             self.ObserveChanges();
             self.CachedTransform.position = self.PresentationPosition.Advance(realElapseSeconds);
@@ -44,17 +36,13 @@ namespace ET.Client
         {
             self.ClearReactive();
             self.PresentationPosition.Reset();
-            self.State = null;
+            self.Entry = null;
         }
 
         [ETReactiveBind(nameof(SurvivorMonsterUGFEntity.PositionX), nameof(SurvivorMonsterUGFEntity.PositionY))]
-        private static void OnPositionChanged(
-            this SurvivorMonsterUGFEntity self,
-            int positionX,
-            int positionY)
+        private static void OnPositionChanged(this SurvivorMonsterUGFEntity self, int positionX, int positionY)
         {
-            self.CachedTransform.position = self.PresentationPosition.SetTarget(
-                new Vector3(positionX / 1000f, positionY / 1000f, 0f));
+            self.CachedTransform.position = self.PresentationPosition.SetTarget(new Vector3(positionX / 1000f, positionY / 1000f, 0f));
         }
     }
 }

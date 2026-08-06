@@ -13,11 +13,12 @@ namespace ET.Client
 
         public bool Choosing { get; set; }
 
-        public SurvivorWorldComponent WorldComponent => this.Client.World;
-
-        public SurvivorPlayerState LocalPlayerState => this.WorldComponent.Data.Players[this.Client.PlayerId];
-
+        /// <summary>本界面由 SurvivorViewComponent 在有可用技能点时打开，但世界切换时可能残留一帧观察。</summary>
         [ETReactiveSource]
-        public long SkillChoiceRevision => this.LocalPlayerState.SkillChoiceRevision;
+        public long SkillChoiceRevision()
+        {
+            SurvivorPlayerState player = this.Client.LocalPlayer;
+            return player == null ? 0 : player.SkillChoiceRevision;
+        }
     }
 }

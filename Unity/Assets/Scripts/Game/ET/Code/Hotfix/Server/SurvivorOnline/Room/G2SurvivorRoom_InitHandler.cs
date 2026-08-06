@@ -3,20 +3,13 @@ using Cysharp.Threading.Tasks;
 namespace ET.Server
 {
     [MessageHandler(SceneType.SurvivorRoomRoot)]
-    public sealed class G2SurvivorRoom_InitHandler:
-            MessageHandler<Scene, G2SurvivorRoom_Init, SurvivorRoom2G_Init>
+    public sealed class G2SurvivorRoom_InitHandler: MessageHandler<Scene, G2SurvivorRoom_Init, SurvivorRoom2G_Init>
     {
-        protected override async UniTask Run(
-            Scene root,
-            G2SurvivorRoom_Init request,
-            SurvivorRoom2G_Init response)
+        protected override async UniTask Run(Scene root, G2SurvivorRoom_Init request, SurvivorRoom2G_Init response)
         {
-            root.AddComponent<SurvivorRoom, SceneType, string>(SceneType.SurvivorServer, request.RoomCode);
-            root.GetComponent<SurvivorRoom>()
-                    .AddComponent<SurvivorWorldComponent, SurvivorWorldRole, string>(
-                        SurvivorWorldRole.ServerAuthority,
-                        request.RoomCode);
-            root.GetComponent<SurvivorRoom>().AddComponent<SurvivorRoomServerComponent>();
+            SurvivorRoom room = root.AddComponent<SurvivorRoom, SceneType, string>(SceneType.SurvivorServer, request.RoomCode);
+            room.AddComponent<SurvivorWorldComponent, SurvivorWorldRole, string>(SurvivorWorldRole.ServerAuthority, request.RoomCode);
+            room.AddComponent<SurvivorRoomServerComponent>();
             await UniTask.CompletedTask;
         }
     }

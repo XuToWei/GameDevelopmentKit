@@ -50,6 +50,7 @@ namespace ET
         public const int MonsterContactDamagePerTick = 1;
         public const int MonsterKillExperience = 5;
         public const int LevelExperienceStep = 10;
+        public const int LevelMaxHpIncrease = 10;
         public const int SpawnDistance = 8000;
         public const int AutoFireIntervalReductionTicks = 2;
         public const int MinimumAutoFireIntervalTicks = 2;

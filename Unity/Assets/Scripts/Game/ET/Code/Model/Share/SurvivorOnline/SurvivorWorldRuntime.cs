@@ -35,7 +35,9 @@ namespace ET
 
         public IEnumerator<KeyValuePair<long, SurvivorPickupState>> PickupEnumerator { get; set; }
 
-        public List<long> MonsterRemovalStateIds { get; } = new();
+        public IEnumerator<Entity> ObserverEnumerator { get; set; }
+
+        public List<long> ObserverIds { get; } = new();
 
         public List<long> ProjectileRemovalStateIds { get; } = new();
 
@@ -57,9 +59,9 @@ namespace ET
 
         public long StateId { get; set; }
 
-        public long TargetPlayerId { get; set; }
-
         public int Index { get; set; }
+
+        public int ObserverIndex { get; set; }
 
         public int DeltaX { get; set; }
 
@@ -91,6 +93,7 @@ namespace ET
             this.MonsterEnumerator?.Dispose();
             this.ProjectileEnumerator?.Dispose();
             this.PickupEnumerator?.Dispose();
+            this.ObserverEnumerator?.Dispose();
             this.ApplyReader.Dispose();
             this.ApplyStream.Dispose();
             this.CaptureWriter.Dispose();

@@ -12,37 +12,28 @@ namespace ET.Client
     {
         public SurvivorViewEntityManagerRuntime Runtime { get; set; }
 
+        /// <summary>父节点在生命周期内稳定，按经验文档第 5 章在 Awake 缓存。</summary>
+        public SurvivorClientComponent Client { get; set; }
+
         [ETReactiveSource]
         public long WorldGeneration { get; set; }
 
-        public SurvivorClientComponent Client => this.GetParent<SurvivorClientComponent>();
-
-        public SurvivorWorldComponent WorldComponent => this.Client.World;
+        [ETReactiveSource]
+        public long PlayerSetRevision => this.Client.HasBaseline ? this.Client.WorldComponent.Data.PlayerSetRevision : 0;
 
         [ETReactiveSource]
-        public long PlayerSetRevision => this.Client.HasBaseline ? this.WorldComponent.Data.PlayerSetRevision : 0;
+        public long MonsterSetRevision => this.Client.HasBaseline ? this.Client.WorldComponent.Data.MonsterSetRevision : 0;
 
         [ETReactiveSource]
-        public long MonsterSetRevision => this.Client.HasBaseline ? this.WorldComponent.Data.MonsterSetRevision : 0;
+        public long ProjectileSetRevision => this.Client.HasBaseline ? this.Client.WorldComponent.Data.ProjectileSetRevision : 0;
 
         [ETReactiveSource]
-        public long ProjectileSetRevision => this.Client.HasBaseline ? this.WorldComponent.Data.ProjectileSetRevision : 0;
-
-        [ETReactiveSource]
-        public long PickupSetRevision => this.Client.HasBaseline ? this.WorldComponent.Data.PickupSetRevision : 0;
+        public long PickupSetRevision => this.Client.HasBaseline ? this.Client.WorldComponent.Data.PickupSetRevision : 0;
     }
 
     [EnableClass]
     public sealed class SurvivorViewEntityManagerRuntime
     {
-        public Dictionary<long, SurvivorPlayerState> PlayerStates { get; } = new();
-
-        public Dictionary<long, SurvivorMonsterState> MonsterStates { get; } = new();
-
-        public Dictionary<long, SurvivorProjectileState> ProjectileStates { get; } = new();
-
-        public Dictionary<long, SurvivorPickupState> PickupStates { get; } = new();
-
         public IEnumerator<KeyValuePair<long, SurvivorPlayerState>> PlayerEnumerator { get; set; }
 
         public IEnumerator<KeyValuePair<long, SurvivorMonsterState>> MonsterEnumerator { get; set; }
@@ -58,8 +49,6 @@ namespace ET.Client
         public List<long> RemovalStateIds { get; } = new();
 
         public long AppliedWorldGeneration { get; set; }
-
-        public long StateId { get; set; }
 
         public int Index { get; set; }
     }

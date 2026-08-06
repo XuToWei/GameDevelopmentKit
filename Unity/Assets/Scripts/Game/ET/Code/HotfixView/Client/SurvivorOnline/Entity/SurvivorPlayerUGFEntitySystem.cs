@@ -18,12 +18,9 @@ namespace ET.Client
         [UGFEntitySystem]
         private static void UGFEntityOnShow(this SurvivorPlayerUGFEntity self)
         {
-            SurvivorPlayerEntry entry = self.GetParent<SurvivorPlayerEntry>();
-            SurvivorClientComponent client = entry.GetParent<SurvivorClientComponent>();
-            SurvivorViewEntityManagerRuntime viewRuntime =
-                    client.GetComponent<SurvivorViewEntityManagerComponent>().Runtime;
-            self.State = viewRuntime.PlayerStates[entry.Id];
-            self.IsLocalPlayer = self.State.PlayerId == client.PlayerId;
+            self.Entry = self.GetParent<SurvivorPlayerEntry>();
+            SurvivorClientComponent client = self.Entry.GetParent<SurvivorClientComponent>();
+            self.IsLocalPlayer = self.Entry.State.PlayerId == client.PlayerId;
             self.View.SpriteRenderer.color = new Color(0.12f, 0.72f, 1f, 1f);
             self.View.SpriteRenderer.sortingOrder = 20;
             self.CachedTransform.localScale = new Vector3(VisualScale, VisualScale, 1f);
@@ -42,22 +39,14 @@ namespace ET.Client
         }
 
         [UGFEntitySystem]
-        private static void UGFEntityOnUpdate(
-            this SurvivorPlayerUGFEntity self,
-            float elapseSeconds,
-            float realElapseSeconds)
+        private static void UGFEntityOnUpdate(this SurvivorPlayerUGFEntity self, float elapseSeconds, float realElapseSeconds)
         {
             self.ObserveChanges();
             self.UpdateSwordWaveVisual(realElapseSeconds);
             if (self.IsLocalPlayer)
             {
-                SurvivorLocalPlayerPrediction prediction = self.GetParent<SurvivorPlayerEntry>()
-                        .GetParent<SurvivorClientComponent>()
-                        .LocalPrediction;
-                self.CachedTransform.position = new Vector3(
-                    prediction.PresentationPositionX,
-                    prediction.PresentationPositionY,
-                    0f);
+                SurvivorLocalPlayerPrediction prediction = self.Entry.GetParent<SurvivorClientComponent>().LocalPrediction;
+                self.CachedTransform.position = new Vector3(prediction.PresentationPositionX, prediction.PresentationPositionY, 0f);
                 return;
             }
 
@@ -69,16 +58,14 @@ namespace ET.Client
         {
             self.ClearReactive();
             self.SwordWaveVisualRemainingSeconds = 0f;
-            self.SwordWaveVisual?.SetActive(false);
+            self.SwordWaveVisual.SetActive(false);
             self.PresentationPosition.Reset();
             self.IsLocalPlayer = false;
-            self.State = null;
+            self.Entry = null;
         }
 
         [ETReactiveBind(nameof(SurvivorPlayerUGFEntity.SwordWaveRevision))]
-        private static void OnSwordWaveTriggered(
-            this SurvivorPlayerUGFEntity self,
-            long swordWaveRevision)
+        private static void OnSwordWaveTriggered(this SurvivorPlayerUGFEntity self, long swordWaveRevision)
         {
             if (swordWaveRevision <= 0)
             {
@@ -91,18 +78,14 @@ namespace ET.Client
         }
 
         [ETReactiveBind(nameof(SurvivorPlayerUGFEntity.PositionX), nameof(SurvivorPlayerUGFEntity.PositionY))]
-        private static void OnPositionChanged(
-            this SurvivorPlayerUGFEntity self,
-            int positionX,
-            int positionY)
+        private static void OnPositionChanged(this SurvivorPlayerUGFEntity self, int positionX, int positionY)
         {
             if (self.IsLocalPlayer)
             {
                 return;
             }
 
-            self.CachedTransform.position = self.PresentationPosition.SetTarget(
-                new Vector3(positionX / 1000f, positionY / 1000f, 0f));
+            self.CachedTransform.position = self.PresentationPosition.SetTarget(new Vector3(positionX / 1000f, positionY / 1000f, 0f));
         }
 
         private static void EnsureSwordWaveVisual(this SurvivorPlayerUGFEntity self)

@@ -19,16 +19,10 @@ namespace ET.Client
         }
 
         [UGFUIFormSystem]
-        private static void UGFUIFormOnUpdate(
-            this UIFormSurvivorHudComponent self,
-            float elapseSeconds,
-            float realElapseSeconds)
+        private static void UGFUIFormOnUpdate(this UIFormSurvivorHudComponent self, float elapseSeconds, float realElapseSeconds)
         {
             Vector2 movement = ReadMovement();
-            self.Client.UpdateLocalInput(
-                (int)(movement.x * SurvivorDefaults.InputScale),
-                (int)(movement.y * SurvivorDefaults.InputScale),
-                realElapseSeconds);
+            self.Client.UpdateLocalInput((int)(movement.x * SurvivorDefaults.InputScale), (int)(movement.y * SurvivorDefaults.InputScale), realElapseSeconds);
             self.ObserveChanges();
         }
 
@@ -81,6 +75,12 @@ namespace ET.Client
             self.ClearReactive();
         }
 
+        [ETReactiveBind(nameof(UIFormSurvivorHudComponent.Level))]
+        private static void OnLevelChanged(this UIFormSurvivorHudComponent self, int level)
+        {
+            self.View.LevelText.text = $"LV  {level}";
+        }
+
         [ETReactiveBind(nameof(UIFormSurvivorHudComponent.RoomCode))]
         private static void OnRoomCodeChanged(this UIFormSurvivorHudComponent self, string roomCode)
         {
@@ -94,26 +94,15 @@ namespace ET.Client
         }
 
         [ETReactiveBind(nameof(UIFormSurvivorHudComponent.Phase))]
-        private static void OnPhaseChanged(
-            this UIFormSurvivorHudComponent self,
-            SurvivorRoomPhase phase)
+        private static void OnPhaseChanged(this UIFormSurvivorHudComponent self, SurvivorRoomPhase phase)
         {
             self.View.PhaseText.text = $"STATE  {phase.ToString().ToUpperInvariant()}";
         }
 
         [ETReactiveBind(nameof(UIFormSurvivorHudComponent.Hp), nameof(UIFormSurvivorHudComponent.MaxHp))]
-        private static void OnHealthChanged(
-            this UIFormSurvivorHudComponent self,
-            int hp,
-            int maxHp)
+        private static void OnHealthChanged(this UIFormSurvivorHudComponent self, int hp, int maxHp)
         {
             self.View.HpText.text = $"HP  {hp}/{maxHp}";
-        }
-
-        [ETReactiveBind(nameof(UIFormSurvivorHudComponent.Level))]
-        private static void OnLevelChanged(this UIFormSurvivorHudComponent self, int level)
-        {
-            self.View.LevelText.text = $"LV  {level}";
         }
     }
 }

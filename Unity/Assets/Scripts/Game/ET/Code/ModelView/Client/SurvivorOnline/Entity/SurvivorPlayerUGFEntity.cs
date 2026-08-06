@@ -11,7 +11,8 @@ namespace ET.Client
             IUGFEntityOnHide,
             IETReactive
     {
-        public SurvivorPlayerState State { get; set; }
+        /// <summary>Entry 在本组件生命周期内稳定，State 由 Entry 实时提供，快照重建实例后不会拿到旧引用。</summary>
+        public SurvivorPlayerEntry Entry { get; set; }
 
         public SurvivorPresentationPosition PresentationPosition { get; set; }
 
@@ -24,12 +25,12 @@ namespace ET.Client
         public float SwordWaveVisualRemainingSeconds { get; set; }
 
         [ETReactiveSource]
-        public int PositionX => this.State.PositionX;
+        public int PositionX => this.Entry.State.PositionX;
 
         [ETReactiveSource]
-        public int PositionY => this.State.PositionY;
-    
+        public int PositionY => this.Entry.State.PositionY;
+
         [ETReactiveSource]
-        public long SwordWaveRevision => this.State.SwordWaveRevision;
+        public long SwordWaveRevision => this.Entry.State.SwordWaveRevision;
     }
 }

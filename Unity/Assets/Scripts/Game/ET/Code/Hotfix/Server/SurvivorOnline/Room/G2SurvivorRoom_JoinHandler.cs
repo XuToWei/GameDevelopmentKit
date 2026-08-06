@@ -45,11 +45,11 @@ namespace ET.Server
             }
 
             server.RegisterPlayerInputQueue(request.PlayerId);
-            server.BroadcastStateFrame(true);
+            SurvivorStateFrameInfo frame = server.BroadcastStateFrame(true);
             response.IsHost = world.Data.HostPlayerId == request.PlayerId;
-            response.Sequence = server.Runtime.Frame.Sequence;
-            response.ServerTick = server.Runtime.Frame.ServerTick;
-            response.FullSnapshot = server.Runtime.Frame.Payload;
+            response.Sequence = frame.Sequence;
+            response.ServerTick = frame.ServerTick;
+            response.FullSnapshot = frame.Payload;
             await UniTask.CompletedTask;
         }
     }

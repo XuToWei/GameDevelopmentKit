@@ -24,81 +24,78 @@ namespace ET.Client
         }
 
         [UGFUIFormSystem]
-        private static void UGFUIFormOnUpdate(
-            this UIFormSurvivorSkillChoiceComponent self,
-            float elapseSeconds,
-            float realElapseSeconds)
+        private static void UGFUIFormOnUpdate(this UIFormSurvivorSkillChoiceComponent self, float elapseSeconds, float realElapseSeconds)
         {
             self.ObserveChanges();
         }
 
         [UGFUIFormSystem]
-        private static void UGFUIFormOnClose(
-            this UIFormSurvivorSkillChoiceComponent self,
-            bool isShutdown)
+        private static void UGFUIFormOnClose(this UIFormSurvivorSkillChoiceComponent self, bool isShutdown)
         {
             self.ClearReactive();
             self.Choosing = false;
         }
 
         [ETReactiveBind(nameof(UIFormSurvivorSkillChoiceComponent.SkillChoiceRevision))]
-        private static void OnSkillChoicesChanged(
-            this UIFormSurvivorSkillChoiceComponent self,
-            long skillChoiceRevision)
+        private static void OnSkillChoicesChanged(this UIFormSurvivorSkillChoiceComponent self, long skillChoiceRevision)
         {
-            SurvivorPlayerState state = self.LocalPlayerState;
-            if (state == null)
+            SurvivorPlayerState player = self.Client.LocalPlayer;
+            if (player == null)
             {
                 return;
             }
 
-            self.View.TitleUXText.text = $"升级！选择一项技能（剩余 {state.UnspentSkillPoints}）";
-            self.View.Choice1LabelText.text = FormatSkill(state.SkillChoice1, state);
-            self.View.Choice2LabelText.text = FormatSkill(state.SkillChoice2, state);
-            self.View.Choice3LabelText.text = FormatSkill(state.SkillChoice3, state);
+            self.View.TitleUXText.text = $"升级！选择一项技能（剩余 {player.UnspentSkillPoints}）";
+            self.View.Choice1LabelText.text = FormatSkill(player.SkillChoice1, player);
+            self.View.Choice2LabelText.text = FormatSkill(player.SkillChoice2, player);
+            self.View.Choice3LabelText.text = FormatSkill(player.SkillChoice3, player);
             self.View.StatusUXText.text = "请选择一项技能";
             self.SetChoiceInteractable(true);
         }
 
         private static UniTask ChooseFirst(this UIFormSurvivorSkillChoiceComponent self)
         {
-            return self.Choose(self.LocalPlayerState.SkillChoice1);
+            return self.Choose(1);
         }
 
         private static UniTask ChooseSecond(this UIFormSurvivorSkillChoiceComponent self)
         {
-            return self.Choose(self.LocalPlayerState.SkillChoice2);
+            return self.Choose(2);
         }
 
         private static UniTask ChooseThird(this UIFormSurvivorSkillChoiceComponent self)
         {
-            return self.Choose(self.LocalPlayerState.SkillChoice3);
+            return self.Choose(3);
         }
 
-        private static async UniTask Choose(
-            this UIFormSurvivorSkillChoiceComponent self,
-            SurvivorSkillType skillType)
+        private static async UniTask Choose(this UIFormSurvivorSkillChoiceComponent self, int choiceSlot)
         {
-            if (self.Choosing || skillType == SurvivorSkillType.None)
+            SurvivorPlayerState player = self.Client.LocalPlayer;
+            if (self.Choosing || player == null)
             {
                 return;
             }
 
-            SurvivorPlayerState state = self.LocalPlayerState;
-            if (state == null)
+            SurvivorSkillType skillType = OfferedSkill(player, choiceSlot);
+            if (skillType == SurvivorSkillType.None)
             {
                 return;
             }
 
+            EntityRef<UIFormSurvivorSkillChoiceComponent> selfRef = self;
             self.Choosing = true;
             self.SetChoiceInteractable(false);
-            G2C_SurvivorChooseSkill response = await self.Client.ChooseSkill(
-                skillType,
-                state.SkillChoiceRevision);
-            self.Choosing = false;
-            if (response.Error != ErrorCode.ERR_Success)
+            SurvivorRequestResult result = await self.Client.ChooseSkill(skillType, player.SkillChoiceRevision);
+            self = selfRef;
+            if (self == null)
             {
-                self.View.StatusUXText.text = response.Message;
+                return;
+            }
+
+            self.Choosing = false;
+            if (!result.Success)
+            {
+                self.View.StatusUXText.text = result.Message;
                 self.SetChoiceInteractable(true);
                 return;
             }
@@ -106,18 +103,27 @@ namespace ET.Client
             self.View.StatusUXText.text = "技能已选择，等待服务器同步";
         }
 
-        private static void SetChoiceInteractable(
-            this UIFormSurvivorSkillChoiceComponent self,
-            bool interactable)
+        private static SurvivorSkillType OfferedSkill(SurvivorPlayerState player, int choiceSlot)
+        {
+            switch (choiceSlot)
+            {
+                case 1:
+                    return player.SkillChoice1;
+                case 2:
+                    return player.SkillChoice2;
+                default:
+                    return player.SkillChoice3;
+            }
+        }
+
+        private static void SetChoiceInteractable(this UIFormSurvivorSkillChoiceComponent self, bool interactable)
         {
             self.View.Choice1Button.interactable = interactable;
             self.View.Choice2Button.interactable = interactable;
             self.View.Choice3Button.interactable = interactable;
         }
 
-        private static string FormatSkill(
-            SurvivorSkillType skillType,
-            SurvivorPlayerState state)
+        private static string FormatSkill(SurvivorSkillType skillType, SurvivorPlayerState state)
         {
             switch (skillType)
             {
@@ -137,24 +143,18 @@ namespace ET.Client
 
         private static float NextAutoFireIntervalSeconds(SurvivorPlayerState state)
         {
-            return Math.Max(
-                       SurvivorDefaults.MinimumAutoFireIntervalTicks,
-                       SurvivorDefaults.AutoFireIntervalTicks -
-                       state.AutoFireLevel *
-                       SurvivorDefaults.AutoFireIntervalReductionTicks) /
-                    (float)SurvivorDefaults.SimulationTicksPerSecond;
+            int intervalTicks = SurvivorDefaults.AutoFireIntervalTicks - state.AutoFireLevel * SurvivorDefaults.AutoFireIntervalReductionTicks;
+            return Math.Max(SurvivorDefaults.MinimumAutoFireIntervalTicks, intervalTicks) / (float)SurvivorDefaults.SimulationTicksPerSecond;
         }
 
         private static int NextProjectileDamage(SurvivorPlayerState state)
         {
-            return SurvivorDefaults.ProjectileDamage +
-                    (state.PowerShotLevel + 1) * SurvivorDefaults.PowerShotDamagePerLevel;
+            return SurvivorDefaults.ProjectileDamage + (state.PowerShotLevel + 1) * SurvivorDefaults.PowerShotDamagePerLevel;
         }
 
         private static int NextMovePerTick(SurvivorPlayerState state)
         {
-            return SurvivorDefaults.PlayerMovePerTick +
-                    (state.SwiftStepLevel + 1) * SurvivorDefaults.SwiftStepMovePerTickPerLevel;
+            return SurvivorDefaults.PlayerMovePerTick + (state.SwiftStepLevel + 1) * SurvivorDefaults.SwiftStepMovePerTickPerLevel;
         }
     }
 }

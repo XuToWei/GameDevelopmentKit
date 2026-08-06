@@ -17,12 +17,7 @@ namespace ET.Client
         [UGFEntitySystem]
         private static void UGFEntityOnShow(this SurvivorPickupUGFEntity self)
         {
-            SurvivorPickupEntry entry = self.GetParent<SurvivorPickupEntry>();
-            self.State = entry
-                    .GetParent<SurvivorClientComponent>()
-                    .GetComponent<SurvivorViewEntityManagerComponent>()
-                    .Runtime
-                    .PickupStates[entry.Id];
+            self.Entry = self.GetParent<SurvivorPickupEntry>();
             self.View.SpriteRenderer.enabled = true;
             self.View.FillSpriteRenderer.enabled = false;
             self.View.DamageTextTextMeshPro.enabled = false;
@@ -33,10 +28,7 @@ namespace ET.Client
         }
 
         [UGFEntitySystem]
-        private static void UGFEntityOnUpdate(
-            this SurvivorPickupUGFEntity self,
-            float elapseSeconds,
-            float realElapseSeconds)
+        private static void UGFEntityOnUpdate(this SurvivorPickupUGFEntity self, float elapseSeconds, float realElapseSeconds)
         {
             self.ObserveChanges();
             self.CachedTransform.position = self.PresentationPosition.Advance(realElapseSeconds);
@@ -47,17 +39,13 @@ namespace ET.Client
         {
             self.ClearReactive();
             self.PresentationPosition.Reset();
-            self.State = null;
+            self.Entry = null;
         }
 
         [ETReactiveBind(nameof(SurvivorPickupUGFEntity.PositionX), nameof(SurvivorPickupUGFEntity.PositionY))]
-        private static void OnPositionChanged(
-            this SurvivorPickupUGFEntity self,
-            int positionX,
-            int positionY)
+        private static void OnPositionChanged(this SurvivorPickupUGFEntity self, int positionX, int positionY)
         {
-            self.CachedTransform.position = self.PresentationPosition.SetTarget(
-                new Vector3(positionX / 1000f, positionY / 1000f, 0f));
+            self.CachedTransform.position = self.PresentationPosition.SetTarget(new Vector3(positionX / 1000f, positionY / 1000f, 0f));
         }
     }
 }

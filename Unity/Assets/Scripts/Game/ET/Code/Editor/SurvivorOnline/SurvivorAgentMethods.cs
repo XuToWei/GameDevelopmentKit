@@ -86,8 +86,7 @@ namespace Game.Editor
             await UniTask.WaitUntil(() => IsInitialSkillChoiceReady(skillChoiceForm, skillChoice), cancellationToken: cancellationToken, cancelImmediately: true);
 
             SurvivorClientComponent client = skillChoiceForm.Client;
-            SurvivorPlayerState playerState = client.LocalPlayerState();
-            long choiceRevision = playerState.SkillChoiceRevision;
+            long choiceRevision = client.LocalPlayer.SkillChoiceRevision;
             skillChoice.Choice1Button.onClick.Invoke();
 
             await UniTask.WaitUntil(() => IsInitialSkillChoiceAccepted(client, choiceRevision), cancellationToken: cancellationToken, cancelImmediately: true);
@@ -102,7 +101,7 @@ namespace Game.Editor
         {
             SurvivorClientComponent client = skillChoiceForm.Client;
             EnsureBattleRunning(client, "等待初始技能可选择");
-            SurvivorPlayerState state = client.LocalPlayerState();
+            SurvivorPlayerState state = client.LocalPlayer;
             return state != null
                     && state.UnspentSkillPoints > 0
                     && state.SkillChoiceRevision > 0
@@ -116,7 +115,7 @@ namespace Game.Editor
             long choiceRevision)
         {
             EnsureBattleRunning(client, "等待服务器确认初始技能");
-            SurvivorPlayerState state = client.LocalPlayerState();
+            SurvivorPlayerState state = client.LocalPlayer;
             return state != null && state.SkillChoiceRevision != choiceRevision;
         }
 
@@ -130,8 +129,7 @@ namespace Game.Editor
 
         private static void EnsureBattleRunning(SurvivorClientComponent client, string stage)
         {
-            SurvivorWorldComponent world = client == null ? null : client.World;
-            if (world?.Data?.Phase == SurvivorRoomPhase.Ended)
+            if (client != null && client.Phase == SurvivorRoomPhase.Ended)
             {
                 throw new CommandException(
                     "SURVIVOR_BATTLE_ENDED_EARLY",

@@ -15,13 +15,10 @@ namespace ET.Client
         [UGFUIFormSystem]
         private static void UGFUIFormOnOpen(this UIFormSurvivorGameOverComponent self)
         {
-            SurvivorWorldComponent world = self.Client.World;
-            self.RoomCode = world.Data.RoomCode;
+            self.RoomCode = self.Client.HasBaseline ? self.Client.WorldComponent.Data.RoomCode : string.Empty;
             self.Returning = false;
             self.View.ReturnToRoomButton.SetAsync(self.ReturnToRoom);
-            self.View.StatusUXText.text = self.RoomCode.Length > 0
-                    ? $"返回房间 {self.RoomCode}，可由房主再次开始"
-                    : "没有可返回的房间";
+            self.View.StatusUXText.text = self.RoomCode.Length > 0 ? $"返回房间 {self.RoomCode}，可由房主再次开始" : "没有可返回的房间";
             self.View.ReturnToRoomButton.interactable = self.RoomCode.Length > 0;
         }
 
@@ -32,6 +29,9 @@ namespace ET.Client
             self.Returning = false;
         }
 
+        /// <summary>
+        /// 成功后不再自己打开 Lobby、关闭自己：Phase 回到 Lobby 之后由 SurvivorViewComponent 统一切换。
+        /// </summary>
         public static async UniTask ReturnToRoom(this UIFormSurvivorGameOverComponent self)
         {
             if (self.Returning || self.RoomCode.Length == 0)
@@ -39,29 +39,21 @@ namespace ET.Client
                 return;
             }
 
+            EntityRef<UIFormSurvivorGameOverComponent> selfRef = self;
+            string roomCode = self.RoomCode;
             self.Returning = true;
             self.View.ReturnToRoomButton.interactable = false;
-            self.View.StatusUXText.text = $"正在返回房间 {self.RoomCode}...";
-            G2C_SurvivorJoinRoom response = await self.Client.JoinRoom(self.RoomCode);
-            if (response.Error != ErrorCode.ERR_Success)
+            self.View.StatusUXText.text = $"正在返回房间 {roomCode}...";
+            SurvivorJoinRoomResult result = await self.Client.JoinRoom(roomCode);
+            self = selfRef;
+            if (self == null || result.Success)
             {
-                self.Returning = false;
-                self.View.ReturnToRoomButton.interactable = true;
-                self.View.StatusUXText.text = response.Message;
                 return;
             }
 
-            UIComponent uiComponent = self.Root().GetComponent<UIComponent>();
-            if (uiComponent.GetComponent<UIFormSurvivorLobbyComponent>() == null)
-            {
-                await uiComponent.AddUIFormComponentAsync<UIFormSurvivorLobbyComponent>(
-                    UGFUIFormId.SurvivorLobby);
-            }
-
-            if (uiComponent.GetComponent<UIFormSurvivorGameOverComponent>() != null)
-            {
-                uiComponent.RemoveComponent<UIFormSurvivorGameOverComponent>();
-            }
+            self.Returning = false;
+            self.View.ReturnToRoomButton.interactable = true;
+            self.View.StatusUXText.text = result.Message;
         }
     }
 }

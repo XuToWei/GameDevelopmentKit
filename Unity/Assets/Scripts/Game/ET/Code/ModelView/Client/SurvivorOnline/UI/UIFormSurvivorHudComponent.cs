@@ -11,28 +11,39 @@ namespace ET.Client
     {
         public SurvivorClientComponent Client { get; set; }
 
-        public SurvivorWorldComponent WorldComponent => this.Client.World;
-
-        public SurvivorWorldData WorldData => this.WorldComponent.Data;
-
-        public SurvivorPlayerState LocalPlayerState => this.WorldData.Players[this.Client.PlayerId];
+        /// <summary>
+        /// HUD 可能在世界被换掉（返回房间重新加入）之后还残留一帧观察，
+        /// 因此所有 Source 都要经过 HasBaseline / LocalPlayer 的动态状态判断。
+        /// 玩家数值用无参方法 Source，避免同一帧内重复查字典。
+        /// </summary>
+        [ETReactiveSource]
+        public string RoomCode => this.Client.HasBaseline ? this.Client.WorldComponent.Data.RoomCode : string.Empty;
 
         [ETReactiveSource]
-        public string RoomCode => this.WorldData.RoomCode;
+        public long ServerTick => this.Client.HasBaseline ? this.Client.WorldComponent.Data.ServerTick : 0;
 
         [ETReactiveSource]
-        public long ServerTick => this.WorldData.ServerTick;
+        public SurvivorRoomPhase Phase => this.Client.Phase;
 
         [ETReactiveSource]
-        public SurvivorRoomPhase Phase => this.WorldData.Phase;
+        public int Hp()
+        {
+            SurvivorPlayerState player = this.Client.LocalPlayer;
+            return player == null ? 0 : player.Hp;
+        }
 
         [ETReactiveSource]
-        public int Hp => this.LocalPlayerState.Hp;
+        public int MaxHp()
+        {
+            SurvivorPlayerState player = this.Client.LocalPlayer;
+            return player == null ? 0 : player.MaxHp;
+        }
 
         [ETReactiveSource]
-        public int MaxHp => this.LocalPlayerState.MaxHp;
-
-        [ETReactiveSource]
-        public int Level => this.LocalPlayerState.Level;
+        public int Level()
+        {
+            SurvivorPlayerState player = this.Client.LocalPlayer;
+            return player == null ? 0 : player.Level;
+        }
     }
 }

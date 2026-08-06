@@ -14,13 +14,11 @@ namespace ET.Client
         [ETReactiveSource]
         public string StatusMessage { get; set; }
 
-        public SurvivorWorldComponent WorldComponent => this.Client.World;
+        [ETReactiveSource]
+        public string RoomCode => this.Client.HasBaseline ? this.Client.WorldComponent.Data.RoomCode : string.Empty;
 
         [ETReactiveSource]
-        public string RoomCode => this.Client.HasBaseline ? this.WorldComponent.Data.RoomCode : string.Empty;
-
-        [ETReactiveSource]
-        public SurvivorRoomPhase Phase => this.Client.HasBaseline ? this.WorldComponent.Data.Phase : SurvivorRoomPhase.Lobby;
+        public SurvivorRoomPhase Phase => this.Client.Phase;
 
         [ETReactiveSource]
         public bool IsHost => this.Client.IsHost;

@@ -4,12 +4,14 @@ using System.Collections.Generic;
 namespace ET.Server
 {
     [ComponentOf(typeof(SurvivorRoom))]
-    public sealed partial class SurvivorRoomServerComponent: Entity, IAwake, IUpdate, IDestroy, IETReactive
+    public sealed class SurvivorRoomServerComponent: Entity, IAwake, IUpdate, IDestroy
     {
         public SurvivorRoomServerRuntime Runtime { get; set; }
 
-        [ETReactiveSource]
-        public SurvivorRoomPhase Phase => this.GetParent<SurvivorRoom>().GetComponent<SurvivorWorldComponent>().Data.Phase;
+        /// <summary>房间与 World 在本组件生命周期内是同一实例，按经验文档第 5 章在 Awake 缓存。</summary>
+        public SurvivorWorldComponent World { get; set; }
+
+        public SurvivorRoomPhase Phase => this.World.Data.Phase;
     }
 
     [EnableClass]
@@ -31,14 +33,31 @@ namespace ET.Server
 
         public long NextSimulationTime { get; set; }
 
-        public SurvivorRoom2C_StateFrame Frame { get; set; }
-
         public void Dispose()
         {
             this.PlayerIdEnumerator?.Dispose();
             this.PlayerStateEnumerator?.Dispose();
             this.PlayerInputQueues.Clear();
             this.LastQueuedInputSequences.Clear();
+        }
+    }
+
+    /// <summary>
+    /// 广播结果的逻辑结构。协议对象只停留在 BroadcastStateFrame 内部，不跨方法传递。
+    /// </summary>
+    public readonly struct SurvivorStateFrameInfo
+    {
+        public readonly long Sequence;
+
+        public readonly long ServerTick;
+
+        public readonly byte[] Payload;
+
+        public SurvivorStateFrameInfo(long sequence, long serverTick, byte[] payload)
+        {
+            this.Sequence = sequence;
+            this.ServerTick = serverTick;
+            this.Payload = payload;
         }
     }
 

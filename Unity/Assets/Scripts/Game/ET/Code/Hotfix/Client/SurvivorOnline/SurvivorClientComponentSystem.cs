@@ -3,7 +3,6 @@ using Cysharp.Threading.Tasks;
 namespace ET.Client
 {
     [EntitySystemOf(typeof(SurvivorClientComponent))]
-    [ETReactiveSystem]
     public static partial class SurvivorClientComponentSystem
     {
         private const int MaxPredictionTicksPerFrame = 5;
@@ -14,55 +13,56 @@ namespace ET.Client
         {
             self.ClientSender = self.Root().GetComponent<ClientSenderComponent>();
             self.LocalPrediction = new SurvivorLocalPlayerPrediction();
-            self.AddComponent<SurvivorCombatFeedbackComponent>();
             self.AddComponent<SurvivorViewEntityManagerComponent>();
+            self.AddComponent<SurvivorViewComponent>();
             self.Root().SceneType |= SceneType.SurvivorView;
-        }
-
-        [EntitySystem]
-        private static void Update(this SurvivorClientComponent self)
-        {
-            self.ObserveChanges();
         }
 
         [EntitySystem]
         private static void Destroy(this SurvivorClientComponent self)
         {
-            self.ClearReactive();
             self.World = default;
             self.Room = default;
             self.LocalPrediction = null;
         }
 
-        public static async UniTask<G2C_SurvivorJoinRoom> JoinRoom(this SurvivorClientComponent self, string roomCode)
+        public static async UniTask<SurvivorJoinRoomResult> JoinRoom(this SurvivorClientComponent self, string roomCode)
         {
             self.PrepareSnapshotConsumer(roomCode);
             using C2G_SurvivorJoinRoom request = C2G_SurvivorJoinRoom.Create(true);
             request.RoomCode = roomCode;
-            G2C_SurvivorJoinRoom response = (G2C_SurvivorJoinRoom)await self.ClientSender.Call(request, false);
+            using G2C_SurvivorJoinRoom response = (G2C_SurvivorJoinRoom)await self.ClientSender.Call(request, false);
             if (response.Error != ErrorCode.ERR_Success)
             {
-                return response;
+                return new SurvivorJoinRoomResult(response.Error, response.Message, 0, false);
             }
 
             self.PlayerId = response.PlayerId;
             self.IsHost = response.IsHost;
             self.ApplyStateFrame(response.Sequence, true, response.FullSnapshot);
-            return response;
+            return new SurvivorJoinRoomResult(response.Error, response.Message, response.PlayerId, response.IsHost);
         }
 
-        public static async UniTask<G2C_SurvivorStartGame> StartGame(this SurvivorClientComponent self)
+        public static async UniTask<SurvivorRequestResult> StartGame(this SurvivorClientComponent self)
         {
             using C2G_SurvivorStartGame request = C2G_SurvivorStartGame.Create(true);
-            G2C_SurvivorStartGame response = (G2C_SurvivorStartGame)await self.ClientSender.Call(request, false);
-            return response;
+            using G2C_SurvivorStartGame response = (G2C_SurvivorStartGame)await self.ClientSender.Call(request, false);
+            return new SurvivorRequestResult(response.Error, response.Message);
+        }
+
+        public static async UniTask<SurvivorRequestResult> ChooseSkill(this SurvivorClientComponent self, SurvivorSkillType skillType, long choiceRevision)
+        {
+            using C2G_SurvivorChooseSkill request = C2G_SurvivorChooseSkill.Create(true);
+            request.SkillType = (int)skillType;
+            request.ChoiceRevision = choiceRevision;
+            using G2C_SurvivorChooseSkill response = (G2C_SurvivorChooseSkill)await self.ClientSender.Call(request, false);
+            return new SurvivorRequestResult(response.Error, response.Message);
         }
 
         public static void UpdateLocalInput(this SurvivorClientComponent self, int moveX, int moveY, float deltaTime)
         {
-            SurvivorPlayerState player = self.LocalPlayerState();
-            SurvivorWorldComponent world = self.World;
-            if (!self.HasBaseline || player == null || world == null || world.Data.Phase != SurvivorRoomPhase.Running || !player.Alive)
+            SurvivorPlayerState player = self.LocalPlayer;
+            if (player == null || self.Phase != SurvivorRoomPhase.Running || !player.Alive)
             {
                 self.LocalPrediction.CurrentMoveX = 0;
                 self.LocalPrediction.CurrentMoveY = 0;
@@ -105,7 +105,7 @@ namespace ET.Client
 
         public static void EnsureLocalPredictionInitialized(this SurvivorClientComponent self)
         {
-            SurvivorPlayerState player = self.LocalPlayerState();
+            SurvivorPlayerState player = self.LocalPlayer;
             if (player == null || self.LocalPrediction.IsInitialized)
             {
                 return;
@@ -120,7 +120,7 @@ namespace ET.Client
 
         public static void ReconcileLocalPrediction(this SurvivorClientComponent self)
         {
-            SurvivorPlayerState player = self.LocalPlayerState();
+            SurvivorPlayerState player = self.LocalPlayer;
             if (player == null)
             {
                 return;
@@ -133,30 +133,11 @@ namespace ET.Client
                 {
                     self.InputSequence = player.LastInputSequence;
                 }
+
                 return;
             }
 
             self.LocalPrediction.Reconcile(player.PositionX, player.PositionY, player.LastInputSequence, player.MovePerTick());
-        }
-
-        public static async UniTask<G2C_SurvivorChooseSkill> ChooseSkill(this SurvivorClientComponent self, SurvivorSkillType skillType, long choiceRevision)
-        {
-            using C2G_SurvivorChooseSkill request = C2G_SurvivorChooseSkill.Create(true);
-            request.SkillType = (int)skillType;
-            request.ChoiceRevision = choiceRevision;
-            G2C_SurvivorChooseSkill response = (G2C_SurvivorChooseSkill)await self.ClientSender.Call(request, false);
-            return response;
-        }
-
-        public static SurvivorPlayerState LocalPlayerState(this SurvivorClientComponent self)
-        {
-            SurvivorWorldComponent world = self.World;
-            if (world?.Data?.Players == null || !world.Data.Players.ContainsKey(self.PlayerId))
-            {
-                return null;
-            }
-
-            return world.Data.Players[self.PlayerId];
         }
 
         public static void ApplyStateFrame(this SurvivorClientComponent self, long sequence, bool isFull, byte[] payload)
@@ -179,8 +160,7 @@ namespace ET.Client
                 return;
             }
 
-            SurvivorWorldComponent world = self.World;
-            world.ApplySnapshot(payload);
+            self.WorldComponent.ApplySnapshot(payload);
             self.LastSequence = sequence;
             self.HasBaseline = true;
             self.ReconcileLocalPrediction();
@@ -195,36 +175,12 @@ namespace ET.Client
 
             SurvivorRoom room = self.Root().AddComponent<SurvivorRoom, SceneType, string>(SceneType.SurvivorClient, roomCode);
             self.Room = room;
-            SurvivorWorldComponent world = room.AddComponent<SurvivorWorldComponent, SurvivorWorldRole, string>(SurvivorWorldRole.SnapshotConsumer, roomCode);
-            self.World = world;
+            self.World = room.AddComponent<SurvivorWorldComponent, SurvivorWorldRole, string>(SurvivorWorldRole.SnapshotConsumer, roomCode);
             self.LastSequence = 0;
             self.InputSequence = 0;
             self.HasBaseline = false;
-            self.ResetReactive();
             self.LocalPrediction.Reset();
             self.GetComponent<SurvivorViewEntityManagerComponent>().WorldGeneration++;
-        }
-
-        [ETReactiveBind(nameof(SurvivorClientComponent.SkillChoiceRevision), nameof(SurvivorClientComponent.UnspentSkillPoints), nameof(SurvivorClientComponent.Phase))]
-        private static void OnSkillChoiceAvailabilityChanged(this SurvivorClientComponent self, long skillChoiceRevision, int unspentSkillPoints, SurvivorRoomPhase phase)
-        {
-            SurvivorSkillChoiceAvailabilityChanged args = new()
-            {
-                Show = phase == SurvivorRoomPhase.Running && unspentSkillPoints > 0,
-                Revision = skillChoiceRevision,
-            };
-            EventSystem.Instance.PublishAsync(self.Root(), args).Forget();
-        }
-
-        [ETReactiveBind(nameof(SurvivorClientComponent.Phase))]
-        private static void OnGameEnded(this SurvivorClientComponent self, SurvivorRoomPhase phase)
-        {
-            if (phase != SurvivorRoomPhase.Ended)
-            {
-                return;
-            }
-
-            EventSystem.Instance.PublishAsync(self.Root(), new SurvivorGameEnded()).Forget();
         }
     }
 }

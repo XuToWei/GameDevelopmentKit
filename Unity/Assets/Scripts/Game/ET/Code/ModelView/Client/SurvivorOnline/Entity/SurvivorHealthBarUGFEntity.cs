@@ -11,18 +11,18 @@ namespace ET.Client
     {
         public bool IsPlayer { get; set; }
 
-        public SurvivorPlayerState PlayerState { get; set; }
+        public SurvivorPlayerEntry PlayerEntry { get; set; }
 
-        public SurvivorMonsterState MonsterState { get; set; }
+        public SurvivorMonsterEntry MonsterEntry { get; set; }
 
         public UGFEntity OwnerEntity { get; set; }
 
         public float VerticalOffset { get; set; }
 
         [ETReactiveSource]
-        public int Hp => this.IsPlayer ? this.PlayerState.Hp : this.MonsterState.Hp;
+        public int Hp => this.IsPlayer ? this.PlayerEntry.State.Hp : this.MonsterEntry.State.Hp;
 
         [ETReactiveSource]
-        public int MaxHp => this.IsPlayer ? this.PlayerState.MaxHp : this.MonsterState.MaxHp;
+        public int MaxHp => this.IsPlayer ? this.PlayerEntry.State.MaxHp : this.MonsterEntry.State.MaxHp;
     }
 }

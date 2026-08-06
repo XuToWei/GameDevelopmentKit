@@ -10,6 +10,7 @@ namespace ET.Client
         [EntitySystem]
         private static void Awake(this SurvivorViewEntityManagerComponent self)
         {
+            self.Client = self.GetParent<SurvivorClientComponent>();
             self.Runtime = new SurvivorViewEntityManagerRuntime();
         }
 
@@ -24,6 +25,7 @@ namespace ET.Client
         {
             self.ClearReactive();
             self.Runtime = null;
+            self.Client = null;
             self.WorldGeneration = 0;
         }
 
@@ -37,7 +39,7 @@ namespace ET.Client
         {
             if (self.Runtime.AppliedWorldGeneration != self.WorldGeneration)
             {
-                self.ClearViewEntries(self.GetParent<SurvivorClientComponent>());
+                self.ClearViewEntries();
                 self.Runtime.AppliedWorldGeneration = self.WorldGeneration;
             }
 
@@ -46,103 +48,109 @@ namespace ET.Client
 
         private static void ReconcileViewEntities(this SurvivorViewEntityManagerComponent self)
         {
-            SurvivorClientComponent client = self.GetParent<SurvivorClientComponent>();
-            SurvivorWorldComponent world = client.World;
-            if (world?.Data?.Players == null ||
-                world.Data.Monsters == null ||
-                world.Data.Projectiles == null ||
-                world.Data.Pickups == null)
+            if (!self.Client.HasBaseline)
             {
-                self.ClearViewEntries(client);
+                self.ClearViewEntries();
                 return;
             }
 
+            SurvivorWorldData world = self.Client.WorldComponent.Data;
             self.Runtime.SeenStateIds.Clear();
-            self.Runtime.PlayerStates.Clear();
-            self.Runtime.MonsterStates.Clear();
-            self.Runtime.ProjectileStates.Clear();
-            self.Runtime.PickupStates.Clear();
 
-            self.Runtime.PlayerEnumerator = world.Data.Players.GetEnumerator();
+            self.Runtime.PlayerEnumerator = world.Players.GetEnumerator();
             while (self.Runtime.PlayerEnumerator.MoveNext())
             {
-                self.Runtime.StateId = self.Runtime.PlayerEnumerator.Current.Value.StateId;
-                self.Runtime.SeenStateIds.Add(self.Runtime.StateId);
-                self.Runtime.PlayerStates[self.Runtime.StateId] =
-                        self.Runtime.PlayerEnumerator.Current.Value;
-                if (client.GetChild<SurvivorPlayerEntry>(self.Runtime.StateId) == null)
-                {
-                    SurvivorPlayerEntry entry =
-                            client.AddChildWithId<SurvivorPlayerEntry>(self.Runtime.StateId);
-                    ShowPlayerViewAsync(entry).Forget();
-                }
+                self.SyncPlayerEntry(self.Runtime.PlayerEnumerator.Current.Value);
             }
 
             self.Runtime.PlayerEnumerator.Dispose();
             self.Runtime.PlayerEnumerator = null;
 
-            self.Runtime.MonsterEnumerator = world.Data.Monsters.GetEnumerator();
+            self.Runtime.MonsterEnumerator = world.Monsters.GetEnumerator();
             while (self.Runtime.MonsterEnumerator.MoveNext())
             {
-                self.Runtime.StateId = self.Runtime.MonsterEnumerator.Current.Value.StateId;
-                self.Runtime.SeenStateIds.Add(self.Runtime.StateId);
-                self.Runtime.MonsterStates[self.Runtime.StateId] =
-                        self.Runtime.MonsterEnumerator.Current.Value;
-                if (client.GetChild<SurvivorMonsterEntry>(self.Runtime.StateId) == null)
-                {
-                    SurvivorMonsterEntry entry =
-                            client.AddChildWithId<SurvivorMonsterEntry>(self.Runtime.StateId);
-                    ShowMonsterViewAsync(entry).Forget();
-                }
+                self.SyncMonsterEntry(self.Runtime.MonsterEnumerator.Current.Value);
             }
 
             self.Runtime.MonsterEnumerator.Dispose();
             self.Runtime.MonsterEnumerator = null;
 
-            self.Runtime.ProjectileEnumerator = world.Data.Projectiles.GetEnumerator();
+            self.Runtime.ProjectileEnumerator = world.Projectiles.GetEnumerator();
             while (self.Runtime.ProjectileEnumerator.MoveNext())
             {
-                self.Runtime.StateId = self.Runtime.ProjectileEnumerator.Current.Value.StateId;
-                self.Runtime.SeenStateIds.Add(self.Runtime.StateId);
-                self.Runtime.ProjectileStates[self.Runtime.StateId] =
-                        self.Runtime.ProjectileEnumerator.Current.Value;
-                if (client.GetChild<SurvivorProjectileEntry>(self.Runtime.StateId) == null)
-                {
-                    SurvivorProjectileEntry entry =
-                            client.AddChildWithId<SurvivorProjectileEntry>(self.Runtime.StateId);
-                    ShowProjectileViewAsync(entry).Forget();
-                }
+                self.SyncProjectileEntry(self.Runtime.ProjectileEnumerator.Current.Value);
             }
 
             self.Runtime.ProjectileEnumerator.Dispose();
             self.Runtime.ProjectileEnumerator = null;
 
-            self.Runtime.PickupEnumerator = world.Data.Pickups.GetEnumerator();
+            self.Runtime.PickupEnumerator = world.Pickups.GetEnumerator();
             while (self.Runtime.PickupEnumerator.MoveNext())
             {
-                self.Runtime.StateId = self.Runtime.PickupEnumerator.Current.Value.StateId;
-                self.Runtime.SeenStateIds.Add(self.Runtime.StateId);
-                self.Runtime.PickupStates[self.Runtime.StateId] =
-                        self.Runtime.PickupEnumerator.Current.Value;
-                if (client.GetChild<SurvivorPickupEntry>(self.Runtime.StateId) == null)
-                {
-                    SurvivorPickupEntry entry =
-                            client.AddChildWithId<SurvivorPickupEntry>(self.Runtime.StateId);
-                    ShowPickupViewAsync(entry).Forget();
-                }
+                self.SyncPickupEntry(self.Runtime.PickupEnumerator.Current.Value);
             }
 
             self.Runtime.PickupEnumerator.Dispose();
             self.Runtime.PickupEnumerator = null;
-            self.RemoveMissingViewEntries(client);
+            self.RemoveMissingViewEntries();
         }
 
-        private static void RemoveMissingViewEntries(
-            this SurvivorViewEntityManagerComponent self,
-            SurvivorClientComponent client)
+        private static void SyncPlayerEntry(this SurvivorViewEntityManagerComponent self, SurvivorPlayerState state)
+        {
+            self.Runtime.SeenStateIds.Add(state.StateId);
+            SurvivorPlayerEntry entry = self.Client.GetChild<SurvivorPlayerEntry>(state.StateId);
+            if (entry != null)
+            {
+                entry.State = state;
+                return;
+            }
+
+            ShowPlayerViewAsync(self.Client.AddChildWithId<SurvivorPlayerEntry, SurvivorPlayerState>(state.StateId, state)).Forget();
+        }
+
+        private static void SyncMonsterEntry(this SurvivorViewEntityManagerComponent self, SurvivorMonsterState state)
+        {
+            self.Runtime.SeenStateIds.Add(state.StateId);
+            SurvivorMonsterEntry entry = self.Client.GetChild<SurvivorMonsterEntry>(state.StateId);
+            if (entry != null)
+            {
+                entry.State = state;
+                return;
+            }
+
+            ShowMonsterViewAsync(self.Client.AddChildWithId<SurvivorMonsterEntry, SurvivorMonsterState>(state.StateId, state)).Forget();
+        }
+
+        private static void SyncProjectileEntry(this SurvivorViewEntityManagerComponent self, SurvivorProjectileState state)
+        {
+            self.Runtime.SeenStateIds.Add(state.StateId);
+            SurvivorProjectileEntry entry = self.Client.GetChild<SurvivorProjectileEntry>(state.StateId);
+            if (entry != null)
+            {
+                entry.State = state;
+                return;
+            }
+
+            ShowProjectileViewAsync(self.Client.AddChildWithId<SurvivorProjectileEntry, SurvivorProjectileState>(state.StateId, state)).Forget();
+        }
+
+        private static void SyncPickupEntry(this SurvivorViewEntityManagerComponent self, SurvivorPickupState state)
+        {
+            self.Runtime.SeenStateIds.Add(state.StateId);
+            SurvivorPickupEntry entry = self.Client.GetChild<SurvivorPickupEntry>(state.StateId);
+            if (entry != null)
+            {
+                entry.State = state;
+                return;
+            }
+
+            ShowPickupViewAsync(self.Client.AddChildWithId<SurvivorPickupEntry, SurvivorPickupState>(state.StateId, state)).Forget();
+        }
+
+        private static void RemoveMissingViewEntries(this SurvivorViewEntityManagerComponent self)
         {
             self.Runtime.RemovalStateIds.Clear();
-            self.Runtime.EntryEnumerator = client.Children.Values.GetEnumerator();
+            self.Runtime.EntryEnumerator = self.Client.Children.Values.GetEnumerator();
             while (self.Runtime.EntryEnumerator.MoveNext())
             {
                 Entity entry = self.Runtime.EntryEnumerator.Current;
@@ -157,21 +165,15 @@ namespace ET.Client
             self.Runtime.Index = 0;
             while (self.Runtime.Index < self.Runtime.RemovalStateIds.Count)
             {
-                client.RemoveChild(self.Runtime.RemovalStateIds[self.Runtime.Index]);
+                self.Client.RemoveChild(self.Runtime.RemovalStateIds[self.Runtime.Index]);
                 self.Runtime.Index++;
             }
         }
 
-        private static void ClearViewEntries(
-            this SurvivorViewEntityManagerComponent self,
-            SurvivorClientComponent client)
+        private static void ClearViewEntries(this SurvivorViewEntityManagerComponent self)
         {
-            self.Runtime.PlayerStates.Clear();
-            self.Runtime.MonsterStates.Clear();
-            self.Runtime.ProjectileStates.Clear();
-            self.Runtime.PickupStates.Clear();
             self.Runtime.SeenStateIds.Clear();
-            self.RemoveMissingViewEntries(client);
+            self.RemoveMissingViewEntries();
         }
 
         private static bool IsManagedEntry(Entity entity)
@@ -195,8 +197,7 @@ namespace ET.Client
                     return;
                 }
 
-                SurvivorHealthBarUGFEntity healthBar =
-                        entry.AddComponent<SurvivorHealthBarUGFEntity, bool>(true);
+                SurvivorHealthBarUGFEntity healthBar = entry.AddComponent<SurvivorHealthBarUGFEntity, bool>(true);
                 await healthBar.ShowEntityAsync(UGFEntityId.SurvivorPickup);
             }
             catch (OperationCanceledException)
@@ -217,8 +218,7 @@ namespace ET.Client
                     return;
                 }
 
-                SurvivorHealthBarUGFEntity healthBar =
-                        entry.AddComponent<SurvivorHealthBarUGFEntity, bool>(false);
+                SurvivorHealthBarUGFEntity healthBar = entry.AddComponent<SurvivorHealthBarUGFEntity, bool>(false);
                 await healthBar.ShowEntityAsync(UGFEntityId.SurvivorPickup);
             }
             catch (OperationCanceledException)
@@ -230,8 +230,7 @@ namespace ET.Client
         {
             try
             {
-                SurvivorProjectileUGFEntity projectileView =
-                        entry.AddComponent<SurvivorProjectileUGFEntity>();
+                SurvivorProjectileUGFEntity projectileView = entry.AddComponent<SurvivorProjectileUGFEntity>();
                 await projectileView.ShowEntityAsync(UGFEntityId.SurvivorProjectile);
             }
             catch (OperationCanceledException)
@@ -251,19 +250,9 @@ namespace ET.Client
             }
         }
 
-        public static void CreateDamageNumber(
-            this SurvivorViewEntityManagerComponent self,
-            int damage,
-            float positionX,
-            float positionY)
+        public static void CreateDamageNumber(this SurvivorViewEntityManagerComponent self, int damage, float positionX, float positionY)
         {
-            SurvivorCombatFeedbackComponent feedback = self.GetParent<SurvivorClientComponent>()
-                    .GetComponent<SurvivorCombatFeedbackComponent>();
-            SurvivorDamageNumberEntry entry =
-                    feedback.AddChild<SurvivorDamageNumberEntry, int, float, float>(
-                        damage,
-                        positionX,
-                        positionY);
+            SurvivorDamageNumberEntry entry = self.AddChild<SurvivorDamageNumberEntry, int, float, float>(damage, positionX, positionY);
             ShowDamageNumberViewAsync(entry).Forget();
         }
 
@@ -271,8 +260,7 @@ namespace ET.Client
         {
             try
             {
-                SurvivorDamageNumberUGFEntity damageView =
-                        entry.AddComponent<SurvivorDamageNumberUGFEntity>();
+                SurvivorDamageNumberUGFEntity damageView = entry.AddComponent<SurvivorDamageNumberUGFEntity>();
                 await damageView.ShowEntityAsync(UGFEntityId.SurvivorPickup);
             }
             catch (OperationCanceledException)
