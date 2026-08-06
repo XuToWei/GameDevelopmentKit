@@ -25,7 +25,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e4def761d69b27b7b51a5de0f6d272861416a2d6"
+      "hash": "ca7f87b6a72f3739f99a5ad0c957c7aae0cbd922"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -81,7 +81,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e2b86f7ad433dd7dba2ac0b1a66d36f5105aa912"
+      "hash": "604dc1eb5ada260a7be546d3d647482dc5bd0578"
     },
     "com.psygames.unitywebsocket": {
       "version": "https://github.com/psygames/UnityWebSocket.git#upm",
@@ -224,7 +224,7 @@
       }
     },
     "com.unity.scriptablebuildpipeline": {
-      "version": "3.1.1",
+      "version": "4.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -327,7 +327,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "87c612de2f08921fc3e0199d4f1545bd74226592"
+      "hash": "a29581bd88aaf345d68c5604f876bf467f40ae8c"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
@@ -344,7 +344,7 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.test-framework": "1.1.33"
       },
-      "hash": "99933a482fb5d3d96c7af2a7afc9dfb93d419873"
+      "hash": "33a5dc50db654ab2ed0b99e9d9dca66095064a28"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
