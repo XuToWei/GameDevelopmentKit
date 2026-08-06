@@ -1,3 +1,11 @@
+# 联机幸存者 Demo
+
+仓库当前内置一个基于 ET 模式的联机幸存者 Demo，用于展示 GDK 从登录、房间、服务器权威模拟、状态同步到 UGF 表现的完整双端开发链路。服务器使用固定的 `SurvivorRoomManager` 管理房间，并为每个房间动态创建独立的 `SurvivorRoomRoot` Fiber；客户端通过 ReactiveBinding 接收完整/增量快照，使用 ETUI 和 ETEntity 驱动界面与战斗表现。
+
+Demo 已包含房间号创建与加入、最多 4 人联机、房主开局、玩家移动与本地预测、怪物追逐、自动射击、经验拾取与升级、技能三选一、伤害数字、生命条和游戏结束界面。当前客户端 `AppType` 已设置为 `Survivor`，用 Unity 打开 `Unity/Assets/Launcher.unity` 并运行即可从登录界面进入 Demo。
+
+详细设计和代码位置见 [联机幸存者 Demo 实现说明](Design/Document/联机幸存者Demo实现说明.md)、[架构需求](Design/Document/联机幸存者Demo架构需求.md) 和 [ET 业务模块开发与重构经验](Book/ET业务模块开发与重构经验.md)。
+
 # ET模式
 使用ET+GF，使用GF扩展了ET的客户端部分，功能更强大，双端开发更便利
 
