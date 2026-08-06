@@ -6,10 +6,10 @@ namespace ET
     {
         public static void TickWeapons(this SurvivorWorldComponent self)
         {
-            self.Runtime.PlayerEnumerator = self.Data.Players.GetEnumerator();
-            while (self.Runtime.PlayerEnumerator.MoveNext())
+            using var playerEnumerator = self.Data.Players.GetEnumerator();
+            while (playerEnumerator.MoveNext())
             {
-                self.Runtime.Player = self.Runtime.PlayerEnumerator.Current.Value;
+                self.Runtime.Player = playerEnumerator.Current.Value;
                 if (!self.Runtime.Player.Alive)
                 {
                     continue;
@@ -19,8 +19,6 @@ namespace ET
                 self.TickAutoFire();
             }
 
-            self.Runtime.PlayerEnumerator.Dispose();
-            self.Runtime.PlayerEnumerator = null;
             self.Runtime.Player = null;
             self.Runtime.TargetMonster = null;
         }
@@ -38,10 +36,10 @@ namespace ET
             }
 
             self.Runtime.SwordWaveHitStateIds.Clear();
-            self.Runtime.MonsterEnumerator = self.Data.Monsters.GetEnumerator();
-            while (self.Runtime.MonsterEnumerator.MoveNext())
+            using var monsterEnumerator = self.Data.Monsters.GetEnumerator();
+            while (monsterEnumerator.MoveNext())
             {
-                self.Runtime.Monster = self.Runtime.MonsterEnumerator.Current.Value;
+                self.Runtime.Monster = monsterEnumerator.Current.Value;
                 if (!self.Runtime.Monster.Alive)
                 {
                     continue;
@@ -64,8 +62,6 @@ namespace ET
                 self.Runtime.SwordWaveHitStateIds.Add(self.Runtime.Monster.StateId);
             }
 
-            self.Runtime.MonsterEnumerator.Dispose();
-            self.Runtime.MonsterEnumerator = null;
             self.Runtime.Monster = null;
             self.Runtime.Index = 0;
             while (self.Runtime.Index < self.Runtime.SwordWaveHitStateIds.Count)
@@ -123,10 +119,10 @@ namespace ET
         {
             self.Runtime.TargetMonster = null;
             self.Runtime.DistanceSquared = long.MaxValue;
-            self.Runtime.MonsterEnumerator = self.Data.Monsters.GetEnumerator();
-            while (self.Runtime.MonsterEnumerator.MoveNext())
+            using var monsterEnumerator = self.Data.Monsters.GetEnumerator();
+            while (monsterEnumerator.MoveNext())
             {
-                self.Runtime.Monster = self.Runtime.MonsterEnumerator.Current.Value;
+                self.Runtime.Monster = monsterEnumerator.Current.Value;
                 if (!self.Runtime.Monster.Alive)
                 {
                     continue;
@@ -147,8 +143,6 @@ namespace ET
                 self.Runtime.TargetMonster = self.Runtime.Monster;
             }
 
-            self.Runtime.MonsterEnumerator.Dispose();
-            self.Runtime.MonsterEnumerator = null;
             self.Runtime.Monster = null;
         }
 

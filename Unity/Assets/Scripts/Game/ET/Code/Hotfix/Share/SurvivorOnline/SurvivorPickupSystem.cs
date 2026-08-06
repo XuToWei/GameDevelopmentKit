@@ -5,15 +5,15 @@ namespace ET
         public static void TickPickups(this SurvivorWorldComponent self)
         {
             self.Runtime.PickupRemovalStateIds.Clear();
-            self.Runtime.PickupEnumerator = self.Data.Pickups.GetEnumerator();
-            while (self.Runtime.PickupEnumerator.MoveNext())
+            using var pickupEnumerator = self.Data.Pickups.GetEnumerator();
+            while (pickupEnumerator.MoveNext())
             {
-                self.Runtime.Pickup = self.Runtime.PickupEnumerator.Current.Value;
+                self.Runtime.Pickup = pickupEnumerator.Current.Value;
                 self.Runtime.Collected = false;
-                self.Runtime.PlayerEnumerator = self.Data.Players.GetEnumerator();
-                while (self.Runtime.PlayerEnumerator.MoveNext())
+                using var playerEnumerator = self.Data.Players.GetEnumerator();
+                while (playerEnumerator.MoveNext())
                 {
-                    self.Runtime.Player = self.Runtime.PlayerEnumerator.Current.Value;
+                    self.Runtime.Player = playerEnumerator.Current.Value;
                     if (!self.Runtime.Player.Alive)
                     {
                         continue;
@@ -38,16 +38,12 @@ namespace ET
                     break;
                 }
 
-                self.Runtime.PlayerEnumerator.Dispose();
-                self.Runtime.PlayerEnumerator = null;
                 if (self.Runtime.Collected)
                 {
                     self.Runtime.PickupRemovalStateIds.Add(self.Runtime.Pickup.StateId);
                 }
             }
 
-            self.Runtime.PickupEnumerator.Dispose();
-            self.Runtime.PickupEnumerator = null;
             self.Runtime.Index = 0;
             while (self.Runtime.Index < self.Runtime.PickupRemovalStateIds.Count)
             {

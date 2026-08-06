@@ -34,16 +34,6 @@ namespace ET.Client
     [EnableClass]
     public sealed class SurvivorViewEntityManagerRuntime
     {
-        public IEnumerator<KeyValuePair<long, SurvivorPlayerState>> PlayerEnumerator { get; set; }
-
-        public IEnumerator<KeyValuePair<long, SurvivorMonsterState>> MonsterEnumerator { get; set; }
-
-        public IEnumerator<KeyValuePair<long, SurvivorProjectileState>> ProjectileEnumerator { get; set; }
-
-        public IEnumerator<KeyValuePair<long, SurvivorPickupState>> PickupEnumerator { get; set; }
-
-        public IEnumerator<Entity> EntryEnumerator { get; set; }
-
         public HashSet<long> SeenStateIds { get; } = new();
 
         public List<long> RemovalStateIds { get; } = new();

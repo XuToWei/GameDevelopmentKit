@@ -4,10 +4,10 @@ namespace ET
     {
         public static void TickPlayerMovement(this SurvivorWorldComponent self)
         {
-            self.Runtime.PlayerEnumerator = self.Data.Players.GetEnumerator();
-            while (self.Runtime.PlayerEnumerator.MoveNext())
+            using var playerEnumerator = self.Data.Players.GetEnumerator();
+            while (playerEnumerator.MoveNext())
             {
-                self.Runtime.Player = self.Runtime.PlayerEnumerator.Current.Value;
+                self.Runtime.Player = playerEnumerator.Current.Value;
                 if (!self.Runtime.Player.Alive)
                 {
                     continue;
@@ -25,8 +25,6 @@ namespace ET
                     self.Runtime.Player.PositionY);
             }
 
-            self.Runtime.PlayerEnumerator.Dispose();
-            self.Runtime.PlayerEnumerator = null;
             self.Runtime.Player = null;
         }
     }

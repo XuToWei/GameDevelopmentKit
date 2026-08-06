@@ -42,14 +42,11 @@ namespace ET
         private static void ObserveStateReactions(this SurvivorWorldComponent self)
         {
             self.Runtime.ObserverIds.Clear();
-            self.Runtime.ObserverEnumerator = self.Children.Values.GetEnumerator();
-            while (self.Runtime.ObserverEnumerator.MoveNext())
+            using var observerEnumerator = self.Children.Values.GetEnumerator();
+            while (observerEnumerator.MoveNext())
             {
-                self.Runtime.ObserverIds.Add(self.Runtime.ObserverEnumerator.Current.Id);
+                self.Runtime.ObserverIds.Add(observerEnumerator.Current.Id);
             }
-
-            self.Runtime.ObserverEnumerator.Dispose();
-            self.Runtime.ObserverEnumerator = null;
             self.Runtime.ObserverIndex = 0;
             while (self.Runtime.ObserverIndex < self.Runtime.ObserverIds.Count)
             {

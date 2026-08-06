@@ -69,14 +69,11 @@ namespace ET
         {
             self.DetachStateReactions();
             SurvivorWorldFactory.ResetForLobby(self.Data);
-            self.Runtime.PlayerEnumerator = self.Data.Players.GetEnumerator();
-            while (self.Runtime.PlayerEnumerator.MoveNext())
+            using var playerEnumerator = self.Data.Players.GetEnumerator();
+            while (playerEnumerator.MoveNext())
             {
-                self.AttachPlayerReaction(self.Runtime.PlayerEnumerator.Current.Value);
+                self.AttachPlayerReaction(playerEnumerator.Current.Value);
             }
-
-            self.Runtime.PlayerEnumerator.Dispose();
-            self.Runtime.PlayerEnumerator = null;
         }
 
         public static void SetPlayerInput(

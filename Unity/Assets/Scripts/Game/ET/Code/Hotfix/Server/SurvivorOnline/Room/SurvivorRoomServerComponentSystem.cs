@@ -77,14 +77,11 @@ namespace ET.Server
             self.Runtime.LastQueuedInputSequences.Clear();
             self.Runtime.QueuedInput = null;
             self.Runtime.NextSimulationTime = TimeInfo.Instance.ServerFrameTime();
-            self.Runtime.PlayerIdEnumerator = self.Runtime.PlayerIds.GetEnumerator();
-            while (self.Runtime.PlayerIdEnumerator.MoveNext())
+            using var playerIdEnumerator = self.Runtime.PlayerIds.GetEnumerator();
+            while (playerIdEnumerator.MoveNext())
             {
-                self.RegisterPlayerInputQueue(self.Runtime.PlayerIdEnumerator.Current);
+                self.RegisterPlayerInputQueue(playerIdEnumerator.Current);
             }
-
-            self.Runtime.PlayerIdEnumerator.Dispose();
-            self.Runtime.PlayerIdEnumerator = null;
         }
 
         public static void QueuePlayerInput(this SurvivorRoomServerComponent self, long playerId, long inputSequence, int moveX, int moveY)
@@ -115,11 +112,11 @@ namespace ET.Server
 
         private static void ConsumePlayerInputs(this SurvivorRoomServerComponent self)
         {
-            self.Runtime.PlayerStateEnumerator = self.World.Data.Players.GetEnumerator();
-            while (self.Runtime.PlayerStateEnumerator.MoveNext())
+            using var playerStateEnumerator = self.World.Data.Players.GetEnumerator();
+            while (playerStateEnumerator.MoveNext())
             {
-                long playerId = self.Runtime.PlayerStateEnumerator.Current.Key;
-                SurvivorPlayerState player = self.Runtime.PlayerStateEnumerator.Current.Value;
+                long playerId = playerStateEnumerator.Current.Key;
+                SurvivorPlayerState player = playerStateEnumerator.Current.Value;
                 if (!self.Runtime.PlayerInputQueues.ContainsKey(playerId) || self.Runtime.PlayerInputQueues[playerId].Count == 0)
                 {
                     player.MoveX = 0;
@@ -132,8 +129,6 @@ namespace ET.Server
                 self.Runtime.QueuedInput = null;
             }
 
-            self.Runtime.PlayerStateEnumerator.Dispose();
-            self.Runtime.PlayerStateEnumerator = null;
         }
 
         /// <summary>
@@ -145,19 +140,17 @@ namespace ET.Server
             long serverTick = self.World.Data.ServerTick;
             byte[] payload = isFull ? self.World.CaptureFull() : self.World.CaptureDelta();
             MessageLocationSenderComponent sender = self.Root().GetComponent<MessageLocationSenderComponent>();
-            self.Runtime.PlayerIdEnumerator = self.Runtime.PlayerIds.GetEnumerator();
-            while (self.Runtime.PlayerIdEnumerator.MoveNext())
+            using var playerIdEnumerator = self.Runtime.PlayerIds.GetEnumerator();
+            while (playerIdEnumerator.MoveNext())
             {
                 SurvivorRoom2C_StateFrame frame = SurvivorRoom2C_StateFrame.Create(true);
                 frame.Sequence = self.Runtime.Sequence;
                 frame.ServerTick = serverTick;
                 frame.IsFull = isFull;
                 frame.Payload = payload;
-                sender.Get(LocationType.GateSession).Send(self.Runtime.PlayerIdEnumerator.Current, frame);
+                sender.Get(LocationType.GateSession).Send(playerIdEnumerator.Current, frame);
             }
 
-            self.Runtime.PlayerIdEnumerator.Dispose();
-            self.Runtime.PlayerIdEnumerator = null;
             return new SurvivorStateFrameInfo(self.Runtime.Sequence, serverTick, payload);
         }
     }

@@ -38,10 +38,10 @@ namespace ET
 
         public static void TickMonsterMovementAndContact(this SurvivorWorldComponent self)
         {
-            self.Runtime.MonsterEnumerator = self.Data.Monsters.GetEnumerator();
-            while (self.Runtime.MonsterEnumerator.MoveNext())
+            using var monsterEnumerator = self.Data.Monsters.GetEnumerator();
+            while (monsterEnumerator.MoveNext())
             {
-                self.Runtime.Monster = self.Runtime.MonsterEnumerator.Current.Value;
+                self.Runtime.Monster = monsterEnumerator.Current.Value;
                 if (!self.Runtime.Monster.Alive)
                 {
                     continue;
@@ -49,18 +49,18 @@ namespace ET
 
                 self.Runtime.TargetPlayer = null;
                 self.Runtime.Distance = int.MaxValue;
-                self.Runtime.PlayerEnumerator = self.Data.Players.GetEnumerator();
-                while (self.Runtime.PlayerEnumerator.MoveNext())
+                using var playerEnumerator = self.Data.Players.GetEnumerator();
+                while (playerEnumerator.MoveNext())
                 {
-                    if (!self.Runtime.PlayerEnumerator.Current.Value.Alive)
+                    if (!playerEnumerator.Current.Value.Alive)
                     {
                         continue;
                     }
 
                     self.Runtime.DeltaX =
-                            self.Runtime.PlayerEnumerator.Current.Value.PositionX - self.Runtime.Monster.PositionX;
+                            playerEnumerator.Current.Value.PositionX - self.Runtime.Monster.PositionX;
                     self.Runtime.DeltaY =
-                            self.Runtime.PlayerEnumerator.Current.Value.PositionY - self.Runtime.Monster.PositionY;
+                            playerEnumerator.Current.Value.PositionY - self.Runtime.Monster.PositionY;
                     if (SurvivorMath.Abs(self.Runtime.DeltaX) + SurvivorMath.Abs(self.Runtime.DeltaY) >=
                         self.Runtime.Distance)
                     {
@@ -69,11 +69,9 @@ namespace ET
 
                     self.Runtime.Distance =
                             SurvivorMath.Abs(self.Runtime.DeltaX) + SurvivorMath.Abs(self.Runtime.DeltaY);
-                    self.Runtime.TargetPlayer = self.Runtime.PlayerEnumerator.Current.Value;
+                    self.Runtime.TargetPlayer = playerEnumerator.Current.Value;
                 }
 
-                self.Runtime.PlayerEnumerator.Dispose();
-                self.Runtime.PlayerEnumerator = null;
                 if (self.Runtime.TargetPlayer == null)
                 {
                     continue;
@@ -95,8 +93,6 @@ namespace ET
                 }
             }
 
-            self.Runtime.MonsterEnumerator.Dispose();
-            self.Runtime.MonsterEnumerator = null;
             self.Runtime.Monster = null;
             self.Runtime.TargetPlayer = null;
         }

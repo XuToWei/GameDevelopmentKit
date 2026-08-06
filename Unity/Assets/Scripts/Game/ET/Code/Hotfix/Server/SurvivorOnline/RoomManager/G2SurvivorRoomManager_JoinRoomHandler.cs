@@ -9,7 +9,7 @@ namespace ET.Server
         {
             SurvivorRoomManagerComponent manager = root.GetComponent<SurvivorRoomManagerComponent>();
             using CoroutineLock _ = await root.GetComponent<CoroutineLockComponent>().Wait(SurvivorCoroutineLockType.RoomDirectory, request.RoomCode.GetHashCode());
-            if (!manager.Runtime.Rooms.TryGetValue(request.RoomCode, out ActorId roomActorId))
+            if (!manager.Rooms.TryGetValue(request.RoomCode, out ActorId roomActorId))
             {
                 int fiberId = await FiberManager.Instance.Create(SchedulerType.ThreadPool, root.Fiber().Zone, SceneType.SurvivorRoomRoot, $"SurvivorRoom-{request.RoomCode}");
                 roomActorId = new ActorId(root.Fiber().Process, fiberId);
@@ -24,7 +24,7 @@ namespace ET.Server
                     return;
                 }
 
-                manager.Runtime.Rooms.Add(request.RoomCode, roomActorId);
+                manager.Rooms.Add(request.RoomCode, roomActorId);
             }
 
             using G2SurvivorRoom_Join joinRequest = G2SurvivorRoom_Join.Create(true);

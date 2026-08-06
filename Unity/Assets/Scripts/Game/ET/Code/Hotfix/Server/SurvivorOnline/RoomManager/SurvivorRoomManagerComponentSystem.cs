@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ET.Server
 {
     [EntitySystemOf(typeof(SurvivorRoomManagerComponent))]
@@ -6,7 +8,7 @@ namespace ET.Server
         [EntitySystem]
         private static void Awake(this SurvivorRoomManagerComponent self)
         {
-            self.Runtime = new SurvivorRoomManagerRuntime();
+            self.Rooms = new Dictionary<string, ActorId>();
         }
     }
 }

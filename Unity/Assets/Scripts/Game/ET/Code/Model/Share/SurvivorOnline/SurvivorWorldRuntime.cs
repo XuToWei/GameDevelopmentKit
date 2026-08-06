@@ -27,16 +27,6 @@ namespace ET
 
         public BinaryReader ApplyReader { get; }
 
-        public IEnumerator<KeyValuePair<long, SurvivorPlayerState>> PlayerEnumerator { get; set; }
-
-        public IEnumerator<KeyValuePair<long, SurvivorMonsterState>> MonsterEnumerator { get; set; }
-
-        public IEnumerator<KeyValuePair<long, SurvivorProjectileState>> ProjectileEnumerator { get; set; }
-
-        public IEnumerator<KeyValuePair<long, SurvivorPickupState>> PickupEnumerator { get; set; }
-
-        public IEnumerator<Entity> ObserverEnumerator { get; set; }
-
         public List<long> ObserverIds { get; } = new();
 
         public List<long> ProjectileRemovalStateIds { get; } = new();
@@ -89,11 +79,6 @@ namespace ET
 
         public void Dispose()
         {
-            this.PlayerEnumerator?.Dispose();
-            this.MonsterEnumerator?.Dispose();
-            this.ProjectileEnumerator?.Dispose();
-            this.PickupEnumerator?.Dispose();
-            this.ObserverEnumerator?.Dispose();
             this.ApplyReader.Dispose();
             this.ApplyStream.Dispose();
             this.CaptureWriter.Dispose();

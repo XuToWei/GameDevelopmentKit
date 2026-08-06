@@ -72,25 +72,19 @@ namespace ET
 
         public static void DetachStateReactions(this SurvivorWorldComponent self)
         {
-            self.Runtime.PlayerEnumerator = self.Data.Players.GetEnumerator();
-            while (self.Runtime.PlayerEnumerator.MoveNext())
+            using var playerEnumerator = self.Data.Players.GetEnumerator();
+            while (playerEnumerator.MoveNext())
             {
-                SurvivorPlayerStateReactiveObserver observer = self.Runtime.PlayerEnumerator.Current.Value.LogicObserver;
+                SurvivorPlayerStateReactiveObserver observer = playerEnumerator.Current.Value.LogicObserver;
                 observer.Dispose();
             }
 
-            self.Runtime.PlayerEnumerator.Dispose();
-            self.Runtime.PlayerEnumerator = null;
-
-            self.Runtime.MonsterEnumerator = self.Data.Monsters.GetEnumerator();
-            while (self.Runtime.MonsterEnumerator.MoveNext())
+            using var monsterEnumerator = self.Data.Monsters.GetEnumerator();
+            while (monsterEnumerator.MoveNext())
             {
-                SurvivorMonsterStateReactiveObserver observer = self.Runtime.MonsterEnumerator.Current.Value.LogicObserver;
+                SurvivorMonsterStateReactiveObserver observer = monsterEnumerator.Current.Value.LogicObserver;
                 observer.Dispose();
             }
-
-            self.Runtime.MonsterEnumerator.Dispose();
-            self.Runtime.MonsterEnumerator = null;
         }
 
         public static void ResolvePlayerHpChanged(this SurvivorWorldComponent self, SurvivorPlayerState state, int newHp)
@@ -150,17 +144,15 @@ namespace ET
         public static void CheckGameEnded(this SurvivorWorldComponent self)
         {
             self.Runtime.AlivePlayerCount = 0;
-            self.Runtime.PlayerEnumerator = self.Data.Players.GetEnumerator();
-            while (self.Runtime.PlayerEnumerator.MoveNext())
+            using var playerEnumerator = self.Data.Players.GetEnumerator();
+            while (playerEnumerator.MoveNext())
             {
-                if (self.Runtime.PlayerEnumerator.Current.Value.Alive)
+                if (playerEnumerator.Current.Value.Alive)
                 {
                     self.Runtime.AlivePlayerCount++;
                 }
             }
 
-            self.Runtime.PlayerEnumerator.Dispose();
-            self.Runtime.PlayerEnumerator = null;
             if (self.Data.Players.Count > 0 && self.Runtime.AlivePlayerCount == 0)
             {
                 self.Data.Phase = SurvivorRoomPhase.Ended;

@@ -23,10 +23,6 @@ namespace ET.Server
 
         public Dictionary<long, long> LastQueuedInputSequences { get; } = new();
 
-        public IEnumerator<long> PlayerIdEnumerator { get; set; }
-
-        public IEnumerator<KeyValuePair<long, SurvivorPlayerState>> PlayerStateEnumerator { get; set; }
-
         public SurvivorQueuedPlayerInput QueuedInput { get; set; }
 
         public long Sequence { get; set; }
@@ -35,8 +31,6 @@ namespace ET.Server
 
         public void Dispose()
         {
-            this.PlayerIdEnumerator?.Dispose();
-            this.PlayerStateEnumerator?.Dispose();
             this.PlayerInputQueues.Clear();
             this.LastQueuedInputSequences.Clear();
         }

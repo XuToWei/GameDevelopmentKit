@@ -57,41 +57,30 @@ namespace ET.Client
             SurvivorWorldData world = self.Client.WorldComponent.Data;
             self.Runtime.SeenStateIds.Clear();
 
-            self.Runtime.PlayerEnumerator = world.Players.GetEnumerator();
-            while (self.Runtime.PlayerEnumerator.MoveNext())
+            using var playerEnumerator = world.Players.GetEnumerator();
+            while (playerEnumerator.MoveNext())
             {
-                self.SyncPlayerEntry(self.Runtime.PlayerEnumerator.Current.Value);
+                self.SyncPlayerEntry(playerEnumerator.Current.Value);
             }
 
-            self.Runtime.PlayerEnumerator.Dispose();
-            self.Runtime.PlayerEnumerator = null;
-
-            self.Runtime.MonsterEnumerator = world.Monsters.GetEnumerator();
-            while (self.Runtime.MonsterEnumerator.MoveNext())
+            using var monsterEnumerator = world.Monsters.GetEnumerator();
+            while (monsterEnumerator.MoveNext())
             {
-                self.SyncMonsterEntry(self.Runtime.MonsterEnumerator.Current.Value);
+                self.SyncMonsterEntry(monsterEnumerator.Current.Value);
             }
 
-            self.Runtime.MonsterEnumerator.Dispose();
-            self.Runtime.MonsterEnumerator = null;
-
-            self.Runtime.ProjectileEnumerator = world.Projectiles.GetEnumerator();
-            while (self.Runtime.ProjectileEnumerator.MoveNext())
+            using var projectileEnumerator = world.Projectiles.GetEnumerator();
+            while (projectileEnumerator.MoveNext())
             {
-                self.SyncProjectileEntry(self.Runtime.ProjectileEnumerator.Current.Value);
+                self.SyncProjectileEntry(projectileEnumerator.Current.Value);
             }
 
-            self.Runtime.ProjectileEnumerator.Dispose();
-            self.Runtime.ProjectileEnumerator = null;
-
-            self.Runtime.PickupEnumerator = world.Pickups.GetEnumerator();
-            while (self.Runtime.PickupEnumerator.MoveNext())
+            using var pickupEnumerator = world.Pickups.GetEnumerator();
+            while (pickupEnumerator.MoveNext())
             {
-                self.SyncPickupEntry(self.Runtime.PickupEnumerator.Current.Value);
+                self.SyncPickupEntry(pickupEnumerator.Current.Value);
             }
 
-            self.Runtime.PickupEnumerator.Dispose();
-            self.Runtime.PickupEnumerator = null;
             self.RemoveMissingViewEntries();
         }
 
@@ -150,18 +139,16 @@ namespace ET.Client
         private static void RemoveMissingViewEntries(this SurvivorViewEntityManagerComponent self)
         {
             self.Runtime.RemovalStateIds.Clear();
-            self.Runtime.EntryEnumerator = self.Client.Children.Values.GetEnumerator();
-            while (self.Runtime.EntryEnumerator.MoveNext())
+            using var entryEnumerator = self.Client.Children.Values.GetEnumerator();
+            while (entryEnumerator.MoveNext())
             {
-                Entity entry = self.Runtime.EntryEnumerator.Current;
+                Entity entry = entryEnumerator.Current;
                 if (IsManagedEntry(entry) && !self.Runtime.SeenStateIds.Contains(entry.Id))
                 {
                     self.Runtime.RemovalStateIds.Add(entry.Id);
                 }
             }
 
-            self.Runtime.EntryEnumerator.Dispose();
-            self.Runtime.EntryEnumerator = null;
             self.Runtime.Index = 0;
             while (self.Runtime.Index < self.Runtime.RemovalStateIds.Count)
             {
