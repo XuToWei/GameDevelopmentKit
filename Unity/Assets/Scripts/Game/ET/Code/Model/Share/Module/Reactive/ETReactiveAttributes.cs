@@ -3,8 +3,8 @@ using System;
 namespace ET
 {
     /// <summary>
-    /// Generates a Hotfix-local reactive observer for an EntitySystemOf class.
-    /// The EntitySystemOf owner must implement IETReactiveHost.
+    /// Generates reactive observation methods for an EntitySystemOf class.
+    /// The EntitySystemOf owner must implement IETReactive.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class ETReactiveSystemAttribute: BaseAttribute
@@ -12,23 +12,9 @@ namespace ET
     }
 
     /// <summary>
-    /// Associates a generated observer Type with its stable reactive owner Type.
+    /// Marks a readable Entity property as a reactive source.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public sealed class ETReactiveObserverAttribute: BaseAttribute
-    {
-        public Type OwnerType { get; }
-
-        public ETReactiveObserverAttribute(Type ownerType)
-        {
-            this.OwnerType = ownerType;
-        }
-    }
-
-    /// <summary>
-    /// Marks a static method whose first argument is the reactive owner.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Property)]
     public sealed class ETReactiveSourceAttribute: BaseAttribute
     {
     }
