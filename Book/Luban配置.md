@@ -37,6 +37,91 @@ dotnet build Kit.sln
 
 Unity 入口会在导出后刷新 AssetDatabase，并清理 UXTool 的编辑器本地化缓存。
 
+### AgentBridge 修改 Excel
+
+Unity 编译完成后，AgentBridge 的 `list_commands` 会提供 `excel` 命令：
+
+| action | 用途 |
+| --- | --- |
+| `inspect` | 查询工作表、已用范围、隐藏状态、合并区域、数据验证及建议表头行 |
+| `read_range` | 按 A1 范围读取类型、原始值、公式和显示文本 |
+| `find_rows` | 按表头列精确或包含查询，支持分页和选择返回列 |
+| `set_cells` | 批量修改 A1 单元格，支持预览、版本和旧值校验 |
+| `upsert_rows` | 按键列更新或追加整行；追加时可复制模板行样式、公式和数据验证 |
+
+先查询工作簿并取得 `version`：
+
+```json
+{
+  "action": "inspect",
+  "filePath": "Design/Excel/GameHot/Datas/Game/UI.xlsx"
+}
+```
+
+按表头定位配置行：
+
+```json
+{
+  "action": "find_rows",
+  "filePath": "Design/Excel/GameHot/Datas/Game/UI.xlsx",
+  "sheet": "UI界面",
+  "where": { "CSName": "UIHelp" },
+  "select": ["Id", "CSName", "AssetName"]
+}
+```
+
+修改前可先设置 `dryRun=true`；正式写入时回传查询得到的 `expectedVersion`，避免覆盖其他进程的新修改：
+
+```json
+{
+  "action": "set_cells",
+  "filePath": "Design/Excel/GameHot/Datas/Game/UI.xlsx",
+  "sheet": "UI界面",
+  "expectedVersion": "<inspect/find_rows 返回的 version>",
+  "cells": [
+    { "cell": "D4", "value": "新备注", "expectedValue": "帮助界面" }
+  ]
+}
+```
+
+新增或更新配置时优先使用表头和键列，不必计算单元格地址：
+
+```json
+{
+  "action": "upsert_rows",
+  "filePath": "Design/Excel/GameHot/Datas/Game/UI.xlsx",
+  "sheet": "UI界面",
+  "keyColumns": ["Id"],
+  "rows": [
+    {
+      "Id": 999,
+      "CSName": "UITest",
+      "Desc": "测试界面",
+      "AssetName": "Hot/UITest",
+      "UIGroupName": "Default",
+      "AllowMultiInstance": false,
+      "PauseCoveredUIForm": false
+    }
+  ]
+}
+```
+
+`value` 支持字符串、数字、布尔值，传 `null` 会清空单元格；也可以改用 `formula` 写公式。命令只接受仓库内路径和已有工作表，并通过临时文件替换原表；如果 Excel 正在占用文件，需要先关闭工作簿。`excel` 只修改源表，不会自动执行 Luban。
+
+AgentBridge 的 `luban` 命令负责后续校验和导出：
+
+```json
+{ "action": "validate", "format": "bin" }
+```
+
+校验成功后再执行：
+
+```json
+{ "action": "export", "format": "bin" }
+```
+
+`validate` 使用 `--Customs=Check`，不写生成产物；`export` 成功后会安排 Unity AssetDatabase 刷新，生成的 C# 变化可能触发编译，可用 `get_compile_result` 查询结果。推荐闭环为 `inspect/find_rows → dryRun → set_cells/upsert_rows → read_range → luban validate → luban export`。
+
 ### 批处理
 
 ```text

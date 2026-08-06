@@ -36,22 +36,22 @@ public static class ETReactiveDiagnosticRules
     public static readonly DiagnosticDescriptor OwnerInterface = Create(
         DiagnosticIds.ETReactiveOwnerInterfaceRuleId,
         "ET Reactive owner 接口无效",
-        "owner '{0}' 必须继承 Entity 并实现 IETReactiveHost，以保存生成的 Hotfix IReactiveObserver");
+        "owner '{0}' 必须继承 Entity 并实现 IETReactive，以保存生成的响应式缓存字段");
 
     public static readonly DiagnosticDescriptor HostDeclaration = Create(
         DiagnosticIds.ETReactiveHostDeclarationRuleId,
         "ET Reactive host 声明无效",
-        "IETReactiveHost '{0}' 及其外层类型必须声明为 partial；ReactiveObserver 属性由源码生成器生成");
+        "IETReactive '{0}' 及其外层类型必须声明为 partial；响应式缓存字段由源码生成器生成");
 
     public static readonly DiagnosticDescriptor SourceSignature = Create(
         DiagnosticIds.ETReactiveSourceSignatureRuleId,
         "ET Reactive source 签名无效",
-        "Reactive source '{0}' 必须是 static、非泛型、返回受支持的非 void 值，并且只接收一个 owner 参数的方法");
+        "Reactive source '{0}' 必须是 Entity 的 public 实例字段、可读非索引属性，或无参非泛型且有返回值的方法");
 
     public static readonly DiagnosticDescriptor DuplicateSource = Create(
         DiagnosticIds.ETReactiveDuplicateSourceRuleId,
         "ET Reactive source ID 重复",
-        "Reactive source ID '{0}' 在 System '{1}' 中重复");
+        "Reactive source ID '{0}' 在 owner '{1}' 中重复");
 
     public static readonly DiagnosticDescriptor MissingSource = Create(
         DiagnosticIds.ETReactiveMissingSourceRuleId,
@@ -62,6 +62,11 @@ public static class ETReactiveDiagnosticRules
         DiagnosticIds.ETReactiveDuplicateBindSourceRuleId,
         "ET Reactive bind source ID 重复",
         "Reactive bind '{0}' 包含重复的 source ID: {1}");
+
+    public static readonly DiagnosticDescriptor BindNameof = Create(
+        DiagnosticIds.ETReactiveBindNameofRuleId,
+        "ET Reactive bind 必须使用 nameof",
+        "Reactive bind '{0}' 的 source ID 必须直接使用 nameof(...)，不能使用字符串字面量或字符串常量");
 
     public static readonly DiagnosticDescriptor BindSignature = Create(
         DiagnosticIds.ETReactiveBindSignatureRuleId,
@@ -81,7 +86,7 @@ public static class ETReactiveDiagnosticRules
     public static readonly DiagnosticDescriptor UnsupportedSourceType = Create(
         DiagnosticIds.ETReactiveUnsupportedSourceTypeRuleId,
         "ET Reactive source 类型不受支持",
-        "Reactive source '{0}' 的返回类型 '{1}' 必须是值类型、string 或 ReactiveBinding.IVersion；object、dynamic 和普通引用类型不受支持");
+        "Reactive source '{0}' 的成员类型 '{1}' 必须是值类型、string 或 ReactiveBinding.IVersion；object、dynamic 和普通引用类型不受支持");
 
     public static readonly DiagnosticDescriptor StructEquality = Create(
         DiagnosticIds.ETReactiveStructEqualityRuleId,

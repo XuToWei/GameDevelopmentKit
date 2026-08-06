@@ -25,6 +25,8 @@
         public const string ObjectSystemAttribute = "ET.SystemAttribute";
 
         public const string EnableMethodAttribute = "ET.EnableMethodAttribute";
+
+        public const string ETReactiveSourceAttribute = "ET.ETReactiveSourceAttribute";
         
         public const string FriendOfAttribute = "ET.FriendOfAttribute";
         

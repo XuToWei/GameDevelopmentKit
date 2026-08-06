@@ -484,4 +484,22 @@ namespace ET.Analyzer
                     true,
                     Description);
     }
+
+    public static class DoubleUnderscoreFieldAccessAnalyzerRule
+    {
+        private const string Title = "禁止直接访问双下划线字段";
+
+        private const string MessageFormat = "字段 '{0}' 是生成器内部字段，业务代码必须使用对应的公开属性";
+
+        private const string Description = "业务代码禁止直接访问所有以 __ 开头的生成器内部字段.";
+
+        public static readonly DiagnosticDescriptor Rule =
+                new DiagnosticDescriptor(DiagnosticIds.DoubleUnderscoreFieldAccessAnalyzerRuleId,
+                    Title,
+                    MessageFormat,
+                    DiagnosticCategories.All,
+                    DiagnosticSeverity.Error,
+                    true,
+                    Description);
+    }
 }

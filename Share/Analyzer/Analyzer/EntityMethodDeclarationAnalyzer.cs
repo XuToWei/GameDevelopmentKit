@@ -87,6 +87,12 @@ namespace ET.Analyzer
                     // 筛选出类声明语法节点下的所有方法声明语法节点
                     if (memberDeclarationSyntax is MethodDeclarationSyntax methodDeclarationSyntax)
                     {
+                        IMethodSymbol? methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclarationSyntax);
+                        if (methodSymbol != null && methodSymbol.HasAttribute(Definition.ETReactiveSourceAttribute))
+                        {
+                            continue;
+                        }
+
                         Diagnostic diagnostic = Diagnostic.Create(Rule, methodDeclarationSyntax.GetLocation(),namedTypeSymbol.Name,methodDeclarationSyntax.Identifier.Text);
                         context.ReportDiagnostic(diagnostic);
                     }
