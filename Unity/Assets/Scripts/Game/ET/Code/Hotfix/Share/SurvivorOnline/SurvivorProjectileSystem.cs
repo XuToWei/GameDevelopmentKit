@@ -49,11 +49,6 @@ namespace ET
                 self.Runtime.MonsterEnumerator = null;
                 if (self.Runtime.Hit)
                 {
-                    self.Runtime.Monster.LogicObserver.ObserveChanges();
-                }
-
-                if (self.Runtime.Hit)
-                {
                     self.Runtime.ProjectileRemovalStateIds.Add(self.Runtime.Projectile.StateId);
                 }
             }

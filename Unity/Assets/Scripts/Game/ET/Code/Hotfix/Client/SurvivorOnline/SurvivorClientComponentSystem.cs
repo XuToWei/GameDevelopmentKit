@@ -6,77 +6,160 @@ namespace ET.Client
     [ETReactiveSystem]
     public static partial class SurvivorClientComponentSystem
     {
+        private const int MaxPredictionTicksPerFrame = 5;
+        private const float MaxPredictionDeltaSeconds = MaxPredictionTicksPerFrame * SurvivorLocalPlayerPrediction.InputIntervalSeconds;
+
         [EntitySystem]
         private static void Awake(this SurvivorClientComponent self)
         {
-            self.Runtime = new SurvivorClientRuntime();
-            self.Root().SceneType |= SceneType.SurvivorClient | SceneType.SurvivorView;
+            self.ClientSender = self.Root().GetComponent<ClientSenderComponent>();
+            self.LocalPrediction = new SurvivorLocalPlayerPrediction();
+            self.AddComponent<SurvivorCombatFeedbackComponent>();
+            self.AddComponent<SurvivorViewEntityManagerComponent>();
+            self.Root().SceneType |= SceneType.SurvivorView;
+        }
+
+        [EntitySystem]
+        private static void Update(this SurvivorClientComponent self)
+        {
+            self.ObserveChanges();
         }
 
         [EntitySystem]
         private static void Destroy(this SurvivorClientComponent self)
         {
             self.ClearReactive();
-            self.World = null;
-            self.Room = null;
-            self.Runtime = null;
+            self.World = default;
+            self.Room = default;
+            self.LocalPrediction = null;
         }
 
-        public static async UniTask<G2C_SurvivorJoinRoom> JoinRoom(
-            this SurvivorClientComponent self,
-            string roomCode)
+        public static async UniTask<G2C_SurvivorJoinRoom> JoinRoom(this SurvivorClientComponent self, string roomCode)
         {
             self.PrepareSnapshotConsumer(roomCode);
-            self.Runtime.JoinRequest = C2G_SurvivorJoinRoom.Create();
-            self.Runtime.JoinRequest.RoomCode = roomCode;
-            self.Runtime.JoinResponse = (G2C_SurvivorJoinRoom)await self.Root()
-                    .GetComponent<ClientSenderComponent>()
-                    .Call(self.Runtime.JoinRequest, false);
-            if (self.Runtime.JoinResponse.Error != ErrorCode.ERR_Success)
+            using C2G_SurvivorJoinRoom request = C2G_SurvivorJoinRoom.Create(true);
+            request.RoomCode = roomCode;
+            G2C_SurvivorJoinRoom response = (G2C_SurvivorJoinRoom)await self.ClientSender.Call(request, false);
+            if (response.Error != ErrorCode.ERR_Success)
             {
-                return self.Runtime.JoinResponse;
+                return response;
             }
 
-            self.PlayerId = self.Runtime.JoinResponse.PlayerId;
-            self.IsHost = self.Runtime.JoinResponse.IsHost;
-            self.ApplyStateFrame(
-                self.Runtime.JoinResponse.Sequence,
-                true,
-                self.Runtime.JoinResponse.FullSnapshot);
-            return self.Runtime.JoinResponse;
+            self.PlayerId = response.PlayerId;
+            self.IsHost = response.IsHost;
+            self.ApplyStateFrame(response.Sequence, true, response.FullSnapshot);
+            return response;
         }
 
         public static async UniTask<G2C_SurvivorStartGame> StartGame(this SurvivorClientComponent self)
         {
-            self.Runtime.StartRequest = C2G_SurvivorStartGame.Create();
-            self.Runtime.StartResponse = (G2C_SurvivorStartGame)await self.Root()
-                    .GetComponent<ClientSenderComponent>()
-                    .Call(self.Runtime.StartRequest, false);
-            return self.Runtime.StartResponse;
+            using C2G_SurvivorStartGame request = C2G_SurvivorStartGame.Create(true);
+            G2C_SurvivorStartGame response = (G2C_SurvivorStartGame)await self.ClientSender.Call(request, false);
+            return response;
         }
 
-        public static void SendInput(this SurvivorClientComponent self, int moveX, int moveY)
+        public static void UpdateLocalInput(this SurvivorClientComponent self, int moveX, int moveY, float deltaTime)
         {
-            if (!self.HasBaseline)
+            SurvivorPlayerState player = self.LocalPlayerState();
+            SurvivorWorldComponent world = self.World;
+            if (!self.HasBaseline || player == null || world == null || world.Data.Phase != SurvivorRoomPhase.Running || !player.Alive)
+            {
+                self.LocalPrediction.CurrentMoveX = 0;
+                self.LocalPrediction.CurrentMoveY = 0;
+                return;
+            }
+
+            self.EnsureLocalPredictionInitialized();
+            self.LocalPrediction.CurrentMoveX = SurvivorMath.Clamp(moveX, -SurvivorDefaults.InputScale, SurvivorDefaults.InputScale);
+            self.LocalPrediction.CurrentMoveY = SurvivorMath.Clamp(moveY, -SurvivorDefaults.InputScale, SurvivorDefaults.InputScale);
+            if (deltaTime < 0f)
+            {
+                deltaTime = 0f;
+            }
+            else if (deltaTime > MaxPredictionDeltaSeconds)
+            {
+                deltaTime = MaxPredictionDeltaSeconds;
+            }
+
+            self.LocalPrediction.AdvancePresentation(deltaTime, player.MovePerTick());
+            self.LocalPrediction.InputAccumulator += deltaTime;
+            int predictedTicks = 0;
+            while (self.LocalPrediction.InputAccumulator >= SurvivorLocalPlayerPrediction.InputIntervalSeconds && predictedTicks < MaxPredictionTicksPerFrame)
+            {
+                self.InputSequence++;
+                self.LocalPrediction.RecordInput(self.InputSequence, self.LocalPrediction.CurrentMoveX, self.LocalPrediction.CurrentMoveY, player.MovePerTick());
+                self.SendInputFrame(self.InputSequence, self.LocalPrediction.CurrentMoveX, self.LocalPrediction.CurrentMoveY);
+                self.LocalPrediction.InputAccumulator -= SurvivorLocalPlayerPrediction.InputIntervalSeconds;
+                predictedTicks++;
+            }
+        }
+
+        private static void SendInputFrame(this SurvivorClientComponent self, long inputSequence, int moveX, int moveY)
+        {
+            C2G_SurvivorInput inputMessage = C2G_SurvivorInput.Create(true);
+            inputMessage.InputSequence = inputSequence;
+            inputMessage.MoveX = moveX;
+            inputMessage.MoveY = moveY;
+            self.ClientSender.Send(inputMessage);
+        }
+
+        public static void EnsureLocalPredictionInitialized(this SurvivorClientComponent self)
+        {
+            SurvivorPlayerState player = self.LocalPlayerState();
+            if (player == null || self.LocalPrediction.IsInitialized)
             {
                 return;
             }
 
-            self.InputSequence++;
-            self.Runtime.InputMessage = C2G_SurvivorInput.Create();
-            self.Runtime.InputMessage.InputSequence = self.InputSequence;
-            self.Runtime.InputMessage.MoveX =
-                    SurvivorMath.Clamp(moveX, -SurvivorDefaults.InputScale, SurvivorDefaults.InputScale);
-            self.Runtime.InputMessage.MoveY =
-                    SurvivorMath.Clamp(moveY, -SurvivorDefaults.InputScale, SurvivorDefaults.InputScale);
-            self.Root().GetComponent<ClientSenderComponent>().Send(self.Runtime.InputMessage);
+            self.LocalPrediction.Initialize(player.PositionX, player.PositionY);
+            if (self.InputSequence < player.LastInputSequence)
+            {
+                self.InputSequence = player.LastInputSequence;
+            }
         }
 
-        public static void ApplyStateFrame(
-            this SurvivorClientComponent self,
-            long sequence,
-            bool isFull,
-            byte[] payload)
+        public static void ReconcileLocalPrediction(this SurvivorClientComponent self)
+        {
+            SurvivorPlayerState player = self.LocalPlayerState();
+            if (player == null)
+            {
+                return;
+            }
+
+            if (!self.LocalPrediction.IsInitialized)
+            {
+                self.LocalPrediction.Initialize(player.PositionX, player.PositionY);
+                if (self.InputSequence < player.LastInputSequence)
+                {
+                    self.InputSequence = player.LastInputSequence;
+                }
+                return;
+            }
+
+            self.LocalPrediction.Reconcile(player.PositionX, player.PositionY, player.LastInputSequence, player.MovePerTick());
+        }
+
+        public static async UniTask<G2C_SurvivorChooseSkill> ChooseSkill(this SurvivorClientComponent self, SurvivorSkillType skillType, long choiceRevision)
+        {
+            using C2G_SurvivorChooseSkill request = C2G_SurvivorChooseSkill.Create(true);
+            request.SkillType = (int)skillType;
+            request.ChoiceRevision = choiceRevision;
+            G2C_SurvivorChooseSkill response = (G2C_SurvivorChooseSkill)await self.ClientSender.Call(request, false);
+            return response;
+        }
+
+        public static SurvivorPlayerState LocalPlayerState(this SurvivorClientComponent self)
+        {
+            SurvivorWorldComponent world = self.World;
+            if (world?.Data?.Players == null || !world.Data.Players.ContainsKey(self.PlayerId))
+            {
+                return null;
+            }
+
+            return world.Data.Players[self.PlayerId];
+        }
+
+        public static void ApplyStateFrame(this SurvivorClientComponent self, long sequence, bool isFull, byte[] payload)
         {
             if (sequence <= self.LastSequence)
             {
@@ -85,25 +168,22 @@ namespace ET.Client
 
             if (!self.HasBaseline && !isFull)
             {
-                self.Root()
-                        .GetComponent<ClientSenderComponent>()
-                        .Send(C2G_SurvivorRequestFullSnapshot.Create());
+                self.ClientSender.Send(C2G_SurvivorRequestFullSnapshot.Create(true));
                 return;
             }
 
             if (self.HasBaseline && !isFull && sequence != self.LastSequence + 1)
             {
                 self.HasBaseline = false;
-                self.Root()
-                        .GetComponent<ClientSenderComponent>()
-                        .Send(C2G_SurvivorRequestFullSnapshot.Create());
+                self.ClientSender.Send(C2G_SurvivorRequestFullSnapshot.Create(true));
                 return;
             }
 
-            self.World.ApplySnapshot(payload);
+            SurvivorWorldComponent world = self.World;
+            world.ApplySnapshot(payload);
             self.LastSequence = sequence;
             self.HasBaseline = true;
-            self.ObserveChanges();
+            self.ReconcileLocalPrediction();
         }
 
         public static void PrepareSnapshotConsumer(this SurvivorClientComponent self, string roomCode)
@@ -113,160 +193,38 @@ namespace ET.Client
                 self.Root().RemoveComponent<SurvivorRoom>();
             }
 
-            self.Room = self.Root().AddComponent<SurvivorRoom, SceneType, string>(
-                SceneType.SurvivorClient,
-                roomCode);
-            self.World = self.Room.AddComponent<SurvivorWorldComponent, SurvivorWorldRole, string>(
-                SurvivorWorldRole.SnapshotConsumer,
-                roomCode);
+            SurvivorRoom room = self.Root().AddComponent<SurvivorRoom, SceneType, string>(SceneType.SurvivorClient, roomCode);
+            self.Room = room;
+            SurvivorWorldComponent world = room.AddComponent<SurvivorWorldComponent, SurvivorWorldRole, string>(SurvivorWorldRole.SnapshotConsumer, roomCode);
+            self.World = world;
             self.LastSequence = 0;
             self.InputSequence = 0;
             self.HasBaseline = false;
             self.ResetReactive();
-            self.Runtime.PlayerStates.Clear();
-            self.Runtime.MonsterStates.Clear();
-            self.Runtime.ProjectileStates.Clear();
-            self.Runtime.PickupStates.Clear();
-            self.Runtime.SeenStateIds.Clear();
-            self.Runtime.RemovalStateIds.Clear();
+            self.LocalPrediction.Reset();
+            self.GetComponent<SurvivorViewEntityManagerComponent>().WorldGeneration++;
         }
 
-        public static void ReconcileStateEntries(this SurvivorClientComponent self)
+        [ETReactiveBind(nameof(SurvivorClientComponent.SkillChoiceRevision), nameof(SurvivorClientComponent.UnspentSkillPoints), nameof(SurvivorClientComponent.Phase))]
+        private static void OnSkillChoiceAvailabilityChanged(this SurvivorClientComponent self, long skillChoiceRevision, int unspentSkillPoints, SurvivorRoomPhase phase)
         {
-            self.Runtime.SeenStateIds.Clear();
-            self.Runtime.PlayerStates.Clear();
-            self.Runtime.MonsterStates.Clear();
-            self.Runtime.ProjectileStates.Clear();
-            self.Runtime.PickupStates.Clear();
-
-            self.Runtime.PlayerEnumerator = self.World
-                    .Data
-                    .Players
-                    .GetEnumerator();
-            while (self.Runtime.PlayerEnumerator.MoveNext())
+            SurvivorSkillChoiceAvailabilityChanged args = new()
             {
-                self.Runtime.StateId = self.Runtime.PlayerEnumerator.Current.Value.StateId;
-                self.Runtime.SeenStateIds.Add(self.Runtime.StateId);
-                self.Runtime.PlayerStates[self.Runtime.StateId] =
-                        self.Runtime.PlayerEnumerator.Current.Value;
-                if (self.GetChild<SurvivorPlayerEntry>(self.Runtime.StateId) == null)
-                {
-                    self.AddChildWithId<SurvivorPlayerEntry>(self.Runtime.StateId);
-                }
-            }
-
-            self.Runtime.PlayerEnumerator.Dispose();
-            self.Runtime.PlayerEnumerator = null;
-
-            self.Runtime.MonsterEnumerator = self.World
-                    .Data
-                    .Monsters
-                    .GetEnumerator();
-            while (self.Runtime.MonsterEnumerator.MoveNext())
-            {
-                self.Runtime.StateId = self.Runtime.MonsterEnumerator.Current.Value.StateId;
-                self.Runtime.SeenStateIds.Add(self.Runtime.StateId);
-                self.Runtime.MonsterStates[self.Runtime.StateId] =
-                        self.Runtime.MonsterEnumerator.Current.Value;
-                if (self.GetChild<SurvivorMonsterEntry>(self.Runtime.StateId) == null)
-                {
-                    self.AddChildWithId<SurvivorMonsterEntry>(self.Runtime.StateId);
-                }
-            }
-
-            self.Runtime.MonsterEnumerator.Dispose();
-            self.Runtime.MonsterEnumerator = null;
-
-            self.Runtime.ProjectileEnumerator = self.World
-                    .Data
-                    .Projectiles
-                    .GetEnumerator();
-            while (self.Runtime.ProjectileEnumerator.MoveNext())
-            {
-                self.Runtime.StateId = self.Runtime.ProjectileEnumerator.Current.Value.StateId;
-                self.Runtime.SeenStateIds.Add(self.Runtime.StateId);
-                self.Runtime.ProjectileStates[self.Runtime.StateId] =
-                        self.Runtime.ProjectileEnumerator.Current.Value;
-                if (self.GetChild<SurvivorProjectileEntry>(self.Runtime.StateId) == null)
-                {
-                    self.AddChildWithId<SurvivorProjectileEntry>(self.Runtime.StateId);
-                }
-            }
-
-            self.Runtime.ProjectileEnumerator.Dispose();
-            self.Runtime.ProjectileEnumerator = null;
-
-            self.Runtime.PickupEnumerator = self.World
-                    .Data
-                    .Pickups
-                    .GetEnumerator();
-            while (self.Runtime.PickupEnumerator.MoveNext())
-            {
-                self.Runtime.StateId = self.Runtime.PickupEnumerator.Current.Value.StateId;
-                self.Runtime.SeenStateIds.Add(self.Runtime.StateId);
-                self.Runtime.PickupStates[self.Runtime.StateId] =
-                        self.Runtime.PickupEnumerator.Current.Value;
-                if (self.GetChild<SurvivorPickupEntry>(self.Runtime.StateId) == null)
-                {
-                    self.AddChildWithId<SurvivorPickupEntry>(self.Runtime.StateId);
-                }
-            }
-
-            self.Runtime.PickupEnumerator.Dispose();
-            self.Runtime.PickupEnumerator = null;
-
-            self.Runtime.RemovalStateIds.Clear();
-            self.Runtime.EntryEnumerator = self.Children.Values.GetEnumerator();
-            while (self.Runtime.EntryEnumerator.MoveNext())
-            {
-                if (!self.Runtime.SeenStateIds.Contains(self.Runtime.EntryEnumerator.Current.Id))
-                {
-                    self.Runtime.RemovalStateIds.Add(self.Runtime.EntryEnumerator.Current.Id);
-                }
-            }
-
-            self.Runtime.EntryEnumerator.Dispose();
-            self.Runtime.EntryEnumerator = null;
-            self.Runtime.Index = 0;
-            while (self.Runtime.Index < self.Runtime.RemovalStateIds.Count)
-            {
-                self.RemoveChild(self.Runtime.RemovalStateIds[self.Runtime.Index]);
-                self.Runtime.Index++;
-            }
+                Show = phase == SurvivorRoomPhase.Running && unspentSkillPoints > 0,
+                Revision = skillChoiceRevision,
+            };
+            EventSystem.Instance.PublishAsync(self.Root(), args).Forget();
         }
 
-        [ETReactiveSource]
-        private static long PlayerSetRevision(this SurvivorClientComponent self)
+        [ETReactiveBind(nameof(SurvivorClientComponent.Phase))]
+        private static void OnGameEnded(this SurvivorClientComponent self, SurvivorRoomPhase phase)
         {
-            return self.World?.Data?.PlayerSetRevision ?? 0;
-        }
+            if (phase != SurvivorRoomPhase.Ended)
+            {
+                return;
+            }
 
-        [ETReactiveSource]
-        private static long MonsterSetRevision(this SurvivorClientComponent self)
-        {
-            return self.World?.Data?.MonsterSetRevision ?? 0;
-        }
-
-        [ETReactiveSource]
-        private static long ProjectileSetRevision(this SurvivorClientComponent self)
-        {
-            return self.World?.Data?.ProjectileSetRevision ?? 0;
-        }
-
-        [ETReactiveSource]
-        private static long PickupSetRevision(this SurvivorClientComponent self)
-        {
-            return self.World?.Data?.PickupSetRevision ?? 0;
-        }
-
-        [ETReactiveBind(
-            nameof(PlayerSetRevision),
-            nameof(MonsterSetRevision),
-            nameof(ProjectileSetRevision),
-            nameof(PickupSetRevision))]
-        private static void OnMembershipChanged(this SurvivorClientComponent self)
-        {
-            self.ReconcileStateEntries();
+            EventSystem.Instance.PublishAsync(self.Root(), new SurvivorGameEnded()).Forget();
         }
     }
 }

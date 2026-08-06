@@ -52,3 +52,18 @@ message SurvivorRoom2C_StateFrame // IMessage
     bool IsFull = 3;
     bytes Payload = 4;
 }
+
+// ResponseType G2C_SurvivorChooseSkill
+message C2G_SurvivorChooseSkill // ISessionRequest
+{
+    int32 RpcId = 1;
+    int32 SkillType = 2;
+    int64 ChoiceRevision = 3;
+}
+
+message G2C_SurvivorChooseSkill // ISessionResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+}

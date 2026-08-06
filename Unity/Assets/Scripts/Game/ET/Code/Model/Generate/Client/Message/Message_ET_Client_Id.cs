@@ -59,5 +59,7 @@ namespace ET
          public const ushort C2G_SurvivorInput = 10053;
          public const ushort C2G_SurvivorRequestFullSnapshot = 10054;
          public const ushort SurvivorRoom2C_StateFrame = 10055;
+         public const ushort C2G_SurvivorChooseSkill = 10056;
+         public const ushort G2C_SurvivorChooseSkill = 10057;
     }
 }

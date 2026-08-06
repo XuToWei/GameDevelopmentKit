@@ -23,7 +23,7 @@ namespace ET
                 return;
             }
 
-            self.TickAutoFire();
+            self.TickWeapons();
             self.TickProjectiles();
             self.TickPickups();
         }

@@ -448,5 +448,32 @@
     "SceneType": "Admin",
     "Name": "Admin",
     "Port": 31002
+  },
+  {
+    "StartConfig": "Localhost",
+    "Id": 8,
+    "Process": 1,
+    "Zone": 1,
+    "SceneType": "SurvivorRoomManager",
+    "Name": "SurvivorRoomManager",
+    "Port": 0
+  },
+  {
+    "StartConfig": "Release",
+    "Id": 8,
+    "Process": 1,
+    "Zone": 1,
+    "SceneType": "SurvivorRoomManager",
+    "Name": "SurvivorRoomManager",
+    "Port": 0
+  },
+  {
+    "StartConfig": "RouterTest",
+    "Id": 8,
+    "Process": 1,
+    "Zone": 1,
+    "SceneType": "SurvivorRoomManager",
+    "Name": "SurvivorRoomManager",
+    "Port": 0
   }
 ]

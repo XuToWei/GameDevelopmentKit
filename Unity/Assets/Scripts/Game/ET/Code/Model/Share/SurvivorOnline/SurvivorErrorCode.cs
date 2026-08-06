@@ -9,5 +9,6 @@ namespace ET
         public const int ERR_SurvivorNotInRoom = 210105;
         public const int ERR_SurvivorOnlyHostCanStart = 210106;
         public const int ERR_SurvivorRoomNotReady = 210107;
+        public const int ERR_SurvivorInvalidSkillChoice = 210108;
     }
 }

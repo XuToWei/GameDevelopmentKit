@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ReactiveBinding;
 
 namespace ET
@@ -37,9 +38,44 @@ namespace ET
                 MaxHp = SurvivorDefaults.PlayerMaxHp,
                 Level = 1,
                 Experience = 0,
-                AutoFireCooldown = SurvivorDefaults.AutoFireIntervalTicks,
+                AutoFireCooldown = 0,
+                SwordWaveCooldown = 0,
+                SwordWaveRevision = 0,
                 Alive = true,
+                AutoFireLevel = 0,
+                PowerShotLevel = 0,
+                SwiftStepLevel = 0,
+                UnspentSkillPoints = 0,
+                SkillChoice1 = SurvivorSkillType.None,
+                SkillChoice2 = SurvivorSkillType.None,
+                SkillChoice3 = SurvivorSkillType.None,
+                SkillChoiceRevision = 0,
             };
+        }
+
+        public static void ResetForLobby(SurvivorWorldData world)
+        {
+            List<long> playerIds = new(world.Players.Keys);
+            for (int index = 0; index < playerIds.Count; index++)
+            {
+                long playerId = playerIds[index];
+                SurvivorPlayerState previous = world.Players[playerId];
+                world.Players[playerId] = CreatePlayer(
+                    previous.StateId,
+                    previous.PlayerId,
+                    previous.DisplayName);
+            }
+
+            world.Monsters.Clear();
+            world.Projectiles.Clear();
+            world.Pickups.Clear();
+            world.ServerTick = 0;
+            world.RandomState = world.RoomCode.GetHashCode();
+            world.PlayerSetRevision++;
+            world.MonsterSetRevision++;
+            world.ProjectileSetRevision++;
+            world.PickupSetRevision++;
+            world.Phase = SurvivorRoomPhase.Lobby;
         }
 
         public static SurvivorMonsterState CreateMonster(long stateId, int positionX, int positionY)
@@ -63,7 +99,8 @@ namespace ET
             int positionX,
             int positionY,
             int velocityX,
-            int velocityY)
+            int velocityY,
+            int damage)
         {
             return new SurvivorProjectileState
             {
@@ -73,7 +110,7 @@ namespace ET
                 PositionY = positionY,
                 VelocityX = velocityX,
                 VelocityY = velocityY,
-                Damage = SurvivorDefaults.ProjectileDamage,
+                Damage = damage,
                 RemainingTicks = SurvivorDefaults.ProjectileLifetimeTicks,
             };
         }

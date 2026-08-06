@@ -14,9 +14,15 @@ namespace ET
                 }
 
                 self.Runtime.Player.PositionX +=
-                        self.Runtime.Player.MoveX * SurvivorDefaults.PlayerMovePerTick / SurvivorDefaults.InputScale;
+                        self.Runtime.Player.MoveX * self.Runtime.Player.MovePerTick() /
+                        SurvivorDefaults.InputScale;
                 self.Runtime.Player.PositionY +=
-                        self.Runtime.Player.MoveY * SurvivorDefaults.PlayerMovePerTick / SurvivorDefaults.InputScale;
+                        self.Runtime.Player.MoveY * self.Runtime.Player.MovePerTick() /
+                        SurvivorDefaults.InputScale;
+                self.Runtime.Player.PositionX = SurvivorDefaults.ClampPlayerPosition(
+                    self.Runtime.Player.PositionX);
+                self.Runtime.Player.PositionY = SurvivorDefaults.ClampPlayerPosition(
+                    self.Runtime.Player.PositionY);
             }
 
             self.Runtime.PlayerEnumerator.Dispose();

@@ -337,7 +337,7 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.test-framework": "1.1.33"
       },
-      "hash": "99933a482fb5d3d96c7af2a7afc9dfb93d419873"
+      "hash": "33a5dc50db654ab2ed0b99e9d9dca66095064a28"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

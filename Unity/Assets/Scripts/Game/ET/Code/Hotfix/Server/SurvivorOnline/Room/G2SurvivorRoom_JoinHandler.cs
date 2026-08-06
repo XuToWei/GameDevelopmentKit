@@ -2,74 +2,54 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    [MessageHandler(SceneType.SurvivorRoom)]
-    public sealed class G2SurvivorRoom_JoinHandler:
-            MessageHandler<Scene, G2SurvivorRoom_Join, SurvivorRoom2G_Join>
+    [MessageHandler(SceneType.SurvivorRoomRoot)]
+    public sealed class G2SurvivorRoom_JoinHandler: MessageHandler<Scene, G2SurvivorRoom_Join, SurvivorRoom2G_Join>
     {
-        protected override async UniTask Run(
-            Scene root,
-            G2SurvivorRoom_Join request,
-            SurvivorRoom2G_Join response)
+        protected override async UniTask Run(Scene root, G2SurvivorRoom_Join request, SurvivorRoom2G_Join response)
         {
-            if (root.GetComponent<SurvivorRoom>()
-                    .GetComponent<SurvivorWorldComponent>()
-                    .Data
-                    .Phase != SurvivorRoomPhase.Lobby)
+            SurvivorRoom room = root.GetComponent<SurvivorRoom>();
+            SurvivorWorldComponent world = room.GetComponent<SurvivorWorldComponent>();
+            SurvivorRoomServerComponent server = room.GetComponent<SurvivorRoomServerComponent>();
+            bool isExistingMember = world.Data.Players.ContainsKey(request.PlayerId);
+            if (world.Data.Phase == SurvivorRoomPhase.Running && !isExistingMember)
             {
                 response.Error = ErrorCode.ERR_SurvivorGameAlreadyStarted;
                 response.Message = "游戏已开始，禁止中途加入";
                 return;
             }
 
-            if (root.GetComponent<SurvivorRoom>()
-                    .GetComponent<SurvivorWorldComponent>()
-                    .Data
-                    .Players
-                    .Count >= SurvivorDefaults.MaxPlayers)
+            if (world.Data.Phase == SurvivorRoomPhase.Ended)
+            {
+                if (!isExistingMember)
+                {
+                    response.Error = ErrorCode.ERR_SurvivorGameAlreadyStarted;
+                    response.Message = "本局已结束，仅原房间成员可以返回";
+                    return;
+                }
+
+                world.ResetForLobby();
+                server.ResetForLobby();
+            }
+
+            if (!isExistingMember && world.Data.Players.Count >= SurvivorDefaults.MaxPlayers)
             {
                 response.Error = ErrorCode.ERR_SurvivorRoomFull;
                 response.Message = "房间已满";
                 return;
             }
 
-            if (!root.GetComponent<SurvivorRoom>()
-                    .GetComponent<SurvivorWorldComponent>()
-                    .Data
-                    .Players
-                    .ContainsKey(request.PlayerId))
+            if (!isExistingMember)
             {
-                root.GetComponent<SurvivorRoom>()
-                        .GetComponent<SurvivorWorldComponent>()
-                        .AddPlayer(request.PlayerId, request.DisplayName);
-                root.GetComponent<SurvivorRoom>()
-                        .GetComponent<SurvivorRoomServerComponent>()
-                        .Runtime
-                        .PlayerIds
-                        .Add(request.PlayerId);
+                world.AddPlayer(request.PlayerId, request.DisplayName);
+                server.Runtime.PlayerIds.Add(request.PlayerId);
             }
 
-            root.GetComponent<SurvivorRoom>()
-                    .GetComponent<SurvivorRoomServerComponent>()
-                    .BroadcastStateFrame(true);
-            response.IsHost = root.GetComponent<SurvivorRoom>()
-                    .GetComponent<SurvivorWorldComponent>()
-                    .Data
-                    .HostPlayerId == request.PlayerId;
-            response.Sequence = root.GetComponent<SurvivorRoom>()
-                    .GetComponent<SurvivorRoomServerComponent>()
-                    .Runtime
-                    .Frame
-                    .Sequence;
-            response.ServerTick = root.GetComponent<SurvivorRoom>()
-                    .GetComponent<SurvivorRoomServerComponent>()
-                    .Runtime
-                    .Frame
-                    .ServerTick;
-            response.FullSnapshot = root.GetComponent<SurvivorRoom>()
-                    .GetComponent<SurvivorRoomServerComponent>()
-                    .Runtime
-                    .Frame
-                    .Payload;
+            server.RegisterPlayerInputQueue(request.PlayerId);
+            server.BroadcastStateFrame(true);
+            response.IsHost = world.Data.HostPlayerId == request.PlayerId;
+            response.Sequence = server.Runtime.Frame.Sequence;
+            response.ServerTick = server.Runtime.Frame.ServerTick;
+            response.FullSnapshot = server.Runtime.Frame.Payload;
             await UniTask.CompletedTask;
         }
     }

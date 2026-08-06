@@ -48,5 +48,20 @@ namespace ET.Client
         /// 联机幸存者局内界面
         /// </summary>
         public const int SurvivorHud = 9802;
+
+        /// <summary>
+        /// 联机幸存者登录界面
+        /// </summary>
+        public const int SurvivorLogin = 9800;
+
+        /// <summary>
+        /// 联机幸存者升级技能三选一界面
+        /// </summary>
+        public const int SurvivorSkillChoice = 9803;
+
+        /// <summary>
+        /// 联机幸存者游戏结束界面
+        /// </summary>
+        public const int SurvivorGameOver = 9804;
     }
 }

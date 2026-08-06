@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    [MessageHandler(SceneType.SurvivorRoom)]
+    [MessageHandler(SceneType.SurvivorRoomRoot)]
     public sealed class G2SurvivorRoom_InitHandler:
             MessageHandler<Scene, G2SurvivorRoom_Init, SurvivorRoom2G_Init>
     {
@@ -11,7 +11,7 @@ namespace ET.Server
             G2SurvivorRoom_Init request,
             SurvivorRoom2G_Init response)
         {
-            root.AddComponent<SurvivorRoom, SceneType, string>(SceneType.SurvivorRoom, request.RoomCode);
+            root.AddComponent<SurvivorRoom, SceneType, string>(SceneType.SurvivorServer, request.RoomCode);
             root.GetComponent<SurvivorRoom>()
                     .AddComponent<SurvivorWorldComponent, SurvivorWorldRole, string>(
                         SurvivorWorldRole.ServerAuthority,

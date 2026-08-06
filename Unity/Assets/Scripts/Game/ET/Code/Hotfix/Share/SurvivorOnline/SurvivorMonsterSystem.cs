@@ -92,7 +92,6 @@ namespace ET
                     SurvivorDefaults.PlayerCollisionRadius + SurvivorDefaults.MonsterCollisionRadius)
                 {
                     self.Runtime.TargetPlayer.Hp -= SurvivorDefaults.MonsterContactDamagePerTick;
-                    self.Runtime.TargetPlayer.LogicObserver.ObserveChanges();
                 }
             }
 

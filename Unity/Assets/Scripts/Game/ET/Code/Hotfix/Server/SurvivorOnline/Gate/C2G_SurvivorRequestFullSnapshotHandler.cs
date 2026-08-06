@@ -3,16 +3,20 @@ using Cysharp.Threading.Tasks;
 namespace ET.Server
 {
     [MessageSessionHandler(SceneType.Gate)]
-    public sealed class C2G_SurvivorRequestFullSnapshotHandler:
-            MessageSessionHandler<C2G_SurvivorRequestFullSnapshot>
+    public sealed class C2G_SurvivorRequestFullSnapshotHandler: MessageSessionHandler<C2G_SurvivorRequestFullSnapshot>
     {
-        protected override async UniTask Run(
-            Session session,
-            C2G_SurvivorRequestFullSnapshot message)
+        protected override async UniTask Run(Session session, C2G_SurvivorRequestFullSnapshot message)
         {
-            (session.GetComponent<SurvivorSessionOperationComponent>() ??
-                    session.AddComponent<SurvivorSessionOperationComponent>())
-                    .RequestFullSnapshot();
+            Player player = session.GetComponent<SessionPlayerComponent>().Player;
+            SurvivorPlayerRoomComponent playerRoom = player.GetComponent<SurvivorPlayerRoomComponent>();
+            if (playerRoom == null)
+            {
+                return;
+            }
+
+            G2SurvivorRoom_RequestFullSnapshot fullSnapshotRequest = G2SurvivorRoom_RequestFullSnapshot.Create(true);
+            fullSnapshotRequest.PlayerId = player.Id;
+            session.Root().GetComponent<MessageSender>().Send(playerRoom.RoomActorId, fullSnapshotRequest);
             await UniTask.CompletedTask;
         }
     }

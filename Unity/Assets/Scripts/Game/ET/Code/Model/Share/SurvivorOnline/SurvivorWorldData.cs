@@ -91,9 +91,39 @@ namespace ET
         private int __AutoFireCooldown;
 
         [VersionField]
+        private int __SwordWaveCooldown;
+
+        [VersionField]
+        private long __SwordWaveRevision;
+
+        [VersionField]
         private bool __Alive;
 
-        public IReactiveObserver LogicObserver { get; set; }
+        [VersionField]
+        private int __AutoFireLevel;
+
+        [VersionField]
+        private int __PowerShotLevel;
+
+        [VersionField]
+        private int __SwiftStepLevel;
+
+        [VersionField]
+        private int __UnspentSkillPoints;
+
+        [VersionField]
+        private SurvivorSkillType __SkillChoice1;
+
+        [VersionField]
+        private SurvivorSkillType __SkillChoice2;
+
+        [VersionField]
+        private SurvivorSkillType __SkillChoice3;
+
+        [VersionField]
+        private long __SkillChoiceRevision;
+
+        public EntityRef<SurvivorPlayerStateReactiveObserver> LogicObserver { get; set; }
     }
 
     [EnableClass]
@@ -123,7 +153,7 @@ namespace ET
         [VersionField]
         private bool __Alive;
 
-        public IReactiveObserver LogicObserver { get; set; }
+        public EntityRef<SurvivorMonsterStateReactiveObserver> LogicObserver { get; set; }
     }
 
     [EnableClass]

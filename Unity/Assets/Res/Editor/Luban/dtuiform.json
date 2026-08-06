@@ -57,7 +57,7 @@
     "Id": 9801,
     "CSName": "SurvivorLobby",
     "Desc": "联机幸存者加房界面",
-    "AssetName": "SurvivorOnline/Lobby",
+    "AssetName": "SurvivorOnline/SurvivorLobby",
     "UIGroupName": "Default",
     "AllowMultiInstance": false,
     "PauseCoveredUIForm": false
@@ -66,7 +66,34 @@
     "Id": 9802,
     "CSName": "SurvivorHud",
     "Desc": "联机幸存者局内界面",
-    "AssetName": "SurvivorOnline/Hud",
+    "AssetName": "SurvivorOnline/SurvivorHud",
+    "UIGroupName": "Pop",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": false
+  },
+  {
+    "Id": 9800,
+    "CSName": "SurvivorLogin",
+    "Desc": "联机幸存者登录界面",
+    "AssetName": "SurvivorOnline/SurvivorLogin",
+    "UIGroupName": "Default",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": false
+  },
+  {
+    "Id": 9803,
+    "CSName": "SurvivorSkillChoice",
+    "Desc": "联机幸存者升级技能三选一界面",
+    "AssetName": "SurvivorOnline/SurvivorSkillChoice",
+    "UIGroupName": "Pop",
+    "AllowMultiInstance": false,
+    "PauseCoveredUIForm": false
+  },
+  {
+    "Id": 9804,
+    "CSName": "SurvivorGameOver",
+    "Desc": "联机幸存者游戏结束界面",
+    "AssetName": "SurvivorOnline/SurvivorGameOver",
     "UIGroupName": "Pop",
     "AllowMultiInstance": false,
     "PauseCoveredUIForm": false

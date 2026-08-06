@@ -19,14 +19,16 @@ namespace ET
                         continue;
                     }
 
-                    if (SurvivorMath.Abs(self.Runtime.Player.PositionX - self.Runtime.Pickup.PositionX) >
-                        SurvivorDefaults.PlayerCollisionRadius + SurvivorDefaults.PickupCollisionRadius)
-                    {
-                        continue;
-                    }
-
-                    if (SurvivorMath.Abs(self.Runtime.Player.PositionY - self.Runtime.Pickup.PositionY) >
-                        SurvivorDefaults.PlayerCollisionRadius + SurvivorDefaults.PickupCollisionRadius)
+                    self.Runtime.DeltaX =
+                            self.Runtime.Player.PositionX - self.Runtime.Pickup.PositionX;
+                    self.Runtime.DeltaY =
+                            self.Runtime.Player.PositionY - self.Runtime.Pickup.PositionY;
+                    self.Runtime.DistanceSquared =
+                            (long)self.Runtime.DeltaX * self.Runtime.DeltaX +
+                            (long)self.Runtime.DeltaY * self.Runtime.DeltaY;
+                    if (self.Runtime.DistanceSquared >
+                        (long)SurvivorDefaults.ExperiencePickupRange *
+                        SurvivorDefaults.ExperiencePickupRange)
                     {
                         continue;
                     }
@@ -38,11 +40,6 @@ namespace ET
 
                 self.Runtime.PlayerEnumerator.Dispose();
                 self.Runtime.PlayerEnumerator = null;
-                if (self.Runtime.Collected)
-                {
-                    self.Runtime.Player.LogicObserver.ObserveChanges();
-                }
-
                 if (self.Runtime.Collected)
                 {
                     self.Runtime.PickupRemovalStateIds.Add(self.Runtime.Pickup.StateId);

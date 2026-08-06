@@ -19,10 +19,6 @@ namespace ET
 
         public SyncContext SyncContext { get; }
 
-        public ISurvivorPlayerReactionSink PlayerReactionSink { get; set; }
-
-        public ISurvivorMonsterReactionSink MonsterReactionSink { get; set; }
-
         public MemoryStream CaptureStream { get; }
 
         public BinaryWriter CaptureWriter { get; }
@@ -42,6 +38,8 @@ namespace ET
         public List<long> MonsterRemovalStateIds { get; } = new();
 
         public List<long> ProjectileRemovalStateIds { get; } = new();
+
+        public List<long> SwordWaveHitStateIds { get; } = new();
 
         public List<long> PickupRemovalStateIds { get; } = new();
 
@@ -68,6 +66,8 @@ namespace ET
         public int DeltaY { get; set; }
 
         public int Distance { get; set; }
+
+        public long DistanceSquared { get; set; }
 
         public int SpawnPositionX { get; set; }
 

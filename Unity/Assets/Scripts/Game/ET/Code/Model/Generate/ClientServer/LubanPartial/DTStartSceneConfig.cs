@@ -21,6 +21,8 @@ namespace ET
 
         public DRStartSceneConfig Match;
 
+        public DRStartSceneConfig SurvivorRoomManager;
+
         public DRStartSceneConfig Benchmark;
 
         public DRStartSceneConfig AdminConfig;
@@ -57,6 +59,7 @@ namespace ET
             this.Routers.Clear();
             this.Maps.Clear();
             this.Match = null;
+            this.SurvivorRoomManager = null;
             this.Benchmark = null;
             this.AdminConfig = null;
             this.Agents.Clear();
@@ -95,6 +98,9 @@ namespace ET
                         break;
                     case SceneType.Match:
                         this.Match = startSceneConfig;
+                        break;
+                    case SceneType.SurvivorRoomManager:
+                        this.SurvivorRoomManager = startSceneConfig;
                         break;
                     case SceneType.BenchmarkServer:
                         this.Benchmark = startSceneConfig;

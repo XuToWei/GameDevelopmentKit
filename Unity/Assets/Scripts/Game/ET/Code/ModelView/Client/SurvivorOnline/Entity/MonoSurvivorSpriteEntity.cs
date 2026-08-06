@@ -10,17 +10,6 @@ namespace ET.Client
         [SerializeField]
         private SpriteRenderer spriteRenderer;
 
-        public SpriteRenderer SpriteRenderer
-        {
-            get
-            {
-                if (this.spriteRenderer == null)
-                {
-                    this.spriteRenderer = this.GetComponent<SpriteRenderer>();
-                }
-
-                return this.spriteRenderer;
-            }
-        }
+        public SpriteRenderer SpriteRenderer => this.spriteRenderer;
     }
 }

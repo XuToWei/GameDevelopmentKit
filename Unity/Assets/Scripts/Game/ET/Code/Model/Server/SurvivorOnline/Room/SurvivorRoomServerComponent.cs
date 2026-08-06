@@ -4,9 +4,12 @@ using System.Collections.Generic;
 namespace ET.Server
 {
     [ComponentOf(typeof(SurvivorRoom))]
-    public sealed class SurvivorRoomServerComponent: Entity, IAwake, IUpdate, IDestroy
+    public sealed partial class SurvivorRoomServerComponent: Entity, IAwake, IUpdate, IDestroy, IETReactive
     {
         public SurvivorRoomServerRuntime Runtime { get; set; }
+
+        [ETReactiveSource]
+        public SurvivorRoomPhase Phase => this.GetParent<SurvivorRoom>().GetComponent<SurvivorWorldComponent>().Data.Phase;
     }
 
     [EnableClass]
@@ -14,7 +17,15 @@ namespace ET.Server
     {
         public HashSet<long> PlayerIds { get; } = new();
 
+        public Dictionary<long, Queue<SurvivorQueuedPlayerInput>> PlayerInputQueues { get; } = new();
+
+        public Dictionary<long, long> LastQueuedInputSequences { get; } = new();
+
         public IEnumerator<long> PlayerIdEnumerator { get; set; }
+
+        public IEnumerator<KeyValuePair<long, SurvivorPlayerState>> PlayerStateEnumerator { get; set; }
+
+        public SurvivorQueuedPlayerInput QueuedInput { get; set; }
 
         public long Sequence { get; set; }
 
@@ -25,6 +36,19 @@ namespace ET.Server
         public void Dispose()
         {
             this.PlayerIdEnumerator?.Dispose();
+            this.PlayerStateEnumerator?.Dispose();
+            this.PlayerInputQueues.Clear();
+            this.LastQueuedInputSequences.Clear();
         }
+    }
+
+    [EnableClass]
+    public sealed class SurvivorQueuedPlayerInput
+    {
+        public long Sequence { get; set; }
+
+        public int MoveX { get; set; }
+
+        public int MoveY { get; set; }
     }
 }

@@ -1,22 +1,13 @@
 namespace ET.Client
 {
-    public struct SurvivorPlayerEntryCreated
+    public struct SurvivorSkillChoiceAvailabilityChanged
     {
-        public SurvivorPlayerEntry Entry;
+        public bool Show;
+
+        public long Revision;
     }
 
-    public struct SurvivorMonsterEntryCreated
+    public struct SurvivorGameEnded
     {
-        public SurvivorMonsterEntry Entry;
-    }
-
-    public struct SurvivorProjectileEntryCreated
-    {
-        public SurvivorProjectileEntry Entry;
-    }
-
-    public struct SurvivorPickupEntryCreated
-    {
-        public SurvivorPickupEntry Entry;
     }
 }

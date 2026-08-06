@@ -60,3 +60,40 @@ message G2SurvivorRoom_RequestFullSnapshot // IMessage
 {
     int64 PlayerId = 1;
 }
+
+// ResponseType SurvivorRoom2G_ChooseSkill
+message G2SurvivorRoom_ChooseSkill // IRequest
+{
+    int32 RpcId = 1;
+    int64 PlayerId = 2;
+    int32 SkillType = 3;
+    int64 ChoiceRevision = 4;
+}
+
+message SurvivorRoom2G_ChooseSkill // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+}
+
+// ResponseType SurvivorRoomManager2G_JoinRoom
+message G2SurvivorRoomManager_JoinRoom // IRequest
+{
+    int32 RpcId = 1;
+    string RoomCode = 2;
+    int64 PlayerId = 3;
+    string DisplayName = 4;
+}
+
+message SurvivorRoomManager2G_JoinRoom // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+    ActorId RoomActorId = 4;
+    bool IsHost = 5;
+    int64 Sequence = 6;
+    int64 ServerTick = 7;
+    bytes FullSnapshot = 8;
+}

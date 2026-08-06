@@ -11,9 +11,9 @@ namespace ET
     [ResponseType(nameof(ObjectQueryResponse))]
     public partial class ObjectQueryRequest: MessageObject, IRequest
     {
-        public static ObjectQueryRequest Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectQueryRequest), isFromPool) as ObjectQueryRequest; 
+        public static ObjectQueryRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectQueryRequest), isFromPool) as ObjectQueryRequest;
         }
 
         [MemoryPackOrder(0)]
@@ -22,13 +22,13 @@ namespace ET
         public long Key { get; set; }
         [MemoryPackOrder(2)]
         public long InstanceId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Key = default;
             this.InstanceId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -38,18 +38,18 @@ namespace ET
     [ResponseType(nameof(A2M_Reload))]
     public partial class M2A_Reload: MessageObject, IRequest
     {
-        public static M2A_Reload Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(M2A_Reload), isFromPool) as M2A_Reload; 
+        public static M2A_Reload Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(M2A_Reload), isFromPool) as M2A_Reload;
         }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -58,9 +58,9 @@ namespace ET
     [Message(Message_ET_Server.A2M_Reload)]
     public partial class A2M_Reload: MessageObject, IResponse
     {
-        public static A2M_Reload Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(A2M_Reload), isFromPool) as A2M_Reload; 
+        public static A2M_Reload Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(A2M_Reload), isFromPool) as A2M_Reload;
         }
 
         [MemoryPackOrder(0)]
@@ -69,13 +69,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -85,9 +85,9 @@ namespace ET
     [ResponseType(nameof(G2G_LockResponse))]
     public partial class G2G_LockRequest: MessageObject, IRequest
     {
-        public static G2G_LockRequest Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2G_LockRequest), isFromPool) as G2G_LockRequest; 
+        public static G2G_LockRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2G_LockRequest), isFromPool) as G2G_LockRequest;
         }
 
         [MemoryPackOrder(0)]
@@ -96,13 +96,13 @@ namespace ET
         public long Id { get; set; }
         [MemoryPackOrder(2)]
         public string Address { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Id = default;
             this.Address = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -111,9 +111,9 @@ namespace ET
     [Message(Message_ET_Server.G2G_LockResponse)]
     public partial class G2G_LockResponse: MessageObject, IResponse
     {
-        public static G2G_LockResponse Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2G_LockResponse), isFromPool) as G2G_LockResponse; 
+        public static G2G_LockResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2G_LockResponse), isFromPool) as G2G_LockResponse;
         }
 
         [MemoryPackOrder(0)]
@@ -122,13 +122,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -138,9 +138,9 @@ namespace ET
     [ResponseType(nameof(G2G_LockReleaseResponse))]
     public partial class G2G_LockReleaseRequest: MessageObject, IRequest
     {
-        public static G2G_LockReleaseRequest Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2G_LockReleaseRequest), isFromPool) as G2G_LockReleaseRequest; 
+        public static G2G_LockReleaseRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2G_LockReleaseRequest), isFromPool) as G2G_LockReleaseRequest;
         }
 
         [MemoryPackOrder(0)]
@@ -149,13 +149,13 @@ namespace ET
         public long Id { get; set; }
         [MemoryPackOrder(2)]
         public string Address { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Id = default;
             this.Address = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -164,9 +164,9 @@ namespace ET
     [Message(Message_ET_Server.G2G_LockReleaseResponse)]
     public partial class G2G_LockReleaseResponse: MessageObject, IResponse
     {
-        public static G2G_LockReleaseResponse Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2G_LockReleaseResponse), isFromPool) as G2G_LockReleaseResponse; 
+        public static G2G_LockReleaseResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2G_LockReleaseResponse), isFromPool) as G2G_LockReleaseResponse;
         }
 
         [MemoryPackOrder(0)]
@@ -175,13 +175,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -191,9 +191,9 @@ namespace ET
     [ResponseType(nameof(ObjectAddResponse))]
     public partial class ObjectAddRequest: MessageObject, IRequest
     {
-        public static ObjectAddRequest Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectAddRequest), isFromPool) as ObjectAddRequest; 
+        public static ObjectAddRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectAddRequest), isFromPool) as ObjectAddRequest;
         }
 
         [MemoryPackOrder(0)]
@@ -204,14 +204,14 @@ namespace ET
         public long Key { get; set; }
         [MemoryPackOrder(3)]
         public ActorId ActorId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Type = default;
             this.Key = default;
             this.ActorId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -220,9 +220,9 @@ namespace ET
     [Message(Message_ET_Server.ObjectAddResponse)]
     public partial class ObjectAddResponse: MessageObject, IResponse
     {
-        public static ObjectAddResponse Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectAddResponse), isFromPool) as ObjectAddResponse; 
+        public static ObjectAddResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectAddResponse), isFromPool) as ObjectAddResponse;
         }
 
         [MemoryPackOrder(0)]
@@ -231,13 +231,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -247,9 +247,9 @@ namespace ET
     [ResponseType(nameof(ObjectLockResponse))]
     public partial class ObjectLockRequest: MessageObject, IRequest
     {
-        public static ObjectLockRequest Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectLockRequest), isFromPool) as ObjectLockRequest; 
+        public static ObjectLockRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectLockRequest), isFromPool) as ObjectLockRequest;
         }
 
         [MemoryPackOrder(0)]
@@ -262,7 +262,7 @@ namespace ET
         public ActorId ActorId { get; set; }
         [MemoryPackOrder(4)]
         public int Time { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
@@ -270,7 +270,7 @@ namespace ET
             this.Key = default;
             this.ActorId = default;
             this.Time = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -279,9 +279,9 @@ namespace ET
     [Message(Message_ET_Server.ObjectLockResponse)]
     public partial class ObjectLockResponse: MessageObject, IResponse
     {
-        public static ObjectLockResponse Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectLockResponse), isFromPool) as ObjectLockResponse; 
+        public static ObjectLockResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectLockResponse), isFromPool) as ObjectLockResponse;
         }
 
         [MemoryPackOrder(0)]
@@ -290,13 +290,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -306,9 +306,9 @@ namespace ET
     [ResponseType(nameof(ObjectUnLockResponse))]
     public partial class ObjectUnLockRequest: MessageObject, IRequest
     {
-        public static ObjectUnLockRequest Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectUnLockRequest), isFromPool) as ObjectUnLockRequest; 
+        public static ObjectUnLockRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectUnLockRequest), isFromPool) as ObjectUnLockRequest;
         }
 
         [MemoryPackOrder(0)]
@@ -321,7 +321,7 @@ namespace ET
         public ActorId OldActorId { get; set; }
         [MemoryPackOrder(4)]
         public ActorId NewActorId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
@@ -329,7 +329,7 @@ namespace ET
             this.Key = default;
             this.OldActorId = default;
             this.NewActorId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -338,9 +338,9 @@ namespace ET
     [Message(Message_ET_Server.ObjectUnLockResponse)]
     public partial class ObjectUnLockResponse: MessageObject, IResponse
     {
-        public static ObjectUnLockResponse Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectUnLockResponse), isFromPool) as ObjectUnLockResponse; 
+        public static ObjectUnLockResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectUnLockResponse), isFromPool) as ObjectUnLockResponse;
         }
 
         [MemoryPackOrder(0)]
@@ -349,13 +349,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -365,9 +365,9 @@ namespace ET
     [ResponseType(nameof(ObjectRemoveResponse))]
     public partial class ObjectRemoveRequest: MessageObject, IRequest
     {
-        public static ObjectRemoveRequest Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectRemoveRequest), isFromPool) as ObjectRemoveRequest; 
+        public static ObjectRemoveRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectRemoveRequest), isFromPool) as ObjectRemoveRequest;
         }
 
         [MemoryPackOrder(0)]
@@ -376,13 +376,13 @@ namespace ET
         public int Type { get; set; }
         [MemoryPackOrder(2)]
         public long Key { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Type = default;
             this.Key = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -391,9 +391,9 @@ namespace ET
     [Message(Message_ET_Server.ObjectRemoveResponse)]
     public partial class ObjectRemoveResponse: MessageObject, IResponse
     {
-        public static ObjectRemoveResponse Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectRemoveResponse), isFromPool) as ObjectRemoveResponse; 
+        public static ObjectRemoveResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectRemoveResponse), isFromPool) as ObjectRemoveResponse;
         }
 
         [MemoryPackOrder(0)]
@@ -402,13 +402,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -418,9 +418,9 @@ namespace ET
     [ResponseType(nameof(ObjectGetResponse))]
     public partial class ObjectGetRequest: MessageObject, IRequest
     {
-        public static ObjectGetRequest Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectGetRequest), isFromPool) as ObjectGetRequest; 
+        public static ObjectGetRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectGetRequest), isFromPool) as ObjectGetRequest;
         }
 
         [MemoryPackOrder(0)]
@@ -429,13 +429,13 @@ namespace ET
         public int Type { get; set; }
         [MemoryPackOrder(2)]
         public long Key { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Type = default;
             this.Key = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -444,9 +444,9 @@ namespace ET
     [Message(Message_ET_Server.ObjectGetResponse)]
     public partial class ObjectGetResponse: MessageObject, IResponse
     {
-        public static ObjectGetResponse Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectGetResponse), isFromPool) as ObjectGetResponse; 
+        public static ObjectGetResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectGetResponse), isFromPool) as ObjectGetResponse;
         }
 
         [MemoryPackOrder(0)]
@@ -459,7 +459,7 @@ namespace ET
         public int Type { get; set; }
         [MemoryPackOrder(4)]
         public ActorId ActorId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
@@ -467,7 +467,7 @@ namespace ET
             this.Message = default;
             this.Type = default;
             this.ActorId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -477,21 +477,21 @@ namespace ET
     [ResponseType(nameof(G2R_GetLoginKey))]
     public partial class R2G_GetLoginKey: MessageObject, IRequest
     {
-        public static R2G_GetLoginKey Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(R2G_GetLoginKey), isFromPool) as R2G_GetLoginKey; 
+        public static R2G_GetLoginKey Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(R2G_GetLoginKey), isFromPool) as R2G_GetLoginKey;
         }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
         public string Account { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Account = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -500,9 +500,9 @@ namespace ET
     [Message(Message_ET_Server.G2R_GetLoginKey)]
     public partial class G2R_GetLoginKey: MessageObject, IResponse
     {
-        public static G2R_GetLoginKey Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2R_GetLoginKey), isFromPool) as G2R_GetLoginKey; 
+        public static G2R_GetLoginKey Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2R_GetLoginKey), isFromPool) as G2R_GetLoginKey;
         }
 
         [MemoryPackOrder(0)]
@@ -515,7 +515,7 @@ namespace ET
         public long Key { get; set; }
         [MemoryPackOrder(4)]
         public long GateId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
@@ -523,7 +523,7 @@ namespace ET
             this.Message = default;
             this.Key = default;
             this.GateId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -532,18 +532,18 @@ namespace ET
     [Message(Message_ET_Server.G2M_SessionDisconnect)]
     public partial class G2M_SessionDisconnect: MessageObject, ILocationMessage
     {
-        public static G2M_SessionDisconnect Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2M_SessionDisconnect), isFromPool) as G2M_SessionDisconnect; 
+        public static G2M_SessionDisconnect Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2M_SessionDisconnect), isFromPool) as G2M_SessionDisconnect;
         }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -552,9 +552,9 @@ namespace ET
     [Message(Message_ET_Server.ObjectQueryResponse)]
     public partial class ObjectQueryResponse: MessageObject, IResponse
     {
-        public static ObjectQueryResponse Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(ObjectQueryResponse), isFromPool) as ObjectQueryResponse; 
+        public static ObjectQueryResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(ObjectQueryResponse), isFromPool) as ObjectQueryResponse;
         }
 
         [MemoryPackOrder(0)]
@@ -565,14 +565,14 @@ namespace ET
         public string Message { get; set; }
         [MemoryPackOrder(3)]
         public byte[] Entity { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
             this.Entity = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -582,9 +582,9 @@ namespace ET
     [ResponseType(nameof(M2M_UnitTransferResponse))]
     public partial class M2M_UnitTransferRequest: MessageObject, IRequest
     {
-        public static M2M_UnitTransferRequest Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(M2M_UnitTransferRequest), isFromPool) as M2M_UnitTransferRequest; 
+        public static M2M_UnitTransferRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(M2M_UnitTransferRequest), isFromPool) as M2M_UnitTransferRequest;
         }
 
         [MemoryPackOrder(0)]
@@ -595,14 +595,14 @@ namespace ET
         public byte[] Unit { get; set; }
         [MemoryPackOrder(3)]
         public List<byte[]> Entitys { get; set; } = new List<byte[]>();
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.OldActorId = default;
             this.Unit = default;
             this.Entitys.Clear();
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -611,9 +611,9 @@ namespace ET
     [Message(Message_ET_Server.M2M_UnitTransferResponse)]
     public partial class M2M_UnitTransferResponse: MessageObject, IResponse
     {
-        public static M2M_UnitTransferResponse Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(M2M_UnitTransferResponse), isFromPool) as M2M_UnitTransferResponse; 
+        public static M2M_UnitTransferResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(M2M_UnitTransferResponse), isFromPool) as M2M_UnitTransferResponse;
         }
 
         [MemoryPackOrder(0)]
@@ -622,13 +622,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -641,21 +641,21 @@ namespace ET
     [ResponseType(nameof(Match2G_Match))]
     public partial class G2Match_Match: MessageObject, IRequest
     {
-        public static G2Match_Match Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2Match_Match), isFromPool) as G2Match_Match; 
+        public static G2Match_Match Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2Match_Match), isFromPool) as G2Match_Match;
         }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
         public long Id { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Id = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -664,9 +664,9 @@ namespace ET
     [Message(Message_ET_Server.Match2G_Match)]
     public partial class Match2G_Match: MessageObject, IResponse
     {
-        public static Match2G_Match Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(Match2G_Match), isFromPool) as Match2G_Match; 
+        public static Match2G_Match Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(Match2G_Match), isFromPool) as Match2G_Match;
         }
 
         [MemoryPackOrder(0)]
@@ -675,13 +675,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -691,21 +691,21 @@ namespace ET
     [ResponseType(nameof(Map2Match_GetRoom))]
     public partial class Match2Map_GetRoom: MessageObject, IRequest
     {
-        public static Match2Map_GetRoom Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(Match2Map_GetRoom), isFromPool) as Match2Map_GetRoom; 
+        public static Match2Map_GetRoom Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(Match2Map_GetRoom), isFromPool) as Match2Map_GetRoom;
         }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
         public List<long> PlayerIds { get; set; } = new List<long>();
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.PlayerIds.Clear();
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -714,9 +714,9 @@ namespace ET
     [Message(Message_ET_Server.Map2Match_GetRoom)]
     public partial class Map2Match_GetRoom: MessageObject, IResponse
     {
-        public static Map2Match_GetRoom Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(Map2Match_GetRoom), isFromPool) as Map2Match_GetRoom; 
+        public static Map2Match_GetRoom Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(Map2Match_GetRoom), isFromPool) as Map2Match_GetRoom;
         }
 
         [MemoryPackOrder(0)]
@@ -730,14 +730,14 @@ namespace ET
         /// </summary>
         [MemoryPackOrder(3)]
         public ActorId ActorId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
             this.ActorId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -747,21 +747,21 @@ namespace ET
     [ResponseType(nameof(Room2G_Reconnect))]
     public partial class G2Room_Reconnect: MessageObject, IRequest
     {
-        public static G2Room_Reconnect Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2Room_Reconnect), isFromPool) as G2Room_Reconnect; 
+        public static G2Room_Reconnect Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2Room_Reconnect), isFromPool) as G2Room_Reconnect;
         }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
         public long PlayerId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.PlayerId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -770,9 +770,9 @@ namespace ET
     [Message(Message_ET_Server.Room2G_Reconnect)]
     public partial class Room2G_Reconnect: MessageObject, IResponse
     {
-        public static Room2G_Reconnect Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(Room2G_Reconnect), isFromPool) as Room2G_Reconnect; 
+        public static Room2G_Reconnect Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(Room2G_Reconnect), isFromPool) as Room2G_Reconnect;
         }
 
         [MemoryPackOrder(0)]
@@ -787,7 +787,7 @@ namespace ET
         public List<LockStepUnitInfo> UnitInfos { get; set; } = new List<LockStepUnitInfo>();
         [MemoryPackOrder(5)]
         public int Frame { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
@@ -796,7 +796,7 @@ namespace ET
             this.StartTime = default;
             this.UnitInfos.Clear();
             this.Frame = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -806,21 +806,21 @@ namespace ET
     [ResponseType(nameof(Room2RoomManager_Init))]
     public partial class RoomManager2Room_Init: MessageObject, IRequest
     {
-        public static RoomManager2Room_Init Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(RoomManager2Room_Init), isFromPool) as RoomManager2Room_Init; 
+        public static RoomManager2Room_Init Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(RoomManager2Room_Init), isFromPool) as RoomManager2Room_Init;
         }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
         public List<long> PlayerIds { get; set; } = new List<long>();
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.PlayerIds.Clear();
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -829,9 +829,9 @@ namespace ET
     [Message(Message_ET_Server.Room2RoomManager_Init)]
     public partial class Room2RoomManager_Init: MessageObject, IResponse
     {
-        public static Room2RoomManager_Init Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(Room2RoomManager_Init), isFromPool) as Room2RoomManager_Init; 
+        public static Room2RoomManager_Init Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(Room2RoomManager_Init), isFromPool) as Room2RoomManager_Init;
         }
 
         [MemoryPackOrder(0)]
@@ -840,13 +840,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -856,21 +856,21 @@ namespace ET
     [ResponseType(nameof(SurvivorRoom2G_Init))]
     public partial class G2SurvivorRoom_Init: MessageObject, IRequest
     {
-        public static G2SurvivorRoom_Init Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Init), isFromPool) as G2SurvivorRoom_Init; 
+        public static G2SurvivorRoom_Init Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Init), isFromPool) as G2SurvivorRoom_Init;
         }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
         public string RoomCode { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.RoomCode = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -879,9 +879,9 @@ namespace ET
     [Message(Message_ET_Server.SurvivorRoom2G_Init)]
     public partial class SurvivorRoom2G_Init: MessageObject, IResponse
     {
-        public static SurvivorRoom2G_Init Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2G_Init), isFromPool) as SurvivorRoom2G_Init; 
+        public static SurvivorRoom2G_Init Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2G_Init), isFromPool) as SurvivorRoom2G_Init;
         }
 
         [MemoryPackOrder(0)]
@@ -890,13 +890,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -906,9 +906,9 @@ namespace ET
     [ResponseType(nameof(SurvivorRoom2G_Join))]
     public partial class G2SurvivorRoom_Join: MessageObject, IRequest
     {
-        public static G2SurvivorRoom_Join Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Join), isFromPool) as G2SurvivorRoom_Join; 
+        public static G2SurvivorRoom_Join Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Join), isFromPool) as G2SurvivorRoom_Join;
         }
 
         [MemoryPackOrder(0)]
@@ -917,13 +917,13 @@ namespace ET
         public long PlayerId { get; set; }
         [MemoryPackOrder(2)]
         public string DisplayName { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.PlayerId = default;
             this.DisplayName = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -932,9 +932,9 @@ namespace ET
     [Message(Message_ET_Server.SurvivorRoom2G_Join)]
     public partial class SurvivorRoom2G_Join: MessageObject, IResponse
     {
-        public static SurvivorRoom2G_Join Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2G_Join), isFromPool) as SurvivorRoom2G_Join; 
+        public static SurvivorRoom2G_Join Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2G_Join), isFromPool) as SurvivorRoom2G_Join;
         }
 
         [MemoryPackOrder(0)]
@@ -951,7 +951,7 @@ namespace ET
         public long ServerTick { get; set; }
         [MemoryPackOrder(6)]
         public byte[] FullSnapshot { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
@@ -961,7 +961,7 @@ namespace ET
             this.Sequence = default;
             this.ServerTick = default;
             this.FullSnapshot = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -971,21 +971,21 @@ namespace ET
     [ResponseType(nameof(SurvivorRoom2G_Start))]
     public partial class G2SurvivorRoom_Start: MessageObject, IRequest
     {
-        public static G2SurvivorRoom_Start Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Start), isFromPool) as G2SurvivorRoom_Start; 
+        public static G2SurvivorRoom_Start Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Start), isFromPool) as G2SurvivorRoom_Start;
         }
 
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
         public long PlayerId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.PlayerId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -994,9 +994,9 @@ namespace ET
     [Message(Message_ET_Server.SurvivorRoom2G_Start)]
     public partial class SurvivorRoom2G_Start: MessageObject, IResponse
     {
-        public static SurvivorRoom2G_Start Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2G_Start), isFromPool) as SurvivorRoom2G_Start; 
+        public static SurvivorRoom2G_Start Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2G_Start), isFromPool) as SurvivorRoom2G_Start;
         }
 
         [MemoryPackOrder(0)]
@@ -1005,13 +1005,13 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -1020,9 +1020,9 @@ namespace ET
     [Message(Message_ET_Server.G2SurvivorRoom_Input)]
     public partial class G2SurvivorRoom_Input: MessageObject, IMessage
     {
-        public static G2SurvivorRoom_Input Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Input), isFromPool) as G2SurvivorRoom_Input; 
+        public static G2SurvivorRoom_Input Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_Input), isFromPool) as G2SurvivorRoom_Input;
         }
 
         [MemoryPackOrder(0)]
@@ -1033,14 +1033,14 @@ namespace ET
         public int MoveX { get; set; }
         [MemoryPackOrder(3)]
         public int MoveY { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.PlayerId = default;
             this.InputSequence = default;
             this.MoveX = default;
             this.MoveY = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
         }
     }
 
@@ -1049,18 +1049,145 @@ namespace ET
     [Message(Message_ET_Server.G2SurvivorRoom_RequestFullSnapshot)]
     public partial class G2SurvivorRoom_RequestFullSnapshot: MessageObject, IMessage
     {
-        public static G2SurvivorRoom_RequestFullSnapshot Create(bool isFromPool = false) 
-        { 
-            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_RequestFullSnapshot), isFromPool) as G2SurvivorRoom_RequestFullSnapshot; 
+        public static G2SurvivorRoom_RequestFullSnapshot Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_RequestFullSnapshot), isFromPool) as G2SurvivorRoom_RequestFullSnapshot;
         }
 
         [MemoryPackOrder(0)]
         public long PlayerId { get; set; }
-        public override void Dispose() 
+        public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
             this.PlayerId = default;
-            ObjectPool.Instance.Recycle(this); 
+            ObjectPool.Instance.Recycle(this);
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:65)
+    [MemoryPackable]
+    [Message(Message_ET_Server.G2SurvivorRoom_ChooseSkill)]
+    [ResponseType(nameof(SurvivorRoom2G_ChooseSkill))]
+    public partial class G2SurvivorRoom_ChooseSkill: MessageObject, IRequest
+    {
+        public static G2SurvivorRoom_ChooseSkill Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoom_ChooseSkill), isFromPool) as G2SurvivorRoom_ChooseSkill;
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public long PlayerId { get; set; }
+        [MemoryPackOrder(2)]
+        public int SkillType { get; set; }
+        [MemoryPackOrder(3)]
+        public long ChoiceRevision { get; set; }
+        public override void Dispose()
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.PlayerId = default;
+            this.SkillType = default;
+            this.ChoiceRevision = default;
+            ObjectPool.Instance.Recycle(this);
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:73)
+    [MemoryPackable]
+    [Message(Message_ET_Server.SurvivorRoom2G_ChooseSkill)]
+    public partial class SurvivorRoom2G_ChooseSkill: MessageObject, IResponse
+    {
+        public static SurvivorRoom2G_ChooseSkill Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(SurvivorRoom2G_ChooseSkill), isFromPool) as SurvivorRoom2G_ChooseSkill;
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        public override void Dispose()
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            ObjectPool.Instance.Recycle(this);
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:81)
+    [MemoryPackable]
+    [Message(Message_ET_Server.G2SurvivorRoomManager_JoinRoom)]
+    [ResponseType(nameof(SurvivorRoomManager2G_JoinRoom))]
+    public partial class G2SurvivorRoomManager_JoinRoom: MessageObject, IRequest
+    {
+        public static G2SurvivorRoomManager_JoinRoom Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(G2SurvivorRoomManager_JoinRoom), isFromPool) as G2SurvivorRoomManager_JoinRoom;
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public string RoomCode { get; set; }
+        [MemoryPackOrder(2)]
+        public long PlayerId { get; set; }
+        [MemoryPackOrder(3)]
+        public string DisplayName { get; set; }
+        public override void Dispose()
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.RoomCode = default;
+            this.PlayerId = default;
+            this.DisplayName = default;
+            ObjectPool.Instance.Recycle(this);
+        }
+    }
+
+    // proto file : ET-ClientServer/SurvivorOnlineInner.proto (line:89)
+    [MemoryPackable]
+    [Message(Message_ET_Server.SurvivorRoomManager2G_JoinRoom)]
+    public partial class SurvivorRoomManager2G_JoinRoom: MessageObject, IResponse
+    {
+        public static SurvivorRoomManager2G_JoinRoom Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(SurvivorRoomManager2G_JoinRoom), isFromPool) as SurvivorRoomManager2G_JoinRoom;
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        [MemoryPackOrder(3)]
+        public ActorId RoomActorId { get; set; }
+        [MemoryPackOrder(4)]
+        public bool IsHost { get; set; }
+        [MemoryPackOrder(5)]
+        public long Sequence { get; set; }
+        [MemoryPackOrder(6)]
+        public long ServerTick { get; set; }
+        [MemoryPackOrder(7)]
+        public byte[] FullSnapshot { get; set; }
+        public override void Dispose()
+        {
+            if (!this.IsFromPool) { return; }
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.RoomActorId = default;
+            this.IsHost = default;
+            this.Sequence = default;
+            this.ServerTick = default;
+            this.FullSnapshot = default;
+            ObjectPool.Instance.Recycle(this);
         }
     }
 

@@ -8,8 +8,6 @@ namespace ET
         {
             self.Role = role;
             self.Runtime = new SurvivorWorldRuntime();
-            self.Runtime.PlayerReactionSink = new SurvivorPlayerReactionSink();
-            self.Runtime.MonsterReactionSink = new SurvivorMonsterReactionSink();
             self.Data = role == SurvivorWorldRole.ServerAuthority ? SurvivorWorldFactory.CreateWorld(roomCode) : null;
             self.AttachTo(self.Runtime.SyncContext);
         }
@@ -17,8 +15,6 @@ namespace ET
         [EntitySystem]
         private static void Destroy(this SurvivorWorldComponent self)
         {
-            self.Runtime.PlayerReactionSink = null;
-            self.Runtime.MonsterReactionSink = null;
             self.Runtime.Dispose();
             self.Runtime = null;
         }
@@ -67,6 +63,20 @@ namespace ET
             }
 
             return self.Runtime.StateId;
+        }
+
+        public static void ResetForLobby(this SurvivorWorldComponent self)
+        {
+            self.DetachStateReactions();
+            SurvivorWorldFactory.ResetForLobby(self.Data);
+            self.Runtime.PlayerEnumerator = self.Data.Players.GetEnumerator();
+            while (self.Runtime.PlayerEnumerator.MoveNext())
+            {
+                self.AttachPlayerReaction(self.Runtime.PlayerEnumerator.Current.Value);
+            }
+
+            self.Runtime.PlayerEnumerator.Dispose();
+            self.Runtime.PlayerEnumerator = null;
         }
 
         public static void SetPlayerInput(

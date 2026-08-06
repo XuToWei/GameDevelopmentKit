@@ -2,14 +2,14 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    [MessageHandler(SceneType.SurvivorRoom)]
+    [MessageHandler(SceneType.SurvivorRoomRoot)]
     public sealed class G2SurvivorRoom_InputHandler: MessageHandler<Scene, G2SurvivorRoom_Input>
     {
         protected override async UniTask Run(Scene root, G2SurvivorRoom_Input message)
         {
             root.GetComponent<SurvivorRoom>()
-                    .GetComponent<SurvivorWorldComponent>()
-                    .SetPlayerInput(
+                    .GetComponent<SurvivorRoomServerComponent>()
+                    .QueuePlayerInput(
                         message.PlayerId,
                         message.InputSequence,
                         message.MoveX,

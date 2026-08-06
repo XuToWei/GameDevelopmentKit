@@ -104,4 +104,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96cec42967aa759449e1a5dedde87487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.ET.Code.ModelView::ET.Client.MonoSurvivorSpriteEntity
-  spriteRenderer: {fileID: 0}
+  m_DamageTextGameObject: {fileID: 0}
+  m_DamageTextRectTransform: {fileID: 0}
+  m_DamageTextTextMeshPro: {fileID: 0}
+  m_FillGameObject: {fileID: 0}
+  m_FillSpriteRenderer: {fileID: 0}
+  m_FillTransform: {fileID: 0}
+  spriteRenderer: {fileID: 8026861458963709438}

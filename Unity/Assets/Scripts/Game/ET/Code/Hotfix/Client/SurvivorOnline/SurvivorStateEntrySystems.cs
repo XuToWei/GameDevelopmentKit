@@ -1,5 +1,3 @@
-using Cysharp.Threading.Tasks;
-
 namespace ET.Client
 {
     [EntitySystemOf(typeof(SurvivorPlayerEntry))]
@@ -8,9 +6,6 @@ namespace ET.Client
         [EntitySystem]
         private static void Awake(this SurvivorPlayerEntry self)
         {
-            EventSystem.Instance.PublishAsync(
-                self.Root(),
-                new SurvivorPlayerEntryCreated { Entry = self }).Forget();
         }
     }
 
@@ -20,9 +15,6 @@ namespace ET.Client
         [EntitySystem]
         private static void Awake(this SurvivorMonsterEntry self)
         {
-            EventSystem.Instance.PublishAsync(
-                self.Root(),
-                new SurvivorMonsterEntryCreated { Entry = self }).Forget();
         }
     }
 
@@ -32,9 +24,6 @@ namespace ET.Client
         [EntitySystem]
         private static void Awake(this SurvivorProjectileEntry self)
         {
-            EventSystem.Instance.PublishAsync(
-                self.Root(),
-                new SurvivorProjectileEntryCreated { Entry = self }).Forget();
         }
     }
 
@@ -44,9 +33,6 @@ namespace ET.Client
         [EntitySystem]
         private static void Awake(this SurvivorPickupEntry self)
         {
-            EventSystem.Instance.PublishAsync(
-                self.Root(),
-                new SurvivorPickupEntryCreated { Entry = self }).Forget();
         }
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ET.Client
 {
@@ -6,11 +7,15 @@ namespace ET.Client
     [ETReactiveSystem]
     public static partial class UIFormSurvivorHudComponentSystem
     {
+        [EntitySystem]
+        private static void Awake(this UIFormSurvivorHudComponent self)
+        {
+            self.Client = self.Root().GetComponent<SurvivorClientComponent>();
+        }
+
         [UGFUIFormSystem]
         private static void UGFUIFormOnOpen(this UIFormSurvivorHudComponent self)
         {
-            self.Client = self.Root().GetComponent<SurvivorClientComponent>();
-            self.ObserveChanges();
         }
 
         [UGFUIFormSystem]
@@ -19,105 +24,96 @@ namespace ET.Client
             float elapseSeconds,
             float realElapseSeconds)
         {
-            self.Client.SendInput(
-                (int)(Input.GetAxisRaw("Horizontal") * SurvivorDefaults.InputScale),
-                (int)(Input.GetAxisRaw("Vertical") * SurvivorDefaults.InputScale));
+            Vector2 movement = ReadMovement();
+            self.Client.UpdateLocalInput(
+                (int)(movement.x * SurvivorDefaults.InputScale),
+                (int)(movement.y * SurvivorDefaults.InputScale),
+                realElapseSeconds);
             self.ObserveChanges();
+        }
+
+        private static Vector2 ReadMovement()
+        {
+            Vector2 movement = Vector2.zero;
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null)
+            {
+                if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed)
+                {
+                    movement.x -= 1f;
+                }
+
+                if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed)
+                {
+                    movement.x += 1f;
+                }
+
+                if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed)
+                {
+                    movement.y -= 1f;
+                }
+
+                if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed)
+                {
+                    movement.y += 1f;
+                }
+            }
+
+            if (movement != Vector2.zero)
+            {
+                return movement;
+            }
+
+            Gamepad gamepad = Gamepad.current;
+            if (gamepad == null)
+            {
+                return Vector2.zero;
+            }
+
+            Vector2 stickMovement = gamepad.leftStick.ReadValue();
+            Vector2 dpadMovement = gamepad.dpad.ReadValue();
+            return dpadMovement.sqrMagnitude > stickMovement.sqrMagnitude ? dpadMovement : stickMovement;
         }
 
         [UGFUIFormSystem]
         private static void UGFUIFormOnClose(this UIFormSurvivorHudComponent self, bool isShutdown)
         {
             self.ClearReactive();
-            self.Client = null;
         }
 
-        private static SurvivorWorldData WorldData(this UIFormSurvivorHudComponent self)
-        {
-            return self.Client?.World?.Data;
-        }
-
-        private static SurvivorPlayerState LocalPlayerState(this UIFormSurvivorHudComponent self)
-        {
-            SurvivorClientComponent client = self.Client;
-            if (client?.Runtime == null)
-            {
-                return null;
-            }
-
-            client.Runtime.PlayerStates.TryGetValue(client.PlayerId, out SurvivorPlayerState state);
-            return state;
-        }
-
-        [ETReactiveSource]
-        private static string RoomCode(this UIFormSurvivorHudComponent self)
-        {
-            return self.WorldData()?.RoomCode ?? string.Empty;
-        }
-
-        [ETReactiveSource]
-        private static long ServerTick(this UIFormSurvivorHudComponent self)
-        {
-            return self.WorldData()?.ServerTick ?? 0;
-        }
-
-        [ETReactiveSource]
-        private static SurvivorRoomPhase Phase(this UIFormSurvivorHudComponent self)
-        {
-            return self.WorldData()?.Phase ?? SurvivorRoomPhase.Lobby;
-        }
-
-        [ETReactiveSource]
-        private static int Hp(this UIFormSurvivorHudComponent self)
-        {
-            return self.LocalPlayerState()?.Hp ?? 0;
-        }
-
-        [ETReactiveSource]
-        private static int MaxHp(this UIFormSurvivorHudComponent self)
-        {
-            return self.LocalPlayerState()?.MaxHp ?? 0;
-        }
-
-        [ETReactiveSource]
-        private static int Level(this UIFormSurvivorHudComponent self)
-        {
-            return self.LocalPlayerState()?.Level ?? 0;
-        }
-
-        [ETReactiveBind(nameof(RoomCode))]
+        [ETReactiveBind(nameof(UIFormSurvivorHudComponent.RoomCode))]
         private static void OnRoomCodeChanged(this UIFormSurvivorHudComponent self, string roomCode)
         {
-            self.View.RoomText.text = roomCode;
+            self.View.RoomText.text = $"ROOM  {roomCode}";
         }
 
-        [ETReactiveBind(nameof(ServerTick))]
+        [ETReactiveBind(nameof(UIFormSurvivorHudComponent.ServerTick))]
         private static void OnServerTickChanged(this UIFormSurvivorHudComponent self, long serverTick)
         {
-            self.View.TickText.text = serverTick.ToString();
+            self.View.TickText.text = $"TIME  {serverTick / SurvivorDefaults.SimulationTicksPerSecond}s";
         }
 
-        [ETReactiveBind(nameof(Phase))]
+        [ETReactiveBind(nameof(UIFormSurvivorHudComponent.Phase))]
         private static void OnPhaseChanged(
             this UIFormSurvivorHudComponent self,
             SurvivorRoomPhase phase)
         {
-            self.View.PhaseText.text = phase.ToString();
+            self.View.PhaseText.text = $"STATE  {phase.ToString().ToUpperInvariant()}";
         }
 
-        [ETReactiveBind(nameof(Hp), nameof(MaxHp))]
+        [ETReactiveBind(nameof(UIFormSurvivorHudComponent.Hp), nameof(UIFormSurvivorHudComponent.MaxHp))]
         private static void OnHealthChanged(
             this UIFormSurvivorHudComponent self,
             int hp,
             int maxHp)
         {
-            self.View.HpText.text = $"{hp}/{maxHp}";
+            self.View.HpText.text = $"HP  {hp}/{maxHp}";
         }
 
-        [ETReactiveBind(nameof(Level))]
+        [ETReactiveBind(nameof(UIFormSurvivorHudComponent.Level))]
         private static void OnLevelChanged(this UIFormSurvivorHudComponent self, int level)
         {
-            self.View.LevelText.text = level.ToString();
+            self.View.LevelText.text = $"LV  {level}";
         }
     }
 }

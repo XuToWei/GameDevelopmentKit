@@ -19,6 +19,7 @@
       <Resource Name="Res/Scene/Map1" LoadType="0" Packed="False" />
       <Resource Name="Res/Scene/Map2" LoadType="0" Packed="False" />
       <Resource Name="Res/Scene/Menu" LoadType="0" Packed="False" />
+      <Resource Name="Res/Scene/SurvivorBattle" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UIPrefab/Button" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UISprite/Common" LoadType="0" Packed="False" />
       <Resource Name="Res/UI/UISprite/Icon" LoadType="0" Packed="False" />
@@ -184,6 +185,7 @@
       <Asset Guid="919546e3dacf13c4c9e26b7393c796fc" ResourceName="UI.UXTool" />
       <Asset Guid="91ddddbb4ac95e144b11eec367d27826" ResourceName="Auto/Combine/6274e2cf" />
       <Asset Guid="927853b6f24bb6c49ae06752fad056be" ResourceName="UI.UXTool" />
+      <Asset Guid="92d0b752ecf8cdf4cbf1dc2bf6c9e125" ResourceName="Res/Scene/SurvivorBattle" />
       <Asset Guid="943f3c476130c4f4f8ae55ef3ccd38ba" ResourceName="Res/Prefab/Skeleton/Texture/Skeleton_D" />
       <Asset Guid="94d28398aaf1dad4c8c2b147cba2ecb1" ResourceName="UI.UXTool" />
       <Asset Guid="951b3cc61016a524a851ac857f80de71" ResourceName="HybridCLR" />

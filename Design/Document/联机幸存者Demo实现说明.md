@@ -1,6 +1,6 @@
 # 联机幸存者 Demo 实现说明
 
-> 状态：第一版可编译玩法骨架  
+> 状态：第一版可玩闭环，已包含登录、房间和升级技能三选一
 > 架构基线：[联机幸存者Demo架构需求.md](./联机幸存者Demo架构需求.md)  
 > 伪代码：[联机幸存者Demo整体伪代码.md](./联机幸存者Demo整体伪代码.md)
 
@@ -13,19 +13,22 @@
 - 首位玩家为房主，房主开始，开局后禁止加入；
 - 玩家移动、怪物生成和追逐、接触伤害；
 - 自动射击、投射物命中、怪物死亡、经验掉落和拾取升级；
+- 升级后获得技能点，并由服务器提供急速射击、强力弹丸、迅捷步伐三选一；
+- 技能选择使用修订号校验，分别影响权威射击间隔、投射物伤害和移动速度；
 - ReactiveBinding 完整/增量快照；
 - 10 Hz 状态广播、序号缺口请求完整快照；
 - 客户端从权威数据重建 ET Entry Entity；
 - UGFEntity + SpriteRenderer 的玩家、怪物、投射物和拾取物表现；
-- UGFUIForm 的加房/开始界面和局内 HUD。
+- 进入对局后启用以本地玩家为中心的正交相机跟随；
+- UGFUIForm 的登录、加房/开始、局内 HUD 和技能选择界面；
 - 字段级 ReactiveBind 派生逻辑与快照提交后的 ReactiveBind 表现刷新。
 
 当前没有实现：
 
 - 客户端预测、表现插值；
 - 游戏中途加入和断线重连；
-- 升级三选一、Buff、Boss、复活和完整结算；
-- 新 Demo 的最终独立 Launcher/Scene 接入。
+- Buff、Boss、复活和完整结算；
+- 可选择的独立 Launcher/Scene 接入；当前启动配置直接使用 Survivor AppType。
 
 ## 2. 数据与 System 边界
 
@@ -90,7 +93,7 @@ Prefab 由 Unity AgentBridge 直接在编辑器中创建、挂载组件、绑定
 UGF 配置使用现有 ET Luban 表追加独立 ID：
 
 - Entity：81001–81004；
-- UIForm：9801–9802。
+- UIForm：9800–9803。
 
 协议源文件直接放入 ET 已有 Proto 目录，没有新增独立 Proto 目录或生成工程。
 
@@ -101,15 +104,9 @@ UGF 配置使用现有 ET Luban 表追加独立 ID：
 - Roslyn 语法扫描：35 个 Survivor System/Handler 均无局部变量、`foreach`、LINQ、闭包、局部函数或迭代器；
 - ReactiveBinding 冒烟测试：完整快照、嵌套增量、集合新增/删除和玩法 Tick 通过；
 - 字段级 HP/经验监听已由玩法冒烟测试覆盖；
-- AgentBridge 验证 4 个 Entity Prefab 的组件，以及 2 个 UI Prefab 的字段引用；
+- AgentBridge 验证 4 个 Entity Prefab 的组件，以及 4 个 UI Prefab 的字段引用；
 - Luban 二进制和编辑器 JSON 已导出并包含全部 Survivor Entity/UI 配置。
 
 ## 6. 启动边界
 
-为遵守“不修改现有 Demo”的要求，当前没有把 SurvivorOnline 自动挂入现有 Launcher 或 Demo 流程。客户端公开入口为：
-
-```csharp
-await SurvivorViewStarter.OpenLobby(root);
-```
-
-该入口会安装 `SurvivorClientComponent` 并打开加房界面。下一步需要确定独立启动方式，再接入新的 Unity Scene、Launcher 配置或启动参数；不应复用并修改现有 Demo 的业务入口。
+当前客户端 `AppType` 直接设置为 `Survivor`。初始化完成后先打开独立登录界面；只有收到 `LoginFinish` 才安装 `SurvivorClientComponent` 并进入加房界面。后续如需同时保留多个 Demo，应再增加可选择的独立 Launcher 或启动参数，而不是继续硬编码单一 `AppType`。

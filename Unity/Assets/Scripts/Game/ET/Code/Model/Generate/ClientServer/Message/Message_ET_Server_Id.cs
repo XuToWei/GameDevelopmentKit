@@ -43,5 +43,9 @@ namespace ET
          public const ushort SurvivorRoom2G_Start = 20037;
          public const ushort G2SurvivorRoom_Input = 20038;
          public const ushort G2SurvivorRoom_RequestFullSnapshot = 20039;
+         public const ushort G2SurvivorRoom_ChooseSkill = 20040;
+         public const ushort SurvivorRoom2G_ChooseSkill = 20041;
+         public const ushort G2SurvivorRoomManager_JoinRoom = 20042;
+         public const ushort SurvivorRoomManager2G_JoinRoom = 20043;
     }
 }

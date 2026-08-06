@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 
 namespace ET.Server
 {
-    [MessageHandler(SceneType.SurvivorRoom)]
+    [MessageHandler(SceneType.SurvivorRoomRoot)]
     public sealed class G2SurvivorRoom_StartHandler:
             MessageHandler<Scene, G2SurvivorRoom_Start, SurvivorRoom2G_Start>
     {
