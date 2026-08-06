@@ -31,4 +31,6 @@ public static class DiagnosticIds
     public const string ETReactiveStructEqualityRuleId = "ET1113";
 
     public const string ETReactiveUnusedSourceRuleId = "ET1114";
+
+    public const string ETReactiveBindNameofRuleId = "ET1115";
 }

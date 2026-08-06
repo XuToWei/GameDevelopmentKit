@@ -65,7 +65,7 @@ namespace UnityGameFramework.Extension
         {
             if (!s_IsSubscribeEvent)
             {
-                throw new Exception("Use await/async extensions must to subscribe event!");
+                throw new GameFrameworkException("Use await/async extensions must to subscribe event!");
             }
         }
 #endif

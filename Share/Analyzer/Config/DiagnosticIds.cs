@@ -65,5 +65,7 @@
         public const string DisableNewAnalyzerRuleId = "ET0031";
 
         public const string DisableNormalClassDeclaratonInModelAssemblyAnalyzerRuleId = "ET0032";
+
+        public const string DoubleUnderscoreFieldAccessAnalyzerRuleId = "ET0033";
     }
 }
