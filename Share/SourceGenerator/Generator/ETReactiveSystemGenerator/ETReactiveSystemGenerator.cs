@@ -130,41 +130,13 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 continue;
             }
 
-            bool valid = true;
-            List<SourceModel> sources = new();
-            foreach (IPropertySymbol property in GetAttributedProperties(host, SourceAttributeName))
-            {
-                if (!IsValidSourceSignature(property))
-                {
-                    Report(context, ETReactiveDiagnosticRules.SourceSignature, GetLocation(property, declaration), property.Name);
-                    valid = false;
-                    continue;
-                }
-
-                bool isVersioned = ImplementsInterface(property.Type, versionInterface);
-                if (!IsSupportedSourceType(property.Type, isVersioned))
-                {
-                    Report(context, ETReactiveDiagnosticRules.UnsupportedSourceType, GetLocation(property, declaration), property.Name, property.Type.ToDisplayString());
-                    valid = false;
-                    continue;
-                }
-
-                if (IsCustomStructWithoutEqualityOperator(property.Type, isVersioned))
-                {
-                    Report(context, ETReactiveDiagnosticRules.StructEquality, GetLocation(property, declaration), property.Name, property.Type.ToDisplayString());
-                    valid = false;
-                    continue;
-                }
-
-                sources.Add(new SourceModel(property, isVersioned));
-            }
+            List<SourceModel> sources = CollectSources(context, declaration, host, versionInterface, out bool valid);
 
             if (!valid)
             {
                 continue;
             }
 
-            sources.Sort(static (left, right) => StringComparer.Ordinal.Compare(left.Id, right.Id));
             context.AddSource(
                 $"ETReactiveHostGenerator.{GetMetadataName(host)}.g.cs",
                 EmitReactiveHost(host, sources));
@@ -236,35 +208,9 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         List<IMethodSymbol> bindMethods = GetAttributedMethods(system, BindAttributeName);
 
         INamedTypeSymbol? versionInterface = context.Compilation.GetTypeByMetadataName(VersionInterfaceName);
-        List<SourceModel> sources = new();
-        foreach (IPropertySymbol property in GetAttributedProperties(owner, SourceAttributeName))
-        {
-            if (!IsValidSourceSignature(property))
-            {
-                Report(context, ETReactiveDiagnosticRules.SourceSignature, GetLocation(property, declaration), property.Name);
-                valid = false;
-                continue;
-            }
+        List<SourceModel> sources = CollectSources(context, declaration, owner, versionInterface, out bool sourcesValid);
+        valid &= sourcesValid;
 
-            bool isVersioned = ImplementsInterface(property.Type, versionInterface);
-            if (!IsSupportedSourceType(property.Type, isVersioned))
-            {
-                Report(context, ETReactiveDiagnosticRules.UnsupportedSourceType, GetLocation(property, declaration), property.Name, property.Type.ToDisplayString());
-                valid = false;
-                continue;
-            }
-
-            if (IsCustomStructWithoutEqualityOperator(property.Type, isVersioned))
-            {
-                Report(context, ETReactiveDiagnosticRules.StructEquality, GetLocation(property, declaration), property.Name, property.Type.ToDisplayString());
-                valid = false;
-                continue;
-            }
-
-            sources.Add(new SourceModel(property, isVersioned));
-        }
-
-        sources.Sort(static (left, right) => StringComparer.Ordinal.Compare(left.Id, right.Id));
         Dictionary<string, SourceModel> sourceById = new(StringComparer.Ordinal);
         foreach (SourceModel source in sources)
         {
@@ -280,6 +226,16 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             AttributeData bindAttribute = GetAttribute(method, BindAttributeName)!;
             List<string> reactiveIds = GetReactiveIds(bindAttribute);
             bool bindValid = true;
+
+            if (reactiveIds.Count > 0 && !UsesOnlyNameofArguments(bindAttribute))
+            {
+                Report(
+                    context,
+                    ETReactiveDiagnosticRules.BindNameof,
+                    GetAttributeLocation(bindAttribute, method, declaration),
+                    method.Name);
+                bindValid = false;
+            }
 
             if (reactiveIds.Count == 0 || reactiveIds.Any(static id => string.IsNullOrWhiteSpace(id)))
             {
@@ -361,7 +317,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             Report(
                 context,
                 ETReactiveDiagnosticRules.UnusedSource,
-                GetLocation(source.Property, declaration),
+                GetLocation(source.Member, declaration),
                 source.Id);
         }
 
@@ -416,26 +372,94 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 .ToList();
     }
 
-    private static List<IPropertySymbol> GetAttributedProperties(INamedTypeSymbol owner, string attributeName)
+    private static List<SourceModel> CollectSources(GeneratorExecutionContext context, ClassDeclarationSyntax declaration, INamedTypeSymbol owner, INamedTypeSymbol? versionInterface, out bool valid)
+    {
+        valid = true;
+        List<SourceModel> sources = new();
+        foreach (ISymbol member in GetAttributedSourceMembers(owner, SourceAttributeName))
+        {
+            if (!TryGetSourceType(member, out ITypeSymbol sourceType))
+            {
+                Report(context, ETReactiveDiagnosticRules.SourceSignature, GetLocation(member, declaration), member.Name);
+                valid = false;
+                continue;
+            }
+
+            bool isVersioned = ImplementsInterface(sourceType, versionInterface);
+            if (!IsSupportedSourceType(sourceType, isVersioned))
+            {
+                Report(context, ETReactiveDiagnosticRules.UnsupportedSourceType, GetLocation(member, declaration), member.Name, sourceType.ToDisplayString());
+                valid = false;
+                continue;
+            }
+
+            if (IsCustomStructWithoutEqualityOperator(sourceType, isVersioned))
+            {
+                Report(context, ETReactiveDiagnosticRules.StructEquality, GetLocation(member, declaration), member.Name, sourceType.ToDisplayString());
+                valid = false;
+                continue;
+            }
+
+            sources.Add(new SourceModel(member, sourceType, isVersioned));
+        }
+
+        sources.Sort(static (left, right) => StringComparer.Ordinal.Compare(left.Id, right.Id));
+        foreach (IGrouping<string, SourceModel> duplicate in sources.GroupBy(static source => source.Id, StringComparer.Ordinal).Where(static group => group.Count() > 1))
+        {
+            foreach (SourceModel source in duplicate.Skip(1))
+            {
+                Report(context, ETReactiveDiagnosticRules.DuplicateSource, GetLocation(source.Member, declaration), source.Id, owner.ToDisplayString());
+            }
+
+            valid = false;
+        }
+
+        return sources;
+    }
+
+    private static List<ISymbol> GetAttributedSourceMembers(INamedTypeSymbol owner, string attributeName)
     {
         return owner.GetMembers()
-                .OfType<IPropertySymbol>()
-                .Where(property => !property.IsImplicitlyDeclared && GetAttribute(property, attributeName) != null)
-                .OrderBy(static property => property.Name, StringComparer.Ordinal)
+                .Where(static member => member is IFieldSymbol or IPropertySymbol or IMethodSymbol)
+                .Where(member => !member.IsImplicitlyDeclared && GetAttribute(member, attributeName) != null)
+                .OrderBy(static member => member.Name, StringComparer.Ordinal)
+                .ThenBy(static member => member.ToDisplayString(), StringComparer.Ordinal)
                 .ToList();
     }
 
-    private static bool IsValidSourceSignature(IPropertySymbol property)
+    private static bool TryGetSourceType(ISymbol member, out ITypeSymbol sourceType)
     {
-        return !property.IsStatic &&
-               property.DeclaredAccessibility == Accessibility.Public &&
-               property.GetMethod != null &&
-               property.Parameters.Length == 0 &&
-               property.RefKind == RefKind.None &&
-               property.Type.TypeKind != TypeKind.Error &&
-               property.Type.TypeKind != TypeKind.Pointer &&
-               property.Type.TypeKind != TypeKind.FunctionPointer &&
-               !property.Type.IsRefLikeType;
+        ITypeSymbol? resolvedType = member switch
+        {
+            IFieldSymbol { IsStatic: false, DeclaredAccessibility: Accessibility.Public } field => field.Type,
+            IPropertySymbol
+            {
+                IsStatic: false,
+                DeclaredAccessibility: Accessibility.Public,
+                GetMethod.DeclaredAccessibility: Accessibility.Public,
+                Parameters.Length: 0,
+                RefKind: RefKind.None,
+            } property => property.Type,
+            IMethodSymbol
+            {
+                MethodKind: MethodKind.Ordinary,
+                IsStatic: false,
+                DeclaredAccessibility: Accessibility.Public,
+                Arity: 0,
+                ReturnsVoid: false,
+                ReturnsByRef: false,
+                ReturnsByRefReadonly: false,
+                Parameters.Length: 0,
+            } method => method.ReturnType,
+            _ => null,
+        };
+
+        sourceType = resolvedType!;
+        return resolvedType != null &&
+               resolvedType.TypeKind != TypeKind.Error &&
+               resolvedType.TypeKind != TypeKind.Pointer &&
+               resolvedType.TypeKind != TypeKind.FunctionPointer &&
+               !resolvedType.IsRefLikeType;
     }
 
     private static bool IsValidBindSignature(
@@ -553,6 +577,41 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         }
 
         return result;
+    }
+
+    private static bool UsesOnlyNameofArguments(AttributeData attribute)
+    {
+        if (attribute.ApplicationSyntaxReference?.GetSyntax() is not AttributeSyntax attributeSyntax || attributeSyntax.ArgumentList == null)
+        {
+            return true;
+        }
+
+        return attributeSyntax.ArgumentList.Arguments.Count > 0 && attributeSyntax.ArgumentList.Arguments.All(static argument => IsNameofSourceExpression(argument.Expression));
+    }
+
+    private static bool IsNameofSourceExpression(ExpressionSyntax expression)
+    {
+        while (expression is ParenthesizedExpressionSyntax parenthesized)
+        {
+            expression = parenthesized.Expression;
+        }
+
+        if (expression is InvocationExpressionSyntax
+            {
+                Expression: IdentifierNameSyntax identifier,
+                ArgumentList.Arguments.Count: 1,
+            } && identifier.Identifier.Text == "nameof")
+        {
+            return true;
+        }
+
+        InitializerExpressionSyntax? initializer = expression switch
+        {
+            ArrayCreationExpressionSyntax arrayCreation => arrayCreation.Initializer,
+            ImplicitArrayCreationExpressionSyntax implicitArrayCreation => implicitArrayCreation.Initializer,
+            _ => null,
+        };
+        return initializer != null && initializer.Expressions.Count > 0 && initializer.Expressions.All(static item => IsNameofSourceExpression(item));
     }
 
     private static bool ValidateGeneratedMethodCollision(
@@ -811,7 +870,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         foreach (SourceModel source in sources)
         {
             string token = source.Id;
-            code.Append(statementIndentation).Append("    self.__ETReactive").Append(token).Append(" = self.").Append(EscapeIdentifier(source.Property.Name)).AppendLine(";");
+            code.Append(statementIndentation).Append("    self.__ETReactive").Append(token).Append(" = ").Append(source.ReadExpression).AppendLine(";");
             if (source.IsVersioned)
             {
                 code.Append(statementIndentation).Append("    self.__ETReactive").Append(token).Append("Version = global::System.Object.ReferenceEquals(self.__ETReactive").Append(token).Append(", null) ? -1 : ((global::ReactiveBinding.IVersion)(object)self.__ETReactive").Append(token).AppendLine(").__Version;");
@@ -832,7 +891,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             string token = source.Id;
             string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             code.Append(statementIndentation).Append(typeName).Append(" __old_").Append(token).Append(" = self.__ETReactive").Append(token).AppendLine(";");
-            code.Append(statementIndentation).Append(typeName).Append(" __current_").Append(token).Append(" = self.").Append(EscapeIdentifier(source.Property.Name)).AppendLine(";");
+            code.Append(statementIndentation).Append(typeName).Append(" __current_").Append(token).Append(" = ").Append(source.ReadExpression).AppendLine(";");
             if (source.IsVersioned)
             {
                 code.Append(statementIndentation).Append("int __current_").Append(token).Append("Version = global::System.Object.ReferenceEquals(__current_").Append(token).Append(", null) ? -1 : ((global::ReactiveBinding.IVersion)(object)__current_").Append(token).AppendLine(").__Version;");
@@ -1053,6 +1112,11 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         return symbol.Locations.FirstOrDefault(static location => location.IsInSource) ?? fallback.Identifier.GetLocation();
     }
 
+    private static Location GetAttributeLocation(AttributeData attribute, ISymbol symbol, ClassDeclarationSyntax fallback)
+    {
+        return attribute.ApplicationSyntaxReference?.GetSyntax().GetLocation() ?? GetLocation(symbol, fallback);
+    }
+
     private static void Report(
         GeneratorExecutionContext context,
         DiagnosticDescriptor descriptor,
@@ -1097,19 +1161,20 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
 
     private sealed class SourceModel
     {
-        public SourceModel(IPropertySymbol property, bool isVersioned)
+        public SourceModel(ISymbol member, ITypeSymbol type, bool isVersioned)
         {
-            this.Property = property;
+            this.Member = member;
+            this.Type = type;
             this.IsVersioned = isVersioned;
         }
 
-        public IPropertySymbol Property { get; }
+        public ISymbol Member { get; }
 
-        public IMethodSymbol Method => this.Property.GetMethod!;
+        public string Id => this.Member.Name;
 
-        public string Id => this.Property.Name;
+        public ITypeSymbol Type { get; }
 
-        public ITypeSymbol Type => this.Property.Type;
+        public string ReadExpression => this.Member is IMethodSymbol ? $"self.{EscapeIdentifier(this.Id)}()" : $"self.{EscapeIdentifier(this.Id)}";
 
         public bool IsVersioned { get; }
     }

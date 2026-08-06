@@ -46,12 +46,12 @@ public static class ETReactiveDiagnosticRules
     public static readonly DiagnosticDescriptor SourceSignature = Create(
         DiagnosticIds.ETReactiveSourceSignatureRuleId,
         "ET Reactive source 签名无效",
-        "Reactive source '{0}' 必须是 public、实例、可读、非索引器且类型受支持的 Entity 属性");
+        "Reactive source '{0}' 必须是 Entity 的 public 实例字段、可读非索引属性，或无参非泛型且有返回值的方法");
 
     public static readonly DiagnosticDescriptor DuplicateSource = Create(
         DiagnosticIds.ETReactiveDuplicateSourceRuleId,
         "ET Reactive source ID 重复",
-        "Reactive source ID '{0}' 在 System '{1}' 中重复");
+        "Reactive source ID '{0}' 在 owner '{1}' 中重复");
 
     public static readonly DiagnosticDescriptor MissingSource = Create(
         DiagnosticIds.ETReactiveMissingSourceRuleId,
@@ -62,6 +62,11 @@ public static class ETReactiveDiagnosticRules
         DiagnosticIds.ETReactiveDuplicateBindSourceRuleId,
         "ET Reactive bind source ID 重复",
         "Reactive bind '{0}' 包含重复的 source ID: {1}");
+
+    public static readonly DiagnosticDescriptor BindNameof = Create(
+        DiagnosticIds.ETReactiveBindNameofRuleId,
+        "ET Reactive bind 必须使用 nameof",
+        "Reactive bind '{0}' 的 source ID 必须直接使用 nameof(...)，不能使用字符串字面量或字符串常量");
 
     public static readonly DiagnosticDescriptor BindSignature = Create(
         DiagnosticIds.ETReactiveBindSignatureRuleId,
@@ -81,7 +86,7 @@ public static class ETReactiveDiagnosticRules
     public static readonly DiagnosticDescriptor UnsupportedSourceType = Create(
         DiagnosticIds.ETReactiveUnsupportedSourceTypeRuleId,
         "ET Reactive source 类型不受支持",
-        "Reactive source '{0}' 的属性类型 '{1}' 必须是值类型、string 或 ReactiveBinding.IVersion；object、dynamic 和普通引用类型不受支持");
+        "Reactive source '{0}' 的成员类型 '{1}' 必须是值类型、string 或 ReactiveBinding.IVersion；object、dynamic 和普通引用类型不受支持");
 
     public static readonly DiagnosticDescriptor StructEquality = Create(
         DiagnosticIds.ETReactiveStructEqualityRuleId,

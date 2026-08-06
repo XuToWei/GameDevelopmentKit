@@ -45,7 +45,7 @@ namespace Game.Editor
             string repositoryRoot = ResolveRepositoryRoot();
             string binDirectory = Path.Combine(repositoryRoot, "Bin");
             TaskScheduler mainThreadScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-            return RunToolAsync(binDirectory, action, format).ContinueWith<object>(task =>
+            return Task.Run(() => RunTool(binDirectory, action, format)).ContinueWith<object>(task =>
                 Complete(task.GetAwaiter().GetResult(), action, format),
                 CancellationToken.None,
                 TaskContinuationOptions.ExecuteSynchronously,
@@ -102,12 +102,6 @@ namespace Game.Editor
     }
   }
 }");
-
-        private static Task<ProcessResult> RunToolAsync(
-            string binDirectory, string action, string format)
-        {
-            return Task.Run(() => RunTool(binDirectory, action, format));
-        }
 
         private static ProcessResult RunTool(
             string binDirectory, string action, string format)

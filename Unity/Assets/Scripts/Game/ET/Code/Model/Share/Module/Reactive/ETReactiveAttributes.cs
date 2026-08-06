@@ -12,9 +12,9 @@ namespace ET
     }
 
     /// <summary>
-    /// Marks a readable Entity property as a reactive source.
+    /// Marks a readable Entity field, property, or parameterless value-returning method as a reactive source.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
     public sealed class ETReactiveSourceAttribute: BaseAttribute
     {
     }

@@ -16,7 +16,7 @@ namespace Game
                 return UniTask.FromException(new GameFrameworkException(error));
             }
             string assetName = AssetUtility.GetSceneAsset(drScene.AssetName);
-            return sceneComponent.LoadSceneAsync(assetName, Constant.AssetPriority.SceneAsset);
+            return sceneComponent.LoadSceneAsync(assetName);
         }
 
         public static UniTask UnloadSceneAsync(this SceneComponent sceneComponent, int sceneId)

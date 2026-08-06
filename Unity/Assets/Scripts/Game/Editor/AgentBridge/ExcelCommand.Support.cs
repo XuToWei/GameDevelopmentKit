@@ -542,7 +542,7 @@ namespace Game.Editor
             }
 
             var result = new HeaderInfo { RowIndex = rowIndex };
-            for (int columnIndex = Math.Max(0, row.FirstCellNum);
+            for (int columnIndex = Math.Max(0, (int)row.FirstCellNum);
                  columnIndex < row.LastCellNum; columnIndex++)
             {
                 string name = SafeCellText(row.GetCell(columnIndex))?.Trim();
