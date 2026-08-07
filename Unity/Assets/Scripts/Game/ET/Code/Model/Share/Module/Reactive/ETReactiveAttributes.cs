@@ -9,6 +9,15 @@ namespace ET
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class ETReactiveSystemAttribute: BaseAttribute
     {
+        /// <summary>
+        /// Throttles ObserveChanges to execute every N invocations. Default is 1 (no throttle).
+        /// </summary>
+        public int ThrottleCount { get; }
+
+        public ETReactiveSystemAttribute(int throttleCount = 1)
+        {
+            this.ThrottleCount = throttleCount;
+        }
     }
 
     /// <summary>
