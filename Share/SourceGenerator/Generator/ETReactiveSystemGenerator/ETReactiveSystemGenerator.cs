@@ -21,7 +21,6 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
     private const string VersionInterfaceName = "ReactiveBinding.IVersion";
     private const string ObserveMethodName = "ObserveChanges";
     private const string ResetMethodName = "ResetReactive";
-    private const string ClearMethodName = "ClearReactive";
 
     public void Initialize(GeneratorInitializationContext context)
     {
@@ -35,15 +34,18 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             return;
         }
 
-        GenerateReactiveHosts(context, receiver.HostDeclarations);
-        if (receiver.SystemDeclarations.Count == 0)
+        List<ClassDeclarationSyntax> hostDeclarations = OrderSyntaxNodes(receiver.HostDeclarations).ToList();
+        List<ClassDeclarationSyntax> systemDeclarations = OrderSyntaxNodes(receiver.SystemDeclarations).ToList();
+
+        GenerateReactiveHosts(context, hostDeclarations);
+        if (systemDeclarations.Count == 0)
         {
             return;
         }
 
         HashSet<INamedTypeSymbol> processedSystems = new(SymbolEqualityComparer.Default);
         List<SystemCandidate> candidates = new();
-        foreach (ClassDeclarationSyntax declaration in receiver.SystemDeclarations)
+        foreach (ClassDeclarationSyntax declaration in systemDeclarations)
         {
             SemanticModel semanticModel = context.Compilation.GetSemanticModel(declaration.SyntaxTree);
             if (semanticModel.GetDeclaredSymbol(declaration, context.CancellationToken) is not INamedTypeSymbol system ||
@@ -301,18 +303,12 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             }
         }
 
-        binds.Sort(static (left, right) =>
-        {
-            int nameResult = StringComparer.Ordinal.Compare(left.Method.Name, right.Method.Name);
-            return nameResult != 0
-                    ? nameResult
-                    : StringComparer.Ordinal.Compare(left.Method.ToDisplayString(), right.Method.ToDisplayString());
-        });
-
-        HashSet<string> usedSourceIds = new(
-            binds.SelectMany(static bind => bind.ReactiveIds),
-            StringComparer.Ordinal);
-        foreach (SourceModel source in sources.Where(source => !usedSourceIds.Contains(source.Id)))
+        List<string> usedSourceIds = binds
+                .SelectMany(static bind => bind.ReactiveIds)
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
+        HashSet<string> usedSourceIdSet = new(usedSourceIds, StringComparer.Ordinal);
+        foreach (SourceModel source in sources.Where(source => !usedSourceIdSet.Contains(source.Id)))
         {
             Report(
                 context,
@@ -321,17 +317,17 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 source.Id);
         }
 
-        sources.RemoveAll(source => !usedSourceIds.Contains(source.Id));
+        sources = usedSourceIds.Select(id => sourceById[id]).ToList();
         valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ObserveMethodName);
         valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ResetMethodName);
-        valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ClearMethodName);
+        valid &= ValidateThrottle(context, declaration, system);
 
         if (!valid)
         {
             return;
         }
 
-        string generatedCode = Emit(system, owner, sources, binds);
+        string generatedCode = Emit(system, owner, sources, binds, GetThrottleCallCount(system));
 
         context.AddSource(
             $"ETReactiveSystemGenerator.{GetMetadataName(system)}.g.cs",
@@ -344,8 +340,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         out INamedTypeSymbol? owner)
     {
         owner = null;
-        if (!string.Equals(attribute.AttributeClass?.ToDisplayString(), SystemAttributeName, StringComparison.Ordinal) ||
-            attribute.ConstructorArguments.Length != 0)
+        if (!string.Equals(attribute.AttributeClass?.ToDisplayString(), SystemAttributeName, StringComparison.Ordinal))
         {
             return false;
         }
@@ -362,13 +357,78 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         return true;
     }
 
+    /// <summary>
+    /// 节流值从 System 的 ETReactiveSystemAttribute.ThrottleCount 读取。
+    /// </summary>
+    private static int GetThrottleCallCount(INamedTypeSymbol system)
+    {
+        if (!TryGetSystemAttribute(system, out AttributeData? attribute) || attribute == null)
+        {
+            return 1;
+        }
+
+        // 先检查命名参数
+        foreach (var namedArg in attribute.NamedArguments)
+        {
+            if (namedArg.Key == "ThrottleCount" && namedArg.Value.Value is int callCount)
+            {
+                return callCount;
+            }
+        }
+
+        // 再检查构造函数参数
+        if (attribute.ConstructorArguments.Length > 0 && attribute.ConstructorArguments[0].Value is int ctorCallCount)
+        {
+            return ctorCallCount;
+        }
+
+        return 1;
+    }
+
+    private static bool ValidateThrottle(GeneratorExecutionContext context, ClassDeclarationSyntax systemDeclaration, INamedTypeSymbol system)
+    {
+        if (!TryGetSystemAttribute(system, out AttributeData? attribute) || attribute == null)
+        {
+            return true;
+        }
+
+        int? callCount = null;
+
+        // 检查命名参数
+        foreach (var namedArg in attribute.NamedArguments)
+        {
+            if (namedArg.Key == "ThrottleCount" && namedArg.Value.Value is int value)
+            {
+                callCount = value;
+                break;
+            }
+        }
+
+        // 检查构造函数参数
+        if (callCount == null && attribute.ConstructorArguments.Length > 0 && attribute.ConstructorArguments[0].Value is int ctorValue)
+        {
+            callCount = ctorValue;
+        }
+
+        if (callCount.HasValue && callCount.Value < 1)
+        {
+            Report(
+                context,
+                ETReactiveDiagnosticRules.ThrottleValue,
+                GetAttributeLocation(attribute, system, systemDeclaration),
+                system.ToDisplayString(),
+                callCount.Value.ToString());
+            return false;
+        }
+
+        return true;
+    }
+
     private static List<IMethodSymbol> GetAttributedMethods(INamedTypeSymbol system, string attributeName)
     {
-        return system.GetMembers()
+        return OrderSymbols(system.GetMembers()
                 .OfType<IMethodSymbol>()
-                .Where(method => !method.IsImplicitlyDeclared && GetAttribute(method, attributeName) != null)
-                .OrderBy(static method => method.Name, StringComparer.Ordinal)
-                .ThenBy(static method => method.ToDisplayString(), StringComparer.Ordinal)
+                .Where(method => !method.IsImplicitlyDeclared && GetAttribute(method, attributeName) != null))
                 .ToList();
     }
 
@@ -403,7 +463,6 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             sources.Add(new SourceModel(member, sourceType, isVersioned));
         }
 
-        sources.Sort(static (left, right) => StringComparer.Ordinal.Compare(left.Id, right.Id));
         foreach (IGrouping<string, SourceModel> duplicate in sources.GroupBy(static source => source.Id, StringComparer.Ordinal).Where(static group => group.Count() > 1))
         {
             foreach (SourceModel source in duplicate.Skip(1))
@@ -419,12 +478,68 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
 
     private static List<ISymbol> GetAttributedSourceMembers(INamedTypeSymbol owner, string attributeName)
     {
-        return owner.GetMembers()
+        return OrderSymbols(owner.GetMembers()
                 .Where(static member => member is IFieldSymbol or IPropertySymbol or IMethodSymbol)
-                .Where(member => !member.IsImplicitlyDeclared && GetAttribute(member, attributeName) != null)
-                .OrderBy(static member => member.Name, StringComparer.Ordinal)
-                .ThenBy(static member => member.ToDisplayString(), StringComparer.Ordinal)
+                .Where(member => !member.IsImplicitlyDeclared && GetAttribute(member, attributeName) != null))
                 .ToList();
+    }
+
+    private static IOrderedEnumerable<TNode> OrderSyntaxNodes<TNode>(IEnumerable<TNode> nodes)
+        where TNode: SyntaxNode
+    {
+        return nodes
+                .OrderBy(static node => GetSyntaxTreeKey(node.SyntaxTree), StringComparer.Ordinal)
+                .ThenBy(static node => node.SpanStart)
+                .ThenBy(static node => node.RawKind);
+    }
+
+    private static IOrderedEnumerable<TSymbol> OrderSymbols<TSymbol>(IEnumerable<TSymbol> symbols)
+        where TSymbol: ISymbol
+    {
+        return symbols
+                .OrderBy(static symbol => GetSyntaxTreeKey(GetSourceLocation(symbol)), StringComparer.Ordinal)
+                .ThenBy(static symbol => GetSourceStart(GetSourceLocation(symbol)))
+                .ThenBy(static symbol => (int)symbol.Kind)
+                .ThenBy(static symbol => symbol.ToDisplayString(), StringComparer.Ordinal);
+    }
+
+    private static Location GetSourceLocation(ISymbol symbol)
+    {
+        foreach (Location location in symbol.Locations)
+        {
+            if (location.IsInSource)
+            {
+                return location;
+            }
+        }
+
+        return Location.None;
+    }
+
+    private static int GetSourceStart(Location location)
+    {
+        return location.IsInSource ? location.SourceSpan.Start : int.MaxValue;
+    }
+
+    private static string GetSyntaxTreeKey(Location location)
+    {
+        return location.SourceTree is SyntaxTree syntaxTree ? GetSyntaxTreeKey(syntaxTree) : "N:";
+    }
+
+    private static string GetSyntaxTreeKey(SyntaxTree syntaxTree)
+    {
+        if (!string.IsNullOrEmpty(syntaxTree.FilePath))
+        {
+            return $"P:{syntaxTree.FilePath.Replace('\\', '/')}";
+        }
+
+        StringBuilder key = new("C:");
+        foreach (byte value in syntaxTree.GetText().GetChecksum())
+        {
+            key.Append(value.ToString("x2"));
+        }
+
+        return key.ToString();
     }
 
     private static bool TryGetSourceType(ISymbol member, out ITypeSymbol sourceType)
@@ -825,7 +940,8 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         INamedTypeSymbol system,
         INamedTypeSymbol owner,
         IReadOnlyList<SourceModel> sources,
-        IReadOnlyList<BindModel> binds)
+        IReadOnlyList<BindModel> binds,
+        int throttleCallCount)
     {
         StringBuilder code = new();
         code.AppendLine("// <auto-generated/>");
@@ -865,6 +981,16 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         code.Append(statementIndentation).AppendLine("    return;");
         code.Append(statementIndentation).AppendLine("}");
         code.AppendLine();
+        if (throttleCallCount > 1)
+        {
+            code.Append(statementIndentation).Append("if (self.__ETReactiveInitialized && ++self.__ETReactiveCallCount < ").Append(throttleCallCount).AppendLine(")");
+            code.Append(statementIndentation).AppendLine("{");
+            code.Append(statementIndentation).AppendLine("    return;");
+            code.Append(statementIndentation).AppendLine("}");
+            code.Append(statementIndentation).AppendLine("self.__ETReactiveCallCount = 0;");
+            code.AppendLine();
+        }
+
         code.Append(statementIndentation).AppendLine("if (!self.__ETReactiveInitialized)");
         code.Append(statementIndentation).AppendLine("{");
         foreach (SourceModel source in sources)
@@ -878,7 +1004,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         }
 
         code.Append(statementIndentation).AppendLine("    self.__ETReactiveInitialized = true;");
-        foreach (BindModel bind in binds.Where(static bind => !IsTransitionBind(bind)))
+        foreach (BindModel bind in binds)
         {
             AppendEntityBindCall(code, statementIndentation + "    ", systemType, bind, static id => $"self.__ETReactive{id}", static id => $"self.__ETReactive{id}");
         }
@@ -886,42 +1012,64 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         code.Append(statementIndentation).AppendLine("    return;");
         code.Append(statementIndentation).AppendLine("}");
         code.AppendLine();
+        HashSet<string> sourcesNeedingFlags = new(
+            multiBinds.SelectMany(static bind => bind.ReactiveIds),
+            StringComparer.Ordinal);
+        HashSet<string> sourcesNeedingOldValues = new(
+            binds.Where(static bind => IsTransitionBind(bind)).SelectMany(static bind => bind.ReactiveIds),
+            StringComparer.Ordinal);
         foreach (SourceModel source in sources)
         {
             string token = source.Id;
             string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            code.Append(statementIndentation).Append(typeName).Append(" __old_").Append(token).Append(" = self.__ETReactive").Append(token).AppendLine(";");
+            if (sourcesNeedingFlags.Contains(source.Id))
+            {
+                code.Append(statementIndentation).Append("bool __changed_").Append(token).AppendLine(" = false;");
+            }
+
+            if (!source.IsVersioned && sourcesNeedingOldValues.Contains(source.Id))
+            {
+                code.Append(statementIndentation).Append(typeName).Append(" __old_").Append(token).Append(" = self.__ETReactive").Append(token).AppendLine(";");
+            }
+        }
+
+        code.AppendLine();
+        foreach (SourceModel source in sources)
+        {
+            string token = source.Id;
+            string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             code.Append(statementIndentation).Append(typeName).Append(" __current_").Append(token).Append(" = ").Append(source.ReadExpression).AppendLine(";");
             if (source.IsVersioned)
             {
                 code.Append(statementIndentation).Append("int __current_").Append(token).Append("Version = global::System.Object.ReferenceEquals(__current_").Append(token).Append(", null) ? -1 : ((global::ReactiveBinding.IVersion)(object)__current_").Append(token).AppendLine(").__Version;");
-                code.Append(statementIndentation).Append("bool __changed_").Append(token).Append(" = !global::System.Object.ReferenceEquals(__current_").Append(token).Append(", self.__ETReactive").Append(token).Append(") || __current_").Append(token).Append("Version != self.__ETReactive").Append(token).AppendLine("Version;");
+                code.Append(statementIndentation).Append("if (!global::System.Object.ReferenceEquals(__current_").Append(token).Append(", self.__ETReactive").Append(token).Append(") || __current_").Append(token).Append("Version != self.__ETReactive").Append(token).AppendLine("Version)");
             }
             else
             {
-                code.Append(statementIndentation).Append("bool __changed_").Append(token).Append(" = ").Append(GetInequalityExpression(source.Type, $"self.__ETReactive{token}", $"__current_{token}")).AppendLine(";");
+                code.Append(statementIndentation).Append("if (").Append(GetInequalityExpression(source.Type, $"__current_{token}", $"self.__ETReactive{token}")).AppendLine(")");
             }
 
-            code.Append(statementIndentation).Append("if (__changed_").Append(token).AppendLine(")");
             code.Append(statementIndentation).AppendLine("{");
+            if (sourcesNeedingFlags.Contains(source.Id))
+            {
+                code.Append(statementIndentation).Append("    __changed_").Append(token).AppendLine(" = true;");
+            }
+
             code.Append(statementIndentation).Append("    self.__ETReactive").Append(token).Append(" = __current_").Append(token).AppendLine(";");
             if (source.IsVersioned)
             {
                 code.Append(statementIndentation).Append("    self.__ETReactive").Append(token).Append("Version = __current_").Append(token).AppendLine("Version;");
             }
 
-            code.Append(statementIndentation).AppendLine("}");
             if (singleBindsBySource.TryGetValue(source.Id, out List<BindModel>? singleBinds))
             {
                 foreach (BindModel bind in singleBinds)
                 {
-                    code.Append(statementIndentation).Append("if (__changed_").Append(token).AppendLine(")");
-                    code.Append(statementIndentation).AppendLine("{");
                     AppendEntityBindCall(code, statementIndentation + "    ", systemType, bind, static id => $"__old_{id}", static id => $"self.__ETReactive{id}");
-                    code.Append(statementIndentation).AppendLine("}");
                 }
             }
 
+            code.Append(statementIndentation).AppendLine("}");
             code.AppendLine();
         }
 
@@ -939,20 +1087,6 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         code.Append(bodyIndentation).Append("public static void ").Append(ResetMethodName).Append("(this ").Append(ownerType).AppendLine(" self)");
         code.Append(bodyIndentation).AppendLine("{");
         code.Append(statementIndentation).AppendLine("self.__ETReactiveInitialized = false;");
-        code.Append(bodyIndentation).AppendLine("}");
-        code.AppendLine();
-        code.Append(bodyIndentation).Append("public static void ").Append(ClearMethodName).Append("(this ").Append(ownerType).AppendLine(" self)");
-        code.Append(bodyIndentation).AppendLine("{");
-        code.Append(statementIndentation).AppendLine("self.__ETReactiveInitialized = false;");
-        foreach (SourceModel source in sources)
-        {
-            code.Append(statementIndentation).Append("self.__ETReactive").Append(source.Id).AppendLine(" = default;");
-            if (source.IsVersioned)
-            {
-                code.Append(statementIndentation).Append("self.__ETReactive").Append(source.Id).AppendLine("Version = -1;");
-            }
-        }
-
         code.Append(bodyIndentation).AppendLine("}");
         code.Append(indentation).AppendLine("}");
         if (!system.ContainingNamespace.IsGlobalNamespace)
@@ -1025,6 +1159,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         }
 
         AppendReactiveField(code, indentation, "public bool __ETReactiveInitialized;");
+
         foreach (SourceModel source in sources)
         {
             string typeName = source.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);

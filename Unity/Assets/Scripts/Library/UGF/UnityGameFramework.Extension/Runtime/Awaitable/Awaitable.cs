@@ -1,4 +1,3 @@
-using System;
 using GameFramework;
 using UnityGameFramework.Runtime;
 
@@ -7,7 +6,7 @@ namespace UnityGameFramework.Extension
     public static partial class Awaitable
     {
         public static bool IsValid { private set; get; }
-        
+
 #if UNITY_EDITOR
         private static bool s_IsSubscribeEvent = false;
 #endif
