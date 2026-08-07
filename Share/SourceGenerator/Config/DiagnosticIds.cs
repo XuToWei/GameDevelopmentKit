@@ -33,4 +33,6 @@ public static class DiagnosticIds
     public const string ETReactiveUnusedSourceRuleId = "ET1114";
 
     public const string ETReactiveBindNameofRuleId = "ET1115";
+
+    public const string ETReactiveThrottleValueRuleId = "ET1116";
 }
