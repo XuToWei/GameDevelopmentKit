@@ -34,7 +34,7 @@ namespace ET.Client
         [UGFEntitySystem]
         private static void UGFEntityOnHide(this SurvivorMonsterUGFEntity self, bool isShutdown)
         {
-            self.ClearReactive();
+            self.ResetReactive();
             self.PresentationPosition.Reset();
             self.Entry = null;
         }

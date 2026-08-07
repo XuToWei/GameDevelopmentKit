@@ -32,7 +32,7 @@ namespace ET.Client
         [UGFUIFormSystem]
         private static void UGFUIFormOnClose(this UIFormSurvivorSkillChoiceComponent self, bool isShutdown)
         {
-            self.ClearReactive();
+            self.ResetReactive();
             self.Choosing = false;
         }
 

@@ -56,7 +56,7 @@ namespace ET.Client
         [UGFEntitySystem]
         private static void UGFEntityOnHide(this SurvivorPlayerUGFEntity self, bool isShutdown)
         {
-            self.ClearReactive();
+            self.ResetReactive();
             self.SwordWaveVisualRemainingSeconds = 0f;
             self.SwordWaveVisual.SetActive(false);
             self.PresentationPosition.Reset();

@@ -30,7 +30,7 @@ namespace ET.Client
         [UGFUIFormSystem]
         private static void UGFUIFormOnClose(this UIFormSurvivorLobbyComponent self, bool isShutdown)
         {
-            self.ClearReactive();
+            self.ResetReactive();
         }
 
         public static async UniTask JoinRoom(this UIFormSurvivorLobbyComponent self)

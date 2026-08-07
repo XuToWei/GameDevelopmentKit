@@ -1,7 +1,7 @@
 namespace ET
 {
-    [EntitySystemOf(typeof(SurvivorPlayerStateReactiveObserver))]
     [ETReactiveSystem]
+    [EntitySystemOf(typeof(SurvivorPlayerStateReactiveObserver))]
     public static partial class SurvivorPlayerStateReactiveObserverSystem
     {
         [EntitySystem]
@@ -14,7 +14,7 @@ namespace ET
         private static void Destroy(this SurvivorPlayerStateReactiveObserver self)
         {
             SurvivorPlayerState state = self.State;
-            self.ClearReactive();
+            self.ResetReactive();
             self.State = null;
             state.LogicObserver = default;
         }
@@ -32,8 +32,8 @@ namespace ET
         }
     }
 
-    [EntitySystemOf(typeof(SurvivorMonsterStateReactiveObserver))]
     [ETReactiveSystem]
+    [EntitySystemOf(typeof(SurvivorMonsterStateReactiveObserver))]
     public static partial class SurvivorMonsterStateReactiveObserverSystem
     {
         [EntitySystem]
@@ -46,7 +46,7 @@ namespace ET
         private static void Destroy(this SurvivorMonsterStateReactiveObserver self)
         {
             SurvivorMonsterState state = self.State;
-            self.ClearReactive();
+            self.ResetReactive();
             self.State = null;
             state.LogicObserver = default;
         }

@@ -24,7 +24,7 @@ namespace ET.Client
         [EntitySystem]
         private static void Destroy(this SurvivorViewComponent self)
         {
-            self.ClearReactive();
+            self.ResetReactive();
             self.Client = null;
             self.Switching = false;
         }

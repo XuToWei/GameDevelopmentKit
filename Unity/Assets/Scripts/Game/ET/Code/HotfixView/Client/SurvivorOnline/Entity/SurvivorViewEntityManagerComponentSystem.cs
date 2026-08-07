@@ -23,7 +23,7 @@ namespace ET.Client
         [EntitySystem]
         private static void Destroy(this SurvivorViewEntityManagerComponent self)
         {
-            self.ClearReactive();
+            self.ResetReactive();
             self.Runtime = null;
             self.Client = null;
             self.WorldGeneration = 0;

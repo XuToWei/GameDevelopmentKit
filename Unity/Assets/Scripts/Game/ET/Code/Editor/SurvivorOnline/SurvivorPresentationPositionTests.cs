@@ -55,5 +55,64 @@ namespace ET.Tests
                 presentation.Advance(SurvivorPresentationPosition.SnapshotIntervalSeconds),
                 Is.EqualTo(Vector3.right));
         }
+
+        [Test]
+        public void ProjectilePrediction_AdvancesAtAuthoritativeVelocity()
+        {
+            SurvivorProjectilePrediction prediction = new SurvivorProjectilePrediction();
+            prediction.Initialize(
+                0,
+                0,
+                SurvivorDefaults.ProjectileMovePerTick,
+                SurvivorDefaults.ProjectileMovePerTick / 2);
+
+            Vector3 position = prediction.Advance(1f / SurvivorDefaults.SimulationTicksPerSecond);
+
+            Assert.That(
+                position.x,
+                Is.EqualTo(SurvivorDefaults.ProjectileMovePerTick / 1000f).Within(0.0001f));
+            Assert.That(
+                position.y,
+                Is.EqualTo(SurvivorDefaults.ProjectileMovePerTick / 2000f).Within(0.0001f));
+        }
+
+        [Test]
+        public void ProjectilePrediction_ReconcileSmoothsSmallError()
+        {
+            SurvivorProjectilePrediction prediction = new SurvivorProjectilePrediction();
+            prediction.Initialize(0, 0, 0, 0);
+
+            Vector3 reconciled = prediction.Reconcile(1000, 0, 0, 0);
+            Vector3 corrected = prediction.Advance(0.05f);
+
+            Assert.That(reconciled, Is.EqualTo(Vector3.zero));
+            Assert.That(corrected.x, Is.GreaterThan(0f));
+            Assert.That(corrected.x, Is.LessThan(1f));
+        }
+
+        [Test]
+        public void ProjectilePrediction_ReconcileSnapsLargeError()
+        {
+            SurvivorProjectilePrediction prediction = new SurvivorProjectilePrediction();
+            prediction.Initialize(0, 0, 0, 0);
+
+            Vector3 reconciled = prediction.Reconcile(2000, 0, 0, 0);
+
+            Assert.That(reconciled.x, Is.EqualTo(2f).Within(0.0001f));
+            Assert.That(reconciled.y, Is.Zero);
+        }
+
+        [Test]
+        public void ProjectilePrediction_ResetClearsState()
+        {
+            SurvivorProjectilePrediction prediction = new SurvivorProjectilePrediction();
+            prediction.Initialize(1000, 2000, SurvivorDefaults.ProjectileMovePerTick, 0);
+            prediction.Advance(0.1f);
+
+            prediction.Reset();
+
+            Assert.That(prediction.IsInitialized, Is.False);
+            Assert.That(prediction.CurrentPosition, Is.EqualTo(Vector3.zero));
+        }
     }
 }

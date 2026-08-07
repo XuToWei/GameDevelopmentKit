@@ -67,7 +67,7 @@ namespace ET.Client
         [UGFEntitySystem]
         private static void UGFEntityOnHide(this SurvivorHealthBarUGFEntity self, bool isShutdown)
         {
-            self.ClearReactive();
+            self.ResetReactive();
             self.View.FillSpriteRenderer.enabled = false;
             self.View.DamageTextTextMeshPro.enabled = false;
             self.View.SpriteRenderer.enabled = true;

@@ -72,7 +72,7 @@ namespace ET.Client
         [UGFUIFormSystem]
         private static void UGFUIFormOnClose(this UIFormSurvivorHudComponent self, bool isShutdown)
         {
-            self.ClearReactive();
+            self.ResetReactive();
         }
 
         [ETReactiveBind(nameof(UIFormSurvivorHudComponent.Level))]
