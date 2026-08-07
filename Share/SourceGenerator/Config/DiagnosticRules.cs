@@ -99,6 +99,11 @@ public static class ETReactiveDiagnosticRules
         "Reactive source '{0}' 没有被任何 ETReactiveBind 引用，将不会在 ObserveChanges 中求值",
         DiagnosticSeverity.Warning);
 
+    public static readonly DiagnosticDescriptor ThrottleValue = Create(
+        DiagnosticIds.ETReactiveThrottleValueRuleId,
+        "ET Reactive 节流值无效",
+        "ETReactiveSystem.ThrottleCount 必须 >= 1，'{0}' 上声明的是 {1}");
+
     private static DiagnosticDescriptor Create(
         string id,
         string title,
