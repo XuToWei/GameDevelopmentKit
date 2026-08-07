@@ -21,7 +21,6 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
     private const string VersionInterfaceName = "ReactiveBinding.IVersion";
     private const string ObserveMethodName = "ObserveChanges";
     private const string ResetMethodName = "ResetReactive";
-    private const string ClearMethodName = "ClearReactive";
 
     public void Initialize(GeneratorInitializationContext context)
     {
@@ -321,7 +320,6 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         sources = usedSourceIds.Select(id => sourceById[id]).ToList();
         valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ObserveMethodName);
         valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ResetMethodName);
-        valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ClearMethodName);
         valid &= ValidateThrottle(context, declaration, system);
 
         if (!valid)
@@ -342,8 +340,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         out INamedTypeSymbol? owner)
     {
         owner = null;
-        if (!string.Equals(attribute.AttributeClass?.ToDisplayString(), SystemAttributeName, StringComparison.Ordinal) ||
-            attribute.ConstructorArguments.Length != 0)
+        if (!string.Equals(attribute.AttributeClass?.ToDisplayString(), SystemAttributeName, StringComparison.Ordinal))
         {
             return false;
         }
@@ -1090,20 +1087,6 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         code.Append(bodyIndentation).Append("public static void ").Append(ResetMethodName).Append("(this ").Append(ownerType).AppendLine(" self)");
         code.Append(bodyIndentation).AppendLine("{");
         code.Append(statementIndentation).AppendLine("self.__ETReactiveInitialized = false;");
-        code.Append(bodyIndentation).AppendLine("}");
-        code.AppendLine();
-        code.Append(bodyIndentation).Append("public static void ").Append(ClearMethodName).Append("(this ").Append(ownerType).AppendLine(" self)");
-        code.Append(bodyIndentation).AppendLine("{");
-        code.Append(statementIndentation).AppendLine("self.__ETReactiveInitialized = false;");
-        foreach (SourceModel source in sources)
-        {
-            code.Append(statementIndentation).Append("self.__ETReactive").Append(source.Id).AppendLine(" = default;");
-            if (source.IsVersioned)
-            {
-                code.Append(statementIndentation).Append("self.__ETReactive").Append(source.Id).AppendLine("Version = -1;");
-            }
-        }
-
         code.Append(bodyIndentation).AppendLine("}");
         code.Append(indentation).AppendLine("}");
         if (!system.ContainingNamespace.IsGlobalNamespace)
