@@ -35,15 +35,18 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             return;
         }
 
-        GenerateReactiveHosts(context, receiver.HostDeclarations);
-        if (receiver.SystemDeclarations.Count == 0)
+        List<ClassDeclarationSyntax> hostDeclarations = OrderSyntaxNodes(receiver.HostDeclarations).ToList();
+        List<ClassDeclarationSyntax> systemDeclarations = OrderSyntaxNodes(receiver.SystemDeclarations).ToList();
+
+        GenerateReactiveHosts(context, hostDeclarations);
+        if (systemDeclarations.Count == 0)
         {
             return;
         }
 
         HashSet<INamedTypeSymbol> processedSystems = new(SymbolEqualityComparer.Default);
         List<SystemCandidate> candidates = new();
-        foreach (ClassDeclarationSyntax declaration in receiver.SystemDeclarations)
+        foreach (ClassDeclarationSyntax declaration in systemDeclarations)
         {
             SemanticModel semanticModel = context.Compilation.GetSemanticModel(declaration.SyntaxTree);
             if (semanticModel.GetDeclaredSymbol(declaration, context.CancellationToken) is not INamedTypeSymbol system ||
@@ -301,18 +304,12 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             }
         }
 
-        binds.Sort(static (left, right) =>
-        {
-            int nameResult = StringComparer.Ordinal.Compare(left.Method.Name, right.Method.Name);
-            return nameResult != 0
-                    ? nameResult
-                    : StringComparer.Ordinal.Compare(left.Method.ToDisplayString(), right.Method.ToDisplayString());
-        });
-
-        HashSet<string> usedSourceIds = new(
-            binds.SelectMany(static bind => bind.ReactiveIds),
-            StringComparer.Ordinal);
-        foreach (SourceModel source in sources.Where(source => !usedSourceIds.Contains(source.Id)))
+        List<string> usedSourceIds = binds
+                .SelectMany(static bind => bind.ReactiveIds)
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
+        HashSet<string> usedSourceIdSet = new(usedSourceIds, StringComparer.Ordinal);
+        foreach (SourceModel source in sources.Where(source => !usedSourceIdSet.Contains(source.Id)))
         {
             Report(
                 context,
@@ -321,7 +318,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 source.Id);
         }
 
-        sources.RemoveAll(source => !usedSourceIds.Contains(source.Id));
+        sources = usedSourceIds.Select(id => sourceById[id]).ToList();
         valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ObserveMethodName);
         valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ResetMethodName);
         valid &= ValidateGeneratedMethodCollision(context, declaration, system, owner, ClearMethodName);
@@ -364,11 +361,9 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
 
     private static List<IMethodSymbol> GetAttributedMethods(INamedTypeSymbol system, string attributeName)
     {
-        return system.GetMembers()
+        return OrderSymbols(system.GetMembers()
                 .OfType<IMethodSymbol>()
-                .Where(method => !method.IsImplicitlyDeclared && GetAttribute(method, attributeName) != null)
-                .OrderBy(static method => method.Name, StringComparer.Ordinal)
-                .ThenBy(static method => method.ToDisplayString(), StringComparer.Ordinal)
+                .Where(method => !method.IsImplicitlyDeclared && GetAttribute(method, attributeName) != null))
                 .ToList();
     }
 
@@ -403,7 +398,6 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             sources.Add(new SourceModel(member, sourceType, isVersioned));
         }
 
-        sources.Sort(static (left, right) => StringComparer.Ordinal.Compare(left.Id, right.Id));
         foreach (IGrouping<string, SourceModel> duplicate in sources.GroupBy(static source => source.Id, StringComparer.Ordinal).Where(static group => group.Count() > 1))
         {
             foreach (SourceModel source in duplicate.Skip(1))
@@ -419,12 +413,68 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
 
     private static List<ISymbol> GetAttributedSourceMembers(INamedTypeSymbol owner, string attributeName)
     {
-        return owner.GetMembers()
+        return OrderSymbols(owner.GetMembers()
                 .Where(static member => member is IFieldSymbol or IPropertySymbol or IMethodSymbol)
-                .Where(member => !member.IsImplicitlyDeclared && GetAttribute(member, attributeName) != null)
-                .OrderBy(static member => member.Name, StringComparer.Ordinal)
-                .ThenBy(static member => member.ToDisplayString(), StringComparer.Ordinal)
+                .Where(member => !member.IsImplicitlyDeclared && GetAttribute(member, attributeName) != null))
                 .ToList();
+    }
+
+    private static IOrderedEnumerable<TNode> OrderSyntaxNodes<TNode>(IEnumerable<TNode> nodes)
+        where TNode: SyntaxNode
+    {
+        return nodes
+                .OrderBy(static node => GetSyntaxTreeKey(node.SyntaxTree), StringComparer.Ordinal)
+                .ThenBy(static node => node.SpanStart)
+                .ThenBy(static node => node.RawKind);
+    }
+
+    private static IOrderedEnumerable<TSymbol> OrderSymbols<TSymbol>(IEnumerable<TSymbol> symbols)
+        where TSymbol: ISymbol
+    {
+        return symbols
+                .OrderBy(static symbol => GetSyntaxTreeKey(GetSourceLocation(symbol)), StringComparer.Ordinal)
+                .ThenBy(static symbol => GetSourceStart(GetSourceLocation(symbol)))
+                .ThenBy(static symbol => (int)symbol.Kind)
+                .ThenBy(static symbol => symbol.ToDisplayString(), StringComparer.Ordinal);
+    }
+
+    private static Location GetSourceLocation(ISymbol symbol)
+    {
+        foreach (Location location in symbol.Locations)
+        {
+            if (location.IsInSource)
+            {
+                return location;
+            }
+        }
+
+        return Location.None;
+    }
+
+    private static int GetSourceStart(Location location)
+    {
+        return location.IsInSource ? location.SourceSpan.Start : int.MaxValue;
+    }
+
+    private static string GetSyntaxTreeKey(Location location)
+    {
+        return location.SourceTree is SyntaxTree syntaxTree ? GetSyntaxTreeKey(syntaxTree) : "N:";
+    }
+
+    private static string GetSyntaxTreeKey(SyntaxTree syntaxTree)
+    {
+        if (!string.IsNullOrEmpty(syntaxTree.FilePath))
+        {
+            return $"P:{syntaxTree.FilePath.Replace('\\', '/')}";
+        }
+
+        StringBuilder key = new("C:");
+        foreach (byte value in syntaxTree.GetText().GetChecksum())
+        {
+            key.Append(value.ToString("x2"));
+        }
+
+        return key.ToString();
     }
 
     private static bool TryGetSourceType(ISymbol member, out ITypeSymbol sourceType)
