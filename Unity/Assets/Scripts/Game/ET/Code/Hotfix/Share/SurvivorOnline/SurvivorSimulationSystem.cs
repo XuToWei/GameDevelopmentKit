@@ -47,11 +47,9 @@ namespace ET
             {
                 self.Runtime.ObserverIds.Add(observerEnumerator.Current.Id);
             }
-            self.Runtime.ObserverIndex = 0;
-            while (self.Runtime.ObserverIndex < self.Runtime.ObserverIds.Count)
+            for (int index = 0; index < self.Runtime.ObserverIds.Count; index++)
             {
-                self.ObserveStateReaction(self.Runtime.ObserverIds[self.Runtime.ObserverIndex]);
-                self.Runtime.ObserverIndex++;
+                self.ObserveStateReaction(self.Runtime.ObserverIds[index]);
             }
         }
 

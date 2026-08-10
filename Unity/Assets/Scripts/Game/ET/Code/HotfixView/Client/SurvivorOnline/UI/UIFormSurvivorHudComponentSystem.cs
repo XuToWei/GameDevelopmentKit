@@ -14,11 +14,6 @@ namespace ET.Client
         }
 
         [UGFUIFormSystem]
-        private static void UGFUIFormOnOpen(this UIFormSurvivorHudComponent self)
-        {
-        }
-
-        [UGFUIFormSystem]
         private static void UGFUIFormOnUpdate(this UIFormSurvivorHudComponent self, float elapseSeconds, float realElapseSeconds)
         {
             Vector2 movement = ReadMovement();

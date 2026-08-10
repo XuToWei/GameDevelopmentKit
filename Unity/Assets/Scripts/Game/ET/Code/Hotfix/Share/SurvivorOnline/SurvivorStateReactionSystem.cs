@@ -134,8 +134,14 @@ namespace ET
 
             state.Hp = 0;
             state.Alive = false;
-            self.Runtime.StateId = self.AllocateStateId();
-            self.Data.Pickups.Add(self.Runtime.StateId, SurvivorWorldFactory.CreatePickup(self.Runtime.StateId, state.PositionX, state.PositionY, SurvivorDefaults.MonsterKillExperience));
+            long stateId = self.AllocateStateId();
+            self.Data.Pickups.Add(
+                stateId,
+                SurvivorWorldFactory.CreatePickup(
+                    stateId,
+                    state.PositionX,
+                    state.PositionY,
+                    SurvivorDefaults.MonsterKillExperience));
             self.Data.PickupSetRevision++;
             self.Data.Monsters.Remove(state.StateId);
             self.Data.MonsterSetRevision++;
@@ -143,17 +149,17 @@ namespace ET
 
         public static void CheckGameEnded(this SurvivorWorldComponent self)
         {
-            self.Runtime.AlivePlayerCount = 0;
+            int alivePlayerCount = 0;
             using var playerEnumerator = self.Data.Players.GetEnumerator();
             while (playerEnumerator.MoveNext())
             {
                 if (playerEnumerator.Current.Value.Alive)
                 {
-                    self.Runtime.AlivePlayerCount++;
+                    alivePlayerCount++;
                 }
             }
 
-            if (self.Data.Players.Count > 0 && self.Runtime.AlivePlayerCount == 0)
+            if (self.Data.Players.Count > 0 && alivePlayerCount == 0)
             {
                 self.Data.Phase = SurvivorRoomPhase.Ended;
             }

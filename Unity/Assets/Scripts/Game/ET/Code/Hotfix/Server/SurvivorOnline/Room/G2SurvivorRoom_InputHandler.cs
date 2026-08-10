@@ -5,10 +5,10 @@ namespace ET.Server
     [MessageHandler(SceneType.SurvivorRoomRoot)]
     public sealed class G2SurvivorRoom_InputHandler: MessageHandler<Scene, G2SurvivorRoom_Input>
     {
-        protected override async UniTask Run(Scene root, G2SurvivorRoom_Input message)
+        protected override UniTask Run(Scene root, G2SurvivorRoom_Input message)
         {
             root.GetComponent<SurvivorRoom>().GetComponent<SurvivorRoomServerComponent>().QueuePlayerInput(message.PlayerId, message.InputSequence, message.MoveX, message.MoveY);
-            await UniTask.CompletedTask;
+            return UniTask.CompletedTask;
         }
     }
 }

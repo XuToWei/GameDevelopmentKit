@@ -23,8 +23,6 @@ namespace ET.Server
 
         public Dictionary<long, long> LastQueuedInputSequences { get; } = new();
 
-        public SurvivorQueuedPlayerInput QueuedInput { get; set; }
-
         public long Sequence { get; set; }
 
         public long NextSimulationTime { get; set; }

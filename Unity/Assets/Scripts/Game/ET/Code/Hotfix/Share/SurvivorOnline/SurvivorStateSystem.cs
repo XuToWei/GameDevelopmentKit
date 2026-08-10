@@ -10,9 +10,7 @@ namespace ET
 
         public static long AllocateStateId(this SurvivorWorldComponent self)
         {
-            self.Runtime.StateId = self.Data.NextStateId;
-            self.Data.NextStateId++;
-            return self.Runtime.StateId;
+            return self.Data.NextStateId++;
         }
     }
 }

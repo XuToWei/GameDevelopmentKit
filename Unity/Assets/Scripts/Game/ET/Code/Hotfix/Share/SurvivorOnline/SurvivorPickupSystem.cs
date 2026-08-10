@@ -8,52 +8,42 @@ namespace ET
             using var pickupEnumerator = self.Data.Pickups.GetEnumerator();
             while (pickupEnumerator.MoveNext())
             {
-                self.Runtime.Pickup = pickupEnumerator.Current.Value;
-                self.Runtime.Collected = false;
+                SurvivorPickupState pickup = pickupEnumerator.Current.Value;
+                bool collected = false;
                 using var playerEnumerator = self.Data.Players.GetEnumerator();
                 while (playerEnumerator.MoveNext())
                 {
-                    self.Runtime.Player = playerEnumerator.Current.Value;
-                    if (!self.Runtime.Player.Alive)
+                    SurvivorPlayerState player = playerEnumerator.Current.Value;
+                    if (!player.Alive)
                     {
                         continue;
                     }
 
-                    self.Runtime.DeltaX =
-                            self.Runtime.Player.PositionX - self.Runtime.Pickup.PositionX;
-                    self.Runtime.DeltaY =
-                            self.Runtime.Player.PositionY - self.Runtime.Pickup.PositionY;
-                    self.Runtime.DistanceSquared =
-                            (long)self.Runtime.DeltaX * self.Runtime.DeltaX +
-                            (long)self.Runtime.DeltaY * self.Runtime.DeltaY;
-                    if (self.Runtime.DistanceSquared >
-                        (long)SurvivorDefaults.ExperiencePickupRange *
-                        SurvivorDefaults.ExperiencePickupRange)
+                    int deltaX = player.PositionX - pickup.PositionX;
+                    int deltaY = player.PositionY - pickup.PositionY;
+                    long distanceSquared = (long)deltaX * deltaX + (long)deltaY * deltaY;
+                    if (distanceSquared >
+                        (long)SurvivorDefaults.ExperiencePickupRange * SurvivorDefaults.ExperiencePickupRange)
                     {
                         continue;
                     }
 
-                    self.Runtime.Player.Experience += self.Runtime.Pickup.Experience;
-                    self.Runtime.Collected = true;
+                    player.Experience += pickup.Experience;
+                    collected = true;
                     break;
                 }
 
-                if (self.Runtime.Collected)
+                if (collected)
                 {
-                    self.Runtime.PickupRemovalStateIds.Add(self.Runtime.Pickup.StateId);
+                    self.Runtime.PickupRemovalStateIds.Add(pickup.StateId);
                 }
             }
 
-            self.Runtime.Index = 0;
-            while (self.Runtime.Index < self.Runtime.PickupRemovalStateIds.Count)
+            for (int index = 0; index < self.Runtime.PickupRemovalStateIds.Count; index++)
             {
-                self.Data.Pickups.Remove(self.Runtime.PickupRemovalStateIds[self.Runtime.Index]);
+                self.Data.Pickups.Remove(self.Runtime.PickupRemovalStateIds[index]);
                 self.Data.PickupSetRevision++;
-                self.Runtime.Index++;
             }
-
-            self.Runtime.Player = null;
-            self.Runtime.Pickup = null;
         }
     }
 }

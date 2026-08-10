@@ -5,7 +5,7 @@ namespace ET.Server
     [Invoke((long)SceneType.SurvivorRoomRoot)]
     public sealed class FiberInit_SurvivorRoomRoot: AInvokeHandler<FiberInit, UniTask>
     {
-        public override async UniTask Handle(FiberInit fiberInit)
+        public override UniTask Handle(FiberInit fiberInit)
         {
             fiberInit.Fiber.Root.AddComponent<MailBoxComponent, MailBoxType>(MailBoxType.UnOrderedMessage);
             fiberInit.Fiber.Root.AddComponent<TimerComponent>();
@@ -14,7 +14,7 @@ namespace ET.Server
             fiberInit.Fiber.Root.AddComponent<MessageSender>();
             fiberInit.Fiber.Root.AddComponent<LocationProxyComponent>();
             fiberInit.Fiber.Root.AddComponent<MessageLocationSenderComponent>();
-            await UniTask.CompletedTask;
+            return UniTask.CompletedTask;
         }
     }
 }

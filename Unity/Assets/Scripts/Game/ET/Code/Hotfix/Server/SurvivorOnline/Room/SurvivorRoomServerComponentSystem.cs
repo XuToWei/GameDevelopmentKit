@@ -60,22 +60,14 @@ namespace ET.Server
 
         public static void RegisterPlayerInputQueue(this SurvivorRoomServerComponent self, long playerId)
         {
-            if (!self.Runtime.PlayerInputQueues.ContainsKey(playerId))
-            {
-                self.Runtime.PlayerInputQueues.Add(playerId, new Queue<SurvivorQueuedPlayerInput>());
-            }
-
-            if (!self.Runtime.LastQueuedInputSequences.ContainsKey(playerId))
-            {
-                self.Runtime.LastQueuedInputSequences.Add(playerId, 0);
-            }
+            self.Runtime.PlayerInputQueues.TryAdd(playerId, new Queue<SurvivorQueuedPlayerInput>());
+            self.Runtime.LastQueuedInputSequences.TryAdd(playerId, 0);
         }
 
         public static void ResetForLobby(this SurvivorRoomServerComponent self)
         {
             self.Runtime.PlayerInputQueues.Clear();
             self.Runtime.LastQueuedInputSequences.Clear();
-            self.Runtime.QueuedInput = null;
             self.Runtime.NextSimulationTime = TimeInfo.Instance.ServerFrameTime();
             using var playerIdEnumerator = self.Runtime.PlayerIds.GetEnumerator();
             while (playerIdEnumerator.MoveNext())
@@ -86,28 +78,27 @@ namespace ET.Server
 
         public static void QueuePlayerInput(this SurvivorRoomServerComponent self, long playerId, long inputSequence, int moveX, int moveY)
         {
-            if (!self.World.Data.Players.ContainsKey(playerId))
+            if (!self.World.Data.Players.TryGetValue(playerId, out SurvivorPlayerState player))
             {
                 return;
             }
 
             self.RegisterPlayerInputQueue(playerId);
-            if (inputSequence <= self.World.Data.Players[playerId].LastInputSequence ||
+            if (inputSequence <= player.LastInputSequence ||
                 inputSequence <= self.Runtime.LastQueuedInputSequences[playerId] ||
                 self.Runtime.PlayerInputQueues[playerId].Count >= MaxQueuedInputsPerPlayer)
             {
                 return;
             }
 
-            self.Runtime.QueuedInput = new SurvivorQueuedPlayerInput
+            SurvivorQueuedPlayerInput queuedInput = new SurvivorQueuedPlayerInput
             {
                 Sequence = inputSequence,
                 MoveX = SurvivorMath.Clamp(moveX, -SurvivorDefaults.InputScale, SurvivorDefaults.InputScale),
                 MoveY = SurvivorMath.Clamp(moveY, -SurvivorDefaults.InputScale, SurvivorDefaults.InputScale),
             };
-            self.Runtime.PlayerInputQueues[playerId].Enqueue(self.Runtime.QueuedInput);
+            self.Runtime.PlayerInputQueues[playerId].Enqueue(queuedInput);
             self.Runtime.LastQueuedInputSequences[playerId] = inputSequence;
-            self.Runtime.QueuedInput = null;
         }
 
         private static void ConsumePlayerInputs(this SurvivorRoomServerComponent self)
@@ -117,16 +108,16 @@ namespace ET.Server
             {
                 long playerId = playerStateEnumerator.Current.Key;
                 SurvivorPlayerState player = playerStateEnumerator.Current.Value;
-                if (!self.Runtime.PlayerInputQueues.ContainsKey(playerId) || self.Runtime.PlayerInputQueues[playerId].Count == 0)
+                if (!self.Runtime.PlayerInputQueues.TryGetValue(playerId, out Queue<SurvivorQueuedPlayerInput> inputQueue) ||
+                    inputQueue.Count == 0)
                 {
                     player.MoveX = 0;
                     player.MoveY = 0;
                     continue;
                 }
 
-                self.Runtime.QueuedInput = self.Runtime.PlayerInputQueues[playerId].Dequeue();
-                self.World.SetPlayerInput(playerId, self.Runtime.QueuedInput.Sequence, self.Runtime.QueuedInput.MoveX, self.Runtime.QueuedInput.MoveY);
-                self.Runtime.QueuedInput = null;
+                SurvivorQueuedPlayerInput queuedInput = inputQueue.Dequeue();
+                self.World.SetPlayerInput(playerId, queuedInput.Sequence, queuedInput.MoveX, queuedInput.MoveY);
             }
 
         }

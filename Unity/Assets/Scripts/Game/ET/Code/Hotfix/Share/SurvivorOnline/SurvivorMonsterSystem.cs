@@ -9,31 +9,24 @@ namespace ET
                 return;
             }
 
-            self.Runtime.Distance = self.NextRandom();
-            if ((self.Runtime.Distance & 1) == 0)
+            int spawnPositionX;
+            int spawnPositionY;
+            if ((self.NextRandom() & 1) == 0)
             {
-                self.Runtime.SpawnPositionX =
-                        (self.NextRandom() & 1) == 0 ? -SurvivorDefaults.SpawnDistance : SurvivorDefaults.SpawnDistance;
-                self.Runtime.SpawnPositionY =
-                        self.NextRandom() % (SurvivorDefaults.SpawnDistance * 2 + 1) - SurvivorDefaults.SpawnDistance;
+                spawnPositionX = (self.NextRandom() & 1) == 0 ? -SurvivorDefaults.SpawnDistance : SurvivorDefaults.SpawnDistance;
+                spawnPositionY = self.NextRandom() % (SurvivorDefaults.SpawnDistance * 2 + 1) - SurvivorDefaults.SpawnDistance;
             }
             else
             {
-                self.Runtime.SpawnPositionX =
-                        self.NextRandom() % (SurvivorDefaults.SpawnDistance * 2 + 1) - SurvivorDefaults.SpawnDistance;
-                self.Runtime.SpawnPositionY =
-                        (self.NextRandom() & 1) == 0 ? -SurvivorDefaults.SpawnDistance : SurvivorDefaults.SpawnDistance;
+                spawnPositionX = self.NextRandom() % (SurvivorDefaults.SpawnDistance * 2 + 1) - SurvivorDefaults.SpawnDistance;
+                spawnPositionY = (self.NextRandom() & 1) == 0 ? -SurvivorDefaults.SpawnDistance : SurvivorDefaults.SpawnDistance;
             }
 
-            self.Runtime.StateId = self.AllocateStateId();
-            self.Data.Monsters.Add(
-                self.Runtime.StateId,
-                SurvivorWorldFactory.CreateMonster(
-                    self.Runtime.StateId,
-                    self.Runtime.SpawnPositionX,
-                    self.Runtime.SpawnPositionY));
+            long stateId = self.AllocateStateId();
+            SurvivorMonsterState monster = SurvivorWorldFactory.CreateMonster(stateId, spawnPositionX, spawnPositionY);
+            self.Data.Monsters.Add(stateId, monster);
             self.Data.MonsterSetRevision++;
-            self.AttachMonsterReaction(self.Data.Monsters[self.Runtime.StateId]);
+            self.AttachMonsterReaction(monster);
         }
 
         public static void TickMonsterMovementAndContact(this SurvivorWorldComponent self)
@@ -41,60 +34,51 @@ namespace ET
             using var monsterEnumerator = self.Data.Monsters.GetEnumerator();
             while (monsterEnumerator.MoveNext())
             {
-                self.Runtime.Monster = monsterEnumerator.Current.Value;
-                if (!self.Runtime.Monster.Alive)
+                SurvivorMonsterState monster = monsterEnumerator.Current.Value;
+                if (!monster.Alive)
                 {
                     continue;
                 }
 
-                self.Runtime.TargetPlayer = null;
-                self.Runtime.Distance = int.MaxValue;
+                SurvivorPlayerState targetPlayer = null;
+                int nearestDistance = int.MaxValue;
                 using var playerEnumerator = self.Data.Players.GetEnumerator();
                 while (playerEnumerator.MoveNext())
                 {
-                    if (!playerEnumerator.Current.Value.Alive)
+                    SurvivorPlayerState player = playerEnumerator.Current.Value;
+                    if (!player.Alive)
                     {
                         continue;
                     }
 
-                    self.Runtime.DeltaX =
-                            playerEnumerator.Current.Value.PositionX - self.Runtime.Monster.PositionX;
-                    self.Runtime.DeltaY =
-                            playerEnumerator.Current.Value.PositionY - self.Runtime.Monster.PositionY;
-                    if (SurvivorMath.Abs(self.Runtime.DeltaX) + SurvivorMath.Abs(self.Runtime.DeltaY) >=
-                        self.Runtime.Distance)
+                    int deltaX = player.PositionX - monster.PositionX;
+                    int deltaY = player.PositionY - monster.PositionY;
+                    int distance = SurvivorMath.Abs(deltaX) + SurvivorMath.Abs(deltaY);
+                    if (distance >= nearestDistance)
                     {
                         continue;
                     }
 
-                    self.Runtime.Distance =
-                            SurvivorMath.Abs(self.Runtime.DeltaX) + SurvivorMath.Abs(self.Runtime.DeltaY);
-                    self.Runtime.TargetPlayer = playerEnumerator.Current.Value;
+                    nearestDistance = distance;
+                    targetPlayer = player;
                 }
 
-                if (self.Runtime.TargetPlayer == null)
+                if (targetPlayer == null)
                 {
                     continue;
                 }
 
-                self.Runtime.Monster.TargetPlayerId = self.Runtime.TargetPlayer.PlayerId;
-                self.Runtime.DeltaX = self.Runtime.TargetPlayer.PositionX - self.Runtime.Monster.PositionX;
-                self.Runtime.DeltaY = self.Runtime.TargetPlayer.PositionY - self.Runtime.Monster.PositionY;
-                self.Runtime.Monster.PositionX +=
-                        SurvivorMath.Sign(self.Runtime.DeltaX) * SurvivorDefaults.MonsterMovePerTick;
-                self.Runtime.Monster.PositionY +=
-                        SurvivorMath.Sign(self.Runtime.DeltaY) * SurvivorDefaults.MonsterMovePerTick;
-                if (SurvivorMath.Abs(self.Runtime.DeltaX) <=
-                    SurvivorDefaults.PlayerCollisionRadius + SurvivorDefaults.MonsterCollisionRadius &&
-                    SurvivorMath.Abs(self.Runtime.DeltaY) <=
-                    SurvivorDefaults.PlayerCollisionRadius + SurvivorDefaults.MonsterCollisionRadius)
+                monster.TargetPlayerId = targetPlayer.PlayerId;
+                int targetDeltaX = targetPlayer.PositionX - monster.PositionX;
+                int targetDeltaY = targetPlayer.PositionY - monster.PositionY;
+                monster.PositionX += SurvivorMath.Sign(targetDeltaX) * SurvivorDefaults.MonsterMovePerTick;
+                monster.PositionY += SurvivorMath.Sign(targetDeltaY) * SurvivorDefaults.MonsterMovePerTick;
+                if (SurvivorMath.Abs(targetDeltaX) <= SurvivorDefaults.PlayerCollisionRadius + SurvivorDefaults.MonsterCollisionRadius &&
+                    SurvivorMath.Abs(targetDeltaY) <= SurvivorDefaults.PlayerCollisionRadius + SurvivorDefaults.MonsterCollisionRadius)
                 {
-                    self.Runtime.TargetPlayer.Hp -= SurvivorDefaults.MonsterContactDamagePerTick;
+                    targetPlayer.Hp -= SurvivorDefaults.MonsterContactDamagePerTick;
                 }
             }
-
-            self.Runtime.Monster = null;
-            self.Runtime.TargetPlayer = null;
         }
     }
 }

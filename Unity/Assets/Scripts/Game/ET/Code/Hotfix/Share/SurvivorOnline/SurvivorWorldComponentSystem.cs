@@ -25,8 +25,7 @@ namespace ET
             self.Runtime.CaptureStream.SetLength(0);
             self.Runtime.SyncContext.CaptureFull(self.Runtime.CaptureWriter);
             self.Runtime.CaptureWriter.Flush();
-            self.Runtime.FrameBytes = self.Runtime.CaptureStream.ToArray();
-            return self.Runtime.FrameBytes;
+            return self.Runtime.CaptureStream.ToArray();
         }
 
         public static byte[] CaptureDelta(this SurvivorWorldComponent self)
@@ -35,8 +34,7 @@ namespace ET
             self.Runtime.CaptureStream.SetLength(0);
             self.Runtime.SyncContext.CaptureDelta(self.Runtime.CaptureWriter);
             self.Runtime.CaptureWriter.Flush();
-            self.Runtime.FrameBytes = self.Runtime.CaptureStream.ToArray();
-            return self.Runtime.FrameBytes;
+            return self.Runtime.CaptureStream.ToArray();
         }
 
         public static void ApplySnapshot(this SurvivorWorldComponent self, byte[] payload)
@@ -50,19 +48,17 @@ namespace ET
 
         public static long AddPlayer(this SurvivorWorldComponent self, long playerId, string displayName)
         {
-            self.Runtime.StateId = self.Data.NextStateId;
-            self.Data.NextStateId++;
-            self.Data.Players.Add(
-                playerId,
-                SurvivorWorldFactory.CreatePlayer(self.Runtime.StateId, playerId, displayName));
+            long stateId = self.AllocateStateId();
+            SurvivorPlayerState player = SurvivorWorldFactory.CreatePlayer(stateId, playerId, displayName);
+            self.Data.Players.Add(playerId, player);
             self.Data.PlayerSetRevision++;
-            self.AttachPlayerReaction(self.Data.Players[playerId]);
+            self.AttachPlayerReaction(player);
             if (self.Data.HostPlayerId == 0)
             {
                 self.Data.HostPlayerId = playerId;
             }
 
-            return self.Runtime.StateId;
+            return stateId;
         }
 
         public static void ResetForLobby(this SurvivorWorldComponent self)
@@ -83,20 +79,15 @@ namespace ET
             int moveX,
             int moveY)
         {
-            if (!self.Data.Players.ContainsKey(playerId))
+            if (!self.Data.Players.TryGetValue(playerId, out SurvivorPlayerState player) ||
+                inputSequence <= player.LastInputSequence)
             {
                 return;
             }
 
-            if (inputSequence <= self.Data.Players[playerId].LastInputSequence)
-            {
-                return;
-            }
-
-            self.Data.Players[playerId].LastInputSequence = inputSequence;
-            self.Data.Players[playerId].MoveX = SurvivorMath.Clamp(moveX, -SurvivorDefaults.InputScale, SurvivorDefaults.InputScale);
-            self.Data.Players[playerId].MoveY = SurvivorMath.Clamp(moveY, -SurvivorDefaults.InputScale, SurvivorDefaults.InputScale);
+            player.LastInputSequence = inputSequence;
+            player.MoveX = SurvivorMath.Clamp(moveX, -SurvivorDefaults.InputScale, SurvivorDefaults.InputScale);
+            player.MoveY = SurvivorMath.Clamp(moveY, -SurvivorDefaults.InputScale, SurvivorDefaults.InputScale);
         }
-
     }
 }

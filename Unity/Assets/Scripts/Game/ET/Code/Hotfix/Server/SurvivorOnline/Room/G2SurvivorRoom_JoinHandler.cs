@@ -5,7 +5,7 @@ namespace ET.Server
     [MessageHandler(SceneType.SurvivorRoomRoot)]
     public sealed class G2SurvivorRoom_JoinHandler: MessageHandler<Scene, G2SurvivorRoom_Join, SurvivorRoom2G_Join>
     {
-        protected override async UniTask Run(Scene root, G2SurvivorRoom_Join request, SurvivorRoom2G_Join response)
+        protected override UniTask Run(Scene root, G2SurvivorRoom_Join request, SurvivorRoom2G_Join response)
         {
             SurvivorRoom room = root.GetComponent<SurvivorRoom>();
             SurvivorWorldComponent world = room.GetComponent<SurvivorWorldComponent>();
@@ -15,7 +15,7 @@ namespace ET.Server
             {
                 response.Error = ErrorCode.ERR_SurvivorGameAlreadyStarted;
                 response.Message = "游戏已开始，禁止中途加入";
-                return;
+                return UniTask.CompletedTask;
             }
 
             if (world.Data.Phase == SurvivorRoomPhase.Ended)
@@ -24,7 +24,7 @@ namespace ET.Server
                 {
                     response.Error = ErrorCode.ERR_SurvivorGameAlreadyStarted;
                     response.Message = "本局已结束，仅原房间成员可以返回";
-                    return;
+                    return UniTask.CompletedTask;
                 }
 
                 world.ResetForLobby();
@@ -35,7 +35,7 @@ namespace ET.Server
             {
                 response.Error = ErrorCode.ERR_SurvivorRoomFull;
                 response.Message = "房间已满";
-                return;
+                return UniTask.CompletedTask;
             }
 
             if (!isExistingMember)
@@ -50,7 +50,7 @@ namespace ET.Server
             response.Sequence = frame.Sequence;
             response.ServerTick = frame.ServerTick;
             response.FullSnapshot = frame.Payload;
-            await UniTask.CompletedTask;
+            return UniTask.CompletedTask;
         }
     }
 }

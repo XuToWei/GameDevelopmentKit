@@ -18,11 +18,11 @@ namespace ET.Client
     [Event(SceneType.Survivor)]
     public sealed class LoginFinish_StartSurvivorClient: AEvent<Scene, LoginFinish>
     {
-        protected override async UniTask Run(Scene scene, LoginFinish args)
+        protected override UniTask Run(Scene scene, LoginFinish args)
         {
             scene.GetComponent<UIComponent>().RemoveComponent<UIFormSurvivorLoginComponent>();
             scene.AddComponent<SurvivorClientComponent>();
-            await UniTask.CompletedTask;
+            return UniTask.CompletedTask;
         }
     }
 }

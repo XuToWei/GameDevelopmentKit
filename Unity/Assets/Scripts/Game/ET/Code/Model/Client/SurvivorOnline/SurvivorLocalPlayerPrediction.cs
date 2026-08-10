@@ -9,17 +9,14 @@ namespace ET.Client
         private const float WorldCoordinateScale = 1000f;
         private const float HardSnapDistance = 1.5f;
         private const float CorrectionSharpness = 20f;
+        private const int PendingInputCompactionThreshold = 64;
 
-        public const float InputIntervalSeconds =
-                1f / SurvivorDefaults.SimulationTicksPerSecond;
+        public const float InputIntervalSeconds = 1f / SurvivorDefaults.SimulationTicksPerSecond;
 
-        public List<long> PendingSequences { get; } = new();
-
-        public List<int> PendingMoveXs { get; } = new();
-
-        public List<int> PendingMoveYs { get; } = new();
-
-        public List<int> PendingMovePerTicks { get; } = new();
+        private readonly List<SurvivorPendingInput> pendingInputs = new();
+        private int firstPendingInputIndex;
+        private float correctionX;
+        private float correctionY;
 
         public bool IsInitialized { get; private set; }
 
@@ -37,10 +34,17 @@ namespace ET.Client
 
         public int CurrentMoveY { get; set; }
 
-        public int PendingCount => this.PendingSequences.Count;
+        public int PendingCount => this.pendingInputs.Count - this.firstPendingInputIndex;
 
-        private float correctionX;
-        private float correctionY;
+        public long GetPendingSequence(int index)
+        {
+            if ((uint)index >= (uint)this.PendingCount)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            return this.pendingInputs[this.firstPendingInputIndex + index].Sequence;
+        }
 
         public void Initialize(int authoritativePositionX, int authoritativePositionY)
         {
@@ -54,24 +58,10 @@ namespace ET.Client
             this.correctionY = 0f;
         }
 
-        public void RecordInput(
-            long sequence,
-            int moveX,
-            int moveY,
-            int movePerTick)
+        public void RecordInput(long sequence, int moveX, int moveY, int movePerTick)
         {
-            this.PendingSequences.Add(sequence);
-            this.PendingMoveXs.Add(moveX);
-            this.PendingMoveYs.Add(moveY);
-            this.PendingMovePerTicks.Add(movePerTick);
-            this.PredictedPositionX +=
-                    moveX * movePerTick / SurvivorDefaults.InputScale;
-            this.PredictedPositionY +=
-                    moveY * movePerTick / SurvivorDefaults.InputScale;
-            this.PredictedPositionX = SurvivorDefaults.ClampPlayerPosition(
-                this.PredictedPositionX);
-            this.PredictedPositionY = SurvivorDefaults.ClampPlayerPosition(
-                this.PredictedPositionY);
+            this.pendingInputs.Add(new SurvivorPendingInput(sequence, moveX, moveY, movePerTick));
+            this.ApplyPredictedInput(moveX, moveY, movePerTick);
         }
 
         public void Reconcile(
@@ -80,44 +70,30 @@ namespace ET.Client
             long acknowledgedInputSequence,
             int currentMovePerTick)
         {
-            while (this.PendingSequences.Count > 0 &&
-                   this.PendingSequences[0] <= acknowledgedInputSequence)
+            while (this.firstPendingInputIndex < this.pendingInputs.Count &&
+                   this.pendingInputs[this.firstPendingInputIndex].Sequence <= acknowledgedInputSequence)
             {
-                this.PendingSequences.RemoveAt(0);
-                this.PendingMoveXs.RemoveAt(0);
-                this.PendingMoveYs.RemoveAt(0);
-                this.PendingMovePerTicks.RemoveAt(0);
+                this.firstPendingInputIndex++;
             }
 
+            this.CompactPendingInputs();
             this.PredictedPositionX = authoritativePositionX;
             this.PredictedPositionY = authoritativePositionY;
-            for (int index = 0; index < this.PendingSequences.Count; index++)
+            for (int index = this.firstPendingInputIndex; index < this.pendingInputs.Count; index++)
             {
-                this.PredictedPositionX +=
-                        this.PendingMoveXs[index] * this.PendingMovePerTicks[index] /
-                        SurvivorDefaults.InputScale;
-                this.PredictedPositionY +=
-                        this.PendingMoveYs[index] * this.PendingMovePerTicks[index] /
-                        SurvivorDefaults.InputScale;
-                this.PredictedPositionX = SurvivorDefaults.ClampPlayerPosition(
-                    this.PredictedPositionX);
-                this.PredictedPositionY = SurvivorDefaults.ClampPlayerPosition(
-                    this.PredictedPositionY);
+                SurvivorPendingInput input = this.pendingInputs[index];
+                this.ApplyPredictedInput(input.MoveX, input.MoveY, input.MovePerTick);
             }
 
             float expectedPositionX = this.PredictedPositionX / WorldCoordinateScale;
             float expectedPositionY = this.PredictedPositionY / WorldCoordinateScale;
             float partialInputRatio = this.InputAccumulator / InputIntervalSeconds;
-            expectedPositionX +=
-                    this.CurrentMoveX * currentMovePerTick * partialInputRatio /
+            expectedPositionX += this.CurrentMoveX * currentMovePerTick * partialInputRatio /
                     (SurvivorDefaults.InputScale * WorldCoordinateScale);
-            expectedPositionY +=
-                    this.CurrentMoveY * currentMovePerTick * partialInputRatio /
+            expectedPositionY += this.CurrentMoveY * currentMovePerTick * partialInputRatio /
                     (SurvivorDefaults.InputScale * WorldCoordinateScale);
-            expectedPositionX = SurvivorDefaults.ClampPlayerPresentationPosition(
-                expectedPositionX);
-            expectedPositionY = SurvivorDefaults.ClampPlayerPresentationPosition(
-                expectedPositionY);
+            expectedPositionX = SurvivorDefaults.ClampPlayerPresentationPosition(expectedPositionX);
+            expectedPositionY = SurvivorDefaults.ClampPlayerPresentationPosition(expectedPositionY);
             float errorX = expectedPositionX - this.PresentationPositionX;
             float errorY = expectedPositionY - this.PresentationPositionY;
             if (errorX * errorX + errorY * errorY > HardSnapDistance * HardSnapDistance)
@@ -140,12 +116,10 @@ namespace ET.Client
                 return;
             }
 
-            this.PresentationPositionX +=
-                    this.CurrentMoveX * movePerTick * deltaTime *
+            this.PresentationPositionX += this.CurrentMoveX * movePerTick * deltaTime *
                     SurvivorDefaults.SimulationTicksPerSecond /
                     (SurvivorDefaults.InputScale * WorldCoordinateScale);
-            this.PresentationPositionY +=
-                    this.CurrentMoveY * movePerTick * deltaTime *
+            this.PresentationPositionY += this.CurrentMoveY * movePerTick * deltaTime *
                     SurvivorDefaults.SimulationTicksPerSecond /
                     (SurvivorDefaults.InputScale * WorldCoordinateScale);
 
@@ -156,18 +130,14 @@ namespace ET.Client
             this.PresentationPositionY += appliedCorrectionY;
             this.correctionX -= appliedCorrectionX;
             this.correctionY -= appliedCorrectionY;
-            this.PresentationPositionX = SurvivorDefaults.ClampPlayerPresentationPosition(
-                this.PresentationPositionX);
-            this.PresentationPositionY = SurvivorDefaults.ClampPlayerPresentationPosition(
-                this.PresentationPositionY);
+            this.PresentationPositionX = SurvivorDefaults.ClampPlayerPresentationPosition(this.PresentationPositionX);
+            this.PresentationPositionY = SurvivorDefaults.ClampPlayerPresentationPosition(this.PresentationPositionY);
         }
 
         public void Reset()
         {
-            this.PendingSequences.Clear();
-            this.PendingMoveXs.Clear();
-            this.PendingMoveYs.Clear();
-            this.PendingMovePerTicks.Clear();
+            this.pendingInputs.Clear();
+            this.firstPendingInputIndex = 0;
             this.IsInitialized = false;
             this.PredictedPositionX = 0;
             this.PredictedPositionY = 0;
@@ -179,5 +149,44 @@ namespace ET.Client
             this.correctionX = 0f;
             this.correctionY = 0f;
         }
+
+        private void ApplyPredictedInput(int moveX, int moveY, int movePerTick)
+        {
+            this.PredictedPositionX += moveX * movePerTick / SurvivorDefaults.InputScale;
+            this.PredictedPositionY += moveY * movePerTick / SurvivorDefaults.InputScale;
+            this.PredictedPositionX = SurvivorDefaults.ClampPlayerPosition(this.PredictedPositionX);
+            this.PredictedPositionY = SurvivorDefaults.ClampPlayerPosition(this.PredictedPositionY);
+        }
+
+        private void CompactPendingInputs()
+        {
+            if (this.firstPendingInputIndex < PendingInputCompactionThreshold ||
+                this.firstPendingInputIndex * 2 < this.pendingInputs.Count)
+            {
+                return;
+            }
+
+            this.pendingInputs.RemoveRange(0, this.firstPendingInputIndex);
+            this.firstPendingInputIndex = 0;
+        }
+    }
+
+    public readonly struct SurvivorPendingInput
+    {
+        public SurvivorPendingInput(long sequence, int moveX, int moveY, int movePerTick)
+        {
+            this.Sequence = sequence;
+            this.MoveX = moveX;
+            this.MoveY = moveY;
+            this.MovePerTick = movePerTick;
+        }
+
+        public long Sequence { get; }
+
+        public int MoveX { get; }
+
+        public int MoveY { get; }
+
+        public int MovePerTick { get; }
     }
 }

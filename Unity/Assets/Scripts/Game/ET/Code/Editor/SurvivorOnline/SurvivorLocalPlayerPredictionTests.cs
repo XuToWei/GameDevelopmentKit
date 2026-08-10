@@ -21,13 +21,41 @@ namespace ET.Tests
                 SurvivorDefaults.PlayerMovePerTick);
 
             Assert.That(prediction.PendingCount, Is.EqualTo(2));
-            Assert.That(prediction.PendingSequences[0], Is.EqualTo(2));
+            Assert.That(prediction.GetPendingSequence(0), Is.EqualTo(2));
             Assert.That(
                 prediction.PredictedPositionX,
                 Is.EqualTo(SurvivorDefaults.PlayerMovePerTick * 2));
             Assert.That(
                 prediction.PredictedPositionY,
                 Is.EqualTo(SurvivorDefaults.PlayerMovePerTick));
+        }
+
+        [Test]
+        public void Reconcile_AcknowledgesMultipleInputsAndPreservesRemainingOrder()
+        {
+            SurvivorLocalPlayerPrediction prediction = new SurvivorLocalPlayerPrediction();
+            prediction.Initialize(0, 0);
+            for (int sequence = 1; sequence <= 5; sequence++)
+            {
+                prediction.RecordInput(
+                    sequence,
+                    SurvivorDefaults.InputScale,
+                    0,
+                    SurvivorDefaults.PlayerMovePerTick);
+            }
+
+            prediction.Reconcile(
+                SurvivorDefaults.PlayerMovePerTick * 3,
+                0,
+                3,
+                SurvivorDefaults.PlayerMovePerTick);
+
+            Assert.That(prediction.PendingCount, Is.EqualTo(2));
+            Assert.That(prediction.GetPendingSequence(0), Is.EqualTo(4));
+            Assert.That(prediction.GetPendingSequence(1), Is.EqualTo(5));
+            Assert.That(
+                prediction.PredictedPositionX,
+                Is.EqualTo(SurvivorDefaults.PlayerMovePerTick * 5));
         }
 
         [Test]

@@ -9,28 +9,25 @@ namespace ET
             using var playerEnumerator = self.Data.Players.GetEnumerator();
             while (playerEnumerator.MoveNext())
             {
-                self.Runtime.Player = playerEnumerator.Current.Value;
-                if (!self.Runtime.Player.Alive)
+                SurvivorPlayerState player = playerEnumerator.Current.Value;
+                if (!player.Alive)
                 {
                     continue;
                 }
 
-                self.TickSwordWave();
-                self.TickAutoFire();
+                self.TickSwordWave(player);
+                self.TickAutoFire(player);
             }
-
-            self.Runtime.Player = null;
-            self.Runtime.TargetMonster = null;
         }
 
-        private static void TickSwordWave(this SurvivorWorldComponent self)
+        private static void TickSwordWave(this SurvivorWorldComponent self, SurvivorPlayerState player)
         {
-            if (self.Runtime.Player.SwordWaveCooldown > 0)
+            if (player.SwordWaveCooldown > 0)
             {
-                self.Runtime.Player.SwordWaveCooldown--;
+                player.SwordWaveCooldown--;
             }
 
-            if (self.Runtime.Player.SwordWaveCooldown > 0)
+            if (player.SwordWaveCooldown > 0)
             {
                 return;
             }
@@ -39,149 +36,126 @@ namespace ET
             using var monsterEnumerator = self.Data.Monsters.GetEnumerator();
             while (monsterEnumerator.MoveNext())
             {
-                self.Runtime.Monster = monsterEnumerator.Current.Value;
-                if (!self.Runtime.Monster.Alive)
+                SurvivorMonsterState monster = monsterEnumerator.Current.Value;
+                if (!monster.Alive)
                 {
                     continue;
                 }
 
-                if (SurvivorMath.Abs(
-                        self.Runtime.Monster.PositionX - self.Runtime.Player.PositionX) >
+                if (SurvivorMath.Abs(monster.PositionX - player.PositionX) >
                     SurvivorDefaults.SwordWaveRangeX + SurvivorDefaults.MonsterCollisionRadius)
                 {
                     continue;
                 }
 
-                if (SurvivorMath.Abs(
-                        self.Runtime.Monster.PositionY - self.Runtime.Player.PositionY) >
+                if (SurvivorMath.Abs(monster.PositionY - player.PositionY) >
                     SurvivorDefaults.SwordWaveRangeY + SurvivorDefaults.MonsterCollisionRadius)
                 {
                     continue;
                 }
 
-                self.Runtime.SwordWaveHitStateIds.Add(self.Runtime.Monster.StateId);
+                self.Runtime.SwordWaveHitStateIds.Add(monster.StateId);
             }
 
-            self.Runtime.Monster = null;
-            self.Runtime.Index = 0;
-            while (self.Runtime.Index < self.Runtime.SwordWaveHitStateIds.Count)
+            for (int index = 0; index < self.Runtime.SwordWaveHitStateIds.Count; index++)
             {
-                self.Runtime.StateId = self.Runtime.SwordWaveHitStateIds[self.Runtime.Index];
-                if (self.Data.Monsters.ContainsKey(self.Runtime.StateId))
+                long stateId = self.Runtime.SwordWaveHitStateIds[index];
+                if (self.Data.Monsters.TryGetValue(stateId, out SurvivorMonsterState monster))
                 {
-                    self.Runtime.Monster = self.Data.Monsters[self.Runtime.StateId];
-                    self.Runtime.Monster.Hp -= SurvivorDefaults.SwordWaveDamage;
+                    monster.Hp -= SurvivorDefaults.SwordWaveDamage;
                 }
-
-                self.Runtime.Index++;
             }
 
-            self.Runtime.Monster = null;
-            self.Runtime.Player.SwordWaveRevision++;
-            self.Runtime.Player.SwordWaveCooldown = SurvivorDefaults.SwordWaveIntervalTicks;
+            player.SwordWaveRevision++;
+            player.SwordWaveCooldown = SurvivorDefaults.SwordWaveIntervalTicks;
         }
 
-        private static void TickAutoFire(this SurvivorWorldComponent self)
+        private static void TickAutoFire(this SurvivorWorldComponent self, SurvivorPlayerState player)
         {
-            if (self.Runtime.Player.AutoFireLevel <= 0)
+            if (player.AutoFireLevel <= 0)
             {
                 return;
             }
 
-            if (self.Runtime.Player.AutoFireCooldown > 0)
+            if (player.AutoFireCooldown > 0)
             {
-                self.Runtime.Player.AutoFireCooldown--;
+                player.AutoFireCooldown--;
             }
 
-            if (self.Runtime.Player.AutoFireCooldown > 0)
-            {
-                return;
-            }
-
-            self.FindNearestMonster();
-            if (self.Runtime.TargetMonster == null)
+            if (player.AutoFireCooldown > 0)
             {
                 return;
             }
 
-            self.Runtime.DeltaX =
-                    self.Runtime.TargetMonster.PositionX - self.Runtime.Player.PositionX;
-            self.Runtime.DeltaY =
-                    self.Runtime.TargetMonster.PositionY - self.Runtime.Player.PositionY;
-            self.CalculateAutoFireVelocity();
-            self.SpawnProjectile(
-                self.Runtime.VelocityX,
-                self.Runtime.VelocityY);
-            self.Runtime.Player.AutoFireCooldown = self.Runtime.Player.AutoFireIntervalTicks();
+            SurvivorMonsterState targetMonster = self.FindNearestMonster(player);
+            if (targetMonster == null)
+            {
+                return;
+            }
+
+            int deltaX = targetMonster.PositionX - player.PositionX;
+            int deltaY = targetMonster.PositionY - player.PositionY;
+            CalculateAutoFireVelocity(deltaX, deltaY, out int velocityX, out int velocityY);
+            self.SpawnProjectile(player, velocityX, velocityY);
+            player.AutoFireCooldown = player.AutoFireIntervalTicks();
         }
 
-        private static void FindNearestMonster(this SurvivorWorldComponent self)
+        private static SurvivorMonsterState FindNearestMonster(this SurvivorWorldComponent self, SurvivorPlayerState player)
         {
-            self.Runtime.TargetMonster = null;
-            self.Runtime.DistanceSquared = long.MaxValue;
+            SurvivorMonsterState targetMonster = null;
+            long nearestDistanceSquared = long.MaxValue;
             using var monsterEnumerator = self.Data.Monsters.GetEnumerator();
             while (monsterEnumerator.MoveNext())
             {
-                self.Runtime.Monster = monsterEnumerator.Current.Value;
-                if (!self.Runtime.Monster.Alive)
+                SurvivorMonsterState monster = monsterEnumerator.Current.Value;
+                if (!monster.Alive)
                 {
                     continue;
                 }
 
-                long deltaX = self.Runtime.Monster.PositionX - self.Runtime.Player.PositionX;
-                long deltaY = self.Runtime.Monster.PositionY - self.Runtime.Player.PositionY;
+                long deltaX = monster.PositionX - player.PositionX;
+                long deltaY = monster.PositionY - player.PositionY;
                 long distanceSquared = deltaX * deltaX + deltaY * deltaY;
-                if (distanceSquared > self.Runtime.DistanceSquared ||
-                    distanceSquared == self.Runtime.DistanceSquared &&
-                    self.Runtime.TargetMonster != null &&
-                    self.Runtime.Monster.StateId >= self.Runtime.TargetMonster.StateId)
+                if (distanceSquared > nearestDistanceSquared ||
+                    distanceSquared == nearestDistanceSquared && targetMonster != null && monster.StateId >= targetMonster.StateId)
                 {
                     continue;
                 }
 
-                self.Runtime.DistanceSquared = distanceSquared;
-                self.Runtime.TargetMonster = self.Runtime.Monster;
+                nearestDistanceSquared = distanceSquared;
+                targetMonster = monster;
             }
 
-            self.Runtime.Monster = null;
+            return targetMonster;
         }
 
-        private static void CalculateAutoFireVelocity(this SurvivorWorldComponent self)
+        private static void CalculateAutoFireVelocity(int deltaX, int deltaY, out int velocityX, out int velocityY)
         {
-            if (self.Runtime.DeltaX == 0 && self.Runtime.DeltaY == 0)
+            if (deltaX == 0 && deltaY == 0)
             {
-                self.Runtime.VelocityX = SurvivorDefaults.ProjectileMovePerTick;
-                self.Runtime.VelocityY = 0;
+                velocityX = SurvivorDefaults.ProjectileMovePerTick;
+                velocityY = 0;
                 return;
             }
 
-            double distance = Math.Sqrt(
-                (long)self.Runtime.DeltaX * self.Runtime.DeltaX +
-                (long)self.Runtime.DeltaY * self.Runtime.DeltaY);
-            self.Runtime.VelocityX = (int)Math.Round(
-                self.Runtime.DeltaX * SurvivorDefaults.ProjectileMovePerTick / distance,
-                MidpointRounding.AwayFromZero);
-            self.Runtime.VelocityY = (int)Math.Round(
-                self.Runtime.DeltaY * SurvivorDefaults.ProjectileMovePerTick / distance,
-                MidpointRounding.AwayFromZero);
+            double distance = Math.Sqrt((long)deltaX * deltaX + (long)deltaY * deltaY);
+            velocityX = (int)Math.Round(deltaX * SurvivorDefaults.ProjectileMovePerTick / distance, MidpointRounding.AwayFromZero);
+            velocityY = (int)Math.Round(deltaY * SurvivorDefaults.ProjectileMovePerTick / distance, MidpointRounding.AwayFromZero);
         }
 
-        private static void SpawnProjectile(
-            this SurvivorWorldComponent self,
-            int velocityX,
-            int velocityY)
+        private static void SpawnProjectile(this SurvivorWorldComponent self, SurvivorPlayerState player, int velocityX, int velocityY)
         {
-            self.Runtime.StateId = self.AllocateStateId();
+            long stateId = self.AllocateStateId();
             self.Data.Projectiles.Add(
-                self.Runtime.StateId,
+                stateId,
                 SurvivorWorldFactory.CreateProjectile(
-                    self.Runtime.StateId,
-                    self.Runtime.Player.PlayerId,
-                    self.Runtime.Player.PositionX,
-                    self.Runtime.Player.PositionY,
+                    stateId,
+                    player.PlayerId,
+                    player.PositionX,
+                    player.PositionY,
                     velocityX,
                     velocityY,
-                    self.Runtime.Player.ProjectileDamage()));
+                    player.ProjectileDamage()));
             self.Data.ProjectileSetRevision++;
         }
     }

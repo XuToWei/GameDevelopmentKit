@@ -2,9 +2,7 @@ namespace ET
 {
     public static class SurvivorSkillSystem
     {
-        public static void RefreshSkillChoices(
-            this SurvivorWorldComponent self,
-            SurvivorPlayerState state)
+        public static void RefreshSkillChoices(this SurvivorWorldComponent self, SurvivorPlayerState state)
         {
             state.SkillChoice1 = SurvivorSkillType.AutoFire;
             state.SkillChoice2 = SurvivorSkillType.PowerShot;
@@ -19,57 +17,51 @@ namespace ET
             SurvivorSkillType skillType)
         {
             if (self.Data.Phase != SurvivorRoomPhase.Running ||
-                !self.Data.Players.ContainsKey(playerId))
+                !self.Data.Players.TryGetValue(playerId, out SurvivorPlayerState player))
             {
                 return false;
             }
 
-            self.Runtime.Player = self.Data.Players[playerId];
-            if (self.Runtime.Player.UnspentSkillPoints <= 0 ||
-                self.Runtime.Player.SkillChoiceRevision != choiceRevision ||
-                !self.Runtime.Player.IsSkillOffered(skillType))
+            if (player.UnspentSkillPoints <= 0 ||
+                player.SkillChoiceRevision != choiceRevision ||
+                !player.IsSkillOffered(skillType))
             {
-                self.Runtime.Player = null;
                 return false;
             }
 
             switch (skillType)
             {
                 case SurvivorSkillType.AutoFire:
-                    self.Runtime.Player.AutoFireLevel++;
-                    self.Runtime.Player.AutoFireCooldown = 0;
+                    player.AutoFireLevel++;
+                    player.AutoFireCooldown = 0;
                     break;
                 case SurvivorSkillType.PowerShot:
-                    self.Runtime.Player.PowerShotLevel++;
+                    player.PowerShotLevel++;
                     break;
                 case SurvivorSkillType.SwiftStep:
-                    self.Runtime.Player.SwiftStepLevel++;
+                    player.SwiftStepLevel++;
                     break;
                 default:
-                    self.Runtime.Player = null;
                     return false;
             }
 
-            self.Runtime.Player.UnspentSkillPoints--;
-            if (self.Runtime.Player.UnspentSkillPoints > 0)
+            player.UnspentSkillPoints--;
+            if (player.UnspentSkillPoints > 0)
             {
-                self.RefreshSkillChoices(self.Runtime.Player);
+                self.RefreshSkillChoices(player);
             }
             else
             {
-                self.Runtime.Player.SkillChoice1 = SurvivorSkillType.None;
-                self.Runtime.Player.SkillChoice2 = SurvivorSkillType.None;
-                self.Runtime.Player.SkillChoice3 = SurvivorSkillType.None;
-                self.Runtime.Player.SkillChoiceRevision++;
+                player.SkillChoice1 = SurvivorSkillType.None;
+                player.SkillChoice2 = SurvivorSkillType.None;
+                player.SkillChoice3 = SurvivorSkillType.None;
+                player.SkillChoiceRevision++;
             }
 
-            self.Runtime.Player = null;
             return true;
         }
 
-        public static bool IsSkillOffered(
-            this SurvivorPlayerState self,
-            SurvivorSkillType skillType)
+        public static bool IsSkillOffered(this SurvivorPlayerState self, SurvivorSkillType skillType)
         {
             return skillType != SurvivorSkillType.None &&
                     (self.SkillChoice1 == skillType ||
@@ -80,14 +72,11 @@ namespace ET
         public static int AutoFireIntervalTicks(this SurvivorPlayerState self)
         {
             int upgradedLevels = self.AutoFireLevel > 1 ? self.AutoFireLevel - 1 : 0;
-            int intervalReduction = upgradedLevels *
-                    SurvivorDefaults.AutoFireIntervalReductionTicks;
-            return SurvivorDefaults.AutoFireIntervalTicks -
-                    intervalReduction <
-                    SurvivorDefaults.MinimumAutoFireIntervalTicks
+            int interval = SurvivorDefaults.AutoFireIntervalTicks -
+                    upgradedLevels * SurvivorDefaults.AutoFireIntervalReductionTicks;
+            return interval < SurvivorDefaults.MinimumAutoFireIntervalTicks
                     ? SurvivorDefaults.MinimumAutoFireIntervalTicks
-                    : SurvivorDefaults.AutoFireIntervalTicks -
-                      intervalReduction;
+                    : interval;
         }
 
         public static int ProjectileDamage(this SurvivorPlayerState self)

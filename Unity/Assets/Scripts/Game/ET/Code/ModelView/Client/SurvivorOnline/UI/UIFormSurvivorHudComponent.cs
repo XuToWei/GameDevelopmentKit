@@ -4,7 +4,6 @@ namespace ET.Client
     public sealed partial class UIFormSurvivorHudComponent:
             UGFUIForm<MonoUIFormSurvivorHud>,
             IAwake,
-            IUGFUIFormOnOpen,
             IUGFUIFormOnUpdate,
             IUGFUIFormOnClose,
             IETReactive

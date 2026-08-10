@@ -35,48 +35,6 @@ namespace ET
 
         public List<long> PickupRemovalStateIds { get; } = new();
 
-        public SurvivorPlayerState Player { get; set; }
-
-        public SurvivorMonsterState Monster { get; set; }
-
-        public SurvivorProjectileState Projectile { get; set; }
-
-        public SurvivorPickupState Pickup { get; set; }
-
-        public SurvivorPlayerState TargetPlayer { get; set; }
-
-        public SurvivorMonsterState TargetMonster { get; set; }
-
-        public long StateId { get; set; }
-
-        public int Index { get; set; }
-
-        public int ObserverIndex { get; set; }
-
-        public int DeltaX { get; set; }
-
-        public int DeltaY { get; set; }
-
-        public int Distance { get; set; }
-
-        public long DistanceSquared { get; set; }
-
-        public int SpawnPositionX { get; set; }
-
-        public int SpawnPositionY { get; set; }
-
-        public int VelocityX { get; set; }
-
-        public int VelocityY { get; set; }
-
-        public int AlivePlayerCount { get; set; }
-
-        public bool Hit { get; set; }
-
-        public bool Collected { get; set; }
-
-        public byte[] FrameBytes { get; set; }
-
         public void Dispose()
         {
             this.ApplyReader.Dispose();
