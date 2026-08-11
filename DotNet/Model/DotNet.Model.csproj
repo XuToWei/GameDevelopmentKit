@@ -44,7 +44,6 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="XuToWei.ReactiveBinding" Version="1.2.2" />
         <ProjectReference Include="..\..\Share\Analyzer\Share.Analyzer.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <ProjectReference Include="..\..\Share\SourceGenerator\Share.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <ProjectReference Include="..\Core\DotNet.Core.csproj" />
