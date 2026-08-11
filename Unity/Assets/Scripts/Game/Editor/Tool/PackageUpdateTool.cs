@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEditor.PackageManager;
@@ -15,7 +14,6 @@ namespace Game.Editor
     public static class PackageUpdateTool
     {
         private const string MENU_PATH = "Game/Tool/UpdateAllPackages";
-        private const int MAX_PREVIEW_COUNT = 20;
 
         private static ListRequest s_ListRequest;
         private static AddAndRemoveRequest s_UpdateRequest;
@@ -97,13 +95,6 @@ namespace Game.Editor
                 return;
             }
 
-            ReportProgress($"Found {updates.Count} package updates. Waiting for confirmation...");
-            if (!EditorUtility.DisplayDialog("Update All Packages", BuildPreview(updates), "Update", "Cancel"))
-            {
-                Finish(EditorProgress.Status.Canceled);
-                return;
-            }
-
             string[] packagesToAdd = new string[updates.Count];
             for (int i = 0; i < updates.Count; i++)
             {
@@ -162,14 +153,13 @@ namespace Game.Editor
                     string identifier = string.IsNullOrEmpty(targetVersion)
                         ? package.name
                         : $"{package.name}@{targetVersion}";
-                    string target = string.IsNullOrEmpty(targetVersion) ? "latest compatible" : targetVersion;
-                    updates.Add(new PackageUpdate(package.name, identifier, $"{package.name}: {package.version} -> {target}"));
+                    updates.Add(new PackageUpdate(package.name, identifier));
                     continue;
                 }
 
                 if (package.source == PackageSource.Git && manifestDependencies.TryGetValue(package.name, out string gitUrl))
                 {
-                    updates.Add(new PackageUpdate(package.name, gitUrl, $"{package.name}: refresh Git revision"));
+                    updates.Add(new PackageUpdate(package.name, gitUrl));
                 }
             }
 
@@ -193,25 +183,6 @@ namespace Game.Editor
                 result.Add(dependency.Name, dependency.Value.Value<string>());
             }
             return result;
-        }
-
-        private static string BuildPreview(List<PackageUpdate> updates)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine($"The following {updates.Count} packages will be updated:");
-            builder.AppendLine();
-            int previewCount = Math.Min(updates.Count, MAX_PREVIEW_COUNT);
-            for (int i = 0; i < previewCount; i++)
-            {
-                builder.Append("• ").AppendLine(updates[i].Description);
-            }
-            if (updates.Count > previewCount)
-            {
-                builder.AppendLine($"... and {updates.Count - previewCount} more packages");
-            }
-            builder.AppendLine();
-            builder.Append("Built-in, local and embedded packages are skipped. Ensure the project is under version control before continuing.");
-            return builder.ToString();
         }
 
         private static void FinishWithError(string message, Error error)
@@ -242,16 +213,14 @@ namespace Game.Editor
 
         private sealed class PackageUpdate
         {
-            public PackageUpdate(string name, string identifier, string description)
+            public PackageUpdate(string name, string identifier)
             {
                 Name = name;
                 Identifier = identifier;
-                Description = description;
             }
 
             public string Name { get; }
             public string Identifier { get; }
-            public string Description { get; }
         }
     }
 }
