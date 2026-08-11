@@ -55,12 +55,13 @@ namespace ET.Analyzer
                 var classTypeSymbol = analysisContext.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax);
                 if (classTypeSymbol!=null)
                 {
-                    Analyzer(analysisContext, classTypeSymbol);
+                    // 只分析当前语法树中的声明；partial 类型的其他声明可能来自源生成器。
+                    Analyzer(analysisContext, classTypeSymbol, classDeclarationSyntax);
                 }
             }
         }
 
-        private void Analyzer(SemanticModelAnalysisContext context, INamedTypeSymbol namedTypeSymbol)
+        private void Analyzer(SemanticModelAnalysisContext context, INamedTypeSymbol namedTypeSymbol, ClassDeclarationSyntax classDeclarationSyntax)
         {
             // 筛选出实体类
             if (namedTypeSymbol.BaseType?.ToString() != Definition.EntityType && namedTypeSymbol.BaseType?.ToString() != Definition.LSEntityType)
@@ -74,28 +75,19 @@ namespace ET.Analyzer
                 return;
             }
 
-            foreach (var syntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
+            foreach (var memberDeclarationSyntax in classDeclarationSyntax.Members)
             {
-                var classSyntax = syntaxReference.GetSyntax();
-                if (!(classSyntax is ClassDeclarationSyntax classDeclarationSyntax))
+                // 筛选出类声明语法节点下的所有方法声明语法节点
+                if (memberDeclarationSyntax is MethodDeclarationSyntax methodDeclarationSyntax)
                 {
-                    return;
-                }
-
-                foreach (var memberDeclarationSyntax in classDeclarationSyntax.Members)
-                {
-                    // 筛选出类声明语法节点下的所有方法声明语法节点
-                    if (memberDeclarationSyntax is MethodDeclarationSyntax methodDeclarationSyntax)
+                    IMethodSymbol? methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclarationSyntax);
+                    if (methodSymbol != null && methodSymbol.HasAttribute(Definition.ETReactiveSourceAttribute))
                     {
-                        IMethodSymbol? methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclarationSyntax);
-                        if (methodSymbol != null && methodSymbol.HasAttribute(Definition.ETReactiveSourceAttribute))
-                        {
-                            continue;
-                        }
-
-                        Diagnostic diagnostic = Diagnostic.Create(Rule, methodDeclarationSyntax.GetLocation(),namedTypeSymbol.Name,methodDeclarationSyntax.Identifier.Text);
-                        context.ReportDiagnostic(diagnostic);
+                        continue;
                     }
+
+                    Diagnostic diagnostic = Diagnostic.Create(Rule, methodDeclarationSyntax.GetLocation(),namedTypeSymbol.Name,methodDeclarationSyntax.Identifier.Text);
+                    context.ReportDiagnostic(diagnostic);
                 }
             }
             
