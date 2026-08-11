@@ -34,7 +34,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "2f4016c3864f66353c97953a35010959534e9a35"
+      "hash": "94ef3ada02ea62a8290bd8ce9d3f572edbdcd007"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
@@ -313,7 +313,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4a72141b66f1b40b66ab12115d171242b425b846"
+      "hash": "d05962f97ce19210e7fa9488f36c45961650d034"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
@@ -337,7 +337,7 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.test-framework": "1.1.33"
       },
-      "hash": "33a5dc50db654ab2ed0b99e9d9dca66095064a28"
+      "hash": "c8710288ebbb99fe51c1befc60567ff470a316f5"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
