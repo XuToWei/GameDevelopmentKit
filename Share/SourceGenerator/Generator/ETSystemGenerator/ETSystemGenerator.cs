@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ET.Analyzer;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -7,37 +8,52 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace ET.Generator;
 
 [Generator(LanguageNames.CSharp)]
-public class ETSystemGenerator: ISourceGenerator
+public class ETSystemGenerator: IIncrementalGenerator
 {
-    private AttributeTemplate? templates;
+    private static readonly AttributeTemplate Templates = new();
 
-    public void Initialize(GeneratorInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        this.templates = new AttributeTemplate();
-        context.RegisterForSyntaxNotifications(() => SyntaxContextReceiver.Create(this.templates));
+        IncrementalValuesProvider<ClassDeclarationSyntax> declarations = context.SyntaxProvider.CreateSyntaxProvider(
+            static (node, _) => IsCandidateClass(node),
+            static (generatorContext, _) => (ClassDeclarationSyntax)generatorContext.Node);
+
+        context.RegisterSourceOutput(
+            declarations.Combine(context.CompilationProvider),
+            static (sourceContext, value) => GenerateCSFiles(value.Left, sourceContext, value.Right));
     }
 
-    public void Execute(GeneratorExecutionContext context)
+    private static bool IsCandidateClass(SyntaxNode node)
     {
-        if (context.SyntaxContextReceiver is not SyntaxContextReceiver receiver || receiver.MethodDeclarations.Count == 0)
+        if (node is not ClassDeclarationSyntax classDeclaration)
         {
-            return;
+            return false;
         }
 
-        foreach (var kv in receiver.MethodDeclarations)
+        return classDeclaration.Members
+                .OfType<MethodDeclarationSyntax>()
+                .Any(static method => HasSupportedAttribute(method));
+    }
+
+    private static bool HasSupportedAttribute(MethodDeclarationSyntax method)
+    {
+        return method.AttributeLists.Any(static list =>
         {
-            this.GenerateCSFiles(kv.Key, kv.Value, context);
-        }
+            AttributeSyntax? attribute = list.Attributes.FirstOrDefault();
+            return attribute != null && Templates.Contains(attribute.Name.ToString());
+        });
     }
 
     /// <summary>
     /// 每个静态类生成一个cs文件
     /// </summary>
-    private void GenerateCSFiles(ClassDeclarationSyntax classDeclarationSyntax, HashSet<MethodDeclarationSyntax> methodDeclarationSyntaxes,
-    GeneratorExecutionContext context)
+    private static void GenerateCSFiles(ClassDeclarationSyntax classDeclarationSyntax, SourceProductionContext context, Compilation compilation)
     {
+        HashSet<MethodDeclarationSyntax> methodDeclarationSyntaxes = new(classDeclarationSyntax.Members
+                .OfType<MethodDeclarationSyntax>()
+                .Where(static method => HasSupportedAttribute(method)));
         string className = classDeclarationSyntax.Identifier.Text;
-        SemanticModel semanticModel = context.Compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
+        SemanticModel semanticModel = compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
         INamedTypeSymbol? classTypeSymbol = semanticModel.GetDeclaredSymbol(classDeclarationSyntax) as INamedTypeSymbol;
         if (classTypeSymbol == null)
         {
@@ -70,20 +86,15 @@ public class ETSystemGenerator: ISourceGenerator
             throw new Exception($"{className} namespace is null");
         }
 
-        this.GenerateSystemCodeByTemplate(namespaceName, className, classDeclarationSyntax, methodDeclarationSyntaxes, context, semanticModel);
+        GenerateSystemCodeByTemplate(namespaceName, className, methodDeclarationSyntaxes, context, semanticModel);
     }
 
     /// <summary>
     /// 根据模板生成System代码
     /// </summary>
-    private void GenerateSystemCodeByTemplate(string namespaceName, string className, ClassDeclarationSyntax classDeclarationSyntax,
-    HashSet<MethodDeclarationSyntax> methodDeclarationSyntaxes, GeneratorExecutionContext context, SemanticModel semanticModel)
+    private static void GenerateSystemCodeByTemplate(string namespaceName, string className,
+    HashSet<MethodDeclarationSyntax> methodDeclarationSyntaxes, SourceProductionContext context, SemanticModel semanticModel)
     {
-        if (this.templates == null)
-        {
-            throw new Exception("attribute template is null");
-        }
-        
         foreach (MethodDeclarationSyntax? methodDeclarationSyntax in methodDeclarationSyntaxes)
         {
             IMethodSymbol? methodSymbol = semanticModel.GetDeclaredSymbol(methodDeclarationSyntax) as IMethodSymbol;
@@ -141,7 +152,7 @@ public class ETSystemGenerator: ISourceGenerator
                 string attributeType = attribute.Name.ToString();
                 string attributeString = $"[{attribute.ToString()}]";
                     
-                string template = this.templates.Get(attributeType);
+                string template = Templates.Get(attributeType);
                     
                 string code = $$"""
 namespace {{namespaceName}}
@@ -206,72 +217,6 @@ namespace {{namespaceName}}
                     }
                 }
             }
-        }
-    }
-
-    class SyntaxContextReceiver: ISyntaxContextReceiver
-    {
-        internal static ISyntaxContextReceiver Create(AttributeTemplate attributeTemplate)
-        {
-            return new SyntaxContextReceiver(attributeTemplate);
-        }
-
-        private AttributeTemplate attributeTemplate;
-
-        SyntaxContextReceiver(AttributeTemplate attributeTemplate)
-        {
-            this.attributeTemplate = attributeTemplate;
-        }
-
-        public Dictionary<ClassDeclarationSyntax, HashSet<MethodDeclarationSyntax>> MethodDeclarations { get; } = new();
-
-        public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
-        {
-            SyntaxNode node = context.Node;
-            if (node is not MethodDeclarationSyntax methodDeclarationSyntax)
-            {
-                return;
-            }
-
-            if (methodDeclarationSyntax.AttributeLists.Count == 0)
-            {
-                return;
-            }
-
-            bool found = false;
-            foreach (AttributeListSyntax attributeListSyntax in methodDeclarationSyntax.AttributeLists)
-            {
-                AttributeSyntax? attribute = attributeListSyntax.Attributes.FirstOrDefault();
-                if (attribute == null)
-                {
-                    return;
-                }
-
-                string attributeName = attribute.Name.ToString();
-
-                if (this.attributeTemplate.Contains(attributeName))
-                {
-                    found = true;
-                }
-            }
-
-            if (!found)
-            {
-                return;
-            }
-
-            ClassDeclarationSyntax? parentClass = methodDeclarationSyntax.GetParentClassDeclaration();
-            if (parentClass == null)
-            {
-                return;
-            }
-
-            if (!MethodDeclarations.ContainsKey(parentClass))
-            {
-                MethodDeclarations[parentClass] = new HashSet<MethodDeclarationSyntax>();
-            }
-
-            MethodDeclarations[parentClass].Add(methodDeclarationSyntax);
         }
     }
 }

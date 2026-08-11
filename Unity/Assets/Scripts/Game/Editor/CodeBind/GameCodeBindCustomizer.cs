@@ -39,8 +39,7 @@ namespace CodeBind
                 {
                     continue;
                 }
-                string controllerPropertyName =
-                    GetPublicPropertyName($"{binding.VariableName}{binding.TargetToken}");
+                string controllerPropertyName = GetPublicPropertyName($"{binding.MemberNamePrefix}{binding.TargetToken}");
                 foreach (StateController.StateGroup group in controller.EditorGroups)
                 {
                     string[] stateNames = controller.GetStateNames(group.Name);
@@ -48,7 +47,7 @@ namespace CodeBind
                     {
                         continue;
                     }
-                    string groupBindingName = $"{binding.VariableName}{group.Name}";
+                    string groupBindingName = $"{binding.MemberNamePrefix}{group.Name}";
                     string groupFieldName = GetSerializedFieldName($"{groupBindingName}StateGroup");
                     string groupPropertyName = GetPublicPropertyName($"{groupBindingName}StateGroup");
                     string stateNameClassName = $"{groupBindingName}StateName";
