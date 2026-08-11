@@ -42,7 +42,7 @@ namespace ET.Analyzer
             var binaryExpression = (BinaryExpressionSyntax)context.Node;
             
             // 检查是否为字符串拼接（+操作符）
-            if (binaryExpression.OperatorToken.Kind() == SyntaxKind.PlusToken)
+            if (binaryExpression.OperatorToken.IsKind(SyntaxKind.PlusToken))
             {
                 // 检查操作数是否包含字符串类型
                 var leftType = context.SemanticModel.GetTypeInfo(binaryExpression.Left).Type;

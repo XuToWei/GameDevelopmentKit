@@ -306,21 +306,21 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "de6877110432a7aaf0417febd02100e46ff590be"
+      "hash": "2692bed575f6b329f60a0a3270e5c7bc2551010e"
     },
     "me.xw.reactivebinding": {
       "version": "https://github.com/XuToWei/ReactiveBinding.git?path=Unity",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d05962f97ce19210e7fa9488f36c45961650d034"
+      "hash": "fed988d65d0392897dd2084db32f01536c6c193f"
     },
     "me.xw.statecontroller": {
       "version": "https://github.com/XuToWei/StateController.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a29581bd88aaf345d68c5604f876bf467f40ae8c"
+      "hash": "96d019fe7e0ffff29eab17e77f9684a042c5db95"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",
@@ -337,7 +337,7 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.test-framework": "1.1.33"
       },
-      "hash": "c8710288ebbb99fe51c1befc60567ff470a316f5"
+      "hash": "694dcc2e4f6283288261215f2fb897d2371e0648"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
