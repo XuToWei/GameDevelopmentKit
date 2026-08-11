@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using ET.Analyzer;
@@ -10,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace ET.Generator;
 
 [Generator(LanguageNames.CSharp)]
-public sealed class ETReactiveSystemGenerator: ISourceGenerator
+public sealed class ETReactiveSystemGenerator: IIncrementalGenerator
 {
     private const string SystemAttributeName = "ET.ETReactiveSystemAttribute";
     private const string EntitySystemAttributeName = "ET.EntitySystemOfAttribute";
@@ -22,22 +23,49 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
     private const string ObserveMethodName = "ObserveChanges";
     private const string ResetMethodName = "ResetReactive";
 
-    public void Initialize(GeneratorInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterForSyntaxNotifications(static () => new SyntaxReceiver());
+        IncrementalValuesProvider<ClassDeclarationSyntax> declarations = context.SyntaxProvider.CreateSyntaxProvider(
+            static (node, _) => node is ClassDeclarationSyntax declaration &&
+                    (declaration.AttributeLists.Count > 0 || declaration.BaseList != null),
+            static (generatorContext, _) => (ClassDeclarationSyntax)generatorContext.Node);
+
+        context.RegisterSourceOutput(
+            declarations.Collect().Combine(context.CompilationProvider),
+            static (sourceContext, value) => Execute(sourceContext, value.Left, value.Right));
     }
 
-    public void Execute(GeneratorExecutionContext context)
+    private static void Execute(
+        SourceProductionContext context,
+        ImmutableArray<ClassDeclarationSyntax> declarations,
+        Compilation compilation)
     {
-        if (context.SyntaxContextReceiver is not SyntaxReceiver receiver)
+        List<ClassDeclarationSyntax> hostDeclarations = new();
+        List<ClassDeclarationSyntax> systemDeclarations = new();
+        INamedTypeSymbol? reactiveHostInterface = compilation.GetTypeByMetadataName(ReactiveHostInterfaceName);
+        foreach (ClassDeclarationSyntax declaration in declarations)
         {
-            return;
+            SemanticModel semanticModel = compilation.GetSemanticModel(declaration.SyntaxTree);
+            if (semanticModel.GetDeclaredSymbol(declaration, context.CancellationToken) is not INamedTypeSymbol type)
+            {
+                continue;
+            }
+
+            if (declaration.AttributeLists.Count > 0 && GetAttribute(type, SystemAttributeName) != null)
+            {
+                systemDeclarations.Add(declaration);
+            }
+
+            if (declaration.BaseList != null && DirectlyImplementsInterface(type, reactiveHostInterface))
+            {
+                hostDeclarations.Add(declaration);
+            }
         }
 
-        List<ClassDeclarationSyntax> hostDeclarations = OrderSyntaxNodes(receiver.HostDeclarations).ToList();
-        List<ClassDeclarationSyntax> systemDeclarations = OrderSyntaxNodes(receiver.SystemDeclarations).ToList();
+        hostDeclarations = OrderSyntaxNodes(hostDeclarations).ToList();
+        systemDeclarations = OrderSyntaxNodes(systemDeclarations).ToList();
 
-        GenerateReactiveHosts(context, hostDeclarations);
+        GenerateReactiveHosts(context, compilation, hostDeclarations);
         if (systemDeclarations.Count == 0)
         {
             return;
@@ -47,7 +75,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         List<SystemCandidate> candidates = new();
         foreach (ClassDeclarationSyntax declaration in systemDeclarations)
         {
-            SemanticModel semanticModel = context.Compilation.GetSemanticModel(declaration.SyntaxTree);
+            SemanticModel semanticModel = compilation.GetSemanticModel(declaration.SyntaxTree);
             if (semanticModel.GetDeclaredSymbol(declaration, context.CancellationToken) is not INamedTypeSymbol system ||
                 !processedSystems.Add(system))
             {
@@ -55,8 +83,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             }
 
             INamedTypeSymbol? owner = null;
-            if (TryGetSystemAttribute(system, out AttributeData? attribute) &&
-                attribute != null)
+            if (TryGetSystemAttribute(system, out AttributeData? attribute) && attribute != null)
             {
                 TryGetOwner(system, attribute, out owner);
             }
@@ -76,17 +103,18 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             ownerCounts[candidate.Owner] = count + 1;
         }
 
-        HashSet<INamedTypeSymbol> referencedOwners = GetReferencedReactiveOwners(context.Compilation);
+        HashSet<INamedTypeSymbol> referencedOwners = GetReferencedReactiveOwners(compilation);
         foreach (SystemCandidate candidate in candidates)
         {
             bool duplicateOwner = candidate.Owner != null &&
                                   (ownerCounts[candidate.Owner] > 1 || referencedOwners.Contains(candidate.Owner));
-            GenerateSystem(context, candidate.Declaration, candidate.System, duplicateOwner);
+            GenerateSystem(context, compilation, candidate.Declaration, candidate.System, duplicateOwner);
         }
     }
 
     private static void GenerateReactiveHosts(
-        GeneratorExecutionContext context,
+        SourceProductionContext context,
+        Compilation compilation,
         IReadOnlyList<ClassDeclarationSyntax> declarations)
     {
         if (declarations.Count == 0)
@@ -94,9 +122,9 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             return;
         }
 
-        INamedTypeSymbol? reactiveHostInterface = context.Compilation.GetTypeByMetadataName(ReactiveHostInterfaceName);
-        INamedTypeSymbol? entityType = context.Compilation.GetTypeByMetadataName(EntityTypeName);
-        INamedTypeSymbol? versionInterface = context.Compilation.GetTypeByMetadataName(VersionInterfaceName);
+        INamedTypeSymbol? reactiveHostInterface = compilation.GetTypeByMetadataName(ReactiveHostInterfaceName);
+        INamedTypeSymbol? entityType = compilation.GetTypeByMetadataName(EntityTypeName);
+        INamedTypeSymbol? versionInterface = compilation.GetTypeByMetadataName(VersionInterfaceName);
         if (reactiveHostInterface == null || entityType == null)
         {
             return;
@@ -105,7 +133,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         HashSet<INamedTypeSymbol> processedHosts = new(SymbolEqualityComparer.Default);
         foreach (ClassDeclarationSyntax declaration in declarations)
         {
-            SemanticModel semanticModel = context.Compilation.GetSemanticModel(declaration.SyntaxTree);
+            SemanticModel semanticModel = compilation.GetSemanticModel(declaration.SyntaxTree);
             if (semanticModel.GetDeclaredSymbol(declaration, context.CancellationToken) is not INamedTypeSymbol host ||
                 !processedHosts.Add(host))
             {
@@ -146,7 +174,8 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
     }
 
     private static void GenerateSystem(
-        GeneratorExecutionContext context,
+        SourceProductionContext context,
+        Compilation compilation,
         ClassDeclarationSyntax declaration,
         INamedTypeSymbol system,
         bool duplicateOwner)
@@ -175,7 +204,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
 
         if (!TryGetOwner(system, systemAttribute, out INamedTypeSymbol? owner) ||
             owner == null ||
-            SymbolEqualityComparer.Default.Equals(owner.ContainingAssembly, context.Compilation.Assembly))
+            SymbolEqualityComparer.Default.Equals(owner.ContainingAssembly, compilation.Assembly))
         {
             Report(
                 context,
@@ -195,8 +224,8 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
             valid = false;
         }
 
-        INamedTypeSymbol? reactiveHostInterface = context.Compilation.GetTypeByMetadataName(ReactiveHostInterfaceName);
-        INamedTypeSymbol? entityType = context.Compilation.GetTypeByMetadataName(EntityTypeName);
+        INamedTypeSymbol? reactiveHostInterface = compilation.GetTypeByMetadataName(ReactiveHostInterfaceName);
+        INamedTypeSymbol? entityType = compilation.GetTypeByMetadataName(EntityTypeName);
         if (!IsOrInheritsFrom(owner, entityType) || !ImplementsInterface(owner, reactiveHostInterface))
         {
             Report(
@@ -209,7 +238,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
 
         List<IMethodSymbol> bindMethods = GetAttributedMethods(system, BindAttributeName);
 
-        INamedTypeSymbol? versionInterface = context.Compilation.GetTypeByMetadataName(VersionInterfaceName);
+        INamedTypeSymbol? versionInterface = compilation.GetTypeByMetadataName(VersionInterfaceName);
         List<SourceModel> sources = CollectSources(context, declaration, owner, versionInterface, out bool sourcesValid);
         valid &= sourcesValid;
 
@@ -385,7 +414,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
         return 1;
     }
 
-    private static bool ValidateThrottle(GeneratorExecutionContext context, ClassDeclarationSyntax systemDeclaration, INamedTypeSymbol system)
+    private static bool ValidateThrottle(SourceProductionContext context, ClassDeclarationSyntax systemDeclaration, INamedTypeSymbol system)
     {
         if (!TryGetSystemAttribute(system, out AttributeData? attribute) || attribute == null)
         {
@@ -432,7 +461,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
                 .ToList();
     }
 
-    private static List<SourceModel> CollectSources(GeneratorExecutionContext context, ClassDeclarationSyntax declaration, INamedTypeSymbol owner, INamedTypeSymbol? versionInterface, out bool valid)
+    private static List<SourceModel> CollectSources(SourceProductionContext context, ClassDeclarationSyntax declaration, INamedTypeSymbol owner, INamedTypeSymbol? versionInterface, out bool valid)
     {
         valid = true;
         List<SourceModel> sources = new();
@@ -730,7 +759,7 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
     }
 
     private static bool ValidateGeneratedMethodCollision(
-        GeneratorExecutionContext context,
+        SourceProductionContext context,
         ClassDeclarationSyntax declaration,
         INamedTypeSymbol system,
         INamedTypeSymbol owner,
@@ -1253,45 +1282,12 @@ public sealed class ETReactiveSystemGenerator: ISourceGenerator
     }
 
     private static void Report(
-        GeneratorExecutionContext context,
+        SourceProductionContext context,
         DiagnosticDescriptor descriptor,
         Location location,
         params object[] messageArguments)
     {
         context.ReportDiagnostic(Diagnostic.Create(descriptor, location, messageArguments));
-    }
-
-    private sealed class SyntaxReceiver: ISyntaxContextReceiver
-    {
-        public List<ClassDeclarationSyntax> SystemDeclarations { get; } = new();
-
-        public List<ClassDeclarationSyntax> HostDeclarations { get; } = new();
-
-        public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
-        {
-            if (context.Node is not ClassDeclarationSyntax declaration ||
-                context.SemanticModel.GetDeclaredSymbol(declaration) is not INamedTypeSymbol type)
-            {
-                return;
-            }
-
-            if (declaration.AttributeLists.Count > 0 && GetAttribute(type, SystemAttributeName) != null)
-            {
-                this.SystemDeclarations.Add(declaration);
-            }
-
-            if (declaration.BaseList == null)
-            {
-                return;
-            }
-
-            INamedTypeSymbol? reactiveHostInterface =
-                    context.SemanticModel.Compilation.GetTypeByMetadataName(ReactiveHostInterfaceName);
-            if (DirectlyImplementsInterface(type, reactiveHostInterface))
-            {
-                this.HostDeclarations.Add(declaration);
-            }
-        }
     }
 
     private sealed class SourceModel
