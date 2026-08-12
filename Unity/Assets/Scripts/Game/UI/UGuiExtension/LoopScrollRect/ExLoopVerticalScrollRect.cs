@@ -15,7 +15,9 @@ namespace Game
     public class ExLoopVerticalScrollRect : LoopVerticalScrollRect, LoopScrollPrefabSource, LoopScrollDataSource
     {
         [SerializeField]
-        [OnValueChanged("OnItemTemplateChanged")]
+#if UNITY_EDITOR
+        [OnValueChanged(nameof(OnItemTemplateChanged))]
+#endif
         private GameObject m_ItemTemplate;
 
         private int m_NumItems;
@@ -82,6 +84,11 @@ namespace Game
         [IgnoreLogMethod]
         private void OnItemTemplateChanged()
         {
+            if (content == null)
+            {
+                Debug.LogError($"LoopScrollRect '{this.name}' content is null.");
+                return;
+            }
             if (m_ItemTemplate != null && m_ItemTemplate.transform.parent != content)
             {
                 Debug.LogError($"Item template must be a child of LoopScrollRect '{this.name}' content.");
