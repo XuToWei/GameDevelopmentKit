@@ -523,10 +523,10 @@ namespace ET
                 if (sn != seg->sn)
                 {
 #if KCP_FASTACK_CONSERVE
-                    seg->fastack++;
-#else
                     if (_itimediff(ts, seg->ts) >= 0)
                         seg->fastack++;
+#else
+                    seg->fastack++;
 #endif
                 }
             }
@@ -674,14 +674,14 @@ namespace ET
                         if (_itimediff(sn, maxack) > 0)
                         {
 #if KCP_FASTACK_CONSERVE
-                            maxack = sn;
-                            latest_ts = ts;
-#else
                             if (_itimediff(ts, latest_ts) > 0)
                             {
                                 maxack = sn;
                                 latest_ts = ts;
                             }
+#else
+                            maxack = sn;
+                            latest_ts = ts;
 #endif
                         }
                     }
@@ -837,7 +837,7 @@ namespace ET
                     kcp->probe_wait = 0;
                 }
 
-                if ((kcp->probe != 0) & (ASK_SEND != 0))
+                if ((kcp->probe & ASK_SEND) != 0)
                 {
                     seg.cmd = CMD_WASK;
                     size = (int)(ptr - buffer);
@@ -850,7 +850,7 @@ namespace ET
                     ptr = ikcp_encode_seg(ptr, &seg);
                 }
 
-                if ((kcp->probe != 0) & (ASK_TELL != 0))
+                if ((kcp->probe & ASK_TELL) != 0)
                 {
                     seg.cmd = CMD_WINS;
                     size = (int)(ptr - buffer);
@@ -1027,7 +1027,7 @@ namespace ET
                             needsend = 1;
                             segment->xmit++;
                             kcp->xmit++;
-                            var step = (int)segment->rto;
+                            var step = kcp->rx_rto;
                             segment->rto += (uint)(step / 2);
                             segment->resendts = current + segment->rto;
                             lost = 1;
@@ -1157,7 +1157,7 @@ namespace ET
         {
             if (kcp->mtu == (uint)mtu)
                 return 0;
-            if (mtu < (int)OVERHEAD)
+            if (mtu < 50 || mtu < (int)OVERHEAD)
                 return -1;
             kcp->mtu = (uint)mtu;
             kcp->mss = kcp->mtu - OVERHEAD;
