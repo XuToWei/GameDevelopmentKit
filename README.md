@@ -65,7 +65,7 @@ GameDevelopmentKit（GDK）是一套 [Unity] 游戏开发框架。服务端基�
 [Unity]: https://unity.com/
 [UnityGameFramework]: https://github.com/EllanJiang/UnityGameFramework
 [UGFExtensions]: https://github.com/FingerCaster/UGFExtensions
-[ET 8.1]: https://github.com/egametang/ET/commit/faa825d22a5b05d727f4878dfe34600628942579
+[ET 8.1]: https://github.com/egametang/ET/commit/b7bdaa0dcd5c682d968ec8922eb7a6dc4637011c
 [HybridCLR]: https://github.com/focus-creative-games/hybridclr
 [Luban]: https://github.com/focus-creative-games/luban
 [Luban Extension]: https://github.com/XuToWei/Luban-Extension
