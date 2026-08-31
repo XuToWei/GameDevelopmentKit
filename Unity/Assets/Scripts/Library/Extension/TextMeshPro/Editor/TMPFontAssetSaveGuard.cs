@@ -10,6 +10,7 @@ namespace TMPro.Extension.Editor
     internal sealed class TMPFontAssetSaveGuard : AssetModificationProcessor
     {
         private static readonly HashSet<string> s_ReportedAssetPaths = new HashSet<string>();
+        private static readonly List<string> s_AllowedAssetPaths = new List<string>();
 
         static TMPFontAssetSaveGuard()
         {
@@ -24,7 +25,7 @@ namespace TMPro.Extension.Editor
                 return paths;
             }
 
-            List<string> allowedPaths = new List<string>(paths.Length);
+            s_AllowedAssetPaths.Clear();
             bool hasBlockedAsset = false;
             for (int i = 0; i < paths.Length; i++)
             {
@@ -41,10 +42,10 @@ namespace TMPro.Extension.Editor
                     continue;
                 }
 
-                allowedPaths.Add(path);
+                s_AllowedAssetPaths.Add(path);
             }
 
-            return hasBlockedAsset ? allowedPaths.ToArray() : paths;
+            return hasBlockedAsset ? s_AllowedAssetPaths.ToArray() : paths;
         }
 
         private static void OnPlayModeStateChanged(PlayModeStateChange state)
