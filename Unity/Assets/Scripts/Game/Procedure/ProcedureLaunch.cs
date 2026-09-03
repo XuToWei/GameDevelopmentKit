@@ -6,7 +6,9 @@
 //------------------------------------------------------------
 
 using GameFramework.Localization;
+using Luban;
 using System;
+using System.Text;
 using UnityGameFramework.Extension;
 using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
@@ -18,6 +20,8 @@ namespace Game
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
+            // 缓存Luban配置中的相同字符串，减少内存占用
+            ByteBuf.StringCacheFinder = (bytes, index, count) => string.Intern(Encoding.UTF8.GetString(bytes, index, count));
             // 注册异步需要的事件
             Awaitable.SubscribeEvent();
             
