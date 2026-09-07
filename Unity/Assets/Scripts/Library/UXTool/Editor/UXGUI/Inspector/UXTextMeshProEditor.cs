@@ -83,7 +83,7 @@ namespace UnityEngine.UI
                 }
                 GUI.enabled = false;
                 EditorGUI.TextField(new Rect(rect) { x = rect.x + 20, width = rect.width - 20 },
-                        LocalizationLanguage.GetLanguage((int)EditorLocalizationTool.ReadyLanguageTypes[index]), textList[index]);
+                        LocalizationLanguage.GetLanguage(EditorLocalizationTool.ReadyLanguageTypes[index]), textList[index]);
                 GUI.enabled = true;
             };
             customList.drawHeaderCallback = (Rect rect) =>
