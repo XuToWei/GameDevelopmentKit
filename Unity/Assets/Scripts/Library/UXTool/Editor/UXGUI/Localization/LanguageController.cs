@@ -21,7 +21,7 @@ public class LanguageController
                 choices.Add(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_游戏内语言));
                 for (int i = 0; i < EditorLocalizationTool.ReadyLanguageTypes.Length; i++)
                 {
-                    choices.Add(LocalizationLanguage.GetLanguage(i));
+                    choices.Add(LocalizationLanguage.GetLanguage(EditorLocalizationTool.ReadyLanguageTypes[i]));
                 }
                 languages = new PopupField<string>(choices, 2);
                 languages.style.position = Position.Absolute;
@@ -48,11 +48,11 @@ public class LanguageController
                         LocalizationHelper.SetPreviewLanguage(LocalizationHelper.LanguageType.None);
                         return;
                     }
-                    foreach (int i in EditorLocalizationTool.ReadyLanguageTypes)
+                    foreach (LocalizationHelper.LanguageType languageType in EditorLocalizationTool.ReadyLanguageTypes)
                     {
-                        if (x.newValue == LocalizationLanguage.GetLanguage(i))
+                        if (x.newValue == LocalizationLanguage.GetLanguage(languageType))
                         {
-                            LocalizationHelper.SetPreviewLanguage((LocalizationHelper.LanguageType)i);
+                            LocalizationHelper.SetPreviewLanguage(languageType);
                             break;
                         }
                     }

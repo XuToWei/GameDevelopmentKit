@@ -294,7 +294,7 @@ namespace UnityEngine.UI
                     }
                 }
                 GUI.enabled = false;
-                GUI.Label(new Rect(rect) { x = rect.x + 20 }, LocalizationLanguage.GetLanguage((int)EditorLocalizationTool.ReadyLanguageTypes[index]));
+                GUI.Label(new Rect(rect) { x = rect.x + 20 }, LocalizationLanguage.GetLanguage(EditorLocalizationTool.ReadyLanguageTypes[index]));
                 EditorGUI.ObjectField(new Rect(rect) { x = rect.x + rect.width - 80, width = 80 }, m_SpriteList[index], typeof(Texture), false);
                 GUI.enabled = true;
             };
