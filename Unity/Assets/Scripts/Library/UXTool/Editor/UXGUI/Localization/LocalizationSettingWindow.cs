@@ -44,7 +44,7 @@ public class LocalizationSettingWindow : EditorWindow
 
     private void InitWindowData()
     {
-        toggles = new Toggle[LocalizationLanguage.Length];
+        toggles = new Toggle[LocalizationLanguage.LanguageTypes.Count];
         for (int i = 0; i < toggles.Length; i++)
         {
             toggles[i] = new Toggle();
@@ -100,9 +100,11 @@ public class LocalizationSettingWindow : EditorWindow
         leftContainerRefresh();
         LocalizeOption.isSelect();
         rightContainer.Clear();
-        for (int i = 0; i < LocalizationLanguage.Length; i++)
+        int i = 0;
+        foreach (var languageType in LocalizationLanguage.LanguageTypes)
         {
-            AddLanguage(LocalizationLanguage.GetLanguage(i), i / 2, i % 2, ref toggles[i]);
+            AddLanguage(LocalizationLanguage.GetLanguage(languageType), i / 2, i % 2, ref toggles[i]);
+            i++;
         }
     }
 
