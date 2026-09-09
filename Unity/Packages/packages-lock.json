@@ -25,7 +25,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ca7f87b6a72f3739f99a5ad0c957c7aae0cbd922"
+      "hash": "fd32708e7f5106f0ffa375bcfe43342ee594c1e5"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -34,7 +34,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "94ef3ada02ea62a8290bd8ce9d3f572edbdcd007"
+      "hash": "4d00ad8c608bf42c8668fdf192130fc16e21a130"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
@@ -43,7 +43,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "1f4427c3d5d249534dba69d8c53acafb5d5fbd7f"
+      "hash": "ff824c234121cd6dde7038c8e8ca4904d7f4d7f3"
     },
     "com.coffee.ui-particle": {
       "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
@@ -53,7 +53,7 @@
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "5a305705f84549e50223d897bb95495edd78bf1a"
+      "hash": "eec288e2a5cfd43743b70e9a8c397d5e5300e80a"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -142,7 +142,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.20.0",
+      "version": "1.19.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -224,7 +224,7 @@
       }
     },
     "com.unity.scriptablebuildpipeline": {
-      "version": "4.0.0",
+      "version": "2.6.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -234,7 +234,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.searcher": {
-      "version": "4.9.5",
+      "version": "4.9.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -290,7 +290,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ec8421f717664d75493e7132cbe16f2cfdbbf946"
+      "hash": "930b0f7e7c9caecec9b79cd43fe0f46c48fb737f"
     },
     "me.qiankanglai.loopscrollrect": {
       "version": "https://github.com/qiankanglai/LoopScrollRect.git",
@@ -344,7 +344,7 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.test-framework": "1.1.33"
       },
-      "hash": "2fe2586e37a5b8729782d1c2ebd84940ea20799a"
+      "hash": "55be190a99512856cfcc7ae53c2ef2994a2e242b"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
