@@ -144,15 +144,13 @@ namespace Game.Editor
 
                 if (package.source == PackageSource.Registry)
                 {
-                    string targetVersion = package.versions?.latestCompatible;
-                    if (!string.IsNullOrEmpty(targetVersion) && targetVersion == package.version)
+                    string targetVersion = GetLatestStableCompatibleVersion(package.versions);
+                    if (string.IsNullOrEmpty(targetVersion) || targetVersion == package.version)
                     {
                         continue;
                     }
 
-                    string identifier = string.IsNullOrEmpty(targetVersion)
-                        ? package.name
-                        : $"{package.name}@{targetVersion}";
+                    string identifier = $"{package.name}@{targetVersion}";
                     updates.Add(new PackageUpdate(package.name, identifier));
                     continue;
                 }
@@ -165,6 +163,33 @@ namespace Game.Editor
 
             updates.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
             return updates;
+        }
+
+        private static string GetLatestStableCompatibleVersion(VersionsInfo versions)
+        {
+            if (versions == null)
+            {
+                return null;
+            }
+
+            string[] compatibleVersions = versions.compatible;
+            if (compatibleVersions != null)
+            {
+                foreach (string version in compatibleVersions)
+                {
+                    if (IsStableVersion(version))
+                    {
+                        return version;
+                    }
+                }
+            }
+
+            return IsStableVersion(versions.latestCompatible) ? versions.latestCompatible : null;
+        }
+
+        private static bool IsStableVersion(string version)
+        {
+            return !string.IsNullOrEmpty(version) && version.IndexOf('-') < 0;
         }
 
         private static Dictionary<string, string> LoadManifestDependencies()
