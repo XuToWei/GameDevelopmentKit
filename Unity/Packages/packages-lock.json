@@ -278,6 +278,13 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.xw.remote-execution": {
+      "version": "https://github.com/XuToWei/UnityRemoteExecution.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "21445ce4bfdddd6a02085c3a4fd99152c1c40cfa"
+    },
     "com.yasirkula.inspectplus": {
       "version": "https://github.com/yasirkula/UnityInspectPlus.git",
       "depth": 0,
@@ -344,7 +351,7 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.test-framework": "1.1.33"
       },
-      "hash": "55be190a99512856cfcc7ae53c2ef2994a2e242b"
+      "hash": "dfeb540002be809615b0692928dd1ec303fdd66b"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
