@@ -283,7 +283,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "21445ce4bfdddd6a02085c3a4fd99152c1c40cfa"
+      "hash": "b77e938ccf478a08f1ce8dc21bc70873263700f9"
     },
     "com.yasirkula.inspectplus": {
       "version": "https://github.com/yasirkula/UnityInspectPlus.git",
