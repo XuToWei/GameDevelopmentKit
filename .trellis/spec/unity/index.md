@@ -22,7 +22,7 @@ GDK 不是单一的 MonoBehaviour 项目。运行时存在两条互斥业务路�
 | [Server and Runtime Data Model](./server-data-model.md) | ET Entity/Component、GameHot EntityData 和共享协议数据落地 | 新增或修改网络数据、领域状态或持久化模型 |
 | [Network Synchronization](./server-sync-and-http.md) | ET 消息、GameHot WebSocket、取消/stale 和可选 HTTP | 修改消息 handler、网络请求或异步 Apply |
 | [Reactive State and UI Refresh](./reactivebinding-refresh.md) | ReactiveBinding 包和 ET reactive source/bind 两套机制 | 新增响应式状态、观察或 UI 刷新 |
-| [Localization Workflow](./localization-workflow.md) | Localization.xlsx、动态文案、导出和运行时加载 | 新增或修改玩家可见文本 |
+| [Localization Workflow](./localization-workflow.md) | Localization.xlsx、动态文案、`EditorTool.ConvertTextTable` 专用导出和运行时加载 | 新增或修改玩家可见文本 |
 | [Luban and Proto Generation](./data-generation.md) | Excel/Proto 源、Luban/Proto2CS、生成物和导出验证 | 修改表格、协议、生成器或导出目录 |
 | [AgentBridge Diagnostics](./agentbridge-bug-diagnostics.md) | Unity Editor bridge 的诊断、读回和受控修改 | 静态分析不足以解释 Unity 运行时状态 |
 | [AgentCallable and Scenario Tests](./agentcallable-reusable-tests.md) | AgentCallable、Unity Test Framework 和可复用场景入口 | 新增流程探针、smoke 或 Editor 测试入口 |

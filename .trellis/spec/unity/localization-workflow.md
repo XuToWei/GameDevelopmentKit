@@ -36,9 +36,11 @@ label.text = "Confirm";
 
 目标项目有四种内置语言资源，具体启用语言以 `GameFramework.Localization.Language`、Excel 表头和导出结果为准。不要把示例语言列或 key 当作永远不变的 schema。
 
-修改 Localization.xlsx 时使用目标已有的 AgentBridge `excel` command：先 `list_commands`，再 `inspect`/`find_rows` 查表头、sheet、key 和版本；写入使用 `dryRun`、`expectedVersion` 和 `upsert_rows`/其他运行时发现的动作；写后回读并执行 Luban/ExcelExporter export。不要使用 openpyxl、Excel/WPS UI、手工 ZIP/XML 或直接改 `.bytes`。
+修改 Localization.xlsx 时使用目标已有的 AgentBridge `excel` command：先 `list_commands`，再 `inspect`/`find_rows` 查表头、sheet、key 和版本；写入使用 `dryRun`、`expectedVersion` 和 `upsert_rows`/其他运行时发现的动作。写后回读再调用 `EditorTool.ConvertTextTable()`；通过 AgentBridge 操作时用 `invoke_menu` 触发 `Game/Tool/LocalizationExporter`。不要使用 openpyxl、Excel/WPS UI、手工 ZIP/XML 或直接改 `.bytes`。
 
 `ExcelCommand.cs` 的 schema 与限制以当前运行时 `list_commands` 为准。它支持仓库内已有工作簿的 inspect、范围读取、表头查询和受版本保护的写入，但不能据此假定可创建/删除 sheet 或任意重排结构。命令不支持 Unity Undo；并发冲突必须重新读取、审阅后用新 request ID 重做。
+
+AgentBridge 没有多语言专用 `ICommandHandler`；`invoke_menu` 成功只表示菜单已触发，仍须确认 `Export Localization Excel Success!`、生成物 diff 和 Unity compile。
 
 导出后确认：
 
@@ -54,7 +56,7 @@ label.text = "Confirm";
 - [ ] 静态文本使用组件绑定，动态文本使用 `GetString`/现有 localization API。
 - [ ] 所有语言占位符和富文本标签契约一致。
 - [ ] Excel 修改走 AgentBridge schema discovery、版本保护、dry-run、写后回读。
-- [ ] 写入后实际执行 export，未直接改生成产物。
+- [ ] 写入并回读后调用 `EditorTool.ConvertTextTable()`，或由 AgentBridge `invoke_menu` 触发对应菜单；未直接改生成产物。
 - [ ] 导出和编译完成，无新增错误或无关资源 diff。
 
 ## References
@@ -65,5 +67,6 @@ label.text = "Confirm";
 - `Unity/Assets/Scripts/Game/Generate/Localization/AssetUtility.Localization.cs`
 - `Unity/Assets/Scripts/Game/Editor/Generate/Localization/LocalizationReadyLanguage.cs`
 - `Unity/Assets/Scripts/Game/Editor/AgentBridge/ExcelCommand.cs`
+- `Unity/Assets/Scripts/Game/Editor/Tool/EditorTool.cs`
 - `Share/Tool/ExcelExporter/ExcelExporter.Localization.cs`
 - `Unity/Assets/Res/Builtin/UGFLocalizationDictionaryEnglish.asset`
