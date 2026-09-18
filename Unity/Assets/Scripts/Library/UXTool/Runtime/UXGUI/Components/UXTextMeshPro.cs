@@ -44,7 +44,7 @@ namespace UnityEngine.UI
         {
             base.Start();
             if (!Application.isPlaying) return;
-            origin_len = text.Length;
+            origin_len = string.IsNullOrEmpty(text) ? 0 : text.Length;
             if (!loaded)
             {
                 loaded = true;
