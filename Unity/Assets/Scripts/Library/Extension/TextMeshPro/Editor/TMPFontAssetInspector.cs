@@ -68,6 +68,20 @@ namespace TMPro.Extension.Editor
             }
 
             EnsureStockInspectorInitialized();
+
+            TMP_FontAsset fontAsset = (TMP_FontAsset)target;
+            using (new EditorGUI.DisabledScope(!TMPFontAssetDynamicData.IsClearOnBuildEnabled(fontAsset)))
+            {
+                if (GUILayout.Button(new GUIContent("清理动态字体数据", "勾选 Clear Dynamic Data On Build 后可手动清理；打包 AssetBundle 前也会自动清理。")))
+                {
+                    TMPFontAssetDynamicData.Clear(fontAsset);
+                    serializedObject.Update();
+                    Repaint();
+                    GUIUtility.ExitGUI();
+                }
+            }
+
+            EditorGUILayout.Space();
             base.OnInspectorGUI();
         }
 
