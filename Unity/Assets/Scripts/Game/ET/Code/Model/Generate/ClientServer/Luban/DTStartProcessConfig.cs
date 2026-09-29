@@ -33,6 +33,7 @@ public partial class DTStartProcessConfig : IDataTable
         else
         {
             _dataList.Clear();
+            _dataList.Capacity = System.Math.Max(_dataList.Capacity, n);
         }
         for(int i = n ; i > 0 ; --i)
         {
@@ -47,6 +48,7 @@ public partial class DTStartProcessConfig : IDataTable
         else
         {
             _dataMapUnion.Clear();
+            _dataMapUnion.EnsureCapacity(n);
         }
         foreach(var _v in _dataList)
         {

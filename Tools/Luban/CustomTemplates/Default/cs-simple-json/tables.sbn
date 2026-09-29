@@ -20,8 +20,8 @@ public partial class {{__name}}
     {
         TablesMemory.BeginRecord();
 
-        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
-        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
+        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>({{array.size __tables}});
+        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>({{array.size __tables}});
 
         {{~for table in __tables ~}}
         {{format_property_name __code_style table.name}} = new {{table.full_name}}(() => loader("{{table.output_data_file}}"));

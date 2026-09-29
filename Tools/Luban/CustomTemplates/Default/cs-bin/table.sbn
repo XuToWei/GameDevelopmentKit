@@ -57,7 +57,9 @@ public partial class {{__name}} : IDataTable
         else
         {
             _dataMap.Clear();
+            _dataMap.EnsureCapacity(n);
             _dataList.Clear();
+            _dataList.Capacity = System.Math.Max(_dataList.Capacity, n);
         }
         for(int i = n ; i > 0 ; --i)
         {
@@ -117,6 +119,7 @@ public partial class {{__name}} : IDataTable
         else
         {
             _dataList.Clear();
+            _dataList.Capacity = System.Math.Max(_dataList.Capacity, n);
         }
         for(int i = n ; i > 0 ; --i)
         {
@@ -132,6 +135,7 @@ public partial class {{__name}} : IDataTable
         else
         {
             _dataMapUnion.Clear();
+            _dataMapUnion.EnsureCapacity(n);
         }
         foreach(var _v in _dataList)
         {
@@ -146,6 +150,7 @@ public partial class {{__name}} : IDataTable
         else
         {
             _dataMap_{{idx.index_field.name}}.Clear();
+            _dataMap_{{idx.index_field.name}}.EnsureCapacity(n);
         }
         {{~end~}}
         foreach(var _v in _dataList)

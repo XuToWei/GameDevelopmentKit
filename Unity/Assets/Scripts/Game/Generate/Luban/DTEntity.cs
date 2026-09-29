@@ -34,7 +34,9 @@ public partial class DTEntity : IDataTable
         else
         {
             _dataMap.Clear();
+            _dataMap.EnsureCapacity(n);
             _dataList.Clear();
+            _dataList.Capacity = System.Math.Max(_dataList.Capacity, n);
         }
         for(int i = n ; i > 0 ; --i)
         {
