@@ -5,19 +5,19 @@
 
 <PageTitle>日志查看器 - 游戏管理后台</PageTitle>
 
-<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-4">
-    <MudText Typo="Typo.h5">日志查看器</MudText>
-    <MudStack Row="true" Spacing="2">
+<PageHeader Title="日志查看器" Description="查看后台已收集的运行日志，按级别、服务器与关键词筛选。" Icon="@Icons.Material.Filled.Terminal">
+    <MudStack Row="true" Spacing="2" Class="wrap-row">
         <MudSwitch @bind-Value="_autoRefresh" Color="Color.Primary" Label="自动刷新" T="bool" />
         <MudButton Variant="Variant.Outlined" Color="Color.Default" Size="Size.Small"
                    StartIcon="@Icons.Material.Filled.Refresh" OnClick="RefreshLogs">刷新</MudButton>
         <MudButton Variant="Variant.Outlined" Color="Color.Default" Size="Size.Small"
                    StartIcon="@Icons.Material.Filled.Clear" OnClick="ClearLogs">清除</MudButton>
     </MudStack>
-</MudStack>
+
+</PageHeader>
 
 @* 筛选条件 *@
-<MudPaper Elevation="2" Class="pa-3 mb-4">
+<MudPaper Elevation="2" Class="log-filters pa-3 mb-4">
     <MudGrid Spacing="2">
         <MudItem xs="12" sm="4">
             <MudTextField @bind-Value="_searchString" Label="搜索关键词" Variant="Variant.Outlined"
@@ -43,7 +43,7 @@
             </MudSelect>
         </MudItem>
         <MudItem xs="12" sm="4">
-            <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center">
+            <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center" Class="wrap-row">
                 <MudText Typo="Typo.body2" Color="Color.Secondary" Class="align-self-center">
                     @_logs.Count / @LogService.TotalCount 条
                 </MudText>
@@ -61,14 +61,14 @@
 </MudPaper>
 
 @* 日志内容 *@
-<MudPaper Elevation="2" Class="pa-0" Style="background: #0d1117;">
-    <div class="log-container pa-3" style="max-height:calc(100vh - 380px); min-height:400px;">
+<MudPaper Elevation="2" Class="log-surface pa-0">
+    <div class="log-container log-viewer pa-3" tabindex="0" aria-label="日志内容">
         @if (_logs.Any())
         {
             @foreach (var log in _logs)
             {
                 <div style="color: @GetLevelTextColor(log.Level); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0;">
-                    <span style="color: #6e7681;">@log.Timestamp.ToString("HH:mm:ss.fff")</span>
+                    <span class="log-timestamp">@log.Timestamp.ToString("HH:mm:ss.fff")</span>
                     <span style="color: @GetLevelTextColor(log.Level); font-weight:bold; display:inline-block; width:50px;">[@log.Level]</span>
                     <span style="color: #7ee787;">[@log.Server]</span>
                     <span style="color: @GetLevelTextColor(log.Level);">@log.Message</span>
@@ -77,10 +77,10 @@
         }
         else
         {
-            <div style="color: #6e7681; text-align: center; padding: 40px;">
+            <div class="log-empty">
                 @if (LogService.TotalCount == 0)
                 {
-                    <span>暂无日志。启动服务器进程后，进程输出将自动显示在此处。</span>
+                    <span>暂无已收集的日志。后台启停操作产生记录后会显示在此处。</span>
                 }
                 else
                 {

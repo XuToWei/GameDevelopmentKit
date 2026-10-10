@@ -6,9 +6,8 @@
 
 <PageTitle>玩家详情 - @GetPlayerName("未知")</PageTitle>
 
-<MudStack Row="true" AlignItems="AlignItems.Center" Class="mb-4">
-    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="@(() => Navigation.NavigateTo("/players"))" />
-    <MudText Typo="Typo.h5">@GetPlayerName("未知玩家")</MudText>
+<PageHeader Title="@GetPlayerName("未知玩家")" Description="查看账号基本信息、连接状态与封禁记录。" Icon="@Icons.Material.Filled.PersonOutline">
+    <MudIconButton aria-label="返回列表" title="返回列表" Icon="@Icons.Material.Filled.ArrowBack" OnClick="@(() => Navigation.NavigateTo("/players"))" />
     @if (_player != null)
     {
         @if (_player.IsBanned)
@@ -24,7 +23,7 @@
             <MudChip T="string" Color="Color.Default" Size="Size.Small">离线</MudChip>
         }
     }
-    <MudSpacer />
+
     @if (_player != null)
     {
         @if (_player.IsOnline)
@@ -43,7 +42,8 @@
                        OnClick="BanPlayer">封禁</MudButton>
         }
     }
-</MudStack>
+
+</PageHeader>
 
 @if (_player == null)
 {

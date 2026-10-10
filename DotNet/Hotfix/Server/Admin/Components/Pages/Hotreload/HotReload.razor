@@ -7,7 +7,7 @@
 
 <PageTitle>热更新 - 游戏管理后台</PageTitle>
 
-<MudText Typo="Typo.h5" Class="mb-4">热更新管理</MudText>
+<PageHeader Title="热更新管理" Description="选择目标与更新类型，执行后在此查看结果及历史。" Icon="@Icons.Material.Filled.Bolt" />
 
 <MudGrid>
     @* 热更操作面板 *@
@@ -85,7 +85,7 @@
                 }
                 else
                 {
-                    <MudText Typo="Typo.body2" Color="Color.Secondary">暂无执行记录</MudText>
+                    <EmptyState Title="尚未执行热更新" Description="执行完成后，这里会显示最近一次结果。" Icon="@Icons.Material.Filled.Bolt" />
                 }
             </MudCardContent>
         </MudCard>
@@ -107,11 +107,11 @@
                 <MudCardHeader>
                     <CardHeaderContent><MudText Typo="Typo.h6">执行日志</MudText></CardHeaderContent>
                     <CardHeaderActions>
-                        <MudIconButton Icon="@Icons.Material.Filled.Clear" OnClick="@(() => _executionLogs.Clear())" />
+                        <MudIconButton aria-label="清除日志" title="清除日志" Icon="@Icons.Material.Filled.Clear" OnClick="@(() => _executionLogs.Clear())" />
                     </CardHeaderActions>
                 </MudCardHeader>
                 <MudCardContent>
-                    <div class="log-container pa-3" style="background: #0d1117; border-radius: 4px;">
+                    <div class="log-container execution-log pa-3">
                         @foreach (var log in _executionLogs)
                         {
                             <div style="color: #81c784;">@log</div>
@@ -128,7 +128,7 @@
             <MudCardHeader>
                 <CardHeaderContent><MudText Typo="Typo.h6">热更历史</MudText></CardHeaderContent>
                 <CardHeaderActions>
-                    <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshHistory" />
+                    <MudIconButton aria-label="刷新" title="刷新" Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshHistory" />
                 </CardHeaderActions>
             </MudCardHeader>
             <MudCardContent>
@@ -143,20 +143,20 @@
                         <MudTh>耗时</MudTh>
                     </HeaderContent>
                     <RowTemplate>
-                        <MudTd>@context.StartTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</MudTd>
-                        <MudTd>@context.Target</MudTd>
-                        <MudTd><MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@context.Type</MudChip></MudTd>
-                        <MudTd>@context.Description</MudTd>
-                        <MudTd>@context.Operator</MudTd>
-                        <MudTd>
+                        <MudTd DataLabel="时间">@context.StartTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</MudTd>
+                        <MudTd DataLabel="目标">@context.Target</MudTd>
+                        <MudTd DataLabel="类型"><MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@context.Type</MudChip></MudTd>
+                        <MudTd DataLabel="说明">@context.Description</MudTd>
+                        <MudTd DataLabel="操作人">@context.Operator</MudTd>
+                        <MudTd DataLabel="结果">
                             <MudChip T="string" Size="Size.Small" Color="@(context.Success ? Color.Success : Color.Error)" Class="status-chip">
                                 @(context.Success ? "成功" : "失败")
                             </MudChip>
                         </MudTd>
-                        <MudTd>@context.Duration</MudTd>
+                        <MudTd DataLabel="耗时">@context.Duration</MudTd>
                     </RowTemplate>
                     <NoRecordsContent>
-                        <MudText>暂无热更历史记录</MudText>
+                        <EmptyState Title="暂无热更历史" Description="执行热更新后，结果与操作记录会显示在这里。" Icon="@Icons.Material.Filled.History" />
                     </NoRecordsContent>
                 </MudTable>
             </MudCardContent>
