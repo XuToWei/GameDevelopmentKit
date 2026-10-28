@@ -8,6 +8,7 @@
         "LubanLib",
         "Unity.Mathematics",
         "HybridCLR.Runtime",
+        "RemoteExecution.Runtime",
         "UniTask",
         "CodeBind",
         "Unity.TextMeshPro",

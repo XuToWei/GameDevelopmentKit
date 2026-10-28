@@ -20,6 +20,7 @@
     "com.unity.scriptablebuildpipeline": "2.6.1",
     "com.unity.searcher": "4.9.4",
     "com.unity.ugui": "2.0.0",
+    "com.xw.remote-execution": "https://github.com/XuToWei/UnityRemoteExecution.git",
     "com.yasirkula.inspectplus": "https://github.com/yasirkula/UnityInspectPlus.git",
     "com.yasirkula.runtimeinspector": "https://github.com/yasirkula/UnityRuntimeInspector.git",
     "me.qiankanglai.loopscrollrect": "https://github.com/qiankanglai/LoopScrollRect.git",

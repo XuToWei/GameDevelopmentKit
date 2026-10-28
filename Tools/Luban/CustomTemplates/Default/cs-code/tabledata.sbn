@@ -33,7 +33,7 @@ public partial class {{__name}}
     {{~if __table.is_map_table ~}}
     public {{__name}}()
     {
-        _dataList = new System.Collections.Generic.List<{{declaring_type_name value_type}}> ()
+        _dataList = new System.Collections.Generic.List<{{declaring_type_name value_type}}> ({{array.size __records}})
         {
             {{table_data_list}}
         };
@@ -48,7 +48,7 @@ public partial class {{__name}}
     {{~else if __table.is_list_table ~}}
     public {{__name}}()
     {
-        _dataList = new System.Collections.Generic.List<{{declaring_type_name value_type}}> ()
+        _dataList = new System.Collections.Generic.List<{{declaring_type_name value_type}}> ({{array.size __records}})
         {
             {{table_data_list}}
         };

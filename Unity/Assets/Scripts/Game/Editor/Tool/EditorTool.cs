@@ -68,6 +68,37 @@ namespace Game.Editor
             }
             RunAsync().Forget();
         }
+
+        [MenuItem("Game/Tool/LocalizationExporter")]
+        public static void ConvertTextTable()
+        {
+            async UniTaskVoid RunAsync()
+            {
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+                const string TOOL = "dotnet Tool.dll";
+#else
+                const string TOOL = ".\\Tool.exe";
+#endif
+                Stopwatch stopwatch = Stopwatch.StartNew();
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
+                await ShellTool.RunAsync($"{TOOL} --AppType=LocalizationExporter --Console=1", "../Bin/");
+#else
+                await ShellTool.RunAsync($"{TOOL} --AppType=LocalizationExporter --Console=1", "../Bin/");
+#endif
+                stopwatch.Stop();
+                UnityEngine.Debug.Log($"Export Localization cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
+                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+                EditorLocalizationTool.Clear();
+                var activeObject = Selection.activeObject;
+                if (activeObject != null)
+                {
+                    Selection.activeObject = null;
+                    await UniTask.DelayFrame(2);
+                    Selection.activeObject = activeObject;
+                }
+            }
+            RunAsync().Forget();
+        }
         
         [MenuItem("Game/Tool/Proto2CS")]
         public static void Proto2CS()
