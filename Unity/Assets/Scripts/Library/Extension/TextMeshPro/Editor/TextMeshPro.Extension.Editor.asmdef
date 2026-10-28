@@ -3,7 +3,9 @@
     "rootNamespace": "TMPro.Extension.Editor",
     "references": [
         "Unity.TextMeshPro",
-        "Unity.TextMeshPro.Editor"
+        "Unity.TextMeshPro.Editor",
+        "UnityGameFramework.Editor",
+        "UnityGameFramework.Extension.Editor"
     ],
     "includePlatforms": [
         "Editor"

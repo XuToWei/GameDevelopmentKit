@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using Cysharp.Threading.Tasks;
 // using UnityEngine.SceneManagement;
 // using UnityEditor.SceneManagement;
 using ThunderFireUITool;
@@ -30,33 +28,7 @@ namespace UnityEngine.UI
         [MenuItem(ThunderFireUIToolConfig.Menu_Localization + "/将文本表格转换 (Convert Text Table)", false, 54)]
         public static void ConvertTextTable()
         {
-            ConvertTextTableAsync().Forget();
-        }
-
-        private static async UniTaskVoid ConvertTextTableAsync()
-        {
-#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-            const string tools = "dotnet Tool.dll";
-#else
-            const string tools = ".\\Tool.exe";
-#endif
-            Stopwatch stopwatch = Stopwatch.StartNew();
-#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-            await ShellTool.RunAsync($"{tools} --AppType=LocalizationExporter --Console=1", "../Bin/");
-#else
-            await ShellTool.RunAsync($"{tools} --AppType=LocalizationExporter --Console=1", "../Bin/");
-#endif
-            stopwatch.Stop();
-            Debug.Log($"Export Localization cost {stopwatch.ElapsedMilliseconds} Milliseconds!");
-            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            EditorLocalizationTool.Clear();
-            var activeObject = Selection.activeObject;
-            if (activeObject != null)
-            {
-                Selection.activeObject = null;
-                await UniTask.DelayFrame(2);
-                Selection.activeObject = activeObject;
-            }
+            EditorTool.ConvertTextTable();
         }
 
         private static string MergePath(string origin_path, string new_path)

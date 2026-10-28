@@ -6,16 +6,16 @@
 
 <PageTitle>版本管理 - 游戏管理后台</PageTitle>
 
-<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-4">
-    <MudText Typo="Typo.h5">版本管理</MudText>
+<PageHeader Title="版本管理" Description="按平台和环境管理版本，查看当前激活状态。" Icon="@Icons.Material.Filled.Inventory2">
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
                OnClick="OpenCreateDialog">新建版本</MudButton>
-</MudStack>
+
+</PageHeader>
 
 @* 筛选 *@
-<MudStack Row="true" Spacing="2" Class="mb-4">
+<MudStack Row="true" Spacing="2" Class="wrap-row mb-4">
     <MudSelect @bind-Value="_filterPlatform" Label="平台" Variant="Variant.Outlined" Dense="true"
-               Margin="Margin.Dense" Style="width:150px;">
+               Margin="Margin.Dense" Class="filter-select">
         <MudSelectItem T="string" Value="@("")">全部</MudSelectItem>
         <MudSelectItem T="string" Value="@("Windows64")">Windows64</MudSelectItem>
         <MudSelectItem T="string" Value="@("MacOS")">MacOS</MudSelectItem>
@@ -23,14 +23,14 @@
         <MudSelectItem T="string" Value="@("Android")">Android</MudSelectItem>
     </MudSelect>
     <MudSelect @bind-Value="_filterEnv" Label="环境" Variant="Variant.Outlined" Dense="true"
-               Margin="Margin.Dense" Style="width:150px;">
+               Margin="Margin.Dense" Class="filter-select">
         <MudSelectItem T="string" Value="@("")">全部</MudSelectItem>
         <MudSelectItem T="string" Value="@("Dev")">Dev</MudSelectItem>
         <MudSelectItem T="string" Value="@("Staging")">Staging</MudSelectItem>
         <MudSelectItem T="string" Value="@("Production")">Production</MudSelectItem>
     </MudSelect>
     <MudSpacer />
-    <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
+    <MudIconButton aria-label="刷新" title="刷新" Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
 </MudStack>
 
 <MudTable Items="_filteredVersions" Dense="true" Hover="true" Elevation="2">
@@ -48,23 +48,23 @@
         <MudTh>操作</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd>@context.Id</MudTd>
-        <MudTd><MudChip T="string" Size="Size.Small" Color="@GetPlatformColor(context.Platform)">@context.Platform</MudChip></MudTd>
-        <MudTd><MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@GetEnvColor(context.Environment)">@context.Environment</MudChip></MudTd>
-        <MudTd>@context.LatestGameVersion</MudTd>
-        <MudTd>@context.InternalGameVersion</MudTd>
-        <MudTd>@context.InternalResourceVersion</MudTd>
-        <MudTd>
+        <MudTd DataLabel="ID">@context.Id</MudTd>
+        <MudTd DataLabel="平台"><MudChip T="string" Size="Size.Small" Color="@GetPlatformColor(context.Platform)">@context.Platform</MudChip></MudTd>
+        <MudTd DataLabel="环境"><MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@GetEnvColor(context.Environment)">@context.Environment</MudChip></MudTd>
+        <MudTd DataLabel="游戏版本">@context.LatestGameVersion</MudTd>
+        <MudTd DataLabel="内部版本">@context.InternalGameVersion</MudTd>
+        <MudTd DataLabel="资源版本">@context.InternalResourceVersion</MudTd>
+        <MudTd DataLabel="强制更新">
             @if (context.ForceUpdateGame)
             {
-                <MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Warning" Size="Size.Small" />
+                <MudText Typo="Typo.body2" Color="Color.Warning">是</MudText>
             }
             else
             {
-                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Default" Size="Size.Small" />
+                <MudText Typo="Typo.body2">否</MudText>
             }
         </MudTd>
-        <MudTd>
+        <MudTd DataLabel="状态">
             @if (context.IsActive)
             {
                 <MudChip T="string" Color="Color.Success" Size="Size.Small" Class="status-chip">已激活</MudChip>
@@ -74,30 +74,30 @@
                 <MudChip T="string" Color="Color.Default" Size="Size.Small" Class="status-chip">未激活</MudChip>
             }
         </MudTd>
-        <MudTd>@context.CreatedAt.ToString("yyyy-MM-dd HH:mm")</MudTd>
-        <MudTd>@context.CreatedBy</MudTd>
-        <MudTd>
+        <MudTd DataLabel="创建时间">@context.CreatedAt.ToString("yyyy-MM-dd HH:mm")</MudTd>
+        <MudTd DataLabel="创建者">@context.CreatedBy</MudTd>
+        <MudTd DataLabel="操作">
             @if (!context.IsActive)
             {
-                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small"
+                <MudIconButton aria-label="激活版本" title="激活版本" Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small"
                                OnClick="@(() => ActivateVersion(context))" />
             }
             else
             {
-                <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Warning" Size="Size.Small"
+                <MudIconButton aria-label="停用版本" title="停用版本" Icon="@Icons.Material.Filled.Cancel" Color="Color.Warning" Size="Size.Small"
                                OnClick="@(() => DeactivateVersion(context))" />
             }
-            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small"
+            <MudIconButton aria-label="编辑" title="编辑" Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small"
                            OnClick="@(() => OpenEditDialog(context))" />
-            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small"
+            <MudIconButton aria-label="删除" title="删除" Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small"
                            OnClick="@(() => DeleteVersion(context))" />
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>
-        <MudText>暂无版本记录，点击"新建版本"创建</MudText>
+        <EmptyState Title="暂无匹配的版本" Description="调整平台与环境筛选，或通过“新建版本”添加记录。" Icon="@Icons.Material.Filled.Inventory2" />
     </NoRecordsContent>
     <PagerContent>
-        <MudTablePager PageSizeOptions="new[] { 10, 25, 50 }" />
+        <MudTablePager RowsPerPageString="每页条数" InfoFormat="{first_item}–{last_item} / {all_items}" PageSizeOptions="new[] { 10, 25, 50 }" />
     </PagerContent>
 </MudTable>
 
@@ -108,7 +108,7 @@
     </TitleContent>
     <DialogContent>
         <MudGrid Spacing="2">
-            <MudItem xs="6">
+            <MudItem xs="12" sm="6">
                 <MudSelect @bind-Value="_editingVersion.Platform" Label="平台" Variant="Variant.Outlined" Required="true">
                     <MudSelectItem T="string" Value="@("Windows64")">Windows64</MudSelectItem>
                     <MudSelectItem T="string" Value="@("MacOS")">MacOS</MudSelectItem>
@@ -116,26 +116,26 @@
                     <MudSelectItem T="string" Value="@("Android")">Android</MudSelectItem>
                 </MudSelect>
             </MudItem>
-            <MudItem xs="6">
+            <MudItem xs="12" sm="6">
                 <MudSelect @bind-Value="_editingVersion.Environment" Label="环境" Variant="Variant.Outlined" Required="true">
                     <MudSelectItem T="string" Value="@("Dev")">Dev</MudSelectItem>
                     <MudSelectItem T="string" Value="@("Staging")">Staging</MudSelectItem>
                     <MudSelectItem T="string" Value="@("Production")">Production</MudSelectItem>
                 </MudSelect>
             </MudItem>
-            <MudItem xs="6">
+            <MudItem xs="12" sm="6">
                 <MudTextField @bind-Value="_editingVersion.LatestGameVersion" Label="游戏版本" Variant="Variant.Outlined" Required="true" />
             </MudItem>
-            <MudItem xs="3">
+            <MudItem xs="12" sm="3">
                 <MudNumericField @bind-Value="_editingVersion.InternalGameVersion" Label="内部游戏版本" Variant="Variant.Outlined" />
             </MudItem>
-            <MudItem xs="3">
+            <MudItem xs="12" sm="3">
                 <MudNumericField @bind-Value="_editingVersion.InternalResourceVersion" Label="资源版本" Variant="Variant.Outlined" />
             </MudItem>
             <MudItem xs="12">
                 <MudTextField @bind-Value="_editingVersion.UpdatePrefixUri" Label="更新地址" Variant="Variant.Outlined" />
             </MudItem>
-            <MudItem xs="6">
+            <MudItem xs="12" sm="6">
                 <MudSwitch @bind-Value="_editingVersion.ForceUpdateGame" Label="强制更新" Color="Color.Warning" T="bool" />
             </MudItem>
             <MudItem xs="12">

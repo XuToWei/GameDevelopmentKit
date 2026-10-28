@@ -7,7 +7,7 @@
 
 <PageTitle>Agent 监控 - 游戏管理后台</PageTitle>
 
-<MudText Typo="Typo.h5" Class="mb-4">Agent 监控</MudText>
+<PageHeader Title="Agent 监控" Description="查看调度节点连通状态及其管理的服务器。" Icon="@Icons.Material.Filled.CloudQueue" />
 
 @* 统计概览 *@
 <MudGrid Class="mb-4">
@@ -49,7 +49,7 @@
     <ToolBarContent>
         <MudText Typo="Typo.body1">Agent 列表</MudText>
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
+        <MudIconButton aria-label="刷新" title="刷新" Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
     </ToolBarContent>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<AgentInfo, object>(x => x.ProcessId)">进程ID</MudTableSortLabel></MudTh>
@@ -74,7 +74,7 @@
         <MudTd DataLabel="内网地址">@context.InnerAddress</MudTd>
         <MudTd DataLabel="管理服务器数">@context.ManagedServerCount</MudTd>
         <MudTd DataLabel="管理的服务器">
-            <MudStack Row="true" Spacing="1">
+            <MudStack Row="true" Spacing="1" Class="wrap-row">
                 @foreach (var serverId in context.ManagedServerIds.Take(5))
                 {
                     <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@serverId</MudChip>
@@ -87,10 +87,7 @@
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>
-        <MudStack AlignItems="AlignItems.Center" Spacing="2" Class="py-4">
-            <MudIcon Icon="@Icons.Material.Filled.Info" Color="Color.Info" />
-            <MudText>暂无 Agent 配置</MudText>
-        </MudStack>
+        <EmptyState Title="暂无 Agent 配置" Description="配置调度节点后，可在这里查看连通状态。" Icon="@Icons.Material.Filled.CloudQueue" />
     </NoRecordsContent>
 </MudTable>
 

@@ -8,17 +8,16 @@
 
 <PageTitle>服务器详情 - Process @ProcessId</PageTitle>
 
-<MudStack Row="true" AlignItems="AlignItems.Center" Class="mb-4">
-    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="@(() => Navigation.NavigateTo("/servers"))" />
-    <MudText Typo="Typo.h5">@GetServerName()</MudText>
+<PageHeader Title="@GetServerName()" Description="查看进程信息、性能字段与 Fiber / Scene 拓扑。" Icon="@Icons.Material.Filled.Dns">
+    <MudIconButton aria-label="返回列表" title="返回列表" Icon="@Icons.Material.Filled.ArrowBack" OnClick="@(() => Navigation.NavigateTo("/servers"))" />
     @if (_server != null)
     {
         <MudChip T="string" Color="@GetStatusColor(_server.Status)" Size="Size.Small" Class="status-chip">
             @GetStatusText(_server.Status)
         </MudChip>
     }
-    <MudSpacer />
-    <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
+
+    <MudIconButton aria-label="刷新" title="刷新" Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
     @if (_server != null && _server.Status == ServerStatus.Running)
     {
         <MudButton Variant="Variant.Outlined" Color="Color.Warning" StartIcon="@Icons.Material.Filled.RestartAlt"
@@ -31,7 +30,8 @@
         <MudButton Variant="Variant.Filled" Color="Color.Success" StartIcon="@Icons.Material.Filled.PlayArrow"
                    OnClick="StartServer">启动</MudButton>
     }
-</MudStack>
+
+</PageHeader>
 
 @if (_server == null)
 {
@@ -69,14 +69,14 @@ else
                 <MudCardContent>
                     <MudStack Spacing="4">
                         <div>
-                            <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudStack Row="true" Justify="Justify.SpaceBetween" Class="wrap-row">
                                 <MudText Typo="Typo.body2">CPU 使用率</MudText>
                                 <MudText Typo="Typo.body2">@_server.CpuUsage.ToString("F1")%</MudText>
                             </MudStack>
                             <MudProgressLinear Value="@_server.CpuUsage" Color="@GetCpuColor(_server.CpuUsage)" Size="Size.Medium" Rounded="true" />
                         </div>
                         <div>
-                            <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudStack Row="true" Justify="Justify.SpaceBetween" Class="wrap-row">
                                 <MudText Typo="Typo.body2">内存使用</MudText>
                                 <MudText Typo="Typo.body2">@FormatMemory(_server.MemoryUsage) / @FormatMemory(_server.MemoryTotal)</MudText>
                             </MudStack>
@@ -109,12 +109,12 @@ else
                 <MudTh>Entity 数</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Id</MudTd>
-                <MudTd>@context.Zone</MudTd>
-                <MudTd><MudChip T="string" Size="Size.Small" Color="Color.Info">@context.SceneType</MudChip></MudTd>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.SchedulerType</MudTd>
-                <MudTd>@context.EntityCount</MudTd>
+                <MudTd DataLabel="ID">@context.Id</MudTd>
+                <MudTd DataLabel="Zone">@context.Zone</MudTd>
+                <MudTd DataLabel="类型"><MudChip T="string" Size="Size.Small" Color="Color.Info">@context.SceneType</MudChip></MudTd>
+                <MudTd DataLabel="名称">@context.Name</MudTd>
+                <MudTd DataLabel="调度器">@context.SchedulerType</MudTd>
+                <MudTd DataLabel="Entity 数">@context.EntityCount</MudTd>
             </RowTemplate>
         </MudTable>
     }
@@ -139,14 +139,14 @@ else
                 <MudTh>Fiber ID</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd>@context.Id</MudTd>
-                <MudTd>@context.Zone</MudTd>
-                <MudTd><MudChip T="string" Size="Size.Small" Color="Color.Secondary">@context.SceneType</MudChip></MudTd>
-                <MudTd>@context.Name</MudTd>
-                <MudTd>@context.InnerAddress</MudTd>
-                <MudTd>@context.OuterAddress</MudTd>
-                <MudTd>@context.PlayerCount</MudTd>
-                <MudTd>@context.FiberId</MudTd>
+                <MudTd DataLabel="ID">@context.Id</MudTd>
+                <MudTd DataLabel="Zone">@context.Zone</MudTd>
+                <MudTd DataLabel="类型"><MudChip T="string" Size="Size.Small" Color="Color.Secondary">@context.SceneType</MudChip></MudTd>
+                <MudTd DataLabel="名称">@context.Name</MudTd>
+                <MudTd DataLabel="内网地址">@context.InnerAddress</MudTd>
+                <MudTd DataLabel="外网地址">@context.OuterAddress</MudTd>
+                <MudTd DataLabel="玩家数">@context.PlayerCount</MudTd>
+                <MudTd DataLabel="Fiber ID">@context.FiberId</MudTd>
             </RowTemplate>
         </MudTable>
     }

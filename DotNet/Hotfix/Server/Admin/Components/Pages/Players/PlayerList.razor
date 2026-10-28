@@ -6,17 +6,18 @@
 
 <PageTitle>玩家管理 - 游戏管理后台</PageTitle>
 
-<MudText Typo="Typo.h5" Class="mb-4">玩家管理</MudText>
+<PageHeader Title="玩家管理" Description="查询已录入的玩家记录，查看账号状态并进行管理。" Icon="@Icons.Material.Filled.Groups" />
 
 <MudTable ServerData="LoadPlayers" Dense="true" Hover="true" Elevation="2" @ref="_table">
     <ToolBarContent>
-        <MudTextField @bind-Value="_searchString" Placeholder="搜索玩家 ID / 名称..."
+        <MudTextField @bind-Value="_searchString" Placeholder="搜索玩家 ID / 名称..." aria-label="搜索玩家 ID / 名称"
                       Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium" Immediate="false"
-                      OnKeyDown="OnSearchKeyDown" Class="mt-0" />
+                      OnKeyDown="OnSearchKeyDown" Class="filter-search" Variant="Variant.Outlined" Margin="Margin.Dense" />
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => _table.ReloadServerData())">搜索</MudButton>
         <MudSpacer />
         <MudSelect Value="_filterStatus" Label="状态" Variant="Variant.Outlined" Dense="true"
-                   Margin="Margin.Dense" Style="width:120px;" Class="ml-2"
+                   Margin="Margin.Dense" Class="filter-select"
                    ValueChanged="@((string val) => { _filterStatus = val; _table.ReloadServerData(); })">
             <MudSelectItem T="string" Value="@("")">全部</MudSelectItem>
             <MudSelectItem T="string" Value="@("online")">在线</MudSelectItem>
@@ -67,28 +68,28 @@
         <MudTd DataLabel="操作">
             @if (context.IsOnline)
             {
-                <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Warning" Size="Size.Small"
+                <MudIconButton aria-label="踢出玩家" title="踢出玩家" Icon="@Icons.Material.Filled.Logout" Color="Color.Warning" Size="Size.Small"
                                OnClick="@(() => KickPlayer(context))" />
             }
             @if (context.IsBanned)
             {
-                <MudIconButton Icon="@Icons.Material.Filled.LockOpen" Color="Color.Success" Size="Size.Small"
+                <MudIconButton aria-label="解封玩家" title="解封玩家" Icon="@Icons.Material.Filled.LockOpen" Color="Color.Success" Size="Size.Small"
                                OnClick="@(() => UnbanPlayer(context))" />
             }
             else
             {
-                <MudIconButton Icon="@Icons.Material.Filled.Block" Color="Color.Error" Size="Size.Small"
+                <MudIconButton aria-label="封禁玩家" title="封禁玩家" Icon="@Icons.Material.Filled.Block" Color="Color.Error" Size="Size.Small"
                                OnClick="@(() => BanPlayer(context))" />
             }
-            <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Primary" Size="Size.Small"
+            <MudIconButton aria-label="查看详情" title="查看详情" Icon="@Icons.Material.Filled.Info" Color="Color.Primary" Size="Size.Small"
                            Href="@($"/players/{context.Id}")" />
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>
-        <MudText>暂无玩家数据（玩家数据将在 ET 服务器运行时自动采集）</MudText>
+        <EmptyState Title="暂无匹配的玩家记录" Description="可调整筛选条件。当前玩家数据尚未接入自动同步。" Icon="@Icons.Material.Filled.Groups" />
     </NoRecordsContent>
     <PagerContent>
-        <MudTablePager PageSizeOptions="new[] { 10, 25, 50 }" />
+        <MudTablePager RowsPerPageString="每页条数" InfoFormat="{first_item}–{last_item} / {all_items}" PageSizeOptions="new[] { 10, 25, 50 }" />
     </PagerContent>
 </MudTable>
 

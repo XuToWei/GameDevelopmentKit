@@ -371,11 +371,3 @@ Detailed documentation is in the `Book/` directory (in Chinese):
 
 先寻找 `Assets/` 与已存在 `.agentbridge/` 同级的 Unity 工程；Bridge root 直接使用固定的 `request.json`、`processing.json`、`response.json` 槽位，空闲时这些文件可以不存在。目录存在只表示桥接配置过，不保证宿主当前已启用。找不到 Bridge root 时停止并报告 Unity 没有安装或运行 AgentBridge，不得自行创建目录。实际 command、params schema 和 batch policy 只从运行时 `list_commands` 获取，不得使用硬编码清单。
 <!-- END UNITY_AGENT_BRIDGE -->
-
-
-
-
-
-
-
-
