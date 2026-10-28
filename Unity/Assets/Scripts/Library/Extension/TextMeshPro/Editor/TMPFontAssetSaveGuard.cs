@@ -6,25 +6,13 @@ using UnityEngine;
 
 namespace TMPro.Extension.Editor
 {
-    [InitializeOnLoad]
     internal sealed class TMPFontAssetSaveGuard : AssetModificationProcessor
     {
         private static readonly HashSet<string> s_ReportedAssetPaths = new HashSet<string>();
         private static readonly List<string> s_AllowedAssetPaths = new List<string>();
 
-        static TMPFontAssetSaveGuard()
-        {
-            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
-            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-        }
-
         public static string[] OnWillSaveAssets(string[] paths)
         {
-            if (!TMPFontAssetPlayModeLock.IsActive)
-            {
-                return paths;
-            }
-
             s_AllowedAssetPaths.Clear();
             bool hasBlockedAsset = false;
             for (int i = 0; i < paths.Length; i++)
@@ -33,27 +21,25 @@ namespace TMPro.Extension.Editor
                 Type mainAssetType = AssetDatabase.GetMainAssetTypeAtPath(path);
                 if (mainAssetType != null && typeof(TMP_FontAsset).IsAssignableFrom(mainAssetType))
                 {
-                    hasBlockedAsset = true;
-                    if (s_ReportedAssetPaths.Add(path))
+                    TMP_FontAsset fontAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(path);
+                    if (fontAsset == null || !TMPFontAssetEditLock.IsUnlocked(fontAsset))
                     {
-                        Debug.LogWarning($"运行模式下禁止保存 TMP Font Asset：{path}");
+                        hasBlockedAsset = true;
+                        if (s_ReportedAssetPaths.Add(path))
+                        {
+                            Debug.LogWarning($"TMP Font Asset 已锁定，无法保存；请先在 Inspector 中解锁：{path}");
+                        }
+
+                        continue;
                     }
 
-                    continue;
+                    s_ReportedAssetPaths.Remove(path);
                 }
 
                 s_AllowedAssetPaths.Add(path);
             }
 
             return hasBlockedAsset ? s_AllowedAssetPaths.ToArray() : paths;
-        }
-
-        private static void OnPlayModeStateChanged(PlayModeStateChange state)
-        {
-            if (state == PlayModeStateChange.EnteredEditMode)
-            {
-                s_ReportedAssetPaths.Clear();
-            }
         }
     }
 }

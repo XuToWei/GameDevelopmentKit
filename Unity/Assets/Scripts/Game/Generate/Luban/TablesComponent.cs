@@ -28,8 +28,8 @@ public partial class TablesComponent
     {
         TablesMemory.BeginRecord();
 
-        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
-        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
+        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>(7);
+        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>(7);
 
         DTUIForm = new DTUIForm(() => loader("dtuiform"));
         loadTasks.Add(DTUIForm.LoadAsync());

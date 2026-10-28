@@ -6,12 +6,12 @@
 
 <PageTitle>版本激活历史 - 游戏管理后台</PageTitle>
 
-<MudText Typo="Typo.h5" Class="mb-4">版本激活历史</MudText>
+<PageHeader Title="版本激活历史" Description="追踪版本激活与停用记录，按需回滚到先前版本。" Icon="@Icons.Material.Filled.History" />
 
 @* 筛选 *@
-<MudStack Row="true" Spacing="2" Class="mb-4">
+<MudStack Row="true" Spacing="2" Class="wrap-row mb-4">
     <MudSelect @bind-Value="_filterPlatform" Label="平台" Variant="Variant.Outlined" Dense="true"
-               Margin="Margin.Dense" Style="width:150px;">
+               Margin="Margin.Dense" Class="filter-select">
         <MudSelectItem T="string" Value="@("")">全部</MudSelectItem>
         <MudSelectItem T="string" Value="@("Windows64")">Windows64</MudSelectItem>
         <MudSelectItem T="string" Value="@("MacOS")">MacOS</MudSelectItem>
@@ -19,7 +19,7 @@
         <MudSelectItem T="string" Value="@("Android")">Android</MudSelectItem>
     </MudSelect>
     <MudSpacer />
-    <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
+    <MudIconButton aria-label="刷新" title="刷新" Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
     <MudText Typo="Typo.body2" Color="Color.Secondary" Class="align-self-center">
         共 @_filteredHistory.Count() 条记录
     </MudText>
@@ -27,22 +27,20 @@
 
 @if (!_filteredHistory.Any())
 {
-    <MudAlert Severity="Severity.Info">暂无激活历史记录</MudAlert>
+    <EmptyState Title="暂无激活历史" Description="版本激活或停用后，可以在这里查看操作记录。" Icon="@Icons.Material.Filled.History" />
 }
 else
 {
-    <MudTimeline TimelinePosition="TimelinePosition.Start">
+    <MudTimeline TimelinePosition="TimelinePosition.Start" Class="version-timeline">
         @foreach (var record in _filteredHistory.Take(50))
         {
             <MudTimelineItem Color="@(record.Action == "Activated" ? Color.Success : Color.Warning)"
                              Size="Size.Small" Elevation="2">
-                <ItemOpposite>
-                    <MudText Typo="Typo.body2" Color="Color.Secondary">@record.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</MudText>
-                </ItemOpposite>
                 <ItemContent>
                     <MudCard Elevation="1">
                         <MudCardContent Class="pa-3">
-                            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                            <MudText Typo="Typo.caption" Class="history-timestamp">@record.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</MudText>
+                            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="wrap-row">
                                 @if (record.Action == "Activated")
                                 {
                                     <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small" />

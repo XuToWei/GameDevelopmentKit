@@ -25,21 +25,21 @@
             <div class="story-copy">
                 <div class="story-kicker"><span></span> GAME OPERATIONS</div>
                 <h1>让每一次部署<br />都清晰可控</h1>
-                <p>在一个工作台中掌握服务器运行、玩家状态、版本交付与热更新全链路。</p>
+                <p>集中管理服务器、版本与配置，让日常运维井然有序。</p>
             </div>
 
             <div class="story-features">
                 <div class="story-feature">
                     <MudIcon Icon="@Icons.Material.Filled.MonitorHeart" />
-                    <span>实时进程监控</span>
+                    <span>服务器管理</span>
                 </div>
                 <div class="story-feature">
                     <MudIcon Icon="@Icons.Material.Filled.Bolt" />
-                    <span>安全热更新</span>
+                    <span>代码与配置热更</span>
                 </div>
                 <div class="story-feature">
-                    <MudIcon Icon="@Icons.Material.Filled.VerifiedUser" />
-                    <span>权限隔离</span>
+                    <MudIcon Icon="@Icons.Material.Filled.History" />
+                    <span>版本记录</span>
                 </div>
             </div>
         </section>
@@ -59,14 +59,14 @@
                 <MudTextField @bind-Value="_username" Label="用户名" Placeholder="请输入管理员账号"
                               Variant="Variant.Outlined" Adornment="Adornment.Start"
                               AdornmentIcon="@Icons.Material.Filled.PersonOutline" Disabled="_loading"
-                              Class="login-field" />
+                              Class="login-field" autocomplete="username" />
                 <MudTextField @bind-Value="_password" Label="密码" Placeholder="请输入登录密码"
                               Variant="Variant.Outlined" InputType="InputType.Password"
                               Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Lock"
-                              OnKeyDown="OnPasswordKeyDown" Disabled="_loading" Class="login-field" />
+                              OnKeyDown="OnPasswordKeyDown" Disabled="_loading" Class="login-field" autocomplete="current-password" />
             @if (!string.IsNullOrEmpty(_errorMessage))
             {
-                    <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Dense="true" Class="login-error">
+                    <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Dense="true" Class="login-error" role="alert">
                         @_errorMessage
                     </MudAlert>
             }
@@ -82,9 +82,9 @@
                 进入控制台
             </MudButton>
 
-            <div class="login-security-note">
-                <MudIcon Icon="@Icons.Material.Filled.Shield" Size="Size.Small" />
-                <span>登录会话独立加密，操作记录可追踪</span>
+            <div class="login-help-note">
+                <MudIcon Icon="@Icons.Material.Filled.Info" Size="Size.Small" />
+                <span>请使用已分配的管理员账户登录</span>
             </div>
         </MudPaper>
     </div>

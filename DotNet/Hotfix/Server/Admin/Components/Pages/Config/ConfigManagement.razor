@@ -7,12 +7,12 @@
 
 <PageTitle>配置管理 - 游戏管理后台</PageTitle>
 
-<MudText Typo="Typo.h5" Class="mb-4">配置管理</MudText>
+<PageHeader Title="配置管理" Description="集中维护后台配置、公告记录与服务器维护设置。" Icon="@Icons.Material.Filled.Tune" />
 
-<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-4">
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" MinimumTabWidth="100px" PanelClass="config-tab-panel" Class="config-tabs">
     @* 游戏配置 *@
     <MudTabPanel Text="游戏配置" Icon="@Icons.Material.Filled.Tune">
-        <MudStack Row="true" Justify="Justify.FlexEnd" Class="mb-2">
+        <MudStack Row="true" Justify="Justify.FlexEnd" Class="wrap-row mb-2">
             <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small"
                        StartIcon="@Icons.Material.Filled.Add" OnClick="OpenAddConfigDialog">添加配置</MudButton>
         </MudStack>
@@ -26,45 +26,45 @@
                 <MudTh>操作</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd><strong>@context.Key</strong></MudTd>
-                <MudTd>
+                <MudTd DataLabel="配置项"><strong>@context.Key</strong></MudTd>
+                <MudTd DataLabel="当前值">
                     @if (context.Key == _editingKey)
                     {
                         <MudTextField @bind-Value="_editingValue" Variant="Variant.Outlined"
-                                      Margin="Margin.Dense" Style="width:200px;" />
+                                      Margin="Margin.Dense" Class="inline-editor" aria-label="配置值" />
                     }
                     else
                     {
                         @context.Value
                     }
                 </MudTd>
-                <MudTd><MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@context.Type</MudChip></MudTd>
-                <MudTd>@context.Description</MudTd>
-                <MudTd>@context.ModifiedAt.ToLocalTime().ToString("MM-dd HH:mm")</MudTd>
-                <MudTd>
+                <MudTd DataLabel="类型"><MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@context.Type</MudChip></MudTd>
+                <MudTd DataLabel="描述">@context.Description</MudTd>
+                <MudTd DataLabel="最后修改">@context.ModifiedAt.ToLocalTime().ToString("MM-dd HH:mm")</MudTd>
+                <MudTd DataLabel="操作">
                     @if (context.Key == _editingKey)
                     {
-                        <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Success" Size="Size.Small"
+                        <MudIconButton aria-label="保存修改" title="保存修改" Icon="@Icons.Material.Filled.Check" Color="Color.Success" Size="Size.Small"
                                        OnClick="@(() => SaveConfig(context))" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Default" Size="Size.Small"
+                        <MudIconButton aria-label="取消编辑" title="取消编辑" Icon="@Icons.Material.Filled.Close" Color="Color.Default" Size="Size.Small"
                                        OnClick="CancelEdit" />
                     }
                     else
                     {
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small"
+                        <MudIconButton aria-label="编辑" title="编辑" Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small"
                                        OnClick="@(() => StartEdit(context))" />
                     }
                 </MudTd>
             </RowTemplate>
             <NoRecordsContent>
-                <MudText>暂无配置项，点击"添加配置"创建</MudText>
+                <EmptyState Title="暂无配置项" Description="通过“添加配置”创建需要管理的参数。" Icon="@Icons.Material.Filled.Tune" />
             </NoRecordsContent>
         </MudTable>
     </MudTabPanel>
 
     @* 公告管理 *@
     <MudTabPanel Text="公告管理" Icon="@Icons.Material.Filled.Campaign">
-        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-4">
+        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="wrap-row mb-4">
             <MudText Typo="Typo.h6">公告列表</MudText>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
                        OnClick="OpenAnnouncementDialog">发布公告</MudButton>
@@ -80,45 +80,45 @@
                 <MudTh>操作</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd><strong>@context.Title</strong></MudTd>
-                <MudTd Style="max-width:300px;">
-                    <MudText Typo="Typo.body2" Style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                <MudTd DataLabel="标题"><strong>@context.Title</strong></MudTd>
+                <MudTd Class="content-cell" DataLabel="内容">
+                    <MudText Typo="Typo.body2" Class="long-copy">
                         @context.Content
                     </MudText>
                 </MudTd>
-                <MudTd>
+                <MudTd DataLabel="类型">
                     <MudChip T="string" Size="Size.Small" Color="@(context.Type == "紧急" ? Color.Error : context.Type == "维护" ? Color.Warning : Color.Info)">
                         @context.Type
                     </MudChip>
                 </MudTd>
-                <MudTd>
+                <MudTd DataLabel="状态">
                     @if (context.IsActive)
                     {
-                        <MudChip T="string" Color="Color.Success" Size="Size.Small">显示中</MudChip>
+                        <MudChip T="string" Color="Color.Success" Size="Size.Small">已启用</MudChip>
                     }
                     else
                     {
-                        <MudChip T="string" Color="Color.Default" Size="Size.Small">已关闭</MudChip>
+                        <MudChip T="string" Color="Color.Default" Size="Size.Small">已停用</MudChip>
                     }
                 </MudTd>
-                <MudTd>@context.PublishedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</MudTd>
-                <MudTd>
+                <MudTd DataLabel="发布时间">@context.PublishedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</MudTd>
+                <MudTd DataLabel="操作">
                     @if (context.IsActive)
                     {
-                        <MudIconButton Icon="@Icons.Material.Filled.VisibilityOff" Color="Color.Warning" Size="Size.Small"
+                        <MudIconButton aria-label="停用公告" title="停用公告" Icon="@Icons.Material.Filled.VisibilityOff" Color="Color.Warning" Size="Size.Small"
                                        OnClick="@(() => ToggleAnnouncement(context, false))" />
                     }
                     else
                     {
-                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Success" Size="Size.Small"
+                        <MudIconButton aria-label="启用公告" title="启用公告" Icon="@Icons.Material.Filled.Visibility" Color="Color.Success" Size="Size.Small"
                                        OnClick="@(() => ToggleAnnouncement(context, true))" />
                     }
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small"
+                    <MudIconButton aria-label="删除" title="删除" Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small"
                                    OnClick="@(() => DeleteAnnouncement(context))" />
                 </MudTd>
             </RowTemplate>
             <NoRecordsContent>
-                <MudText>暂无公告</MudText>
+                <EmptyState Title="暂无公告" Description="通过“发布公告”创建后台公告记录。" Icon="@Icons.Material.Filled.Campaign" />
             </NoRecordsContent>
         </MudTable>
     </MudTabPanel>
@@ -143,11 +143,11 @@
                 <MudAlert Severity="@(_maintenanceEnabled ? Severity.Warning : Severity.Info)" Class="mb-3">
                     @if (_maintenanceEnabled)
                     {
-                        <span>维护模式已开启，新玩家将无法登录</span>
+                        <span>保存后将禁止从后台启动服务器。</span>
                     }
                     else
                     {
-                        <span>维护模式未开启，服务器正常运行</span>
+                        <span>保存后允许从后台启动服务器。</span>
                     }
                 </MudAlert>
             </MudItem>
@@ -285,7 +285,7 @@
     {
         item.IsActive = active;
         ConfigService.UpdateAnnouncement(item);
-        Snackbar.Add(active ? "公告已重新发布" : "公告已关闭", Severity.Info);
+        Snackbar.Add(active ? "公告已启用" : "公告已停用", Severity.Info);
         RefreshData();
     }
 

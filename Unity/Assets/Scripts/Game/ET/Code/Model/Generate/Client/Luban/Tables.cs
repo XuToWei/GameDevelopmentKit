@@ -25,8 +25,8 @@ public partial class Tables
     {
         TablesMemory.BeginRecord();
 
-        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
-        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
+        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>(4);
+        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>(4);
 
         DTOneConfig = new DTOneConfig(() => loader("dtoneconfig"));
         loadTasks.Add(DTOneConfig.LoadAsync());

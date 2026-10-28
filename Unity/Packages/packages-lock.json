@@ -9,7 +9,7 @@
         "com.unity.collections": "1.5.1",
         "com.unity.mathematics": "1.0.1"
       },
-      "hash": "ab6e92bfe78ff911def2fd3c4e9c79bb5a186946"
+      "hash": "422eb124051c81a9bc3f422ebf190703c5053514"
     },
     "com.annulusgames.lit-motion.animation": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
@@ -18,14 +18,14 @@
       "dependencies": {
         "com.annulusgames.lit-motion": "2.0.0"
       },
-      "hash": "ab6e92bfe78ff911def2fd3c4e9c79bb5a186946"
+      "hash": "422eb124051c81a9bc3f422ebf190703c5053514"
     },
     "com.code-philosophy.hybridclr": {
       "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "fd32708e7f5106f0ffa375bcfe43342ee594c1e5"
+      "hash": "d17a727fac8a56186c35294ec285362902f4a04d"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -278,6 +278,13 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.xw.remote-execution": {
+      "version": "https://github.com/XuToWei/UnityRemoteExecution.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "4177555eaab61d45a82e9dfcd9ac9fe9f56cc539"
+    },
     "com.yasirkula.inspectplus": {
       "version": "https://github.com/yasirkula/UnityInspectPlus.git",
       "depth": 0,
@@ -337,7 +344,7 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.test-framework": "1.1.33"
       },
-      "hash": "55be190a99512856cfcc7ae53c2ef2994a2e242b"
+      "hash": "c19ff7565b9d153db06dd36a79734c00e37bf911"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

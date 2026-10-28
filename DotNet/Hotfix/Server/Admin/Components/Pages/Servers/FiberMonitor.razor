@@ -7,7 +7,7 @@
 
 <PageTitle>Fiber 监控 - 游戏管理后台</PageTitle>
 
-<MudText Typo="Typo.h5" Class="mb-4">Fiber 监控</MudText>
+<PageHeader Title="Fiber 监控" Description="按调度器与场景类型查看进程拓扑。实体数量尚未接入实时采集。" Icon="@Icons.Material.Filled.AccountTree" />
 
 @* 统计概览 *@
 <MudGrid Class="mb-4">
@@ -47,26 +47,26 @@
 
 <MudTable Items="_filteredFibers" Dense="true" Hover="true" Elevation="2" Filter="FilterFunc" Loading="_loading">
     <ToolBarContent>
-        <MudTextField @bind-Value="_searchString" Placeholder="搜索 Fiber..." Adornment="Adornment.Start"
+        <MudTextField @bind-Value="_searchString" Placeholder="搜索 Fiber..." aria-label="搜索 Fiber" Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
-                      Immediate="true" Class="mt-0" />
+                      Immediate="true" Class="filter-search" Variant="Variant.Outlined" Margin="Margin.Dense" />
         <MudSpacer />
         <MudSelect @bind-Value="_filterScheduler" Label="调度器" Variant="Variant.Outlined" Dense="true"
-                   Margin="Margin.Dense" Class="ml-2" Style="width:150px;">
+                   Margin="Margin.Dense" Class="filter-select">
             <MudSelectItem T="string" Value="@("")">全部</MudSelectItem>
             <MudSelectItem T="string" Value="@("Main")">Main</MudSelectItem>
             <MudSelectItem T="string" Value="@("Thread")">Thread</MudSelectItem>
             <MudSelectItem T="string" Value="@("ThreadPool")">ThreadPool</MudSelectItem>
         </MudSelect>
         <MudSelect @bind-Value="_filterSceneType" Label="场景类型" Variant="Variant.Outlined" Dense="true"
-                   Margin="Margin.Dense" Class="ml-2" Style="width:150px;">
+                   Margin="Margin.Dense" Class="filter-select">
             <MudSelectItem T="string" Value="@("")">全部</MudSelectItem>
             @foreach (var type in _fibers.Select(f => f.SceneType).Distinct().OrderBy(t => t))
             {
                 <MudSelectItem T="string" Value="@type">@type</MudSelectItem>
             }
         </MudSelect>
-        <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" Class="ml-2" />
+        <MudIconButton aria-label="刷新" title="刷新" Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" Class="ml-2" />
     </ToolBarContent>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<FiberInfo, object>(x => x.Id)">ID</MudTableSortLabel></MudTh>
@@ -78,30 +78,26 @@
         <MudTh><MudTableSortLabel SortBy="new Func<FiberInfo, object>(x => x.ProcessId)">进程ID</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd>@context.Id</MudTd>
-        <MudTd>@context.Zone</MudTd>
-        <MudTd><MudChip T="string" Size="Size.Small" Color="@GetSceneColor(context.SceneType)">@context.SceneType</MudChip></MudTd>
-        <MudTd>@context.Name</MudTd>
-        <MudTd>
+        <MudTd DataLabel="ID">@context.Id</MudTd>
+        <MudTd DataLabel="Zone">@context.Zone</MudTd>
+        <MudTd DataLabel="场景类型"><MudChip T="string" Size="Size.Small" Color="@GetSceneColor(context.SceneType)">@context.SceneType</MudChip></MudTd>
+        <MudTd DataLabel="名称">@context.Name</MudTd>
+        <MudTd DataLabel="调度器">
             <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined"
                      Color="@(context.SchedulerType == "Main" ? Color.Primary : Color.Default)">
                 @context.SchedulerType
             </MudChip>
         </MudTd>
-        <MudTd>@context.EntityCount</MudTd>
-        <MudTd>
+        <MudTd DataLabel="Entity 数">@context.EntityCount</MudTd>
+        <MudTd DataLabel="进程ID">
             <MudLink Href="@($"/servers/{context.ProcessId}")">@context.ProcessId</MudLink>
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>
-        <MudStack AlignItems="AlignItems.Center" Spacing="2" Class="py-4">
-            <MudIcon Icon="@Icons.Material.Filled.Info" Color="Color.Info" />
-            <MudText>暂无 Fiber 数据</MudText>
-            <MudText Typo="Typo.body2" Color="Color.Secondary">ET 进程未连接或未响应，无法获取 Fiber 信息</MudText>
-        </MudStack>
+        <EmptyState Title="暂无匹配的 Fiber" Description="尝试调整筛选条件，或检查进程连接与启动配置。" Icon="@Icons.Material.Filled.AccountTree" />
     </NoRecordsContent>
     <PagerContent>
-        <MudTablePager PageSizeOptions="new[] { 25, 50, 100 }" />
+        <MudTablePager RowsPerPageString="每页条数" InfoFormat="{first_item}–{last_item} / {all_items}" PageSizeOptions="new[] { 25, 50, 100 }" />
     </PagerContent>
 </MudTable>
 

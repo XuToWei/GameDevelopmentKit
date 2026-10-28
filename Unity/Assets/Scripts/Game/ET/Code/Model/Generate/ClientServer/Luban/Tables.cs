@@ -29,8 +29,8 @@ public partial class Tables
     {
         TablesMemory.BeginRecord();
 
-        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>();
-        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>();
+        _tables = new System.Collections.Generic.Dictionary<string, IDataTable>(8);
+        var loadTasks = new System.Collections.Generic.List<Cysharp.Threading.Tasks.UniTask>(8);
 
         DTStartMachineConfig = new DTStartMachineConfig(() => loader("dtstartmachineconfig"));
         loadTasks.Add(DTStartMachineConfig.LoadAsync());

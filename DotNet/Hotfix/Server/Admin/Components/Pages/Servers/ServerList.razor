@@ -9,29 +9,29 @@
 
 <PageTitle>服务器管理 - 游戏管理后台</PageTitle>
 
-<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-4">
-    <MudText Typo="Typo.h5">服务器管理</MudText>
-    <MudStack Row="true" Spacing="2">
+<PageHeader Title="服务器管理" Description="查看进程状态与地址，统一管理服务器启停。" Icon="@Icons.Material.Filled.Dns">
+    <MudStack Row="true" Spacing="2" Class="wrap-row">
         <MudSwitch Value="ProcessManager.MaintenanceMode" Color="Color.Warning" Label="维护模式"
                    T="bool" ValueChanged="OnMaintenanceModeChanged" />
         <MudButton Variant="Variant.Filled" Color="Color.Success" StartIcon="@Icons.Material.Filled.PlayArrow"
                    OnClick="StartAll" Disabled="ProcessManager.MaintenanceMode">全部启动</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Error" StartIcon="@Icons.Material.Filled.Stop"
+        <MudButton Variant="Variant.Outlined" Color="Color.Error" StartIcon="@Icons.Material.Filled.Stop"
                    OnClick="StopAll">全部停止</MudButton>
-        <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
+        <MudIconButton aria-label="刷新" title="刷新" Icon="@Icons.Material.Filled.Refresh" OnClick="RefreshData" />
     </MudStack>
-</MudStack>
+
+</PageHeader>
 
 @if (ProcessManager.MaintenanceMode)
 {
     <MudAlert Severity="Severity.Warning" Class="mb-4" Icon="@Icons.Material.Filled.Engineering">
-        维护模式已开启 - 新玩家将无法登录，服务器无法启动
+        维护模式已开启，后台启动服务器操作已禁用。
     </MudAlert>
 }
 
 @if (_agents.Any())
 {
-    <MudStack Row="true" Spacing="2" Class="mb-3">
+    <MudStack Row="true" Spacing="2" Class="wrap-row mb-3">
         @foreach (var agent in _agents)
         {
             <MudChip T="string" Size="Size.Small"
@@ -44,13 +44,13 @@
 }
 
 <MudTable Items="_servers" Dense="true" Hover="true" Elevation="2" Loading="_loading"
-          GroupBy="@(_groupByMachine ? _machineGroupDef : null)">
+          Filter="FilterServer" GroupBy="@(_groupByMachine ? _machineGroupDef : null)">
     <ToolBarContent>
-        <MudTextField @bind-Value="_searchString" Placeholder="搜索服务器..." Adornment="Adornment.Start"
+        <MudTextField @bind-Value="_searchString" Placeholder="搜索服务器..." aria-label="搜索服务器" Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
-                      Immediate="true" Class="mt-0" />
+                      Immediate="true" Class="filter-search" Variant="Variant.Outlined" Margin="Margin.Dense" />
         <MudSpacer />
-        <MudToggleIconButton @bind-Toggled="_groupByMachine" Size="Size.Small" Class="mr-2"
+        <MudToggleIconButton aria-label="按机器分组" title="按机器分组" @bind-Toggled="_groupByMachine" Size="Size.Small" Class="mr-2"
                              Icon="@Icons.Material.Filled.ViewList" ToggledIcon="@Icons.Material.Filled.ViewModule" />
         <MudText Typo="Typo.body2" Color="Color.Secondary">
             共 @_servers.Count 个服务器，@_servers.Count(s => s.Status == ServerStatus.Running) 个运行中
@@ -81,7 +81,7 @@
         <MudTd DataLabel="内网地址">@FormatAddress(context.InnerIP, context.InnerPort)</MudTd>
         <MudTd DataLabel="外网地址">@FormatAddress(context.OuterIP, context.OuterPort)</MudTd>
         <MudTd DataLabel="CPU">
-            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1" Class="wrap-row">
                 <MudProgressLinear Value="@context.CpuUsage" Color="@GetCpuColor(context.CpuUsage)"
                                    Style="width:60px;" Size="Size.Small" />
                 <MudText Typo="Typo.body2">@context.CpuUsage.ToString("F1")%</MudText>
@@ -91,25 +91,25 @@
         <MudTd DataLabel="操作">
             @if (context.Status == ServerStatus.Running)
             {
-                <MudIconButton Icon="@Icons.Material.Filled.Stop" Color="Color.Error" Size="Size.Small"
+                <MudIconButton aria-label="停止服务器" title="停止服务器" Icon="@Icons.Material.Filled.Stop" Color="Color.Error" Size="Size.Small"
                                OnClick="@(() => StopServer(context))" />
-                <MudIconButton Icon="@Icons.Material.Filled.RestartAlt" Color="Color.Warning" Size="Size.Small"
+                <MudIconButton aria-label="重启服务器" title="重启服务器" Icon="@Icons.Material.Filled.RestartAlt" Color="Color.Warning" Size="Size.Small"
                                OnClick="@(() => RestartServer(context))" />
             }
             else if (context.Status == ServerStatus.Stopped || context.Status == ServerStatus.Error)
             {
-                <MudIconButton Icon="@Icons.Material.Filled.PlayArrow" Color="Color.Success" Size="Size.Small"
+                <MudIconButton aria-label="启动服务器" title="启动服务器" Icon="@Icons.Material.Filled.PlayArrow" Color="Color.Success" Size="Size.Small"
                                OnClick="@(() => StartServer(context))" />
             }
-            <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Primary" Size="Size.Small"
+            <MudIconButton aria-label="查看详情" title="查看详情" Icon="@Icons.Material.Filled.Info" Color="Color.Primary" Size="Size.Small"
                            Href="@($"/servers/{context.ProcessId}")" />
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>
-        <MudText>暂无已管理的服务器进程</MudText>
+        <EmptyState Title="暂无匹配的服务器" Description="尝试调整搜索条件，或检查服务器与 Agent 配置。" Icon="@Icons.Material.Filled.Dns" />
     </NoRecordsContent>
     <PagerContent>
-        <MudTablePager PageSizeOptions="new[] { 10, 25, 50 }" />
+        <MudTablePager RowsPerPageString="每页条数" InfoFormat="{first_item}–{last_item} / {all_items}" PageSizeOptions="new[] { 10, 25, 50 }" />
     </PagerContent>
 </MudTable>
 
@@ -174,6 +174,11 @@
         ProcessManager.SetMaintenanceMode(enabled);
         Snackbar.Add(enabled ? "维护模式已开启" : "维护模式已关闭", enabled ? Severity.Warning : Severity.Success);
     }
+
+    private bool FilterServer(ServerInfo server) =>
+        string.IsNullOrWhiteSpace(_searchString)
+        || server.ProcessId.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase)
+        || server.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase);
 
     private Color GetStatusColor(ServerStatus status) => status switch
     {

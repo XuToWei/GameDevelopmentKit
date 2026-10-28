@@ -1,0 +1,20 @@
+<header class="page-header">
+    <div class="page-heading">
+        <span class="page-heading-icon" aria-hidden="true"><MudIcon Icon="@Icon" /></span>
+        <div>
+            <h1>@Title</h1>
+            <p>@Description</p>
+        </div>
+    </div>
+    @if (ChildContent != null)
+    {
+        <div class="page-actions">@ChildContent</div>
+    }
+</header>
+
+@code {
+    [Parameter, EditorRequired] public string Title { get; set; } = "";
+    [Parameter, EditorRequired] public string Description { get; set; } = "";
+    [Parameter, EditorRequired] public string Icon { get; set; } = "";
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

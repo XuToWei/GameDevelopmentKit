@@ -1,0 +1,18 @@
+<div class="empty-state">
+    <span class="empty-state-icon" aria-hidden="true"><MudIcon Icon="@Icon" /></span>
+    <div class="empty-state-copy">
+        <h3>@Title</h3>
+        <p>@Description</p>
+    </div>
+    @if (ChildContent != null)
+    {
+        <div class="empty-state-actions">@ChildContent</div>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string Title { get; set; } = "";
+    [Parameter, EditorRequired] public string Description { get; set; } = "";
+    [Parameter, EditorRequired] public string Icon { get; set; } = "";
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

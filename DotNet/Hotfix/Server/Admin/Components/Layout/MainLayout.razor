@@ -10,7 +10,7 @@
 
 <MudLayout Class="admin-layout">
     <MudAppBar Elevation="0" Class="admin-topbar">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+        <MudIconButton aria-label="展开或收起导航" title="展开或收起导航" Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
                        OnClick="@ToggleDrawer" Class="menu-button" />
         <div class="brand-lockup">
             <div class="brand-mark">
@@ -28,7 +28,7 @@
         </div>
         <MudTooltip Text="@(_isDarkMode ? "切换浅色模式" : "切换深色模式")">
             <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
-                           Color="Color.Inherit" OnClick="ToggleTheme" Class="topbar-icon" />
+                           aria-label="@(_isDarkMode ? "切换浅色模式" : "切换深色模式")" Color="Color.Inherit" OnClick="ToggleTheme" Class="topbar-icon" />
         </MudTooltip>
         @if (AuthService.CurrentUser != null)
         {
@@ -40,21 +40,21 @@
                 </div>
             </div>
             <MudTooltip Text="退出登录">
-                <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit"
+                <MudIconButton aria-label="退出登录" title="退出登录" Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit"
                                OnClick="HandleLogout" Class="topbar-icon" />
             </MudTooltip>
         }
     </MudAppBar>
 
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0"
-               Variant="DrawerVariant.Responsive" Breakpoint="Breakpoint.Md" Width="272px"
+               Variant="DrawerVariant.Responsive" Breakpoint="Breakpoint.Md" Width="248px"
                Class="admin-drawer">
         <NavMenu />
         <div class="drawer-footer">
-            <div class="drawer-footer-icon"><MudIcon Icon="@Icons.Material.Filled.Security" Size="Size.Small" /></div>
+            <div class="drawer-footer-icon"><MudIcon Icon="@Icons.Material.Filled.SportsEsports" Size="Size.Small" /></div>
             <div>
-                <div class="drawer-footer-title">安全连接</div>
-                <div class="drawer-footer-copy">ET Admin Channel</div>
+                <div class="drawer-footer-title">GameDevelopmentKit</div>
+                <div class="drawer-footer-copy">游戏运维控制台</div>
             </div>
         </div>
     </MudDrawer>
