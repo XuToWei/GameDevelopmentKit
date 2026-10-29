@@ -278,15 +278,30 @@ Pop-Location
 
 启动时，GF 通过 `TablesComponent.LoadAllAsync()` 加载公共表；ET 与 GameHot 的入口加载各自生成的 Tables。
 
-单表重载示例：
+### 初始化顺序
+
+生成的 `Tables.LoadAsync()` 并行加载各表，等待 `UniTask.WhenAll(loadTasks)` 完成后，再调用 `Refresh()` 统一解析引用。
+
+单表的 `PostInit()` 在该表加载完成时执行，此时其他表可能尚未加载完成，因此只适合处理本表数据。partial 中需要读取其他表数据的初始化应放在 `PostResolveRef()` 中，在全部表加载完成后的引用解析阶段执行。
+
+例如 ET 的 `DTStartSceneConfig` 需要通过场景的 `StartProcessConfig` 读取 `MachineId`，构建 `AgentByMachineId` 索引；场景索引的初始化统一放在 `PostResolveRef()`，避免场景表先加载完成时读取尚未就绪的进程表。
+
+`Refresh()` 会再次执行 `PostResolveRef()`。重建索引前应清空旧集合并重置缓存字段，避免重载后留下重复或过期数据。
+
+### 配置重载
+
+直接加载单表后，需要调用 `Tables.Instance.Refresh()`，重新解析引用并重建跨表索引：
 
 ```csharp
 IDataTable table = Tables.Instance.GetDataTable("DTDemo");
 if (table != null)
 {
     await table.LoadAsync();
+    Tables.Instance.Refresh();
 }
 ```
+
+批量重载时，等待所有目标表加载完成后统一调用一次 `Refresh()`。ET 的 `ConfigComponent.ReloadOne` 与 `ReloadAll` 对应处理器已包含这一步。
 
 表名是生成类名，不是 Excel 文件名。重载只刷新当前进程内存，不会自动通知其他进程。
 
