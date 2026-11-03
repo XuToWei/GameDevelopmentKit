@@ -49,7 +49,8 @@ namespace ET
             return agent;
         }
 
-        partial void PostInit()
+        // 跨表索引需要等待所有配置加载完成后再构建。
+        partial void PostResolveRef()
         {
             this.Gates.Clear();
             this.ProcessScenes.Clear();
