@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using HybridCLR.Editor.Settings;
+using HybridCLR.Settings;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -15,8 +15,8 @@ namespace Game.Editor
 
         public static void EnableHybridCLR()
         {
-            HybridCLRSettings.Instance.enable = true;
-            string linkFile = $"{Application.dataPath}/{HybridCLRSettings.Instance.outputLinkFile}";
+            HybridCLRSettings.instance.enable = true;
+            string linkFile = $"{Application.dataPath}/{HybridCLRSettings.instance.outputLinkFile}";
             string linkDisableFile = $"{linkFile}.DISABLED";
             if (File.Exists(linkDisableFile))
             {
@@ -30,8 +30,8 @@ namespace Game.Editor
 
         public static void DisableHybridCLR()
         {
-            HybridCLRSettings.Instance.enable = false;
-            string linkFile = $"{Application.dataPath}/{HybridCLRSettings.Instance.outputLinkFile}";
+            HybridCLRSettings.instance.enable = false;
+            string linkFile = $"{Application.dataPath}/{HybridCLRSettings.instance.outputLinkFile}";
             string linkDisableFile = $"{linkFile}.DISABLED";
             if (File.Exists(linkFile))
             {
@@ -51,11 +51,11 @@ namespace Game.Editor
             AssemblyDefinitionAsset asset = AssetDatabase.LoadAssetAtPath<AssemblyDefinitionAsset>(assetPath);
             if (asset == null)
                 return;
-            var allAssets = HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions.ToList();
+            var allAssets = HybridCLRSettings.instance.hotUpdateAssemblyDefinitions.ToList();
             if (allAssets.Contains(asset))
                 return;
             allAssets.Add(asset);
-            HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions = allAssets.ToArray();
+            HybridCLRSettings.instance.hotUpdateAssemblyDefinitions = allAssets.ToArray();
             HybridCLRSettings.Save();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
@@ -68,11 +68,11 @@ namespace Game.Editor
             AssemblyDefinitionAsset asset = AssetDatabase.LoadAssetAtPath<AssemblyDefinitionAsset>(assetPath);
             if (asset == null)
                 return;
-            var allAssets = HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions.ToList();
+            var allAssets = HybridCLRSettings.instance.hotUpdateAssemblyDefinitions.ToList();
             if (!allAssets.Contains(asset))
                 return;
             allAssets.Remove(asset);
-            HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions = allAssets.ToArray();
+            HybridCLRSettings.instance.hotUpdateAssemblyDefinitions = allAssets.ToArray();
             HybridCLRSettings.Save();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
@@ -80,12 +80,11 @@ namespace Game.Editor
         public static void RefreshSettings()
         {
             RefreshExternalHotUpdateDirs();
-            RefreshSettingsByLinkXML();
             HybridCLRSettings.Save();
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
 
-        private static void RefreshSettingsByLinkXML()
+        public static string[] GetAotAssemblyNames()
         {
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(LinkXMLHelper.LinkXMLPath);
@@ -105,13 +104,13 @@ namespace Game.Editor
                 assemblyNames.Add(assemblyName);
             }
 
-            HybridCLRSettings.Instance.patchAOTAssemblies = assemblyNames.ToArray();
+            return assemblyNames.ToArray();
         }
 
         private static void RefreshExternalHotUpdateDirs()
         {
             List<string> dirList = new List<string>();
-            string[] dirs = HybridCLRSettings.Instance.externalHotUpdateAssembliyDirs;
+            string[] dirs = HybridCLRSettings.instance.externalHotUpdateAssembliyDirs;
             if (dirs != null)
             {
                 dirList.AddRange(dirs);
@@ -120,7 +119,7 @@ namespace Game.Editor
             {
                 dirList.Add(ExternalHotUpdateAssemblyDir);
             }
-            HybridCLRSettings.Instance.externalHotUpdateAssembliyDirs = dirList.ToArray();
+            HybridCLRSettings.instance.externalHotUpdateAssembliyDirs = dirList.ToArray();
         }
     }
 }

@@ -25,7 +25,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d17a727fac8a56186c35294ec285362902f4a04d"
+      "hash": "e48a7beb956f79cd33e636e0efbb1914ff045437"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -53,7 +53,7 @@
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "eec288e2a5cfd43743b70e9a8c397d5e5300e80a"
+      "hash": "433071025490c0bcfc5f72508b3e1453f321789c"
     },
     "com.coffee.unmask": {
       "version": "https://github.com/mob-sakai/UnmaskForUGUI.git",
@@ -81,7 +81,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "604dc1eb5ada260a7be546d3d647482dc5bd0578"
+      "hash": "b9c1d8a8a10d37f344b63384d3c44ed814fda1d7"
     },
     "com.psygames.unitywebsocket": {
       "version": "https://github.com/psygames/UnityWebSocket.git#upm",
@@ -181,7 +181,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.pipeline": {
-      "version": "0.9.1-exp.1",
+      "version": "0.10.0-exp.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -293,7 +293,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ff4f8480247d4f909c9f6f4f478a5423b240046f"
+      "hash": "bb734bddf2908c8b5c0ba338b7c124fe352204fe"
     },
     "com.yasirkula.inspectplus": {
       "version": "https://github.com/yasirkula/UnityInspectPlus.git",
@@ -323,7 +323,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2692bed575f6b329f60a0a3270e5c7bc2551010e"
+      "hash": "f5fc57d8cce86e2e37e622b475bad9f247d0c986"
     },
     "me.xw.protobufunity": {
       "version": "https://github.com/XuToWei/Protobuf-Unity.git",
@@ -344,7 +344,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "96d019fe7e0ffff29eab17e77f9684a042c5db95"
+      "hash": "dc420338450a62bb9cd1883fbc8ead7e155e0633"
     },
     "me.xw.toolbarextension": {
       "version": "https://github.com/XuToWei/ToolbarExtension.git",

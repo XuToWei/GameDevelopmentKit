@@ -42,13 +42,13 @@ Game.Hot.Code
 4. 确认当前 Build Target 已切到目标平台。
 5. 执行 `Game/Define Symbol/Refresh`。
 
-Refresh 会同步启用 HybridCLR、更新 `link.xml` 条件区块、热更新程序集列表、AOT 补充程序集列表和外部 DLL 目录。
+Refresh 会同步启用 HybridCLR、更新 `link.xml` 条件区块、热更新程序集列表和外部 DLL 目录。AOT 补充程序集列表在复制 DLL 时从当前 `link.xml` 读取。
 
 不要只在 Player Settings 中手工添加宏。那样不会同步资源规则、Luban 工程与 HybridCLR 设置。
 
 ## 首次安装与编辑器升级
 
-当前工程使用 Unity `6000.6.7f1`。首次使用 HybridCLR、更换 Unity Editor 版本或升级 HybridCLR 包后，先打开 `HybridCLR/Installer...`，检查当前 Editor 的兼容状态，并通过 `Install` 重新安装对应的本地 IL2CPP 环境。Installer 从当前 Editor 复制工具链；已有的 `HybridCLRData/LocalIl2CppData-*` 目录不表示它与升级后的 Editor 一致。
+当前工程使用 Unity `6000.6.7f1`。首次使用 HybridCLR、更换 Unity Editor 版本或升级 HybridCLR 包后，先打开 `HybridCLR/Installer...`，检查当前 Editor 的兼容状态，并通过 `Install` 重新安装对应的本地 IL2CPP 环境。Installer 从当前 Editor 复制工具链；已有的 `Library/HybridCLR/LocalIl2CppData-*` 目录不表示它与升级后的 Editor 一致。
 
 安装完成后，切换到目标 Build Target，再执行下面的 `HybridCLR/Do All`。该命令会重新编译业务 DLL、生成代码并复制 AOT 元数据，**不包含 Installer 的安装步骤**。
 
@@ -100,7 +100,7 @@ Assets/Res/Hot/Code/*.pdb.bytes
 
 ## AOT 补充元数据
 
-`HybridCLR/CopyAotDlls` 从 HybridCLR 的 `strippedAOTDllOutputRootDir/<BuildTarget>` 读取 `patchAOTAssemblies`，复制到：
+`HybridCLR/CopyAotDlls` 通过 `SettingsUtil.GetAssembliesPostIl2CppStripDir(target)` 定位裁剪后的 AOT DLL 目录（当前为 `Unity/Library/HybridCLR/AssembliesPostIl2CppStrip/<BuildTarget>`），按 `Assets/link.xml` 中启用的 assembly 节点读取程序集列表，复制到：
 
 ```text
 Unity/Assets/Res/HybridCLR/*.dll.bytes
@@ -168,7 +168,7 @@ Build Target 必须先切换。AOT DLL、脚本编译产物与平台相关，不
 
 `Unity/Assets/link.xml` 使用注释标记维护多组条件区块。`LinkXMLHelper` 根据 Hotfix、ET、GameHot 和 ET CodeMode 开关启用必要程序集，并移除无关保留项。
 
-`HybridCLRTool.RefreshSettingsByLinkXML()` 再从启用后的 assembly 节点生成 `patchAOTAssemblies`。手工破坏区块标记会同时影响代码裁剪和 AOT 元数据列表。
+`HybridCLRTool.GetAotAssemblyNames()` 在复制 AOT DLL 时从启用后的 assembly 节点读取程序集列表。手工破坏区块标记会同时影响代码裁剪和 AOT 元数据列表。
 
 ## 常见问题
 
