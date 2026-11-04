@@ -644,6 +644,46 @@
             Whether the current version of Odin is an enterprise version.
             </summary>
         </member>
+        <member name="M:Sirenix.OdinInspector.Editor.OdinInspectorVersion.GetOnDiskVersion">
+            <summary>
+            Gets the Odin Inspector version as written in the "Version.txt" file inside the Odin Inspector directory.
+            Note that this is the version on disk, which is not necessarily the same as the runtime version determined from the loaded assembly.
+            </summary>
+            <returns>
+            The version read from Version.txt, or null if the file is missing or its contents can't be parsed.
+            </returns>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Editor.ScriptingDefinesLocation">
+            <summary>
+            Where Odin puts its scripting define symbols, such as ODIN_INSPECTOR.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.Editor.ScriptingDefinesLocation.PlayerSettings">
+            <summary>
+            Odin adds its symbols to Player Settings. They are saved in ProjectSettings.asset, and reach everyone who uses the project, including team members without Odin.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.Editor.ScriptingDefinesLocation.LocalResponseFile">
+            <summary>
+            Odin adds its symbols to Assets/csc.rsp and removes them from Player Settings. Exclude Assets/csc.rsp from source control, so only machines with Odin get the symbols.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.Editor.ScriptingDefinesLocation.Manual">
+            <summary>
+            Odin doesn't add or remove its symbols.
+            </summary>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Editor.ScriptingDefinesConfig">
+            <summary>
+            Configures where Odin puts its scripting define symbols.
+            The setting is saved in ProjectSettings/OdinScriptingDefines.json, so it's shared through source control even when the Odin folder isn't.
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.Editor.ScriptingDefinesConfig.Location">
+            <summary>
+            Gets or sets where Odin puts its scripting define symbols. Setting it moves the symbols right away.
+            </summary>
+        </member>
         <member name="T:Sirenix.OdinInspector.Editor.TypeDrawerPair">
             <summary>
             <para>Contains information about an editor type which is assigned to draw a certain type in the inspector.</para>
@@ -2613,6 +2653,37 @@
         <member name="F:Sirenix.OdinInspector.Editor.CollectionChangeType.SetKey">
             <summary>
             The change is setting the value of a key in the collection. Key, Value and SelectionIndex will be set.
+            </summary>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Editor.IOverridesUnityPropertyNames">
+            <summary>
+            A property resolver can implement this interface to override the Unity property names for all child indices.
+            This can be necessary when the Odin path and the Unity property path are different by some necessity or other.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.StaticRootPropertyResolver`1.CanShowValuesOfMemberTypes(System.Reflection.MemberInfo)">
+            <summary>
+            Values are shown through generic getters and setters (<see cref="T:Sirenix.OdinInspector.Editor.GetterSetter`2"/>), so members with a value, parameter
+            or return type that can't be a generic type argument can't be shown: pointers, byrefs (such as ref-returning properties) and byref-like
+            types such as Span&lt;T&gt;. As every static member is listed, such members are left out; on CoreCLR (Unity 7 and up), creating their
+            getter throws, which would break the whole static inspector of the type.
+            </summary>
+        </member>
+        <member name="T:Sirenix.OdinInspector.Editor.UnityDictionaryPropertyResolver`3">
+            <summary>
+            <para>
+            This resolver has the unenviable job of handling Unity's dictionary serialization and translating it into Odin terms.
+            Unity decided that dictionaries are secretly serialized as arrays, with a secret ordering that is invisible to the outside
+            and only stored inside of Unity's serialization systems.
+            </para>
+            <para>
+            This means Odin must query Unity's SerializedObject/SerializedProperties to determine the true indices of all keys in the 
+            dictionary, which is necessary to, for example, correctly map prefab modification paths. 
+            </para>
+            <para>
+            This resolver also prefers to always modify the dictionary directly through Unity SerializedProperty and then applying, 
+            rather than directly editing the live C# dictionary object.
+            </para>
             </summary>
         </member>
         <member name="T:Sirenix.OdinInspector.Editor.SerializationBackend">
@@ -7593,10 +7664,19 @@
             Odin has its own implementations for these attribute drawers; never use Unity's.
             </summary>
         </member>
+        <member name="M:Sirenix.OdinInspector.Editor.DrawerUtilities.SubstituteTargets(System.Type[]@,System.Type[],System.Type[])">
+            <summary>
+            The targets of a partially constructed drawer are found on its generic type definition, so its fixed arguments must be substituted into them.
+            </summary>
+        </member>
         <member name="M:Sirenix.OdinInspector.Editor.DrawerUtilities.GetDrawerPriority(System.Type)">
             <summary>
             Gets the priority of a given drawer type.
             </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.DrawerUtilities.CalculateDrawerPriority(System.Type,System.Type[])">
+            <param name="drawerType">The drawer type, or a generic drawer type definition if <paramref name="drawerArguments"/> is given.</param>
+            <param name="drawerArguments">For a partially constructed drawer, the arguments for its generic type definition; otherwise null.</param>
         </member>
         <member name="T:Sirenix.OdinInspector.Editor.EmittedMonoBehaviour">
             <summary>
@@ -7697,20 +7777,6 @@
             <summary>
             <para>This class fixes Unity's about window, by invoking "UnityEditor.VisualStudioIntegration.UnityVSSupport.GetAboutWindowLabel" before any dynamic assemblies have been defined.</para>
             <para>This is because dynamic assemblies in the current AppDomain break that method, and Unity's about window depends on it.</para>
-            </summary>
-        </member>
-        <member name="T:Sirenix.OdinInspector.Editor.FixUnityAssemblyVersionResolution">
-            <summary>
-            <para>
-            If you mark any of Unity's assemblies with the [AssemblyVersion] attribute to get a rolling assembly
-            version that changes sometimes (or all the time), Odin's hardcoded assembly references to user types
-            will break.
-            </para>
-            <para>
-            To fix this case, and all other cases of references to wrongly versioned Unity types not being resolved,
-            we overload the app domain's type resolution and resolve Unity user assemblies properly regardless of
-            version.
-            </para>
             </summary>
         </member>
         <member name="T:Sirenix.OdinInspector.Editor.FixUnityScriptableObjectDirtying">
@@ -7959,6 +8025,37 @@
             </summary>
             <param name="priority">The higher the priority, the earlier it will be processed.</param>
         </member>
+        <member name="T:Sirenix.OdinInspector.Editor.ScriptingDefinesUtility">
+            <summary>
+            Adds and removes Odin's scripting define symbols in Player Settings or in Assets/csc.rsp, as <see cref="T:Sirenix.OdinInspector.Editor.ScriptingDefinesConfig"/> says.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.ScriptingDefinesUtility.GetScriptingDefineSymbols(UnityEditor.BuildTargetGroup)">
+            <summary>
+            Gets the scripting define symbols of the build target group from Player Settings, separated by ';', with the API the running Unity version provides.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.ScriptingDefinesUtility.SetScriptingDefineSymbols(UnityEditor.BuildTargetGroup,System.String)">
+            <summary>
+            Sets the scripting define symbols of the build target group in Player Settings, separated by ';', with the API the running Unity version provides.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.ScriptingDefinesUtility.EnsureDefines(System.String[])">
+            <summary>
+            Registers the symbols as Odin's, and puts them where the config says. Call it from an [InitializeOnLoadMethod].
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.ScriptingDefinesUtility.ApplyAll">
+            <summary>
+            Puts all registered symbols where the config says. Called when the location changes.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.ScriptingDefinesUtility.UpdateResponseFile(System.String[],System.Boolean)">
+            <summary>
+            Adds or removes the symbols in Assets/csc.rsp. Only lines Odin writes itself ("-define:SYMBOL") are removed; everything else in the file is left alone.
+            Returns true if the file changed.
+            </summary>
+        </member>
         <member name="T:Sirenix.OdinInspector.Editor.SerializedPropertyUtilities">
             <summary>
             Not yet documented.
@@ -8102,6 +8199,14 @@
         <member name="F:Sirenix.OdinInspector.Editor.TypeSearch.TypeSearchIndex.LOCK">
             <summary>
             To safely change anything in the type cache, you must be holding this lock.
+            </summary>
+        </member>
+        <member name="F:Sirenix.OdinInspector.Editor.TypeSearch.TypeSearchInfo.MatchTypeArguments">
+            <summary>
+            <para>Optional. If <see cref="F:Sirenix.OdinInspector.Editor.TypeSearch.TypeSearchInfo.MatchType"/> is a generic type definition, the arguments to construct it with: entries that are MatchType's own generic
+            parameters stay open and are inferred from the targets, the rest are fixed.</para>
+            <para>This describes a partially constructed match type, such as <c>Drawer&lt;SomeType, T&gt;</c>, without creating it as a <see cref="T:System.Type"/>.
+            The CoreCLR runtime refuses to create such types when the open parameter's constraints depend on the fixed arguments.</para>
             </summary>
         </member>
         <member name="M:Sirenix.OdinInspector.Editor.TypeRegistry.GetInstantiableInheritors(System.Type,System.Boolean,System.Boolean)">
@@ -10746,6 +10851,13 @@
             <param name="context">The persistent context object.</param>
             <returns>Returns <c>true</c> when the context is first created. Otherwise <c>false</c>.</returns>
         </member>
+        <member name="M:Sirenix.OdinInspector.Editor.PersistentContext.GetKeyHash``1(``0)">
+            <summary>
+            The hash of a key, as saved in the persistent context cache. String keys use StringSlice's stable hash, since string.GetHashCode()
+            is randomized per process on .NET Core and CoreCLR (Unity 7 and up), which would lose all persistent state when the editor restarts.
+            StringSlice's hash is the same value string.GetHashCode() gives on Mono, so state saved by older Unity versions keeps its keys.
+            </summary>
+        </member>
         <member name="T:Sirenix.OdinInspector.Editor.PersistentContextCache">
             <summary>
             Persistent Context cache object.
@@ -11265,7 +11377,7 @@
         </member>
         <member name="T:Sirenix.Utilities.EnsureOdinInspectorDefine">
             <summary>
-            Defines the ODIN_INSPECTOR symbol.
+            Defines the ODIN_INSPECTOR symbols, where <see cref="T:Sirenix.OdinInspector.Editor.ScriptingDefinesConfig"/> says.
             </summary>
         </member>
         <member name="T:Sirenix.Utilities.Editor.SerializationDebuggerWindow">

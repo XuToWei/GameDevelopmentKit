@@ -23,5 +23,5 @@
         "!UNITY_HOTFIX || UNITY_COMPILE || UNITY_EDITOR"
     ],
     "versionDefines": [],
-    "noEngineReferences": true
+    "noEngineReferences": false
 }

@@ -23,7 +23,7 @@ public class ReorderableListDrawer
 
     private static string GetPropertyKeyName(SerializedProperty property)
     {
-        return property.serializedObject.targetObject.GetInstanceID() + "." + property.name+ "." + property.propertyPath;
+        return property.serializedObject.targetObject.GetEntityId() + "." + property.name+ "." + property.propertyPath;
     }
 
     private static ReorderableList TryGetPropertyList(SerializedProperty property, string headerName, Func<SerializedProperty, float> getHeight)

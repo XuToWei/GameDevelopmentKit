@@ -1,0 +1,2 @@
+CurrentVersion: 2.0.0.9
+RequiresOdinVersion: 4.0.2.2

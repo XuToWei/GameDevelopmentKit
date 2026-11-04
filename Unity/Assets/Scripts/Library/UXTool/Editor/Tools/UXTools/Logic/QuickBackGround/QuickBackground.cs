@@ -153,8 +153,8 @@ namespace ThunderFireUITool
             inPrefabFlag = PrefabStageUtils.GetCurrentPrefabStage() != null;
             name = "UXQuickBackground";
             childName = "UXQuickBackgroundImage";
-            EditorApplication.hierarchyWindowItemOnGUI -= OnHierarchyGUI;
-            EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= OnHierarchyGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += OnHierarchyGUI;
         }
 
         public static void SetBackGround()
@@ -195,10 +195,10 @@ namespace ThunderFireUITool
             name = go.name;
             childName = "UXQuickBackgroundImage";
 
-            EditorApplication.hierarchyWindowItemOnGUI -= OnHierarchyGUI;
-            EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= OnHierarchyGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += OnHierarchyGUI;
         }
-        private static void OnHierarchyGUI(int instanceID, Rect selectionRect)
+        private static void OnHierarchyGUI(EntityId instanceID, Rect selectionRect)
         {
             GameObject go = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             if (go == null) return;
@@ -317,7 +317,7 @@ namespace ThunderFireUITool
 
         public static void Close()
         {
-            EditorApplication.hierarchyWindowItemOnGUI -= OnHierarchyGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= OnHierarchyGUI;
             isOpen = false;
             Serialize();
 

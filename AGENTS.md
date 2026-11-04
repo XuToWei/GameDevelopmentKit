@@ -15,9 +15,10 @@ GameDevelopmentKit is a dual-end (client/server) game development framework for 
 
 ### Prerequisites
 - .NET 8 SDK
-- Unity 6000.3.18f1
+- Unity 6000.6.7f1 (exact version: `Unity/ProjectSettings/ProjectVersion.txt`)
 - MongoDB (optional, for server features)
-- Paid plugin: Odin Inspector
+- Paid plugin: Odin Inspector 4.1.0.0; use the same version of Odin Validator when installed
+- Unity CLI (optional, for Editor automation); the project includes `com.unity.pipeline` 0.9.1-exp.1
 
 ### Running in Editor
 1. Open Unity project, wait for compilation
@@ -25,8 +26,9 @@ GameDevelopmentKit is a dual-end (client/server) game development framework for 
 3. Click "Launcher" button next to Unity Play button to run ET Demo
 
 ### Building
-1. Run HybridCLR hot-reload preparation (see Book/HybridCLR热更.md)
-2. Use one-click build tool (see Book/一键打包.md)
+1. After changing the Unity Editor or HybridCLR package version, reinstall the local IL2CPP environment with `HybridCLR/Installer...` before preparing hot reload.
+2. Run HybridCLR hot-reload preparation and regenerate DLLs/AOT metadata (see Book/HybridCLR热更.md).
+3. Use the one-click build tool to rebuild resources and the Player (see Book/一键打包.md).
 
 ## Solution Files
 - `Kit.sln` - Main solution for tools and utilities
@@ -364,10 +366,10 @@ Detailed documentation is in the `Book/` directory (in Chinese):
 ## QQ Group
 949482664
 
-<!-- BEGIN UNITY_AGENT_BRIDGE -->
-## Unity Agent Bridge（驱动 Unity Editor）
+## Unity CLI（驱动 Unity Editor）
 
-本工程通过 Unity Agent Bridge 驱动编辑器。执行任何 Unity 查询或修改前，必须先阅读已安装包的 `AGENT.md`，并遵守其中的 fixed-slot single-flight exchange、原子请求写入、先等 `processing.json` 消失再删除响应的 ack、唯一 id、session 首次 `list_commands` 和 `commandsVersion` 刷新规则。
+本工程使用 Unity CLI 和 `com.unity.pipeline` 驱动已打开的 Unity Editor。Unity 工程路径为仓库下的 `Unity/`。先运行 `unity command --project-path ./Unity` 发现命令组，再用 `unity command --project-path ./Unity <group>` 查询具体命令、参数、类型和默认值。以运行时发现结果为准；新增命令需等待 Unity 编译完成。
 
-先寻找 `Assets/` 与已存在 `.agentbridge/` 同级的 Unity 工程；Bridge root 直接使用固定的 `request.json`、`processing.json`、`response.json` 槽位，空闲时这些文件可以不存在。目录存在只表示桥接配置过，不保证宿主当前已启用。找不到 Bridge root 时停止并报告 Unity 没有安装或运行 AgentBridge，不得自行创建目录。实际 command、params schema 和 batch policy 只从运行时 `list_commands` 获取，不得使用硬编码清单。
-<!-- END UNITY_AGENT_BRIDGE -->
+项目命令位于 `Unity/Assets/Scripts/Game/Editor/Cli/`，按 `game.codebind`、`game.statecontroller`、`game.uxtool`、`game.excel`、`game.luban` 分组。使用独立动作子命令和 snake_case CLI 参数；复杂 Excel 写入通过 `--input` 传结构化 JSON，DTO 字段使用 camelCase。CLI 输出选项（如 `--json`）放在 `command` 前；业务参数放在动作之后。完整示例见 `Book/UnityCLI.md` 和 `Book/Luban配置.md`。
+
+Prefab 写操作自动保存，Scene 写操作标记 dirty；Excel 修改源表，不自动导出 Luban。CodeBind 生成新字段后等待编译，再执行 `game.codebind set_serialization`。Luban 导出后可能触发编译，应再次检查编译结果。项目命令需独立调用，不放进 `job batch`；磁盘文件修改不受 Unity Undo 事务保护。未连接到 Editor 时报告实际连接错误，不创建任何旧桥接目录。

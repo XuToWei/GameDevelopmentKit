@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using AgentBridge;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPOI.SS.UserModel;
@@ -10,12 +9,12 @@ using NPOI.SS.Util;
 
 namespace Game.Editor
 {
-    public sealed partial class ExcelCommand
+    public static partial class ExcelCommand
     {
         private static object SetCells(JObject @params)
         {
             WorkbookPathInfo path = ResolveWorkbookPath(GetString(@params, "filePath", null));
-            string sheetName = RequireString(@params, "sheet");
+            string sheetName = RequireString(@params, "sheet", 31);
             bool dryRun = GetBool(@params, "dryRun", false);
             List<CellChange> changes = ParseCellChanges(@params?["cells"] as JArray, path);
             IWorkbook workbook = null;
@@ -55,13 +54,13 @@ namespace Game.Editor
                                 SetCellValue(cell, change.Value);
                             }
                         }
-                        catch (CommandException)
+                        catch (GameCommandException)
                         {
                             throw;
                         }
                         catch (Exception ex)
                         {
-                            throw new CommandException(ErrorCodes.InvalidParams,
+                            throw new GameCommandException(GameCommandException.InvalidParams,
                                 $"Cannot set cell {change.Address}: {ex.Message}");
                         }
                         changedCount++;
@@ -72,7 +71,7 @@ namespace Game.Editor
                                            EstimateSnapshotCharacters(current);
                     if (estimatedCharacters > MaxQueryResponseCharacters)
                     {
-                        throw new CommandException(ErrorCodes.InvalidParams,
+                        throw new GameCommandException(GameCommandException.InvalidParams,
                             "set_cells response would be too large. Split the changes into smaller requests.");
                     }
                     results.Add(new JObject
@@ -111,23 +110,23 @@ namespace Game.Editor
                     cells = results
                 };
             }
-            catch (CommandException)
+            catch (GameCommandException)
             {
                 throw;
             }
             catch (IOException ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Cannot update '{path.RelativePath}'. Close the workbook in Excel and try again. {ex.Message}");
             }
             catch (UnauthorizedAccessException ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Cannot update '{path.RelativePath}': {ex.Message}");
             }
             catch (Exception ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Failed to update '{path.RelativePath}': {ex.Message}");
             }
             finally
@@ -139,21 +138,22 @@ namespace Game.Editor
         private static object UpsertRows(JObject @params)
         {
             WorkbookPathInfo path = ResolveWorkbookPath(GetString(@params, "filePath", null));
-            string sheetName = RequireString(@params, "sheet");
+            string sheetName = RequireString(@params, "sheet", 31);
             bool dryRun = GetBool(@params, "dryRun", false);
             bool copyTemplate = GetBool(@params, "copyTemplate", true);
             JArray requestedRows = @params?["rows"] as JArray;
             JArray requestedKeys = @params?["keyColumns"] as JArray;
-            if (requestedRows == null || requestedRows.Count == 0)
+            if (requestedRows == null || requestedRows.Count < 1 || requestedRows.Count > 200)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
-                    "upsert_rows requires a non-empty 'rows' array.");
+                throw new GameCommandException(GameCommandException.InvalidParams,
+                    "upsert_rows requires 1..200 'rows'.");
             }
-            if (requestedKeys == null || requestedKeys.Count == 0)
+            if (requestedKeys == null)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     "upsert_rows requires a non-empty 'keyColumns' array.");
             }
+            ValidateColumnNames(requestedKeys, "keyColumns", 8);
 
             IWorkbook workbook = null;
             try
@@ -166,7 +166,7 @@ namespace Game.Editor
                 int dataStartRow = ResolveDataStartRow(@params, sheet, headers, path.MaxRows);
                 if (sheet.LastRowNum - dataStartRow + 1 > 100000)
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         "upsert_rows supports at most 100000 existing data rows per request.");
                 }
                 List<string> keyColumns = ResolveKeyColumns(requestedKeys, headers);
@@ -196,7 +196,7 @@ namespace Game.Editor
                         rowIndex = Math.Max(dataStartRow, lastDataRow + 1);
                         if (rowIndex >= path.MaxRows)
                         {
-                            throw new CommandException(ErrorCodes.InvalidParams,
+                            throw new GameCommandException(GameCommandException.InvalidParams,
                                 $"Cannot append another row: sheet '{sheetName}' reached its row limit.");
                         }
                         lastDataRow = rowIndex;
@@ -246,13 +246,13 @@ namespace Game.Editor
                                 SetCellValue(cell, property.Value);
                             }
                         }
-                        catch (CommandException)
+                        catch (GameCommandException)
                         {
                             throw;
                         }
                         catch (Exception ex)
                         {
-                            throw new CommandException(ErrorCodes.InvalidParams,
+                            throw new GameCommandException(GameCommandException.InvalidParams,
                                 $"Cannot set column '{property.Name}' at row {rowIndex + 1}: {ex.Message}");
                         }
 
@@ -264,7 +264,7 @@ namespace Game.Editor
                                                EstimateSnapshotCharacters(current);
                         if (estimatedCharacters > MaxQueryResponseCharacters)
                         {
-                            throw new CommandException(ErrorCodes.InvalidParams,
+                            throw new GameCommandException(GameCommandException.InvalidParams,
                                 "upsert_rows response would be too large. Split rows into smaller requests.");
                         }
                         cellChanges.Add(new JObject
@@ -329,23 +329,23 @@ namespace Game.Editor
                     rows = results
                 };
             }
-            catch (CommandException)
+            catch (GameCommandException)
             {
                 throw;
             }
             catch (IOException ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Cannot upsert '{path.RelativePath}'. Close the workbook in Excel and try again. {ex.Message}");
             }
             catch (UnauthorizedAccessException ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Cannot upsert '{path.RelativePath}': {ex.Message}");
             }
             catch (Exception ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Failed to upsert '{path.RelativePath}': {ex.Message}");
             }
             finally
@@ -358,8 +358,14 @@ namespace Game.Editor
         {
             if (cells == null || cells.Count == 0)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     "set_cells requires a non-empty 'cells' array.");
+            }
+
+            if (cells.Count > 500)
+            {
+                throw new GameCommandException(GameCommandException.InvalidParams,
+                    "set_cells supports at most 500 cells per request.");
             }
 
             var addresses = new HashSet<string>(StringComparer.Ordinal);
@@ -368,15 +374,19 @@ namespace Game.Editor
             {
                 if (!(item is JObject cell))
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         "Every cells item must be an object.");
                 }
 
+                RequireInputProperties(cell, "cell", "value", "formula", "expectedValue", "expectedFormula");
+                RequireInputString(cell, "cell", true, 1, 10);
+                ValidateInputFormula(cell, "formula");
+                ValidateInputFormula(cell, "expectedFormula");
                 ParseAddress(cell["cell"]?.Value<string>(), path,
                     out string address, out int rowIndex, out int columnIndex);
                 if (!addresses.Add(address))
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"Duplicate cell address '{address}' in one request.");
                 }
 
@@ -384,7 +394,7 @@ namespace Game.Editor
                 bool hasFormula = cell.Property("formula", StringComparison.Ordinal) != null;
                 if (hasValue == hasFormula)
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"Cell {address} must contain exactly one of 'value' or 'formula'.");
                 }
 
@@ -392,8 +402,17 @@ namespace Game.Editor
                 bool hasExpectedFormula = cell.Property("expectedFormula", StringComparison.Ordinal) != null;
                 if (hasExpectedValue && hasExpectedFormula)
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"Cell {address} cannot contain both expectedValue and expectedFormula.");
+                }
+
+                if (hasValue)
+                {
+                    ValidateLiteral(cell["value"], $"{address}.value");
+                }
+                if (hasExpectedValue)
+                {
+                    ValidateLiteral(cell["expectedValue"], $"{address}.expectedValue");
                 }
 
                 result.Add(new CellChange
@@ -419,12 +438,12 @@ namespace Game.Editor
         {
             if (change.HasExpectedValue && !CellMatchesToken(cell, change.ExpectedValue))
             {
-                throw new CommandException(ConflictErrorCode,
+                throw new GameCommandException(ConflictErrorCode,
                     $"Cell {change.Address} no longer has expectedValue. Actual: {SnapshotResult(previous).ToString(Formatting.None)}");
             }
             if (change.ExpectedFormula != null && !CellHasFormula(cell, change.ExpectedFormula))
             {
-                throw new CommandException(ConflictErrorCode,
+                throw new GameCommandException(ConflictErrorCode,
                     $"Cell {change.Address} no longer has expectedFormula '={change.ExpectedFormula}'. Actual: {SnapshotResult(previous).ToString(Formatting.None)}");
             }
         }
@@ -438,12 +457,12 @@ namespace Game.Editor
                 string name = item.Value<string>();
                 if (!unique.Add(name))
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"keyColumns contains duplicate column '{name}'.");
                 }
                 if (!headers.ByName.ContainsKey(name))
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"Key column '{name}' was not found in header row {headers.RowIndex + 1}.");
                 }
                 result.Add(name);
@@ -461,7 +480,7 @@ namespace Game.Editor
                 JObject row = item as JObject;
                 if (row == null || !row.HasValues)
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         "Every upsert_rows row must be a non-empty object.");
                 }
 
@@ -469,13 +488,13 @@ namespace Game.Editor
                 {
                     if (!headers.ByName.ContainsKey(property.Name))
                     {
-                        throw new CommandException(ErrorCodes.InvalidParams,
+                        throw new GameCommandException(GameCommandException.InvalidParams,
                             $"Column '{property.Name}' was not found in header row {headers.RowIndex + 1}.");
                     }
                     if (property.Value is JObject formulaObject &&
                         (formulaObject.Count != 1 || formulaObject.Property("formula", StringComparison.Ordinal) == null))
                     {
-                        throw new CommandException(ErrorCodes.InvalidParams,
+                        throw new GameCommandException(GameCommandException.InvalidParams,
                             $"Column '{property.Name}' formula value must contain only a 'formula' property.");
                     }
                 }
@@ -487,7 +506,7 @@ namespace Game.Editor
                     if (keyProperty == null || keyProperty.Value.Type == JTokenType.Null ||
                         keyProperty.Value.Type == JTokenType.Object)
                     {
-                        throw new CommandException(ErrorCodes.InvalidParams,
+                        throw new GameCommandException(GameCommandException.InvalidParams,
                             $"Every upsert row requires a non-null constant key column '{keyColumn}'.");
                     }
                     key[keyColumn] = keyProperty.Value.DeepClone();
@@ -496,7 +515,7 @@ namespace Game.Editor
                 string canonicalKey = BuildCanonicalKey(key, keyColumns);
                 if (!unique.Add(canonicalKey))
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"upsert_rows contains duplicate key {key.ToString(Formatting.None)}.");
                 }
                 result.Add(new UpsertInput
@@ -540,7 +559,7 @@ namespace Game.Editor
                 string canonicalKey = BuildCanonicalKey(key, keyColumns);
                 if (result.TryGetValue(canonicalKey, out int existingRow))
                 {
-                    throw new CommandException(ConflictErrorCode,
+                    throw new GameCommandException(ConflictErrorCode,
                         $"Existing key {key.ToString(Formatting.None)} is duplicated at rows {existingRow + 1} and {rowIndex + 1}.");
                 }
                 result.Add(canonicalKey, rowIndex);
@@ -593,7 +612,7 @@ namespace Game.Editor
             }
             if (rowIndex > sheet.LastRowNum || sheet.GetRow(rowIndex) == null)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"templateRow {rowIndex + 1} does not exist in sheet '{sheet.SheetName}'.");
             }
             return rowIndex;

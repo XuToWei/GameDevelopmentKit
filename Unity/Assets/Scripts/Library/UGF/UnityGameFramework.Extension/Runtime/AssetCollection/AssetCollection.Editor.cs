@@ -71,7 +71,7 @@ namespace UnityGameFramework.Extension
                     continue;
                 }
                 DefaultAsset defaultAsset = AssetDatabase.LoadAssetAtPath<DefaultAsset>(assetPath);
-                if (defaultAsset == null || !ProjectWindowUtil.IsFolder(defaultAsset.GetInstanceID()))
+                if (defaultAsset == null || !ProjectWindowUtil.IsFolder(defaultAsset.GetEntityId()))
                 {
                     isDirty = true;
                     m_CollectionPathGUIDs.RemoveAt(i);
@@ -104,7 +104,7 @@ namespace UnityGameFramework.Extension
             for (int i = m_CollectionPaths.Count - 1; i >= 0; i--)
             {
                 DefaultAsset defaultAsset = m_CollectionPaths[i];
-                if (defaultAsset == null || !ProjectWindowUtil.IsFolder(defaultAsset.GetInstanceID()))
+                if (defaultAsset == null || !ProjectWindowUtil.IsFolder(defaultAsset.GetEntityId()))
                 {
                     isDirty = true;
                     m_CollectionPaths.RemoveAt(i);
@@ -156,7 +156,7 @@ namespace UnityGameFramework.Extension
             string[] searchPatterns = (string.IsNullOrEmpty(m_CollectionPatterns) ? "*.*" : m_CollectionPatterns).Split(';', ',', '|');
             foreach (DefaultAsset defaultAsset in m_CollectionPaths)
             {
-                if(defaultAsset == null || !ProjectWindowUtil.IsFolder(defaultAsset.GetInstanceID()))
+                if(defaultAsset == null || !ProjectWindowUtil.IsFolder(defaultAsset.GetEntityId()))
                     continue;
                 string path = AssetDatabase.GetAssetPath(defaultAsset);
                 foreach (var pattern in searchPatterns)

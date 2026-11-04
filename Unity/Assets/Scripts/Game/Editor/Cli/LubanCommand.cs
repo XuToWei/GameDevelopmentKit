@@ -3,48 +3,54 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using AgentBridge;
-using Newtonsoft.Json.Linq;
+using Unity.Pipeline.Commands;
 using ThunderFireUITool;
 using UnityEditor;
 using UnityEngine;
 
 namespace Game.Editor
 {
-    /// <summary>
-    /// Unity Agent Bridge command for validating and exporting Luban workbooks.
-    /// </summary>
-    public sealed class LubanCommand : ICommandHandler
+    /// <summary>Validate and export Luban workbooks using the repository's tool.</summary>
+    // Pipeline uses Task return types to await commands and exclude them from synchronous job batches.
+#pragma warning disable ET0501
+    public static class LubanCommand
     {
         private const string ErrorCode = "LUBAN_ERROR";
+        private const string Group = "game.luban";
         private const int MaxReturnedOutputLength = 60000;
 
-        public string Command => "luban";
-        public string Description => "Luban 配置工具：action=validate/export，默认 validate。validate 使用 ExcelExporter Check 模式，只校验不写生成产物；export 生成代码和 bin/json 数据，成功后刷新 Unity AssetDatabase。返回进程输出、耗时和退出码；需要先编译 Kit.sln 生成 Bin/Tool.exe 或 Tool.dll。";
-        public string Group => "Game";
-        public bool CanDisable => true;
-        public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
-
-        // Run the external tool off the Unity thread, then marshal result handling back to it.
-        public async Task<object> ExecuteAsync(JObject @params)
+        [CliGroupCommand(Group, "运行 Luban Check，只校验不写生成产物；需要先编译 Kit.sln。")]
+        public static Task<object> Validate(
+            [CliArg("data_format", "配置数据格式：bin 或 json。")] LubanDataFormat format = LubanDataFormat.Bin,
+            [CliArg("timeout", "包含外部进程在内的超时秒数。")] double timeoutInSeconds = 600)
         {
-            string action = @params?["action"]?.Value<string>() ?? "validate";
-            string format = @params?["format"]?.Value<string>() ?? "bin";
-            if (action != "validate" && action != "export")
-            {
-                throw new CommandException(ErrorCodes.InvalidParams,
-                    $"Unknown action: {action}. Supported: validate, export");
-            }
-            if (format != "bin" && format != "json")
-            {
-                throw new CommandException(ErrorCodes.InvalidParams,
-                    $"Unknown format: {format}. Supported: bin, json");
-            }
+            return ExecuteAsync("validate", format, timeoutInSeconds);
+        }
 
+        [CliGroupCommand(Group, "导出 Luban 代码与数据；成功后刷新 AssetDatabase 并清理本地化缓存，可能触发编译。需要先编译 Kit.sln。")]
+        public static Task<object> Export(
+            [CliArg("data_format", "配置数据格式：bin 或 json。")] LubanDataFormat format = LubanDataFormat.Bin,
+            [CliArg("timeout", "包含外部进程在内的超时秒数。")] double timeoutInSeconds = 600)
+        {
+            return ExecuteAsync("export", format, timeoutInSeconds);
+        }
+
+        // Pipeline awaits Task results. Keep Unity API access on the captured Unity context.
+        private static async Task<object> ExecuteAsync(string action, LubanDataFormat dataFormat, double timeoutInSeconds)
+        {
+            if (!Enum.IsDefined(typeof(LubanDataFormat), dataFormat))
+            {
+                throw new GameCommandException(GameCommandException.InvalidParams, "data_format must be bin or json.");
+            }
+            if (double.IsNaN(timeoutInSeconds) || timeoutInSeconds <= 0)
+            {
+                throw new GameCommandException(GameCommandException.InvalidParams, "timeout must be positive.");
+            }
+            string format = dataFormat == LubanDataFormat.Json ? "json" : "bin";
             string repositoryRoot = ResolveRepositoryRoot();
             string binDirectory = Path.Combine(repositoryRoot, "Bin");
-            ProcessResult result = await Task.Run(
-                () => RunTool(binDirectory, action, format));
+            bool isWindows = Application.platform == RuntimePlatform.WindowsEditor;
+            ProcessResult result = await Task.Run(() => RunTool(binDirectory, action, format, isWindows, timeoutInSeconds));
             return Complete(result, action, format);
         }
 
@@ -59,7 +65,7 @@ namespace Game.Editor
 
             if (result.ExitCode != 0 || failureMarker || !successMarker)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Luban {action} failed (exitCode={result.ExitCode}). {TruncateOutput(combined)}");
             }
 
@@ -80,29 +86,9 @@ namespace Game.Editor
             };
         }
 
-        public JObject ParamsSchema { get; } = JObject.Parse(@"{
-  ""type"": ""object"",
-  ""additionalProperties"": false,
-  ""properties"": {
-    ""action"": {
-      ""type"": ""string"",
-      ""default"": ""validate"",
-      ""enum"": [""validate"", ""export""],
-      ""description"": ""默认 validate。validate 只运行 Check；export 会写生成代码和数据并刷新 AssetDatabase。""
-    },
-    ""format"": {
-      ""type"": ""string"",
-      ""default"": ""bin"",
-      ""enum"": [""bin"", ""json""],
-      ""description"": ""默认 bin。export=json 使用 cs-simple-json/json；validate 时保留该选项用于对应配置模式。""
-    }
-  }
-}");
-
         private static ProcessResult RunTool(
-            string binDirectory, string action, string format)
+            string binDirectory, string action, string format, bool isWindows, double timeoutInSeconds)
         {
-            bool isWindows = Application.platform == RuntimePlatform.WindowsEditor;
             string executable = isWindows
                 ? Path.Combine(binDirectory, "Tool.exe")
                 : "dotnet";
@@ -111,7 +97,7 @@ namespace Game.Editor
                 : Path.Combine(binDirectory, "Tool.dll");
             if (!File.Exists(toolFile))
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Luban tool not found: {toolFile}. Compile Kit.sln first.");
             }
 
@@ -151,13 +137,21 @@ namespace Game.Editor
                 {
                     if (!process.Start())
                     {
-                        throw new CommandException(ErrorCode,
+                        throw new GameCommandException(ErrorCode,
                             $"Failed to start Luban tool: {executable}");
                     }
 
                     Task<string> outputTask = process.StandardOutput.ReadToEndAsync();
                     Task<string> errorTask = process.StandardError.ReadToEndAsync();
-                    process.WaitForExit();
+                    bool exited = double.IsPositiveInfinity(timeoutInSeconds)
+                        ? WaitForExit(process)
+                        : process.WaitForExit((int)Math.Min(int.MaxValue, Math.Ceiling(timeoutInSeconds * 1000)));
+                    if (!exited)
+                    {
+                        process.Kill();
+                        process.WaitForExit();
+                        throw new GameCommandException(ErrorCode, $"Luban {action} timed out after {timeoutInSeconds} seconds.");
+                    }
                     Task.WaitAll(outputTask, errorTask);
                     stopwatch.Stop();
 
@@ -169,16 +163,22 @@ namespace Game.Editor
                         StandardError = errorTask.Result ?? string.Empty
                     };
                 }
-                catch (CommandException)
+                catch (GameCommandException)
                 {
                     throw;
                 }
                 catch (Exception ex)
                 {
-                    throw new CommandException(ErrorCode,
+                    throw new GameCommandException(ErrorCode,
                         $"Failed to run Luban tool '{executable}': {ex.Message}");
                 }
             }
+        }
+
+        private static bool WaitForExit(Process process)
+        {
+            process.WaitForExit();
+            return true;
         }
 
         private static string ResolveRepositoryRoot()
@@ -187,7 +187,7 @@ namespace Game.Editor
             DirectoryInfo repository = unityProject?.Parent;
             if (repository == null)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Cannot resolve repository root from Unity data path '{Application.dataPath}'.");
             }
             return repository.FullName;
@@ -217,5 +217,13 @@ namespace Game.Editor
             public string StandardOutput;
             public string StandardError;
         }
+    }
+
+#pragma warning restore ET0501
+
+    public enum LubanDataFormat
+    {
+        Bin,
+        Json
     }
 }

@@ -46,6 +46,14 @@ Refresh 会同步启用 HybridCLR、更新 `link.xml` 条件区块、热更新�
 
 不要只在 Player Settings 中手工添加宏。那样不会同步资源规则、Luban 工程与 HybridCLR 设置。
 
+## 首次安装与编辑器升级
+
+当前工程使用 Unity `6000.6.7f1`。首次使用 HybridCLR、更换 Unity Editor 版本或升级 HybridCLR 包后，先打开 `HybridCLR/Installer...`，检查当前 Editor 的兼容状态，并通过 `Install` 重新安装对应的本地 IL2CPP 环境。Installer 从当前 Editor 复制工具链；已有的 `HybridCLRData/LocalIl2CppData-*` 目录不表示它与升级后的 Editor 一致。
+
+安装完成后，切换到目标 Build Target，再执行下面的 `HybridCLR/Do All`。该命令会重新编译业务 DLL、生成代码并复制 AOT 元数据，**不包含 Installer 的安装步骤**。
+
+编辑器升级后应重新生成 DLL/PDB、AOT 补充元数据和 AssetBundle，并重新构建 IL2CPP Player。Editor 编译通过后，仍需在目标平台验证热更新加载；不要复用旧 Editor 生成的构建产物。
+
 ## 一键准备
 
 使用：

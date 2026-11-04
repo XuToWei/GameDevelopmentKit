@@ -33,7 +33,7 @@ namespace UnityGameFramework.Extension
         }
 
         [OnOpenAsset]
-        public static bool OnOpenAsset(int instanceID, int line)
+        public static bool OnOpenAsset(EntityId instanceID, int line)
         {
             var config = EditorUtility.EntityIdToObject(instanceID) as MergeAssetScriptableObject;
             if (config != null)

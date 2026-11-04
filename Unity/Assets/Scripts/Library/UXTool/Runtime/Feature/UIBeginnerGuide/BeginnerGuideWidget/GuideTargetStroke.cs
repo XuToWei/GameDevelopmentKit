@@ -35,9 +35,9 @@ public class GuideTargetStroke : GuideWidgetBase
         }
     }
 
-    public override List<int> GetControlledInstanceIds()
+    public override List<EntityId> GetControlledInstanceIds()
     {
-        List<int> list = new List<int>();
+        List<EntityId> list = new List<EntityId>();
 
         return list;
     }

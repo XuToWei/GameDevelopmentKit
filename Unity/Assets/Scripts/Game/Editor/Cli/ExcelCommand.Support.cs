@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using AgentBridge;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
@@ -14,7 +13,7 @@ using UnityEngine;
 
 namespace Game.Editor
 {
-    public sealed partial class ExcelCommand
+    public static partial class ExcelCommand
     {
         private const int XlsxMaxRows = 1048576;
         private const int XlsxMaxColumns = 16384;
@@ -42,12 +41,17 @@ namespace Game.Editor
             return @params?.Property(name, StringComparison.Ordinal) != null;
         }
 
-        private static string RequireString(JObject @params, string name)
+        private static string RequireString(JObject @params, string name, int maximumLength)
         {
             string value = GetString(@params, name, null);
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new CommandException(ErrorCodes.InvalidParams, $"Missing '{name}'.");
+                throw new GameCommandException(GameCommandException.InvalidParams, $"Missing '{name}'.");
+            }
+            if (value.Length > maximumLength)
+            {
+                throw new GameCommandException(GameCommandException.InvalidParams,
+                    $"'{name}' must contain at most {maximumLength} characters.");
             }
             return value;
         }
@@ -56,14 +60,20 @@ namespace Game.Editor
         {
             if (string.IsNullOrWhiteSpace(requestedPath))
             {
-                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'filePath'.");
+                throw new GameCommandException(GameCommandException.InvalidParams, "Missing 'filePath'.");
+            }
+
+            if (requestedPath.Length > 2048)
+            {
+                throw new GameCommandException(GameCommandException.InvalidParams,
+                    "filePath must contain at most 2048 characters.");
             }
 
             DirectoryInfo unityProject = Directory.GetParent(Path.GetFullPath(Application.dataPath));
             DirectoryInfo repository = unityProject?.Parent;
             if (repository == null)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Cannot resolve repository root from Unity data path '{Application.dataPath}'.");
             }
 
@@ -79,7 +89,7 @@ namespace Game.Editor
             catch (Exception ex) when (ex is ArgumentException || ex is NotSupportedException ||
                                        ex is PathTooLongException)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Invalid filePath '{requestedPath}': {ex.Message}");
             }
 
@@ -89,7 +99,7 @@ namespace Game.Editor
                 : StringComparison.Ordinal;
             if (!fullPath.StartsWith(rootPrefix, comparison))
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"filePath must be inside repository root '{repositoryRoot}'.");
             }
 
@@ -97,12 +107,12 @@ namespace Game.Editor
             bool isXls = string.Equals(extension, ".xls", StringComparison.OrdinalIgnoreCase);
             if (!isXls && !string.Equals(extension, ".xlsx", StringComparison.OrdinalIgnoreCase))
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"filePath must end with .xlsx or .xls: {requestedPath}");
             }
             if (!File.Exists(fullPath))
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Excel file not found: {requestedPath}");
             }
 
@@ -130,13 +140,13 @@ namespace Game.Editor
         {
             if (string.IsNullOrWhiteSpace(sheetName))
             {
-                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'sheet'.");
+                throw new GameCommandException(GameCommandException.InvalidParams, "Missing 'sheet'.");
             }
 
             ISheet sheet = workbook.GetSheet(sheetName);
             if (sheet == null)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Sheet '{sheetName}' not found in '{relativePath}'.");
             }
             return sheet;
@@ -157,13 +167,34 @@ namespace Game.Editor
             }
         }
 
+        private static void ValidateExpectedVersionFormat(string expectedVersion)
+        {
+            if (expectedVersion == null)
+            {
+                return;
+            }
+            bool valid = expectedVersion.Length == 64;
+            foreach (char character in expectedVersion)
+            {
+                valid &= character >= '0' && character <= '9' ||
+                         character >= 'a' && character <= 'f' ||
+                         character >= 'A' && character <= 'F';
+            }
+            if (!valid)
+            {
+                throw new GameCommandException(GameCommandException.InvalidParams,
+                    "expectedVersion must be a 64-character hexadecimal SHA-256 hash.");
+            }
+        }
+
         private static void ValidateExpectedVersion(JObject @params, string actualVersion)
         {
             string expectedVersion = GetString(@params, "expectedVersion", null);
+            ValidateExpectedVersionFormat(expectedVersion);
             if (expectedVersion != null &&
                 !string.Equals(expectedVersion, actualVersion, StringComparison.OrdinalIgnoreCase))
             {
-                throw new CommandException(ConflictErrorCode,
+                throw new GameCommandException(ConflictErrorCode,
                     $"Workbook version changed. Expected {expectedVersion}, actual {actualVersion}. Query it again before writing.");
             }
         }
@@ -173,7 +204,7 @@ namespace Game.Editor
             string actualVersion = GetFileVersion(fullPath);
             if (!string.Equals(expectedVersion, actualVersion, StringComparison.OrdinalIgnoreCase))
             {
-                throw new CommandException(ConflictErrorCode,
+                throw new GameCommandException(ConflictErrorCode,
                     $"Workbook changed while the command was running. Expected {expectedVersion}, actual {actualVersion}.");
             }
         }
@@ -219,7 +250,7 @@ namespace Game.Editor
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"[AgentBridge] Failed to delete temporary Excel file '{path}': {ex.Message}");
+                Debug.LogWarning($"[game.excel] Failed to delete temporary Excel file '{path}': {ex.Message}");
             }
         }
 
@@ -228,7 +259,7 @@ namespace Game.Editor
         {
             if (string.IsNullOrEmpty(requestedAddress))
             {
-                throw new CommandException(ErrorCodes.InvalidParams, "An A1 cell address is required.");
+                throw new GameCommandException(GameCommandException.InvalidParams, "An A1 cell address is required.");
             }
 
             int split = 0;
@@ -240,10 +271,11 @@ namespace Game.Editor
             }
 
             if (split == 0 || split == requestedAddress.Length || split > 3 ||
+                requestedAddress.Length - split > 7 || requestedAddress[split] < '1' || requestedAddress[split] > '9' ||
                 !int.TryParse(requestedAddress.Substring(split), NumberStyles.None,
                     CultureInfo.InvariantCulture, out int row) || row < 1 || row > path.MaxRows)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Invalid or out-of-range Excel cell address '{requestedAddress}'.");
             }
 
@@ -255,7 +287,7 @@ namespace Game.Editor
             }
             if (column < 1 || column > path.MaxColumns)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Excel cell address '{requestedAddress}' exceeds the workbook column limit.");
             }
 
@@ -268,13 +300,13 @@ namespace Game.Editor
         {
             if (string.IsNullOrWhiteSpace(requestedRange))
             {
-                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'range' for read_range.");
+                throw new GameCommandException(GameCommandException.InvalidParams, "Missing 'range' for read_range.");
             }
 
             string[] parts = requestedRange.Split(':');
             if (parts.Length < 1 || parts.Length > 2)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Invalid Excel range '{requestedRange}'. Use A1 or A1:H30.");
             }
 
@@ -283,14 +315,14 @@ namespace Game.Editor
                 out _, out int lastRow, out int lastColumn);
             if (lastRow < firstRow || lastColumn < firstColumn)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Range end must not precede range start: {requestedRange}");
             }
 
             long cellCount = (long)(lastRow - firstRow + 1) * (lastColumn - firstColumn + 1);
             if (cellCount > maxCells)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Range '{requestedRange}' contains {cellCount} cells, exceeding maxCells={maxCells}.");
             }
 
@@ -320,6 +352,11 @@ namespace Game.Editor
 
         private static string NormalizeFormula(string formula, string address)
         {
+            if (formula != null && formula.Length > 8192)
+            {
+                throw new GameCommandException(GameCommandException.InvalidParams,
+                    $"Formula for {address} must contain at most 8192 characters.");
+            }
             string normalized = formula?.Trim();
             if (!string.IsNullOrEmpty(normalized) && normalized[0] == '=')
             {
@@ -327,7 +364,7 @@ namespace Game.Editor
             }
             if (string.IsNullOrWhiteSpace(normalized))
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Formula for {address} must not be empty.");
             }
             return normalized;
@@ -366,7 +403,7 @@ namespace Game.Editor
                     return result;
                 }
                 default:
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"Unsupported Excel cell value type: {value.Type}.");
             }
         }
@@ -529,7 +566,7 @@ namespace Game.Editor
         {
             if (headerRowNumber < 1 || headerRowNumber > maxRows)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"headerRow must be in 1..{maxRows}, got {headerRowNumber}.");
             }
 
@@ -537,7 +574,7 @@ namespace Game.Editor
             IRow row = sheet.GetRow(rowIndex);
             if (row == null || row.LastCellNum <= 0)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Header row {headerRowNumber} is empty in sheet '{sheet.SheetName}'.");
             }
 
@@ -552,7 +589,7 @@ namespace Game.Editor
                 }
                 if (result.ByName.ContainsKey(name))
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"Header '{name}' appears more than once in row {headerRowNumber}.");
                 }
 
@@ -562,12 +599,12 @@ namespace Game.Editor
 
             if (result.Columns.Count == 0)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Header row {headerRowNumber} has no named columns.");
             }
             if (result.Columns.Count > 512)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Header row {headerRowNumber} has too many columns ({result.Columns.Count}, maximum 512).");
             }
             return result;
@@ -576,6 +613,11 @@ namespace Game.Editor
         private static int ResolveDataStartRow(JObject @params, ISheet sheet, HeaderInfo headers, int maxRows)
         {
             int requested = GetInt(@params, "dataStartRow", 0);
+            if (HasParam(@params, "dataStartRow") && (requested < 1 || requested > maxRows))
+            {
+                throw new GameCommandException(GameCommandException.InvalidParams,
+                    $"dataStartRow must be in 1..{maxRows}, got {requested}.");
+            }
             int result;
             if (requested > 0)
             {
@@ -597,7 +639,7 @@ namespace Game.Editor
 
             if (result <= headers.RowIndex || result >= maxRows)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"dataStartRow must be after headerRow and within 1..{maxRows}, got {result + 1}.");
             }
             return result;

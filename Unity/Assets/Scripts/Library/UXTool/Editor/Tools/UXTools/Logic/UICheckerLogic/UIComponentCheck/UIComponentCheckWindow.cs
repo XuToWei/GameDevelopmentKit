@@ -129,16 +129,16 @@ namespace ThunderFireUITool
         private void OnEnable()
         {
             
-            EditorApplication.hierarchyWindowItemOnGUI += HandleHierarchyWindowItemOnGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += HandleHierarchyWindowItemOnGUI;
         }
 
         private void OnDisable()
         {
             checkResultGoTransList.Clear();
-            EditorApplication.hierarchyWindowItemOnGUI -= HandleHierarchyWindowItemOnGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= HandleHierarchyWindowItemOnGUI;
         }
 
-        static void HandleHierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
+        static void HandleHierarchyWindowItemOnGUI(EntityId instanceID, Rect selectionRect)
         {
             var hierarchyReferenceStyle = new GUIStyle()
             {

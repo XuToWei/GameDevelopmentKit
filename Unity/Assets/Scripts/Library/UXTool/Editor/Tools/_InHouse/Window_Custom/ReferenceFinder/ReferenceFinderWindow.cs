@@ -90,17 +90,17 @@ namespace ThunderFireUITool
             //var isDepend = PlayerPrefs.GetInt(isDependPrefKey, 0) == 1;
             m_AssetTreeView = EditorUIUtils.CreateTreeView<AssetTreeView, AssetDescription>();
 
-            EditorApplication.hierarchyWindowItemOnGUI += HandleHierarchyWindowItemOnGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += HandleHierarchyWindowItemOnGUI;
         }
 
 
         private void OnDisable()
         {
             referenceGoTransList.Clear();
-            EditorApplication.hierarchyWindowItemOnGUI -= HandleHierarchyWindowItemOnGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= HandleHierarchyWindowItemOnGUI;
         }
 
-        static void HandleHierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
+        static void HandleHierarchyWindowItemOnGUI(EntityId instanceID, Rect selectionRect)
         {
             var hierarchyReferenceStyle = new GUIStyle()
             {

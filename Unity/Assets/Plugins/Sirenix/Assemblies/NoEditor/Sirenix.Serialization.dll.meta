@@ -2,13 +2,59 @@ fileFormatVersion: 2
 guid: 5651992cdad94894a3af7dc3f1da9170
 timeCreated: 1488828285
 PluginImporter:
-  serializedVersion: 1
+  externalObjects: {}
+  serializedVersion: 2
   iconMap: {}
   executionOrder: {}
+  defineConstraints: []
   isPreloaded: 0
   isOverridable: 0
+  isExplicitlyReferenced: 0
+  validateReferences: 1
   platformData:
-    Any:
+  - first:
+      : Any
+    second:
+      enabled: 0
+      settings:
+        Exclude Editor: 1
+        Exclude Linux64: 1
+        Exclude OSXUniversal: 1
+        Exclude Win: 1
+        Exclude Win64: 1
+  - first:
+      : N3DS
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      : PSM
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      : PSP2
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      : SamsungTV
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      : Tizen
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      : WiiU
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      Any: 
+    second:
       enabled: 0
       settings:
         Exclude Android: 1
@@ -16,63 +62,85 @@ PluginImporter:
         Exclude Linux: 1
         Exclude Linux64: 1
         Exclude LinuxUniversal: 1
-        Exclude N3DS: 0
+        Exclude N3DS: 1
         Exclude OSXIntel: 1
         Exclude OSXIntel64: 1
         Exclude OSXUniversal: 1
-        Exclude PS4: 0
-        Exclude PSM: 0
-        Exclude PSP2: 0
-        Exclude SamsungTV: 0
-        Exclude Tizen: 0
-        Exclude WebGL: 0
-        Exclude WiiU: 0
+        Exclude PS4: 1
+        Exclude PSM: 1
+        Exclude PSP2: 1
+        Exclude SamsungTV: 1
+        Exclude Tizen: 1
+        Exclude WebGL: 1
+        Exclude WiiU: 1
         Exclude Win: 1
         Exclude Win64: 1
-        Exclude WindowsStoreApps: 0
-        Exclude XboxOne: 0
-        Exclude iOS: 0
-        Exclude tvOS: 0
-    Editor:
+        Exclude WindowsStoreApps: 1
+        Exclude XboxOne: 1
+        Exclude iOS: 1
+        Exclude tvOS: 1
+  - first:
+      Editor: Editor
+    second:
       enabled: 0
       settings:
+        CPU: AnyCPU
         DefaultValueInitialized: true
-    N3DS:
-      enabled: 1
+        OS: AnyOS
+  - first:
+      PS4: PS4
+    second:
+      enabled: 0
       settings: {}
-    PS4:
-      enabled: 1
-      settings: {}
-    PSM:
-      enabled: 1
-      settings: {}
-    PSP2:
-      enabled: 1
-      settings: {}
-    SamsungTV:
-      enabled: 1
-      settings: {}
-    Tizen:
-      enabled: 1
-      settings: {}
-    WebGL:
-      enabled: 1
-      settings: {}
-    WiiU:
-      enabled: 1
-      settings: {}
-    WindowsStoreApps:
-      enabled: 1
+  - first:
+      Standalone: Linux64
+    second:
+      enabled: 0
       settings:
         CPU: AnyCPU
-    XboxOne:
-      enabled: 1
+  - first:
+      Standalone: OSXUniversal
+    second:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+  - first:
+      Standalone: Win
+    second:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+  - first:
+      Standalone: Win64
+    second:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+  - first:
+      WebGL: WebGL
+    second:
+      enabled: 0
       settings: {}
-    iOS:
-      enabled: 1
+  - first:
+      Windows Store Apps: WindowsStoreApps
+    second:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+  - first:
+      XboxOne: XboxOne
+    second:
+      enabled: 0
       settings: {}
-    tvOS:
-      enabled: 1
+  - first:
+      iPhone: iOS
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      tvOS: tvOS
+    second:
+      enabled: 0
       settings: {}
   userData: 
   assetBundleName: 

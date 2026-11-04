@@ -64,7 +64,7 @@ namespace ThunderFireUITool
             InitWindowUI();
             InitWindowData();
             EditorApplication.delayCall += RefreshWindow;
-            EditorApplication.hierarchyWindowItemOnGUI += (int instanceID, Rect selectionRect) =>
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += (EntityId instanceID, Rect selectionRect) =>
             {
                 if (Event.current.type == EventType.MouseDrag)
                 {
