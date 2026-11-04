@@ -320,7 +320,7 @@ namespace Game.Editor
                 return type;
             }
 
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (Assembly assembly in UnityEngine.Assemblies.CurrentAssemblies.GetLoadedAssemblies())
             {
                 type = assembly.GetType(fullName);
                 if (type != null)

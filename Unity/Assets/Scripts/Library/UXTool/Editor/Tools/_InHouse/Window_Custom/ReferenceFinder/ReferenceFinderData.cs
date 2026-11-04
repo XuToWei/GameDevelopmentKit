@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEditor;
 using UnityEngine;
 using System.Threading;
@@ -49,7 +48,23 @@ public class ReferenceFinderData
     public string[] allAssets;
 
     //缓存路径
-    private const string CACHE_PATH = "Library/ReferenceFinderCache-2019-10-09";
+    private const string CACHE_PATH = "Library/ReferenceFinderCache.json";
+    private const int CacheVersion = 1;
+
+    [Serializable]
+    private sealed class CacheData
+    {
+        public int version;
+        public List<string> guids;
+        public List<string> dependencyHashes;
+        public List<CacheDependencies> dependencies;
+    }
+
+    [Serializable]
+    private sealed class CacheDependencies
+    {
+        public int[] indices;
+    }
 
     //资源引用信息字典
     public Dictionary<string, AssetDescription> assetDict = new Dictionary<string, AssetDescription>();
@@ -268,29 +283,41 @@ public class ReferenceFinderData
     {
         assetDict.Clear();
         Texture2D[] t = PlayerSettings.GetIcons(NamedBuildTarget.Android, IconKind.Settings);
-        settingIconPath = AssetDatabase.GetAssetPath(t[0]);
+        settingIconPath = t.Length > 0 ? AssetDatabase.GetAssetPath(t[0]) : string.Empty;
         ClearCache();
         if (File.Exists(CACHE_PATH))
         {
-            var serializedGuid = new List<string>();
-            var serializedDependencyHash = new List<string>();
-            var serializedDenpendencies = new List<int[]>();
-            //反序列化数据
-            using (FileStream fs = File.OpenRead(CACHE_PATH))
+            CacheData cache;
+            try
             {
-                BinaryFormatter bf = new BinaryFormatter();
                 if (EditorUtility.DisplayCancelableProgressBar("Import Cache", "Reading Cache", 0))
                 {
-                    EditorUtility.ClearProgressBar();
                     return false;
                 }
 
-                serializedGuid = (List<string>)bf.Deserialize(fs);
-                serializedDependencyHash = (List<string>)bf.Deserialize(fs);
-                serializedDenpendencies = (List<int[]>)bf.Deserialize(fs);
+                cache = JsonUtility.FromJson<CacheData>(File.ReadAllText(CACHE_PATH));
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+            finally
+            {
                 EditorUtility.ClearProgressBar();
             }
 
+            if (cache == null || cache.version != CacheVersion || cache.guids == null ||
+                cache.dependencyHashes == null || cache.dependencies == null ||
+                cache.guids.Count != cache.dependencyHashes.Count || cache.guids.Count != cache.dependencies.Count ||
+                cache.dependencies.Any(dependency => dependency?.indices == null ||
+                    dependency.indices.Any(index => index < 0 || index >= cache.guids.Count)))
+            {
+                return false;
+            }
+
+            var serializedGuid = cache.guids;
+            var serializedDependencyHash = cache.dependencyHashes;
+            var serializedDenpendencies = cache.dependencies;
             for (int i = 0; i < serializedGuid.Count; ++i)
             {
                 string path = AssetDatabase.GUIDToAssetPath(serializedGuid[i]);
@@ -309,7 +336,7 @@ public class ReferenceFinderData
                 string guid = serializedGuid[i];
                 if (assetDict.ContainsKey(guid))
                 {
-                    var guids = serializedDenpendencies[i].Select(index => serializedGuid[index]).Where(g => assetDict.ContainsKey(g)).ToList();
+                    var guids = serializedDenpendencies[i].indices.Select(index => serializedGuid[index]).Where(g => assetDict.ContainsKey(g)).ToList();
                     assetDict[guid].dependencies = guids;
                 }
             }
@@ -324,47 +351,41 @@ public class ReferenceFinderData
     //写入缓存
     private void WriteToChache()
     {
-        if (File.Exists(CACHE_PATH))
-        {
-            File.Delete(CACHE_PATH);
-        }
-
         //Debug.Log("write cache");
         var serializedGuid = new List<string>();
         var serializedDependencyHash = new List<string>();
-        var serializedDenpendencies = new List<int[]>();
+        var serializedDenpendencies = new List<CacheDependencies>();
         //辅助映射字典
         var guidIndex = new Dictionary<string, int>();
         //序列化
-        using (FileStream fs = File.OpenWrite(CACHE_PATH))
+        foreach (var pair in assetDict)
         {
-            foreach (var pair in assetDict)
-            {
-                guidIndex.Add(pair.Key, guidIndex.Count);
-                serializedGuid.Add(pair.Key);
-                serializedDependencyHash.Add(pair.Value.assetDependencyHashString);
-            }
-
-            foreach (var guid in serializedGuid)
-            {
-                List<int> res = new List<int>();
-                foreach (var i in assetDict[guid].dependencies)
-                {
-                    if (guidIndex.ContainsKey(i))
-                    {
-                        res.Add(guidIndex[i]);
-                    }
-                }
-
-                int[] indexes = res.ToArray();
-                serializedDenpendencies.Add(indexes);
-            }
-
-            BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(fs, serializedGuid);
-            bf.Serialize(fs, serializedDependencyHash);
-            bf.Serialize(fs, serializedDenpendencies);
+            guidIndex.Add(pair.Key, guidIndex.Count);
+            serializedGuid.Add(pair.Key);
+            serializedDependencyHash.Add(pair.Value.assetDependencyHashString);
         }
+
+        foreach (var guid in serializedGuid)
+        {
+            List<int> res = new List<int>();
+            foreach (var i in assetDict[guid].dependencies)
+            {
+                if (guidIndex.ContainsKey(i))
+                {
+                    res.Add(guidIndex[i]);
+                }
+            }
+
+            serializedDenpendencies.Add(new CacheDependencies { indices = res.ToArray() });
+        }
+
+        File.WriteAllText(CACHE_PATH, JsonUtility.ToJson(new CacheData
+        {
+            version = CacheVersion,
+            guids = serializedGuid,
+            dependencyHashes = serializedDependencyHash,
+            dependencies = serializedDenpendencies
+        }));
     }
 
     //更新引用信息状态

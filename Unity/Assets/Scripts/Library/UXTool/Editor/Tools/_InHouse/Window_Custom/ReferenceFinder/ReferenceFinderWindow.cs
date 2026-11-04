@@ -35,6 +35,7 @@ namespace ThunderFireUITool
         //选中资源列表
         public List<string> selectedAssetGuid = new List<string>();
 
+        [System.NonSerialized]
         public AssetTreeView m_AssetTreeView;
 
         [SerializeField] private TreeViewState<int> m_TreeViewState;

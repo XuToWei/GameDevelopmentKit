@@ -37,7 +37,7 @@ namespace Game.Hot
             GameEntry.Event.Subscribe(ShowEntitySuccessEventArgs.EventId, OnShowEntitySuccess);
             GameEntry.Event.Subscribe(ShowEntityFailureEventArgs.EventId, OnShowEntityFailure);
 
-            m_SceneBackground = Object.FindFirstObjectByType<ScrollableBackground>();
+            m_SceneBackground = Object.FindAnyObjectByType<ScrollableBackground>();
             if (m_SceneBackground == null)
             {
                 Log.Warning("Can not find scene background.");

@@ -71,7 +71,7 @@ public class ColorBlind : Editor
         Camera mainCamera = Camera.main;
         if (mainCamera == null)
         {
-            mainCamera = FindFirstObjectByType<Camera>();
+            mainCamera = FindAnyObjectByType<Camera>();
             if (mainCamera == null)
             {
                 var cameraGo = new GameObject("ColorBlind Camera");

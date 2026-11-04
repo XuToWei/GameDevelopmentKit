@@ -70,6 +70,7 @@ namespace ThunderFireUITool
         private object modifyValue;
         private FieldInfo selectedFieldInfo;
         private Type selectedFieldType;
+        [NonSerialized]
         public List<UIComponentCheckFilterBase> m_ckeckList = new List<UIComponentCheckFilterBase>();
         private int selectedFieldIndex = 0;
         private int selectedValueScriptIndex = 0;
@@ -361,7 +362,7 @@ namespace ThunderFireUITool
             Type baseType = typeof(MonoBehaviour);
 
             // 获取当前项目中所有程序集中的类型
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            IReadOnlyList<Assembly> assemblies = UnityEngine.Assemblies.CurrentAssemblies.GetLoadedAssemblies();
             foreach (Assembly assembly in assemblies)
             {
                 Type[] types = assembly.GetTypes();

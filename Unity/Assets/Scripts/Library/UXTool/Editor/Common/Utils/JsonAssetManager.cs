@@ -13,6 +13,7 @@ public class JsonAssetManager
     [Serializable]
     public class AssetPath
     {
+        [SerializeField]
         public Dictionary<string, string> data;
     }
 

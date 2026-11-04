@@ -86,6 +86,7 @@ namespace ThunderFireUITool
         private VisualElement _prefabContent;
         private VisualElement _lineContent;
         private VisualElement _buttonContent;
+        [System.NonSerialized]
         public VisualElement resultDiv;
         private Label _searchResultText;
         private Label _prefabDrag;
