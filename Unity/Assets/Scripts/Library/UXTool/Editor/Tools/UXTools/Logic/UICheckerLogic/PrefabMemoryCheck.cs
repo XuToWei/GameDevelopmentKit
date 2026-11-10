@@ -11,7 +11,6 @@ namespace ThunderFireUITool
         [MenuItem(ThunderFireUIToolConfig.Menu_ResourceCheck + "/Prefab 内存检查(Prefab MemoryCheck)", false, ThunderFireUIToolConfig.Menu_ResourceCheckIndex + 6)]
         private static void BeginMemoryCheck()
         {
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.ResourceCheck);
             var prefabStage = PrefabStageUtils.GetCurrentPrefabStage();
             if (prefabStage == null)
             {

@@ -99,7 +99,6 @@ namespace ThunderFireUITool
                 HaveToolbar = true;
             }
 
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.ToolBar);
             UXSceneViewCursor.Instance.Init();
             SceneView.lastActiveSceneView.in2DMode = true;
         }

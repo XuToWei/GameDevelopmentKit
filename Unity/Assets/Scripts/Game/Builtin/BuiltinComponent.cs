@@ -60,7 +60,7 @@ namespace Game
         }
 
 #if UNITY_EDITOR
-        [IgnoreLogMethod]
+#pragma warning disable ET0505
         [Button("Collect All Localization Dictionary")]
         public void CollectAllLocalizationDictionary()
         {
@@ -109,6 +109,7 @@ namespace Game
                 }
             }
         }
+#pragma warning restore ET0505
 #endif
     }
 }

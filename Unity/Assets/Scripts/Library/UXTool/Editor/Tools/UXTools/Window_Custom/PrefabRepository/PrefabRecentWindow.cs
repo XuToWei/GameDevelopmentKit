@@ -27,7 +27,6 @@ namespace ThunderFireUITool
             //r_window.position = new Rect((Screen.currentResolution.width - width) / 2, (Screen.currentResolution.height - height) / 2, width, height);
             r_window.titleContent.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_最近打开的模板);
             r_window.titleContent.image = ToolUtils.GetIcon("clock_w");
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.RecentlyOpen);
         }
 
         static PrefabRecentWindow()

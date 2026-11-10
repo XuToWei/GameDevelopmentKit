@@ -36,7 +36,6 @@ namespace ThunderFireUITool
             m_window.minSize = new Vector2(width, height);
             m_window.titleContent.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_组件库);
             m_window.titleContent.image = ToolUtils.GetIcon("component_w");
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.WidgetLibrary);
         }
 
         static WidgetRepositoryWindow()

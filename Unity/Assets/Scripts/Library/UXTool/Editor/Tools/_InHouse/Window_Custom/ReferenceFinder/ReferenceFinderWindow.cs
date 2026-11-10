@@ -83,7 +83,6 @@ namespace ThunderFireUITool
             window.Focus();
 
             SortHelper.Init();
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.ResourceCheck);
         }
 
         private void OnEnable()

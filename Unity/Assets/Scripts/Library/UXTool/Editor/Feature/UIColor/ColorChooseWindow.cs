@@ -25,7 +25,6 @@ public class ColorChooseWindow : EditorWindow
         r_window = GetWindow<ColorChooseWindow>();
         r_window.minSize = new Vector2(width, height);
         r_window.titleContent.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_选择颜色预设);
-        UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.ColorConfig);
     }
 
     private void OnEnable()
