@@ -42,7 +42,7 @@ namespace Game.Hot
                 return;
             }
 
-            ScrollableBackground sceneBackground = FindFirstObjectByType<ScrollableBackground>();
+            ScrollableBackground sceneBackground = FindAnyObjectByType<ScrollableBackground>();
             if (sceneBackground == null)
             {
                 Log.Warning("Can not find scene background.");

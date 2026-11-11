@@ -16,7 +16,7 @@
         </member>
         <member name="T:Sirenix.OdinValidator.Editor.EnsureOdinValidatorDefine">
             <summary>
-            Defines the ODIN_VALIDATOR symbol.
+            Defines the ODIN_VALIDATOR symbols, where <see cref="T:Sirenix.OdinInspector.Editor.ScriptingDefinesConfig"/> says.
             </summary>
         </member>
         <member name="T:Sirenix.OdinInspector.Editor.Validation.RegisterValidationRuleAttribute">

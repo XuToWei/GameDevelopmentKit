@@ -298,11 +298,7 @@ public partial class UXPlatform
 		}
 
 		{
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-			CheckIsDevOrEditor = true;
-#else
-			CheckIsDevOrEditor = false;
-#endif
+			CheckIsDevOrEditor = Application.isEditor || Debug.isDebugBuild;
 		}
 
 

@@ -38,6 +38,7 @@ Book 解释“怎么做、为什么这样做、产物在哪里”。主 README �
 | ET 工具 | [ET 代码生成工具](ET代码生成工具.md) | 已实现 | Component、UIForm、UIWidget、Entity 模板 |
 | ET 扩展 | [ET 动态事件](ET动态事件.md) | 已实现 | 按实体类型和 SceneType 广播事件 |
 | 编辑器 | [自定义 Toolbar](自定义Toolbar.md) | 已实现 | 向 Unity 主工具栏注册按钮 |
+| 编辑器 | [Unity CLI 自定义命令](UnityCLI.md) | 已实现 | 通过终端驱动 Editor，执行 CodeBind、StateController、Excel 和 Luban 操作 |
 | 构建 | [HybridCLR 热更新](HybridCLR热更.md) | 已实现 | 热更新 DLL 与 AOT 元数据准备 |
 | 构建 | [一键打包](一键打包.md) | 已实现 | 资源、安装包和本地资源服务器 |
 | 设计 | [动态扩容设计](动态扩容.md) | 未实现 | ET 服务发现、路由与弹性伸缩方案 |

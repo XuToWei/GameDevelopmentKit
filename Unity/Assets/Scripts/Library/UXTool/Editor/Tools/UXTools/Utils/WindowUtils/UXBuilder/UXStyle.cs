@@ -105,6 +105,9 @@ namespace ThunderFireUITool
         public StyleMaterialDefinition unityMaterial { get; set; }
         public StyleTextAutoSize unityTextAutoSize { get; set; }
 #endif
+        public StyleEnum<AnimationPlayState> animationPlayState { get; set; }
+        public StyleList<FilterFunction> backdropFilter { get; set; }
+        public StyleUIAnimationClip unityAnimationClip { get; set; }
 
 #if UNITY_6000_0_OR_NEWER
         public void Clear(bool clearInlineStyle)

@@ -36,7 +36,6 @@ namespace ThunderFireUITool
             m_window.minSize = new Vector2(width, height);
             m_window.titleContent.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_组件库);
             m_window.titleContent.image = ToolUtils.GetIcon("component_w");
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.WidgetLibrary);
         }
 
         static WidgetRepositoryWindow()
@@ -88,7 +87,7 @@ namespace ThunderFireUITool
         {
             InitWindowUI();
             InitWindowData();
-            EditorApplication.hierarchyWindowItemOnGUI += (int instanceID, Rect selectionRect) =>
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += (EntityId instanceID, Rect selectionRect) =>
             {
                 if (Event.current.type == EventType.MouseDrag)
                 {
@@ -97,15 +96,11 @@ namespace ThunderFireUITool
                 }
             };
             EditorApplication.delayCall += RefreshWindow;
-#if UNITY_2021_2_OR_NEWER
             DragAndDrop.AddDropHandlerV2(OnHierarchyGUI);
-#endif
         }
         private void OnDisable()
         {
-#if UNITY_2021_2_OR_NEWER
             DragAndDrop.RemoveDropHandlerV2(OnHierarchyGUI);
-#endif
         }
 
 
@@ -539,12 +534,13 @@ namespace ThunderFireUITool
                 {
 
                     GameObject obj = (GameObject)EditorUtility.EntityIdToObject(dropTargetEntityId);
+                    EntityId activeSceneId = EntityId.FromULong(UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle.GetRawData());
                     //UXCustomSceneView.RemoveDelegate(DrawTexture);
                     GameObject currentPrefab = PrefabUtility.InstantiatePrefab(LoadPrefab) as GameObject;
                     bool isUnpack = AssetDatabase.GetLabels(LoadPrefab).Contains(WidgetRepositoryConfig.UnpackText);
                     if (dropMode.HasFlag(HierarchyDropFlags.DropUpon))
                     {
-                        if (dropTargetEntityId != UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle)
+                        if (dropTargetEntityId != activeSceneId)
                         {
                             currentPrefab.transform.SetParent(obj.transform);
                         }
@@ -552,7 +548,7 @@ namespace ThunderFireUITool
                     }
                     else if (dropMode.HasFlag(HierarchyDropFlags.DropAfterParent))
                     {
-                        if (dropTargetEntityId != UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle)
+                        if (dropTargetEntityId != activeSceneId)
                         {
                             currentPrefab.transform.SetParent(obj.transform.parent);
                         }
@@ -561,7 +557,7 @@ namespace ThunderFireUITool
                     }
                     else if (dropMode.HasFlag(HierarchyDropFlags.DropBetween))
                     {
-                        if (dropTargetEntityId != UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle)
+                        if (dropTargetEntityId != activeSceneId)
                         {
                             currentPrefab.transform.SetParent(obj.transform.parent);
                             currentPrefab.transform.SetSiblingIndex(obj.transform.GetSiblingIndex() + 1);
@@ -570,7 +566,7 @@ namespace ThunderFireUITool
                     }
                     else if (dropMode.HasFlag(HierarchyDropFlags.SearchActive))
                     {
-                        if (dropTargetEntityId != UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle)
+                        if (dropTargetEntityId != activeSceneId)
                         {
                             currentPrefab.transform.SetParent(obj.transform);
                         }

@@ -14,15 +14,10 @@ namespace ThunderFireUITool {
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            EditorGUI.BeginChangeCheck();
             
             EditorGUILayout.PropertyField(m_Path);
             EditorGUILayout.PropertyField(m_ReddotFlag);
             serializedObject.ApplyModifiedProperties();
-            if (EditorGUI.EndChangeCheck())
-            {
-                UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.Reddot);
-            }
         }
     }
     

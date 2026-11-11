@@ -20,99 +20,18 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: m_Language
-      Entry: 3
-      Data: 14
-    - Name: m_Dictionary
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String,
-        mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 6
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: Language.English
-    - Name: $v
-      Entry: 1
-      Data: English
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: Language.ChineseSimplified
-    - Name: $v
-      Entry: 1
-      Data: Chinese Simplified
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: Language.ChineseTraditional
-    - Name: $v
-      Entry: 1
-      Data: Chinese Traditional
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: Language.Korean
-    - Name: $v
-      Entry: 1
-      Data: Korean
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: CheckVersion.Tips
-    - Name: $v
-      Entry: 1
-      Data: Checking if the game needs update. Please wait...
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: UpdateResource.Tips
-    - Name: $v
-      Entry: 1
-      Data: '{0}/{1}, {2}/{3}, {4:P0}, {5}/s'
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
+  m_Language: 14
+  m_Dictionary:
+  - key: Language.English
+    value: English
+  - key: Language.ChineseSimplified
+    value: Chinese Simplified
+  - key: Language.ChineseTraditional
+    value: Chinese Traditional
+  - key: Language.Korean
+    value: Korean
+  - key: CheckVersion.Tips
+    value: Checking if the game needs update. Please wait...
+  - key: UpdateResource.Tips
+    value: '{0}/{1}, {2}/{3}, {4:P0}, {5}/s'

@@ -1671,6 +1671,7 @@
             <summary>
             <para>Checks whether an array of types satisfy the constraints of a given generic type definition.</para>
             <para>If this method returns true, the given parameters can be safely used with <see cref="M:System.Type.MakeGenericType(System.Type[])"/> with the given generic type definition.</para>
+            <para>The rules are the ones the CoreCLR runtime enforces, which are stricter than Mono's, and the result is the same on every runtime.</para>
             </summary>
             <param name="genericType">The generic type definition to check.</param>
             <param name="parameters">The parameters to check validity for.</param>
@@ -1685,6 +1686,7 @@
             <summary>
             <para>Checks whether an array of types satisfy the constraints of a given generic method definition.</para>
             <para>If this method returns true, the given parameters can be safely used with <see cref="M:System.Reflection.MethodInfo.MakeGenericMethod(System.Type[])"/> with the given generic method definition.</para>
+            <para>The rules are the ones the CoreCLR runtime enforces, which are stricter than Mono's, and the result is the same on every runtime.</para>
             </summary>
             <param name="genericMethod">The generic method definition to check.</param>
             <param name="parameters">The parameters to check validity for.</param>
@@ -1695,9 +1697,44 @@
             </exception>
             <exception cref="T:System.ArgumentException">The genericMethod parameter must be a generic method definition.</exception>
         </member>
-        <member name="M:Sirenix.Utilities.TypeExtensions.GenericParameterIsFulfilledBy(System.Type,System.Type,System.Collections.Generic.Dictionary{System.Type,System.Type},System.Collections.Generic.HashSet{System.Type})">
+        <member name="M:Sirenix.Utilities.TypeExtensions.AreGenericConstraintsSatisfiedBy(System.Type[],System.Type[])">
             <summary>
-            Before calling this method we must ALWAYS hold a lock on the GenericConstraintsSatisfaction_LOCK object, as that is an implicit assumption it works with.
+            <para>Checks whether an array of types can be used as the arguments for the given generic parameters, which must be all the generic parameters of one generic type or method definition, in order.</para>
+            <para>Entries of <paramref name="definitions"/> that are not generic parameters must be matched exactly by the corresponding entry of <paramref name="parameters"/>.</para>
+            <para>The rules are the ones the CoreCLR runtime enforces, which are stricter than Mono's, and the result is the same on every runtime.</para>
+            </summary>
+        </member>
+        <member name="M:Sirenix.Utilities.TypeExtensions.GenericParameterIsFulfilledBy(System.Type,System.Type)">
+            <summary>
+            <para>Checks whether a type can be used as the argument for a single generic parameter, when the arguments for the other generic parameters of its declaring type or method are not known.</para>
+            <para>Constraints that refer to other generic parameters are considered satisfied if those parameters can be inferred from the given type in a valid way;
+            for example, given <c>where T : IList&lt;U&gt;</c>, <c>List&lt;int&gt;</c> fulfills T by inferring that U is <c>int</c>.</para>
+            </summary>
+        </member>
+        <member name="M:Sirenix.Utilities.TypeExtensions.IsGenericArgumentValidFor(System.Type,System.Type,System.Type[],System.Type[],System.Boolean,System.Int32)">
+            <summary>
+            Whether <paramref name="argument"/> may be used for the generic parameter <paramref name="parameter"/>, which is one of <paramref name="definitions"/>,
+            when <paramref name="arguments"/> are the arguments for all of <paramref name="definitions"/>. If <paramref name="inferUnknown"/> is true, null entries
+            of <paramref name="arguments"/> are unknown and may be inferred (and filled in) while checking.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Utilities.TypeExtensions.CanCastTo(System.Type,System.Type,System.Int32)">
+            <summary>
+            Whether a value of type <paramref name="from"/> can be cast to <paramref name="to"/>, for the purposes of satisfying a generic constraint.
+            Value types count as boxed, variance applies, and an open generic parameter can be cast to whatever its own constraints can be cast to.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Utilities.TypeExtensions.SubstituteGenericParameters(System.Type,System.Type[],System.Type[])">
+            <summary>
+            Replaces the generic parameters in <paramref name="definitions"/> with the corresponding <paramref name="arguments"/>, anywhere within <paramref name="type"/>.
+            For example, substituting T with int in <c>IList&lt;T[]&gt;</c> gives <c>IList&lt;int[]&gt;</c>. Null arguments, and arguments that are the parameter itself,
+            leave that parameter in place. Returns null if the resulting type can't be constructed.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Utilities.TypeExtensions.TryInferUnknownGenericParameters(System.Type,System.Type,System.Type[],System.Type[],System.Int32)">
+            <summary>
+            Infers unknown generic parameters within <paramref name="target"/> from the type in <paramref name="argument"/>'s hierarchy (itself, its base types or its
+            interfaces) with the same generic type definition, and validates each inferred argument for its parameter.
             </summary>
         </member>
         <member name="M:Sirenix.Utilities.TypeExtensions.GetGenericConstraintsString(System.Type,System.Boolean)">

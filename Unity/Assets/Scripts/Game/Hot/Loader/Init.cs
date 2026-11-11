@@ -51,7 +51,7 @@ namespace Game.Hot
             {
                 byte[] dllBytes = await LoadCodeBytesAsync("Game.Hot.Code.dll.bytes");
                 byte[] pdbBytes = await LoadCodeBytesAsync("Game.Hot.Code.pdb.bytes");
-                Assembly.Load(dllBytes, pdbBytes);
+                UnityEngine.Assemblies.CurrentAssemblies.LoadFromBytes(dllBytes, pdbBytes);
             }
             this.m_HotEntryAsset = await GameEntry.Resource.LoadAssetAsync<GameObject>(AssetUtility.GetGameHotAsset("HotEntry.prefab"));
             this.m_HotEntryGameObject = GameObject.Instantiate(this.m_HotEntryAsset, GameEntry.CodeRunner.transform);

@@ -87,7 +87,6 @@ namespace ThunderFireUITool
         public static void Align(AlignType type)
         {
             List<RectTransform> rects = Utils.GetAllSelectionRectTransform();
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.LayoutTools);
             if (CanAlign(rects))
             {
                 Align(type, rects);
@@ -201,7 +200,6 @@ namespace ThunderFireUITool
         public static void Grid(GridType type)
         {
             List<RectTransform> rects = Utils.GetAllSelectionRectTransform();
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.LayoutTools);
             if (CanGrid(rects))
             {
                 Grid(type, rects);

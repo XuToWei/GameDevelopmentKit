@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Linq;
 using ET.Analyzer.Custom;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -50,12 +49,6 @@ namespace ET.Analyzer
                 
                 if (IsStringType(leftType) || IsStringType(rightType))
                 {
-                    // 检查是否使用了IgnoreStringConcatAttribute特性
-                    if (HasIgnoreStringConcatAttribute(context, binaryExpression))
-                    {
-                        return;
-                    }
-
                     var diagnostic = Diagnostic.Create(
                         CustomStringConcatAnalyzerRule.Rule, 
                         binaryExpression.OperatorToken.GetLocation(), 
@@ -83,12 +76,6 @@ namespace ET.Analyzer
             if (symbol != null && 
                 symbol.ContainingType?.ToString() == "string")
             {
-                // 检查是否使用了IgnoreStringConcatAttribute特性
-                if (HasIgnoreStringConcatAttribute(context, invocation))
-                {
-                    return;
-                }
-
                 if (symbol.Name == "Format")
                 {
                     var diagnostic = Diagnostic.Create(
@@ -121,12 +108,6 @@ namespace ET.Analyzer
 
             var interpolatedString = (InterpolatedStringExpressionSyntax)context.Node;
             
-            // 检查是否使用了IgnoreStringConcatAttribute特性
-            if (HasIgnoreStringConcatAttribute(context, interpolatedString))
-            {
-                return;
-            }
-            
             // 检查字符串内插表达式
             var diagnostic = Diagnostic.Create(
                 CustomStringConcatAnalyzerRule.Rule, 
@@ -138,35 +119,6 @@ namespace ET.Analyzer
         private static bool IsStringType(ITypeSymbol? type)
         {
             return type != null && type.ToString() == "string";
-        }
-
-        private bool HasIgnoreStringConcatAttribute(SyntaxNodeAnalysisContext context, SyntaxNode syntaxNode)
-        {
-            const string IGNORE_STRING_CONCAT_ATTRIBUTE = "Game.IgnoreStringConcatAttribute";
-            
-            // 检查包含该语法节点的类是否有IgnoreStringConcatAttribute特性
-            var classDeclaration = syntaxNode.GetParentClassDeclaration();
-            if (classDeclaration != null)
-            {
-                var classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
-                if (classSymbol != null && classSymbol.HasAttribute(IGNORE_STRING_CONCAT_ATTRIBUTE))
-                {
-                    return true;
-                }
-            }
-            
-            // 检查包含该语法节点的方法是否有IgnoreStringConcatAttribute特性
-            var methodDeclaration = syntaxNode.GetNeareastAncestor<MethodDeclarationSyntax>();
-            if (methodDeclaration != null)
-            {
-                var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration);
-                if (methodSymbol != null && methodSymbol.HasAttribute(IGNORE_STRING_CONCAT_ATTRIBUTE))
-                {
-                    return true;
-                }
-            }
-            
-            return false;
         }
     }
 }

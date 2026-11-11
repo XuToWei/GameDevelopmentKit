@@ -95,6 +95,8 @@ HybridCLR 同时维护热更新程序集列表与 AOT 补充元数据。完整�
 
 ET 的 `CodeMode` 决定客户端、服务端或两者的程序集内容。它由 `UNITY_ET_CODEMODE_CLIENT`、`SERVER`、`CLIENTSERVER` 三个互斥符号控制。
 
+Unity `6000.6` 中，`Unity.Mathematics` 的 `float3`、`quaternion` 等类型转发到引擎模块 `UnityEngine.MathematicsModule`。因此 Unity 侧的 `Game.ET.Code.Model` 与 `Game.ET.Code.Hotfix` 已设置 `noEngineReferences=false`，以解析这些类型。业务分层仍按上表区分，独立服务端继续由 `DotNet/` 的 .NET 项目引用决定，不受 Unity `.asmdef` 设置影响。
+
 ## 如何选择目录
 
 | 需求 | 推荐位置 |

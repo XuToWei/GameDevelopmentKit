@@ -64,7 +64,7 @@ namespace Game
             base.CalculateLayoutInputHorizontal();
 
             float minWidth = GetGreatestMinimumChildWidth() + padding.horizontal;
-            SetLayoutInputForAxis(minWidth, -1f, -1f, 0);
+            SetLayoutInputForAxis(minWidth, LayoutUtility.DefaultMaxSize, -1f, -1f, 0);
         }
 
         public override void CalculateLayoutInputVertical()
@@ -96,7 +96,7 @@ namespace Game
             {
                 if (axis == 1)
                 {
-                    SetLayoutInputForAxis(totalHeight, totalHeight, -1f, axis);
+                    SetLayoutInputForAxis(totalHeight, LayoutUtility.DefaultMaxSize, totalHeight, -1f, axis);
                 }
 
                 return totalHeight;

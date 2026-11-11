@@ -247,6 +247,7 @@ namespace UnityEngine.UI
 
         }
 
+        [System.NonSerialized]
         public TextGenerationSettings customGenerationSettings;
         public TextGenerationSettings CustomGenerationSettings { get => customGenerationSettings; }
 
