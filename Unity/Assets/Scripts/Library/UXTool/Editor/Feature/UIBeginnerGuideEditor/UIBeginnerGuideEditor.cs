@@ -55,7 +55,7 @@ namespace ThunderFireUITool
         /// <summary>
         /// key:instanceID, value: info
         /// </summary>
-        private Dictionary<int, GuideRootInfo> GuideRootInfos = new Dictionary<int, GuideRootInfo>();
+        private Dictionary<EntityId, GuideRootInfo> GuideRootInfos = new Dictionary<EntityId, GuideRootInfo>();
 
         private List<Transform> allChilds;
         private List<Transform> allChildsForDiff;
@@ -81,7 +81,7 @@ namespace ThunderFireUITool
             InitToolBar();
 
             SceneViewContextMenu.addContextMenuFunc += OnRightClickInScene;
-            EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += OnHierarchyGUI;
             PrefabStageUtils.AddClosingEvent(PrefabStageClosing);
             PrefabStageUtils.AddOpenedEvent(PrefabStageClosing);
             EditorApplication.update += UpdateTransform;
@@ -154,7 +154,7 @@ namespace ThunderFireUITool
             }
 
             SceneViewContextMenu.addContextMenuFunc -= OnRightClickInScene;
-            EditorApplication.hierarchyWindowItemOnGUI -= OnHierarchyGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= OnHierarchyGUI;
             PrefabStageUtils.RemoveClosingEvent(PrefabStageClosing);
             PrefabStageUtils.RemoveOpenedEvent(PrefabStageClosing);
             EditorApplication.update -= UpdateTransform;
@@ -245,7 +245,7 @@ namespace ThunderFireUITool
                 name = go.name,
                 displayName = customGuideRootNames.ContainsKey(formatRootName) ? customGuideRootNames[formatRootName] : originName
             };
-            GuideRootInfos.Add(go.GetInstanceID(), rootInfo);
+            GuideRootInfos.Add(go.GetEntityId(), rootInfo);
 
             foreach (Transform child in go.transform)
             {
@@ -262,7 +262,7 @@ namespace ThunderFireUITool
                         name = highlightchild.gameObject.name,
                         displayName = EditorLocalization.GetLocalization("UIBeginnerGuide", "highlightchild")
                     };
-                    GuideRootInfos.Add(highlightchild.gameObject.GetInstanceID(), Info1);
+                    GuideRootInfos.Add(highlightchild.gameObject.GetEntityId(), Info1);
                 }
                 string formatname = child.gameObject.name.Split('_')[0];
 
@@ -271,7 +271,7 @@ namespace ThunderFireUITool
                     name = child.gameObject.name,
                     displayName = customGuideRootNames.ContainsKey(formatname) ? customGuideRootNames[formatname] : child.gameObject.name
                 };
-                GuideRootInfos.Add(child.gameObject.GetInstanceID(), Info);
+                GuideRootInfos.Add(child.gameObject.GetEntityId(), Info);
             }
             grandsons = allChilds.Except(sons).ToList();
 
@@ -464,7 +464,7 @@ namespace ThunderFireUITool
                 beginnerGuide.HighLightAreaPreview(guideData.highLightTarget.GetComponent<RectTransform>());
             });
         }
-        private void OnHierarchyGUI(int instanceID, Rect selectionRect)
+        private void OnHierarchyGUI(EntityId instanceID, Rect selectionRect)
         {
             GameObject go = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             if (go == null) return;
@@ -654,24 +654,24 @@ namespace ThunderFireUITool
         private void FindNewObject()
         {
             Transform[] allChild = _gameObjectForDiff.GetComponentsInChildren<Transform>(true);
-            List<int> list = new List<int>();
+            List<EntityId> list = new List<EntityId>();
             List<Transform> transforms = new List<Transform>();
 
             GuideWidgetBase[] idsList = _gameObjectForDiff.GetComponentsInChildren<GuideWidgetBase>(true);
             foreach (Transform item in allChildsForDiff)
             {
-                list.Add(item.GetInstanceID());
+                list.Add(item.GetEntityId());
             }
             foreach (var ids in idsList)
             {
-                list = list.Union(ids.GetControlledInstanceIds()).ToList<int>();
+                list = list.Union(ids.GetControlledInstanceIds()).ToList<EntityId>();
             }
             // list.Add(_gameObjectForDiff.transform.GetInstanceID());
 
             guideData.GuideSelfDefinedData.Clear();
             foreach (Transform child in allChild)
             {
-                if (!list.Contains(child.GetInstanceID()))
+                if (!list.Contains(child.GetEntityId()))
                 {
                     child.gameObject.AddComponent<GuideSelfDefinedData>();
                     transforms.Add(child);

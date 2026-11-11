@@ -16,7 +16,7 @@ namespace ET
     internal static class LogRedirection
     {
         [OnOpenAsset(0)]
-        private static bool OnOpenAsset(int instanceID, int line)
+        private static bool OnOpenAsset(EntityId instanceID, int line)
         {
             if (line <= 0)
             {

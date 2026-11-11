@@ -110,7 +110,7 @@ namespace UnityGameFramework.Extension
                 return AssetType.Text;
             }
 
-            if (obj is DefaultAsset && ProjectWindowUtil.IsFolder(obj.GetInstanceID()))
+            if (obj is DefaultAsset && ProjectWindowUtil.IsFolder(obj.GetEntityId()))
             {
                 return AssetType.Folder;
             }

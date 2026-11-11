@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AgentBridge;
+using Unity.Pipeline.Commands;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using StateController;
+using Unity.Pipeline;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -12,70 +12,119 @@ using StateControllerComponent = StateController.StateController;
 
 namespace Game.Editor
 {
-    /// <summary>
-    /// Unity Agent Bridge command for StateController inspection, state switching, and simple authoring.
-    /// </summary>
-    public sealed class StateControllerCommand : ICommandHandler
+    /// <summary>Inspect and edit StateController groups, states, and binding nodes.</summary>
+    // Pipeline uses Task return types to await commands and exclude them from synchronous job batches.
+#pragma warning disable ET0501
+    public static class StateControllerCommand
     {
         private const string ErrorCode = "STATECONTROLLER_ERROR";
+        private const string Group = "game.statecontroller";
 
-        private static readonly HashSet<string> s_Actions = new HashSet<string>
+        // Task-returning entry points keep these Prefab/file operations out of transactional job batches.
+        [CliGroupCommand(Group, "列出目标下的 StateController 状态组与状态。")]
+        public static Task<object> List(
+            [CliArg("asset_path", "Prefab 资源路径，优先于 instance_id/path/当前选择。")] string assetPath = null,
+            [CliArg("path", "场景层级路径。")] string path = null,
+            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ObjectId? instanceId = null)
         {
-            "list", "list_nodes", "set_state", "add_data", "add_state", "add_state_node"
-        };
+            return Task.FromResult(Execute(new Arguments { AssetPath = assetPath, Path = path, InstanceId = instanceId }, "list"));
+        }
 
-        public string Command => "statecontroller";
-        public string Description => "StateController 编辑工具：列出控制器状态组/状态、列出 StateBinding 节点、切换状态、新增 group/state、给节点添加 StateBinding 组件。action=list/list_nodes/set_state/add_data/add_state/add_state_node，默认 list；dataName 保留为兼容参数，含义为 groupName；目标支持 assetPath(prefab)/path(scene)/instanceId/当前选择。写操作会自动保存 Prefab 或标记 Scene dirty。";
-        public string Group => "Game";
-        public bool CanDisable => true;
-        public CommandBatchMode BatchMode => CommandBatchMode.NotAllowed;
-
-        // AgentBridge's Task<object> contract requires an async method builder, while ET0501
-        // normally forbids non-UniTask async methods in project code.
-        public Task<object> ExecuteAsync(JObject @params)
+        [CliGroupCommand(Group, "列出 StateBinding 节点，可按状态组和节点路径过滤。")]
+        public static Task<object> ListNodes(
+            [CliArg("asset_path", "Prefab 资源路径。")] string assetPath = null,
+            [CliArg("path", "场景层级路径。")] string path = null,
+            [CliArg("instance_id", "场景对象实例 ID。")] ObjectId? instanceId = null,
+            [CliArg("group_name", "只返回绑定到该状态组的节点。")] string groupName = null,
+            [CliArg("node_path", "节点路径，支持含根节点路径、相对路径或唯一节点名。")] string nodePath = null)
         {
-            string action = GetString(@params, "action", "list").ToLowerInvariant();
-            if (!s_Actions.Contains(action))
-            {
-                throw new CommandException(ErrorCodes.InvalidParams,
-                    $"Unknown action: {action}. Supported: {string.Join(", ", s_Actions)}");
-            }
+            return Task.FromResult(Execute(new Arguments { AssetPath = assetPath, Path = path, InstanceId = instanceId,
+                GroupName = groupName, NodePath = nodePath }, "list_nodes"));
+        }
 
-            if (!TryResolveRoot(@params, out GameObject root, out bool isPrefabContents, out string assetPath,
+        [CliGroupCommand(Group, "切换状态；state_name 与 state_index 必须且只能提供一个。Prefab 自动保存，Scene 标记 dirty。")]
+        public static Task<object> SetState(
+            [CliArg("group_name", "状态组名。", Required = true)] string groupName,
+            [CliArg("state_name", "目标状态名，与 state_index 二选一。")] string stateName = null,
+            [CliArg("state_index", "目标状态的非负索引，与 state_name 二选一。")] int? stateIndex = null,
+            [CliArg("asset_path", "Prefab 资源路径。")] string assetPath = null,
+            [CliArg("path", "场景层级路径。")] string path = null,
+            [CliArg("instance_id", "场景对象实例 ID。")] ObjectId? instanceId = null,
+            [CliArg("controller_path", "目标有多个控制器时，用控制器路径消歧。")] string controllerPath = null)
+        {
+            return Task.FromResult(Execute(new Arguments { GroupName = groupName, StateName = stateName, StateIndex = stateIndex,
+                AssetPath = assetPath, Path = path, InstanceId = instanceId, ControllerPath = controllerPath }, "set_state"));
+        }
+
+        [CliGroupCommand(Group, "新增状态组及可选的初始状态。Prefab 自动保存，Scene 标记 dirty。")]
+        public static Task<object> AddGroup(
+            [CliArg("group_name", "新增状态组名。", Required = true)] string groupName,
+            [CliArg("states", "初始状态名的 JSON 数组，例如 [\"Normal\",\"Selected\"]；不得重复。")] string[] states = null,
+            [CliArg("asset_path", "Prefab 资源路径。")] string assetPath = null,
+            [CliArg("path", "场景层级路径。")] string path = null,
+            [CliArg("instance_id", "场景对象实例 ID。")] ObjectId? instanceId = null,
+            [CliArg("controller_path", "目标有多个控制器时，用控制器路径消歧。")] string controllerPath = null)
+        {
+            return Task.FromResult(Execute(new Arguments { GroupName = groupName, States = states,
+                AssetPath = assetPath, Path = path, InstanceId = instanceId, ControllerPath = controllerPath }, "add_group"));
+        }
+
+        [CliGroupCommand(Group, "向已有状态组添加状态并对齐绑定节点。Prefab 自动保存，Scene 标记 dirty。")]
+        public static Task<object> AddState(
+            [CliArg("group_name", "已有状态组名。", Required = true)] string groupName,
+            [CliArg("state_name", "新增状态名。", Required = true)] string stateName,
+            [CliArg("asset_path", "Prefab 资源路径。")] string assetPath = null,
+            [CliArg("path", "场景层级路径。")] string path = null,
+            [CliArg("instance_id", "场景对象实例 ID。")] ObjectId? instanceId = null,
+            [CliArg("controller_path", "目标有多个控制器时，用控制器路径消歧。")] string controllerPath = null)
+        {
+            return Task.FromResult(Execute(new Arguments { GroupName = groupName, StateName = stateName,
+                AssetPath = assetPath, Path = path, InstanceId = instanceId, ControllerPath = controllerPath }, "add_state"));
+        }
+
+        [CliGroupCommand(Group, "为目标节点添加 StateBinding 并绑定状态组。Prefab 自动保存，Scene 标记 dirty。")]
+        public static Task<object> AddStateNode(
+            [CliArg("group_name", "已有状态组名。", Required = true)] string groupName,
+            [CliArg("state_type", "StateBinding 子类名或完整类型名。", Required = true)] string stateType,
+            [CliArg("asset_path", "Prefab 资源路径。")] string assetPath = null,
+            [CliArg("path", "场景层级路径。")] string path = null,
+            [CliArg("instance_id", "场景对象实例 ID。")] ObjectId? instanceId = null,
+            [CliArg("node_path", "根节点下的路径，省略时操作根节点。")] string nodePath = null)
+        {
+            return Task.FromResult(Execute(new Arguments { GroupName = groupName, StateType = stateType,
+                AssetPath = assetPath, Path = path, InstanceId = instanceId, NodePath = nodePath }, "add_state_node"));
+        }
+
+        private static object Execute(Arguments args, string action)
+        {
+            if (!GameCommandTarget.TryResolveRoot(args.AssetPath, args.Path, args.InstanceId,
+                    out GameObject root, out bool isPrefabContents, out string assetPath,
                     out string targetLabel, out string error))
             {
-                throw new CommandException(ErrorCode, error);
+                throw new GameCommandException(ErrorCode, error);
             }
-
             try
             {
                 if (action == "add_state_node")
                 {
-                    return Task.FromResult<object>(AddStateNode(@params, root, targetLabel, isPrefabContents, assetPath));
+                    return AddStateNode(args, root, targetLabel, isPrefabContents, assetPath);
                 }
                 if (action == "list_nodes")
                 {
-                    return Task.FromResult<object>(ListNodes(@params, root, targetLabel));
+                    return ListNodes(args, root, targetLabel);
                 }
-
                 StateControllerComponent[] controllers = root.GetComponentsInChildren<StateControllerComponent>(true);
                 if (controllers.Length == 0)
                 {
-                    throw new CommandException(ErrorCode, $"No StateController found under '{targetLabel}'.");
+                    throw new GameCommandException(ErrorCode, $"No StateController found under '{targetLabel}'.");
                 }
-
                 switch (action)
                 {
-                    case "list":
-                        return Task.FromResult<object>(List(root, targetLabel, controllers));
-                    case "set_state":
-                        return Task.FromResult<object>(SetState(@params, root, targetLabel, controllers, isPrefabContents, assetPath));
-                    case "add_data":
-                        return Task.FromResult<object>(AddData(@params, root, targetLabel, controllers, isPrefabContents, assetPath));
-                    case "add_state":
-                        return Task.FromResult<object>(AddState(@params, root, targetLabel, controllers, isPrefabContents, assetPath));
-                    default:
-                        throw new CommandException(ErrorCode, $"Unhandled action: {action}");
+                    case "list": return List(root, targetLabel, controllers);
+                    case "set_state": return SetState(args, root, targetLabel, controllers, isPrefabContents, assetPath);
+                    case "add_group": return AddGroup(args, root, targetLabel, controllers, isPrefabContents, assetPath);
+                    case "add_state": return AddState(args, root, targetLabel, controllers, isPrefabContents, assetPath);
+                    default: throw new GameCommandException(ErrorCode, $"Unhandled action: {action}");
                 }
             }
             finally
@@ -86,68 +135,6 @@ namespace Game.Editor
                 }
             }
         }
-
-        public JObject ParamsSchema { get; } = JObject.Parse(@"{
-  ""type"": ""object"",
-  ""additionalProperties"": false,
-  ""properties"": {
-    ""action"": {
-      ""type"": ""string"",
-      ""default"": ""list"",
-      ""enum"": [""list"", ""list_nodes"", ""set_state"", ""add_data"", ""add_state"", ""add_state_node""],
-      ""description"": ""默认 list。list/list_nodes 只读；set_state/add_data/add_state/add_state_node 会修改目标，Prefab 自动保存，Scene 标记 dirty。""
-    },
-    ""assetPath"": {
-      ""type"": ""string"",
-      ""minLength"": 1,
-      ""description"": ""Prefab 资源路径。传入后通过 PrefabUtility.LoadPrefabContents 编辑并保存 prefab；优先级高于 instanceId/path/selection。""
-    },
-    ""path"": {
-      ""type"": ""string"",
-      ""minLength"": 1,
-      ""description"": ""Scene 中 GameObject 的层级路径，包含根节点名；未传 assetPath/instanceId 时使用。""
-    },
-    ""instanceId"": {
-      ""type"": ""integer"",
-      ""description"": ""Scene 对象 instanceId；未传 assetPath 时优先于 path。""
-    },
-    ""nodePath"": {
-      ""type"": ""string"",
-      ""minLength"": 1,
-      ""description"": ""目标根节点下的节点路径；可直接回传 list_nodes 返回的含根节点路径，也兼容不含根节点的相对路径。add_state_node 用它定位节点，list_nodes 用它过滤。""
-    },
-    ""controllerPath"": {
-      ""type"": ""string"",
-      ""minLength"": 1,
-      ""description"": ""当目标下有多个 StateController 时用于消歧；可用 list 返回的含根节点路径、不含根节点的相对路径或唯一节点名。""
-    },
-    ""dataName"": {
-      ""type"": ""string"",
-      ""minLength"": 1,
-      ""description"": ""兼容参数名，含义为 groupName；set_state/add_data/add_state/add_state_node 使用；list_nodes 可用作过滤条件。""
-    },
-    ""stateName"": {
-      ""type"": ""string"",
-      ""minLength"": 1,
-      ""description"": ""set_state 要切换到的状态名，或 add_state 要新增的状态名。set_state 可用 stateIndex 替代。""
-    },
-    ""stateIndex"": {
-      ""type"": ""integer"",
-      ""minimum"": 0,
-      ""description"": ""set_state 可选。按状态索引切换，未传 stateName 时使用。""
-    },
-    ""states"": {
-      ""type"": ""string"",
-      ""minLength"": 1,
-      ""description"": ""add_data 可选。逗号分隔且不可重复的初始状态名，例如 Normal,Selected,Disabled。""
-    },
-    ""stateType"": {
-      ""type"": ""string"",
-      ""minLength"": 1,
-      ""description"": ""add_state_node 必填。StateBinding 子类名或完整类型名，例如 GameObjectActiveBinding。""
-    }
-  }
-}");
 
         private static object List(GameObject root, string targetLabel, StateControllerComponent[] controllers)
         {
@@ -181,10 +168,10 @@ namespace Game.Editor
             };
         }
 
-        private static object ListNodes(JObject @params, GameObject root, string targetLabel)
+        private static object ListNodes(Arguments args, GameObject root, string targetLabel)
         {
-            string dataFilter = GetString(@params, "dataName", null);
-            string nodeFilter = GetString(@params, "nodePath", null);
+            string dataFilter = args.GroupName;
+            string nodeFilter = args.NodePath;
 
             var nodes = new List<object>();
             foreach (StateBinding state in root.GetComponentsInChildren<StateBinding>(true))
@@ -259,7 +246,7 @@ namespace Game.Editor
             };
         }
 
-        private static BindingInfo BuildBinding(string dataName, SerializedProperty stateValuesProp)
+        private static BindingInfo BuildBinding(string groupName, SerializedProperty stateValuesProp)
         {
             var slots = new List<object>();
             if (stateValuesProp != null && stateValuesProp.isArray)
@@ -279,16 +266,16 @@ namespace Game.Editor
 
             return new BindingInfo
             {
-                DataName = dataName,
+                GroupName = groupName,
                 StateValues = slots
             };
         }
 
-        private static bool BindingsContainData(List<BindingInfo> bindings, string dataName)
+        private static bool BindingsContainData(List<BindingInfo> bindings, string groupName)
         {
             foreach (BindingInfo binding in bindings)
             {
-                if (binding.DataName == dataName)
+                if (binding.GroupName == groupName)
                 {
                     return true;
                 }
@@ -337,67 +324,67 @@ namespace Game.Editor
             return index >= 0 && index < names.Length ? names[index] : index.ToString();
         }
 
-        private static object SetState(JObject @params, GameObject root, string targetLabel,
+        private static object SetState(Arguments args, GameObject root, string targetLabel,
             StateControllerComponent[] controllers, bool isPrefabContents, string assetPath)
         {
-            string dataName = GetString(@params, "dataName", null);
-            if (string.IsNullOrWhiteSpace(dataName))
+            string groupName = args.GroupName;
+            if (string.IsNullOrWhiteSpace(groupName))
             {
-                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'dataName' for set_state.");
+                throw new GameCommandException(GameCommandException.InvalidParams, "Missing 'group_name' for set_state.");
             }
 
-            bool hasStateName = HasParam(@params, "stateName");
-            string stateName = GetString(@params, "stateName", null);
-            bool hasStateIndex = HasParam(@params, "stateIndex");
-            int stateIndex = GetInt(@params, "stateIndex", -1);
+            bool hasStateName = args.StateName != null;
+            string stateName = args.StateName;
+            bool hasStateIndex = args.StateIndex.HasValue;
+            int stateIndex = args.StateIndex ?? -1;
             if (!hasStateName && !hasStateIndex)
             {
-                throw new CommandException(ErrorCodes.InvalidParams, "Provide 'stateName' or 'stateIndex' for set_state.");
+                throw new GameCommandException(GameCommandException.InvalidParams, "Provide 'state_name' or 'state_index' for set_state.");
             }
             if (hasStateName && hasStateIndex)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
-                    "Provide only one of 'stateName' or 'stateIndex' for set_state.");
+                throw new GameCommandException(GameCommandException.InvalidParams,
+                    "Provide only one of 'state_name' or 'state_index' for set_state.");
             }
             if (hasStateName && string.IsNullOrWhiteSpace(stateName))
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
-                    "'stateName' must not be empty or whitespace for set_state.");
+                throw new GameCommandException(GameCommandException.InvalidParams,
+                    "'state_name' must not be empty or whitespace for set_state.");
             }
 
-            string controllerPath = GetString(@params, "controllerPath", null);
-            StateControllerComponent controller = ResolveController(root, controllers, controllerPath, dataName, out string resolveError);
+            string controllerPath = args.ControllerPath;
+            StateControllerComponent controller = ResolveController(root, controllers, controllerPath, groupName, out string resolveError);
             if (controller == null)
             {
-                throw new CommandException(ErrorCode, resolveError);
+                throw new GameCommandException(ErrorCode, resolveError);
             }
 
-            string[] states = controller.GetStateNames(dataName);
+            string[] states = controller.GetStateNames(groupName);
             if (states == null)
             {
-                throw new CommandException(ErrorCode,
-                    $"Data '{dataName}' not found on controller '{GetRelativePath(root.transform, controller.transform)}'.");
+                throw new GameCommandException(ErrorCode,
+                    $"Data '{groupName}' not found on controller '{GetRelativePath(root.transform, controller.transform)}'.");
             }
 
             if (hasStateName)
             {
                 if (Array.IndexOf(states, stateName) < 0)
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
-                        $"State '{stateName}' not in data '{dataName}'. Available: [{string.Join(", ", states)}]");
+                    throw new GameCommandException(GameCommandException.InvalidParams,
+                        $"State '{stateName}' not in data '{groupName}'. Available: [{string.Join(", ", states)}]");
                 }
             }
             else
             {
                 if (stateIndex < 0 || stateIndex >= states.Length)
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
-                        $"stateIndex {stateIndex} out of range for data '{dataName}' (count {states.Length}).");
+                    throw new GameCommandException(GameCommandException.InvalidParams,
+                        $"stateIndex {stateIndex} out of range for data '{groupName}' (count {states.Length}).");
                 }
                 stateName = states[stateIndex];
             }
 
-            controller.SetCurrentStateName(dataName, stateName);
+            controller.SetCurrentStateName(groupName, stateName);
             Persist(controller, isPrefabContents, root, assetPath);
 
             return new
@@ -405,53 +392,53 @@ namespace Game.Editor
                 action = "set_state",
                 target = targetLabel,
                 controllerPath = GetRelativePath(root.transform, controller.transform),
-                dataName,
+                groupName,
                 stateName,
                 stateIndex = Array.IndexOf(states, stateName)
             };
         }
 
-        private static object AddData(JObject @params, GameObject root, string targetLabel,
+        private static object AddGroup(Arguments args, GameObject root, string targetLabel,
             StateControllerComponent[] controllers, bool isPrefabContents, string assetPath)
         {
-            string dataName = GetString(@params, "dataName", null);
-            if (string.IsNullOrWhiteSpace(dataName))
+            string groupName = args.GroupName;
+            if (string.IsNullOrWhiteSpace(groupName))
             {
-                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'dataName' for add_data.");
+                throw new GameCommandException(GameCommandException.InvalidParams, "Missing 'group_name' for add_group.");
             }
 
-            string controllerPath = GetString(@params, "controllerPath", null);
+            string controllerPath = args.ControllerPath;
             StateControllerComponent controller = ResolveController(root, controllers, controllerPath, null, out string resolveError);
             if (controller == null)
             {
-                throw new CommandException(ErrorCode, resolveError);
+                throw new GameCommandException(ErrorCode, resolveError);
             }
 
-            var initialStates = SplitCsv(GetString(@params, "states", null));
+            var initialStates = ValidateStates(args.States);
             var so = new SerializedObject(controller);
             SerializedProperty datas = so.FindProperty("m_Groups");
             if (datas == null)
             {
-                throw new CommandException(ErrorCode, "StateController.m_Groups not found (package layout changed?).");
+                throw new GameCommandException(ErrorCode, "StateController.m_Groups not found (package layout changed?).");
             }
 
             for (int i = 0; i < datas.arraySize; i++)
             {
-                if (datas.GetArrayElementAtIndex(i).FindPropertyRelative("m_Name").stringValue == dataName)
+                if (datas.GetArrayElementAtIndex(i).FindPropertyRelative("m_Name").stringValue == groupName)
                 {
-                    throw new CommandException(ErrorCode, $"Data '{dataName}' already exists on controller.");
+                    throw new GameCommandException(ErrorCode, $"Data '{groupName}' already exists on controller.");
                 }
             }
 
             if (!isPrefabContents)
             {
-                Undo.RecordObject(controller, "AgentBridge StateController Add Data");
+                Undo.RecordObject(controller, "CLI StateController Add Data");
             }
 
             int index = datas.arraySize;
             datas.InsertArrayElementAtIndex(index);
             SerializedProperty dataEl = datas.GetArrayElementAtIndex(index);
-            dataEl.FindPropertyRelative("m_Name").stringValue = dataName;
+            dataEl.FindPropertyRelative("m_Name").stringValue = groupName;
             SerializedProperty statesProp = dataEl.FindPropertyRelative("m_States");
             statesProp.ClearArray();
             foreach (string state in initialStates)
@@ -464,29 +451,29 @@ namespace Game.Editor
 
             return new
             {
-                action = "add_data",
+                action = "add_group",
                 target = targetLabel,
                 controllerPath = GetRelativePath(root.transform, controller.transform),
-                dataName,
+                groupName,
                 states = initialStates
             };
         }
 
-        private static object AddState(JObject @params, GameObject root, string targetLabel,
+        private static object AddState(Arguments args, GameObject root, string targetLabel,
             StateControllerComponent[] controllers, bool isPrefabContents, string assetPath)
         {
-            string dataName = GetString(@params, "dataName", null);
-            string stateName = GetString(@params, "stateName", null);
-            if (string.IsNullOrWhiteSpace(dataName) || string.IsNullOrWhiteSpace(stateName))
+            string groupName = args.GroupName;
+            string stateName = args.StateName;
+            if (string.IsNullOrWhiteSpace(groupName) || string.IsNullOrWhiteSpace(stateName))
             {
-                throw new CommandException(ErrorCodes.InvalidParams, "Provide both 'dataName' and 'stateName' for add_state.");
+                throw new GameCommandException(GameCommandException.InvalidParams, "Provide both 'group_name' and 'state_name' for add_state.");
             }
 
-            string controllerPath = GetString(@params, "controllerPath", null);
-            StateControllerComponent controller = ResolveController(root, controllers, controllerPath, dataName, out string resolveError);
+            string controllerPath = args.ControllerPath;
+            StateControllerComponent controller = ResolveController(root, controllers, controllerPath, groupName, out string resolveError);
             if (controller == null)
             {
-                throw new CommandException(ErrorCode, resolveError);
+                throw new GameCommandException(ErrorCode, resolveError);
             }
 
             var so = new SerializedObject(controller);
@@ -495,7 +482,7 @@ namespace Game.Editor
             for (int i = 0; i < datas.arraySize; i++)
             {
                 SerializedProperty el = datas.GetArrayElementAtIndex(i);
-                if (el.FindPropertyRelative("m_Name").stringValue == dataName)
+                if (el.FindPropertyRelative("m_Name").stringValue == groupName)
                 {
                     dataEl = el;
                     break;
@@ -503,7 +490,7 @@ namespace Game.Editor
             }
             if (dataEl == null)
             {
-                throw new CommandException(ErrorCode, $"Data '{dataName}' not found on controller.");
+                throw new GameCommandException(ErrorCode, $"Data '{groupName}' not found on controller.");
             }
 
             SerializedProperty statesProp = dataEl.FindPropertyRelative("m_States");
@@ -511,20 +498,20 @@ namespace Game.Editor
             {
                 if (statesProp.GetArrayElementAtIndex(i).FindPropertyRelative("m_Name").stringValue == stateName)
                 {
-                    throw new CommandException(ErrorCode, $"State '{stateName}' already exists in data '{dataName}'.");
+                    throw new GameCommandException(ErrorCode, $"State '{stateName}' already exists in data '{groupName}'.");
                 }
             }
 
             if (!isPrefabContents)
             {
-                Undo.RecordObject(controller, "AgentBridge StateController Add State");
+                Undo.RecordObject(controller, "CLI StateController Add State");
             }
 
             AddStateElement(statesProp, stateName);
             so.ApplyModifiedPropertiesWithoutUndo();
 
-            string[] states = controller.GetStateNames(dataName) ?? Array.Empty<string>();
-            int aligned = AlignEffectNodes(controller, dataName, states);
+            string[] states = controller.GetStateNames(groupName) ?? Array.Empty<string>();
+            int aligned = AlignEffectNodes(controller, groupName, states);
             Persist(controller, isPrefabContents, root, assetPath);
 
             return new
@@ -532,87 +519,87 @@ namespace Game.Editor
                 action = "add_state",
                 target = targetLabel,
                 controllerPath = GetRelativePath(root.transform, controller.transform),
-                dataName,
+                groupName,
                 stateName,
                 states,
                 alignedEffectNodes = aligned
             };
         }
 
-        private static object AddStateNode(JObject @params, GameObject root, string targetLabel,
+        private static object AddStateNode(Arguments args, GameObject root, string targetLabel,
             bool isPrefabContents, string assetPath)
         {
-            string stateTypeName = GetString(@params, "stateType", null);
+            string stateTypeName = args.StateType;
             if (string.IsNullOrWhiteSpace(stateTypeName))
             {
-                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'stateType' for add_state_node.");
+                throw new GameCommandException(GameCommandException.InvalidParams, "Missing 'state_type' for add_state_node.");
             }
-            string dataName = GetString(@params, "dataName", null);
-            if (string.IsNullOrWhiteSpace(dataName))
+            string groupName = args.GroupName;
+            if (string.IsNullOrWhiteSpace(groupName))
             {
-                throw new CommandException(ErrorCodes.InvalidParams, "Missing 'dataName' for add_state_node.");
+                throw new GameCommandException(GameCommandException.InvalidParams, "Missing 'group_name' for add_state_node.");
             }
 
             Type stateType = ResolveStateType(stateTypeName);
             if (stateType == null)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Binding type '{stateTypeName}' not found (must be a non-abstract StateBinding subclass).");
             }
 
             Transform node = root.transform;
-            string nodePath = GetString(@params, "nodePath", null);
+            string nodePath = args.NodePath;
             if (!string.IsNullOrEmpty(nodePath))
             {
                 node = FindNode(root.transform, nodePath);
                 if (node == null)
                 {
-                    throw new CommandException(ErrorCode, $"Node '{nodePath}' not found under '{targetLabel}'.");
+                    throw new GameCommandException(ErrorCode, $"Node '{nodePath}' not found under '{targetLabel}'.");
                 }
             }
 
             StateControllerComponent controller = node.GetComponentInParent<StateControllerComponent>(true);
             if (controller == null)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Node '{GetRelativePath(root.transform, node)}' has no StateController ancestor.");
             }
 
-            string[] states = controller.GetStateNames(dataName);
+            string[] states = controller.GetStateNames(groupName);
             if (states == null)
             {
-                throw new CommandException(ErrorCode,
-                    $"Data '{dataName}' not found on controller '{GetRelativePath(root.transform, controller.transform)}'.");
+                throw new GameCommandException(ErrorCode,
+                    $"Data '{groupName}' not found on controller '{GetRelativePath(root.transform, controller.transform)}'.");
             }
             if (node.GetComponent(stateType) != null)
             {
-                throw new CommandException(ErrorCode, $"Node already has a '{stateType.Name}' component.");
+                throw new GameCommandException(ErrorCode, $"Node already has a '{stateType.Name}' component.");
             }
 
             Component comp = node.gameObject.AddComponent(stateType);
             if (!isPrefabContents)
             {
-                Undo.RegisterCreatedObjectUndo(comp, "AgentBridge StateController Add State Node");
+                Undo.RegisterCreatedObjectUndo(comp, "CLI StateController Add State Node");
             }
 
             var so = new SerializedObject(comp);
             string boundField;
             if (so.FindProperty("m_GroupName") != null)
             {
-                so.FindProperty("m_GroupName").stringValue = dataName;
+                so.FindProperty("m_GroupName").stringValue = groupName;
                 AlignStateValues(so.FindProperty("m_ValueMappings"), states);
                 boundField = "m_GroupName";
             }
             else if (so.FindProperty("m_GroupName1") != null)
             {
-                so.FindProperty("m_GroupName1").stringValue = dataName;
+                so.FindProperty("m_GroupName1").stringValue = groupName;
                 AlignStateValues(so.FindProperty("m_ValueMappings1"), states);
                 boundField = "m_GroupName1";
             }
             else
             {
                 UnityEngine.Object.DestroyImmediate(comp, true);
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"'{stateType.Name}' has no recognized group field (m_GroupName / m_GroupName1).");
             }
             so.ApplyModifiedPropertiesWithoutUndo();
@@ -626,7 +613,7 @@ namespace Game.Editor
                 nodePath = GetRelativePath(root.transform, node),
                 stateType = stateType.Name,
                 controllerPath = GetRelativePath(root.transform, controller.transform),
-                dataName,
+                groupName,
                 boundField,
                 stateValueSlots = states
             };
@@ -695,7 +682,7 @@ namespace Game.Editor
             }
         }
 
-        private static int AlignEffectNodes(StateControllerComponent controller, string dataName, string[] states)
+        private static int AlignEffectNodes(StateControllerComponent controller, string groupName, string[] states)
         {
             int count = 0;
             foreach (StateBinding state in controller.GetComponentsInChildren<StateBinding>(true))
@@ -710,7 +697,7 @@ namespace Game.Editor
                 SerializedProperty dn = so.FindProperty("m_GroupName");
                 if (dn != null)
                 {
-                    if (dn.stringValue == dataName)
+                    if (dn.stringValue == groupName)
                     {
                         AlignStateValues(so.FindProperty("m_ValueMappings"), states);
                         changed = true;
@@ -719,13 +706,13 @@ namespace Game.Editor
                 else
                 {
                     SerializedProperty dn1 = so.FindProperty("m_GroupName1");
-                    if (dn1 != null && dn1.stringValue == dataName)
+                    if (dn1 != null && dn1.stringValue == groupName)
                     {
                         AlignStateValues(so.FindProperty("m_ValueMappings1"), states);
                         changed = true;
                     }
                     SerializedProperty dn2 = so.FindProperty("m_GroupName2");
-                    if (dn2 != null && dn2.stringValue == dataName)
+                    if (dn2 != null && dn2.stringValue == groupName)
                     {
                         AlignStateValues(so.FindProperty("m_ValueMappings2"), states);
                         changed = true;
@@ -753,66 +740,8 @@ namespace Game.Editor
             return null;
         }
 
-        private static bool TryResolveRoot(JObject @params, out GameObject root, out bool isPrefabContents,
-            out string assetPath, out string targetLabel, out string error)
-        {
-            root = null;
-            isPrefabContents = false;
-            error = null;
-            assetPath = GetString(@params, "assetPath", null);
-            string path = GetString(@params, "path", null);
-            int instanceId = GetInt(@params, "instanceId", 0);
-
-            if (!string.IsNullOrEmpty(assetPath))
-            {
-                if (!assetPath.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
-                {
-                    targetLabel = assetPath;
-                    error = $"assetPath must be a .prefab: {assetPath}";
-                    return false;
-                }
-                if (AssetDatabase.LoadAssetAtPath<GameObject>(assetPath) == null)
-                {
-                    targetLabel = assetPath;
-                    error = $"Prefab not found: {assetPath}";
-                    return false;
-                }
-                root = PrefabUtility.LoadPrefabContents(assetPath);
-                isPrefabContents = true;
-                targetLabel = assetPath;
-                return true;
-            }
-
-            if (instanceId != 0)
-            {
-#if UNITY_6000_0_OR_NEWER
-                root = EditorUtility.EntityIdToObject(instanceId) as GameObject;
-#else
-                root = EditorUtility.InstanceIDToObject(instanceId) as GameObject;
-#endif
-                targetLabel = path ?? $"instanceId:{instanceId}";
-            }
-            else if (!string.IsNullOrEmpty(path))
-            {
-                root = SceneObjectResolver.FindByPath(path);
-                targetLabel = path;
-            }
-            else
-            {
-                root = Selection.activeGameObject;
-                targetLabel = root != null ? root.name : null;
-            }
-
-            if (root == null)
-            {
-                error = "Target not found. Provide 'assetPath' (prefab), 'path'/'instanceId' (scene), or select a GameObject.";
-                return false;
-            }
-            return true;
-        }
-
         private static StateControllerComponent ResolveController(GameObject root, StateControllerComponent[] controllers,
-            string controllerPath, string dataName, out string error)
+            string controllerPath, string groupName, out string error)
         {
             error = null;
 
@@ -879,7 +808,7 @@ namespace Game.Editor
                 return null;
             }
 
-            if (string.IsNullOrEmpty(dataName))
+            if (string.IsNullOrEmpty(groupName))
             {
                 if (controllers.Length == 1)
                 {
@@ -892,7 +821,7 @@ namespace Game.Editor
             var owning = new List<StateControllerComponent>();
             foreach (StateControllerComponent controller in controllers)
             {
-                if (controller.GetStateNames(dataName) != null)
+                if (controller.GetStateNames(groupName) != null)
                 {
                     owning.Add(controller);
                 }
@@ -904,11 +833,11 @@ namespace Game.Editor
             }
             if (owning.Count == 0)
             {
-                error = $"No controller under target has data '{dataName}'.";
+                error = $"No controller under target has data '{groupName}'.";
                 return null;
             }
 
-            error = $"Multiple controllers have data '{dataName}'. Disambiguate with controllerPath. Candidates: [{string.Join(", ", GetControllerPaths(root, owning))}]";
+            error = $"Multiple controllers have data '{groupName}'. Disambiguate with controllerPath. Candidates: [{string.Join(", ", GetControllerPaths(root, owning))}]";
             return null;
         }
 
@@ -937,26 +866,26 @@ namespace Game.Editor
             }
         }
 
-        private static List<string> SplitCsv(string csv)
+        private static List<string> ValidateStates(string[] states)
         {
             var result = new List<string>();
-            if (string.IsNullOrEmpty(csv))
+            if (states == null)
             {
                 return result;
             }
 
             var unique = new HashSet<string>(StringComparer.Ordinal);
-            foreach (string part in csv.Split(','))
+            foreach (string part in states)
             {
-                string trimmed = part.Trim();
+                string trimmed = part?.Trim() ?? string.Empty;
                 if (trimmed.Length == 0)
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         "states must not contain empty entries.");
                 }
                 if (!unique.Add(trimmed))
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"states contains duplicate entry '{trimmed}'.");
                 }
                 result.Add(trimmed);
@@ -1008,28 +937,28 @@ namespace Game.Editor
             return string.IsNullOrEmpty(relativePath) ? root.name : $"{root.name}/{relativePath}";
         }
 
-        private static string GetString(JObject @params, string name, string defaultValue)
+        private sealed class Arguments
         {
-            return @params?[name]?.Value<string>() ?? defaultValue;
-        }
-
-        private static int GetInt(JObject @params, string name, int defaultValue)
-        {
-            return @params?[name]?.Value<int?>() ?? defaultValue;
-        }
-
-        private static bool HasParam(JObject @params, string name)
-        {
-            return @params?[name] != null;
+            public string AssetPath;
+            public string Path;
+            public ObjectId? InstanceId;
+            public string NodePath;
+            public string ControllerPath;
+            public string GroupName;
+            public string StateName;
+            public int? StateIndex;
+            public string[] States;
+            public string StateType;
         }
 
         private sealed class BindingInfo
         {
-            [JsonProperty("dataName")]
-            public string DataName;
+            [JsonProperty("groupName")]
+            public string GroupName;
 
             [JsonProperty("stateValues")]
             public List<object> StateValues;
         }
     }
+#pragma warning restore ET0501
 }

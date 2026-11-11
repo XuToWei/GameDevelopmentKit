@@ -3581,6 +3581,22 @@
             <param name="value">The value to serialize.</param>
             <param name="writer">The writer to serialize with.</param>
         </member>
+        <member name="T:Sirenix.Serialization.DictionaryComparerUtility">
+            <summary>
+            <para>Dictionaries write their comparer only when it is not the key type's default comparer, which is what a dictionary gets without
+            one anyway. The default comparers are internal types that differ between runtimes: for string keys, the default comparer is
+            GenericEqualityComparer&lt;string&gt; on Mono and StringEqualityComparer on CoreCLR (Unity 7 and up), which does not exist on Mono.</para>
+            <para>Comparers read from data are likewise replaced by the default when they are the default comparer of the runtime that wrote them.</para>
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.DictionaryComparerUtility.IsDefaultComparer(System.Object,System.Object,System.Type)">
+            <summary>
+            Whether the comparer is null, the same type as the given default comparer (EqualityComparer&lt;TKey&gt;.Default), or another
+            runtime's implementation of EqualityComparer&lt;TKey&gt;.Default: a subclass of EqualityComparer&lt;TKey&gt; in the core library
+            without any instance fields. Without state, such a comparer's behaviour is given by its type alone, which makes it a default
+            comparer implementation (unlike, for example, the comparers EqualityComparer&lt;T&gt;.Create makes from delegates).
+            </summary>
+        </member>
         <member name="T:Sirenix.Serialization.DoubleLookupDictionaryFormatter`3">
             <summary>
             Custom Odin serialization formatter for <see cref="T:Sirenix.Serialization.Utilities.DoubleLookupDictionary`3"/>.
@@ -4727,6 +4743,35 @@
             </returns>
             <exception cref="T:System.ArgumentNullException">The type argument is null.</exception>
         </member>
+        <member name="F:Sirenix.Serialization.DefaultSerializationBinder.CoreLibraryForwardedFrom">
+            <summary>
+            <para>On runtimes whose core library is not mscorlib, such as CoreCLR (Unity 7 and up), the class library types live in different
+            assemblies than on Mono and the .NET Framework: System.Int32 is in System.Private.CoreLib, System.Uri in System.Private.Uri, and so on.
+            Writing those assembly names would make the same data differ between runtimes, and Mono can only resolve them by searching every
+            loaded assembly.</para>
+            <para>So type names are written with the assembly a type comes from on the .NET Framework, as given by its [TypeForwardedFrom]
+            attribute, which the class library provides for exactly this purpose. Core library types without it come from the same assembly
+            as System.Object. This is the assembly name of System.Object's [TypeForwardedFrom] attribute (mscorlib), or null on runtimes where
+            System.Object is already in that assembly, such as Mono.</para>
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.DefaultSerializationBinder.GetForwardedFromAssemblyFullName(System.Type)">
+            <summary>
+            The full name of the assembly a type is written with; see <see cref="F:Sirenix.Serialization.DefaultSerializationBinder.CoreLibraryForwardedFrom"/>.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.DefaultSerializationBinder.BindToNameWithForwardedFromAssemblies(System.Type)">
+            <summary>
+            Produces the same name as BindToName does on Mono, with the assembly names given by <see cref="M:Sirenix.Serialization.DefaultSerializationBinder.GetForwardedFromAssemblyFullName(System.Type)"/>
+            instead of the actual ones. As there, assemblies of generic arguments are written as simple names when the type is generic,
+            and as full names otherwise (such as in arrays of generic types), which is how Type.FullName writes them.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.DefaultSerializationBinder.GetFullNameWithForwardedFromAssemblies(System.Type,System.Collections.Generic.HashSet{System.String})">
+            <summary>
+            Type.FullName, with the assemblies of generic arguments given by <see cref="M:Sirenix.Serialization.DefaultSerializationBinder.GetForwardedFromAssemblyFullName(System.Type)"/>.
+            </summary>
+        </member>
         <member name="M:Sirenix.Serialization.DefaultSerializationBinder.ContainsType(System.String)">
             <summary>
             Determines whether the specified type name is mapped.
@@ -5806,9 +5851,20 @@
             <summary>
             Public fields, as well as fields or auto-properties marked with <see cref="T:UnityEngine.SerializeField"/> or <see cref="T:Sirenix.Serialization.OdinSerializeAttribute"/> and not marked with <see cref="T:System.NonSerializedAttribute"/>, are serialized.
             <para />
-            There are two exceptions:
+            There are three exceptions:
             <para/>1) All fields in tuples, as well as in private nested types marked as compiler generated (e.g. lambda capture classes) are also serialized.
             <para/>2) Virtual auto-properties are never serialized. Note that properties specified by an implemented interface are automatically marked virtual by the compiler.
+            <para/>3) All fields not marked with <see cref="T:System.NonSerializedAttribute"/> in .NET's own [Serializable] types (in the System namespaces) are serialized, as .NET's serialization contract for them requires.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.SerializationPolicies.IsDotNetSerializableClassLibraryType(System.Type)">
+            <summary>
+            <para>Whether the type is one of .NET's own [Serializable] types: marked [Serializable], in the System namespaces (which Unity also
+            treats as .NET's own, see <see cref="M:Sirenix.Serialization.UnitySerializationUtility.GuessIfUnityWillSerialize(System.Type)"/>).</para>
+            <para>The Unity policy serializes all of their fields except [NonSerialized] ones, like .NET's own serialization contract does. These
+            types keep their state in private fields, which the policy otherwise skips, so they would lose their state; for example the
+            CompareInfo inside a culture-aware StringComparer. .NET keeps these fields the same across the .NET Framework, Mono and .NET Core
+            for the sake of its own serializers, so the data is also compatible across runtimes.</para>
             </summary>
         </member>
         <member name="P:Sirenix.Serialization.SerializationPolicies.Strict">
@@ -6691,6 +6747,15 @@
             <param name="value">The value to write.</param>
             <param name="writer">The writer to use.</param>
         </member>
+        <member name="M:Sirenix.Serialization.Editor.AOTSupportScanner.IsNonPublicClassLibraryType(System.Type)">
+            <summary>
+            Whether the type is a non-public type of the .NET class library (the System namespaces, as for .NET's own types in
+            <see cref="P:Sirenix.Serialization.SerializationPolicies.Unity"/>), such as HashSet&lt;T&gt;.Entry. These are implementation details of the editor's
+            class library, which can differ from the player's or be missing there, so AOT support doesn't reference them. They are only
+            reached through the private fields of .NET types. Generic arguments are checked separately, so List&lt;T&gt; of a private
+            type of your own is still registered.
+            </summary>
+        </member>
         <member name="M:Sirenix.Serialization.Editor.AOTSupportUtilities.ScanProjectForSerializedTypes(System.Collections.Generic.List{System.Type}@,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String},System.Boolean)">
             <summary>
             Scans the project's build scenes and resources, plus their dependencies, for serialized types to support. Progress bars are shown during the scan.
@@ -6702,6 +6767,11 @@
             <param name="scanResources">Whether to scan the project's resources.</param>
             <param name="resourcesToScan">An optional list of the resource paths to scan. Only has an effect if the scanResources argument is true. All the resources will be scanned if null.</param>
             <returns>true if the scan succeeded, false if the scan failed or was cancelled</returns>
+        </member>
+        <member name="M:Sirenix.Serialization.Editor.AOTSupportUtilities.SaveDynamicAssembly(System.Reflection.Emit.AssemblyBuilder,System.String,System.String)">
+            <summary>
+            Saves an assembly created by <see cref="M:Sirenix.Serialization.Editor.AOTSupportUtilities.DefineSavableDynamicAssembly(System.Reflection.AssemblyName,System.String)"/> as the file <paramref name="fileName"/> in <paramref name="dirPath"/>.
+            </summary>
         </member>
         <member name="M:Sirenix.Serialization.Editor.AOTSupportUtilities.GenerateDLL(System.String,System.String,System.Collections.Generic.List{System.Type},System.Boolean)">
             <summary>
@@ -8347,6 +8417,7 @@
             <summary>
             <para>Checks whether an array of types satisfy the constraints of a given generic type definition.</para>
             <para>If this method returns true, the given parameters can be safely used with <see cref="M:System.Type.MakeGenericType(System.Type[])"/> with the given generic type definition.</para>
+            <para>The rules are the ones the CoreCLR runtime enforces, which are stricter than Mono's, and the result is the same on every runtime.</para>
             </summary>
             <param name="genericType">The generic type definition to check.</param>
             <param name="parameters">The parameters to check validity for.</param>
@@ -8361,8 +8432,9 @@
             <summary>
             <para>Checks whether an array of types satisfy the constraints of a given generic method definition.</para>
             <para>If this method returns true, the given parameters can be safely used with <see cref="M:System.Reflection.MethodInfo.MakeGenericMethod(System.Type[])"/> with the given generic method definition.</para>
+            <para>The rules are the ones the CoreCLR runtime enforces, which are stricter than Mono's, and the result is the same on every runtime.</para>
             </summary>
-            <param name="genericType">The generic method definition to check.</param>
+            <param name="genericMethod">The generic method definition to check.</param>
             <param name="parameters">The parameters to check validity for.</param>
             <exception cref="T:System.ArgumentNullException">
             genericType is null
@@ -8371,9 +8443,44 @@
             </exception>
             <exception cref="T:System.ArgumentException">The genericMethod parameter must be a generic method definition.</exception>
         </member>
-        <member name="M:Sirenix.Serialization.Utilities.TypeExtensions.GenericParameterIsFulfilledBy(System.Type,System.Type,System.Collections.Generic.Dictionary{System.Type,System.Type},System.Collections.Generic.HashSet{System.Type})">
+        <member name="M:Sirenix.Serialization.Utilities.TypeExtensions.AreGenericConstraintsSatisfiedBy(System.Type[],System.Type[])">
             <summary>
-            Before calling this method we must ALWAYS hold a lock on the GenericConstraintsSatisfaction_LOCK object, as that is an implicit assumption it works with.
+            <para>Checks whether an array of types can be used as the arguments for the given generic parameters, which must be all the generic parameters of one generic type or method definition, in order.</para>
+            <para>Entries of <paramref name="definitions"/> that are not generic parameters must be matched exactly by the corresponding entry of <paramref name="parameters"/>.</para>
+            <para>The rules are the ones the CoreCLR runtime enforces, which are stricter than Mono's, and the result is the same on every runtime.</para>
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.Utilities.TypeExtensions.GenericParameterIsFulfilledBy(System.Type,System.Type)">
+            <summary>
+            <para>Checks whether a type can be used as the argument for a single generic parameter, when the arguments for the other generic parameters of its declaring type or method are not known.</para>
+            <para>Constraints that refer to other generic parameters are considered satisfied if those parameters can be inferred from the given type in a valid way;
+            for example, given <c>where T : IList&lt;U&gt;</c>, <c>List&lt;int&gt;</c> fulfills T by inferring that U is <c>int</c>.</para>
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.Utilities.TypeExtensions.IsGenericArgumentValidFor(System.Type,System.Type,System.Type[],System.Type[],System.Boolean,System.Int32)">
+            <summary>
+            Whether <paramref name="argument"/> may be used for the generic parameter <paramref name="parameter"/>, which is one of <paramref name="definitions"/>,
+            when <paramref name="arguments"/> are the arguments for all of <paramref name="definitions"/>. If <paramref name="inferUnknown"/> is true, null entries
+            of <paramref name="arguments"/> are unknown and may be inferred (and filled in) while checking.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.Utilities.TypeExtensions.CanCastTo(System.Type,System.Type,System.Int32)">
+            <summary>
+            Whether a value of type <paramref name="from"/> can be cast to <paramref name="to"/>, for the purposes of satisfying a generic constraint.
+            Value types count as boxed, variance applies, and an open generic parameter can be cast to whatever its own constraints can be cast to.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.Utilities.TypeExtensions.SubstituteGenericParameters(System.Type,System.Type[],System.Type[])">
+            <summary>
+            Replaces the generic parameters in <paramref name="definitions"/> with the corresponding <paramref name="arguments"/>, anywhere within <paramref name="type"/>.
+            For example, substituting T with int in <c>IList&lt;T[]&gt;</c> gives <c>IList&lt;int[]&gt;</c>. Null arguments, and arguments that are the parameter itself,
+            leave that parameter in place. Returns null if the resulting type can't be constructed.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.Utilities.TypeExtensions.TryInferUnknownGenericParameters(System.Type,System.Type,System.Type[],System.Type[],System.Int32)">
+            <summary>
+            Infers unknown generic parameters within <paramref name="target"/> from the type in <paramref name="argument"/>'s hierarchy (itself, its base types or its
+            interfaces) with the same generic type definition, and validates each inferred argument for its parameter.
             </summary>
         </member>
         <member name="M:Sirenix.Serialization.Utilities.TypeExtensions.GetGenericConstraintsString(System.Type,System.Boolean)">
@@ -8532,6 +8639,35 @@
             <param name="backend">The scripting backend build settting.</param>
             <param name="apiLevel">The api level build setting.</param>
             <returns><c>true</c> if the build settings supports JIT; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="T:Sirenix.Serialization.Utilities.AssemblyLoadContextUtilities">
+            <summary>
+            <para>Deals with assemblies being unloaded and reloaded in collectible AssemblyLoadContexts, as on the CoreCLR runtime (Unity 7 and up).</para>
+            <para>There, a domain reload unloads the AssemblyLoadContext that holds all of Unity's managed code (Unity's own assemblies, packages,
+            user scripts and Odin) and loads everything again into a new one. While the previous context is being unloaded, its assemblies are
+            still returned by AppDomain.GetAssemblies(), also when the new code initializes. Types found in those assemblies are not the current
+            ones, and holding on to them keeps the previous context from being unloaded. Likewise, subscribing to process-wide events (such as
+            AppDomain events) keeps the subscriber's context alive until it unsubscribes.</para>
+            <para>AssemblyLoadContext is not part of .NET Standard 2.1 or the .NET Framework API, so it is bound by reflection. On Mono, where a domain
+            reload tears everything down, every loaded assembly is current and unloading callbacks are never needed.</para>
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.Utilities.AssemblyLoadContextUtilities.GetLoadedAssemblies">
+            <summary>
+            Gets the loaded assemblies that are current: all of them, except assemblies from other collectible AssemblyLoadContexts than this
+            code's own, such as the previous one while it is being unloaded after a domain reload.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.Utilities.AssemblyLoadContextUtilities.IsCurrentAssembly(System.Reflection.Assembly)">
+            <summary>
+            Whether the assembly is in this code's own AssemblyLoadContext or a non-collectible one (such as the .NET runtime's). Always true on runtimes without AssemblyLoadContexts.
+            </summary>
+        </member>
+        <member name="M:Sirenix.Serialization.Utilities.AssemblyLoadContextUtilities.RegisterUnloadingCallback(System.Action)">
+            <summary>
+            Invokes the callback when this code's AssemblyLoadContext starts unloading. Use it to unsubscribe from process-wide events and stop
+            threads, which would otherwise keep the unloaded code alive. Never invoked on runtimes without collectible AssemblyLoadContexts.
+            </summary>
         </member>
         <member name="T:Sirenix.Serialization.Utilities.Cache`1">
             <summary>
@@ -9025,6 +9161,18 @@
         <member name="F:Sirenix.Serialization.Utilities.Flags.AllMembers">
             <summary>
             Search criteria encompassing all members (public and non-public, instance and static), including base members.
+            </summary>
+        </member>
+        <member name="T:Sirenix.Serialization.Utilities.FloatingPointFormatting">
+            <summary>
+            <para>Formats floating point numbers as text that parses back to the same value, the same way on every runtime.</para>
+            <para>The "R" format means different things on different runtimes. On Mono and the .NET Framework, it is 7 significant digits for a float
+            (15 for a double), or 9 (17) if that does not parse back to the same value. On .NET Core and CoreCLR (Unity 7 and up), it is the shortest
+            text that parses back to the same value. Both parse back correctly, but the text differs for about half of all values, so the same data
+            would be written differently depending on the runtime. This uses the .NET Framework definition everywhere, which keeps data written on
+            Mono unchanged.</para>
+            <para>Negative zero is the exception: Mono and the .NET Framework write it as "0" and parse "-0" as positive zero, which loses its sign.
+            It is written as "-0" everywhere, and the parse methods here read "-0" as negative zero on every runtime.</para>
             </summary>
         </member>
         <member name="T:Sirenix.Serialization.Utilities.ICacheNotificationReceiver">

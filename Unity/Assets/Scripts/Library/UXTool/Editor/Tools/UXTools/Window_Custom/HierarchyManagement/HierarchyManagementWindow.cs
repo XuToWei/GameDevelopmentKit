@@ -51,7 +51,6 @@ namespace ThunderFireUITool
             _managementWindow.minSize = new Vector2(windowWidth, windowHeight);
             _managementWindow.titleContent.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_层级管理);
 
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.HierarchyManage);
         }
 
         //[UnityEditor.Callbacks.DidReloadScripts(0)]
@@ -86,6 +85,7 @@ namespace ThunderFireUITool
         private VisualElement _prefabContent;
         private VisualElement _lineContent;
         private VisualElement _buttonContent;
+        [System.NonSerialized]
         public VisualElement resultDiv;
         private Label _searchResultText;
         private Label _prefabDrag;

@@ -17,7 +17,7 @@ namespace UnityEngine.UI
 
         static UXScrollRectEditor()
         {
-            EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += OnHierarchyGUI;
         }
 
         protected override void OnEnable()
@@ -35,7 +35,7 @@ namespace UnityEngine.UI
             base.OnEnable();
         }
 
-        private static void OnHierarchyGUI(int instanceID, Rect selectionRect)
+        private static void OnHierarchyGUI(EntityId instanceID, Rect selectionRect)
         {
             GameObject go = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             if (go != null && go.hideFlags == HideFlags.DontSave && go.name.StartsWith("UXPreview"))

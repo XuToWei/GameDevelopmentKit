@@ -25,7 +25,6 @@ public class FirstImportProcess
 
     private static void OpenGuideWindow()
     {
-        UXToolUsed.InitUXToolUsed();
         GuideWindow.OpenWindow();
     }
 }

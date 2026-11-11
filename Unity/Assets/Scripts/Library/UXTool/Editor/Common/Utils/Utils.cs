@@ -651,7 +651,7 @@ namespace ThunderFireUITool
             return new Bounds(center, size);
         }
 
-        public static void DrawGreenRect(int instanceID, Rect selectionRect, string text)
+        public static void DrawGreenRect(EntityId instanceID, Rect selectionRect, string text)
         {
             GameObject go = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             Rect rect = new Rect(selectionRect)

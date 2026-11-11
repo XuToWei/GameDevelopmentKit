@@ -240,7 +240,7 @@ public class PrefabGeneratorWindow : EditorWindow
 
     private static void GenPrefabRoot()
     {
-        GameObject canvasGo = FindFirstObjectByType<Canvas>()?.gameObject;
+        GameObject canvasGo = FindAnyObjectByType<Canvas>()?.gameObject;
         if (canvasGo == null)
         {
             canvasGo = new GameObject("Canvas");

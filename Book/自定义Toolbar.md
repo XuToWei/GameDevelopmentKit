@@ -41,7 +41,7 @@ namespace Game.Editor
 | `side` | `Left` 或 `Right` 工具栏区域 |
 | `priority` | 同一区域内的排序权重 |
 
-当前实现左侧按 priority 升序保存，右侧按 priority 降序保存。Unity 6000.3 的容器使用反向 Flex 布局，因此判断视觉位置时应以实际工具栏为准，不要依赖未记录的“越大越靠外”猜测。
+当前实现左侧按 priority 升序保存，右侧按 priority 降序保存。Package 在 Unity `6000.3+` 的实现中使用反向 Flex 布局，当前工程的 `6000.6.7f1` 也使用这条路径，因此判断视觉位置时应以实际工具栏为准。
 
 ## 当前项目按钮
 
@@ -63,9 +63,9 @@ namespace Game.Editor
 
 ## Unity 版本适配
 
-Unity `6000.3+` 使用 `UnityEditor.Toolbars.MainToolbarElement` 创建左右容器。更早版本通过 Toolbar 根 VisualElement 注册 IMGUIContainer。
+当前工程使用 Unity `6000.6.7f1`。Package 从 `6000.3` 起使用 `UnityEditor.Toolbars.MainToolbarElement` 创建左右容器，当前版本沿用该实现；这里的 `6000.3` 表示 API 路径的启用版本。
 
-版本差异由 Package 内部处理，业务 Toolbar 方法无需条件编译。升级 Unity 时应先验证 Package 对新 Toolbar API 的适配。
+业务 Toolbar 方法无需为当前 Editor 添加版本分支。后续升级 Unity 时应检查 Package 对 Toolbar API 的适配，并验证按钮位置和点击行为。
 
 ## 绘制建议
 
@@ -87,7 +87,7 @@ Unity `6000.3+` 使用 `UnityEditor.Toolbars.MainToolbarElement` 创建左右容
 
 ### 顺序与预期相反
 
-左右区域的排序方向不同，Unity 6000.3 还使用 RowReverse。调整 priority 后以实际显示为准，并避免多个按钮使用相同权重。
+左右区域的排序方向不同，当前 `6000.6.7f1` 使用的容器也设置了 `RowReverse`。调整 priority 后以实际显示为准，并避免多个按钮使用相同权重。
 
 ### 修改后没有刷新
 

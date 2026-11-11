@@ -35,6 +35,7 @@ namespace ThunderFireUITool
         //选中资源列表
         public List<string> selectedAssetGuid = new List<string>();
 
+        [System.NonSerialized]
         public AssetTreeView m_AssetTreeView;
 
         [SerializeField] private TreeViewState<int> m_TreeViewState;
@@ -82,7 +83,6 @@ namespace ThunderFireUITool
             window.Focus();
 
             SortHelper.Init();
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.ResourceCheck);
         }
 
         private void OnEnable()
@@ -90,17 +90,17 @@ namespace ThunderFireUITool
             //var isDepend = PlayerPrefs.GetInt(isDependPrefKey, 0) == 1;
             m_AssetTreeView = EditorUIUtils.CreateTreeView<AssetTreeView, AssetDescription>();
 
-            EditorApplication.hierarchyWindowItemOnGUI += HandleHierarchyWindowItemOnGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += HandleHierarchyWindowItemOnGUI;
         }
 
 
         private void OnDisable()
         {
             referenceGoTransList.Clear();
-            EditorApplication.hierarchyWindowItemOnGUI -= HandleHierarchyWindowItemOnGUI;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= HandleHierarchyWindowItemOnGUI;
         }
 
-        static void HandleHierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
+        static void HandleHierarchyWindowItemOnGUI(EntityId instanceID, Rect selectionRect)
         {
             var hierarchyReferenceStyle = new GUIStyle()
             {

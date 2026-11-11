@@ -101,7 +101,7 @@ namespace Soco.ShaderVariantsStripper
         }
         private static void SetupConditionType()
         {
-            _ConditionTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(
+            _ConditionTypes = UnityEngine.Assemblies.CurrentAssemblies.GetLoadedAssemblies().SelectMany(
                 assembly => assembly.GetTypes()).Where(
                 type => typeof(ShaderVariantsStripperCondition).IsAssignableFrom(type) && !type.IsAbstract
             ).ToArray();

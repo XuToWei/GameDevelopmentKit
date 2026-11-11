@@ -11,7 +11,7 @@ namespace TMPro.Extension.Editor
     {
         private bool m_StockInspectorInitialized;
         private bool m_IsUnlocked;
-        private int m_UnlockedFontAssetInstanceId;
+        private EntityId m_UnlockedFontAssetInstanceId;
 
         public new void OnEnable()
         {
@@ -113,7 +113,7 @@ namespace TMPro.Extension.Editor
 
         private void EnsureLockMatchesTarget()
         {
-            if (!m_IsUnlocked || target.GetInstanceID() == m_UnlockedFontAssetInstanceId)
+            if (!m_IsUnlocked || target.GetEntityId() == m_UnlockedFontAssetInstanceId)
             {
                 return;
             }
@@ -124,15 +124,15 @@ namespace TMPro.Extension.Editor
         private void UnlockEditing()
         {
             TMP_FontAsset fontAsset = (TMP_FontAsset)target;
-            TMPFontAssetEditLock.Unlock(GetInstanceID(), fontAsset);
-            m_UnlockedFontAssetInstanceId = fontAsset.GetInstanceID();
+            TMPFontAssetEditLock.Unlock(GetEntityId(), fontAsset);
+            m_UnlockedFontAssetInstanceId = fontAsset.GetEntityId();
             m_IsUnlocked = true;
         }
 
         private void LockEditing()
         {
-            TMPFontAssetEditLock.Lock(GetInstanceID());
-            m_UnlockedFontAssetInstanceId = 0;
+            TMPFontAssetEditLock.Lock(GetEntityId());
+            m_UnlockedFontAssetInstanceId = default;
             m_IsUnlocked = false;
         }
     }

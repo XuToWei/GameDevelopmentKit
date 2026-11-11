@@ -22,7 +22,7 @@ namespace GameFramework
 
             static Assembly()
             {
-                s_Assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                s_Assemblies = new List<System.Reflection.Assembly>(UnityEngine.Assemblies.CurrentAssemblies.GetLoadedAssemblies()).ToArray();
             }
 
             /// <summary>

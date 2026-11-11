@@ -2,13 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using AgentBridge;
 using Newtonsoft.Json.Linq;
 using NPOI.SS.UserModel;
 
 namespace Game.Editor
 {
-    public sealed partial class ExcelCommand
+    public static partial class ExcelCommand
     {
         private static object Inspect(JObject @params)
         {
@@ -71,18 +70,18 @@ namespace Game.Editor
                     sheets
                 };
             }
-            catch (CommandException)
+            catch (GameCommandException)
             {
                 throw;
             }
             catch (IOException ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Cannot inspect '{path.RelativePath}'. Close the workbook in Excel and try again. {ex.Message}");
             }
             catch (Exception ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Failed to inspect '{path.RelativePath}': {ex.Message}");
             }
             finally
@@ -97,13 +96,13 @@ namespace Game.Editor
             int maxCells = GetInt(@params, "maxCells", 500);
             if (maxCells < 1 || maxCells > 2000)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"maxCells must be in 1..2000, got {maxCells}.");
             }
 
             CellRangeInfo range = ParseRange(GetString(@params, "range", null), path, maxCells);
             bool includeEmpty = GetBool(@params, "includeEmpty", true);
-            string sheetName = RequireString(@params, "sheet");
+            string sheetName = RequireString(@params, "sheet", 31);
             IWorkbook workbook = null;
 
             try
@@ -128,7 +127,7 @@ namespace Game.Editor
                         estimatedCharacters += EstimateSnapshotCharacters(snapshot);
                         if (estimatedCharacters > MaxQueryResponseCharacters)
                         {
-                            throw new CommandException(ErrorCodes.InvalidParams,
+                            throw new GameCommandException(GameCommandException.InvalidParams,
                                 "read_range result is too large. Request a smaller range or set includeEmpty=false.");
                         }
                         cells.Add(CellResult(GetCellAddress(rowIndex, columnIndex),
@@ -150,18 +149,18 @@ namespace Game.Editor
                     cells
                 };
             }
-            catch (CommandException)
+            catch (GameCommandException)
             {
                 throw;
             }
             catch (IOException ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Cannot read '{path.RelativePath}'. Close the workbook in Excel and try again. {ex.Message}");
             }
             catch (Exception ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Failed to read '{path.RelativePath}': {ex.Message}");
             }
             finally
@@ -173,18 +172,23 @@ namespace Game.Editor
         private static object FindRows(JObject @params)
         {
             WorkbookPathInfo path = ResolveWorkbookPath(GetString(@params, "filePath", null));
-            string sheetName = RequireString(@params, "sheet");
+            string sheetName = RequireString(@params, "sheet", 31);
             JObject where = @params?["where"] as JObject;
             if (where == null || !where.HasValues)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     "find_rows requires a non-empty 'where' object.");
+            }
+
+            foreach (JProperty condition in where.Properties())
+            {
+                ValidateLiteral(condition.Value, $"where.{condition.Name}");
             }
 
             string match = GetString(@params, "match", "exact").ToLowerInvariant();
             if (match != "exact" && match != "contains")
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"Unknown match mode '{match}'. Supported: exact, contains.");
             }
             bool ignoreCase = GetBool(@params, "ignoreCase", false);
@@ -192,7 +196,7 @@ namespace Game.Editor
             int limit = GetInt(@params, "limit", 50);
             if (offset < 0 || limit < 1 || limit > 200)
             {
-                throw new CommandException(ErrorCodes.InvalidParams,
+                throw new GameCommandException(GameCommandException.InvalidParams,
                     $"offset must be >= 0 and limit must be in 1..200, got offset={offset}, limit={limit}.");
             }
 
@@ -208,12 +212,12 @@ namespace Game.Editor
                 int endRow = GetInt(@params, "endRow", defaultEndRow) - 1;
                 if (endRow < dataStartRow || endRow >= path.MaxRows)
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"endRow must be in {dataStartRow + 1}..{path.MaxRows}, got {endRow + 1}.");
                 }
                 if (endRow - dataStartRow + 1 > 100000)
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         "find_rows scans at most 100000 rows per request. Narrow the range with endRow.");
                 }
 
@@ -221,7 +225,7 @@ namespace Game.Editor
                 {
                     if (!headers.ByName.ContainsKey(condition.Name))
                     {
-                        throw new CommandException(ErrorCodes.InvalidParams,
+                        throw new GameCommandException(GameCommandException.InvalidParams,
                             $"where column '{condition.Name}' was not found in header row {headers.RowIndex + 1}.");
                     }
                 }
@@ -255,7 +259,7 @@ namespace Game.Editor
                         estimatedCharacters += header.Name.Length + EstimateSnapshotCharacters(snapshot);
                         if (estimatedCharacters > MaxQueryResponseCharacters)
                         {
-                            throw new CommandException(ErrorCodes.InvalidParams,
+                            throw new GameCommandException(GameCommandException.InvalidParams,
                                 "find_rows result is too large. Reduce limit or select fewer columns.");
                         }
                         values[header.Name] = snapshot.Value == null
@@ -292,22 +296,22 @@ namespace Game.Editor
                     scannedCount,
                     matchedCount,
                     returnedCount = rows.Count,
-                    hasMore = offset + rows.Count < matchedCount,
+                    hasMore = (long)offset + rows.Count < matchedCount,
                     rows
                 };
             }
-            catch (CommandException)
+            catch (GameCommandException)
             {
                 throw;
             }
             catch (IOException ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Cannot query '{path.RelativePath}'. Close the workbook in Excel and try again. {ex.Message}");
             }
             catch (Exception ex)
             {
-                throw new CommandException(ErrorCode,
+                throw new GameCommandException(ErrorCode,
                     $"Failed to query '{path.RelativePath}': {ex.Message}");
             }
             finally
@@ -348,6 +352,7 @@ namespace Game.Editor
                 return defaults.Count > 0 ? defaults : new List<HeaderColumn>(headers.Columns);
             }
 
+            ValidateColumnNames(select, "select", 100);
             var result = new List<HeaderColumn>(select.Count);
             var unique = new HashSet<string>(StringComparer.Ordinal);
             foreach (JToken item in select)
@@ -355,12 +360,12 @@ namespace Game.Editor
                 string name = item.Value<string>();
                 if (!unique.Add(name))
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"select contains duplicate column '{name}'.");
                 }
                 if (!headers.ByName.TryGetValue(name, out int columnIndex))
                 {
-                    throw new CommandException(ErrorCodes.InvalidParams,
+                    throw new GameCommandException(GameCommandException.InvalidParams,
                         $"select column '{name}' was not found in header row {headers.RowIndex + 1}.");
                 }
                 result.Add(new HeaderColumn { Name = name, ColumnIndex = columnIndex });

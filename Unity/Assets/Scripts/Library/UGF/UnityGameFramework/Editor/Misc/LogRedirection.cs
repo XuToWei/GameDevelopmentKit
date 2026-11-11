@@ -23,7 +23,7 @@ namespace UnityGameFramework.Editor
         private static readonly Regex LogRegex = new Regex(@" \(at (.+)\:(\d+)\)\r?\n");
 
         [OnOpenAsset(0)]
-        private static bool OnOpenAsset(int instanceId, int line)
+        private static bool OnOpenAsset(EntityId instanceId, int line)
         {
             string selectedStackTrace = GetSelectedStackTrace();
             if (string.IsNullOrEmpty(selectedStackTrace))

@@ -4468,7 +4468,40 @@
             </summary>
             <param name="messageType">The type of info box to draw.</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:Sirenix.OdinInspector.RequiredListLengthAttribute" -->
+        <member name="T:Sirenix.OdinInspector.RequiredListLengthAttribute">
+            <summary>
+            An attribute that can be applied to lists, arrays and other types of collections to ensure they contain a specified number of elements.
+            </summary>
+            <example>
+            <code>
+            public class MyComponent : MonoBehaviour
+            {
+                [RequiredListLength(10)]
+                public int[] fixedLength;
+            
+                [RequiredListLength(1, null)]
+                public int[] minLength;
+            
+                [RequiredListLength(null, 10)]
+                public List&lt;int&gt; maxLength;
+            
+                [RequiredListLength(3, 10)]
+                public List&lt;int&gt; minAndMaxLength;
+            
+                public int SomeNumber;
+            
+                [RequiredListLength("@this.GetComponent&lt;Vehicle&gt;().NumberOfWheels")]
+                public List&lt;GameObject&gt; matchLengthOfOther;
+            
+                [RequiredListLength("@this.SomeNumber", null)]
+                public int[] minLengthExpression;
+            
+                [RequiredListLength(null, "@this.SomeNumber")]
+                public List&lt;int&gt; maxLengthExpression;
+            }
+            </code>
+            </example>
+        </member>
         <member name="P:Sirenix.OdinInspector.RequiredListLengthAttribute.MinLength">
             <summary>
             The minimum length of the collection. If not set, there is no minimum length restriction.

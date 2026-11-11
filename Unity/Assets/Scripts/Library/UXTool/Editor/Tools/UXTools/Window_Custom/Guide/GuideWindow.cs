@@ -209,7 +209,6 @@ public class GuideWindow : EditorWindow
         {
             pageNum = 0;
             isAgreement = false;
-            UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.UXToolAccept);
             return;
         }
 
@@ -223,7 +222,6 @@ public class GuideWindow : EditorWindow
         {
             // Agree.
             case 0:
-                UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.UXToolAccept);
                 pageNum = 0;
                 isAgreement = false;
                 agree = true;
