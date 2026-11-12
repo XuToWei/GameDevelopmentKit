@@ -6,7 +6,6 @@
         "ET.ThirdParty",
         "Game.ET.Code.Model",
         "Game.ET.Loader",
-        "Unity.Mathematics",
         "UnityEngine.UI",
         "LubanLib",
         "CodeBind",

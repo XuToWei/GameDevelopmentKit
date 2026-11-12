@@ -1,0 +1,2 @@
+CurrentVersion: 1.1.0.14
+RequiresOdinVersion: 4.0.2.2

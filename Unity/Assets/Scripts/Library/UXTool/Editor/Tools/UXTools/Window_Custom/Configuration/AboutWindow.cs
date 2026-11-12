@@ -90,56 +90,6 @@ namespace ThunderFireUITool
             });
 
 
-            var rowUserID = UXBuilder.Row(div, new UXBuilderRowStruct()
-            {
-                align = Align.Center,
-                justify = Justify.Center,
-                style = new UXStyle() { marginTop = 35 }
-            });
-
-            var userIDLabel = UXBuilder.Text(rowUserID, new UXBuilderTextStruct()
-            {
-                style = new UXStyle()
-                {
-                    unityTextAlign = TextAnchor.MiddleCenter,
-                    fontSize = 14,
-                },
-                text = "ID:"
-            });
-
-            var userIDContentLabel = UXBuilder.Text(rowUserID, new UXBuilderTextStruct()
-            {
-                style = new UXStyle()
-                {
-                    unityTextAlign = TextAnchor.MiddleCenter,
-                    fontSize = 14,
-                },
-                text = UXToolAnalysis.GetUserID()
-            });
-
-            var buttonCopy = UXBuilder.Button(rowUserID, new UXBuilderButtonStruct()
-            {
-                text = "",
-                style = new UXStyle()
-                {
-                    width = 16,
-                    height = 16,
-                    backgroundImage = (StyleBackground)ToolUtils.GetIcon("ToolBar/copy"),
-                    color = new Color(0, 0, 0, 0)
-                },
-                OnClick = () =>
-                {
-                    string str = userIDContentLabel.text;
-
-                    TextEditor textEditor = new TextEditor();
-                    textEditor.text = str;
-                    textEditor.SelectAll();
-                    textEditor.Copy();
-                    ShowNotification(new GUIContent(EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_ID已复制)), 0.5f);
-                }
-            }); ;
-
-
             var rowButtons = UXBuilder.Row(div, new UXBuilderRowStruct()
             {
                 align = Align.Center,

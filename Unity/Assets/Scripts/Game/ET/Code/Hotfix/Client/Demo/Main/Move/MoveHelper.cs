@@ -1,15 +1,14 @@
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Unity.Mathematics;
+using TrueSync;
 
 namespace ET.Client
 {
     public static partial class MoveHelper
     {
         // 可以多次调用，多次调用的话会取消上一次的协程
-        public static async UniTask<int> MoveToAsync(this Unit unit, float3 targetPos, CancellationToken token = default)
+        public static async UniTask<int> MoveToAsync(this Unit unit, TSVector targetPos, CancellationToken token = default)
         {
             C2M_PathfindingResult msg = C2M_PathfindingResult.Create();
             msg.Position = targetPos;
@@ -29,7 +28,7 @@ namespace ET.Client
             return waitUnitStop.Error;
         }
         
-        public static async UniTask MoveToAsync(this Unit unit, List<float3> path)
+        public static async UniTask MoveToAsync(this Unit unit, List<TSVector> path)
         {
             float speed = unit.GetComponent<NumericComponent>().GetAsFloat(NumericType.Speed);
             MoveComponent moveComponent = unit.GetComponent<MoveComponent>();

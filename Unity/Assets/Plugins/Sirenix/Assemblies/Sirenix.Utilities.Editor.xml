@@ -2012,6 +2012,14 @@
             <param name="objectToPreview"></param>
             <exception cref="T:System.ArgumentNullException"></exception>
         </member>
+        <member name="M:Sirenix.Utilities.Editor.GUIHelper.OpenAssetAfterGUIEvent(UnityEngine.Object)">
+            <summary>
+            Opens the asset with <see cref="M:UnityEditor.AssetDatabase.OpenAsset(UnityEngine.Object)"/> once the current GUI event has finished processing.
+            Calling OpenAsset from inside an IMGUI mouse event, e.g. when double-clicking an object field to open a script in the IDE,
+            breaks Unity's event handling afterwards in some Unity versions (seen in 6000.7), where the scene view stops receiving
+            its navigation shortcuts such as right mouse fly mode.
+            </summary>
+        </member>
         <member name="M:Sirenix.Utilities.Editor.GUIHelper.CalcSize(UnityEngine.GUIStyle,System.String)">
             <summary>
             Measures the size of a given <see cref="T:System.String"/>, if it would be presented with this <see cref="T:UnityEngine.GUIStyle"/>.
@@ -9122,11 +9130,6 @@
             Returns a <see cref="T:System.String" /> that represents this instance.
             </summary>
         </member>
-        <member name="T:Sirenix.Utilities.Editor.OdinEntityId.Internal">
-            <summary>
-            Use at your own risk; subject to change.
-            </summary>
-        </member>
         <member name="T:Sirenix.Utilities.Editor.TextureUtilities">
             <summary>
             Collection of texture functions.
@@ -9516,6 +9519,17 @@
             </summary>
             <returns>An <see cref="T:Sirenix.Utilities.ImmutableList"/> of all assemblies in the current <see cref="T:System.AppDomain"/>.</returns>
         </member>
+        <member name="M:Sirenix.Utilities.AssemblyUtilities.GetLoadedAssemblies">
+            <summary>
+            Gets the loaded assemblies that are current. On the CoreCLR runtime (Unity 7 and up) this excludes assemblies in other collectible
+            AssemblyLoadContexts than Odin's own, such as the previous one while it is being unloaded after a domain reload. Use this instead of AppDomain.GetAssemblies().
+            </summary>
+        </member>
+        <member name="M:Sirenix.Utilities.AssemblyUtilities.IsCurrentAssembly(System.Reflection.Assembly)">
+            <summary>
+            Whether the assembly is current: in Odin's own AssemblyLoadContext, or a non-collectible one (such as the .NET runtime's). Always true on runtimes without AssemblyLoadContexts.
+            </summary>
+        </member>
         <member name="M:Sirenix.Utilities.AssemblyUtilities.GetAssemblyTypeFlag(System.Reflection.Assembly)">
             <summary>
             Gets the <see cref="T:Sirenix.Utilities.AssemblyTypeFlags"/> for a given assembly.
@@ -9797,6 +9811,18 @@
         <member name="P:Sirenix.OdinInspector.Editor.IResizableColumn.Resizable">
             <summary>
             Gets a value indicating whether this <see cref="T:Sirenix.OdinInspector.Editor.IResizableColumn"/> is resizable.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.SdfIcons.CreateTransparentIconTexture(Sirenix.OdinInspector.SdfIconType,UnityEngine.Color,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Renders an SDF icon into a new texture, meant for GUI use. The texture has <see cref="F:UnityEngine.HideFlags.DontSaveInEditor"/> set, so scene loads
+            (including entering play mode) do not destroy it while it is referenced. Set its hideFlags to <see cref="F:UnityEngine.HideFlags.None"/> before saving it in an asset or scene.
+            </summary>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.SdfIcons.CreateTransparentIconTexture(Sirenix.OdinInspector.Editor.SdfIcon,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Renders an SDF icon into a new texture, meant for GUI use. The texture has <see cref="F:UnityEngine.HideFlags.DontSaveInEditor"/> set, so scene loads
+            (including entering play mode) do not destroy it while it is referenced. Set its hideFlags to <see cref="F:UnityEngine.HideFlags.None"/> before saving it in an asset or scene.
             </summary>
         </member>
         <member name="T:Sirenix.OdinInspector.Editor.UnityEditorEventUtility">

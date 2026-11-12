@@ -26,7 +26,6 @@ public class UIColorConfigWindow : EditorWindow
         var window = GetWindow<UIColorConfigWindow>(true, EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_颜色预设编辑器), true);
         window.minSize = new Vector2(550, 450);
         select = 0;
-        UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.ColorConfig);
     }
 
     private void OnEnable()

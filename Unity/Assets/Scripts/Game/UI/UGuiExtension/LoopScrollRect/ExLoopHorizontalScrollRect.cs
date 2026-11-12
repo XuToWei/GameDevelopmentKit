@@ -23,12 +23,11 @@ namespace Game
         private int m_NumItems;
         private readonly Stack<Transform> m_ItemPool = new Stack<Transform>();
 
-        [IgnorePropertyDeclaration]
+#pragma warning disable ET0502
         public Action<int, Transform> itemRenderer { set; private get; }
 
         [ShowInInspector]
         [DisableInEditorMode]
-        [IgnorePropertyDeclaration]
         public int numItems
         {
             set
@@ -39,6 +38,7 @@ namespace Game
             }
             get => m_NumItems;
         }
+#pragma warning restore ET0502
 
         public void Refresh()
         {
@@ -81,7 +81,7 @@ namespace Game
         }
 
 #if UNITY_EDITOR
-        [IgnoreLogMethod]
+#pragma warning disable ET0505
         private void OnItemTemplateChanged()
         {
             if (content == null)
@@ -95,6 +95,7 @@ namespace Game
                 m_ItemTemplate = null;
             }
         }
+#pragma warning restore ET0505
 #endif
     }
 }

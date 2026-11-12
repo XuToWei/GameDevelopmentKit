@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using UnityEditor;
 using UnityEngine;
@@ -42,16 +41,7 @@ namespace ThunderFireUITool
 
         public static PrefabDetail DeepCopyByXml(PrefabDetail obj)
         {
-            object retval;
-            using (var ms = new MemoryStream())
-            {
-                var bf = new BinaryFormatter();
-                bf.Serialize(ms, obj);
-                ms.Seek(0, SeekOrigin.Begin);
-                retval = bf.Deserialize(ms);
-                ms.Close();
-            }
-            return (PrefabDetail)retval;
+            return JsonUtility.FromJson<PrefabDetail>(JsonUtility.ToJson(obj));
         }
     }
 
@@ -74,16 +64,7 @@ namespace ThunderFireUITool
 
         public static TagDetail DeepCopyByXml(TagDetail obj)
         {
-            object retval;
-            using (var ms = new MemoryStream())
-            {
-                var bf = new BinaryFormatter();
-                bf.Serialize(ms, obj);
-                ms.Seek(0, SeekOrigin.Begin);
-                retval = bf.Deserialize(ms);
-                ms.Close();
-            }
-            return (TagDetail)retval;
+            return JsonUtility.FromJson<TagDetail>(JsonUtility.ToJson(obj));
         }
     }
 

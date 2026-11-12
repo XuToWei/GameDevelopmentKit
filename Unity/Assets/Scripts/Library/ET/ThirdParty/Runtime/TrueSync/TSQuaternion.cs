@@ -139,6 +139,12 @@ namespace TrueSync
                 dot = -dot;
             }
 
+            // GDK: avoid dividing by Sin(0) for identical or nearly identical rotations.
+            if (dot > (FP)0.9995f)
+            {
+                return Lerp(from, to, t);
+            }
+
             FP halfTheta = FP.Acos(dot);
 
             return Multiply(Multiply(from, FP.Sin((1 - t) * halfTheta)) + Multiply(to, FP.Sin(t * halfTheta)), 1 / FP.Sin(halfTheta));

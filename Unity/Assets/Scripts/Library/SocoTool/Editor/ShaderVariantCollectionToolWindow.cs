@@ -868,7 +868,7 @@ namespace Soco.ShaderVariantsCollection
         {
             if (!mCachedImplements.TryGetValue(typeof(T), out var impls))
             {
-                impls = AppDomain.CurrentDomain.GetAssemblies().SelectMany(
+                impls = UnityEngine.Assemblies.CurrentAssemblies.GetLoadedAssemblies().SelectMany(
                     assembly => assembly.GetTypes().Where(type => 
                         type.IsSubclassOf(typeof(T)))).ToArray();
                 mCachedImplements.Add(typeof(T), impls);
@@ -1077,7 +1077,7 @@ namespace Soco.ShaderVariantsCollection
         {
             if (!mCachedEditorTypes.TryGetValue(type, out var editor))
             {
-                editor = AppDomain.CurrentDomain.GetAssemblies()
+                editor = UnityEngine.Assemblies.CurrentAssemblies.GetLoadedAssemblies()
                     .SelectMany(assembly => assembly.GetTypes()
                         .Where(t => t.IsSubclassOf(typeof(ShaderVariantCollectionToolEditor))))
                     .FirstOrDefault(t => !t.IsAbstract

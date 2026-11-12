@@ -144,7 +144,7 @@ namespace Game.Editor
 
                 if (package.source == PackageSource.Registry)
                 {
-                    string targetVersion = GetLatestStableCompatibleVersion(package.versions);
+                    string targetVersion = GetLatestCompatibleVersion(package.versions, package.version);
                     if (string.IsNullOrEmpty(targetVersion) || targetVersion == package.version)
                     {
                         continue;
@@ -165,31 +165,38 @@ namespace Game.Editor
             return updates;
         }
 
-        private static string GetLatestStableCompatibleVersion(VersionsInfo versions)
+        private static string GetLatestCompatibleVersion(VersionsInfo versions, string currentVersion)
         {
-            if (versions == null)
+            string[] compatibleVersions = versions?.compatible;
+            if (compatibleVersions == null || string.IsNullOrEmpty(currentVersion))
             {
                 return null;
             }
 
-            string[] compatibleVersions = versions.compatible;
-            if (compatibleVersions != null)
+            bool isStable = IsStableVersion(currentVersion);
+            // UPM lists compatible versions in ascending order.
+            for (int i = compatibleVersions.Length - 1; i >= 0; i--)
             {
-                foreach (string version in compatibleVersions)
+                string version = compatibleVersions[i];
+                if (!string.IsNullOrEmpty(version) && IsStableVersion(version) == isStable)
                 {
-                    if (IsStableVersion(version))
-                    {
-                        return version;
-                    }
+                    return version;
                 }
             }
 
-            return IsStableVersion(versions.latestCompatible) ? versions.latestCompatible : null;
+            return null;
         }
 
         private static bool IsStableVersion(string version)
         {
-            return !string.IsNullOrEmpty(version) && version.IndexOf('-') < 0;
+            if (string.IsNullOrEmpty(version))
+            {
+                return false;
+            }
+
+            int prereleaseIndex = version.IndexOf('-');
+            int metadataIndex = version.IndexOf('+');
+            return prereleaseIndex < 0 || (metadataIndex >= 0 && prereleaseIndex > metadataIndex);
         }
 
         private static Dictionary<string, string> LoadManifestDependencies()

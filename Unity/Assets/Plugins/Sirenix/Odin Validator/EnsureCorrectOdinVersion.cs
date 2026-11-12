@@ -15,7 +15,7 @@ namespace Sirenix.OdinValidator.Editor
 
     internal static class EnsureCorrectOdinVersion
     {
-        private const string validatorVersion = "4.0.2.0";
+        private const string validatorVersion = "4.1.0.0";
 
         private static bool IsHeadlessOrBatchMode { get { return SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Null || UnityEditorInternal.InternalEditorUtility.inBatchMode; } }
 
@@ -109,21 +109,33 @@ namespace Sirenix.OdinValidator.Editor
                     // Install / update Odin Validator.
                     AssetDatabase.StartAssetEditing();
 
-                    foreach (var item in assemblyFiles)
+                    try
                     {
-                        var oldFile = item;
-                        var newFile = item + tmp_extension;
-
-                        if (File.Exists(newFile))
+                        foreach (var item in assemblyFiles)
                         {
-                            if (File.Exists(oldFile))
-                                File.Delete(oldFile);
+                            var oldFile = item;
+                            var newFile = item + tmp_extension;
 
-                            File.Move(newFile, oldFile);
+                            if (File.Exists(newFile))
+                            {
+                                if (File.Exists(oldFile))
+                                    File.Delete(oldFile);
+
+                                File.Move(newFile, oldFile);
+                            }
+
+                            // The package import also creates a .meta file for each staged _tmp file (every
+                            // .unitypackage entry carries one). Delete it, otherwise Unity warns about an orphaned .meta.
+                            var newFileMeta = newFile + ".meta";
+
+                            if (File.Exists(newFileMeta))
+                                File.Delete(newFileMeta);
                         }
                     }
-
-                    AssetDatabase.StopAssetEditing();
+                    finally
+                    {
+                        AssetDatabase.StopAssetEditing();
+                    }
                     AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
                     EditorPrefs.SetBool("ODIN_VALIDATOR_SHOW_GETTING_STARTED", true);
                 }

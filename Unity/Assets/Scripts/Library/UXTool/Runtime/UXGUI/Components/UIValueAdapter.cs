@@ -246,6 +246,7 @@ public class ValueProcess
 #endif
 }
 
+[Serializable]
 public abstract class ValueProcType
 {
     [SerializeField, ShowInInspector, OnValueChanged("EditorRefresh")]

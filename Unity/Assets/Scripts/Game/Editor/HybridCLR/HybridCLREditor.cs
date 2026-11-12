@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using HybridCLR.Editor.Settings;
+using HybridCLR;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,10 +14,11 @@ namespace Game.Editor
         public static void CopyAotDll()
         {
             BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
-            string fromDir = Path.Combine(HybridCLRSettings.Instance.strippedAOTDllOutputRootDir, target.ToString());
+            string fromDir = SettingsUtil.GetAssembliesPostIl2CppStripDir(target);
+            string[] aotAssemblies = HybridCLRTool.GetAotAssemblyNames();
             FileTool.CleanDirectoryFiles(s_ResDir, "*.dll.bytes");
             FileTool.CleanDirectoryFiles(s_ResDir, "*.dll.bytes.meta");
-            foreach (string aotDll in HybridCLRSettings.Instance.patchAOTAssemblies)
+            foreach (string aotDll in aotAssemblies)
             {
                 string file = Path.Combine(fromDir, $"{aotDll}.dll");
                 if(!File.Exists(file))
@@ -29,9 +30,9 @@ namespace Game.Editor
 
             // 设置aot dlls
             List<TextAsset> aotAssemblyList = new List<TextAsset>();
-            for (int i = 0; i < HybridCLRSettings.Instance.patchAOTAssemblies.Length; i++)
+            for (int i = 0; i < aotAssemblies.Length; i++)
             {
-                string file = Path.Combine(s_ResDir, $"{HybridCLRSettings.Instance.patchAOTAssemblies[i]}.dll.bytes");
+                string file = Path.Combine(s_ResDir, $"{aotAssemblies[i]}.dll.bytes");
                 if(!File.Exists(file))
                     continue;
                 aotAssemblyList.Add(AssetDatabase.LoadAssetAtPath<TextAsset>(file));

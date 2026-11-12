@@ -40,7 +40,7 @@ namespace ThunderFireUITool
                 //场景中进行新手引导预览
                 var guideDataList = guideRoot.GetComponent<UIBeginnerGuideDataList>();
 
-                var guideManager = Object.FindFirstObjectByType<UIBeginnerGuideManager>();
+                var guideManager = Object.FindAnyObjectByType<UIBeginnerGuideManager>();
                 if (guideManager != null)
                 {
                     CreateGuideLauncher(guideDataList, previewGuideId, false);
@@ -60,7 +60,7 @@ namespace ThunderFireUITool
                 //初始化PreviewScene
                 PreviewLogic.InitPreviewScene(prefabStage);
 
-                var allGuideDataList = Object.FindObjectsByType<UIBeginnerGuideDataList>(FindObjectsSortMode.InstanceID);
+                var allGuideDataList = Object.FindObjectsByType<UIBeginnerGuideDataList>();
 
                 foreach (var t in allGuideDataList)
                 {

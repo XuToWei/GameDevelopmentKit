@@ -101,23 +101,23 @@ public class GuideGesture : GuideWidgetBase
         }
     }
 
-    public override List<int> GetControlledInstanceIds()
+    public override List<EntityId> GetControlledInstanceIds()
     {
         Transform[] allChild = gameObject.GetComponentsInChildren<Transform>(true);
-        List<int> list = new List<int>();
+        List<EntityId> list = new List<EntityId>();
         foreach (var child in allChild)
         {
-            list.Add(child.GetInstanceID());
+            list.Add(child.GetEntityId());
         }
         Transform startPosControllerTrans = this.transform.Find("StartPosController");
         Transform endPosControllerTrans = this.transform.Find("EndPosController");
         if (startPosControllerTrans != null)
         {
-            list.Add(startPosControllerTrans.GetInstanceID());
+            list.Add(startPosControllerTrans.GetEntityId());
         }
         if (endPosControllerTrans != null)
         {
-            list.Add(endPosControllerTrans.GetInstanceID());
+            list.Add(endPosControllerTrans.GetEntityId());
         }
         return list;
     }

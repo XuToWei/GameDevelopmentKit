@@ -154,6 +154,10 @@ message C2G_Ping // IRequest
 
 其他类型名按原样写入，通常用于同组消息或枚举。
 
+ET 的位置、方向与路径点使用 `TrueSync.TSVector`，旋转使用 `TrueSync.TSQuaternion`，协议字段直接填写完整类型名。Model、Hotfix 排除 Unity 引擎引用；与 Unity Transform 或 DotRecast 浮点接口之间的转换放在对应接口边界。
+
+从旧的 `Unity.Mathematics.float3/quaternion` 切换后，MemoryPack 字段由浮点数变成 `FP` 定点数，客户端与服务端必须同步更新。MongoDB 中已保存的旧坐标和旋转也需要迁移或重新生成。
+
 ## 生成稳定性
 
 生成器只有内容变化时才重写主代码文件，避免无意义 diff。输出目录中失去对应源文件的空 `.meta` 会在生成末尾清理。

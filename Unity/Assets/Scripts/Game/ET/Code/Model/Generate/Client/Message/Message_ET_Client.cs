@@ -534,9 +534,9 @@ namespace ET
         }
 
         [MemoryPackOrder(0)]
-        public List<Unity.Mathematics.float3> Points { get; set; } = new List<Unity.Mathematics.float3>();
+        public List<TrueSync.TSVector> Points { get; set; } = new List<TrueSync.TSVector>();
         [MemoryPackOrder(1)]
-        public Unity.Mathematics.quaternion Rotation { get; set; }
+        public TrueSync.TSQuaternion Rotation { get; set; }
         [MemoryPackOrder(2)]
         public int TurnSpeed { get; set; }
         public override void Dispose()
@@ -566,9 +566,9 @@ namespace ET
         [MemoryPackOrder(2)]
         public int Type { get; set; }
         [MemoryPackOrder(3)]
-        public Unity.Mathematics.float3 Position { get; set; }
+        public TrueSync.TSVector Position { get; set; }
         [MemoryPackOrder(4)]
-        public Unity.Mathematics.float3 Forward { get; set; }
+        public TrueSync.TSVector Forward { get; set; }
         [MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]
         [MemoryPackOrder(5)]
         public Dictionary<int, long> KV { get; set; } = new();
@@ -684,7 +684,7 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
-        public Unity.Mathematics.float3 Position { get; set; }
+        public TrueSync.TSVector Position { get; set; }
         public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
@@ -727,9 +727,9 @@ namespace ET
         [MemoryPackOrder(0)]
         public long Id { get; set; }
         [MemoryPackOrder(1)]
-        public Unity.Mathematics.float3 Position { get; set; }
+        public TrueSync.TSVector Position { get; set; }
         [MemoryPackOrder(2)]
-        public List<Unity.Mathematics.float3> Points { get; set; } = new List<Unity.Mathematics.float3>();
+        public List<TrueSync.TSVector> Points { get; set; } = new List<TrueSync.TSVector>();
         public override void Dispose()
         {
             if (!this.IsFromPool) { return; }
@@ -755,9 +755,9 @@ namespace ET
         [MemoryPackOrder(1)]
         public long Id { get; set; }
         [MemoryPackOrder(2)]
-        public Unity.Mathematics.float3 Position { get; set; }
+        public TrueSync.TSVector Position { get; set; }
         [MemoryPackOrder(3)]
-        public Unity.Mathematics.quaternion Rotation { get; set; }
+        public TrueSync.TSQuaternion Rotation { get; set; }
         public override void Dispose()
         {
             if (!this.IsFromPool) { return; }

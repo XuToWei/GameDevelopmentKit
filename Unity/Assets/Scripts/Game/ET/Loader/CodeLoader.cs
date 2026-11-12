@@ -47,8 +47,8 @@ namespace ET
                     byte[] pdbBytesModel = await LoadCodeBytesAsync("Game.ET.Code.Model.pdb.bytes");
                     byte[] assBytesModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.dll.bytes");
                     byte[] pdbBytesModelView = await LoadCodeBytesAsync("Game.ET.Code.ModelView.pdb.bytes");
-                    m_Model = Assembly.Load(assBytesModel, pdbBytesModel);
-                    m_ModelView = Assembly.Load(assBytesModelView, pdbBytesModelView);
+                    m_Model = UnityEngine.Assemblies.CurrentAssemblies.LoadFromBytes(assBytesModel, pdbBytesModel);
+                    m_ModelView = UnityEngine.Assemblies.CurrentAssemblies.LoadFromBytes(assBytesModelView, pdbBytesModelView);
                 }
                 var hotfixAssemblies = await LoadHotfixAsync();
 
@@ -111,8 +111,8 @@ namespace ET
             byte[] pdbBytesHotfix = await LoadCodeBytesAsync("Game.ET.Code.Hotfix.pdb.bytes");
             byte[] assBytesHotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.dll.bytes");
             byte[] pdbBytesHotfixView = await LoadCodeBytesAsync("Game.ET.Code.HotfixView.pdb.bytes");
-            Assembly hotfix = Assembly.Load(assBytesHotfix, pdbBytesHotfix);
-            Assembly hotfixView = Assembly.Load(assBytesHotfixView, pdbBytesHotfixView);
+            Assembly hotfix = UnityEngine.Assemblies.CurrentAssemblies.LoadFromBytes(assBytesHotfix, pdbBytesHotfix);
+            Assembly hotfixView = UnityEngine.Assemblies.CurrentAssemblies.LoadFromBytes(assBytesHotfixView, pdbBytesHotfixView);
             return (hotfix, hotfixView);
         }
 

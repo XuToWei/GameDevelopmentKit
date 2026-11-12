@@ -479,7 +479,7 @@ namespace ThunderFireUITool
                 {
                     bool isAssigned = false;
 
-                    string id = child.gameObject.GetInstanceID().ToString();
+                    string id = child.gameObject.GetEntityId().ToString();
                     if (assignedInstanceIdList.Contains(id))
                     {
                         isAssigned = true;
@@ -490,7 +490,7 @@ namespace ThunderFireUITool
                     List<Component> components = child.gameObject.GetComponents<Component>().ToList();
                     foreach (Component component in components)
                     {
-                        id = component.GetInstanceID().ToString();
+                        id = component.GetEntityId().ToString();
                         if (assignedInstanceIdList.Contains(id))
                         {
                             isAssigned = true;

@@ -20,12 +20,13 @@ namespace Game
         [SerializeField]
         private ButtonOnPointerDownEvent m_OnPointerDown = new ButtonOnPointerDownEvent();
 
-        [IgnorePropertyDeclaration]
+#pragma warning disable ET0502
         public ButtonOnPointerDownEvent onPointerDown
         {
             get => m_OnPointerDown;
             set => m_OnPointerDown = value;
         }
+#pragma warning restore ET0502
 
         public override void OnPointerDown(PointerEventData eventData)
         {

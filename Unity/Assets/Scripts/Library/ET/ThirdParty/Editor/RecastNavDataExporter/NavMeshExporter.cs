@@ -577,7 +577,7 @@ namespace ET.Editor
                 return meshes;
             }
 
-            MeshFilter[] meshFilters = FindObjectsByType<MeshFilter>(FindObjectsSortMode.InstanceID);
+            MeshFilter[] meshFilters = FindObjectsByType<MeshFilter>();
             foreach (MeshFilter mf in meshFilters)
             {
                 if (mf.gameObject.tag == NAVMESH_TAG)

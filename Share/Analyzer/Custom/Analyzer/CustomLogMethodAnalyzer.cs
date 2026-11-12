@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -45,11 +44,6 @@ namespace ET.Analyzer.Custom
             {
                 return;
             }
-            if (HasIgnoreLogMethodAttribute(context, context.Node))
-            {
-                // 如果有IgnoreLogMethodAttribute特性，则不进行分析
-                return;
-            }
             // 检查是否为UnityEngine.Debug调用
             if (symbol.ContainingType.ToString() != "UnityEngine.Debug")
             {
@@ -71,35 +65,6 @@ namespace ET.Analyzer.Custom
             }
             Diagnostic diagnostic = Diagnostic.Create(CustomLogMethodAnalyzerRule.Rule, memberAccess.GetLocation());
             context.ReportDiagnostic(diagnostic);
-        }
-        
-        private bool HasIgnoreLogMethodAttribute(SyntaxNodeAnalysisContext context, SyntaxNode syntaxNode)
-        {
-            const string IGNORE_LOG_METHOD_ATTRIBUTE = "Game.IgnoreLogMethodAttribute";
-            
-            // 检查包含该语法节点的类是否有IgnoreLogMethodAttribute特性
-            var classDeclaration = syntaxNode.GetParentClassDeclaration();
-            if (classDeclaration != null)
-            {
-                var classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
-                if (classSymbol != null && classSymbol.HasAttribute(IGNORE_LOG_METHOD_ATTRIBUTE))
-                {
-                    return true;
-                }
-            }
-            
-            // 检查包含该语法节点的方法是否有IgnoreLogMethodAttribute特性
-            var methodDeclaration = syntaxNode.GetNeareastAncestor<MethodDeclarationSyntax>();
-            if (methodDeclaration != null)
-            {
-                var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration);
-                if (methodSymbol != null && methodSymbol.HasAttribute(IGNORE_LOG_METHOD_ATTRIBUTE))
-                {
-                    return true;
-                }
-            }
-            
-            return false;
         }
     }
 }

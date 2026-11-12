@@ -25,7 +25,6 @@ public class GradientChooseWindow : EditorWindow
         r_window = GetWindow<GradientChooseWindow>();
         r_window.minSize = new Vector2(width, height);
         r_window.titleContent.text = EditorLocalization.GetLocalization(EditorLocalizationStorage.Def_选择渐变预设);
-        UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.ColorConfig);
     }
 
     private void OnEnable()

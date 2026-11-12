@@ -209,7 +209,6 @@ namespace UnityEngine.UI
                     ShowObj();
                     if (!ignoreLocalization.boolValue)
                     {
-                        UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.Localization);
                         if (localizationID.stringValue == "")
                         {
                             textList.Clear();
@@ -389,7 +388,6 @@ namespace UnityEngine.UI
                 --EditorGUI.indentLevel;
                 if (EditorGUI.EndChangeCheck())
                 {
-                    UXToolAnalysis.SendUXToolLog(UXToolAnalysisLog.UXText);
                     m_useShrinkFit.boolValue = useShrinkFit;
                 }
             }

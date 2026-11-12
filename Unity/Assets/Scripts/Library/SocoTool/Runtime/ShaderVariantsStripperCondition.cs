@@ -8,6 +8,7 @@ using UnityEngine.Rendering;
 namespace Soco.ShaderVariantsStripper
 {
 #if UNITY_EDITOR
+    [System.Serializable]
     public struct ShaderVariantsStripperConditionOnGUIContext
     {
         public Shader shader;

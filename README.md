@@ -39,7 +39,7 @@ GameDevelopmentKit（GDK）是一套 [Unity] 游戏开发框架。服务端基�
 
 ## 快速开始
 
-1. 安装 [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) 和 [Unity 6000.3.18f1](https://unity.com/releases/editor/whats-new/6000.3.18f1)。
+1. 安装 [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) 和 [Unity 6000.6.7f1](https://unity.com/releases/editor/whats-new/6000.6.7f1)。Unity 精确版本以 `Unity/ProjectSettings/ProjectVersion.txt` 为准。
 
 2. 在仓库根目录编译工具项目：
 
@@ -51,7 +51,7 @@ GameDevelopmentKit（GDK）是一套 [Unity] 游戏开发框架。服务端基�
 
 3. 用 Unity 打开 `Unity/`，加载 `Assets/Launcher.unity`，点击 Play。
 
-模式切换和独立服务端启动方式见 [完整快速开始](Book/快速开始.md)。
+模式切换、旧版工程升级和独立服务端启动方式见 [完整快速开始](Book/快速开始.md)。
 
 ## 文档导航
 
@@ -62,6 +62,7 @@ GameDevelopmentKit（GDK）是一套 [Unity] 游戏开发框架。服务端基�
 | 资源与数据 | [AssetSet](Book/AssetSet.md)、[Luban 配置](Book/Luban配置.md) |
 | 协议 | [Proto 生成](Book/Proto生成工具.md) |
 | 热更新与构建 | [HybridCLR 热更新](Book/HybridCLR热更.md)、[一键打包](Book/一键打包.md) |
+| 编辑器自动化 | [Unity CLI 自定义命令](Book/UnityCLI.md) |
 
 ## 主要依赖
 
@@ -104,6 +105,6 @@ GameDevelopmentKit（GDK）是一套 [Unity] 游戏开发框架。服务端基�
 
 ## 商业依赖、交流与许可
 
-- 商业插件：[Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)，需自行购买并遵守授权条款。
+- 商业插件：[Odin Inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041) 当前版本为 `4.1.0.0`，需自行购买并遵守授权条款；同时使用 Odin Validator 时保持相同版本。
 - QQ 群：`949482664`
 - 项目代码采用 [MIT License](LICENSE)；第三方资源和插件遵循各自许可。
