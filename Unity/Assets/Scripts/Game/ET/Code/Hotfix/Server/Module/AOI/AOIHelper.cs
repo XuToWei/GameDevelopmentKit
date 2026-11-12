@@ -1,10 +1,17 @@
 ﻿using System.Collections.Generic;
+using TrueSync;
 
 namespace ET.Server
 {
     [FriendOf(typeof(AOIEntity))]
     public static partial class AOIHelper
     {
+        public static int GetCellCoordinate(FP position)
+        {
+            // 保持原浮点转整数的向零截断规则，避免负坐标边界偏移。
+            return (int)((position * 1000).RawValue / FP.ONE) / AOIManagerComponent.CellSize;
+        }
+
         public static long CreateCellId(int x, int y)
         {
             return (long) ((ulong) x << 32) | (uint) y;

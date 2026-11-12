@@ -6,7 +6,6 @@
         "UnityGameFramework.Runtime",
         "UnityGameFramework.Extension",
         "LubanLib",
-        "Unity.Mathematics",
         "HybridCLR.Runtime",
         "RemoteExecution.Runtime",
         "UniTask",

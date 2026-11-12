@@ -8,7 +8,6 @@
         "Game.ET.Code.Hotfix",
         "Game.ET.Code.ModelView",
         "Game.ET.Loader",
-        "Unity.Mathematics",
         "UnityEngine.UI",
         "LubanLib",
         "CodeBind",

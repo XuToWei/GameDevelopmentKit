@@ -1,11 +1,11 @@
-using Unity.Mathematics;
+using TrueSync;
 
 namespace ET.Client
 {
     [FriendOf(typeof(XunLuoPathComponent))]
     public static partial class XunLuoPathComponentSystem
     {
-        public static float3 GetCurrent(this XunLuoPathComponent self)
+        public static TSVector GetCurrent(this XunLuoPathComponent self)
         {
             return self.path[self.Index];
         }

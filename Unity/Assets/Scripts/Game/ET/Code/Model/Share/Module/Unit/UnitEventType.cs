@@ -1,11 +1,11 @@
-﻿using Unity.Mathematics;
+using TrueSync;
 
 namespace ET
 {
     public struct ChangePosition
     {
         public Unit Unit;
-        public float3 OldPos;
+        public TSVector OldPos;
     }
 
     public struct ChangeRotation
