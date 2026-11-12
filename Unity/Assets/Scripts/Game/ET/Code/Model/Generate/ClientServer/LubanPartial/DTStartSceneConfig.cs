@@ -114,11 +114,7 @@ namespace ET
                         break;
                 }
             }
-        }
 
-        partial void PostResolveRef()
-        {
-            this.AgentByMachineId.Clear();
             foreach (DRStartSceneConfig agent in this.Agents)
             {
                 this.AgentByMachineId[agent.StartProcessConfig.MachineId] = agent;

@@ -1,9 +1,10 @@
 using System;
 using System.Threading;
-using AgentBridge;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using ET;
 using ET.Client;
+using Unity.Pipeline.Commands;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,8 +15,10 @@ namespace Game.Editor
     {
         private const string BattleSceneName = "SurvivorBattle";
 
-        [AgentCallable("通过现有 UI 自动登录、加入唯一测试房间并开始 Survivor 战斗。调用前需先进入 Play Mode。", 150)]
-        private static async UniTask EnterSurvivorBattle()
+        // Pipeline 使用 Task 等待命令完成。
+#pragma warning disable ET0501
+        [CliGroupCommand("game.survivor", "通过现有 UI 自动登录、加入唯一测试房间并开始 Survivor 战斗。调用前需先进入 Play Mode。")]
+        public static async Task EnterSurvivorBattle()
         {
             EnsurePlaying("启动自动进入战斗");
             using CancellationTokenSource cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(Application.exitCancellationToken);
@@ -78,7 +81,7 @@ namespace Game.Editor
                     skillChoice.UGFUIForm as UIFormSurvivorSkillChoiceComponent;
             if (skillChoiceForm == null)
             {
-                throw new CommandException(
+                throw new GameCommandException(
                     "SURVIVOR_SKILL_FORM_MISSING",
                     "初始技能界面的 ET 组件尚未完成绑定");
             }
@@ -94,6 +97,7 @@ namespace Game.Editor
 
             Debug.Log($"[SurvivorAgent] Battle ready account={account} room={roomCode}");
         }
+#pragma warning restore ET0501
 
         private static bool IsInitialSkillChoiceReady(
             UIFormSurvivorSkillChoiceComponent skillChoiceForm,
@@ -131,7 +135,7 @@ namespace Game.Editor
         {
             if (client != null && client.Phase == SurvivorRoomPhase.Ended)
             {
-                throw new CommandException(
+                throw new GameCommandException(
                     "SURVIVOR_BATTLE_ENDED_EARLY",
                     $"{stage}失败：战斗已提前结束");
             }
@@ -139,9 +143,7 @@ namespace Game.Editor
 
         private static T FindActiveView<T>() where T : AETMonoUGFUIForm
         {
-            T[] views = UnityEngine.Object.FindObjectsByType<T>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None);
+            T[] views = UnityEngine.Object.FindObjectsByType<T>(FindObjectsInactive.Include);
 
             foreach (T view in views)
             {
@@ -163,7 +165,7 @@ namespace Game.Editor
         {
             if (first == null || second == null || third == null)
             {
-                throw new CommandException("SURVIVOR_UI_BINDING_MISSING", $"{viewName}存在未绑定的自动化控件");
+                throw new GameCommandException("SURVIVOR_UI_BINDING_MISSING", $"{viewName}存在未绑定的自动化控件");
             }
         }
 
@@ -171,7 +173,7 @@ namespace Game.Editor
         {
             if (!EditorApplication.isPlaying)
             {
-                throw new CommandException("SURVIVOR_NOT_PLAYING", $"{stage}失败：Unity 当前不在 Play Mode");
+                throw new GameCommandException("SURVIVOR_NOT_PLAYING", $"{stage}失败：Unity 当前不在 Play Mode");
             }
         }
 

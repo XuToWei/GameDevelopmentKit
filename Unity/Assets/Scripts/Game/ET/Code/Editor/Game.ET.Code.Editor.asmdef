@@ -13,8 +13,10 @@
         "ReactiveBinding",
         "Game.ET.Loader",
         "Game",
+        "Game.Editor",
         "UnityGameFramework.Runtime",
-        "AgentBridge.Editor",
+        "Unity.Pipeline.Attributes",
+        "UnityEngine.UI",
         "UniTask"
     ],
     "includePlatforms": [
