@@ -1,12 +1,12 @@
 using Cysharp.Threading.Tasks;
-using Unity.Mathematics;
+using TrueSync;
 
 namespace ET.Server
 {
     public static partial class MoveHelper
     {
         // 可以多次调用，多次调用的话会取消上一次的协程
-        public static async UniTask FindPathMoveToAsync(this Unit unit, float3 target)
+        public static async UniTask FindPathMoveToAsync(this Unit unit, TSVector target)
         {
             float speed = unit.GetComponent<NumericComponent>().GetAsFloat(NumericType.Speed);
             if (speed < 0.01)

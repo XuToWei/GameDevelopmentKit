@@ -15,7 +15,7 @@ namespace ET.Client
             GameObject unitGo = await scene.Root().GetComponent<UGFComponent>().LoadAssetAsync<GameObject>(AssetUtility.GetPrefabAsset("Skeleton/Skeleton"));
 
             GameObject go = UnityEngine.Object.Instantiate(unitGo);
-            go.transform.position = unit.Position;
+            go.transform.position = unit.Position.ToVector();
             unit.AddComponent<GameObjectComponent>().GameObject = go;
             unit.AddComponent<AnimatorComponent>();
             await UniTask.CompletedTask;

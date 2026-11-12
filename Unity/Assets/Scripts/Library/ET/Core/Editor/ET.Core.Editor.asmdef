@@ -3,7 +3,7 @@
     "rootNamespace": "ET",
     "references": [
         "ET.Core",
-        "Unity.Mathematics"
+        "ET.ThirdParty"
     ],
     "includePlatforms": [
         "Editor"

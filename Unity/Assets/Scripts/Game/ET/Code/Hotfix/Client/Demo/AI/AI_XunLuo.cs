@@ -1,6 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Unity.Mathematics;
+using TrueSync;
 
 namespace ET.Client
 {
@@ -31,7 +31,7 @@ namespace ET.Client
             while (true)
             {
                 XunLuoPathComponent xunLuoPathComponent = myUnit.GetComponent<XunLuoPathComponent>();
-                float3 nextTarget = xunLuoPathComponent.GetCurrent();
+                TSVector nextTarget = xunLuoPathComponent.GetCurrent();
                 await myUnit.MoveToAsync(nextTarget, token);
                 xunLuoPathComponent.MoveNext();
             }

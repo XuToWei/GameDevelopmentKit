@@ -4,7 +4,7 @@ using System.IO;
 using DotRecast.Core;
 using DotRecast.Detour;
 using DotRecast.Detour.Io;
-using Unity.Mathematics;
+using TrueSync;
 
 namespace ET
 {
@@ -39,7 +39,7 @@ namespace ET
             self.navMesh = null;
         }
         
-        public static void Find(this PathfindingComponent self, float3 start, float3 target, List<float3> result)
+        public static void Find(this PathfindingComponent self, TSVector start, TSVector target, List<TSVector> result)
         {
             if (self.navMesh == null)
             {
@@ -47,8 +47,8 @@ namespace ET
                 throw new Exception($"pathfinding ptr is zero: {self.Scene().Name}");
             }
 
-            RcVec3f startPos = new(-start.x, start.y, start.z);
-            RcVec3f endPos = new(-target.x, target.y, target.z);
+            RcVec3f startPos = new(-start.x.AsFloat(), start.y.AsFloat(), start.z.AsFloat());
+            RcVec3f endPos = new(-target.x.AsFloat(), target.y.AsFloat(), target.z.AsFloat());
 
             long startRef;
             long endRef;
@@ -81,7 +81,7 @@ namespace ET
             for (int i = 0; i < self.straightPath.Count; ++i)
             {
                 RcVec3f pos = self.straightPath[i].pos;
-                result.Add(new float3(-pos.x, pos.y, pos.z));
+                result.Add(new TSVector(-pos.x, pos.y, pos.z));
             }
         }
     }

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Unity.Mathematics;
+using System.Collections.Generic;
+using TrueSync;
 
 namespace ET.Server
 {
@@ -8,7 +8,7 @@ namespace ET.Server
     public static partial class AOIEntitySystem2
     {
         [EntitySystem]
-        private static void Awake(this AOIEntity self, int distance, float3 pos)
+        private static void Awake(this AOIEntity self, int distance, TSVector pos)
         {
             self.ViewDistance = distance;
             self.Scene().GetComponent<AOIManagerComponent>().Add(self, pos.x, pos.z);
