@@ -15,6 +15,7 @@ GameDevelopmentKit is a dual-end (client/server) game development framework for 
 
 ### Prerequisites
 - .NET 8 SDK
+- Aspire: .NET 10 SDK for DNX and the pinned Aspire CLI bundle; keep .NET 8 / ASP.NET Core 8 runtimes for the `net8.0` applications (see Book/管理后台.md).
 - Unity 6000.6.7f1 (exact version: `Unity/ProjectSettings/ProjectVersion.txt`)
 - MongoDB (optional, for server features)
 - Paid plugin: Odin Inspector 4.1.0.0; use the same version of Odin Validator when installed

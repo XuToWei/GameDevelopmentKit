@@ -1,4 +1,4 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.1.2">
+<Project Sdk="Aspire.AppHost.Sdk/13.6.5">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -8,6 +8,8 @@
         <RootNamespace>ET</RootNamespace>
         <AssemblyName>Share.Aspire</AssemblyName>
         <LangVersion>12</LangVersion>
+        <AspireUseCliBundle>true</AspireUseCliBundle>
+        <AspireCliInvocationMode>DnxPinned</AspireCliInvocationMode>
     </PropertyGroup>
 
     <PropertyGroup>
