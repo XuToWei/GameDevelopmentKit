@@ -61,7 +61,6 @@ Server/.DS_Store
 Publish/
 
 /Unity/HybridCLRData
-global.json
 Unity/ProjectSettings/EditorBuildSettings.asset
 Unity/ProjectSettings/EditorBuildSettings.asset
 

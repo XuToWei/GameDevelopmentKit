@@ -1,11 +1,11 @@
 {
   "runtimeTarget": {
-    "name": ".NETCoreApp,Version=v8.0",
+    "name": ".NETCoreApp,Version=v10.0",
     "signature": ""
   },
   "compilationOptions": {},
   "targets": {
-    ".NETCoreApp,Version=v8.0": {
+    ".NETCoreApp,Version=v10.0": {
       "Luban.CSharp/1.0.0": {
         "dependencies": {
           "Luban.DataValidator.Builtin": "1.0.0"
@@ -22,11 +22,11 @@
           }
         }
       },
-      "Scriban/7.2.1": {
+      "Scriban/7.2.5": {
         "runtime": {
           "lib/net8.0/Scriban.dll": {
             "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.2.1.0"
+            "fileVersion": "7.2.5.0"
           }
         }
       },
@@ -53,12 +53,12 @@
       "path": "nlog/5.3.4",
       "hashPath": "nlog.5.3.4.nupkg.sha512"
     },
-    "Scriban/7.2.1": {
+    "Scriban/7.2.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-5Jw6PyOiY6RBhC5XgtZbOO6ZbZOXlqUDS35IVhLdAPRZHclf3iW35Tdh4FCw1/gNCJ9ia1CGVQabypGPYVThbw==",
-      "path": "scriban/7.2.1",
-      "hashPath": "scriban.7.2.1.nupkg.sha512"
+      "sha512": "sha512-6HDyv0P6PVdx/prWM3Aw0QHAT/DCpkBxOovZ2iPIH4L4ZvJ13JNYJgyUI+xJ5K2agXreYTBe23AL5ZQNTqJQvA==",
+      "path": "scriban/7.2.5",
+      "hashPath": "scriban.7.2.5.nupkg.sha512"
     },
     "Luban.DataValidator.Builtin/1.0.0": {
       "type": "project",

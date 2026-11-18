@@ -90,7 +90,7 @@ namespace Game.Editor
                 {
                     foreach (BindTarget target in targets)
                     {
-                        InvokeBinder(target, "TryGenerateBindingSource");
+                        InvokeBinder(target, "GenerateBindingSource");
                         codeGenerated.Add(target.Label);
                     }
                 }
@@ -101,7 +101,7 @@ namespace Game.Editor
                     {
                         try
                         {
-                            InvokeBinder(target, "TrySerializeBindings");
+                            InvokeBinder(target, "UpdateSerializedBindings");
                             serialized.Add(target.Label);
                         }
                         catch (Exception ex) when (action == "all")

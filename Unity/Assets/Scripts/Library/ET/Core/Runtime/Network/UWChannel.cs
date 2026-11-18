@@ -1,4 +1,4 @@
-#if UNITY_ET
+#if !UNITY_EDITOR && UNITY_WEBGL && UNITY_ET
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,12 +23,12 @@ namespace ET
 
         private CancellationTokenSource cancellationTokenSource = new();
 
-        public WChannel(long id, IPEndPoint ipEndPoint, WService service)
+        public WChannel(long id, string address, WService service)
         {
             this.Service = service;
             this.Id = id;
             this.ChannelType = ChannelType.Connect;
-            this.webSocket = new WebSocket($"ws://{ipEndPoint}");
+            this.webSocket = new WebSocket(address);
             this.webSocket.OnMessage += OnWebSocketMessage;
             this.webSocket.OnClose += (sender, args) =>
             {
