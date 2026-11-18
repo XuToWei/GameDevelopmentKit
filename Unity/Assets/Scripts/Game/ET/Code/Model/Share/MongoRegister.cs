@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using TrueSync;
+using Unity.Mathematics;
 
 namespace ET
 {
@@ -28,6 +29,10 @@ namespace ET
 
             ConventionRegistry.Register("IgnoreExtraElements", conventionPack, type => true);
 
+            RegisterStruct<float2>();
+            RegisterStruct<float3>();
+            RegisterStruct<float4>();
+            RegisterStruct<quaternion>();
             RegisterStruct<FP>();
             RegisterStruct<TSVector>();
             RegisterStruct<TSVector2>();

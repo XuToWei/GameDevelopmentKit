@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TrueSync;
 
 namespace ET.Server
 {
@@ -8,10 +7,10 @@ namespace ET.Server
     [FriendOf(typeof(Cell))]
     public static partial class AOIManagerComponentSystem
     {
-        public static void Add(this AOIManagerComponent self, AOIEntity aoiEntity, FP x, FP y)
+        public static void Add(this AOIManagerComponent self, AOIEntity aoiEntity, float x, float y)
         {
-            int cellX = AOIHelper.GetCellCoordinate(x);
-            int cellY = AOIHelper.GetCellCoordinate(y);
+            int cellX = (int)(x * 1000) / AOIManagerComponent.CellSize;
+            int cellY = (int)(y * 1000) / AOIManagerComponent.CellSize;
 
             if (aoiEntity.ViewDistance == 0)
             {
