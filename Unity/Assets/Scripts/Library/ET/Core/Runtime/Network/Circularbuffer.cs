@@ -154,19 +154,15 @@ namespace ET
 					this.LastIndex = 0;
 				}
 
-				int n = count - alreadyCopyCount;
-				if (ChunkSize - this.LastIndex > n)
+				int n = Math.Min(count - alreadyCopyCount, ChunkSize - this.LastIndex);
+				int bytesRead = stream.Read(this.lastBuffer, this.LastIndex, n);
+				if (bytesRead == 0)
 				{
-					stream.Read(this.lastBuffer, this.LastIndex, n);
-					this.LastIndex += count - alreadyCopyCount;
-					alreadyCopyCount += n;
+					throw new EndOfStreamException("Stream ended before all bytes were copied.");
 				}
-				else
-				{
-					stream.Read(this.lastBuffer, this.LastIndex, ChunkSize - this.LastIndex);
-					alreadyCopyCount += ChunkSize - this.LastIndex;
-					this.LastIndex = ChunkSize;
-				}
+
+				this.LastIndex += bytesRead;
+				alreadyCopyCount += bytesRead;
 			}
 		}
 	    

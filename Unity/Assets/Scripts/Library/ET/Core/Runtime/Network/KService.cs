@@ -426,6 +426,11 @@ namespace ET
             return channel;
         }
 
+        public override void Create(long id, string address)
+        {
+            throw new NotSupportedException("String addresses are not supported by this transport.");
+        }
+
         public override void Create(long id, IPEndPoint ipEndPoint)
         {
             if (this.localConnChannels.TryGetValue(id, out KChannel kChannel))

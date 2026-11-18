@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 
 namespace ET
@@ -24,6 +25,23 @@ namespace ET
             self.AService.ErrorCallback = self.OnError;
         }
         
+        [EntitySystem]
+        private static void Awake(this NetComponent self, NetworkProtocol protocol)
+        {
+            self.AService = new WService(protocol);
+            self.AService.ReadCallback = self.OnRead;
+            self.AService.ErrorCallback = self.OnError;
+        }
+
+        [EntitySystem]
+        private static void Awake(this NetComponent self, IEnumerable<string> prefixes, NetworkProtocol protocol)
+        {
+            self.AService = new WService(prefixes, protocol);
+            self.AService.AcceptCallback = self.OnAccept;
+            self.AService.ReadCallback = self.OnRead;
+            self.AService.ErrorCallback = self.OnError;
+        }
+
         [EntitySystem]
         private static void Update(this NetComponent self)
         {
@@ -80,6 +98,18 @@ namespace ET
             EventSystem.Instance.Invoke((long)self.IScene.SceneType, new NetComponentOnRead() {Session = session, Message = message});
         }
         
+        public static Session Create(this NetComponent self, string address)
+        {
+            long channelId = NetServices.Instance.CreateConnectChannelId();
+            Session session = self.AddChildWithId<Session, AService>(channelId, self.AService);
+            if (self.IScene.SceneType != SceneType.BenchmarkClient)
+            {
+                session.AddComponent<SessionIdleCheckerComponent>();
+            }
+            self.AService.Create(session.Id, address);
+            return session;
+        }
+
         public static Session Create(this NetComponent self, IPEndPoint realIPEndPoint)
         {
             long channelId = NetServices.Instance.CreateConnectChannelId();

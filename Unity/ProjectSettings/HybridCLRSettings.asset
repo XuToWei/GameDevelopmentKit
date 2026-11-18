@@ -23,53 +23,9 @@ MonoBehaviour:
   - {fileID: 5897886265953266890, guid: 7556e3848364e0c4198e292bc4741c8a, type: 3}
   hotUpdateAssemblies: []
   preserveHotUpdateAssemblies: []
-  hotUpdateDllCompileOutputRootDir: HybridCLRData/HotUpdateDlls
   externalHotUpdateAssembliyDirs:
   - ./Temp/HybridCLRBin
-  strippedAOTDllOutputRootDir: HybridCLRData/AssembliesPostIl2CppStrip
-  patchAOTAssemblies:
-  - mscorlib
-  - System
-  - System.Core
-  - System.Net.Http
-  - System.Runtime.CompilerServices.Unsafe
-  - UnityEngine
-  - UnityEngine.AnimationModule
-  - UnityEngine.AssetBundleModule
-  - UnityEngine.CoreModule
-  - Unity.RenderPipelines.Universal.Runtime
-  - UnityEngine.UI
-  - Unity.InputSystem
-  - Unity.Mathematics
-  - ICSharpCode.SharpZipLib
-  - Coffee.UIEffect
-  - Coffee.UIParticle
-  - Coffee.SoftMaskForUGUI
-  - Coffee.UnmaskForUGUI
-  - Newtonsoft.Json
-  - CodeBind
-  - LubanLib
-  - GameFramework
-  - UnityGameFramework.Runtime
-  - UnityGameFramework.Extension
-  - UniTask
-  - ZString
-  - Leihuo.UXTools.Runtime
-  - UniTask.Extension
-  - StompyRobot.SRDebugger
-  - EnhancedScroller
-  - R3.Unity
-  - LitMotion
-  - LitMotion.Extensions
-  - LitMotion.Animation
-  - Game
-  - MemoryPack
-  - MongoDB.Bson
-  - CommandLine
-  - ET.Core
-  - ET.ThirdParty
-  - Game.ET.Loader
-  - MongoDB.Driver
+  linkPreserveLevel: 0
   outputLinkFile: Res/Editor/HybridCLR/Generate/link.xml
   outputAOTGenericReferenceFile: Res/Editor/HybridCLR/Generate/AOTGenericReferences.cs
   maxGenericReferenceIteration: 4

@@ -327,6 +327,24 @@ if (table != null)
 
 ![Luban 配置示例](png/luban_genconfig.png)
 
+## 重建 Luban 工具
+
+仓库附带的 `Tools/Luban/Tools/Luban/` 运行产物为 Luban 5.1.0，使用 .NET 10。安装 .NET 10 SDK 后，在仓库根目录执行：
+
+```powershell
+Tools/Luban/Tools/build-luban.bat
+```
+
+macOS 或 Linux 执行 `bash Tools/Luban/Tools/build-luban.sh`。
+Luban-Extension 子模块中的全部项目直接以 `net10.0` 为目标，
+其 `global.json` 选择 .NET 10 稳定版 SDK，Scriban、MessagePack 的依赖版本由子模块项目维护。
+也可进入 `Tools/Luban/Luban-Extension/` 后执行 `dotnet build src/Luban.sln -c Release` 独立构建；
+主仓库构建脚本会将运行产物更新到 `Tools/Luban/Tools/Luban/`。
+
+指定 Excel 工作表时支持 `工作表@目录/文件.xlsx`，并保留现有
+`目录/工作表@文件.xlsx` 的兼容处理。表结构加载会先拆分工作表名再拼接数据目录，
+避免把 `@` 引用当作实际文件名。
+
 ## 相关文档
 
 - [多语言](多语言.md)

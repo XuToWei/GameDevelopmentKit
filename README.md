@@ -28,7 +28,7 @@ GameDevelopmentKit（GDK）是一套 [Unity] 游戏开发框架。服务端基�
 
 ## 快速开始
 
-1. 安装 [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) 和 [Unity 6000.6.7f1](https://unity.com/releases/editor/whats-new/6000.6.7f1)。Unity 精确版本以 `Unity/ProjectSettings/ProjectVersion.txt` 为准。
+1. 安装 [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) 和 [Unity 6000.6.7f1](https://unity.com/releases/editor/whats-new/6000.6.7f1)。仓库通过 `global.json` 选择 .NET 10 稳定版 SDK；Unity 精确版本以 `Unity/ProjectSettings/ProjectVersion.txt` 为准。需要数据库功能时使用 MongoDB 4.4 或更高版本。
 
 2. 在仓库根目录编译工具项目：
 

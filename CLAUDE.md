@@ -14,9 +14,9 @@ GameDevelopmentKit is a dual-end (client/server) game development framework for 
 ## Build Commands
 
 ### Prerequisites
-- .NET 8 SDK
+- .NET 10 SDK (selected by `global.json`); server applications and tools target `net10.0`. Analyzers/source generators retain `netstandard2.0` for Unity compatibility.
 - Unity 6000.6.7f1 (exact version: `Unity/ProjectSettings/ProjectVersion.txt`)
-- MongoDB (optional, for server features)
+- MongoDB 4.4+ (optional, for server features; required by MongoDB.Driver 3.14)
 - Paid plugin: Odin Inspector 4.1.0.0; use the same version of Odin Validator when installed
 - Unity CLI (optional, for Editor automation); the project includes `com.unity.pipeline` 0.9.1-exp.1
 

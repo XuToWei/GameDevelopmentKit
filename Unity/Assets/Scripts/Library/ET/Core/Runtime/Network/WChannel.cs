@@ -1,4 +1,4 @@
-#if !UNITY_ET
+#if UNITY_EDITOR || !UNITY_WEBGL || !UNITY_ET
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -43,16 +43,16 @@ namespace ET
             });
         }
 
-        public WChannel(long id, WebSocket webSocket, IPEndPoint ipEndPoint, WService service)
+        public WChannel(long id, string address, WService service)
         {
             this.Service = service;
             this.Id = id;
             this.ChannelType = ChannelType.Connect;
-            this.webSocket = webSocket;
+            this.webSocket = new ClientWebSocket();
 
             isConnected = false;
             
-            this.Service.ThreadSynchronizationContext.Post(()=>this.ConnectAsync($"ws://{ipEndPoint}").Forget());
+            this.Service.ThreadSynchronizationContext.Post(()=>this.ConnectAsync(address).Forget());
         }
 
         public override void Dispose()
@@ -69,11 +69,11 @@ namespace ET
             this.webSocket.Dispose();
         }
 
-        private async UniTaskVoid ConnectAsync(string url)
+        private async UniTaskVoid ConnectAsync(string address)
         {
             try
             {
-                await ((ClientWebSocket) this.webSocket).ConnectAsync(new Uri(url), cancellationTokenSource.Token);
+                await ((ClientWebSocket) this.webSocket).ConnectAsync(new Uri(address), cancellationTokenSource.Token);
                 isConnected = true;
                 
                 this.StartRecv().Forget();
