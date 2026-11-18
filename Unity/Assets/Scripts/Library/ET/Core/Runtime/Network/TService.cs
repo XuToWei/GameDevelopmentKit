@@ -112,6 +112,11 @@ namespace ET
 			OnAcceptComplete(this.innArgs.SocketError, this.innArgs.AcceptSocket);
 		}
 
+		public override void Create(long id, string address)
+		{
+			throw new NotSupportedException("String addresses are not supported by this transport.");
+		}
+
 		public override void Create(long id, IPEndPoint ipEndPoint)
 		{
 			if (this.idChannels.TryGetValue(id, out TChannel _))

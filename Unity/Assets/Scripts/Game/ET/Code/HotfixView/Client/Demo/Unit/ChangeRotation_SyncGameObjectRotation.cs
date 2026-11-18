@@ -15,7 +15,7 @@ namespace ET.Client
                 return;
             }
             Transform transform = gameObjectComponent.GameObject.transform;
-            transform.rotation = unit.Rotation.ToQuaternion();
+            transform.rotation = unit.Rotation;
             await UniTask.CompletedTask;
         }
     }

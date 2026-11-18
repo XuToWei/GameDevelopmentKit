@@ -183,6 +183,8 @@ macOS 或 Linux 使用 `dotnet Tool.dll`。
 
 实际配置可换行书写，工具读取时会把换行与制表符整理成单行命令。
 
+在 `__tables__.xlsx` 的 `input` 列中引用 Excel 工作簿时，填写相对于 `dataDir` 的文件路径，例如 `Game/Entity.xlsx`。本项目禁止在该路径中使用 `@` 指定工作表。
+
 ## 路径变量
 
 | 变量 | 展开结果 |
@@ -326,6 +328,20 @@ if (table != null)
 先检查 `Assets/Res/Editor/Luban/dtuiform.json` 或对应 JSON 是否更新。如果没有，问题在 Luban 目标；如果已更新，再检查 Share.Tool 的二次生成日志。
 
 ![Luban 配置示例](png/luban_genconfig.png)
+
+## 重建 Luban 工具
+
+仓库附带的 `Tools/Luban/Tools/Luban/` 运行产物为 Luban 5.1.0，使用 .NET 10。安装 .NET 10 SDK 后，在仓库根目录执行：
+
+```powershell
+Tools/Luban/Tools/build-luban.bat
+```
+
+macOS 或 Linux 执行 `bash Tools/Luban/Tools/build-luban.sh`。
+Luban-Extension 子模块中的全部项目直接以 `net10.0` 为目标，
+其 `global.json` 选择 .NET 10 稳定版 SDK，Scriban、MessagePack 的依赖版本由子模块项目维护。
+也可进入 `Tools/Luban/Luban-Extension/` 后执行 `dotnet build src/Luban.sln -c Release` 独立构建；
+主仓库构建脚本会将运行产物更新到 `Tools/Luban/Tools/Luban/`。
 
 ## 相关文档
 
