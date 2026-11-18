@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using TrueSync;
+using Unity.Mathematics;
 
 namespace ET
 {
@@ -36,7 +36,7 @@ namespace ET
         private static void Awake(this MoveComponent self)
         {
             self.StartTime = 0;
-            self.StartPos = TSVector.zero;
+            self.StartPos = float3.zero;
             self.NeedTime = 0;
             self.MoveTimer = 0;
             self.tcs = null;
@@ -51,21 +51,21 @@ namespace ET
             return self.Targets.Count == 0;
         }
 
-        public static bool ChangeSpeed(this MoveComponent self, FP speed)
+        public static bool ChangeSpeed(this MoveComponent self, float speed)
         {
             if (self.IsArrived())
             {
                 return false;
             }
 
-            if (speed < FP.EN4)
+            if (speed < 0.0001)
             {
                 return false;
             }
             
             Unit unit = self.GetParent<Unit>();
 
-            using ListComponent<TSVector> path = ListComponent<TSVector>.Create();
+            using ListComponent<float3> path = ListComponent<float3>.Create();
             
             self.MoveForward(false);
                 
@@ -79,11 +79,11 @@ namespace ET
         }
 
         // 该方法不需要用cancelToken的方式取消，因为即使不传入cancelToken，多次调用该方法也要取消之前的移动协程,上层可以stop取消
-        public static async UniTask<bool> MoveToAsync(this MoveComponent self, List<TSVector> target, FP speed, int turnTime = 100)
+        public static async UniTask<bool> MoveToAsync(this MoveComponent self, List<float3> target, float speed, int turnTime = 100)
         {
             self.Stop(false);
 
-            foreach (TSVector v in target)
+            foreach (float3 v in target)
             {
                 self.Targets.Add(v);
             }
@@ -133,22 +133,22 @@ namespace ET
                 else
                 {
                     // 计算位置插值
-                    FP amount = (FP)moveTime / self.NeedTime;
+                    float amount = moveTime * 1f / self.NeedTime;
                     if (amount > 0)
                     {
-                        TSVector newPos = TSVector.Lerp(self.StartPos, self.NextTarget, amount);
+                        float3 newPos = math.lerp(self.StartPos, self.NextTarget, amount);
                         unit.Position = newPos;
                     }
                     
                     // 计算方向插值
                     if (self.TurnTime > 0)
                     {
-                        amount = (FP)moveTime / self.TurnTime;
+                        amount = moveTime * 1f / self.TurnTime;
                         if (amount > 1)
                         {
-                            amount = FP.One;
+                            amount = 1f;
                         }
-                        TSQuaternion q = TSQuaternion.Slerp(self.From, self.To, amount);
+                        quaternion q = math.slerp(self.From, self.To, amount);
                         unit.Rotation = q;
                     }
                 }
@@ -194,8 +194,8 @@ namespace ET
             ++self.N;
 
             // 时间计算用服务端的位置, 但是移动要用客户端的位置来插值
-            TSVector v = self.GetFaceV();
-            FP distance = v.magnitude;
+            float3 v = self.GetFaceV();
+            float distance = math.length(v);
             
             // 插值的起始点要以unit的真实位置来算
             self.StartPos = unit.Position;
@@ -207,8 +207,8 @@ namespace ET
             if (self.TurnTime > 0)
             {
                 // 要用unit的位置
-                TSVector faceV = self.GetFaceV();
-                if (faceV.sqrMagnitude < FP.EN4)
+                float3 faceV = self.GetFaceV();
+                if (math.lengthsq(faceV) < 0.0001f)
                 {
                     return;
                 }
@@ -219,9 +219,9 @@ namespace ET
                     faceV.y = 0;
                 }
 
-                if (FP.Abs(faceV.x) > FP.EN2 || FP.Abs(faceV.z) > FP.EN2)
+                if (Math.Abs(faceV.x) > 0.01 || Math.Abs(faceV.z) > 0.01)
                 {
-                    self.To = TSQuaternion.LookRotation(faceV, TSVector.up);
+                    self.To = quaternion.LookRotation(faceV, math.up());
                 }
 
                 return;
@@ -229,26 +229,26 @@ namespace ET
             
             if (self.TurnTime == 0) // turn time == 0 立即转向
             {
-                TSVector faceV = self.GetFaceV();
+                float3 faceV = self.GetFaceV();
                 if (self.IsTurnHorizontal)
                 {
                     faceV.y = 0;
                 }
 
-                if (FP.Abs(faceV.x) > FP.EN2 || FP.Abs(faceV.z) > FP.EN2)
+                if (Math.Abs(faceV.x) > 0.01 || Math.Abs(faceV.z) > 0.01)
                 {
-                    self.To = TSQuaternion.LookRotation(faceV, TSVector.up);
+                    self.To = quaternion.LookRotation(faceV, math.up());
                     unit.Rotation = self.To;
                 }
             }
         }
 
-        private static TSVector GetFaceV(this MoveComponent self)
+        private static float3 GetFaceV(this MoveComponent self)
         {
             return self.NextTarget - self.PreTarget;
         }
 
-        public static bool FlashTo(this MoveComponent self, TSVector target)
+        public static bool FlashTo(this MoveComponent self, float3 target)
         {
             Unit unit = self.GetParent<Unit>();
             unit.Position = target;
@@ -274,7 +274,7 @@ namespace ET
             }
             
             self.StartTime = 0;
-            self.StartPos = TSVector.zero;
+            self.StartPos = float3.zero;
             self.BeginTime = 0;
             self.NeedTime = 0;
             self.Targets.Clear();

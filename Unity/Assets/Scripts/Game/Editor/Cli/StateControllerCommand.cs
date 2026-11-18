@@ -209,15 +209,15 @@ namespace Game.Editor
                         booleanLogic = SafeEnumName(logic);
                     }
 
-                    SerializedProperty dn1 = so.FindProperty("m_GroupName1");
+                    SerializedProperty dn1 = so.FindProperty("m_PrimaryGroupName");
                     if (dn1 != null)
                     {
-                        bindings.Add(BuildBinding(dn1.stringValue, so.FindProperty("m_ValueMappings1")));
+                        bindings.Add(BuildBinding(dn1.stringValue, so.FindProperty("m_PrimaryValueMappings")));
                     }
-                    SerializedProperty dn2 = so.FindProperty("m_GroupName2");
+                    SerializedProperty dn2 = so.FindProperty("m_SecondaryGroupName");
                     if (dn2 != null && !string.IsNullOrEmpty(dn2.stringValue))
                     {
-                        bindings.Add(BuildBinding(dn2.stringValue, so.FindProperty("m_ValueMappings2")));
+                        bindings.Add(BuildBinding(dn2.stringValue, so.FindProperty("m_SecondaryValueMappings")));
                     }
                 }
 
@@ -590,17 +590,17 @@ namespace Game.Editor
                 AlignStateValues(so.FindProperty("m_ValueMappings"), states);
                 boundField = "m_GroupName";
             }
-            else if (so.FindProperty("m_GroupName1") != null)
+            else if (so.FindProperty("m_PrimaryGroupName") != null)
             {
-                so.FindProperty("m_GroupName1").stringValue = groupName;
-                AlignStateValues(so.FindProperty("m_ValueMappings1"), states);
-                boundField = "m_GroupName1";
+                so.FindProperty("m_PrimaryGroupName").stringValue = groupName;
+                AlignStateValues(so.FindProperty("m_PrimaryValueMappings"), states);
+                boundField = "m_PrimaryGroupName";
             }
             else
             {
                 UnityEngine.Object.DestroyImmediate(comp, true);
                 throw new GameCommandException(ErrorCode,
-                    $"'{stateType.Name}' has no recognized group field (m_GroupName / m_GroupName1).");
+                    $"'{stateType.Name}' has no recognized group field (m_GroupName / m_PrimaryGroupName).");
             }
             so.ApplyModifiedPropertiesWithoutUndo();
 
@@ -630,11 +630,11 @@ namespace Game.Editor
             {
                 links.ClearArray();
             }
-            SerializedProperty onSelectedEvent = element.FindPropertyRelative("m_OnSelectedEvent");
-            if (onSelectedEvent != null &&
-                onSelectedEvent.propertyType == SerializedPropertyType.ManagedReference)
+            SerializedProperty onEnteredEvent = element.FindPropertyRelative("m_OnEnteredEvent");
+            if (onEnteredEvent != null &&
+                onEnteredEvent.propertyType == SerializedPropertyType.ManagedReference)
             {
-                onSelectedEvent.managedReferenceValue = null;
+                onEnteredEvent.managedReferenceValue = null;
             }
         }
 
@@ -705,16 +705,16 @@ namespace Game.Editor
                 }
                 else
                 {
-                    SerializedProperty dn1 = so.FindProperty("m_GroupName1");
+                    SerializedProperty dn1 = so.FindProperty("m_PrimaryGroupName");
                     if (dn1 != null && dn1.stringValue == groupName)
                     {
-                        AlignStateValues(so.FindProperty("m_ValueMappings1"), states);
+                        AlignStateValues(so.FindProperty("m_PrimaryValueMappings"), states);
                         changed = true;
                     }
-                    SerializedProperty dn2 = so.FindProperty("m_GroupName2");
+                    SerializedProperty dn2 = so.FindProperty("m_SecondaryGroupName");
                     if (dn2 != null && dn2.stringValue == groupName)
                     {
-                        AlignStateValues(so.FindProperty("m_ValueMappings2"), states);
+                        AlignStateValues(so.FindProperty("m_SecondaryValueMappings"), states);
                         changed = true;
                     }
                 }

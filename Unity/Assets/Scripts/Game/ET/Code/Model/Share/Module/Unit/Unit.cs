@@ -1,6 +1,6 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using MongoDB.Bson.Serialization.Attributes;
-using TrueSync;
+using Unity.Mathematics;
 
 namespace ET
 {
@@ -11,46 +11,34 @@ namespace ET
         public int ConfigId { get; set; } //配置表id
 
         [BsonElement]
-        private TSVector position; //坐标
+        private float3 position; //坐标
 
         [BsonIgnore]
-        public TSVector Position
+        public float3 Position
         {
-            get
-            {
-                return this.position;
-            }
+            get => this.position;
             set
             {
-                TSVector oldPos = this.position;
+                float3 oldPos = this.position;
                 this.position = value;
                 EventSystem.Instance.Publish(this.Scene(), new ChangePosition() { Unit = this, OldPos = oldPos });
             }
         }
 
         [BsonIgnore]
-        public TSVector Forward
+        public float3 Forward
         {
-            get
-            {
-                return this.Rotation * TSVector.forward;
-            }
-            set
-            {
-                this.Rotation = TSQuaternion.LookRotation(value, TSVector.up);
-            }
+            get => math.mul(this.Rotation, math.forward());
+            set => this.Rotation = quaternion.LookRotation(value, math.up());
         }
         
         [BsonElement]
-        private TSQuaternion rotation = TSQuaternion.identity;
+        private quaternion rotation;
         
         [BsonIgnore]
-        public TSQuaternion Rotation
+        public quaternion Rotation
         {
-            get
-            {
-                return this.rotation;
-            }
+            get => this.rotation;
             set
             {
                 this.rotation = value;

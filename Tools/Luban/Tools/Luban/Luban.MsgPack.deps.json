@@ -1,37 +1,37 @@
 {
   "runtimeTarget": {
-    "name": ".NETCoreApp,Version=v8.0",
+    "name": ".NETCoreApp,Version=v10.0",
     "signature": ""
   },
   "compilationOptions": {},
   "targets": {
-    ".NETCoreApp,Version=v8.0": {
+    ".NETCoreApp,Version=v10.0": {
       "Luban.MsgPack/1.0.0": {
         "dependencies": {
           "Luban.Core": "1.0.0",
-          "MessagePack": "3.1.7"
+          "MessagePack": "3.1.12"
         },
         "runtime": {
           "Luban.MsgPack.dll": {}
         }
       },
-      "MessagePack/3.1.7": {
+      "MessagePack/3.1.12": {
         "dependencies": {
-          "MessagePack.Annotations": "3.1.7",
+          "MessagePack.Annotations": "3.1.12",
           "Microsoft.NET.StringTools": "17.11.4"
         },
         "runtime": {
-          "lib/net8.0/MessagePack.dll": {
-            "assemblyVersion": "3.1.7.0",
-            "fileVersion": "3.1.7.0"
+          "lib/net9.0/MessagePack.dll": {
+            "assemblyVersion": "3.1.12.0",
+            "fileVersion": "3.1.12.0"
           }
         }
       },
-      "MessagePack.Annotations/3.1.7": {
+      "MessagePack.Annotations/3.1.12": {
         "runtime": {
           "lib/netstandard2.0/MessagePack.Annotations.dll": {
-            "assemblyVersion": "3.1.7.0",
-            "fileVersion": "3.1.7.0"
+            "assemblyVersion": "3.1.12.0",
+            "fileVersion": "3.1.12.0"
           }
         }
       },
@@ -51,18 +51,18 @@
           }
         }
       },
-      "Scriban/7.2.1": {
+      "Scriban/7.2.5": {
         "runtime": {
           "lib/net8.0/Scriban.dll": {
             "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.2.1.0"
+            "fileVersion": "7.2.5.0"
           }
         }
       },
       "Luban.Core/1.0.0": {
         "dependencies": {
           "NLog": "5.3.4",
-          "Scriban": "7.2.1"
+          "Scriban": "7.2.5"
         },
         "runtime": {
           "Luban.Core.dll": {
@@ -79,19 +79,19 @@
       "serviceable": false,
       "sha512": ""
     },
-    "MessagePack/3.1.7": {
+    "MessagePack/3.1.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-gXpifaxbhfBqh8bVToQn9j+OgCnhXWMbRCV7RQIbCVa9CNJG1fY6oHAYYl+ER3Tb9uUIHiQ5QbGiGwwFhoagbA==",
-      "path": "messagepack/3.1.7",
-      "hashPath": "messagepack.3.1.7.nupkg.sha512"
+      "sha512": "sha512-m1QEsd59gUj82ji5tEQbZiyjV6y0F7cYfGVhil6pAlNZpyzR7ze9TucMu4lPpi8cZAV8aNl3D9/T9J1HbFz15Q==",
+      "path": "messagepack/3.1.12",
+      "hashPath": "messagepack.3.1.12.nupkg.sha512"
     },
-    "MessagePack.Annotations/3.1.7": {
+    "MessagePack.Annotations/3.1.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-IW1yX9viarFl/Dsio5G+pM90JkOSW4xhAiJcKxPPF5rzyp2/yCpieWju8G99QLEmaQeze2uQMEskUBA59YZmkw==",
-      "path": "messagepack.annotations/3.1.7",
-      "hashPath": "messagepack.annotations.3.1.7.nupkg.sha512"
+      "sha512": "sha512-LdI67sY7F3KK+JsrG02+DP1XFkowaZSoyfL2M88hjm1MOOsjf8amBLAJolV+zxoPUZf3uGbKzq1cMQD8PlpSpA==",
+      "path": "messagepack.annotations/3.1.12",
+      "hashPath": "messagepack.annotations.3.1.12.nupkg.sha512"
     },
     "Microsoft.NET.StringTools/17.11.4": {
       "type": "package",
@@ -107,12 +107,12 @@
       "path": "nlog/5.3.4",
       "hashPath": "nlog.5.3.4.nupkg.sha512"
     },
-    "Scriban/7.2.1": {
+    "Scriban/7.2.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-5Jw6PyOiY6RBhC5XgtZbOO6ZbZOXlqUDS35IVhLdAPRZHclf3iW35Tdh4FCw1/gNCJ9ia1CGVQabypGPYVThbw==",
-      "path": "scriban/7.2.1",
-      "hashPath": "scriban.7.2.1.nupkg.sha512"
+      "sha512": "sha512-6HDyv0P6PVdx/prWM3Aw0QHAT/DCpkBxOovZ2iPIH4L4ZvJ13JNYJgyUI+xJ5K2agXreYTBe23AL5ZQNTqJQvA==",
+      "path": "scriban/7.2.5",
+      "hashPath": "scriban.7.2.5.nupkg.sha512"
     },
     "Luban.Core/1.0.0": {
       "type": "project",

@@ -1,13 +1,13 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using TrueSync;
+using Unity.Mathematics;
 
 namespace ET
 {
     [ComponentOf(typeof(Unit))]
     public class MoveComponent: Entity, IAwake, IDestroy
     {
-        public TSVector PreTarget
+        public float3 PreTarget
         {
             get
             {
@@ -15,7 +15,7 @@ namespace ET
             }
         }
 
-        public TSVector NextTarget
+        public float3 NextTarget
         {
             get
             {
@@ -30,9 +30,9 @@ namespace ET
         public long StartTime { get; set; }
 
         // 开启移动协程的Unit的位置
-        public TSVector StartPos;
+        public float3 StartPos;
 
-        public TSVector RealPos
+        public float3 RealPos
         {
             get
             {
@@ -56,13 +56,13 @@ namespace ET
 
         public long MoveTimer;
 
-        public FP Speed; // m/s
+        public float Speed; // m/s
 
         public AutoResetUniTaskCompletionSource<bool> tcs;
 
-        public List<TSVector> Targets = new List<TSVector>();
+        public List<float3> Targets = new List<float3>();
 
-        public TSVector FinalTarget
+        public float3 FinalTarget
         {
             get
             {
@@ -76,8 +76,8 @@ namespace ET
 
         public bool IsTurnHorizontal;
 
-        public TSQuaternion From;
+        public quaternion From;
 
-        public TSQuaternion To;
+        public quaternion To;
     }
 }

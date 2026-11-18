@@ -2,6 +2,7 @@
     "name": "ET.Core",
     "rootNamespace": "ET",
     "references": [
+        "Unity.Mathematics",
         "UniTask",
         "MemoryPack",
         "ET.ThirdParty",

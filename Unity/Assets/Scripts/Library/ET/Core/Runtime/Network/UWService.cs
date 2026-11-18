@@ -1,4 +1,5 @@
-#if UNITY_ET
+#if !UNITY_EDITOR && UNITY_WEBGL && UNITY_ET
+using System;
 using System.Collections.Generic;
 using System.Net;
 
@@ -12,8 +13,17 @@ namespace ET
 
         public ThreadSynchronizationContext ThreadSynchronizationContext;
 
-        public WService()
+        public WService(IEnumerable<string> prefixes, NetworkProtocol protocol)
         {
+            throw new PlatformNotSupportedException("WebGL clients cannot listen for incoming WebSocket connections.");
+        }
+
+        public WService(NetworkProtocol protocol)
+        {
+            if (protocol != NetworkProtocol.Websocket)
+            {
+                throw new NotSupportedException($"Unsupported WebSocket protocol: {protocol}.");
+            }
             this.ServiceType = ServiceType.Outer;
             this.ThreadSynchronizationContext = new ThreadSynchronizationContext();
         }
@@ -28,7 +38,12 @@ namespace ET
 
         public override void Create(long id, IPEndPoint ipEndpoint)
         {
-            WChannel channel = new(id, ipEndpoint, this);
+            throw new NotSupportedException("IP endpoints are not supported by the WebSocket transport.");
+        }
+
+        public override void Create(long id, string address)
+        {
+            WChannel channel = new(id, address, this);
             this.channels[channel.Id] = channel;
         }
 

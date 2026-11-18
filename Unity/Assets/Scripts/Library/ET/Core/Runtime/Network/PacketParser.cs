@@ -42,7 +42,10 @@ namespace ET
 								return false;
 							}
 
-							this.buffer.Read(this.cache, 0, InnerPacketSizeLength);
+							if (this.buffer.Read(this.cache, 0, InnerPacketSizeLength) != InnerPacketSizeLength)
+							{
+								throw new EndOfStreamException("Incomplete inner packet header.");
+							}
 
 							this.packetSize = BitConverter.ToInt32(this.cache, 0);
 							if (this.packetSize > ushort.MaxValue * 16 || this.packetSize < Packet.MinPacketSize)
@@ -58,7 +61,10 @@ namespace ET
 								return false;
 							}
 
-							this.buffer.Read(this.cache, 0, OuterPacketSizeLength);
+							if (this.buffer.Read(this.cache, 0, OuterPacketSizeLength) != OuterPacketSizeLength)
+							{
+								throw new EndOfStreamException("Incomplete outer packet header.");
+							}
 
 							this.packetSize = BitConverter.ToUInt16(this.cache, 0);
 							if (this.packetSize < Packet.MinPacketSize)

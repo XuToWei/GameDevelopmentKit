@@ -1,5 +1,5 @@
-using System.Collections.Generic;
-using TrueSync;
+﻿using System.Collections.Generic;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
@@ -26,7 +26,7 @@ namespace ET.Server
                     unitInfo.MoveInfo.Points.Add(unit.Position);
                     for (int i = moveComponent.N; i < moveComponent.Targets.Count; ++i)
                     {
-                        TSVector pos = moveComponent.Targets[i];
+                        float3 pos = moveComponent.Targets[i];
                         unitInfo.MoveInfo.Points.Add(pos);
                     }
                 }
