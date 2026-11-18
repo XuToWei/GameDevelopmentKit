@@ -183,6 +183,8 @@ macOS 或 Linux 使用 `dotnet Tool.dll`。
 
 实际配置可换行书写，工具读取时会把换行与制表符整理成单行命令。
 
+在 `__tables__.xlsx` 的 `input` 列中引用 Excel 工作簿时，填写相对于 `dataDir` 的文件路径，例如 `Game/Entity.xlsx`。本项目禁止在该路径中使用 `@` 指定工作表。
+
 ## 路径变量
 
 | 变量 | 展开结果 |
@@ -340,10 +342,6 @@ Luban-Extension 子模块中的全部项目直接以 `net10.0` 为目标，
 其 `global.json` 选择 .NET 10 稳定版 SDK，Scriban、MessagePack 的依赖版本由子模块项目维护。
 也可进入 `Tools/Luban/Luban-Extension/` 后执行 `dotnet build src/Luban.sln -c Release` 独立构建；
 主仓库构建脚本会将运行产物更新到 `Tools/Luban/Tools/Luban/`。
-
-指定 Excel 工作表时支持 `工作表@目录/文件.xlsx`，并保留现有
-`目录/工作表@文件.xlsx` 的兼容处理。表结构加载会先拆分工作表名再拼接数据目录，
-避免把 `@` 引用当作实际文件名。
 
 ## 相关文档
 

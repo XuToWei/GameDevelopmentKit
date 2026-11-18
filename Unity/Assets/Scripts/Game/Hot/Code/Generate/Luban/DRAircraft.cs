@@ -60,10 +60,10 @@ public sealed partial class DRAircraft : Luban.BeanBase
 
     public  void ResolveRef(TablesComponent tables)
     {
-        WeaponIds_Ref = new System.Collections.Generic.List<DRWeapon>();
+        WeaponIds_Ref = new System.Collections.Generic.List<DRWeapon>(WeaponIds.Count);
         foreach (var _v in WeaponIds) { WeaponIds_Ref.Add(tables.DTWeapon.GetOrDefault(_v)); }
 
-        ArmorIds_Ref = new System.Collections.Generic.List<DRArmor>();
+        ArmorIds_Ref = new System.Collections.Generic.List<DRArmor>(ArmorIds.Count);
         foreach (var _v in ArmorIds) { ArmorIds_Ref.Add(tables.DTArmor.GetOrDefault(_v)); }
 
         PostResolveRef();
