@@ -9,7 +9,7 @@
         "com.unity.collections": "1.5.1",
         "com.unity.mathematics": "1.0.1"
       },
-      "hash": "422eb124051c81a9bc3f422ebf190703c5053514"
+      "hash": "46158219a403758d5860bfa30f119129f7f15c85"
     },
     "com.annulusgames.lit-motion.animation": {
       "version": "https://github.com/AnnulusGames/LitMotion.git?path=src/LitMotion/Assets/LitMotion.Animation",
@@ -18,14 +18,14 @@
       "dependencies": {
         "com.annulusgames.lit-motion": "2.0.0"
       },
-      "hash": "422eb124051c81a9bc3f422ebf190703c5053514"
+      "hash": "46158219a403758d5860bfa30f119129f7f15c85"
     },
     "com.code-philosophy.hybridclr": {
       "version": "https://github.com/focus-creative-games/hybridclr_unity.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e48a7beb956f79cd33e636e0efbb1914ff045437"
+      "hash": "7e74e59637055b535d50f41b69c94605da2a7a40"
     },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
@@ -34,7 +34,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "4d00ad8c608bf42c8668fdf192130fc16e21a130"
+      "hash": "8e5e5318cf0b8f30a491ae7fe5973bb32570f108"
     },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
@@ -43,7 +43,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "ff824c234121cd6dde7038c8e8ca4904d7f4d7f3"
+      "hash": "76f14785235d7a1ac0fbffd893ea1a8df48174ac"
     },
     "com.coffee.ui-particle": {
       "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
@@ -132,7 +132,7 @@
       "dependencies": {}
     },
     "com.unity.ide.rider": {
-      "version": "3.1.0",
+      "version": "3.1.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -154,14 +154,14 @@
       "dependencies": {}
     },
     "com.unity.memoryprofiler": {
-      "version": "1.1.12",
+      "version": "1.2.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.burst": "1.8.0",
-        "com.unity.collections": "1.2.3",
-        "com.unity.mathematics": "1.2.1",
-        "com.unity.profiling.core": "1.0.0",
+        "com.unity.burst": "1.8.29",
+        "com.unity.collections": "1.2.4",
+        "com.unity.mathematics": "1.2.6",
+        "com.unity.profiling.core": "1.0.2",
         "com.unity.editorcoroutines": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -181,7 +181,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.pipeline": {
-      "version": "0.10.0-exp.1",
+      "version": "1.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -231,7 +231,7 @@
       }
     },
     "com.unity.scriptablebuildpipeline": {
-      "version": "3.0.3",
+      "version": "4.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -307,7 +307,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "930b0f7e7c9caecec9b79cd43fe0f46c48fb737f"
+      "hash": "2d461b975725f4713aee5eb3857661e361ab8d27"
     },
     "me.qiankanglai.loopscrollrect": {
       "version": "https://github.com/qiankanglai/LoopScrollRect.git",
@@ -316,7 +316,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "a7a32fbe81587690511871d9c51fff6d506937d2"
+      "hash": "23726aa9e73c337eaa16bb2ea3cca1fd4c9bae6d"
     },
     "me.xw.codebind": {
       "version": "https://github.com/XuToWei/CodeBind.git",

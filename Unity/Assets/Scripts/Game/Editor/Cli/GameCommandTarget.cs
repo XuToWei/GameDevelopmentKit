@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Unity.Pipeline;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +10,7 @@ namespace Game.Editor
     /// <summary>Resolve Prefabs, loaded scene objects (including inactive objects), or the selection.</summary>
     internal static class GameCommandTarget
     {
-        public static bool TryResolveRoot(string requestedAssetPath, string path, ObjectId? instanceId,
+        public static bool TryResolveRoot(string requestedAssetPath, string path, ulong? instanceId,
             out GameObject root, out bool isPrefabContents, out string assetPath,
             out string targetLabel, out string error)
         {
@@ -40,7 +39,7 @@ namespace Game.Editor
 
             if (instanceId.HasValue)
             {
-                root = PipelineUtils.IdToObject(instanceId.Value) as GameObject;
+                root = EditorUtility.EntityIdToObject(UnityEngine.EntityId.FromULong(instanceId.Value)) as GameObject;
             }
             else if (path != null)
             {

@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CodeBind;
 using Unity.Pipeline.Commands;
-using Unity.Pipeline;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -27,7 +26,7 @@ namespace Game.Editor
         public static Task<object> All(
             [CliArg("asset_path", "Prefab 资源路径，优先于 instance_id/path/当前选择。")] string assetPath = null,
             [CliArg("path", "场景层级路径，例如 Canvas/LoginForm。")] string path = null,
-            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ObjectId? instanceId = null)
+            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ulong? instanceId = null)
         {
             return Task.FromResult(RunBind(assetPath, path, instanceId, "all"));
         }
@@ -36,7 +35,7 @@ namespace Game.Editor
         public static Task<object> GenerateCode(
             [CliArg("asset_path", "Prefab 资源路径，优先于 instance_id/path/当前选择。")] string assetPath = null,
             [CliArg("path", "场景层级路径。")] string path = null,
-            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ObjectId? instanceId = null)
+            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ulong? instanceId = null)
         {
             return Task.FromResult(RunBind(assetPath, path, instanceId, "generate_code"));
         }
@@ -45,12 +44,12 @@ namespace Game.Editor
         public static Task<object> SetSerialization(
             [CliArg("asset_path", "Prefab 资源路径，优先于 instance_id/path/当前选择。")] string assetPath = null,
             [CliArg("path", "场景层级路径。")] string path = null,
-            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ObjectId? instanceId = null)
+            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ulong? instanceId = null)
         {
             return Task.FromResult(RunBind(assetPath, path, instanceId, "set_serialization"));
         }
 
-        private static object RunBind(string requestedAssetPath, string path, ObjectId? instanceId, string action)
+        private static object RunBind(string requestedAssetPath, string path, ulong? instanceId, string action)
         {
             if (!TryResolveBinderTypes(out string typeError))
             {
@@ -152,7 +151,7 @@ namespace Game.Editor
             [CliArg("bind_name", "绑定字段名，不得包含 separator。", Required = true)] string bindName,
             [CliArg("asset_path", "Prefab 资源路径，优先于 instance_id/path/当前选择。")] string assetPath = null,
             [CliArg("path", "场景层级路径。")] string path = null,
-            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ObjectId? instanceId = null,
+            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ulong? instanceId = null,
             [CliArg("node_path", "目标根节点下的相对路径；省略时操作根节点。")] string nodePath = null,
             [CliArg("array_index", "可选的非负数组索引；省略时生成单字段绑定名。")] int? arrayIndex = null,
             [CliArg("separator", "单字符分隔符，默认读取 CodeBind 编辑器设置。")] string separator = null)
@@ -160,7 +159,7 @@ namespace Game.Editor
             return Task.FromResult(RenameNodeCore(bindName, assetPath, path, instanceId, nodePath, arrayIndex, separator));
         }
 
-        private static object RenameNodeCore(string bindName, string assetPath, string path, ObjectId? instanceId,
+        private static object RenameNodeCore(string bindName, string assetPath, string path, ulong? instanceId,
             string nodePath, int? arrayIndex, string separator)
         {
             char nameSeparator = GetSeparator(separator);
