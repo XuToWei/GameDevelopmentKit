@@ -144,7 +144,7 @@ namespace Game.Editor
 
                 if (package.source == PackageSource.Registry)
                 {
-                    string targetVersion = GetLatestCompatibleVersion(package.versions, package.version);
+                    string targetVersion = GetPreferredVersion(package.versions?.compatible);
                     if (string.IsNullOrEmpty(targetVersion) || targetVersion == package.version)
                     {
                         continue;
@@ -165,35 +165,34 @@ namespace Game.Editor
             return updates;
         }
 
-        private static string GetLatestCompatibleVersion(VersionsInfo versions, string currentVersion)
+        private static string GetPreferredVersion(string[] compatibleVersions)
         {
-            string[] compatibleVersions = versions?.compatible;
-            if (compatibleVersions == null || string.IsNullOrEmpty(currentVersion))
+            if (compatibleVersions == null)
             {
                 return null;
             }
 
-            bool isStable = IsStableVersion(currentVersion);
+            string latestPrerelease = null;
             // UPM lists compatible versions in ascending order.
             for (int i = compatibleVersions.Length - 1; i >= 0; i--)
             {
                 string version = compatibleVersions[i];
-                if (!string.IsNullOrEmpty(version) && IsStableVersion(version) == isStable)
+                if (string.IsNullOrEmpty(version))
+                {
+                    continue;
+                }
+                if (IsStableVersion(version))
                 {
                     return version;
                 }
+                latestPrerelease ??= version;
             }
 
-            return null;
+            return latestPrerelease;
         }
 
         private static bool IsStableVersion(string version)
         {
-            if (string.IsNullOrEmpty(version))
-            {
-                return false;
-            }
-
             int prereleaseIndex = version.IndexOf('-');
             int metadataIndex = version.IndexOf('+');
             return prereleaseIndex < 0 || (metadataIndex >= 0 && prereleaseIndex > metadataIndex);
