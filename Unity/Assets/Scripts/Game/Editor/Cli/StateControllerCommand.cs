@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Unity.Pipeline.Commands;
 using Newtonsoft.Json;
 using StateController;
-using Unity.Pipeline;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -25,7 +24,7 @@ namespace Game.Editor
         public static Task<object> List(
             [CliArg("asset_path", "Prefab 资源路径，优先于 instance_id/path/当前选择。")] string assetPath = null,
             [CliArg("path", "场景层级路径。")] string path = null,
-            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ObjectId? instanceId = null)
+            [CliArg("instance_id", "场景对象实例 ID，优先于 path。")] ulong? instanceId = null)
         {
             return Task.FromResult(Execute(new Arguments { AssetPath = assetPath, Path = path, InstanceId = instanceId }, "list"));
         }
@@ -34,7 +33,7 @@ namespace Game.Editor
         public static Task<object> ListNodes(
             [CliArg("asset_path", "Prefab 资源路径。")] string assetPath = null,
             [CliArg("path", "场景层级路径。")] string path = null,
-            [CliArg("instance_id", "场景对象实例 ID。")] ObjectId? instanceId = null,
+            [CliArg("instance_id", "场景对象实例 ID。")] ulong? instanceId = null,
             [CliArg("group_name", "只返回绑定到该状态组的节点。")] string groupName = null,
             [CliArg("node_path", "节点路径，支持含根节点路径、相对路径或唯一节点名。")] string nodePath = null)
         {
@@ -49,7 +48,7 @@ namespace Game.Editor
             [CliArg("state_index", "目标状态的非负索引，与 state_name 二选一。")] int? stateIndex = null,
             [CliArg("asset_path", "Prefab 资源路径。")] string assetPath = null,
             [CliArg("path", "场景层级路径。")] string path = null,
-            [CliArg("instance_id", "场景对象实例 ID。")] ObjectId? instanceId = null,
+            [CliArg("instance_id", "场景对象实例 ID。")] ulong? instanceId = null,
             [CliArg("controller_path", "目标有多个控制器时，用控制器路径消歧。")] string controllerPath = null)
         {
             return Task.FromResult(Execute(new Arguments { GroupName = groupName, StateName = stateName, StateIndex = stateIndex,
@@ -62,7 +61,7 @@ namespace Game.Editor
             [CliArg("states", "初始状态名的 JSON 数组，例如 [\"Normal\",\"Selected\"]；不得重复。")] string[] states = null,
             [CliArg("asset_path", "Prefab 资源路径。")] string assetPath = null,
             [CliArg("path", "场景层级路径。")] string path = null,
-            [CliArg("instance_id", "场景对象实例 ID。")] ObjectId? instanceId = null,
+            [CliArg("instance_id", "场景对象实例 ID。")] ulong? instanceId = null,
             [CliArg("controller_path", "目标有多个控制器时，用控制器路径消歧。")] string controllerPath = null)
         {
             return Task.FromResult(Execute(new Arguments { GroupName = groupName, States = states,
@@ -75,7 +74,7 @@ namespace Game.Editor
             [CliArg("state_name", "新增状态名。", Required = true)] string stateName,
             [CliArg("asset_path", "Prefab 资源路径。")] string assetPath = null,
             [CliArg("path", "场景层级路径。")] string path = null,
-            [CliArg("instance_id", "场景对象实例 ID。")] ObjectId? instanceId = null,
+            [CliArg("instance_id", "场景对象实例 ID。")] ulong? instanceId = null,
             [CliArg("controller_path", "目标有多个控制器时，用控制器路径消歧。")] string controllerPath = null)
         {
             return Task.FromResult(Execute(new Arguments { GroupName = groupName, StateName = stateName,
@@ -88,7 +87,7 @@ namespace Game.Editor
             [CliArg("state_type", "StateBinding 子类名或完整类型名。", Required = true)] string stateType,
             [CliArg("asset_path", "Prefab 资源路径。")] string assetPath = null,
             [CliArg("path", "场景层级路径。")] string path = null,
-            [CliArg("instance_id", "场景对象实例 ID。")] ObjectId? instanceId = null,
+            [CliArg("instance_id", "场景对象实例 ID。")] ulong? instanceId = null,
             [CliArg("node_path", "根节点下的路径，省略时操作根节点。")] string nodePath = null)
         {
             return Task.FromResult(Execute(new Arguments { GroupName = groupName, StateType = stateType,
@@ -941,7 +940,7 @@ namespace Game.Editor
         {
             public string AssetPath;
             public string Path;
-            public ObjectId? InstanceId;
+            public ulong? InstanceId;
             public string NodePath;
             public string ControllerPath;
             public string GroupName;
