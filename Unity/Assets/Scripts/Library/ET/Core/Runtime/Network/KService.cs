@@ -60,6 +60,9 @@ namespace ET
                 case NetworkProtocol.UDP:
                     this.Transport = new UdpTransport(ipEndPoint);
                     break;
+                case NetworkProtocol.WebSocket:
+                    this.Transport = new WebSocketTransport(ipEndPoint);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException($"{this.Protocol}");
             }
@@ -69,7 +72,6 @@ namespace ET
         {
             this.ServiceType = serviceType;
             this.startTime = TimeInfo.Instance.ClientFrameTime();
-            this.Transport = new TcpTransport(addressFamily);
             this.Protocol = protocol;
             switch (this.Protocol)
             {
@@ -78,6 +80,9 @@ namespace ET
                     break;
                 case NetworkProtocol.UDP:
                     this.Transport = new UdpTransport(addressFamily);
+                    break;
+                case NetworkProtocol.WebSocket:
+                    this.Transport = new WebSocketTransport(addressFamily);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"{this.Protocol}");
@@ -424,11 +429,6 @@ namespace ET
             KChannel channel;
             this.localConnChannels.TryGetValue(id, out channel);
             return channel;
-        }
-
-        public override void Create(long id, string address)
-        {
-            throw new NotSupportedException("String addresses are not supported by this transport.");
         }
 
         public override void Create(long id, IPEndPoint ipEndPoint)

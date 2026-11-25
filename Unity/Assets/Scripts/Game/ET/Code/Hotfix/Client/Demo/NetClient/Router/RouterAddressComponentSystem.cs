@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
@@ -11,21 +10,16 @@ namespace ET.Client
     public static partial class RouterAddressComponentSystem
     {
         [EntitySystem]
-        private static void Awake(this RouterAddressComponent self, string address, int port)
+        private static void Awake(this RouterAddressComponent self, string address)
         {
-            self.RouterManagerHost = address;
-            self.RouterManagerPort = port;
-        }
-        
-        public static async UniTask Init(this RouterAddressComponent self)
-        {
-            self.RouterManagerIPAddress = NetworkHelper.GetHostAddress(self.RouterManagerHost);
-            await self.GetAllRouter();
+            self.Address = address;
+            Uri uri = new(address);
+            self.AddressFamily = uri.HostNameType == UriHostNameType.IPv6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork;
         }
 
-        private static async UniTask GetAllRouter(this RouterAddressComponent self)
+        public static async UniTask GetAllRouter(this RouterAddressComponent self)
         {
-            string url = $"http://{self.RouterManagerHost}:{self.RouterManagerPort}/get_router?v={RandomGenerator.RandUInt32()}";
+            string url = $"{self.Address}/get_router?v={RandomGenerator.RandUInt32()}";
             Log.Debug($"start get router info: {url}");
             string routerInfo = await HttpClientHelper.Get(url);
             Log.Debug($"recv router info: {routerInfo}");
@@ -59,26 +53,19 @@ namespace ET.Client
 
             string address = self.Info.Routers[self.RouterIndex++ % self.Info.Routers.Count];
             Log.Info($"get router address: {self.RouterIndex - 1} {address}");
-            string[] ss = address.Split(':');
-            IPAddress ipAddress = IPAddress.Parse(ss[0]);
-            if (self.RouterManagerIPAddress.AddressFamily == AddressFamily.InterNetworkV6)
-            { 
-                ipAddress = ipAddress.MapToIPv6();
+            IPEndPoint endPoint = NetworkHelper.ToIPEndPoint(address);
+            if (self.AddressFamily == AddressFamily.InterNetworkV6)
+            {
+                endPoint.Address = endPoint.Address.MapToIPv6();
             }
-            return new IPEndPoint(ipAddress, int.Parse(ss[1]));
+            return endPoint;
         }
         
         public static IPEndPoint GetRealmAddress(this RouterAddressComponent self, string account)
         {
             int v = account.Mode(self.Info.Realms.Count);
             string address = self.Info.Realms[v];
-            string[] ss = address.Split(':');
-            IPAddress ipAddress = IPAddress.Parse(ss[0]);
-            //if (self.IPAddress.AddressFamily == AddressFamily.InterNetworkV6)
-            //{ 
-            //    ipAddress = ipAddress.MapToIPv6();
-            //}
-            return new IPEndPoint(ipAddress, int.Parse(ss[1]));
+            return NetworkHelper.ToIPEndPoint(address);
         }
     }
 }
