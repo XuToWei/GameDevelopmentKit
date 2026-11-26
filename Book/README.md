@@ -22,6 +22,7 @@ Book 解释“怎么做、为什么这样做、产物在哪里”。主 README �
 
 1. [HybridCLR 热更新](HybridCLR热更.md)
 2. [一键打包](一键打包.md)
+3. [使用 Nginx 为微信小程序配置 HTTPS 和 WSS](HTTPS与WSS部署.md)
 
 ## 文档索引
 
@@ -41,6 +42,7 @@ Book 解释“怎么做、为什么这样做、产物在哪里”。主 README �
 | 编辑器 | [Unity CLI 自定义命令](UnityCLI.md) | 已实现 | 通过终端驱动 Editor，执行 CodeBind、StateController、Excel 和 Luban 操作 |
 | 构建 | [HybridCLR 热更新](HybridCLR热更.md) | 已实现 | 热更新 DLL 与 AOT 元数据准备 |
 | 构建 | [一键打包](一键打包.md) | 已实现 | 资源、安装包和本地资源服务器 |
+| 部署 | [HTTPS 与 WSS 部署](HTTPS与WSS部署.md) | 已实现 | Nginx 转发 ET Router、微信合法域名配置和真机验收 |
 | 设计 | [动态扩容设计](动态扩容.md) | 未实现 | ET 服务发现、路由与弹性伸缩方案 |
 
 ## 阅读约定
