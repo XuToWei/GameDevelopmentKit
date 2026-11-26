@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
 
 namespace ET.Server
 {
@@ -13,15 +11,19 @@ namespace ET.Server
         [EntitySystem]
         private static void Awake(this RouterComponent self, IPEndPoint outerAddress, string innerIP)
         {
-            self.OuterUdp = new UdpTransport(outerAddress);
+#if UNITY_WEBGL
+            self.OuterTcp = new WebSocketTransport(outerAddress);
+#else
             self.OuterTcp = new TcpTransport(outerAddress);
+            self.OuterUdp = new UdpTransport(outerAddress);
+#endif
             self.InnerSocket = new UdpTransport(new IPEndPoint(IPAddress.Parse(innerIP), 0));
         }
-        
+
         [EntitySystem]
         private static void Destroy(this RouterComponent self)
         {
-            self.OuterUdp.Dispose();
+            self.OuterUdp?.Dispose();
             self.OuterTcp.Dispose();
             self.InnerSocket.Dispose();
             self.IPEndPoint = null;
@@ -30,7 +32,7 @@ namespace ET.Server
         [EntitySystem]
         private static void Update(this RouterComponent self)
         {
-            self.OuterUdp.Update();
+            self.OuterUdp?.Update();
             self.OuterTcp.Update();
             self.InnerSocket.Update();
             long timeNow = TimeInfo.Instance.ClientNow();

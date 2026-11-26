@@ -70,8 +70,6 @@ namespace ET
         
         public abstract void Create(long id, IPEndPoint ipEndPoint);
 
-        public abstract void Create(long id, string address);
-
         public abstract void Send(long channelId, MemoryBuffer memoryBuffer);
 
         public virtual (uint, uint) GetChannelConn(long channelId)
