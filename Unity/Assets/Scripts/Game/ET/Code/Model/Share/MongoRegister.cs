@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.Serializers;
 using TrueSync;
 using Unity.Mathematics;
 
@@ -22,8 +23,12 @@ namespace ET
             createSerializerRegistry.Invoke(null, Array.Empty<object>());
             MethodInfo registerIdGenerators = typeof (BsonSerializer).GetMethod("RegisterIdGenerators", BindingFlags.Static | BindingFlags.NonPublic);
             registerIdGenerators.Invoke(null, Array.Empty<object>());
-            
-            
+
+            // 以 object 写出路由响应等业务对象时允许所有运行时类型，读入 object 时使用驱动默认的类型白名单。
+            BsonSerializer.RegisterSerializer<object>(ObjectSerializer.Instance.WithAllowedTypes(
+                allowedDeserializationTypes: ObjectSerializer.DefaultAllowedTypes,
+                allowedSerializationTypes: ObjectSerializer.AllAllowedTypes));
+
             // 自动注册IgnoreExtraElements
             ConventionPack conventionPack = new() { new IgnoreExtraElementsConvention(true) };
 
