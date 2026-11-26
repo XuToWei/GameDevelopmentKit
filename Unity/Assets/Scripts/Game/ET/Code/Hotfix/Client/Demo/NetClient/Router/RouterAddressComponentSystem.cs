@@ -14,7 +14,20 @@ namespace ET.Client
         {
             self.Address = address;
             Uri uri = new(address);
-            self.AddressFamily = uri.HostNameType == UriHostNameType.IPv6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork;
+            if (uri.HostNameType == UriHostNameType.IPv6)
+            {
+                self.AddressFamily = AddressFamily.InterNetworkV6;
+            }
+#if !UNITY_WEBGL
+            else if (uri.HostNameType == UriHostNameType.Dns)
+            {
+                self.AddressFamily = NetworkHelper.GetHostAddress(uri.DnsSafeHost).AddressFamily;
+            }
+#endif
+            else
+            {
+                self.AddressFamily = AddressFamily.InterNetwork;
+            }
         }
 
         public static async UniTask GetAllRouter(this RouterAddressComponent self)

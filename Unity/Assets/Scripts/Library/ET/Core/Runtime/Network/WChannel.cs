@@ -47,11 +47,20 @@ namespace ET
             this.webSocket.OnOpen -= OnWebSocketOpen;
             this.webSocket.OnError -= OnWebSocketError;
 
+            this.Id = 0;
+            while (this.queue.Count > 0)
+            {
+                this.Service.Recycle(this.queue.Dequeue());
+            }
             this.webSocket.CloseAsync();
         }
 
         private void ConnectAsync()
         {
+            if (this.IsDisposed)
+            {
+                return;
+            }
             try
             {
                 this.webSocket.ConnectAsync();
@@ -88,7 +97,7 @@ namespace ET
             {
                 return;
             }
-            Log.Error(args.Exception);
+            Log.Error(args.Message);
             this.OnError(ErrorCore.ERR_WebsocketSendError);
         }
 

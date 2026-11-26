@@ -52,6 +52,7 @@ namespace ET
             this.ServiceType = serviceType;
             this.startTime = TimeInfo.Instance.ClientFrameTime();
             this.Protocol = protocol;
+            this.ipEndPoint = new IPEndPoint(ipEndPoint.AddressFamily == AddressFamily.InterNetworkV6 ? IPAddress.IPv6Any : IPAddress.Any, 0);
             switch (this.Protocol)
             {
                 case NetworkProtocol.TCP:
@@ -73,6 +74,7 @@ namespace ET
             this.ServiceType = serviceType;
             this.startTime = TimeInfo.Instance.ClientFrameTime();
             this.Protocol = protocol;
+            this.ipEndPoint = new IPEndPoint(addressFamily == AddressFamily.InterNetworkV6 ? IPAddress.IPv6Any : IPAddress.Any, 0);
             switch (this.Protocol)
             {
                 case NetworkProtocol.TCP:
@@ -95,7 +97,7 @@ namespace ET
 
         private readonly byte[] cache = new byte[2048];
         
-        private EndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
+        private EndPoint ipEndPoint;
         
 
         private readonly List<long> cacheIds = new();

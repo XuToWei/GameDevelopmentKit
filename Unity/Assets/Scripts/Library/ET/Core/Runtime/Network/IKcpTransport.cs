@@ -287,10 +287,9 @@ namespace ET
             MemoryBuffer memoryBuffer = this.tService.Fetch();
             memoryBuffer.Write(bytes, index, length);
             memoryBuffer.Seek(0, SeekOrigin.Begin);
-            this.tService.Send(id, memoryBuffer);
-            
             long timeNow = TimeInfo.Instance.ClientFrameTime();
             this.readWriteTime[id] = timeNow;
+            this.tService.Send(id, memoryBuffer);
         }
 
         public int Recv(byte[] buffer, ref EndPoint endPoint)

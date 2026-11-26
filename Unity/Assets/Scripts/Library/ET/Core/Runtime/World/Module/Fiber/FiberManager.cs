@@ -29,7 +29,7 @@ namespace ET
             this.schedulers[(int)SchedulerType.Main] = this.mainThreadScheduler;
 
 // 编辑器模式下如果开启了UNITY_ET_VIEW使用单线程，WEBGL模式也使用单线程
-#if (UNITY_ET_VIEW && UNITY_EDITOR) || UNITY_WEBGL
+#if (UNITY_ET_VIEW && UNITY_EDITOR) || (UNITY_WEBGL && UNITY_ET)
             this.schedulers[(int)SchedulerType.Thread] = this.mainThreadScheduler;
             this.schedulers[(int)SchedulerType.ThreadPool] = this.mainThreadScheduler;
 #else
