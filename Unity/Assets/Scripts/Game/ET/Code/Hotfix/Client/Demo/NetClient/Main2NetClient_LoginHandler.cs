@@ -1,11 +1,11 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
 
 namespace ET.Client
 {
     [MessageHandler(SceneType.NetClient)]
+    [FriendOf(typeof(RouterAddressComponent))]
     public class Main2NetClient_LoginHandler: MessageHandler<Scene, Main2NetClient_Login, NetClient2Main_Login>
     {
         protected override async UniTask Run(Scene root, Main2NetClient_Login request, NetClient2Main_Login response)
@@ -15,14 +15,17 @@ namespace ET.Client
             // 创建一个ETModel层的Session
             root.RemoveComponent<RouterAddressComponent>();
             // 获取路由跟realmDispatcher地址
-            RouterAddressComponent routerAddressComponent =
-                    root.AddComponent<RouterAddressComponent, string, int>(ConstValue.RouterHttpHost, ConstValue.RouterHttpPort);
-            await routerAddressComponent.Init();
-            root.AddComponent<NetComponent, AddressFamily, NetworkProtocol>(routerAddressComponent.RouterManagerIPAddress.AddressFamily, NetworkProtocol.UDP);
+            RouterAddressComponent routerAddressComponent = root.AddComponent<RouterAddressComponent, string>(ConstValue.RouterHttpUrl);
+            await routerAddressComponent.GetAllRouter();
+#if UNITY_WEBGL
+            NetComponent netComponent = root.AddComponent<NetComponent, AddressFamily, NetworkProtocol>(routerAddressComponent.AddressFamily, NetworkProtocol.WebSocket);
+            KService kService = (KService)netComponent.AService;
+            ((WebSocketTransport)kService.Transport).ConnectUrl = ConstValue.RouterWebSocketUrl;
+#else
+            NetComponent netComponent = root.AddComponent<NetComponent, AddressFamily, NetworkProtocol>(routerAddressComponent.AddressFamily, NetworkProtocol.UDP);
+#endif
             root.GetComponent<FiberParentComponent>().ParentFiberId = request.OwnerFiberId;
 
-            NetComponent netComponent = root.GetComponent<NetComponent>();
-            
             IPEndPoint realmAddress = routerAddressComponent.GetRealmAddress(account);
 
             R2C_Login r2CLogin;

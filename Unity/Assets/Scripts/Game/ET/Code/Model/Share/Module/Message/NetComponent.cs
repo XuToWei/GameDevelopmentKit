@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
@@ -11,7 +10,7 @@ namespace ET
     }
     
     [ComponentOf(typeof(Scene))]
-    public class NetComponent: Entity, IAwake<IPEndPoint, NetworkProtocol>, IAwake<AddressFamily, NetworkProtocol>, IAwake<NetworkProtocol>, IAwake<IEnumerable<string>, NetworkProtocol>, IDestroy, IUpdate
+    public class NetComponent: Entity, IAwake<IPEndPoint, NetworkProtocol>, IAwake<AddressFamily, NetworkProtocol>, IDestroy, IUpdate
     {
         public AService AService { get; set; }
     }

@@ -52,6 +52,7 @@ namespace ET
             this.ServiceType = serviceType;
             this.startTime = TimeInfo.Instance.ClientFrameTime();
             this.Protocol = protocol;
+            this.ipEndPoint = new IPEndPoint(ipEndPoint.AddressFamily == AddressFamily.InterNetworkV6 ? IPAddress.IPv6Any : IPAddress.Any, 0);
             switch (this.Protocol)
             {
                 case NetworkProtocol.TCP:
@@ -59,6 +60,9 @@ namespace ET
                     break;
                 case NetworkProtocol.UDP:
                     this.Transport = new UdpTransport(ipEndPoint);
+                    break;
+                case NetworkProtocol.WebSocket:
+                    this.Transport = new WebSocketTransport(ipEndPoint);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"{this.Protocol}");
@@ -69,8 +73,8 @@ namespace ET
         {
             this.ServiceType = serviceType;
             this.startTime = TimeInfo.Instance.ClientFrameTime();
-            this.Transport = new TcpTransport(addressFamily);
             this.Protocol = protocol;
+            this.ipEndPoint = new IPEndPoint(addressFamily == AddressFamily.InterNetworkV6 ? IPAddress.IPv6Any : IPAddress.Any, 0);
             switch (this.Protocol)
             {
                 case NetworkProtocol.TCP:
@@ -78,6 +82,9 @@ namespace ET
                     break;
                 case NetworkProtocol.UDP:
                     this.Transport = new UdpTransport(addressFamily);
+                    break;
+                case NetworkProtocol.WebSocket:
+                    this.Transport = new WebSocketTransport(addressFamily);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"{this.Protocol}");
@@ -90,7 +97,7 @@ namespace ET
 
         private readonly byte[] cache = new byte[2048];
         
-        private EndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
+        private EndPoint ipEndPoint;
         
 
         private readonly List<long> cacheIds = new();
@@ -424,11 +431,6 @@ namespace ET
             KChannel channel;
             this.localConnChannels.TryGetValue(id, out channel);
             return channel;
-        }
-
-        public override void Create(long id, string address)
-        {
-            throw new NotSupportedException("String addresses are not supported by this transport.");
         }
 
         public override void Create(long id, IPEndPoint ipEndPoint)

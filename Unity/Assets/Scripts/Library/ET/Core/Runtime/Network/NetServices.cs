@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 
 namespace ET
 {
@@ -8,7 +6,7 @@ namespace ET
     {
         TCP,
         KCP,
-        Websocket,
+        WebSocket,
         UDP,
     }
 

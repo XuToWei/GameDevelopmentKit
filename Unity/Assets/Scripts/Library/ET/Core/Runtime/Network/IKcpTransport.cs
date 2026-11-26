@@ -94,7 +94,7 @@ namespace ET
             this.tService.ErrorCallback = this.OnError;
             this.tService.ReadCallback = this.OnRead;
         }
-        
+
         public TcpTransport(IPEndPoint ipEndPoint)
         {
             this.tService = new TService(ipEndPoint, ServiceType.Outer);
@@ -152,6 +152,144 @@ namespace ET
             
             long timeNow = TimeInfo.Instance.ClientFrameTime();
             this.readWriteTime[id] = timeNow;
+        }
+
+        public int Recv(byte[] buffer, ref EndPoint endPoint)
+        {
+            return RecvNonAlloc(buffer, ref endPoint);
+        }
+
+        public int RecvNonAlloc(byte[] buffer, ref EndPoint endPoint)
+        {
+            (EndPoint e, MemoryBuffer memoryBuffer) = this.channelRecvDatas.Dequeue();
+            endPoint = e;
+            int count = memoryBuffer.Read(buffer);
+            this.tService.Recycle(memoryBuffer);
+            return count;
+        }
+
+        public bool Available()
+        {
+            return this.channelRecvDatas.Count > 0;
+        }
+
+        public void Update()
+        {
+            // 检查长时间不读写的TChannel, 超时断开, 一次update检查10个
+            long timeNow = TimeInfo.Instance.ClientFrameTime();
+            const int MaxCheckNum = 10;
+            int n = this.channelIds.Count < MaxCheckNum? this.channelIds.Count : MaxCheckNum;
+            for (int i = 0; i < n; ++i)
+            {
+                long id = this.channelIds.Dequeue();
+                if (!this.readWriteTime.TryGetValue(id, out long rwTime))
+                {
+                    continue;
+                }
+                if (timeNow - rwTime > 30 * 1000)
+                {
+                    this.OnError(id, ErrorCore.ERR_KcpReadWriteTimeout);
+                    continue;
+                }
+                this.channelIds.Enqueue(id);
+            }
+            
+            this.tService.Update();
+        }
+
+        public void Dispose()
+        {
+            this.tService?.Dispose();
+        }
+    }
+
+    public class WebSocketTransport: IKcpTransport
+    {
+        private readonly WService tService;
+
+        // 内网直连时可保持 null，客户端会连接 ws://{Router 的 IP:端口}/ws/。
+        // 微信小程序正式环境填写使用 socket 合法域名的完整地址，例如 wss://game.example.com/ws/。
+        public string ConnectUrl { private get; set; }
+
+        private readonly DoubleMap<long, EndPoint> idEndpoints = new();
+
+        private readonly Queue<(EndPoint, MemoryBuffer)> channelRecvDatas = new();
+
+        private readonly Dictionary<long, long> readWriteTime = new();
+
+        private readonly Queue<long> channelIds = new();
+        
+        public WebSocketTransport(AddressFamily addressFamily)
+        {
+            this.tService = new WService(addressFamily, ServiceType.Outer);
+            this.tService.ErrorCallback = this.OnError;
+            this.tService.ReadCallback = this.OnRead;
+        }
+        
+        public WebSocketTransport(IPEndPoint ipEndPoint)
+        {
+            this.tService = new WService(ipEndPoint, ServiceType.Outer);
+            this.tService.AcceptCallback = this.OnAccept;
+            this.tService.ErrorCallback = this.OnError;
+            this.tService.ReadCallback = this.OnRead;
+        }
+
+        private void OnAccept(long id, IPEndPoint ipEndPoint)
+        {
+            WChannel channel = this.tService.Get(id);
+            long timeNow = TimeInfo.Instance.ClientFrameTime();
+            this.readWriteTime[id] = timeNow;
+            this.channelIds.Enqueue(id);
+            this.idEndpoints.Add(id, channel.RemoteAddress);
+        }
+
+        public void OnError(long id, int error)
+        {
+            Log.Warning($"IKcpTransport websocket error: {id} {error}");
+            this.tService.Remove(id, error);
+            this.idEndpoints.RemoveByKey(id);
+            this.readWriteTime.Remove(id);
+        }
+        
+        private void OnRead(long id, MemoryBuffer memoryBuffer)
+        {
+            long timeNow = TimeInfo.Instance.ClientFrameTime();
+            this.readWriteTime[id] = timeNow;
+            WChannel channel = this.tService.Get(id);
+            channelRecvDatas.Enqueue((channel.RemoteAddress, memoryBuffer));
+        }
+        
+        public void Send(byte[] bytes, int index, int length, EndPoint endPoint, ChannelType channelType)
+        {
+            long id = this.idEndpoints.GetKeyByValue(endPoint);
+            if (id == 0)
+            {
+                if (channelType == ChannelType.Connect)
+                {
+                    id = IdGenerater.Instance.GenerateInstanceId();
+                    if (this.ConnectUrl == null)
+                    {
+                        this.tService.Create(id, (IPEndPoint)endPoint);
+                    }
+                    else
+                    {
+                        this.tService.Create(id, this.ConnectUrl);
+                        this.tService.Get(id).RemoteAddress = (IPEndPoint)endPoint;
+                    }
+                    this.idEndpoints.Add(id, endPoint);
+                    this.channelIds.Enqueue(id);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            MemoryBuffer memoryBuffer = this.tService.Fetch();
+            memoryBuffer.Write(bytes, index, length);
+            memoryBuffer.Seek(0, SeekOrigin.Begin);
+            long timeNow = TimeInfo.Instance.ClientFrameTime();
+            this.readWriteTime[id] = timeNow;
+            this.tService.Send(id, memoryBuffer);
         }
 
         public int Recv(byte[] buffer, ref EndPoint endPoint)
